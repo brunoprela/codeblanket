@@ -275,8 +275,7 @@ api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
 
 # Get account info
 account = api.get_account()
-print(f"Buying power: ${float(account.buying_power):, .2f
-}")
+print(f"Buying power: ${float(account.buying_power):,.2f}")
 
 # Place order
 api.submit_order(

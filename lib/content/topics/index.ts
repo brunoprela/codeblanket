@@ -117,7 +117,9 @@ import { timeSeriesFinancialMlModule } from '../modules/time-series-financial-ml
 import { llmApplicationsFinanceModule } from '../modules/llm-applications-finance';
 import { quantInterviewPrepModule } from '../modules/quant-interview-prep';
 import { financeFoundationsModule } from '../modules/finance-foundations';
+import { professionalToolsModule } from '../modules/professional-tools';
 import { corporateFinanceModule } from '../modules/corporate-finance';
+import { financialMarketsInstrumentsModule } from '../modules/financial-markets-instruments';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -216,7 +218,9 @@ const allModulesMap: Record<string, Module> = {
   'ml-ai-llm-applications-finance': llmApplicationsFinanceModule,
   'quant-interview-prep': quantInterviewPrepModule,
   'finance-foundations': financeFoundationsModule,
+  'professional-tools': professionalToolsModule,
   'corporate-finance': corporateFinanceModule,
+  'financial-markets-instruments': financialMarketsInstrumentsModule,
 
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,
   'applied-ai-prompt-engineering': promptEngineeringOptimizationModule,

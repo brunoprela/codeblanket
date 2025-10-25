@@ -85,7 +85,7 @@ ticker = yf.Ticker("AAPL")
 info = ticker.info
 print(f"Company: {info['longName']}")
 print(f"Sector: {info['sector']}")
-print(f"Market Cap: ${info['marketCap']:, .0f
+print(f"Market Cap: \${info['marketCap']:, .0f
 }")
 print(f"P/E Ratio: {info.get('trailingPE', 'N/A')}")
 print(f"Dividend Yield: {info.get('dividendYield', 0) * 100:.2f}%")
@@ -337,9 +337,9 @@ print(f"\\nCompany: {info.get('longName', 'N/A')}")
 print(f"Sector: {info.get('sector', 'N/A')}")
 print(f"Industry: {info.get('industry', 'N/A')}")
 
-print(f"\\nCurrent Price: ${info.get('currentPrice', 0):.2f}")
-print(f"52-Week Range: ${info.get('fiftyTwoWeekLow', 0):.2f} - ${info.get('fiftyTwoWeekHigh', 0):.2f}")
-print(f"Market Cap: ${info.get('marketCap', 0):,.0f}")
+print(f"\\nCurrent Price: \${info.get('currentPrice', 0):.2f}")
+print(f"52-Week Range: \${info.get('fiftyTwoWeekLow', 0):.2f} - \${info.get('fiftyTwoWeekHigh', 0):.2f}")
+print(f"Market Cap: \${info.get('marketCap', 0):,.0f}")
 
 print(f"\\nValuation Ratios:")
 ratios = self.get_financial_ratios()
@@ -361,8 +361,8 @@ sma_200 = self.calculate_sma(200).iloc[-1]
 rsi = self.calculate_rsi().iloc[-1]
 
 print(f"\\nTechnical Indicators:")
-print(f"  50-day SMA: ${sma_50:.2f}")
-print(f"  200-day SMA: ${sma_200:.2f}")
+print(f"  50-day SMA: \${sma_50:.2f}")
+print(f"  200-day SMA: \${sma_200:.2f}")
 print(f"  RSI (14): {rsi:.2f}")
 print(f"  Trend: {'Bullish' if current_price > sma_50 > sma_200 else 'Bearish'}")
 
@@ -988,11 +988,11 @@ aggs = client.get_aggs(
 
 # Get last trade
 last_trade = client.get_last_trade("AAPL")
-print(f"Last trade: ${last_trade.price} at {last_trade.timestamp}")
+print(f"Last trade: \${last_trade.price} at {last_trade.timestamp}")
 
 # Get last quote
 last_quote = client.get_last_quote("AAPL")
-print(f"Bid: ${last_quote.bid_price}, Ask: ${last_quote.ask_price}")
+print(f"Bid: \${last_quote.bid_price}, Ask: \${last_quote.ask_price}")
 
 
 # ==========================================
@@ -1001,7 +1001,7 @@ print(f"Bid: ${last_quote.bid_price}, Ask: ${last_quote.ask_price}")
 
 def handle_msg(msgs):
     for msg in msgs:
-        print(f"{msg.symbol}: ${msg.price} at {msg.timestamp}")
+        print(f"{msg.symbol}: \${msg.price} at {msg.timestamp}")
 
 # Create WebSocket client
 ws_client = WebSocketClient(
@@ -1029,7 +1029,7 @@ options = client.list_options_contracts(
 )
 
 for option in options:
-    print(f"{option.ticker}: Strike ${option.strike_price}")
+    print(f"{option.ticker}: Strike \${option.strike_price}")
 
 
 # ==========================================
@@ -1148,8 +1148,8 @@ base_url = 'https://cloud.iexapis.com/stable'
 response = requests.get(f'{base_url}/stock/AAPL/quote?token={token}')
 quote = response.json()
 
-print(f"Price: ${quote['latestPrice']}")
-print(f"Market Cap: ${quote['marketCap']:,}")
+print(f"Price: \${quote['latestPrice']}")
+print(f"Market Cap: \${quote['marketCap']:,}")
 print(f"P/E Ratio: {quote['peRatio']}")
 \`\`\`
 
@@ -1228,7 +1228,7 @@ cg = CoinGeckoAPI()
 
 # Get Bitcoin price
 btc_price = cg.get_price(ids='bitcoin', vs_currencies='usd')
-print(f"Bitcoin: ${btc_price['bitcoin']['usd']:,}")
+print(f"Bitcoin: \${btc_price['bitcoin']['usd']:,}")
 
 # Get market data
 btc_market = cg.get_coin_market_chart_by_id(
@@ -1323,8 +1323,8 @@ class FreeDataPlatform:
         
         print(f"\\nCompany: {info.get('longName')}")
         print(f"Sector: {info.get('sector')}")
-        print(f"Price: ${info.get('currentPrice'): .2f}")
-print(f"Market Cap: ${info.get('marketCap'):,}")
+        print(f"Price: \${info.get('currentPrice'): .2f}")
+print(f"Market Cap: \${info.get('marketCap'):,}")
 print(f"P/E: {info.get('trailingPE'):.2f}")
         
         # Historical performance

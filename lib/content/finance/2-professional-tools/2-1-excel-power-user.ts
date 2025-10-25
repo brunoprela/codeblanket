@@ -1,7 +1,7 @@
 export const section1 = {
-    id: '2-1',
-    title: 'Excel Power User for Finance',
-    content: `
+  id: '2-1',
+  title: 'Excel Power User for Finance',
+  content: `
 # Excel Power User for Finance
 
 ## Why Excel Still Dominates Finance
@@ -837,7 +837,6 @@ Excel remains the lingua franca of finance. Mastering these skills will:
 
 Remember: Excel proficiency is expected, not impressive. It's table stakes for finance roles, but combined with Python and data science skills, you become truly valuable.
 `,
-    quiz: '2-1-quiz',
-    discussionQuestions: '2-1-discussion'
+  quiz: '2-1-quiz',
+  discussionQuestions: '2-1-discussion',
 };
-

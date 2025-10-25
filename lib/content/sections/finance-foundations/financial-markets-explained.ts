@@ -87,8 +87,7 @@ def analyze_stock(ticker: str, period: str = '1y'):
     print(f"{'='*60}")
     print(f"\\nCompany: {info.get('longName', 'N/A')}")
     print(f"Sector: {info.get('sector', 'N/A')}")
-    print(f"Market Cap: ${info.get('marketCap', 0) / 1e9: .1f
-}B")
+    print(f"Market Cap: ${info.get('marketCap', 0) / 1e9:.1f}B")
 print(f"\\nPrice Information:")
 print(f"  Current: ${df['Close'].iloc[-1]:.2f}")
 print(f"  52-Week High: ${df['Close'].max():.2f}")

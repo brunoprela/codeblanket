@@ -1,8 +1,9 @@
 export const derivativesDiscussionQuestions = [
-    {
-        id: 1,
-        question: "A fintech startup wants to offer 'leveraged ETFs' that use futures contracts to provide 2x or 3x daily returns of an index. Design the rebalancing mechanism, explain the volatility decay problem that causes long-term underperformance, and discuss whether this is an ethical product to offer retail investors. Include mathematical examples showing how daily rebalancing causes performance divergence.",
-        answer: `## Comprehensive Answer:
+  {
+    id: 1,
+    question:
+      "A fintech startup wants to offer 'leveraged ETFs' that use futures contracts to provide 2x or 3x daily returns of an index. Design the rebalancing mechanism, explain the volatility decay problem that causes long-term underperformance, and discuss whether this is an ethical product to offer retail investors. Include mathematical examples showing how daily rebalancing causes performance divergence.",
+    answer: `## Comprehensive Answer:
 
 ### Understanding Leveraged ETFs
 
@@ -101,9 +102,9 @@ def demonstrate_volatility_decay():
         regular_value *= (1 + ret)
     
     print(f"Regular ETF:")
-    print(f"  Day 1: +10% → ${100 * 1.10: .2f
+    print(f"  Day 1: +10% → \${100 * 1.10: .2f
     }")
-    print(f"  Day 2: -9.09% → ${regular_value:.2f}")
+    print(f"  Day 2: -9.09% → \${regular_value:.2f}")
     print(f"  Total Return: {(regular_value - 100) / 100 * 100:.2f}%")
     
     # 2x Leveraged ETF(with daily rebalancing)
@@ -113,8 +114,8 @@ for ret in regular_etf_returns:
 leveraged_value *= (1 + leveraged_return)
 
 print(f"\\n2x Leveraged ETF:")
-print(f"  Day 1: +20% (2× +10%) → ${100 * 1.20:.2f}")
-print(f"  Day 2: -18.18% (2× -9.09%) → ${leveraged_value:.2f}")
+print(f"  Day 1: +20% (2× +10%) → \${100 * 1.20:.2f}")
+print(f"  Day 2: -18.18% (2× -9.09%) → \${leveraged_value:.2f}")
 print(f"  Total Return: {(leveraged_value - 100) / 100 * 100:.2f}%")
 
 print(f"\\n💡 KEY INSIGHT:")
@@ -149,9 +150,9 @@ lev2x_final = lev2x_path[-1]
 lev3x_final = lev3x_path[-1]
 
 print(f"After 100 days of 2% daily volatility:")
-print(f"  Index: ${index_final:.2f} ({(index_final-100)/100*100:+.2f}%)")
-print(f"  2x ETF: ${lev2x_final:.2f} ({(lev2x_final-100)/100*100:+.2f}%)")
-print(f"  3x ETF: ${lev3x_final:.2f} ({(lev3x_final-100)/100*100:+.2f}%)")
+print(f"  Index: \${index_final:.2f} ({(index_final-100)/100*100:+.2f}%)")
+print(f"  2x ETF: \${lev2x_final:.2f} ({(lev2x_final-100)/100*100:+.2f}%)")
+print(f"  3x ETF: \${lev3x_final:.2f} ({(lev3x_final-100)/100*100:+.2f}%)")
 
 print(f"\\n⚠️  Higher leverage = MORE decay!")
 print(f"     Even though index is flat, leveraged ETFs lost money")
@@ -362,12 +363,13 @@ Leveraged ETFs are:
 - ✅ **Useful for professionals** who understand mechanics
 
 If you build this, prioritize education and disclosures. The math doesn't lie - volatility decay is real and devastating for buy-and-hold investors.
-`
+`,
   },
-{
+  {
     id: 2,
-        question: "Design a derivatives pricing engine that can handle forwards, futures, options, and swaps. Discuss your choice of pricing models (Black-Scholes, binomial trees, Monte Carlo), how you'd handle the 'Greeks' (sensitivities), performance optimization for real-time pricing, and how to calibrate models to market data. Include consideration for exotic features (early exercise, barriers, etc.).",
-            answer: `## Comprehensive Architecture:
+    question:
+      "Design a derivatives pricing engine that can handle forwards, futures, options, and swaps. Discuss your choice of pricing models (Black-Scholes, binomial trees, Monte Carlo), how you'd handle the 'Greeks' (sensitivities), performance optimization for real-time pricing, and how to calibrate models to market data. Include consideration for exotic features (early exercise, barriers, etc.).",
+    answer: `## Comprehensive Architecture:
 
 [Content continues with full implementation details for a production-grade derivatives pricing engine, including Black-Scholes, binomial trees, Monte Carlo simulation, Greeks calculation, calibration methods, and performance optimization - approximately 3000 more words]
 
@@ -381,12 +383,13 @@ A production derivatives pricing engine needs:
 5. **Extensibility** for exotic derivatives
 
 [Full implementation would continue...]
-`
-},
-{
+`,
+  },
+  {
     id: 3,
-        question: "Explain how you would build a risk management system for a proprietary trading desk that trades derivatives across multiple asset classes (equities, rates, FX, commodities). Your system must monitor: (1) position limits, (2) VaR (Value at Risk), (3) Greeks limits, (4) counterparty exposure, and (5) scenario analysis. How would you handle a 'flash crash' or other extreme market event?",
-            answer: `## Comprehensive Risk Management System:
+    question:
+      "Explain how you would build a risk management system for a proprietary trading desk that trades derivatives across multiple asset classes (equities, rates, FX, commodities). Your system must monitor: (1) position limits, (2) VaR (Value at Risk), (3) Greeks limits, (4) counterparty exposure, and (5) scenario analysis. How would you handle a 'flash crash' or other extreme market event?",
+    answer: `## Comprehensive Risk Management System:
 
 [Content continues with full system design for multi-asset derivatives risk management, including VaR calculation, Greeks monitoring, stress testing, counterparty risk, and crisis handling procedures - approximately 3000 more words]
 
@@ -401,7 +404,6 @@ A production risk management system needs:
 6. **Kill switches** for extreme events
 
 [Full implementation would continue...]
-`
-}
+`,
+  },
 ];
-

@@ -983,6 +983,5 @@ print(f"Data from: {hub.available_platforms}")
 The best platform is the one that fits your workflow and budget. Don't pay for Bloomberg if you're not using the network!
 `,
   quiz: '2-3-quiz',
-  discussionQuestions: '2-3-discussion'
+  discussionQuestions: '2-3-discussion',
 };
-

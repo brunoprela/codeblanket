@@ -256,8 +256,7 @@ position = Position('AAPL', 100, 150.00)
 
 # Price moves
 position.update_price(155.00)
-print(f"Unrealized P&L: ${position.unrealized_pnl():, .2f
-}")
+print(f"Unrealized P&L: ${position.unrealized_pnl():,.2f}")
 
 # Close half position
 realized = position.realized_pnl(155.00, 50)

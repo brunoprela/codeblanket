@@ -41,8 +41,7 @@ Most people instinctively choose today. But let's quantify the difference:
 PV_today = 1_000_000
 FV_future = PV_today * (1 + 0.07)**10
 
-print(f"$1M today grows to: ${FV_future:, .0f
-}")
+print(f"$1M today grows to: ${FV_future:,.0f}")
 # $1M today grows to: $1, 967, 151
 
 # What's $1M in 10 years worth today?

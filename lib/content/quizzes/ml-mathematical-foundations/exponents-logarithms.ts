@@ -345,9 +345,9 @@ plt.legend()
 plt.grid(True)
 
 print(f"After 30 years:")
-print(f"Simple: \${simple[-1]:,.2f}")
-print(f"Compound: \${compound_annual[-1]:,.2f}")
-print(f"Continuous: \${continuous[-1]:,.2f}")
+print(f"Simple: \\${simple[-1]:,.2f}")
+print(f"Compound: \\${compound_annual[-1]:,.2f}")
+print(f"Continuous: \\${continuous[-1]:,.2f}")
             \`\`\`
 
 **Trading Application: Compounding Returns**:

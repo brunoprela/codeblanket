@@ -240,8 +240,7 @@ class MandAValuation:
         print(f"{'=' * 70}\\n")
         
         print("Valuation:")
-        print(f"  {self.target_name} Standalone Value: ${deal['Target Standalone Value']:, .0f
-}M")
+        print(f"  {self.target_name} Standalone Value: ${deal['Target Standalone Value']:,.0f}M")
 print(f"  Control Premium: {deal['Control Premium']:.1f}%")
 print(f"  Offer Price: ${deal['Offer Price']:,.0f}M")
 print(f"\\n  {self.acquirer_name} Value: ${deal['Acquirer Value']:,.0f}M")

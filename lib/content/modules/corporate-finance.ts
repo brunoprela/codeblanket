@@ -41,106 +41,106 @@ import { moduleProjectMultipleChoice } from '@/lib/content/multiple-choice/corpo
 
 // Transform functions
 const transformQuiz = (quiz: any) => ({
-    id: quiz.id,
-    question: quiz.question,
-    sampleAnswer: quiz.sampleAnswer,
-    keyPoints: quiz.keyPoints,
+  id: quiz.id,
+  question: quiz.question,
+  sampleAnswer: quiz.sampleAnswer,
+  keyPoints: quiz.keyPoints,
 });
 
 const transformMC = (mc: any) => ({
-    id: mc.id,
-    question: mc.question,
-    options: mc.options,
-    correctAnswer: mc.correctAnswer,
-    explanation: mc.explanation,
+  id: mc.id,
+  question: mc.question,
+  options: mc.options,
+  correctAnswer: mc.correctAnswer,
+  explanation: mc.explanation,
 });
 
 export const corporateFinanceModule: Module = {
-    id: 'corporate-finance',
-    title: 'Corporate Finance Fundamentals',
-    description: 'Master valuation, capital structure, M&A, LBO modeling, and core corporate finance concepts',
-    sections: [
-        {
-            id: timeValueOfMoney.id,
-            title: timeValueOfMoney.title,
-            content: timeValueOfMoney.content,
-        },
-        {
-            id: npvIrrCapitalBudgeting.id,
-            title: npvIrrCapitalBudgeting.title,
-            content: npvIrrCapitalBudgeting.content,
-        },
-        {
-            id: costOfCapitalWacc.id,
-            title: costOfCapitalWacc.title,
-            content: costOfCapitalWacc.content,
-        },
-        {
-            id: capmBeta.id,
-            title: capmBeta.title,
-            content: capmBeta.content,
-        },
-        {
-            id: capitalStructureLeverage.id,
-            title: capitalStructureLeverage.title,
-            content: capitalStructureLeverage.content,
-        },
-        {
-            id: valuationBasics.id,
-            title: valuationBasics.title,
-            content: valuationBasics.content,
-        },
-        {
-            id: dividendsShareBuybacks.id,
-            title: dividendsShareBuybacks.title,
-            content: dividendsShareBuybacks.content,
-        },
-        {
-            id: mergersAcquisitions.id,
-            title: mergersAcquisitions.title,
-            content: mergersAcquisitions.content,
-        },
-        {
-            id: leveragedBuyouts.id,
-            title: leveragedBuyouts.title,
-            content: leveragedBuyouts.content,
-        },
-        {
-            id: workingCapitalManagement.id,
-            title: workingCapitalManagement.title,
-            content: workingCapitalManagement.content,
-        },
-        {
-            id: moduleProject.id,
-            title: moduleProject.title,
-            content: moduleProject.content,
-        },
-    ],
-    quizzes: [
-        ...timeValueOfMoneyQuiz.map(transformQuiz),
-        ...npvIrrCapitalBudgetingQuiz.map(transformQuiz),
-        ...costOfCapitalWaccQuiz.map(transformQuiz),
-        ...capmBetaQuiz.map(transformQuiz),
-        ...capitalStructureLeverageQuiz.map(transformQuiz),
-        ...valuationBasicsQuiz.map(transformQuiz),
-        ...dividendsShareBuybacksQuiz.map(transformQuiz),
-        ...mergersAcquisitionsQuiz.map(transformQuiz),
-        ...leveragedBuyoutsQuiz.map(transformQuiz),
-        ...workingCapitalManagementQuiz.map(transformQuiz),
-        ...moduleProjectQuiz.map(transformQuiz),
-    ],
-    multipleChoiceQuestions: [
-        ...timeValueOfMoneyMultipleChoice.map(transformMC),
-        ...npvIrrCapitalBudgetingMultipleChoice.map(transformMC),
-        ...costOfCapitalWaccMultipleChoice.map(transformMC),
-        ...capmBetaMultipleChoice.map(transformMC),
-        ...capitalStructureLeverageMultipleChoice.map(transformMC),
-        ...valuationBasicsMultipleChoice.map(transformMC),
-        ...dividendsShareBuybacksMultipleChoice.map(transformMC),
-        ...mergersAcquisitionsMultipleChoice.map(transformMC),
-        ...leveragedBuyoutsMultipleChoice.map(transformMC),
-        ...workingCapitalManagementMultipleChoice.map(transformMC),
-        ...moduleProjectMultipleChoice.map(transformMC),
-    ],
+  id: 'corporate-finance',
+  title: 'Corporate Finance Fundamentals',
+  description:
+    'Master valuation, capital structure, M&A, LBO modeling, and core corporate finance concepts',
+  sections: [
+    {
+      id: timeValueOfMoney.id,
+      title: timeValueOfMoney.title,
+      content: timeValueOfMoney.content,
+    },
+    {
+      id: npvIrrCapitalBudgeting.id,
+      title: npvIrrCapitalBudgeting.title,
+      content: npvIrrCapitalBudgeting.content,
+    },
+    {
+      id: costOfCapitalWacc.id,
+      title: costOfCapitalWacc.title,
+      content: costOfCapitalWacc.content,
+    },
+    {
+      id: capmBeta.id,
+      title: capmBeta.title,
+      content: capmBeta.content,
+    },
+    {
+      id: capitalStructureLeverage.id,
+      title: capitalStructureLeverage.title,
+      content: capitalStructureLeverage.content,
+    },
+    {
+      id: valuationBasics.id,
+      title: valuationBasics.title,
+      content: valuationBasics.content,
+    },
+    {
+      id: dividendsShareBuybacks.id,
+      title: dividendsShareBuybacks.title,
+      content: dividendsShareBuybacks.content,
+    },
+    {
+      id: mergersAcquisitions.id,
+      title: mergersAcquisitions.title,
+      content: mergersAcquisitions.content,
+    },
+    {
+      id: leveragedBuyouts.id,
+      title: leveragedBuyouts.title,
+      content: leveragedBuyouts.content,
+    },
+    {
+      id: workingCapitalManagement.id,
+      title: workingCapitalManagement.title,
+      content: workingCapitalManagement.content,
+    },
+    {
+      id: moduleProject.id,
+      title: moduleProject.title,
+      content: moduleProject.content,
+    },
+  ],
+  quizzes: [
+    ...timeValueOfMoneyQuiz.map(transformQuiz),
+    ...npvIrrCapitalBudgetingQuiz.map(transformQuiz),
+    ...costOfCapitalWaccQuiz.map(transformQuiz),
+    ...capmBetaQuiz.map(transformQuiz),
+    ...capitalStructureLeverageQuiz.map(transformQuiz),
+    ...valuationBasicsQuiz.map(transformQuiz),
+    ...dividendsShareBuybacksQuiz.map(transformQuiz),
+    ...mergersAcquisitionsQuiz.map(transformQuiz),
+    ...leveragedBuyoutsQuiz.map(transformQuiz),
+    ...workingCapitalManagementQuiz.map(transformQuiz),
+    ...moduleProjectQuiz.map(transformQuiz),
+  ],
+  multipleChoiceQuestions: [
+    ...timeValueOfMoneyMultipleChoice.map(transformMC),
+    ...npvIrrCapitalBudgetingMultipleChoice.map(transformMC),
+    ...costOfCapitalWaccMultipleChoice.map(transformMC),
+    ...capmBetaMultipleChoice.map(transformMC),
+    ...capitalStructureLeverageMultipleChoice.map(transformMC),
+    ...valuationBasicsMultipleChoice.map(transformMC),
+    ...dividendsShareBuybacksMultipleChoice.map(transformMC),
+    ...mergersAcquisitionsMultipleChoice.map(transformMC),
+    ...leveragedBuyoutsMultipleChoice.map(transformMC),
+    ...workingCapitalManagementMultipleChoice.map(transformMC),
+    ...moduleProjectMultipleChoice.map(transformMC),
+  ],
 };
-

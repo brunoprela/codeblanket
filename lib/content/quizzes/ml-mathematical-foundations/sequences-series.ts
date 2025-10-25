@@ -501,9 +501,9 @@ portfolio = portfolio_sequence(1000, returns)
 
 print("Portfolio value sequence:")
 for i, (v, r) in enumerate(zip(portfolio[:-1], returns)):
-    print(f"V_{i} = \${v:.2f} → V_{i+1} = \${portfolio[i+1]:.2f} (return: {r*100:+.1f}%)")
+    print(f"V_{i} = \\${v:.2f} → V_{i+1} = \${portfolio[i+1]:.2f} (return: {r*100:+.1f}%)")
 
-print(f"\\nFinal value: \${portfolio[-1]:.2f}")
+print(f"\\nFinal value: \\${portfolio[-1]:.2f}")
 print(f"Total return: {(portfolio[-1]/portfolio[0] - 1)*100:.2f}%")
 \`\`\`
 
@@ -580,10 +580,10 @@ volatility_drag = volatility**2 / 2
 geometric_return = annual_return - volatility_drag
 wealth_geometric = initial_wealth * (1 + geometric_return)**years
 
-print(f"30-year wealth projection (initial \${initial_wealth:,}):")
-print(f"Arithmetic (wrong): \${wealth_arithmetic:,.0f}")
-print(f"Geometric (correct): \${wealth_geometric:,.0f}")
-print(f"Difference: \${wealth_arithmetic - wealth_geometric:,.0f}")
+print(f"30-year wealth projection (initial \\${initial_wealth:,}):")
+print(f"Arithmetic (wrong): \\${wealth_arithmetic:,.0f}")
+print(f"Geometric (correct): \\${wealth_geometric:,.0f}")
+print(f"Difference: \\${wealth_arithmetic - wealth_geometric:,.0f}")
 print(f"\\nOverstimation: {(wealth_arithmetic/wealth_geometric - 1)*100:.1f}%")
 \`\`\`
 
@@ -936,9 +936,9 @@ print("\\nTrading Episode Analysis:\\n")
 for gamma in gammas_trading:
     returns_seq = compute_returns_backward(np.array(rewards), gamma)
     G0 = returns_seq[0]
-    print(f"γ = {gamma:.2f}: Initial expected return G₀ = \${G0:.2f}")
+    print(f"γ = {gamma:.2f}: Initial expected return G₀ = \\${G0:.2f}")
 
-print(f"\\nTotal episode profit (undiscounted): \${np.sum(rewards):.2f}")
+print(f"\\nTotal episode profit (undiscounted): \\${np.sum(rewards):.2f}")
 print("\\nLower γ → Prioritizes near-term profits")
 print("Higher γ → Considers long-term strategy value")
 \`\`\`

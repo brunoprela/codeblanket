@@ -1,8 +1,9 @@
 export const fixedIncomeDiscussionQuestions = [
-    {
-        id: 1,
-        question: "You're building a robo-advisor platform that invests in both stocks and bonds. The product manager wants to show users a single 'bond return' percentage, similar to how you show stock returns. Explain why this is misleading and potentially problematic. Design a better approach to displaying bond performance that accounts for duration, yield changes, and reinvestment assumptions. How would you explain bond returns to a non-technical user?",
-        answer: `## Comprehensive Answer:
+  {
+    id: 1,
+    question:
+      "You're building a robo-advisor platform that invests in both stocks and bonds. The product manager wants to show users a single 'bond return' percentage, similar to how you show stock returns. Explain why this is misleading and potentially problematic. Design a better approach to displaying bond performance that accounts for duration, yield changes, and reinvestment assumptions. How would you explain bond returns to a non-technical user?",
+    answer: `## Comprehensive Answer:
 
 ### Why a Single "Bond Return" is Misleading
 
@@ -373,12 +374,13 @@ Never show a single "bond return" number without:
 5. **Plain English explanations** for non-experts
 
 Build education into the UI - bonds are less intuitive than stocks, so users need more context and explanation.
-`
-    },
-    {
-        id: 2,
-        question: "A startup wants to build a 'bond ETF' that automatically rebalances to maintain a constant duration of 5 years as time passes and interest rates change. Explain the challenges of maintaining constant duration, design the rebalancing algorithm, discuss transaction cost considerations, and estimate the tracking error vs a static bond portfolio. Would this product be valuable? Why or why not?",
-        answer: `## Comprehensive Answer:
+`,
+  },
+  {
+    id: 2,
+    question:
+      "A startup wants to build a 'bond ETF' that automatically rebalances to maintain a constant duration of 5 years as time passes and interest rates change. Explain the challenges of maintaining constant duration, design the rebalancing algorithm, discuss transaction cost considerations, and estimate the tracking error vs a static bond portfolio. Would this product be valuable? Why or why not?",
+    answer: `## Comprehensive Answer:
 
 ### Understanding the Challenge
 
@@ -834,12 +836,13 @@ A constant-duration bond ETF is:
 - 💰 **Cost matters** - keep transaction costs < 0.15%/year
 
 **Recommendation**: Build it as institutional product, not retail ETF. Focus on pension funds and insurance companies that need precise duration matching for liability management.
-`
-    },
-    {
-        id: 3,
-        question: "Design a bond screening and alert system for a hedge fund that monitors 10,000+ corporate bonds in real-time. The system should detect: (1) credit rating changes, (2) unusual yield spread widening/narrowing, (3) liquidity deterioration, and (4) potential arbitrage opportunities. Discuss your data architecture, alerting thresholds, false positive management, and how you'd handle the 2am phone call when a major issuer defaults.",
-        answer: `## Comprehensive System Design:
+`,
+  },
+  {
+    id: 3,
+    question:
+      "Design a bond screening and alert system for a hedge fund that monitors 10,000+ corporate bonds in real-time. The system should detect: (1) credit rating changes, (2) unusual yield spread widening/narrowing, (3) liquidity deterioration, and (4) potential arbitrage opportunities. Discuss your data architecture, alerting thresholds, false positive management, and how you'd handle the 2am phone call when a major issuer defaults.",
+    answer: `## Comprehensive System Design:
 
 ### System Requirements
 
@@ -961,7 +964,6 @@ class DefaultCrisisHandler:
 - Runbook for various scenarios
 
 This would be a ~15-20 page detailed architecture document in production.
-`
-    }
+`,
+  },
 ];
-

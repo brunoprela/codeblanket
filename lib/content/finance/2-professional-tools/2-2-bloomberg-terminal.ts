@@ -1,7 +1,7 @@
 export const section2 = {
-    id: '2-2',
-    title: 'Bloomberg Terminal Fundamentals',
-    content: `
+  id: '2-2',
+  title: 'Bloomberg Terminal Fundamentals',
+  content: `
 # Bloomberg Terminal Fundamentals
 
 ## What is the Bloomberg Terminal?
@@ -726,7 +726,7 @@ def get_company_info(ticker):
     print(f"Company: {info.get('longName')}")
     print(f"Industry: {info.get('industry')}")
     print(f"Sector: {info.get('sector')}")
-    print(f"Market Cap: ${info.get('marketCap'):, .0f
+    print(f"Market Cap: \${info.get('marketCap'):, .0f
 }")
 print(f"Description: {info.get('longBusinessSummary')}")
 
@@ -976,7 +976,6 @@ The Terminal represents old-school finance meeting modern technology. Understand
 4. Build Bloomberg Excel templates
 5. Set up Python alternatives for personal use
 `,
-    quiz: '2-2-quiz',
-        discussionQuestions: '2-2-discussion'
+  quiz: '2-2-quiz',
+  discussionQuestions: '2-2-discussion',
 };
-

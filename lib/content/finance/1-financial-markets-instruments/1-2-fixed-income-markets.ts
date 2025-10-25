@@ -1,8 +1,9 @@
 export const fixedIncomeMarkets = {
-    title: "Fixed Income Markets",
-    slug: "fixed-income-markets",
-    description: "Master bond markets, pricing, and yield curve analysis for building fixed income systems",
-    content: `
+  title: 'Fixed Income Markets',
+  slug: 'fixed-income-markets',
+  description:
+    'Master bond markets, pricing, and yield curve analysis for building fixed income systems',
+  content: `
 # Fixed Income Markets
 
 ## Introduction: Why Fixed Income Matters
@@ -99,15 +100,15 @@ treasury_note = Bond(
 )
 
 print(f"Bond: {treasury_note.issuer}")
-print(f"Face Value: ${treasury_note.face_value:, .0f
+print(f"Face Value: \${treasury_note.face_value:, .0f
 }")
 print(f"Coupon Rate: {treasury_note.coupon_rate*100}%")
-print(f"Coupon Payment (semi-annual): ${treasury_note.get_coupon_payment():.2f}")
+print(f"Coupon Payment (semi-annual): \${treasury_note.get_coupon_payment():.2f}")
 print(f"Years to Maturity: {treasury_note.years_to_maturity():.2f}")
 
 print("\\nCash Flows:")
 for i, cf in enumerate(treasury_note.get_cash_flows()[: 5], 1):
-    print(f"Payment {i}: {cf['date'].strftime('%Y-%m-%d')} - ${cf['amount']:.2f} ({cf['type']})")
+    print(f"Payment {i}: {cf['date'].strftime('%Y-%m-%d')} - \${cf['amount']:.2f} ({cf['type']})")
 \`\`\`
 
 **Key Terms:**
@@ -184,9 +185,9 @@ t_note = TreasuryBond.create_t_note(face_value=1000, years=5, coupon_rate=0.04)
 t_bond = TreasuryBond.create_t_bond(face_value=1000, years=30, coupon_rate=0.045)
 
 print("Treasury Securities:")
-print(f"T-Bill (91 days): ${t_bill.face_value}")
-print(f"T-Note (5 year): ${t_note.face_value}, {t_note.coupon_rate*100}% coupon")
-print(f"T-Bond (30 year): ${t_bond.face_value}, {t_bond.coupon_rate*100}% coupon")
+print(f"T-Bill (91 days): \${t_bill.face_value}")
+print(f"T-Note (5 year): \${t_note.face_value}, {t_note.coupon_rate*100}% coupon")
+print(f"T-Bond (30 year): \${t_bond.face_value}, {t_bond.coupon_rate*100}% coupon")
 \`\`\`
 
 ### 2. Corporate Bonds
@@ -499,7 +500,7 @@ print("Bond Pricing at Different Yields:\\n")
 for ytm in [0.03, 0.04, 0.05]:
     result = BondPricer.price_bond(t_note, ytm)
     print(f"YTM = {ytm*100}%:")
-    print(f"  Price: ${result['price']: .2f} ({ result['price_as_percent_of_par']: .2f } % of par) ")
+    print(f"  Price: \${result['price']: .2f} ({ result['price_as_percent_of_par']: .2f } % of par) ")
 print(f"  Type: {result['price_type']}")
 print()
 
@@ -512,7 +513,7 @@ print("\\nWhy? Higher discount rate → lower PV of future cash flows")
 # Calculate YTM from market price
 market_price = 950  # Bond trading at discount
 calculated_ytm = BondPricer.calculate_ytm(t_note, market_price)
-print(f"\\nIf bond trades at ${market_price}, YTM = {calculated_ytm*100:.3f}%")
+print(f"\\nIf bond trades at \${market_price}, YTM = {calculated_ytm*100:.3f}%")
 \`\`\`
 
 **Critical Relationships:**
@@ -755,13 +756,13 @@ def analyze_treasury_market():
     }
     
     print("U.S. Treasury Market Overview:\\n")
-    print(f"Total Outstanding: ${market_overview['total_outstanding'] / 1e12: .1f} trillion")
-print(f"Daily Trading Volume: ${market_overview['daily_volume']/1e9:.0f} billion")
+    print(f"Total Outstanding: \${market_overview['total_outstanding'] / 1e12: .1f} trillion")
+print(f"Daily Trading Volume: \${market_overview['daily_volume']/1e9:.0f} billion")
 print(f"Role: {market_overview['benchmark_role']}")
 
 print("\\nTop Holders:")
 for holder, amount in market_overview['largest_holders'].items():
-    print(f"  {holder}: ${amount/1e12:.2f}T")
+    print(f"  {holder}: \${amount/1e12:.2f}T")
 
 print("\\nWhy Treasuries Matter:")
 print("✓ Risk-free rate (foundation of all pricing)")
@@ -884,8 +885,8 @@ platform.update_yield_curve(normal_curve)
 # Analyze specific bond
 analysis = platform.analyze_bond('UST-10Y', market_price=980)
 print("Bond Analysis:")
-print(f"Fair Value: ${analysis['fair_value']: .2f}")
-print(f"Market Price: ${analysis['market_price']:.2f}")
+print(f"Fair Value: \${analysis['fair_value']: .2f}")
+print(f"Market Price: \${analysis['market_price']:.2f}")
 print(f"YTM: {analysis['ytm']*100:.3f}%")
 print(f"Is Cheap: {analysis['is_cheap']}")
 
@@ -923,15 +924,18 @@ print(f"\\nFound {len(results)} bonds matching criteria")
 
 You now understand fixed income markets - ready to build bond analytics systems!
 `,
-    exercises: [
-        {
-            prompt: "Build a bond portfolio optimizer that maximizes yield while maintaining a target duration and credit quality. Include constraints for sector diversification and issue concentration limits.",
-            solution: "// Implementation: 1) Fetch universe of bonds with prices/yields, 2) Calculate duration for each bond, 3) Set up optimization problem (maximize yield), 4) Add constraints (target duration ±0.5 years, min 80% investment grade, max 5% in single issuer, sector limits), 5) Use cvxpy or scipy.optimize, 6) Output optimal portfolio weights"
-        },
-        {
-            prompt: "Create a yield curve construction system that bootstraps spot rates from bond prices, handling multiple bonds per maturity. Implement smoothing (e.g., Nelson-Siegel model) and generate forward rate curves.",
-            solution: "// Implementation: 1) Collect bond prices and cash flows for multiple bonds, 2) Bootstrap short end (T-bills) for spot rates, 3) Iterate longer maturities solving for spot rates, 4) Fit Nelson-Siegel or cubic spline for smooth curve, 5) Calculate forward rates from spot rates, 6) Validate curve is arbitrage-free, 7) Visualize with confidence intervals"
-        }
-    ]
+  exercises: [
+    {
+      prompt:
+        'Build a bond portfolio optimizer that maximizes yield while maintaining a target duration and credit quality. Include constraints for sector diversification and issue concentration limits.',
+      solution:
+        '// Implementation: 1) Fetch universe of bonds with prices/yields, 2) Calculate duration for each bond, 3) Set up optimization problem (maximize yield), 4) Add constraints (target duration ±0.5 years, min 80% investment grade, max 5% in single issuer, sector limits), 5) Use cvxpy or scipy.optimize, 6) Output optimal portfolio weights',
+    },
+    {
+      prompt:
+        'Create a yield curve construction system that bootstraps spot rates from bond prices, handling multiple bonds per maturity. Implement smoothing (e.g., Nelson-Siegel model) and generate forward rate curves.',
+      solution:
+        '// Implementation: 1) Collect bond prices and cash flows for multiple bonds, 2) Bootstrap short end (T-bills) for spot rates, 3) Iterate longer maturities solving for spot rates, 4) Fit Nelson-Siegel or cubic spline for smooth curve, 5) Calculate forward rates from spot rates, 6) Validate curve is arbitrage-free, 7) Visualize with confidence intervals',
+    },
+  ],
 };
-

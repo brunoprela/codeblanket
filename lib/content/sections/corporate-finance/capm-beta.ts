@@ -1,7 +1,7 @@
 export const capmBeta = {
-    title: 'CAPM & Beta',
-    id: 'capm-beta',
-    content: `
+  title: 'CAPM & Beta',
+  id: 'capm-beta',
+  content: `
 # CAPM & Beta
 
 ## Introduction
@@ -1049,4 +1049,3 @@ You now understand CAPM and beta! Next topics:
 **Next Section**: [Capital Structure & Leverage](./capital-structure-leverage) →
 `,
 };
-

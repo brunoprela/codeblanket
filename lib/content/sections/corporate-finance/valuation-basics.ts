@@ -341,8 +341,7 @@ class DCFModel:
         print(f"{'=' * 60}\\n")
         
         print("Valuation Build-Up:")
-        print(f"  PV of Projected FCF (Years 1-{len(self.projections)}): ${self.valuation_summary['PV of Projected FCF']:, .0f
-}M")
+        print(f"  PV of Projected FCF (Years 1-{len(self.projections)}): ${self.valuation_summary['PV of Projected FCF']:,.0f}M")
 print(f"  Terminal Value: ${self.valuation_summary['Terminal Value']:,.0f}M")
 print(f"  PV of Terminal Value: ${self.valuation_summary['PV of Terminal Value']:,.0f}M")
 print(f"  {'─' * 58}")

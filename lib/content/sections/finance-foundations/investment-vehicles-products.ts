@@ -85,8 +85,7 @@ class StockPortfolio:
             portfolio_data.append({
                 'Ticker': ticker,
                 'Shares': shares,
-                'Cost Basis': f'${cost_basis: .2f
-}',
+                'Cost Basis': f'${cost_basis:.2f}',
 'Current Price': f'${current_price:.2f}',
     'Cost': f'${cost:.2f}',
         'Current Value': f'${current_value:.2f}',

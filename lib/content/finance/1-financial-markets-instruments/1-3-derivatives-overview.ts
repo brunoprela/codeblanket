@@ -98,14 +98,14 @@ margin_required = 10_000  # $10K margin
 leverage = oil_future.calculate_leverage_ratio(margin_required)
 
 print(f"Oil Futures Contract:")
-print(f"Notional Value: ${oil_future.notional_amount:,
+print(f"Notional Value: \${oil_future.notional_amount:,
 }")
-print(f"Margin Required: ${margin_required:,}")
+print(f"Margin Required: \${margin_required:,}")
 print(f"Leverage: {leverage:.1f}x")
 print(f"\\n⚠️  If oil moves 1%, your P&L moves {leverage}%!")
-print(f"   Oil +10% = Your account +{leverage*0.10:.0f}% (+${oil_future.notional_amount * 0.10:,.0f})")
-print(f"   Oil -10% = Your account -{leverage*0.10:.0f}% (-${oil_future.notional_amount * 0.10:,.0f})")
-print(f"\\n⚡ With only ${margin_required:,}, you control ${oil_future.notional_amount:,} of oil!")
+print(f"   Oil +10% = Your account +{leverage*0.10:.0f}% (+\${oil_future.notional_amount * 0.10:,.0f})")
+print(f"   Oil -10% = Your account -{leverage*0.10:.0f}% (-\${oil_future.notional_amount * 0.10:,.0f})")
+print(f"\\n⚡ With only \${margin_required:,}, you control \${oil_future.notional_amount:,} of oil!")
 \`\`\`
 
 **Key Insight**: Derivatives provide **leverage** - small price moves in the underlying create large P&L swings in your account. This is both their power (amplify gains) and danger (amplify losses).
@@ -339,13 +339,13 @@ bull_trade = SpeculationExample.bull_futures_trade()
 print(f"Bullish Trader - {bull_trade['position']}")
 print(f"  Leverage: {bull_trade['leverage']:.0f}x")
 print(f"  Oil +{bull_trade['price_move']} → Account +{bull_trade['return_on_margin']:.0f}%")
-print(f"  Profit: ${bull_trade['dollar_profit']:,}")
+print(f"  Profit: \${bull_trade['dollar_profit']:,}")
 
 bear_trade = SpeculationExample.bear_put_option()
 print(f"\\nBearish Trader - {bear_trade['position']}")
-print(f"  Cost: ${bear_trade['cost']:,}")
+print(f"  Cost: \${bear_trade['cost']:,}")
 print(f"  Stock -{bear_trade['stock_drop']} → Return +{bear_trade['return_on_investment']:.0f}%")
-print(f"  Profit: ${bear_trade['option_profit']:,}")
+print(f"  Profit: \${bear_trade['option_profit']:,}")
 print(f"\\n⚠️  Speculation = high risk, high reward. Can lose entire investment!")
 \`\`\`
 
@@ -453,8 +453,8 @@ print("\\n=== Arbitrage Use Cases ===\\n")
 arb1 = ArbitrageExample.cash_and_carry_arbitrage()
 if arb1.get('arbitrage_opportunity') != False:
     print(f"{arb1['arbitrage_type']} Arbitrage:")
-print(f"  Mispricing: ${arb1['mispricing']:.2f}")
-print(f"  Risk-Free Profit: ${arb1['risk_free_profit']:.2f}")
+print(f"  Mispricing: \${arb1['mispricing']:.2f}")
+print(f"  Risk-Free Profit: \${arb1['risk_free_profit']:.2f}")
 print(f"  {arb1['interpretation']}")
 
 print("\\n💡 In efficient markets, arbitrage opportunities disappear in seconds")
@@ -558,19 +558,19 @@ usd_eur_forward = ForwardContract(
 
 print("=== Forward Contract Example ===\\n")
 print(f"Contract: {usd_eur_forward.underlying_asset}")
-print(f"Forward Rate Locked: ${usd_eur_forward.forward_price}")
+print(f"Forward Rate Locked: \${usd_eur_forward.forward_price}")
 print(f"Maturity: {usd_eur_forward.time_to_maturity_days()} days")
 
 # Scenario 1: EUR strengthens to 1.15
 payoff1 = usd_eur_forward.calculate_payoff(1.15)
-print(f"\\nScenario 1: EUR at ${payoff1['spot_at_maturity']}")
-print(f"  {payoff1['long_party']}: {'Gains' if payoff1['long_payoff'] > 0 else 'Loses'} ${abs(payoff1['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
+print(f"\\nScenario 1: EUR at \${payoff1['spot_at_maturity']}")
+print(f"  {payoff1['long_party']}: {'Gains' if payoff1['long_payoff'] > 0 else 'Loses'} \${abs(payoff1['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
 print(f"  (Locked in $1.10, market is $1.15, saved $0.05 per euro)")
 
 # Scenario 2: EUR weakens to 1.05
 payoff2 = usd_eur_forward.calculate_payoff(1.05)
-print(f"\\nScenario 2: EUR at ${payoff2['spot_at_maturity']}")
-print(f"  {payoff2['long_party']}: {'Gains' if payoff2['long_payoff'] > 0 else 'Loses'} ${abs(payoff2['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
+print(f"\\nScenario 2: EUR at \${payoff2['spot_at_maturity']}")
+print(f"  {payoff2['long_party']}: {'Gains' if payoff2['long_payoff'] > 0 else 'Loses'} \${abs(payoff2['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
 print(f"  (Locked in $1.10, market is $1.05, overpaid $0.05 per euro)")
 
 # Mark to market now
@@ -677,15 +677,15 @@ sp500_future = FuturesContract(
 
 print("\\n=== Futures Contract Example ===\\n")
 print(f"Contract: {sp500_future.underlying_asset}")
-print(f"Multiplier: ${sp500_future.contract_size} per point")
-print(f"Initial Margin: ${sp500_future.initial_margin:,}")
+print(f"Multiplier: \${sp500_future.contract_size} per point")
+print(f"Initial Margin: \${sp500_future.initial_margin:,}")
 
 # Day 1: Enter long at 4500
 entry_price = 4500
 position_value = entry_price * sp500_future.contract_size
 print(f"\\nDay 1: Enter long at {entry_price}")
-print(f"Position Value: ${position_value:,}")
-print(f"Margin Posted: ${sp500_future.initial_margin:,}")
+print(f"Position Value: \${position_value:,}")
+print(f"Margin Posted: \${sp500_future.initial_margin:,}")
 print(f"Leverage: {position_value / sp500_future.initial_margin:.1f}x")
 
 # Day 2: Price moves to 4520(+20 points)
@@ -698,8 +698,8 @@ pnl_day2 = sp500_future.calculate_daily_pnl(
 )
 
 print(f"\\nDay 2: Price moves to {day2_price} (+{day2_price - entry_price} points)")
-print(f"Daily P&L: ${pnl_day2['total_daily_pnl']:,}")
-print(f"Account Balance: ${sp500_future.initial_margin + pnl_day2['total_daily_pnl']:,}")
+print(f"Daily P&L: \${pnl_day2['total_daily_pnl']:,}")
+print(f"Account Balance: \${sp500_future.initial_margin + pnl_day2['total_daily_pnl']:,}")
 
 # Day 3: Market crashes to 4400(-120 points)
 day3_price = 4400
@@ -713,8 +713,8 @@ pnl_day3 = sp500_future.calculate_daily_pnl(
 new_balance = sp500_future.initial_margin + pnl_day2['total_daily_pnl'] + pnl_day3['total_daily_pnl']
 
 print(f"\\nDay 3: Market crashes to {day3_price} (-{day2_price - day3_price} points)")
-print(f"Daily P&L: ${pnl_day3['total_daily_pnl']:,}")
-print(f"Account Balance: ${new_balance:,}")
+print(f"Daily P&L: \${pnl_day3['total_daily_pnl']:,}")
+print(f"Account Balance: \${new_balance:,}")
 
 # Check for margin call
 margin_check = sp500_future.check_margin_call(
@@ -725,7 +725,7 @@ margin_check = sp500_future.check_margin_call(
 
 print(f"\\n{margin_check['warning']}")
 if margin_check['is_margin_call']:
-    print(f"Must deposit: ${margin_check['amount_to_deposit']:,}")
+    print(f"Must deposit: \${margin_check['amount_to_deposit']:,}")
 \`\`\`
 
 **Forwards vs Futures Comparison:**
@@ -819,15 +819,15 @@ call = OptionContract(
 )
 
 print("\\n=== Option Payoff Examples ===\\n")
-print(f"Call Option: Strike ${call.strike}, Premium ${call.premium}")
+print(f"Call Option: Strike \${call.strike}, Premium \${call.premium}")
 print(f"Moneyness: {call.moneyness()}")
 
 # Calculate payoffs at different prices
 for price in [80, 90, 100, 110, 120]:
     result = call.calculate_payoff(price)
-    print(f"\\nStock at ${price}:")
-    print(f"  Intrinsic Value: ${result['intrinsic_value']: .2f}")
-print(f"  Net Profit: ${result['net_profit']:.2f}")
+    print(f"\\nStock at \${price}:")
+    print(f"  Intrinsic Value: \${result['intrinsic_value']: .2f}")
+print(f"  Net Profit: \${result['net_profit']:.2f}")
 print(f"  Return: {result['return']:.0f}%")
 
 print("\\n💡 Key Insight:")
@@ -915,14 +915,14 @@ floating_rates = [0.03 + np.random.normal(0, 0.005)
 payments_df = swap.calculate_payments(floating_rates)
 
 print("\\n=== Interest Rate Swap Example ===\\n")
-print(f"Notional: ${swap.notional:,}")
+print(f"Notional: \${swap.notional:,}")
 print(f"Fixed Rate: {swap.fixed_rate*100}%")
 print(f"Tenor: {swap.tenor_years} years")
 print(f"\\nPayment Schedule:")
 print(payments_df.to_string(index = False))
 
 final_pnl = payments_df['cumulative_pnl'].iloc[-1]
-print(f"\\nFinal P&L (Fixed Payer): ${final_pnl:,.0f}")
+print(f"\\nFinal P&L (Fixed Payer): \${final_pnl:,.0f}")
 if final_pnl < 0:
     print("Fixed payer paid more than received (rates stayed below 4%)")
 else:

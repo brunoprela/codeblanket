@@ -1,7 +1,7 @@
 export const careerPathsEngineersFinance = {
-    title: 'Career Paths for Engineers in Finance',
-    id: 'career-paths-engineers-finance',
-    content: `
+  title: 'Career Paths for Engineers in Finance',
+  id: 'career-paths-engineers-finance',
+  content: `
 # Career Paths for Engineers in Finance
 
 ## Introduction
@@ -510,4 +510,3 @@ Build **low-latency systems** for exchanges, market data vendors, trading firms.
 Your engineering skills are valuable everywhere in finance. Pick the path that aligns with your interests! 🚀
 `,
 };
-

@@ -1,9 +1,9 @@
 export const careerPathsEngineersFinanceQuiz = [
-    {
-        id: 'cpef-q-1',
-        question:
-            'You\'re deciding between three job offers: (1) Two Sigma - Quant Researcher ($350K total, PhD required, research-focused, 60 hr weeks), (2) Stripe - Senior Engineer ($400K with equity, full-stack web, 50 hr weeks), (3) Goldman Sachs - Strat ($280K, trading desk support, 70 hr weeks). Analyze: compensation (cash vs equity, bonus structure, vesting), career growth (skills developed, exit opportunities), work-life balance, risk factors, and long-term wealth potential. Which would you choose for a 10-year career horizon and why? Consider: what if Stripe IPO fails? What if Two Sigma strategies underperform? What if banking bonus pool shrinks?',
-        sampleAnswer: `Comprehensive Career Offer Analysis:
+  {
+    id: 'cpef-q-1',
+    question:
+      "You're deciding between three job offers: (1) Two Sigma - Quant Researcher ($350K total, PhD required, research-focused, 60 hr weeks), (2) Stripe - Senior Engineer ($400K with equity, full-stack web, 50 hr weeks), (3) Goldman Sachs - Strat ($280K, trading desk support, 70 hr weeks). Analyze: compensation (cash vs equity, bonus structure, vesting), career growth (skills developed, exit opportunities), work-life balance, risk factors, and long-term wealth potential. Which would you choose for a 10-year career horizon and why? Consider: what if Stripe IPO fails? What if Two Sigma strategies underperform? What if banking bonus pool shrinks?",
+    sampleAnswer: `Comprehensive Career Offer Analysis:
 
 **1. Total Compensation Analysis (10-Year Horizon)**
 
@@ -217,39 +217,38 @@ Years 6-10 Stripe: Staff/Principal, leadership ($4-5M total comp)
 Year 11+: Either (A) Continue Stripe as Principal/VP, or (B) Start fintech company with deep payments knowledge + $10M net worth cushion
 
 **Final Answer**: Stripe - for skills, balance, optionality, and long-term wealth potential (not just next 10 years, but 20-30 year career).`,
-        keyPoints: [
-            'Compensation: Two Sigma highest ($6.5M/10yr), Stripe $6M + equity upside, Goldman $6M but volatile bonus',
-            'Skills: Stripe best (modern tech, transferable), Two Sigma specialized (ML for trading), Goldman legacy (Excel/VBA)',
-            'Work-life: Stripe 50hrs (⭐⭐⭐⭐), Two Sigma 60hrs (⭐⭐), Goldman 70hrs (⭐⭐)',
-            'Exit options: Stripe broadest (any tech), Two Sigma narrow (AI/quant), Goldman finance-focused',
-            'Risk-adjusted: Stripe wins on skills + balance + equity upside despite lower pure cash comp',
-        ],
-    },
-    {
-        id: 'cpef-q-2',
-        question:
-            'Design a self-study plan to break into quantitative finance as a software engineer (no finance background, no PhD). Timeline: 6 months. Cover: (1) foundational knowledge (finance, statistics, ML), (2) practical projects (trading strategies, backtesting), (3) portfolio building (GitHub, blog, competitions), (4) networking strategy, (5) application tactics. What books/courses/resources would you use? What projects would demonstrate competence? How would you position yourself to tier-2 quant funds?',
-        sampleAnswer: `Answer to be completed (6-month self-study plan covering: Month 1-2 foundations with books "Python for Finance" + fast.ai ML course + Coursera statistics, Month 3-4 build 3 projects (momentum strategy backtest, pairs trading with cointegration, sentiment analysis trading bot) all on GitHub with detailed README, Month 5 compete in Kaggle Jane Street competition + write technical blog posts explaining strategies, Month 6 network via QuantConnect forum + LinkedIn + informational interviews, application tactics include targeting tier-2 funds like Wolverine/Optiver/IMC that hire without PhD, emphasize software engineering expertise + demonstrable quant skills via projects, prepare for interview with "Heard on the Street" probability questions + LeetCode + explaining your backtests, realistic timeline is 6-12 months to first offer at tier-2 fund starting $180-250K, then build track record to move to tier-1).`,
-        keyPoints: [
-            'Foundations (2 months): "Python for Finance" book, fast.ai ML, statistics (Coursera), portfolio theory basics',
-            'Projects (2 months): Momentum backtest, pairs trading, sentiment analysis bot - all on GitHub with detailed documentation',
-            'Portfolio (1 month): Kaggle competitions (Jane Street), technical blog posts, QuantConnect live strategies',
-            'Networking (ongoing): LinkedIn (connect with quant devs), QuantConnect forums, informational interviews, conferences',
-            'Application (1 month): Target tier-2 funds (Optiver, IMC, Wolverine), emphasize SWE skills + quant projects, realistic $200-300K starting comp',
-        ],
-    },
-    {
-        id: 'cpef-q-3',
-        question:
-            'You\'re a senior engineer at FAANG ($500K total comp, L6 level, 45 hr weeks) considering a move to finance. Compare trade-offs for: (1) Jane Street (market maker, $600K+, 55 hrs, OCaml), (2) BlackRock (asset manager, $400K, 45 hrs, Python/risk systems), (3) Robinhood (fintech, $550K with equity, 50 hrs, React/Python). Analyze: compensation change (including equity risk), skill development, career trajectory, reversibility (can you return to tech?), and regret minimization. Which minimizes regret over 20-year career?',
-        sampleAnswer: `Answer to be completed (comprehensive analysis covering: Jane Street offers $600-800K all-cash with proprietary OCaml that's hard to transfer back to tech but ultimate trading/systems challenge, BlackRock $400K is pay cut but best work-life balance and transferable Python/risk skills, Robinhood $550K with equity upside similar to FAANG culture/stack but fintech risk, regret minimization framework suggests staying FAANG for most engineers unless you specifically want trading challenge (Jane Street) or fintech product building (Robinhood), reversibility analysis shows Robinhood easiest to return to FAANG (same React/Python stack), Jane Street hardest (specialized OCaml/trading), BlackRock moderate (risk systems niche but valuable), ultimate recommendation depends on personal priorities but for risk-averse choose BlackRock for minimal disruption, for maximum comp choose Jane Street, for best of both worlds stay FAANG and do quant trading as side project).`,
-        keyPoints: [
-            'Compensation: Jane Street $600-800K cash (20% up), BlackRock $400K (20% down), Robinhood $550K + equity (lateral)',
-            'Skills: Jane Street specialized (OCaml, trading), BlackRock transferable (Python, risk), Robinhood FAANG-like (React, Python)',
-            'Reversibility: Robinhood easiest to return (same stack), Jane Street hardest (specialized), BlackRock moderate',
-            'Regret minimization: Stay FAANG unless specific passion for trading (Jane Street) or fintech products (Robinhood)',
-            'Work-life: BlackRock best (45hrs), Robinhood similar (50hrs), Jane Street more intense (55hrs + trading pressure)',
-        ],
-    },
+    keyPoints: [
+      'Compensation: Two Sigma highest ($6.5M/10yr), Stripe $6M + equity upside, Goldman $6M but volatile bonus',
+      'Skills: Stripe best (modern tech, transferable), Two Sigma specialized (ML for trading), Goldman legacy (Excel/VBA)',
+      'Work-life: Stripe 50hrs (⭐⭐⭐⭐), Two Sigma 60hrs (⭐⭐), Goldman 70hrs (⭐⭐)',
+      'Exit options: Stripe broadest (any tech), Two Sigma narrow (AI/quant), Goldman finance-focused',
+      'Risk-adjusted: Stripe wins on skills + balance + equity upside despite lower pure cash comp',
+    ],
+  },
+  {
+    id: 'cpef-q-2',
+    question:
+      'Design a self-study plan to break into quantitative finance as a software engineer (no finance background, no PhD). Timeline: 6 months. Cover: (1) foundational knowledge (finance, statistics, ML), (2) practical projects (trading strategies, backtesting), (3) portfolio building (GitHub, blog, competitions), (4) networking strategy, (5) application tactics. What books/courses/resources would you use? What projects would demonstrate competence? How would you position yourself to tier-2 quant funds?',
+    sampleAnswer: `Answer to be completed (6-month self-study plan covering: Month 1-2 foundations with books "Python for Finance" + fast.ai ML course + Coursera statistics, Month 3-4 build 3 projects (momentum strategy backtest, pairs trading with cointegration, sentiment analysis trading bot) all on GitHub with detailed README, Month 5 compete in Kaggle Jane Street competition + write technical blog posts explaining strategies, Month 6 network via QuantConnect forum + LinkedIn + informational interviews, application tactics include targeting tier-2 funds like Wolverine/Optiver/IMC that hire without PhD, emphasize software engineering expertise + demonstrable quant skills via projects, prepare for interview with "Heard on the Street" probability questions + LeetCode + explaining your backtests, realistic timeline is 6-12 months to first offer at tier-2 fund starting $180-250K, then build track record to move to tier-1).`,
+    keyPoints: [
+      'Foundations (2 months): "Python for Finance" book, fast.ai ML, statistics (Coursera), portfolio theory basics',
+      'Projects (2 months): Momentum backtest, pairs trading, sentiment analysis bot - all on GitHub with detailed documentation',
+      'Portfolio (1 month): Kaggle competitions (Jane Street), technical blog posts, QuantConnect live strategies',
+      'Networking (ongoing): LinkedIn (connect with quant devs), QuantConnect forums, informational interviews, conferences',
+      'Application (1 month): Target tier-2 funds (Optiver, IMC, Wolverine), emphasize SWE skills + quant projects, realistic $200-300K starting comp',
+    ],
+  },
+  {
+    id: 'cpef-q-3',
+    question:
+      "You're a senior engineer at FAANG ($500K total comp, L6 level, 45 hr weeks) considering a move to finance. Compare trade-offs for: (1) Jane Street (market maker, $600K+, 55 hrs, OCaml), (2) BlackRock (asset manager, $400K, 45 hrs, Python/risk systems), (3) Robinhood (fintech, $550K with equity, 50 hrs, React/Python). Analyze: compensation change (including equity risk), skill development, career trajectory, reversibility (can you return to tech?), and regret minimization. Which minimizes regret over 20-year career?",
+    sampleAnswer: `Answer to be completed (comprehensive analysis covering: Jane Street offers $600-800K all-cash with proprietary OCaml that's hard to transfer back to tech but ultimate trading/systems challenge, BlackRock $400K is pay cut but best work-life balance and transferable Python/risk skills, Robinhood $550K with equity upside similar to FAANG culture/stack but fintech risk, regret minimization framework suggests staying FAANG for most engineers unless you specifically want trading challenge (Jane Street) or fintech product building (Robinhood), reversibility analysis shows Robinhood easiest to return to FAANG (same React/Python stack), Jane Street hardest (specialized OCaml/trading), BlackRock moderate (risk systems niche but valuable), ultimate recommendation depends on personal priorities but for risk-averse choose BlackRock for minimal disruption, for maximum comp choose Jane Street, for best of both worlds stay FAANG and do quant trading as side project).`,
+    keyPoints: [
+      'Compensation: Jane Street $600-800K cash (20% up), BlackRock $400K (20% down), Robinhood $550K + equity (lateral)',
+      'Skills: Jane Street specialized (OCaml, trading), BlackRock transferable (Python, risk), Robinhood FAANG-like (React, Python)',
+      'Reversibility: Robinhood easiest to return (same stack), Jane Street hardest (specialized), BlackRock moderate',
+      'Regret minimization: Stay FAANG unless specific passion for trading (Jane Street) or fintech products (Robinhood)',
+      'Work-life: BlackRock best (45hrs), Robinhood similar (50hrs), Jane Street more intense (55hrs + trading pressure)',
+    ],
+  },
 ];
-

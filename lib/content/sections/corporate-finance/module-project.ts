@@ -1,7 +1,7 @@
 export const moduleProject = {
-    title: 'Module 4 Project: Comprehensive Corporate Finance Analysis',
-    id: 'module-project',
-    content: `
+  title: 'Module 4 Project: Comprehensive Corporate Finance Analysis',
+  id: 'module-project',
+  content: `
 # Module 4 Project: Comprehensive Corporate Finance Analysis
 
 ## Project Overview
@@ -701,4 +701,3 @@ Good luck! This project will stretch your skills and prepare you for careers in 
 **Happy Modeling! 📊📈💼**
 `,
 };
-

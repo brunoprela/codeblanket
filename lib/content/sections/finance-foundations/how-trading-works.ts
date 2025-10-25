@@ -253,8 +253,7 @@ book.add_order(limit_buy)
 book.add_order(limit_sell)
 
 print("Initial market:")
-print(f"  Best bid: ${book.get_best_bid_ask()[0]: .2f
-}")
+print(f"  Best bid: ${book.get_best_bid_ask()[0]:.2f}")
 print(f"  Best ask: ${book.get_best_bid_ask()[1]:.2f}")
 print(f"  Spread: ${book.get_spread():.2f}")
 

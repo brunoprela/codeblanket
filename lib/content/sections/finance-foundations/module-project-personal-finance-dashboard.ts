@@ -1,7 +1,7 @@
 export const moduleProjectPersonalFinanceDashboard = {
-    title: 'Module Project: Personal Finance Dashboard',
-    id: 'module-project-personal-finance-dashboard',
-    content: `
+  title: 'Module Project: Personal Finance Dashboard',
+  id: 'module-project-personal-finance-dashboard',
+  content: `
 # Module Project: Personal Finance Dashboard
 
 ## Introduction
@@ -382,10 +382,9 @@ if page == "Portfolio":
         total_gain = total_value - total_cost
         total_gain_pct = (total_gain / total_cost * 100) if total_cost > 0 else 0
         
-        col1.metric("Total Value", f"${total_value:, .0f
-}")
-col2.metric("Total Cost", f"${total_cost:,.0f}")
-col3.metric("Gain/Loss", f"${total_gain:,.0f}", f"{total_gain_pct:.1f}%")
+        col1.metric("Total Value", f"\${total_value:,.0f}")
+col2.metric("Total Cost", f"\${total_cost:,.0f}")
+col3.metric("Gain/Loss", f"\${total_gain:,.0f}", f"{total_gain_pct:.1f}%")
 col4.metric("Positions", len(portfolio))
         
         # Portfolio table
@@ -425,9 +424,9 @@ summary = budget_tracker.get_monthly_summary(year, month)
     
     # Summary metrics
 col1, col2, col3, col4 = st.columns(4)
-col1.metric("Income", f"${summary['income']:,.0f}")
-col2.metric("Expenses", f"${summary['expenses']:,.0f}")
-col3.metric("Savings", f"${summary['savings']:,.0f}")
+col1.metric("Income", f"\${summary['income']:,.0f}")
+col2.metric("Expenses", f"\${summary['expenses']:,.0f}")
+col3.metric("Savings", f"\${summary['savings']:,.0f}")
 col4.metric("Savings Rate", f"{summary['savings_rate']:.1f}%")
     
     # Expense breakdown
@@ -502,4 +501,3 @@ streamlit run app.py
 **Congratulations on completing Module 0!** You now understand finance foundations and have a working personal finance dashboard. Ready for Module 1: Market Microstructure!
 `,
 };
-

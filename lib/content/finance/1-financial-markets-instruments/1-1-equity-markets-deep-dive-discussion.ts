@@ -1,7 +1,8 @@
 export const equityMarketsDiscussionQuestions = [
   {
     id: 1,
-    question: "You're building a stock trading platform for retail investors. The product manager wants to show users 'the current stock price' prominently on each stock page. Explain why showing a single 'current price' can be misleading, and design a better UI that accurately represents how equity markets work. What data should you display, and how should you explain bid-ask spreads to non-technical users?",
+    question:
+      "You're building a stock trading platform for retail investors. The product manager wants to show users 'the current stock price' prominently on each stock page. Explain why showing a single 'current price' can be misleading, and design a better UI that accurately represents how equity markets work. What data should you display, and how should you explain bid-ask spreads to non-technical users?",
     answer: `## Comprehensive Answer:
 
 ### Why a Single "Current Price" is Misleading
@@ -95,11 +96,12 @@ Note: Final price may vary based on market conditions"
 
 **Conclusion:**
 Never show a single "current price" without context. Always display bid/ask with clear explanation of what users will actually pay/receive. For mobile apps with limited space, show mid-price but make bid/ask accessible with one tap, along with spread indicators.
-`
+`,
   },
   {
     id: 2,
-    question: "A client asks you to build an algorithmic trading system that exploits 'weak-form market inefficiency' by using technical analysis (chart patterns, moving averages, etc.). From an engineering and quantitative perspective, explain whether this is likely to be profitable, what challenges you'd face, and what you would need to test before deploying such a system to production with real money.",
+    question:
+      "A client asks you to build an algorithmic trading system that exploits 'weak-form market inefficiency' by using technical analysis (chart patterns, moving averages, etc.). From an engineering and quantitative perspective, explain whether this is likely to be profitable, what challenges you'd face, and what you would need to test before deploying such a system to production with real money.",
     answer: `## Comprehensive Answer:
 
 ### Understanding Weak-Form Market Efficiency
@@ -315,11 +317,12 @@ Combine technical + fundamental + alternative data for more robust signals. Pure
 ### Conclusion
 
 Build the system to learn, but maintain realistic expectations. Focus on proper testing methodology, risk management, and knowing when to shut down a strategy that isn't working. The engineering is the easy part - finding genuine alpha is the hard part.
-`
+`,
   },
   {
     id: 3,
-    question: "Design the architecture for a stock screening service that needs to scan 5,000 stocks every day across multiple criteria (valuation, growth, technical indicators, sentiment). The system should be able to deliver results within 5 minutes of market close. Discuss your choices for data sources, processing pipeline, database design, caching strategy, and how you'd handle failures. Include cost estimates for running this in production on AWS.",
+    question:
+      "Design the architecture for a stock screening service that needs to scan 5,000 stocks every day across multiple criteria (valuation, growth, technical indicators, sentiment). The system should be able to deliver results within 5 minutes of market close. Discuss your choices for data sources, processing pipeline, database design, caching strategy, and how you'd handle failures. Include cost estimates for running this in production on AWS.",
     answer: `## Comprehensive Architecture Design:
 
 ### System Requirements
@@ -930,7 +933,6 @@ This architecture provides:
 3. Gradually scale to 5,000 stocks
 4. Add monitoring and alerting
 5. Optimize based on real performance data
-`
-  }
+`,
+  },
 ];
-

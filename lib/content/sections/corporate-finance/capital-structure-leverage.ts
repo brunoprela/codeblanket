@@ -218,8 +218,7 @@ mm_tax_results = mm_prop1_with_tax(vu, tax, debt_range)
 
 print("\\nMM Proposition I (With Taxes):")
 print("=" * 80)
-print(f"Unlevered firm value: ${vu / 1e9: .2f
-}B")
+print(f"Unlevered firm value: ${vu / 1e9:.2f}B")
 print(f"Tax rate: {tax:.0%}")
 print()
 print(f"{'Debt ($M)':<15} {'Tax Shield ($M)':<20} {'Levered Value ($M)'}")

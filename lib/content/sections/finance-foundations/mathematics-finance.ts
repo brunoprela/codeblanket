@@ -222,8 +222,7 @@ percentile_5 = np.percentile(final_values, 5)  # VaR 95%
 percentile_95 = np.percentile(final_values, 95)
 
 print(f"\\n=== Monte Carlo Results (10,000 simulations) ===")
-print(f"Initial value: ${initial:, .0f
-}")
+print(f"Initial value: ${initial:,.0f}")
 print(f"\\nAfter 1 year:")
 print(f"  Mean: ${mean_final:,.0f}")
 print(f"  Median: ${median_final:,.0f}")

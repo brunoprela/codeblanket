@@ -115,8 +115,7 @@ pv_annuity = sum(
     for year in range(1, 31)
 )
 
-print(f"Lump sum: ${lump_sum:, .0f
-}")
+print(f"Lump sum: ${lump_sum:,.0f}")
 print(f"PV of annuity: ${pv_annuity:,.0f}")
 print(f"Difference: ${lump_sum - pv_annuity:,.0f}")
 print(f"\\nTake the lump sum!" if lump_sum > pv_annuity else "\\nTake the annuity!")

@@ -353,8 +353,7 @@ class LBOModel:
         for key, value in su['Sources'].items():
             if key != 'Total Sources':
                 pct = value / self.purchase_price
-                print(f"  {key}: ${value:, .0f
-}M ({ pct: .1 %})")
+                print(f"  {key}: ${value:,.0f}M ({pct:.1%})")
 print(f"  {'-' * 66}")
 print(f"  Total: ${su['Sources']['Total Sources']:,.0f}M\\n")
 

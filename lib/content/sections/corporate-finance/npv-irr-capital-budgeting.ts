@@ -47,8 +47,7 @@ discount_rate = 0.10
 pv_cash_flows = sum([annual_cf / (1 + discount_rate)**t for t in range(1, years + 1)])
 npv = initial_investment + pv_cash_flows
 
-print(f"NPV: ${npv / 1e6: .2f
-} million")
+print(f"NPV: ${npv / 1e6:.2f} million")
 # NPV: $21.71 million
 
 # Decision: NPV > 0 → Build it!
@@ -140,10 +139,10 @@ rate = 0.10
 project_npv = npv(rate, cash_flows, initial_cost)
 
 print("Project Analysis:")
-print(f"Initial investment: ${abs(initial_cost): .0f}")
+print(f"Initial investment: \${abs(initial_cost): .0f}")
 print(f"Cash flows: {cash_flows}")
 print(f"Discount rate: {rate:.0%}")
-print(f"NPV: ${project_npv:.2f}")
+print(f"NPV: \${project_npv:.2f}")
 print(f"Decision: {'✓ Accept' if project_npv > 0 else '✗ Reject'}")
 
 # Output:
@@ -332,7 +331,7 @@ print(f"IRR: {project_irr:.2%}")
 print(f"Required return: 10.00%")
 print(f"\\nDecision: {'✓ Accept' if project_irr > 0.10 else '✗ Reject'}")
 print(f"(IRR {project_irr:.2%} > Required 10.00%)")
-print(f"\\nNPV at 10%: ${project_npv: .2f}")
+print(f"\\nNPV at 10%: \${project_npv: .2f}")
 
 # Output:
 # IRR Analysis:
@@ -565,7 +564,7 @@ for i, r in enumerate(irrs, 1):
     print(f"  IRR #{i}: {r:.2%}")
 
 print("\\nWhich IRR is 'correct'? → Neither! Use NPV instead.")
-print(f"NPV at 10%: ${npv(0.10, oil_well): .2f}")
+print(f"NPV at 10%: \${npv(0.10, oil_well): .2f}")
 
 # Output:
 # Multiple IRR Problem:
@@ -594,7 +593,7 @@ try:
 except:
     print("No IRR exists!")
 
-print(f"NPV at 10%: ${npv(0.10, no_irr_project): .2f}")
+print(f"NPV at 10%: \${npv(0.10, no_irr_project): .2f}")
 
 # Output:
 # No IRR exists!
@@ -741,14 +740,14 @@ cfs = [30, 40, 50]
 
 payback = payback_period(initial_inv, cfs)
 
-print(f"Initial investment: ${initial_inv}")
+print(f"Initial investment: \${initial_inv}")
 print(f"Cash flows: {cfs}")
 print(f"Payback period: {payback:.2f} years")
 
 # Cumulative cash flows
 cumulative = np.cumsum([0] + cfs)
 for year, cum in enumerate(cumulative[1:], 1):
-    print(f"  Year {year}: ${cum} cumulative")
+    print(f"  Year {year}: \${cum} cumulative")
 
 # Output:
 # Initial investment: $100
@@ -865,7 +864,7 @@ def profitability_index(
 pi = profitability_index(100, [30, 40, 50], 0.10)
 
 print(f"Profitability Index: {pi:.3f}")
-print(f"Interpretation: Every $1 invested generates ${pi: .2f} in PV")
+print(f"Interpretation: Every $1 invested generates \${pi: .2f} in PV")
 print(f"Decision: {'Accept (PI > 1)' if pi > 1 else 'Reject (PI < 1)'}")
 
 # Output:
@@ -956,16 +955,16 @@ analysis = incremental_analysis(old_equipment, new_equipment, 0.10)
 
 print("Incremental Analysis:")
 print(f"\\nProject A (Keep Old):")
-print(f"  NPV: ${analysis['Project A']['NPV']: .2f}")
+print(f"  NPV: \${analysis['Project A']['NPV']: .2f}")
 print(f"  IRR: {analysis['Project A']['IRR']:.2%}")
 
 print(f"\\nProject B (Buy New):")
-print(f"  NPV: ${analysis['Project B']['NPV']:.2f}")
+print(f"  NPV: \${analysis['Project B']['NPV']:.2f}")
 print(f"  IRR: {analysis['Project B']['IRR']:.2%}")
 
 print(f"\\nIncremental Analysis (New - Old):")
 print(f"  Incremental cash flows: {analysis['Incremental (B-A)']['Cash Flows']}")
-print(f"  Incremental NPV: ${analysis['Incremental (B-A)']['NPV']:.2f}")
+print(f"  Incremental NPV: \${analysis['Incremental (B-A)']['NPV']:.2f}")
 print(f"  Incremental IRR: {analysis['Incremental (B-A)']['IRR']:.2%}")
 
 print(f"\\nDecision: {analysis['Decision']}")
@@ -1066,7 +1065,7 @@ print("Startup Investment Analysis:")
 for key, value in analysis.items():
     if isinstance(value, float):
         if 'NPV' in key or 'Investment' in key or 'Proceeds' in key or 'PV' in key:
-            print(f"{key}: ${value / 1e6: .2f}M")
+            print(f"{key}: \${value / 1e6: .2f}M")
         else:
 print(f"{key}: {value:.2%}")
     else:
@@ -1163,16 +1162,16 @@ project = real_estate_project(
 )
 
 print("Real Estate Development Analysis:")
-print(f"Total investment: ${project['Total Investment'] / 1e6: .1f}M")
-print(f"Exit value: ${project['Exit Value']/1e6:.1f}M")
-print(f"NPV: ${project['NPV']/1e6:.2f}M")
+print(f"Total investment: \${project['Total Investment'] / 1e6: .1f}M")
+print(f"Exit value: \${project['Exit Value']/1e6:.1f}M")
+print(f"NPV: \${project['NPV']/1e6:.2f}M")
 print(f"IRR: {project['IRR']:.2%}")
 print(f"\\nDecision: {project['Decision']}")
 
 # Show cash flow timeline
 print("\\nCash Flow Timeline:")
 for year, cf in enumerate(project['Cash Flows']):
-    print(f"  Year {year}: ${cf/1e6:+.1f}M")
+    print(f"  Year {year}: \${cf/1e6:+.1f}M")
 
 # Output:
 # Real Estate Development Analysis:

@@ -1,9 +1,9 @@
 export const financialMarketsExplainedQuiz = [
-    {
-        id: 'fme-q-1',
-        question:
-            'Build a multi-asset portfolio optimization system that handles equities, bonds, commodities, and crypto. Design: (1) data fetching infrastructure (handle different APIs, data formats, update frequencies), (2) return calculation methodology (arithmetic vs geometric, handling different time zones for crypto), (3) correlation matrix computation (handling missing data, non-synchronous trading), (4) portfolio optimization (mean-variance, risk parity, Black-Litterman), (5) rebalancing logic (tax-aware, transaction cost-aware). Include code architecture, handle edge cases (delisted stocks, market holidays, crypto downtime), and explain trade-offs between different optimization methods.',
-        sampleAnswer: `Multi-Asset Portfolio Optimization System Design:
+  {
+    id: 'fme-q-1',
+    question:
+      'Build a multi-asset portfolio optimization system that handles equities, bonds, commodities, and crypto. Design: (1) data fetching infrastructure (handle different APIs, data formats, update frequencies), (2) return calculation methodology (arithmetic vs geometric, handling different time zones for crypto), (3) correlation matrix computation (handling missing data, non-synchronous trading), (4) portfolio optimization (mean-variance, risk parity, Black-Litterman), (5) rebalancing logic (tax-aware, transaction cost-aware). Include code architecture, handle edge cases (delisted stocks, market holidays, crypto downtime), and explain trade-offs between different optimization methods.',
+    sampleAnswer: `Multi-Asset Portfolio Optimization System Design:
 
 **1. Data Fetching Infrastructure**
 
@@ -492,9 +492,9 @@ trades, transaction_costs, taxes = rebalancer.calculate_rebalance_trades(
 
 print("\\nRebalancing Trades:")
 for ticker, trade in trades.items():
-    print(f"  {ticker}: {trade['shares']:.0f} shares (${trade['dollars']:, .0f}) ")
-print(f"\\nTotal Transaction Costs: ${transaction_costs:,.2f}")
-print(f"Total Taxes: ${taxes:,.2f}")
+    print(f"  {ticker}: {trade['shares']:.0f} shares (\${trade['dollars']:, .0f}) ")
+print(f"\\nTotal Transaction Costs: \${transaction_costs:,.2f}")
+print(f"Total Taxes: \${taxes:,.2f}")
 \`\`\`
 
 **Trade-offs Summary:**
@@ -506,38 +506,37 @@ print(f"Total Taxes: ${taxes:,.2f}")
 
 **Recommendation**: Start with Mean-Variance for simplicity, add shrinkage to correlation matrix for stability, implement tax-aware rebalancing for real-world portfolios.`,
     keyPoints: [
-        'Data infrastructure: Separate providers for each asset class (EquityDataProvider, CryptoDataProvider), handle 24/7 crypto vs M-F stocks',
-        'Return alignment: Resample to common frequency, forward-fill weekends/holidays, use geometric returns for long-term, log returns for modeling',
-        'Correlation: Use Ledoit-Wolf shrinkage for stability, pairwise calculation with min 30 periods, rolling correlation for regime analysis',
-        'Optimization: Mean-variance (maximize return/risk), risk parity (equal risk contribution), max Sharpe (best risk-adjusted), each has trade-offs',
-        'Rebalancing: Only rebalance if drift >5%, tax-aware (long-term gains 20% vs short-term 37%), transaction costs reduce returns by 0.1-0.5%/year',
+      'Data infrastructure: Separate providers for each asset class (EquityDataProvider, CryptoDataProvider), handle 24/7 crypto vs M-F stocks',
+      'Return alignment: Resample to common frequency, forward-fill weekends/holidays, use geometric returns for long-term, log returns for modeling',
+      'Correlation: Use Ledoit-Wolf shrinkage for stability, pairwise calculation with min 30 periods, rolling correlation for regime analysis',
+      'Optimization: Mean-variance (maximize return/risk), risk parity (equal risk contribution), max Sharpe (best risk-adjusted), each has trade-offs',
+      'Rebalancing: Only rebalance if drift >5%, tax-aware (long-term gains 20% vs short-term 37%), transaction costs reduce returns by 0.1-0.5%/year',
     ],
   },
-{
+  {
     id: 'fme-q-2',
-        question:
-    'Explain why bond prices and interest rates move inversely. Design a bond portfolio immunization strategy that: (1) calculates duration and convexity, (2) constructs a portfolio matching a liability duration, (3) handles interest rate shocks (+/-2%), (4) rebalances as duration drifts, (5) compares to naive strategies. Include mathematical derivation, code implementation, and analysis of when immunization fails.',
-        sampleAnswer: `Answer to be completed (comprehensive bond immunization covering: inverse price-yield relationship because present value denominator increases when rates rise reducing PV of future cash flows, duration measures price sensitivity (modified duration = -dP/P per 1% yield change), convexity captures second-order curvature, immunization matches portfolio duration to liability duration so parallel shifts cancel out, implementation requires: calculate Macaulay duration of all bonds, use optimization to find portfolio weights matching target duration, handle non-parallel shifts with key rate duration, rebalance quarterly as duration changes with time passage, analysis shows immunization works for parallel shifts but fails for yield curve twists or large non-parallel moves, naive strategy of just buying zero-coupon bond matching liability date is simpler but has reinvestment risk).`,
-            keyPoints: [
-                'Inverse relationship: Bond price = PV of cash flows; when discount rate (yield) rises, PV falls, so price falls',
-                'Duration: First-order sensitivity (-10% duration means 1% yield rise → 10% price fall), Macaulay = weighted average time to cash flows',
-                'Immunization: Match portfolio duration to liability duration, so interest rate changes affect assets and liabilities equally',
-                'Convexity: Second-order effect (positive convexity = benefit from large rate moves), adds ~0.5 × Convexity × (Δy)²',
-                'Limitations: Only works for parallel shifts (all rates move together), fails for yield curve twists, need to rebalance as duration drifts',
-            ],
+    question:
+      'Explain why bond prices and interest rates move inversely. Design a bond portfolio immunization strategy that: (1) calculates duration and convexity, (2) constructs a portfolio matching a liability duration, (3) handles interest rate shocks (+/-2%), (4) rebalances as duration drifts, (5) compares to naive strategies. Include mathematical derivation, code implementation, and analysis of when immunization fails.',
+    sampleAnswer: `Answer to be completed (comprehensive bond immunization covering: inverse price-yield relationship because present value denominator increases when rates rise reducing PV of future cash flows, duration measures price sensitivity (modified duration = -dP/P per 1% yield change), convexity captures second-order curvature, immunization matches portfolio duration to liability duration so parallel shifts cancel out, implementation requires: calculate Macaulay duration of all bonds, use optimization to find portfolio weights matching target duration, handle non-parallel shifts with key rate duration, rebalance quarterly as duration changes with time passage, analysis shows immunization works for parallel shifts but fails for yield curve twists or large non-parallel moves, naive strategy of just buying zero-coupon bond matching liability date is simpler but has reinvestment risk).`,
+    keyPoints: [
+      'Inverse relationship: Bond price = PV of cash flows; when discount rate (yield) rises, PV falls, so price falls',
+      'Duration: First-order sensitivity (-10% duration means 1% yield rise → 10% price fall), Macaulay = weighted average time to cash flows',
+      'Immunization: Match portfolio duration to liability duration, so interest rate changes affect assets and liabilities equally',
+      'Convexity: Second-order effect (positive convexity = benefit from large rate moves), adds ~0.5 × Convexity × (Δy)²',
+      'Limitations: Only works for parallel shifts (all rates move together), fails for yield curve twists, need to rebalance as duration drifts',
+    ],
   },
-{
+  {
     id: 'fme-q-3',
-        question:
-    'Build a cryptocurrency trading system that handles 24/7 markets. Cover: (1) WebSocket connections for real-time data (handle disconnects, reconnects), (2) order execution across multiple exchanges (Binance, Coinbase, Kraken), (3) arbitrage detection (triangular arbitrage, cross-exchange), (4) risk management (volatility filters, position limits), (5) monitoring and alerting. Include handling extreme volatility (50%+ moves), exchange downtime, and flash crashes.',
-        sampleAnswer: `Answer to be completed (24/7 crypto trading system covering: WebSocket implementation using ccxt.pro for real-time order book + trades streaming, handle disconnections with exponential backoff reconnection, execute orders via REST API with retry logic for failed orders, triangular arbitrage checks BTC/USD → ETH/BTC → ETH/USD for profit opportunities requiring <100ms execution, cross-exchange arbitrage compares Binance BTC price vs Coinbase accounting for fees + transfer time, risk management includes: circuit breaker stops trading if volatility >5% in 1 minute, max position $100K per exchange, stop-loss at -2%, monitoring uses Prometheus + Grafana for latency metrics + P&L tracking, alerting via PagerDuty for: exchange disconnection >30 seconds, position limit breach, daily loss >$10K, edge cases include flash crash handling via price reasonableness checks rejecting trades >10% from VWAP, exchange downtime gracefully fails to other exchanges, extreme volatility pauses trading until volatility <3% for 5 minutes).`,
-            keyPoints: [
-                'WebSocket: Use ccxt.pro for real-time streaming, handle disconnects with exponential backoff, heartbeat every 30s to detect stale connections',
-                'Multi-exchange: Binance (lowest fees), Coinbase (most liquid USD), Kraken (backup), route orders to best price after fees',
-                'Arbitrage: Triangular (BTC→ETH→USD→BTC) needs <100ms execution, cross-exchange needs <30s for profitable after transfer costs',
-                'Risk: Circuit breaker at 5% volatility, max position $100K, stop-loss -2%, position sizing based on volatility (higher vol = smaller size)',
-                'Monitoring: Track: latency (<50ms target), order fill rate (>95%), P&L (real-time), exchange health, alert on anomalies',
-            ],
+    question:
+      'Build a cryptocurrency trading system that handles 24/7 markets. Cover: (1) WebSocket connections for real-time data (handle disconnects, reconnects), (2) order execution across multiple exchanges (Binance, Coinbase, Kraken), (3) arbitrage detection (triangular arbitrage, cross-exchange), (4) risk management (volatility filters, position limits), (5) monitoring and alerting. Include handling extreme volatility (50%+ moves), exchange downtime, and flash crashes.',
+    sampleAnswer: `Answer to be completed (24/7 crypto trading system covering: WebSocket implementation using ccxt.pro for real-time order book + trades streaming, handle disconnections with exponential backoff reconnection, execute orders via REST API with retry logic for failed orders, triangular arbitrage checks BTC/USD → ETH/BTC → ETH/USD for profit opportunities requiring <100ms execution, cross-exchange arbitrage compares Binance BTC price vs Coinbase accounting for fees + transfer time, risk management includes: circuit breaker stops trading if volatility >5% in 1 minute, max position $100K per exchange, stop-loss at -2%, monitoring uses Prometheus + Grafana for latency metrics + P&L tracking, alerting via PagerDuty for: exchange disconnection >30 seconds, position limit breach, daily loss >$10K, edge cases include flash crash handling via price reasonableness checks rejecting trades >10% from VWAP, exchange downtime gracefully fails to other exchanges, extreme volatility pauses trading until volatility <3% for 5 minutes).`,
+    keyPoints: [
+      'WebSocket: Use ccxt.pro for real-time streaming, handle disconnects with exponential backoff, heartbeat every 30s to detect stale connections',
+      'Multi-exchange: Binance (lowest fees), Coinbase (most liquid USD), Kraken (backup), route orders to best price after fees',
+      'Arbitrage: Triangular (BTC→ETH→USD→BTC) needs <100ms execution, cross-exchange needs <30s for profitable after transfer costs',
+      'Risk: Circuit breaker at 5% volatility, max position $100K, stop-loss -2%, position sizing based on volatility (higher vol = smaller size)',
+      'Monitoring: Track: latency (<50ms target), order fill rate (>95%), P&L (real-time), exchange health, alert on anomalies',
+    ],
   },
 ];
-

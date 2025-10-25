@@ -1,9 +1,9 @@
 export const typesOfFinancialInstitutionsQuiz = [
-    {
-        id: 'tfi-q-1',
-        question:
-            'You\'re joining a quantitative hedge fund as a researcher. Design a complete systematic trading strategy development pipeline: (1) research environment setup (data, tools, libraries), (2) alpha signal discovery process (hypothesis → testing → validation), (3) backtesting framework with realistic assumptions (transaction costs, slippage, market impact), (4) risk management integration (position sizing, stop losses, portfolio constraints), (5) production deployment considerations (latency, monitoring, fail-safes). Include code architecture, statistical rigor requirements, and common pitfalls to avoid.',
-        sampleAnswer: `Systematic Trading Strategy Development Pipeline:
+  {
+    id: 'tfi-q-1',
+    question:
+      "You're joining a quantitative hedge fund as a researcher. Design a complete systematic trading strategy development pipeline: (1) research environment setup (data, tools, libraries), (2) alpha signal discovery process (hypothesis → testing → validation), (3) backtesting framework with realistic assumptions (transaction costs, slippage, market impact), (4) risk management integration (position sizing, stop losses, portfolio constraints), (5) production deployment considerations (latency, monitoring, fail-safes). Include code architecture, statistical rigor requirements, and common pitfalls to avoid.",
+    sampleAnswer: `Systematic Trading Strategy Development Pipeline:
 
 **1. Research Environment Setup**
 
@@ -528,39 +528,38 @@ Monitoring dashboard (real-time):
 - [ ] Monte Carlo robust (95% of shuffles have Sharpe > 0.8)
 - [ ] Capacity > $50M AUM
 - [ ] Can explain WHY strategy works (not just curve-fit)`,
-        keyPoints: [
-            'Research environment: Jupyter for exploration, refactor to .py modules for production, Git + DVC for version control',
-            'Statistical validation: p-value < 0.05, Cohen\'s d > 0.2, consistent across regimes, not explained by known factors',
-            'Realistic backtesting: Model transaction costs (commission + slippage + market impact), avoid lookahead/survivorship bias, walk-forward validation',
-            'Risk management: Kelly criterion for position sizing (use 25% fraction for safety), VaR-based portfolio limits, dynamic stops based on ATR',
-            'Production deployment: <100ms latency, 99.9% uptime, real-time monitoring, emergency kill switch at max daily loss limit',
-        ],
-    },
-    {
-        id: 'tfi-q-2',
-        question:
-            'Compare career paths at (1) Goldman Sachs (investment bank strat), (2) Two Sigma (quant hedge fund), (3) BlackRock (asset manager), (4) Stripe (fintech), (5) Citadel Securities (market maker). For each, analyze: compensation structure (base/bonus/equity), work-life balance, engineering culture, learning opportunities, career progression, exit opportunities, and risk of role obsolescence. Which path would you choose for a 10-year career and why? Include realistic comp numbers and pros/cons analysis.',
-        sampleAnswer: `Answer to be completed (comprehensive comparison covering: Goldman Sachs strat $150-400K mostly bonus-weighted with hierarchical progression to VP/MD but long hours 60-80/week, Two Sigma quant researcher $200-500K+ with profit sharing and cutting-edge ML but high pressure and publish-or-perish, BlackRock risk engineer $120-280K with better work-life balance 45-55 hours but slower career progression, Stripe senior engineer $200-400K base + equity potentially worth millions but startup risk and hyper-growth burnout, Citadel Securities low-latency engineer $200-500K+ with P&L share and ultimate technical challenge but market-hours pressure and specialized skills. Choice depends on: compensation priority vs work-life balance, desire for equity upside vs stable cash comp, preference for trading excitement vs product building, risk tolerance for startup equity vs established firm security, and long-term career goals - recommend Two Sigma for pure quant technical challenge, Stripe for equity upside and product building, BlackRock for work-life balance and stability).`,
-        keyPoints: [
-            'Investment bank (GS): $150-400K heavily bonus-weighted, 60-80 hr weeks, hierarchical (Analyst→VP→MD), exit to buy-side/corp dev',
-            'Quant fund (Two Sigma): $200-500K+ with profit sharing, cutting-edge ML/research, publish-or-perish culture, exit to big tech AI/research',
-            'Asset manager (BlackRock): $120-280K, best work-life balance (45-55 hrs), slower progression but stable, exit to fintech/corp finance',
-            'Fintech (Stripe): $200-400K base + equity (potentially millions), startup culture, equity risk, exit to other startups/FAANG',
-            'Market maker (Citadel): $200-500K+ with P&L share, ultimate low-latency challenge, market-hours pressure, exit to HFT/exchanges',
-        ],
-    },
-    {
-        id: 'tfi-q-3',
-        question:
-            'Design a market making system for a new crypto exchange. Cover: (1) order book data structure for O(1) best bid/ask lookup, (2) pricing algorithm considering inventory risk and adverse selection, (3) latency optimization techniques (C++, zero-copy, kernel bypass), (4) risk management (inventory limits, P&L circuit breakers), (5) profitability analysis showing minimum spread needed given trading volume. Include code architecture, expected latency targets, and competitive analysis vs Binance/Coinbase.',
-        sampleAnswer: `Answer to be completed (comprehensive market maker system design covering: Order book using two heaps (max-heap for bids, min-heap for asks) with hash map for O(1) lookup and O(log n) insert/delete, pricing algorithm using Avellaneda-Stoikov model accounting for inventory skew (quote wider on long inventory side to shed risk), latency optimization with C++17 lock-free structures + DPDK kernel bypass + SIMD vectorization targeting <10μs exchange→quote update, risk management with max inventory $1M per asset + max daily loss $50K kill switch + max position drift 5% triggers rebalancing, profitability model showing need 2-5 bps spread on $1B daily volume = $200K-500K daily revenue minus infrastructure costs $50K/month, competitive analysis shows Binance <1ms latency via co-located matching engine vs Coinbase 5-10ms cloud-based gives latency advantage for professional market makers).`,
-        keyPoints: [
-            'Order book: Two heaps (max-heap bids, min-heap asks) + hash map for O(1) best bid/ask, O(log n) insert/delete',
-            'Pricing: Avellaneda-Stoikov model - quote wider on inventory-heavy side to mean-revert, adjust for volatility and adverse selection',
-            'Latency: C++ with lock-free structures, DPDK kernel bypass, SIMD, target <10μs quote update, <50μs order-to-execution',
-            'Risk: Max inventory $1M per asset, daily loss limit $50K (kill switch), inventory drift >5% triggers forced rebalancing',
-            'Economics: Need 2-5 bps spread on $1B daily volume = $200-500K daily revenue, infrastructure costs $50K/mo, 80%+ profit margin',
-        ],
-    },
+    keyPoints: [
+      'Research environment: Jupyter for exploration, refactor to .py modules for production, Git + DVC for version control',
+      "Statistical validation: p-value < 0.05, Cohen's d > 0.2, consistent across regimes, not explained by known factors",
+      'Realistic backtesting: Model transaction costs (commission + slippage + market impact), avoid lookahead/survivorship bias, walk-forward validation',
+      'Risk management: Kelly criterion for position sizing (use 25% fraction for safety), VaR-based portfolio limits, dynamic stops based on ATR',
+      'Production deployment: <100ms latency, 99.9% uptime, real-time monitoring, emergency kill switch at max daily loss limit',
+    ],
+  },
+  {
+    id: 'tfi-q-2',
+    question:
+      'Compare career paths at (1) Goldman Sachs (investment bank strat), (2) Two Sigma (quant hedge fund), (3) BlackRock (asset manager), (4) Stripe (fintech), (5) Citadel Securities (market maker). For each, analyze: compensation structure (base/bonus/equity), work-life balance, engineering culture, learning opportunities, career progression, exit opportunities, and risk of role obsolescence. Which path would you choose for a 10-year career and why? Include realistic comp numbers and pros/cons analysis.',
+    sampleAnswer: `Answer to be completed (comprehensive comparison covering: Goldman Sachs strat $150-400K mostly bonus-weighted with hierarchical progression to VP/MD but long hours 60-80/week, Two Sigma quant researcher $200-500K+ with profit sharing and cutting-edge ML but high pressure and publish-or-perish, BlackRock risk engineer $120-280K with better work-life balance 45-55 hours but slower career progression, Stripe senior engineer $200-400K base + equity potentially worth millions but startup risk and hyper-growth burnout, Citadel Securities low-latency engineer $200-500K+ with P&L share and ultimate technical challenge but market-hours pressure and specialized skills. Choice depends on: compensation priority vs work-life balance, desire for equity upside vs stable cash comp, preference for trading excitement vs product building, risk tolerance for startup equity vs established firm security, and long-term career goals - recommend Two Sigma for pure quant technical challenge, Stripe for equity upside and product building, BlackRock for work-life balance and stability).`,
+    keyPoints: [
+      'Investment bank (GS): $150-400K heavily bonus-weighted, 60-80 hr weeks, hierarchical (Analyst→VP→MD), exit to buy-side/corp dev',
+      'Quant fund (Two Sigma): $200-500K+ with profit sharing, cutting-edge ML/research, publish-or-perish culture, exit to big tech AI/research',
+      'Asset manager (BlackRock): $120-280K, best work-life balance (45-55 hrs), slower progression but stable, exit to fintech/corp finance',
+      'Fintech (Stripe): $200-400K base + equity (potentially millions), startup culture, equity risk, exit to other startups/FAANG',
+      'Market maker (Citadel): $200-500K+ with P&L share, ultimate low-latency challenge, market-hours pressure, exit to HFT/exchanges',
+    ],
+  },
+  {
+    id: 'tfi-q-3',
+    question:
+      'Design a market making system for a new crypto exchange. Cover: (1) order book data structure for O(1) best bid/ask lookup, (2) pricing algorithm considering inventory risk and adverse selection, (3) latency optimization techniques (C++, zero-copy, kernel bypass), (4) risk management (inventory limits, P&L circuit breakers), (5) profitability analysis showing minimum spread needed given trading volume. Include code architecture, expected latency targets, and competitive analysis vs Binance/Coinbase.',
+    sampleAnswer: `Answer to be completed (comprehensive market maker system design covering: Order book using two heaps (max-heap for bids, min-heap for asks) with hash map for O(1) lookup and O(log n) insert/delete, pricing algorithm using Avellaneda-Stoikov model accounting for inventory skew (quote wider on long inventory side to shed risk), latency optimization with C++17 lock-free structures + DPDK kernel bypass + SIMD vectorization targeting <10μs exchange→quote update, risk management with max inventory $1M per asset + max daily loss $50K kill switch + max position drift 5% triggers rebalancing, profitability model showing need 2-5 bps spread on $1B daily volume = $200K-500K daily revenue minus infrastructure costs $50K/month, competitive analysis shows Binance <1ms latency via co-located matching engine vs Coinbase 5-10ms cloud-based gives latency advantage for professional market makers).`,
+    keyPoints: [
+      'Order book: Two heaps (max-heap bids, min-heap asks) + hash map for O(1) best bid/ask, O(log n) insert/delete',
+      'Pricing: Avellaneda-Stoikov model - quote wider on inventory-heavy side to mean-revert, adjust for volatility and adverse selection',
+      'Latency: C++ with lock-free structures, DPDK kernel bypass, SIMD, target <10μs quote update, <50μs order-to-execution',
+      'Risk: Max inventory $1M per asset, daily loss limit $50K (kill switch), inventory drift >5% triggers forced rebalancing',
+      'Economics: Need 2-5 bps spread on $1B daily volume = $200-500K daily revenue, infrastructure costs $50K/mo, 80%+ profit margin',
+    ],
+  },
 ];
-

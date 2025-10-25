@@ -124,8 +124,7 @@ tax_rate = 0.25             # 25% tax rate
 wacc = calculate_wacc(equity_value, debt_value, cost_equity, cost_debt, tax_rate)
 
 print("WACC Calculation:")
-print(f"Market value of equity: ${equity_value / 1e6: .0f
-}M")
+print(f"Market value of equity: ${equity_value / 1e6:.0f}M")
 print(f"Market value of debt: ${debt_value/1e6:.0f}M")
 print(f"Total firm value: ${(equity_value + debt_value)/1e6:.0f}M")
 print(f"\\nEquity weight: {equity_value/(equity_value+debt_value):.1%}")

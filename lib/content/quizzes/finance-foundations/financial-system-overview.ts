@@ -1,9 +1,9 @@
 export const financialSystemOverviewQuiz = [
-    {
-        id: 'fso-q-1',
-        question:
-            'You\'re building a robo-advisor platform that needs to explain the time value of money to non-technical users. Design an interactive calculator that: (1) demonstrates why $100 today ≠ $100 tomorrow, (2) shows the impact of different discount rates (inflation, opportunity cost, risk), (3) helps users choose between lump sum vs annuity payments, (4) visualizes compound growth over time, (5) incorporates real-world scenarios (lottery winnings, pension choices, inheritance timing). Include the mathematical models, UX considerations, and educational approach.',
-        sampleAnswer: `Interactive Time Value of Money Calculator Design:
+  {
+    id: 'fso-q-1',
+    question:
+      "You're building a robo-advisor platform that needs to explain the time value of money to non-technical users. Design an interactive calculator that: (1) demonstrates why $100 today ≠ $100 tomorrow, (2) shows the impact of different discount rates (inflation, opportunity cost, risk), (3) helps users choose between lump sum vs annuity payments, (4) visualizes compound growth over time, (5) incorporates real-world scenarios (lottery winnings, pension choices, inheritance timing). Include the mathematical models, UX considerations, and educational approach.",
+    sampleAnswer: `Interactive Time Value of Money Calculator Design:
 
 **1. Core Mathematical Model**
 Present Value: PV = FV / (1 + r)^n
@@ -171,19 +171,19 @@ Inflation Adjustment:
 4. Users return: Calculate multiple scenarios (lottery, pension, etc.)
 
 This calculator transforms abstract financial concepts into concrete, actionable insights that help users make better financial decisions.`,
-        keyPoints: [
-            'Break discount rate into three components (inflation, opportunity cost, risk) for user understanding',
-            'Use real-world scenarios (lottery, pension) with actual numbers for concrete learning',
-            'Progressive disclosure: start simple (basic comparison), add complexity gradually (Monte Carlo)',
-            'Visualization key: timeline view showing future dollars "shrinking" when discounted to present value',
-            'Educational approach: intuition first (would you rather...), formalize second (formula), apply third (real decisions)',
-        ],
-    },
-    {
-        id: 'fso-q-2',
-        question:
-            'Design a risk-adjusted return comparison tool for your portfolio management platform. Requirements: (1) calculate Sharpe ratio, Sortino ratio, and Calmar ratio for multiple strategies, (2) explain why Strategy A with 50% return might be worse than Strategy B with 20% return, (3) build an interactive visualization showing efficient frontier, (4) incorporate downside risk vs total volatility, (5) help users understand "return per unit of risk". Include code implementation, statistical considerations, and user education approach.',
-        sampleAnswer: `Answer: Comprehensive Risk-Adjusted Return Comparison System
+    keyPoints: [
+      'Break discount rate into three components (inflation, opportunity cost, risk) for user understanding',
+      'Use real-world scenarios (lottery, pension) with actual numbers for concrete learning',
+      'Progressive disclosure: start simple (basic comparison), add complexity gradually (Monte Carlo)',
+      'Visualization key: timeline view showing future dollars "shrinking" when discounted to present value',
+      'Educational approach: intuition first (would you rather...), formalize second (formula), apply third (real decisions)',
+    ],
+  },
+  {
+    id: 'fso-q-2',
+    question:
+      'Design a risk-adjusted return comparison tool for your portfolio management platform. Requirements: (1) calculate Sharpe ratio, Sortino ratio, and Calmar ratio for multiple strategies, (2) explain why Strategy A with 50% return might be worse than Strategy B with 20% return, (3) build an interactive visualization showing efficient frontier, (4) incorporate downside risk vs total volatility, (5) help users understand "return per unit of risk". Include code implementation, statistical considerations, and user education approach.',
+    sampleAnswer: `Answer: Comprehensive Risk-Adjusted Return Comparison System
 
 **1. Risk Metrics Implementation**
 
@@ -483,26 +483,25 @@ Interactive Feature:
 - Normalize metrics: "Your strategy's Sharpe is 1.5, which beats 80% of mutual funds"
 
 This transforms abstract risk metrics into actionable insights users can understand and act on.`,
-        keyPoints: [
-            'Sharpe ratio = return per unit of TOTAL risk; Sortino = return per unit of DOWNSIDE risk; Calmar = return per unit of DRAWDOWN risk',
-            '50% return with 60% volatility (Sharpe 0.77) is WORSE than 20% return with 15% volatility (Sharpe 1.07) - can leverage efficient strategy',
-            'Efficient frontier shows best risk-return tradeoff; strategies below frontier are inefficient (same risk, lower return or same return, higher risk)',
-            'Upside volatility is good (big wins), downside volatility is bad (losses) - Sortino ratio accounts for this asymmetry',
-            'User education key: analogies (MPG for cars = return per unit of risk for strategies), rename metrics (Risk Efficiency Score instead of Sharpe Ratio)',
-        ],
-    },
-    {
-        id: 'fso-q-3',
-        question:
-            'Analyze the 2008 financial crisis from an engineering perspective. Explain: (1) what went wrong with the risk models (Value at Risk failures), (2) how leverage amplified losses (30:1 ratios), (3) systemic risk and contagion effects, (4) what you would have built differently as an engineer (better risk systems, circuit breakers, stress tests), (5) lessons for building financial systems today. Include mathematical analysis of leverage impact, network effects in contagion, and specific technical solutions.',
-        sampleAnswer: `Answer to be completed (placeholder for comprehensive analysis of 2008 crisis from engineering lens, including: VaR model assumptions and failures, leverage mathematics showing 30:1 amplification, network analysis of bank interconnections showing contagion paths, technical solutions like real-time risk monitoring dashboards, automated circuit breakers at leverage thresholds, stress testing frameworks using Monte Carlo simulation, transparency systems for complex derivatives using blockchain-like technology, and cultural changes needed in financial engineering around risk management vs profit optimization).`,
-        keyPoints: [
-            'VaR models assumed normal distributions (5σ event ≈ 1 in 3.5M days) but real markets have fat tails (crashes happen every 10-20 years)',
-            'Leverage amplification: 30:1 ratio means 3.3% portfolio loss = 100% equity loss = bankruptcy (Lehman Brothers)',
-            'Systemic risk: network effects where one bank failure cascades to others via interconnected exposures (credit default swaps)',
-            'Engineering solutions: real-time risk dashboards, automated deleveraging at thresholds, mandatory stress tests, blockchain for derivative transparency',
-            'Cultural lesson: optimize for robustness (survive worst case) not just profit (maximize expected return) - antifragility',
-        ],
-    },
+    keyPoints: [
+      'Sharpe ratio = return per unit of TOTAL risk; Sortino = return per unit of DOWNSIDE risk; Calmar = return per unit of DRAWDOWN risk',
+      '50% return with 60% volatility (Sharpe 0.77) is WORSE than 20% return with 15% volatility (Sharpe 1.07) - can leverage efficient strategy',
+      'Efficient frontier shows best risk-return tradeoff; strategies below frontier are inefficient (same risk, lower return or same return, higher risk)',
+      'Upside volatility is good (big wins), downside volatility is bad (losses) - Sortino ratio accounts for this asymmetry',
+      'User education key: analogies (MPG for cars = return per unit of risk for strategies), rename metrics (Risk Efficiency Score instead of Sharpe Ratio)',
+    ],
+  },
+  {
+    id: 'fso-q-3',
+    question:
+      'Analyze the 2008 financial crisis from an engineering perspective. Explain: (1) what went wrong with the risk models (Value at Risk failures), (2) how leverage amplified losses (30:1 ratios), (3) systemic risk and contagion effects, (4) what you would have built differently as an engineer (better risk systems, circuit breakers, stress tests), (5) lessons for building financial systems today. Include mathematical analysis of leverage impact, network effects in contagion, and specific technical solutions.',
+    sampleAnswer: `Answer to be completed (placeholder for comprehensive analysis of 2008 crisis from engineering lens, including: VaR model assumptions and failures, leverage mathematics showing 30:1 amplification, network analysis of bank interconnections showing contagion paths, technical solutions like real-time risk monitoring dashboards, automated circuit breakers at leverage thresholds, stress testing frameworks using Monte Carlo simulation, transparency systems for complex derivatives using blockchain-like technology, and cultural changes needed in financial engineering around risk management vs profit optimization).`,
+    keyPoints: [
+      'VaR models assumed normal distributions (5σ event ≈ 1 in 3.5M days) but real markets have fat tails (crashes happen every 10-20 years)',
+      'Leverage amplification: 30:1 ratio means 3.3% portfolio loss = 100% equity loss = bankruptcy (Lehman Brothers)',
+      'Systemic risk: network effects where one bank failure cascades to others via interconnected exposures (credit default swaps)',
+      'Engineering solutions: real-time risk dashboards, automated deleveraging at thresholds, mandatory stress tests, blockchain for derivative transparency',
+      'Cultural lesson: optimize for robustness (survive worst case) not just profit (maximize expected return) - antifragility',
+    ],
+  },
 ];
-

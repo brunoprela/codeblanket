@@ -89,8 +89,7 @@ class InvestmentBankRevenue:
 gs = InvestmentBankRevenue()
 
 print("Goldman Sachs Annual Revenue (est.):")
-print(f"  M&A Advisory: ${gs.m_and_a_fees(500_000_000_000, 0.01) / 1e9: .1f
-}B")
+print(f"  M&A Advisory: ${gs.m_and_a_fees(500_000_000_000, 0.01) / 1e9:.1f}B")
 print(f"  IPO Underwriting: ${gs.ipo_underwriting(50_000_000_000, 0.06) / 1e9:.1f}B")
 print(f"  Trading (250 days): ${gs.trading_revenue(5_000_000_000_000, 0.0003) * 250 / 1e9:.1f}B")
 print(f"  Wealth Mgmt: ${gs.wealth_management(500_000_000_000, 0.015) / 1e9:.1f}B")

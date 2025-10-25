@@ -44,113 +44,113 @@ import { moduleProjectPersonalFinanceDashboardMultipleChoice } from '@/lib/conte
 
 // Transform functions
 const transformQuiz = (quiz: any) => ({
-    id: quiz.id,
-    question: quiz.question,
-    sampleAnswer: quiz.sampleAnswer,
-    keyPoints: quiz.keyPoints,
+  id: quiz.id,
+  question: quiz.question,
+  sampleAnswer: quiz.sampleAnswer,
+  keyPoints: quiz.keyPoints,
 });
 
 const transformMC = (mc: any) => ({
-    id: mc.id,
-    question: mc.question,
-    options: mc.options,
-    correctAnswer: mc.correctAnswer,
-    explanation: mc.explanation,
+  id: mc.id,
+  question: mc.question,
+  options: mc.options,
+  correctAnswer: mc.correctAnswer,
+  explanation: mc.explanation,
 });
 
 export const financeFoundationsModule: Module = {
-    id: 'finance-foundations',
-    title: 'Finance Foundations for Engineers',
-    description: 'Understanding the financial landscape, career paths, and why finance matters for engineers',
-    sections: [
-        {
-            id: financialSystemOverview.id,
-            title: financialSystemOverview.title,
-            content: financialSystemOverview.content,
-        },
-        {
-            id: typesOfFinancialInstitutions.id,
-            title: typesOfFinancialInstitutions.title,
-            content: typesOfFinancialInstitutions.content,
-        },
-        {
-            id: careerPathsEngineersFinance.id,
-            title: careerPathsEngineersFinance.title,
-            content: careerPathsEngineersFinance.content,
-        },
-        {
-            id: financialMarketsExplained.id,
-            title: financialMarketsExplained.title,
-            content: financialMarketsExplained.content,
-        },
-        {
-            id: investmentVehiclesProducts.id,
-            title: investmentVehiclesProducts.title,
-            content: investmentVehiclesProducts.content,
-        },
-        {
-            id: howTradingWorks.id,
-            title: howTradingWorks.title,
-            content: howTradingWorks.content,
-        },
-        {
-            id: regulatoryLandscapeEngineers.id,
-            title: regulatoryLandscapeEngineers.title,
-            content: regulatoryLandscapeEngineers.content,
-        },
-        {
-            id: financeTerminologyDevelopers.id,
-            title: financeTerminologyDevelopers.title,
-            content: financeTerminologyDevelopers.content,
-        },
-        {
-            id: mathematicsForFinance.id,
-            title: mathematicsForFinance.title,
-            content: mathematicsForFinance.content,
-        },
-        {
-            id: readingFinancialNewsData.id,
-            title: readingFinancialNewsData.title,
-            content: readingFinancialNewsData.content,
-        },
-        {
-            id: learningEnvironment.id,
-            title: learningEnvironment.title,
-            content: learningEnvironment.content,
-        },
-        {
-            id: moduleProjectPersonalFinanceDashboard.id,
-            title: moduleProjectPersonalFinanceDashboard.title,
-            content: moduleProjectPersonalFinanceDashboard.content,
-        },
-    ],
-    quizzes: [
-        ...financialSystemOverviewQuiz.map(transformQuiz),
-        ...typesOfFinancialInstitutionsQuiz.map(transformQuiz),
-        ...careerPathsEngineersFinanceQuiz.map(transformQuiz),
-        ...financialMarketsExplainedQuiz.map(transformQuiz),
-        ...investmentVehiclesProductsQuiz.map(transformQuiz),
-        ...howTradingWorksQuiz.map(transformQuiz),
-        ...regulatoryLandscapeEngineersQuiz.map(transformQuiz),
-        ...financeTerminologyDevelopersQuiz.map(transformQuiz),
-        ...mathematicsFinanceQuiz.map(transformQuiz),
-        ...readingFinancialNewsDataQuiz.map(transformQuiz),
-        ...learningEnvironmentQuiz.map(transformQuiz),
-        ...moduleProjectPersonalFinanceDashboardQuiz.map(transformQuiz),
-    ],
-    multipleChoiceQuestions: [
-        ...financialSystemOverviewMultipleChoice.map(transformMC),
-        ...typesOfFinancialInstitutionsMultipleChoice.map(transformMC),
-        ...careerPathsEngineersFinanceMultipleChoice.map(transformMC),
-        ...financialMarketsExplainedMultipleChoice.map(transformMC),
-        ...investmentVehiclesProductsMultipleChoice.map(transformMC),
-        ...howTradingWorksMultipleChoice.map(transformMC),
-        ...regulatoryLandscapeEngineersMultipleChoice.map(transformMC),
-        ...financeTerminologyDevelopersMultipleChoice.map(transformMC),
-        ...mathematicsFinanceMultipleChoice.map(transformMC),
-        ...readingFinancialNewsDataMultipleChoice.map(transformMC),
-        ...learningEnvironmentMultipleChoice.map(transformMC),
-        ...moduleProjectPersonalFinanceDashboardMultipleChoice.map(transformMC),
-    ],
+  id: 'finance-foundations',
+  title: 'Finance Foundations for Engineers',
+  description:
+    'Understanding the financial landscape, career paths, and why finance matters for engineers',
+  sections: [
+    {
+      id: financialSystemOverview.id,
+      title: financialSystemOverview.title,
+      content: financialSystemOverview.content,
+    },
+    {
+      id: typesOfFinancialInstitutions.id,
+      title: typesOfFinancialInstitutions.title,
+      content: typesOfFinancialInstitutions.content,
+    },
+    {
+      id: careerPathsEngineersFinance.id,
+      title: careerPathsEngineersFinance.title,
+      content: careerPathsEngineersFinance.content,
+    },
+    {
+      id: financialMarketsExplained.id,
+      title: financialMarketsExplained.title,
+      content: financialMarketsExplained.content,
+    },
+    {
+      id: investmentVehiclesProducts.id,
+      title: investmentVehiclesProducts.title,
+      content: investmentVehiclesProducts.content,
+    },
+    {
+      id: howTradingWorks.id,
+      title: howTradingWorks.title,
+      content: howTradingWorks.content,
+    },
+    {
+      id: regulatoryLandscapeEngineers.id,
+      title: regulatoryLandscapeEngineers.title,
+      content: regulatoryLandscapeEngineers.content,
+    },
+    {
+      id: financeTerminologyDevelopers.id,
+      title: financeTerminologyDevelopers.title,
+      content: financeTerminologyDevelopers.content,
+    },
+    {
+      id: mathematicsForFinance.id,
+      title: mathematicsForFinance.title,
+      content: mathematicsForFinance.content,
+    },
+    {
+      id: readingFinancialNewsData.id,
+      title: readingFinancialNewsData.title,
+      content: readingFinancialNewsData.content,
+    },
+    {
+      id: learningEnvironment.id,
+      title: learningEnvironment.title,
+      content: learningEnvironment.content,
+    },
+    {
+      id: moduleProjectPersonalFinanceDashboard.id,
+      title: moduleProjectPersonalFinanceDashboard.title,
+      content: moduleProjectPersonalFinanceDashboard.content,
+    },
+  ],
+  quizzes: [
+    ...financialSystemOverviewQuiz.map(transformQuiz),
+    ...typesOfFinancialInstitutionsQuiz.map(transformQuiz),
+    ...careerPathsEngineersFinanceQuiz.map(transformQuiz),
+    ...financialMarketsExplainedQuiz.map(transformQuiz),
+    ...investmentVehiclesProductsQuiz.map(transformQuiz),
+    ...howTradingWorksQuiz.map(transformQuiz),
+    ...regulatoryLandscapeEngineersQuiz.map(transformQuiz),
+    ...financeTerminologyDevelopersQuiz.map(transformQuiz),
+    ...mathematicsFinanceQuiz.map(transformQuiz),
+    ...readingFinancialNewsDataQuiz.map(transformQuiz),
+    ...learningEnvironmentQuiz.map(transformQuiz),
+    ...moduleProjectPersonalFinanceDashboardQuiz.map(transformQuiz),
+  ],
+  multipleChoiceQuestions: [
+    ...financialSystemOverviewMultipleChoice.map(transformMC),
+    ...typesOfFinancialInstitutionsMultipleChoice.map(transformMC),
+    ...careerPathsEngineersFinanceMultipleChoice.map(transformMC),
+    ...financialMarketsExplainedMultipleChoice.map(transformMC),
+    ...investmentVehiclesProductsMultipleChoice.map(transformMC),
+    ...howTradingWorksMultipleChoice.map(transformMC),
+    ...regulatoryLandscapeEngineersMultipleChoice.map(transformMC),
+    ...financeTerminologyDevelopersMultipleChoice.map(transformMC),
+    ...mathematicsFinanceMultipleChoice.map(transformMC),
+    ...readingFinancialNewsDataMultipleChoice.map(transformMC),
+    ...learningEnvironmentMultipleChoice.map(transformMC),
+    ...moduleProjectPersonalFinanceDashboardMultipleChoice.map(transformMC),
+  ],
 };
-
