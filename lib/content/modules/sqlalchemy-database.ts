@@ -57,7 +57,7 @@ export const sqlalchemyDatabaseModule: Module = {
   id: 'sqlalchemy-database',
   title: 'SQLAlchemy & Database Mastery',
   description:
-    'Master SQLAlchemy ORM and database management from fundamentals to production. Learn database concepts (RDBMS, DB-API), SQLAlchemy Core & ORM architecture, model definitions with complex relationships (one-to-many, many-to-many, polymorphic), advanced query API (joins, subqueries, CTEs, window functions), filtering & expressions, relationship loading strategies (lazy, eager, selectin), session management patterns, Alembic migrations (auto-generation, branching, zero-downtime), performance optimization (indexes, bulk operations, EXPLAIN), advanced patterns (Repository, Unit of Work), testing strategies (fixtures, factories, mocks), multi-database & sharding (read replicas, hash/range sharding, distributed transactions), and production patterns (connection pooling, caching, monitoring, health checks). Build production-ready database applications with proper architecture, testing, and deployment.',
+    'Master SQLAlchemy ORM and database management from fundamentals to production.',
   icon: '🗄️',
   keyTakeaways: [
     'Understand RDBMS concepts: ACID, normalization, indexes, constraints',
