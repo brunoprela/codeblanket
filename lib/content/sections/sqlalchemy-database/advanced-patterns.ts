@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const advancedPatterns = {
   title: 'Advanced Patterns & Techniques',
   id: 'advanced-patterns',

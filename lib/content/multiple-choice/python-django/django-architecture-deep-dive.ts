@@ -1,17 +1,18 @@
-export const DjangoArchitectureDeepDiveMultipleChoice = {
-  title: 'Django Architecture Deep Dive - Multiple Choice Questions',
-  questions: [
-    {
-      question:
-        "In Django's MVT architecture, what is the primary role of the View component?",
-      options: [
-        'A) Render HTML templates and handle presentation logic',
-        'B) Define database schema and handle data persistence',
-        'C) Process HTTP requests and contain business logic',
-        'D) Configure URL routing and middleware execution',
-      ],
-      correctAnswer: 2,
-      explanation: `
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const DjangoArchitectureDeepDiveMultipleChoice = [
+  {
+    id: 1,
+    question:
+      "In Django's MVT architecture, what is the primary role of the View component?",
+    options: [
+      'A) Render HTML templates and handle presentation logic',
+      'B) Define database schema and handle data persistence',
+      'C) Process HTTP requests and contain business logic',
+      'D) Configure URL routing and middleware execution',
+    ],
+    correctAnswer: 2,
+    explanation: `
 **Correct Answer: C) Process HTTP requests and contain business logic**
 
 **Why C is correct:**
@@ -36,18 +37,18 @@ While views are connected to URLs, URL routing itself is configured in urls.py f
 **Production Note:**
 Understanding the distinction between Views (business logic) and Templates (presentation) is crucial for proper separation of concerns in Django applications. This separation makes code more maintainable and testable.
       `,
-    },
-    {
-      question:
-        'Which Django ORM method would you use to optimize a query that retrieves articles with their related authors and categories, avoiding N+1 query problems?',
-      options: [
-        'A) Article.objects.all().filter(author__isnull=False)',
-        'B) Article.objects.select_related("author", "category")',
-        'C) Article.objects.prefetch_related("author", "category")',
-        'D) Article.objects.raw("SELECT * FROM articles JOIN authors")',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      'Which Django ORM method would you use to optimize a query that retrieves articles with their related authors and categories, avoiding N+1 query problems?',
+    options: [
+      'A) Article.objects.all().filter(author__isnull=False)',
+      'B) Article.objects.select_related("author", "category")',
+      'C) Article.objects.prefetch_related("author", "category")',
+      'D) Article.objects.raw("SELECT * FROM articles JOIN authors")',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) Article.objects.select_related("author", "category")**
 
 **Why B is correct:**
@@ -78,18 +79,18 @@ Always use \`select_related()\` for "to-one" relationships (ForeignKey, OneToOne
 - With select_related(): 1 query with JOINs
 - Result: ~100x faster for 100 articles!
       `,
-    },
-    {
-      question:
-        "In Django's request/response cycle, at what stage does middleware execute its request processing methods?",
-      options: [
-        'A) After the view function executes but before the template is rendered',
-        'B) Before the URL resolver determines which view to call',
-        'C) After the template is rendered but before the response is sent to the client',
-        'D) Only when an exception occurs during view execution',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      "In Django's request/response cycle, at what stage does middleware execute its request processing methods?",
+    options: [
+      'A) After the view function executes but before the template is rendered',
+      'B) Before the URL resolver determines which view to call',
+      'C) After the template is rendered but before the response is sent to the client',
+      'D) Only when an exception occurs during view execution',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) Before the URL resolver determines which view to call**
 
 **Why B is correct:**
@@ -149,18 +150,18 @@ MIDDLEWARE = [
 ]
 \`\`\`
       `,
-    },
-    {
-      question:
-        'What is the most efficient way to count related objects in Django ORM without loading them into memory?',
-      options: [
-        'A) len(article.comments.all())',
-        'B) article.comments.count()',
-        'C) Article.objects.annotate(comment_count=Count("comments"))',
-        'D) len([c for c in article.comments.iterator()])',
-      ],
-      correctAnswer: 2,
-      explanation: `
+  },
+  {
+    question:
+      'What is the most efficient way to count related objects in Django ORM without loading them into memory?',
+    options: [
+      'A) len(article.comments.all())',
+      'B) article.comments.count()',
+      'C) Article.objects.annotate(comment_count=Count("comments"))',
+      'D) len([c for c in article.comments.iterator()])',
+    ],
+    correctAnswer: 2,
+    explanation: `
 **Correct Answer: C) Article.objects.annotate(comment_count=Count("comments"))**
 
 **Why C is correct:**
@@ -236,18 +237,18 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 This approach ensures optimal performance even with thousands of articles and millions of comments.
       `,
-    },
-    {
-      question:
-        'When using Django signals, what is the recommended approach to ensure side effects (like sending emails) only occur after a database transaction commits successfully?',
-      options: [
-        'A) Use post_save signal without any special handling',
-        'B) Wrap the signal handler in a try/except block',
-        'C) Use transaction.on_commit() inside the signal handler',
-        'D) Use pre_save signal instead of post_save',
-      ],
-      correctAnswer: 2,
-      explanation: `
+  },
+  {
+    question:
+      'When using Django signals, what is the recommended approach to ensure side effects (like sending emails) only occur after a database transaction commits successfully?',
+    options: [
+      'A) Use post_save signal without any special handling',
+      'B) Wrap the signal handler in a try/except block',
+      'C) Use transaction.on_commit() inside the signal handler',
+      'D) Use pre_save signal instead of post_save',
+    ],
+    correctAnswer: 2,
+    explanation: `
 **Correct Answer: C) Use transaction.on_commit() inside the signal handler**
 
 **Why C is correct:**
@@ -330,6 +331,5 @@ def queue_order_tasks(sender, instance, created, **kwargs):
 
 This pattern ensures data consistency and prevents embarrassing production bugs where users receive notifications for actions that never actually happened.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({ id: `django-mc-${idx + 1}`, ...q }));

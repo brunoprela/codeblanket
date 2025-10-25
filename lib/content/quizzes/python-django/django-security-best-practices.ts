@@ -1,10 +1,9 @@
-export const djangoSecurityBestPracticesQuiz = {
-  title: 'Django Security Best Practices - Discussion Questions',
-  questions: [
-    {
-      question:
-        "Explain Django's built-in security features including CSRF protection, SQL injection prevention, XSS protection, and clickjacking defense. How do you configure them properly?",
-      answer: `
+export const djangoSecurityBestPracticesQuiz = [
+  {
+    id: 1,
+    question:
+      "Explain Django's built-in security features including CSRF protection, SQL injection prevention, XSS protection, and clickjacking defense. How do you configure them properly?",
+    answer: `
 **CSRF Protection:**
 
 \`\`\`python
@@ -115,11 +114,11 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Describe authentication security in Django including password hashing, session management, and protecting against brute force attacks. Include rate limiting strategies.',
-      answer: `
+  },
+  {
+    question:
+      'Describe authentication security in Django including password hashing, session management, and protecting against brute force attacks. Include rate limiting strategies.',
+    answer: `
 **Password Security:**
 
 \`\`\`python
@@ -256,11 +255,11 @@ def sensitive_view(request):
     pass
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Explain secure API design in DRF including JWT security, CORS configuration, API key management, and preventing common API vulnerabilities.',
-      answer: `
+  },
+  {
+    question:
+      'Explain secure API design in DRF including JWT security, CORS configuration, API key management, and preventing common API vulnerabilities.',
+    answer: `
 **JWT Security:**
 
 \`\`\`python
@@ -423,6 +422,10 @@ REST_FRAMEWORK = {
 }
 \`\`\`
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

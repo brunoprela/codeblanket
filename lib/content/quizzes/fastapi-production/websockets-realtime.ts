@@ -1,9 +1,9 @@
 export const websocketsRealtimeQuiz = [
-    {
-      id: 1,
-      question:
-        "Design a real-time collaborative document editing system (like Google Docs) using FastAPI WebSockets. The system must handle: (1) multiple users editing simultaneously, (2) operational transformation to resolve conflicts, (3) presence indicators showing who's online, (4) cursor position tracking, and (5) chat functionality. Design the WebSocket message protocol, connection management strategy, and conflict resolution approach. How would you ensure users don't overwrite each other's changes? What happens when a user's connection drops and reconnects? Implement the core WebSocket handler with all these features.",
-      answer: `**Collaborative Document Editing System Design**:
+  {
+    id: 1,
+    question:
+      "Design a real-time collaborative document editing system (like Google Docs) using FastAPI WebSockets. The system must handle: (1) multiple users editing simultaneously, (2) operational transformation to resolve conflicts, (3) presence indicators showing who's online, (4) cursor position tracking, and (5) chat functionality. Design the WebSocket message protocol, connection management strategy, and conflict resolution approach. How would you ensure users don't overwrite each other's changes? What happens when a user's connection drops and reconnects? Implement the core WebSocket handler with all these features.",
+    answer: `**Collaborative Document Editing System Design**:
 
 **1. Message Protocol**:
 
@@ -517,12 +517,12 @@ class CollaborativeEditor {
 3. On reconnect, sends sync_request with last_known_version
 4. Server sends full document state
 5. Client reconciles any pending operations`,
-    },
-    {
-      id: 2,
-      question:
-        'Design a scalable WebSocket architecture for a live sports/stock ticker application serving 100,000+ concurrent connections. The system must broadcast real-time price updates to all connected clients with sub-second latency. How would you scale WebSocket connections across multiple server instances? How do you handle broadcasting to clients connected to different servers? Design the architecture including Redis Pub/Sub for message distribution, load balancing strategies, and connection recovery. What are the bottlenecks and how do you monitor performance at scale?',
-      answer: `**Scalable WebSocket Architecture for Real-Time Ticker**:
+  },
+  {
+    id: 2,
+    question:
+      'Design a scalable WebSocket architecture for a live sports/stock ticker application serving 100,000+ concurrent connections. The system must broadcast real-time price updates to all connected clients with sub-second latency. How would you scale WebSocket connections across multiple server instances? How do you handle broadcasting to clients connected to different servers? Design the architecture including Redis Pub/Sub for message distribution, load balancing strategies, and connection recovery. What are the bottlenecks and how do you monitor performance at scale?',
+    answer: `**Scalable WebSocket Architecture for Real-Time Ticker**:
 
 **1. System Architecture**:
 
@@ -936,12 +936,12 @@ class MonitoredConnectionManager(DistributedConnectionManager):
 ✅ Compression: gzip for large payloads  
 ✅ Metrics: track connections, latency, throughput  
 ✅ Alerting: connection spikes, high latency, Redis issues`,
-    },
-    {
-      id: 3,
-      question:
-        "You are building a real-time monitoring dashboard with WebSockets that displays live metrics from thousands of IoT devices. Each device sends sensor data every second. Design a system that: (1) handles device authentication, (2) aggregates metrics in real-time, (3) broadcasts only changed values to reduce bandwidth, (4) handles device disconnections gracefully, and (5) stores historical data. How would you implement backpressure when clients can't keep up with the data rate? What happens when a client reconnects after being offline? Implement the complete solution including device ingestion, aggregation, and client WebSocket handler.",
-      answer: `**IoT Real-Time Monitoring Dashboard**:
+  },
+  {
+    id: 3,
+    question:
+      "You are building a real-time monitoring dashboard with WebSockets that displays live metrics from thousands of IoT devices. Each device sends sensor data every second. Design a system that: (1) handles device authentication, (2) aggregates metrics in real-time, (3) broadcasts only changed values to reduce bandwidth, (4) handles device disconnections gracefully, and (5) stores historical data. How would you implement backpressure when clients can't keep up with the data rate? What happens when a client reconnects after being offline? Implement the complete solution including device ingestion, aggregation, and client WebSocket handler.",
+    answer: `**IoT Real-Time Monitoring Dashboard**:
 
 **1. System Architecture**:
 
@@ -1396,6 +1396,10 @@ async def dashboard_websocket(
 - Client sends last timestamp received
 - Server sends aggregated state + missing historical data
 - Resume real-time updates`,
-    },
-
-].map(({ id, ...q }, idx) => ({ id: `fastapi-websockets-realtime-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `fastapi-websockets-realtime-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

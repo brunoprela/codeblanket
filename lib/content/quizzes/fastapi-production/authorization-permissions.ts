@@ -1,9 +1,9 @@
 export const authorizationPermissionsQuiz = [
-        {
-            id: 1,
-            question:
-                'Compare and contrast Role-Based Access Control (RBAC) and Permission-Based Access Control (PBAC). In what scenarios would you choose RBAC over PBAC, and vice versa? Design an authorization system for a content management platform where authors can create posts, editors can approve posts, and administrators can delete any post. Would you use RBAC, PBAC, or a hybrid approach? Justify your choice with code examples showing how you would implement the key authorization checks.',
-            answer: `**RBAC vs PBAC Comparison**:
+  {
+    id: 1,
+    question:
+      'Compare and contrast Role-Based Access Control (RBAC) and Permission-Based Access Control (PBAC). In what scenarios would you choose RBAC over PBAC, and vice versa? Design an authorization system for a content management platform where authors can create posts, editors can approve posts, and administrators can delete any post. Would you use RBAC, PBAC, or a hybrid approach? Justify your choice with code examples showing how you would implement the key authorization checks.',
+    answer: `**RBAC vs PBAC Comparison**:
 
 **RBAC (Role-Based Access Control)**:
 - Users assigned to roles (admin, editor, author)
@@ -147,12 +147,12 @@ async def delete_post(
 - Extra permissions for special cases (guest editor can approve specific category)
 - Revoked permissions for exceptions (editor temporarily suspended from approving)
 - Combines simplicity of RBAC with flexibility of PBAC`,
-        },
-        {
-            id: 2,
-            question:
-                'Design a comprehensive multi-tenant authorization system where each organization (tenant) has its own users, and users can belong to multiple organizations with different roles in each. For example, Alice is an admin in Org A but just a regular user in Org B. How would you model this in the database? How would you ensure complete data isolation between tenants? Write the FastAPI dependencies and middleware needed to automatically filter all database queries by the current tenant. What security considerations must you address to prevent tenant data leakage?',
-            answer: `**Multi-Tenant Authorization Design**:
+  },
+  {
+    id: 2,
+    question:
+      'Design a comprehensive multi-tenant authorization system where each organization (tenant) has its own users, and users can belong to multiple organizations with different roles in each. For example, Alice is an admin in Org A but just a regular user in Org B. How would you model this in the database? How would you ensure complete data isolation between tenants? Write the FastAPI dependencies and middleware needed to automatically filter all database queries by the current tenant. What security considerations must you address to prevent tenant data leakage?',
+    answer: `**Multi-Tenant Authorization Design**:
 
 **Database Schema**:
 
@@ -490,12 +490,12 @@ async def delete_post(
    - Test that user A cannot access org B's data
    - Test that changing headers doesn't bypass isolation
    - Test SQL injection attempts with org_id`,
-        },
-        {
-            id: 3,
-            question:
-                'You are building a healthcare application that must comply with HIPAA regulations. Design an authorization system that implements the principle of least privilege, where doctors can only access patient records they are assigned to, nurses can view records but not edit diagnoses, and administrators can view audit logs but not patient data. Implement a comprehensive audit logging system that tracks every authorization decision (success and failure). How would you test this authorization system to ensure there are no security vulnerabilities? Provide specific test cases that would catch common authorization bugs.',
-            answer: `**HIPAA-Compliant Authorization System**:
+  },
+  {
+    id: 3,
+    question:
+      'You are building a healthcare application that must comply with HIPAA regulations. Design an authorization system that implements the principle of least privilege, where doctors can only access patient records they are assigned to, nurses can view records but not edit diagnoses, and administrators can view audit logs but not patient data. Implement a comprehensive audit logging system that tracks every authorization decision (success and failure). How would you test this authorization system to ensure there are no security vulnerabilities? Provide specific test cases that would catch common authorization bugs.',
+    answer: `**HIPAA-Compliant Authorization System**:
 
 **Database Schema with Audit**:
 
@@ -872,10 +872,10 @@ def test_audit_log_on_denied_access(client, db):
 4. **Encrypted PHI**: Encrypt sensitive fields at rest
 5. **Session timeout**: Auto-logout after inactivity
 6. **MFA for privileged roles**: Require MFA for doctors and admins`,
-        },
-    ].map(({ id, ...q }, idx) => ({
-        id: `fastapi-authz-q-${idx + 1}`,
-        question: q.question,
-        sampleAnswer: String(q.answer),
-        keyPoints: []
-    }));
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `fastapi-authz-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

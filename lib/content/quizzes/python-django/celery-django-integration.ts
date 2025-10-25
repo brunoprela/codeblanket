@@ -1,10 +1,9 @@
-export const celeryDjangoIntegrationQuiz = {
-  title: 'Celery + Django Integration - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain how to integrate Celery with Django for background task processing. Include configuration, task definition, and best practices for production deployments.',
-      answer: `
+export const celeryDjangoIntegrationQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain how to integrate Celery with Django for background task processing. Include configuration, task definition, and best practices for production deployments.',
+    answer: `
 **Celery Django Setup:**
 
 \`\`\`python
@@ -120,11 +119,11 @@ def robust_task(self, data):
     pass
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Describe periodic tasks with Celery Beat in Django. Include scheduling strategies, dynamic task creation, and handling task failures.',
-      answer: `
+  },
+  {
+    question:
+      'Describe periodic tasks with Celery Beat in Django. Include scheduling strategies, dynamic task creation, and handling task failures.',
+    answer: `
 **Celery Beat Setup:**
 
 \`\`\`python
@@ -239,11 +238,11 @@ elif task.failed():
     print(task.traceback)
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Explain task queues, routing, and priority in Celery. How do you optimize task execution for different workload types?',
-      answer: `
+  },
+  {
+    question:
+      'Explain task queues, routing, and priority in Celery. How do you optimize task execution for different workload types?',
+    answer: `
 **Task Queues & Routing:**
 
 \`\`\`python
@@ -359,6 +358,10 @@ CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 min hard limit
 CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 min soft limit
 \`\`\`
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

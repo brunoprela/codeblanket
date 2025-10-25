@@ -198,7 +198,7 @@ services:
     environment:
       - DATABASE_URL=postgresql://user:pass@db:5432/myapp
       - REDIS_URL=redis://redis:6379/0
-      - SECRET_KEY=${SECRET_KEY}
+      - SECRET_KEY=\${SECRET_KEY}
     depends_on:
       - db
       - redis

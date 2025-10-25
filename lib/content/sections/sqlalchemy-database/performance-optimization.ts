@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const performanceOptimization = {
   title: 'Performance Optimization',
   id: 'performance-optimization',

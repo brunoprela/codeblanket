@@ -363,13 +363,13 @@ def process_user_balance(self, user_id: int):
     try:
         # Critical section (only one worker executes this)
         balance = get_user_balance(user_id)
-        logger.info(f"Processing user {user_id}, balance: ${balance}")
+        logger.info(f"Processing user {user_id}, balance: \${balance}")
         
         # Update balance
         new_balance = balance + 50
         set_user_balance(user_id, new_balance)
         
-        logger.info(f"User {user_id} processed, new balance: ${new_balance}")
+        logger.info(f"User {user_id} processed, new balance: \${new_balance}")
         
         return {'user_id': user_id, 'balance': new_balance}
     

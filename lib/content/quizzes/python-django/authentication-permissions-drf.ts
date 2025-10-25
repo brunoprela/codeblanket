@@ -1,10 +1,9 @@
-export const authenticationPermissionsDrfQuiz = {
-  title: 'Authentication & Permissions (DRF) - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Compare different DRF authentication methods (TokenAuthentication, SessionAuthentication, JWTAuthentication). Explain when to use each and how to implement custom authentication.',
-      answer: `
+export const authenticationPermissionsDrfQuiz = [
+  {
+    id: 1,
+    question:
+      'Compare different DRF authentication methods (TokenAuthentication, SessionAuthentication, JWTAuthentication). Explain when to use each and how to implement custom authentication.',
+    answer: `
 **TokenAuthentication:**
 Simple token-based auth with database-stored tokens.
 
@@ -85,11 +84,11 @@ class APIKeyAuthentication(BaseAuthentication):
 - JWT: Mobile apps, SPAs, microservices
 - Custom: API keys, OAuth2, etc.
       `,
-    },
-    {
-      question:
-        'Explain DRF permission classes and how to implement object-level permissions. Include examples of custom permission classes for complex authorization logic.',
-      answer: `
+  },
+  {
+    question:
+      'Explain DRF permission classes and how to implement object-level permissions. Include examples of custom permission classes for complex authorization logic.',
+    answer: `
 **Built-in Permissions:**
 
 \`\`\`python
@@ -174,11 +173,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
 - Fail securely (deny by default)
 - Cache expensive permission checks
       `,
-    },
-    {
-      question:
-        'Describe how to implement OAuth2 or social authentication with DRF. Include token refresh strategies and security considerations.',
-      answer: `
+  },
+  {
+    question:
+      'Describe how to implement OAuth2 or social authentication with DRF. Include token refresh strategies and security considerations.',
+    answer: `
 **OAuth2 with django-oauth-toolkit:**
 
 \`\`\`python
@@ -290,6 +289,10 @@ SIMPLE_JWT = {
 }
 \`\`\`
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

@@ -88,4 +88,3 @@ export const advancedPatternsMultipleChoice: MultipleChoiceQuestion[] = [
       'Example composition: (Active & Verified) | AdminSpec = active verified users OR admins.',
   },
 ];
-

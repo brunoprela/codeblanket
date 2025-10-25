@@ -1,10 +1,9 @@
-export const djangoArchitectureDeepDiveQuiz = {
-  title: 'Django Architecture Deep Dive - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain the Django MVT (Model-View-Template) architecture and how it differs from traditional MVC. In your explanation, describe the request/response lifecycle in detail, including middleware execution, URL routing, view processing, and template rendering.',
-      answer: `
+export const djangoArchitectureDeepDiveQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain the Django MVT (Model-View-Template) architecture and how it differs from traditional MVC. In your explanation, describe the request/response lifecycle in detail, including middleware execution, URL routing, view processing, and template rendering.',
+    answer: `
 **Django MVT vs MVC:**
 
 Django follows the MVT (Model-View-Template) pattern, which is conceptually similar to MVC but with different naming:
@@ -40,11 +39,11 @@ Request → SecurityMiddleware → SessionMiddleware → AuthenticationMiddlewar
 
 This architecture provides clean separation of concerns, making Django applications maintainable and scalable.
       `,
-    },
-    {
-      question:
-        'Describe Django\'s app structure and the principle of "loose coupling" in Django applications. How would you design a multi-app project for an e-commerce platform, and what strategies would you use to maintain clear boundaries between apps?',
-      answer: `
+  },
+  {
+    question:
+      'Describe Django\'s app structure and the principle of "loose coupling" in Django applications. How would you design a multi-app project for an e-commerce platform, and what strategies would you use to maintain clear boundaries between apps?',
+    answer: `
 **Django App Structure:**
 
 A Django "app" is a self-contained module that serves a specific purpose. Apps should be:
@@ -145,11 +144,11 @@ ORDER_EXPIRY_HOURS = 24
 - Clear separation of concerns
 - Better team collaboration (different devs work on different apps)
       `,
-    },
-    {
-      question:
-        "Explain Django's ORM lazy evaluation and query optimization. How do select_related() and prefetch_related() differ, and when would you use each? Provide examples of N+1 query problems and how to solve them.",
-      answer: `
+  },
+  {
+    question:
+      "Explain Django's ORM lazy evaluation and query optimization. How do select_related() and prefetch_related() differ, and when would you use each? Provide examples of N+1 query problems and how to solve them.",
+    answer: `
 **Lazy Evaluation:**
 
 Django QuerySets are lazy - they don't hit the database until evaluated. Evaluation happens when you:
@@ -279,6 +278,10 @@ articles = Article.objects.select_related('author').prefetch_related(
 
 This optimization can reduce hundreds of queries to just a handful, dramatically improving performance.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

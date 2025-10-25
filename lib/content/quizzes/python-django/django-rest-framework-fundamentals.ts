@@ -1,10 +1,9 @@
-export const djangoRestFrameworkFundamentalsQuiz = {
-  title: 'Django REST Framework Fundamentals - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain the core components of Django REST Framework and how they work together. Compare APIView, generics, and ViewSets approaches, and describe when you would use each pattern in a production API.',
-      answer: `
+export const djangoRestFrameworkFundamentalsQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain the core components of Django REST Framework and how they work together. Compare APIView, generics, and ViewSets approaches, and describe when you would use each pattern in a production API.',
+    answer: `
 **DRF Core Components:**
 
 **1. Serializers**: Convert complex data to/from JSON
@@ -206,11 +205,11 @@ class ArticleListCreateView(generics.ListCreateAPIView):
 
 The right pattern depends on your specific use case, but ViewSets provide the best balance of simplicity and functionality for standard REST APIs.
       `,
-    },
-    {
-      question:
-        'Describe DRF request/response cycle, including parsing, authentication, permissions, throttling, and rendering. Explain how to customize each stage and implement middleware-like functionality.',
-      answer: `
+  },
+  {
+    question:
+      'Describe DRF request/response cycle, including parsing, authentication, permissions, throttling, and rendering. Explain how to customize each stage and implement middleware-like functionality.',
+    answer: `
 **DRF Request/Response Cycle:**
 
 \`\`\`
@@ -569,11 +568,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 Understanding this cycle allows you to customize any part of DRF request processing.
       `,
-    },
-    {
-      question:
-        'Explain DRF content negotiation, format suffixes, and API versioning strategies. Provide examples of implementing multiple API versions while maintaining backward compatibility.',
-      answer: `
+  },
+  {
+    question:
+      'Explain DRF content negotiation, format suffixes, and API versioning strategies. Provide examples of implementing multiple API versions while maintaining backward compatibility.',
+    answer: `
 **Content Negotiation in DRF:**
 
 Content negotiation is the process of selecting the best representation for a response when multiple representations are available.
@@ -956,6 +955,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 This comprehensive approach ensures smooth API evolution while maintaining client compatibility.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

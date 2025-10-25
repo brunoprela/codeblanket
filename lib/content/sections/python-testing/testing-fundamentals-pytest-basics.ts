@@ -426,7 +426,7 @@ def test_with_custom_messages():
     cost = 100
     assert balance >= cost, (
         f"Insufficient funds. "
-        f"Balance: ${balance}, Required: ${cost}"
+        f"Balance: \${balance}, Required: \${cost}"
     )
 \`\`\`
 

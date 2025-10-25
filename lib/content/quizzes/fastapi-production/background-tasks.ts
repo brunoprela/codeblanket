@@ -1,9 +1,9 @@
 export const backgroundTasksQuiz = [
-    {
-      id: 1,
-      question:
-        "Compare FastAPI's built-in BackgroundTasks with Celery for handling asynchronous operations. Design a system for an e-commerce platform that needs to: (1) send order confirmation emails immediately, (2) process credit card payments with retry logic, (3) generate daily sales reports at midnight, and (4) resize product images after upload. For each requirement, would you use BackgroundTasks or Celery? Justify your choices with code examples showing how you would implement each, including error handling and monitoring.",
-      answer: `**BackgroundTasks vs Celery Analysis**:
+  {
+    id: 1,
+    question:
+      "Compare FastAPI's built-in BackgroundTasks with Celery for handling asynchronous operations. Design a system for an e-commerce platform that needs to: (1) send order confirmation emails immediately, (2) process credit card payments with retry logic, (3) generate daily sales reports at midnight, and (4) resize product images after upload. For each requirement, would you use BackgroundTasks or Celery? Justify your choices with code examples showing how you would implement each, including error handling and monitoring.",
+    answer: `**BackgroundTasks vs Celery Analysis**:
 
 **BackgroundTasks** (FastAPI built-in):
 - Runs in same process as API server
@@ -312,12 +312,12 @@ async def check_celery_workers():
 | Payment processing | Celery | Critical, needs retries, idempotency | 5-30 seconds |
 | Daily sales report | Celery Beat | Scheduled, long-running | 5-10 minutes |
 | Image processing | Celery | CPU-intensive, needs retries | 10-60 seconds |`,
-    },
-    {
-      id: 2,
-      question:
-        "Design a comprehensive retry strategy for background tasks that interact with external APIs (payment gateways, email services, SMS providers). Some failures are transient (network timeouts) and should be retried, while others are permanent (invalid API key, card declined) and shouldn't be retried. How would you categorize errors? What retry backoff strategy would you use and why? Implement a Celery task that processes payments with intelligent retry logic, including exponential backoff, max retries, dead letter queues for failed tasks, and alerting when tasks fail permanently. How would you test this retry logic?",
-      answer: `**Intelligent Retry Strategy Design**:
+  },
+  {
+    id: 2,
+    question:
+      "Design a comprehensive retry strategy for background tasks that interact with external APIs (payment gateways, email services, SMS providers). Some failures are transient (network timeouts) and should be retried, while others are permanent (invalid API key, card declined) and shouldn't be retried. How would you categorize errors? What retry backoff strategy would you use and why? Implement a Celery task that processes payments with intelligent retry logic, including exponential backoff, max retries, dead letter queues for failed tasks, and alerting when tasks fail permanently. How would you test this retry logic?",
+    answer: `**Intelligent Retry Strategy Design**:
 
 **1. Error Categorization**:
 
@@ -769,13 +769,12 @@ def test_exponential_backoff_timing():
 6. **Dead letter queue**: Handle failed tasks manually
 7. **Comprehensive logging**: Track every retry attempt
 8. **Testing**: Test success, transient failures, permanent failures, max retries`,
-    },
-    {
-      id: 3,
-      question:
-        'Design a monitoring and observability strategy for a production Celery deployment processing thousands of tasks per minute. What metrics would you track? How would you detect and alert on task failures, slow tasks, worker failures, and queue backlogs? Implement a comprehensive monitoring solution using Prometheus and Grafana, including health check endpoints, custom metrics, and alerting rules. How would you debug a situation where tasks are being accepted but not processed (stuck in queue)? What are the common causes and solutions?',
-      answer:
-        `**Production Celery Monitoring Strategy**:
+  },
+  {
+    id: 3,
+    question:
+      'Design a monitoring and observability strategy for a production Celery deployment processing thousands of tasks per minute. What metrics would you track? How would you detect and alert on task failures, slow tasks, worker failures, and queue backlogs? Implement a comprehensive monitoring solution using Prometheus and Grafana, including health check endpoints, custom metrics, and alerting rules. How would you debug a situation where tasks are being accepted but not processed (stuck in queue)? What are the common causes and solutions?',
+    answer: `**Production Celery Monitoring Strategy**:
 
 **1. Key Metrics to Track**:
 
@@ -1273,6 +1272,10 @@ celery_app.conf.broker_pool_limit = 10
 ✅ Logging: Structured logs with task_id, task_name, duration  
 ✅ Diagnostic tools: Scripts to identify stuck queues  
 ✅ Regular reviews: Analyze slow tasks weekly`,
-    },
-
-].map(({ id, ...q }, idx) => ({ id: `fastapi-background-tasks-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `fastapi-background-tasks-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

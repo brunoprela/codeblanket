@@ -1,9 +1,9 @@
 export const errorHandlingValidationQuiz = [
-    {
-      id: 1,
-      question:
-        'Design a comprehensive error handling strategy for a production FastAPI application that includes: (1) custom exception handlers for different error types, (2) structured error responses with request IDs for tracking, (3) appropriate HTTP status codes, (4) logging without exposing sensitive data, and (5) integration with error tracking services like Sentry. Implement the complete solution showing how validation errors, business logic errors, database errors, and unexpected exceptions are handled differently.',
-      answer: `**Comprehensive Error Handling Strategy**:
+  {
+    id: 1,
+    question:
+      'Design a comprehensive error handling strategy for a production FastAPI application that includes: (1) custom exception handlers for different error types, (2) structured error responses with request IDs for tracking, (3) appropriate HTTP status codes, (4) logging without exposing sensitive data, and (5) integration with error tracking services like Sentry. Implement the complete solution showing how validation errors, business logic errors, database errors, and unexpected exceptions are handled differently.',
+    answer: `**Comprehensive Error Handling Strategy**:
 
 \`\`\`python
 from fastapi import FastAPI, Request, HTTPException
@@ -165,12 +165,12 @@ async def global_exception_handler(request: Request, exc: Exception):
 \`\`\`
 
 **Key principles**: Validation errors → 422, Business errors → 4xx with code, Database errors → log+Sentry, never expose internals.`,
-    },
-    {
-      id: 2,
-      question:
-        'Explain the difference between HTTP status codes 400, 401, 403, 404, 422, and 429. For each status code, provide specific use cases in a FastAPI application. Design an endpoint that handles user registration and can return each of these status codes in appropriate scenarios.',
-      answer: `**HTTP Status Code Guide**:
+  },
+  {
+    id: 2,
+    question:
+      'Explain the difference between HTTP status codes 400, 401, 403, 404, 422, and 429. For each status code, provide specific use cases in a FastAPI application. Design an endpoint that handles user registration and can return each of these status codes in appropriate scenarios.',
+    answer: `**HTTP Status Code Guide**:
 
 **400 Bad Request**: Generic client error, malformed request
 - Use when: Request syntax invalid, missing required header, invalid JSON
@@ -267,12 +267,12 @@ async def delete_user(
 \`\`\`
 
 **Summary**: 400=bad input, 401=not authenticated, 403=not authorized, 404=not found, 422=validation failed, 429=rate limited.`,
-    },
-    {
-      id: 3,
-      question:
-        'Design an error response format that balances providing enough information for debugging while not exposing sensitive internal details. The format should support: field-level validation errors, error codes for programmatic handling, request IDs for tracking, and optional debug information in development. Show how this format would be used for different error scenarios and how it integrates with frontend error handling.',
-      answer: `**Structured Error Response Format**:
+  },
+  {
+    id: 3,
+    question:
+      'Design an error response format that balances providing enough information for debugging while not exposing sensitive internal details. The format should support: field-level validation errors, error codes for programmatic handling, request IDs for tracking, and optional debug information in development. Show how this format would be used for different error scenarios and how it integrates with frontend error handling.',
+    answer: `**Structured Error Response Format**:
 
 \`\`\`python
 from pydantic import BaseModel
@@ -401,6 +401,10 @@ async function handleApiError(error: Response) {
 - Production: Generic messages, no stack traces, no sensitive data
 - Development: Full details, stack traces, input values
 - Always include: request_id for support ticket correlation`,
-    },
-
-].map(({ id, ...q }, idx) => ({ id: `fastapi-error-handling-validation-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `fastapi-error-handling-validation-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

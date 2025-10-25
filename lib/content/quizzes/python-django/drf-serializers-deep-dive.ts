@@ -1,10 +1,9 @@
-export const drfSerializersDeepDiveQuiz = {
-  title: 'DRF Serializers Deep Dive - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain nested serializers in DRF, including writable nested serializers, handling create/update operations, and performance optimization with select_related/prefetch_related. Provide production examples with complex relationships.',
-      answer: `
+export const drfSerializersDeepDiveQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain nested serializers in DRF, including writable nested serializers, handling create/update operations, and performance optimization with select_related/prefetch_related. Provide production examples with complex relationships.',
+    answer: `
 **Nested Serializers in DRF:**
 
 Nested serializers allow you to represent related objects within a parent serializer, creating hierarchical JSON structures.
@@ -380,11 +379,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 This approach provides optimal performance, flexibility, and maintainability for production APIs with nested relationships.
       `,
-    },
-    {
-      question:
-        'Describe custom serializer fields, SerializerMethodField, and field-level validation in DRF. Explain how to implement complex validation logic, custom representations, and field-level permissions.',
-      answer: `
+  },
+  {
+    question:
+      'Describe custom serializer fields, SerializerMethodField, and field-level validation in DRF. Explain how to implement complex validation logic, custom representations, and field-level permissions.',
+    answer: `
 **Custom Serializer Fields in DRF:**
 
 **1. SerializerMethodField (Read-Only):**
@@ -784,11 +783,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 This comprehensive approach ensures robust, secure, and performant DRF serializers in production.
       `,
-    },
-    {
-      question:
-        'Explain serializer performance optimization techniques, including queryset optimization, caching, and bulk operations. Provide examples of optimizing serializers for large datasets and high-traffic APIs.',
-      answer: `
+  },
+  {
+    question:
+      'Explain serializer performance optimization techniques, including queryset optimization, caching, and bulk operations. Provide examples of optimizing serializers for large datasets and high-traffic APIs.',
+    answer: `
 **Serializer Performance Optimization:**
 
 **1. QuerySet Optimization:**
@@ -1163,6 +1162,10 @@ class ArticleSerializer(ProfilingSerializerMixin, serializers.ModelSerializer):
 
 These optimizations can improve API performance by 100x or more!
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

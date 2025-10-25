@@ -1,17 +1,18 @@
-export const CustomManagersQuerysetsMultipleChoice = {
-  title: 'Custom Managers & QuerySets - Multiple Choice Questions',
-  questions: [
-    {
-      question:
-        'What is the primary advantage of using custom QuerySets over custom Managers in Django?',
-      options: [
-        'A) Custom QuerySets are faster than custom Managers',
-        'B) Custom QuerySets allow method chaining while Managers do not',
-        'C) Custom QuerySets can filter data while Managers cannot',
-        'D) Custom QuerySets are required for all custom queries',
-      ],
-      correctAnswer: 1,
-      explanation: `
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const CustomManagersQuerysetsMultipleChoice = [
+  {
+    id: 1,
+    question:
+      'What is the primary advantage of using custom QuerySets over custom Managers in Django?',
+    options: [
+      'A) Custom QuerySets are faster than custom Managers',
+      'B) Custom QuerySets allow method chaining while Managers do not',
+      'C) Custom QuerySets can filter data while Managers cannot',
+      'D) Custom QuerySets are required for all custom queries',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) Custom QuerySets allow method chaining while Managers do not**
 
 **Why B is correct:**
@@ -72,18 +73,18 @@ Article.objects.published().by_author(user).order_by('-created_at')
 
 This pattern provides both performance optimization and flexible, chainable query building.
       `,
-    },
-    {
-      question:
-        'When using prefetch_related with a Prefetch object, what is the main benefit over simple prefetch_related("relation_name")?',
-      options: [
-        'A) Prefetch objects execute faster than simple prefetch_related',
-        'B) Prefetch objects allow you to customize the queryset for the related objects',
-        'C) Prefetch objects work with ForeignKey while simple prefetch does not',
-        'D) Prefetch objects automatically cache results in Redis',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      'When using prefetch_related with a Prefetch object, what is the main benefit over simple prefetch_related("relation_name")?',
+    options: [
+      'A) Prefetch objects execute faster than simple prefetch_related',
+      'B) Prefetch objects allow you to customize the queryset for the related objects',
+      'C) Prefetch objects work with ForeignKey while simple prefetch does not',
+      'D) Prefetch objects automatically cache results in Redis',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) Prefetch objects allow you to customize the queryset for the related objects**
 
 **Why B is correct:**
@@ -185,18 +186,18 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 Prefetch objects are essential for optimizing complex nested relationships in production APIs.
       `,
-    },
-    {
-      question:
-        'In Django, which approach correctly implements a soft delete pattern using a custom Manager?',
-      options: [
-        'A) Override the delete() method in the Model',
-        'B) Create a custom Manager that filters out deleted objects by default',
-        'C) Use a pre_delete signal to prevent deletion',
-        'D) Add a database constraint to prevent DELETE operations',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      'In Django, which approach correctly implements a soft delete pattern using a custom Manager?',
+    options: [
+      'A) Override the delete() method in the Model',
+      'B) Create a custom Manager that filters out deleted objects by default',
+      'C) Use a pre_delete signal to prevent deletion',
+      'D) Add a database constraint to prevent DELETE operations',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) Create a custom Manager that filters out deleted objects by default**
 
 **Why B is correct:**
@@ -344,18 +345,18 @@ Article.objects.dead()  # Only deleted
 
 This pattern is widely used in production for critical data that shouldn't be permanently deleted immediately.
       `,
-    },
-    {
-      question:
-        'What is the most efficient way to check if a QuerySet has any results without loading them into memory?',
-      options: [
-        'A) if len(queryset) > 0:',
-        'B) if queryset.count() > 0:',
-        'C) if queryset.exists():',
-        'D) if list(queryset):',
-      ],
-      correctAnswer: 2,
-      explanation: `
+  },
+  {
+    question:
+      'What is the most efficient way to check if a QuerySet has any results without loading them into memory?',
+    options: [
+      'A) if len(queryset) > 0:',
+      'B) if queryset.count() > 0:',
+      'C) if queryset.exists():',
+      'D) if list(queryset):',
+    ],
+    correctAnswer: 2,
+    explanation: `
 **Correct Answer: C) if queryset.exists():**
 
 **Why C is correct:**
@@ -481,18 +482,18 @@ def check_username(request):
 
 Using \`exists()\` correctly can improve query performance by 100x or more in large databases!
       `,
-    },
-    {
-      question:
-        'In a custom QuerySet, what does returning "self" from a method allow you to do?',
-      options: [
-        'A) Cache the QuerySet results in memory',
-        'B) Chain additional QuerySet methods after calling your custom method',
-        'C) Execute the query immediately without lazy evaluation',
-        'D) Return the current model instance instead of a QuerySet',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      'In a custom QuerySet, what does returning "self" from a method allow you to do?',
+    options: [
+      'A) Cache the QuerySet results in memory',
+      'B) Chain additional QuerySet methods after calling your custom method',
+      'C) Execute the query immediately without lazy evaluation',
+      'D) Return the current model instance instead of a QuerySet',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) Chain additional QuerySet methods after calling your custom method**
 
 **Why B is correct:**
@@ -636,6 +637,5 @@ stats = Article.objects.published().in_language('en').stats()  # ✅ Terminal me
 
 Understanding QuerySet chaining is fundamental to writing clean, efficient Django code.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({ id: `django-mc-${idx + 1}`, ...q }));

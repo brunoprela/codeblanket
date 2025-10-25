@@ -1,10 +1,9 @@
-export const testingDjangoApplicationsQuiz = {
-  title: 'Testing Django Applications - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain comprehensive testing strategies for Django applications using pytest-django. Include fixtures, database handling, and test organization.',
-      answer: `
+export const testingDjangoApplicationsQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain comprehensive testing strategies for Django applications using pytest-django. Include fixtures, database handling, and test organization.',
+    answer: `
 **pytest-django Setup:**
 
 \`\`\`python
@@ -126,11 +125,11 @@ def test_with_transaction():
         user = User.objects.create(username='test')
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Describe testing DRF APIs including authentication, permissions, and response validation. Include examples of testing ViewSets and custom actions.',
-      answer: `
+  },
+  {
+    question:
+      'Describe testing DRF APIs including authentication, permissions, and response validation. Include examples of testing ViewSets and custom actions.',
+    answer: `
 **API Testing Setup:**
 
 \`\`\`python
@@ -263,11 +262,11 @@ def test_article_detail_response_structure(self, api_client):
     assert data['author']['username'] == article.author.username
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Explain testing async views, middleware, signals, and Celery tasks in Django. Include mocking strategies and integration testing.',
-      answer: `
+  },
+  {
+    question:
+      'Explain testing async views, middleware, signals, and Celery tasks in Django. Include mocking strategies and integration testing.',
+    answer: `
 **Testing Async Views:**
 
 \`\`\`python
@@ -407,6 +406,10 @@ def test_with_real_celery(celery_worker):
 pytest --cov=myapp --cov-report=html --cov-report=term-missing
 \`\`\`
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

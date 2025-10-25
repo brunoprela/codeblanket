@@ -1,10 +1,9 @@
-export const cachingDjangoQuiz = {
-  title: 'Caching in Django - Discussion Questions',
-  questions: [
-    {
-      question:
-        "Explain Django's caching framework including cache backends (Redis, Memcached, Database). Compare their performance characteristics and use cases.",
-      answer: `
+export const cachingDjangoQuiz = [
+  {
+    id: 1,
+    question:
+      "Explain Django's caching framework including cache backends (Redis, Memcached, Database). Compare their performance characteristics and use cases.",
+    answer: `
 **Django Cache Backends:**
 
 **Redis:**
@@ -76,11 +75,11 @@ CACHES = {
 - Database: Small apps, no extra infrastructure
 - LocMem: Development only
       `,
-    },
-    {
-      question:
-        'Describe cache invalidation strategies in Django. Include examples of cache key generation, TTL management, and cache warming.',
-      answer: `
+  },
+  {
+    question:
+      'Describe cache invalidation strategies in Django. Include examples of cache key generation, TTL management, and cache warming.',
+    answer: `
 **Cache Invalidation Strategies:**
 
 **1. Time-based (TTL):**
@@ -163,11 +162,11 @@ class Command(BaseCommand):
 - Versioning for coordinated cache clears
 - Warm cache during off-peak hours
       `,
-    },
-    {
-      question:
-        'Explain per-view caching, template fragment caching, and low-level cache API in Django. When should you use each approach?',
-      answer: `
+  },
+  {
+    question:
+      'Explain per-view caching, template fragment caching, and low-level cache API in Django. When should you use each approach?',
+    answer: `
 **Per-View Caching:**
 
 \`\`\`python
@@ -274,6 +273,10 @@ def get_articles_cached(status='published', category=None):
     return articles
 \`\`\`
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

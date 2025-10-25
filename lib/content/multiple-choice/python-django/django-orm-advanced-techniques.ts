@@ -1,17 +1,18 @@
-export const DjangoOrmAdvancedTechniquesMultipleChoice = {
-  title: 'Django ORM Advanced Techniques - Multiple Choice Questions',
-  questions: [
-    {
-      question:
-        'What is the primary advantage of using F() expressions in Django ORM queries?',
-      options: [
-        'A) They allow filtering by related model fields',
-        'B) They perform operations at the database level, avoiding race conditions',
-        'C) They enable complex aggregation calculations',
-        'D) They automatically optimize queries with select_related',
-      ],
-      correctAnswer: 1,
-      explanation: `
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const DjangoOrmAdvancedTechniquesMultipleChoice = [
+  {
+    id: 1,
+    question:
+      'What is the primary advantage of using F() expressions in Django ORM queries?',
+    options: [
+      'A) They allow filtering by related model fields',
+      'B) They perform operations at the database level, avoiding race conditions',
+      'C) They enable complex aggregation calculations',
+      'D) They automatically optimize queries with select_related',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) They perform operations at the database level, avoiding race conditions**
 
 **Why B is correct:**
@@ -58,18 +59,18 @@ Product.objects.annotate(
 
 This database-level operation is much safer and more efficient than fetching data to Python for manipulation.
       `,
-    },
-    {
-      question:
-        "In Django's transaction management, what happens if an exception is raised inside an atomic() block?",
-      options: [
-        'A) The transaction commits and the exception is logged',
-        'B) The transaction is automatically rolled back and the exception propagates',
-        'C) The transaction commits only the changes made before the exception',
-        'D) The exception is caught and converted to a database error',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      "In Django's transaction management, what happens if an exception is raised inside an atomic() block?",
+    options: [
+      'A) The transaction commits and the exception is logged',
+      'B) The transaction is automatically rolled back and the exception propagates',
+      'C) The transaction commits only the changes made before the exception',
+      'D) The exception is caught and converted to a database error',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) The transaction is automatically rolled back and the exception propagates**
 
 **Why B is correct:**
@@ -150,18 +151,18 @@ with transaction.atomic():  # Outer transaction
 
 Understanding transaction behavior is critical for data integrity in production applications.
       `,
-    },
-    {
-      question:
-        'Which approach is most efficient for retrieving articles with their comments, where comments also need their associated users?',
-      options: [
-        'A) Article.objects.all().prefetch_related("comments", "comments__user")',
-        'B) Article.objects.select_related("comments").prefetch_related("user")',
-        'C) Article.objects.prefetch_related(Prefetch("comments", queryset=Comment.objects.select_related("user")))',
-        'D) Article.objects.all().annotate(comment_count=Count("comments"))',
-      ],
-      correctAnswer: 2,
-      explanation: `
+  },
+  {
+    question:
+      'Which approach is most efficient for retrieving articles with their comments, where comments also need their associated users?',
+    options: [
+      'A) Article.objects.all().prefetch_related("comments", "comments__user")',
+      'B) Article.objects.select_related("comments").prefetch_related("user")',
+      'C) Article.objects.prefetch_related(Prefetch("comments", queryset=Comment.objects.select_related("user")))',
+      'D) Article.objects.all().annotate(comment_count=Count("comments"))',
+    ],
+    correctAnswer: 2,
+    explanation: `
 **Correct Answer: C) Article.objects.prefetch_related(Prefetch("comments", queryset=Comment.objects.select_related("user")))**
 
 **Why C is correct:**
@@ -243,18 +244,18 @@ Article.objects.prefetch_related(
 
 This pattern is essential for building performant APIs that return nested data structures efficiently.
       `,
-    },
-    {
-      question:
-        'When implementing a multi-database setup with read replicas in Django, which database router method determines where write operations are sent?',
-      options: [
-        'A) db_for_read()',
-        'B) db_for_write()',
-        'C) allow_migrate()',
-        'D) allow_relation()',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      'When implementing a multi-database setup with read replicas in Django, which database router method determines where write operations are sent?',
+    options: [
+      'A) db_for_read()',
+      'B) db_for_write()',
+      'C) allow_migrate()',
+      'D) allow_relation()',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) db_for_write()**
 
 **Why B is correct:**
@@ -380,18 +381,18 @@ articles = Article.objects.using('replica1').all()
 
 Understanding database routing is essential for scaling Django applications horizontally with read replicas.
       `,
-    },
-    {
-      question:
-        'What is the correct way to perform a conditional update in Django that only updates records meeting specific criteria?',
-      options: [
-        'A) Article.objects.filter(status="draft").save()',
-        'B) Article.objects.update(status="published")',
-        'C) Article.objects.filter(status="draft").update(status="published")',
-        'D) for article in Article.objects.filter(status="draft"): article.status="published"; article.save()',
-      ],
-      correctAnswer: 2,
-      explanation: `
+  },
+  {
+    question:
+      'What is the correct way to perform a conditional update in Django that only updates records meeting specific criteria?',
+    options: [
+      'A) Article.objects.filter(status="draft").save()',
+      'B) Article.objects.update(status="published")',
+      'C) Article.objects.filter(status="draft").update(status="published")',
+      'D) for article in Article.objects.filter(status="draft"): article.status="published"; article.save()',
+    ],
+    correctAnswer: 2,
+    explanation: `
 **Correct Answer: C) Article.objects.filter(status="draft").update(status="published")**
 
 **Why C is correct:**
@@ -505,6 +506,5 @@ def publish_drafts_batch():
 
 Understanding the difference between \`update()\` and iterating with \`save()\` is crucial for building performant Django applications, especially when dealing with large datasets.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({ id: `django-mc-${idx + 1}`, ...q }));

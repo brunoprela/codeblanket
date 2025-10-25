@@ -345,7 +345,7 @@ pylint --output-format=json myapp/ > pylint-report.json
 
 ### Configuration
 
-\`\`\```.pylintrc
+\`\`\`.pylintrc
 [MASTER]
 # Use multiple cores
 jobs=4

@@ -1,10 +1,9 @@
-export const drfViewsetsRoutersQuiz = {
-  title: 'DRF ViewSets & Routers - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain the different types of ViewSets in DRF (ViewSet, GenericViewSet, ModelViewSet, ReadOnlyModelViewSet) and when to use each. Include examples of custom actions and how routers generate URLs.',
-      answer: `
+export const drfViewsetsRoutersQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain the different types of ViewSets in DRF (ViewSet, GenericViewSet, ModelViewSet, ReadOnlyModelViewSet) and when to use each. Include examples of custom actions and how routers generate URLs.',
+    answer: `
 **ViewSet Types:**
 
 **1. ViewSet (Base):**
@@ -93,11 +92,11 @@ router.register(r'articles', ArticleViewSet)
 - Custom mixins: Partial CRUD (e.g., list + create only)
 - ViewSet: Fully custom non-CRUD endpoints
       `,
-    },
-    {
-      question:
-        'Describe how to implement action-specific serializers, permissions, and pagination in DRF ViewSets. Provide examples of customizing behavior per action.',
-      answer: `
+  },
+  {
+    question:
+      'Describe how to implement action-specific serializers, permissions, and pagination in DRF ViewSets. Provide examples of customizing behavior per action.',
+    answer: `
 **Action-Specific Customization:**
 
 **1. Different Serializers Per Action:**
@@ -186,11 +185,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 This pattern provides maximum flexibility while keeping code organized.
       `,
-    },
-    {
-      question:
-        'Explain DRF routers (SimpleRouter vs DefaultRouter) and how to customize URL patterns. Include nested routing and custom route configurations.',
-      answer: `
+  },
+  {
+    question:
+      'Explain DRF routers (SimpleRouter vs DefaultRouter) and how to customize URL patterns. Include nested routing and custom route configurations.',
+    answer: `
 **Router Comparison:**
 
 **SimpleRouter:**
@@ -268,6 +267,10 @@ urlpatterns = [
 - Nested routers for hierarchical resources
 - Custom URL patterns for non-standard endpoints
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

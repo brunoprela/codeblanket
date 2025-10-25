@@ -1,10 +1,9 @@
-export const customManagersQuerysetsQuiz = {
-  title: 'Custom Managers & QuerySets - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain the difference between custom managers and custom QuerySets in Django. Provide examples of when you would use each and how to combine them effectively for reusable query logic.',
-      answer: `
+export const customManagersQuerysetsQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain the difference between custom managers and custom QuerySets in Django. Provide examples of when you would use each and how to combine them effectively for reusable query logic.',
+    answer: `
 **Custom Managers vs Custom QuerySets:**
 
 **Custom Managers:**
@@ -82,11 +81,11 @@ Article.objects.published().by_author(user)  # Optimized + chainable
 
 This gives both performance (manager optimization) and flexibility (queryset methods).
       `,
-    },
-    {
-      question:
-        'Describe advanced QuerySet techniques including prefetch_related with Prefetch objects, conditional expressions with Case/When, and subquery annotations. Provide production examples.',
-      answer: `
+  },
+  {
+    question:
+      'Describe advanced QuerySet techniques including prefetch_related with Prefetch objects, conditional expressions with Case/When, and subquery annotations. Provide production examples.',
+    answer: `
 **1. Advanced prefetch_related with Prefetch:**
 
 \`\`\`python
@@ -220,11 +219,11 @@ products = Product.objects.annotate(
 
 These techniques enable complex analytics without N+1 queries or post-processing in Python.
       `,
-    },
-    {
-      question:
-        'Explain how to build a generic filtering system using QuerySet methods, Q objects, and dynamic field lookups. Include handling user input safely and building reusable filter classes.',
-      answer: `
+  },
+  {
+    question:
+      'Explain how to build a generic filtering system using QuerySet methods, Q objects, and dynamic field lookups. Include handling user input safely and building reusable filter classes.',
+    answer: `
 **Generic Filtering System:**
 
 **1. Basic Dynamic Filters:**
@@ -448,6 +447,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 This approach provides flexible, safe, and reusable filtering for APIs and views.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

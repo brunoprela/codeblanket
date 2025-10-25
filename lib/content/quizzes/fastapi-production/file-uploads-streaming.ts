@@ -1,9 +1,9 @@
 export const fileUploadsStreamingQuiz = [
-    {
-      id: 1,
-      question:
-        "Design a production file upload system for a video platform that handles uploads up to 5GB. The system must: (1) validate file type and size, (2) scan for viruses, (3) transcode to multiple formats (1080p, 720p, 480p), (4) generate thumbnails, and (5) store in S3. How would you implement chunked uploads with resume capability? Design the complete flow including progress tracking, error handling, and background processing. What happens if a user's connection drops mid-upload?",
-      answer: `**Production Video Upload System**:
+  {
+    id: 1,
+    question:
+      "Design a production file upload system for a video platform that handles uploads up to 5GB. The system must: (1) validate file type and size, (2) scan for viruses, (3) transcode to multiple formats (1080p, 720p, 480p), (4) generate thumbnails, and (5) store in S3. How would you implement chunked uploads with resume capability? Design the complete flow including progress tracking, error handling, and background processing. What happens if a user's connection drops mid-upload?",
+    answer: `**Production Video Upload System**:
 
 **Architecture**: Client → API (chunks) → S3 (presigned) → Background Worker (transcode) → CDN
 
@@ -205,12 +205,12 @@ def transcode_video(upload_id: str, source_key: str):
 \`\`\`
 
 **Connection Drop Handling**: Client detects disconnect, calls /status endpoint to get missing chunks, resumes from where it left off. All chunks are idempotent (re-uploading same chunk is safe).`,
-    },
-    {
-      id: 2,
-      question:
-        'Compare three strategies for file uploads: (1) uploading through API server to S3, (2) presigned URLs for direct S3 upload, and (3) multipart upload directly to S3. For each approach, analyze: performance, security, complexity, cost, and use cases. When would you use each? Implement a presigned URL approach with proper validation and callback confirmation.',
-      answer: `**Upload Strategy Comparison**:
+  },
+  {
+    id: 2,
+    question:
+      'Compare three strategies for file uploads: (1) uploading through API server to S3, (2) presigned URLs for direct S3 upload, and (3) multipart upload directly to S3. For each approach, analyze: performance, security, complexity, cost, and use cases. When would you use each? Implement a presigned URL approach with proper validation and callback confirmation.',
+    answer: `**Upload Strategy Comparison**:
 
 **1. Upload through API Server**:
 \`\`\`
@@ -387,12 +387,12 @@ Use case: Very large files (> 1GB), need resume capability
 - Large files (10MB - 1GB): Presigned URL
 - Very large (> 1GB): Multipart
 `,
-    },
-    {
-      id: 3,
-      question:
-        'Design a streaming response system for generating and downloading large CSV exports (millions of rows) from a database. The system must: (1) stream data without loading everything into memory, (2) support filtering and pagination at the database level, (3) compress the output stream, and (4) provide progress updates. Implement both the streaming endpoint and client-side progress tracking. How would you handle cancellation if the user stops the download?',
-      answer: `**Streaming CSV Export System**:
+  },
+  {
+    id: 3,
+    question:
+      'Design a streaming response system for generating and downloading large CSV exports (millions of rows) from a database. The system must: (1) stream data without loading everything into memory, (2) support filtering and pagination at the database level, (3) compress the output stream, and (4) provide progress updates. Implement both the streaming endpoint and client-side progress tracking. How would you handle cancellation if the user stops the download?',
+    answer: `**Streaming CSV Export System**:
 
 \`\`\`python
 """
@@ -623,6 +623,10 @@ async function cancelDownload(exportId) {
 4. **Progress tracking**: Separate endpoint with export_id
 5. **Cancellation**: Set flag, check in generator loop
 6. **Cleanup**: Background task removes old progress data`,
-    },
-
-].map(({ id, ...q }, idx) => ({ id: `fastapi-file-uploads-streaming-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `fastapi-file-uploads-streaming-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

@@ -1,10 +1,9 @@
-export const djangoProductionDeploymentQuiz = {
-  title: 'Django Production Deployment - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain a complete Django production deployment stack with Gunicorn, NGINX, PostgreSQL, and Redis. Include configuration, process management, and load balancing.',
-      answer: `
+export const djangoProductionDeploymentQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain a complete Django production deployment stack with Gunicorn, NGINX, PostgreSQL, and Redis. Include configuration, process management, and load balancing.',
+    answer: `
 **Production Stack Architecture:**
 
 \`\`\`
@@ -168,11 +167,11 @@ WantedBy=multi-user.target
 # systemctl start gunicorn
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Describe Django application containerization with Docker. Include multi-stage builds, docker-compose for development, and production Kubernetes deployment.',
-      answer: `
+  },
+  {
+    question:
+      'Describe Django application containerization with Docker. Include multi-stage builds, docker-compose for development, and production Kubernetes deployment.',
+    answer: `
 **Multi-Stage Dockerfile:**
 
 \`\`\`dockerfile
@@ -385,11 +384,11 @@ def readiness_check(request):
         return JsonResponse({'status': 'not ready', 'error': str(e)}, status=503)
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Explain production settings, environment variables, secret management, monitoring, and logging for Django applications. Include CI/CD best practices.',
-      answer: `
+  },
+  {
+    question:
+      'Explain production settings, environment variables, secret management, monitoring, and logging for Django applications. Include CI/CD best practices.',
+    answer: `
 **Production Settings:**
 
 \`\`\`python
@@ -585,6 +584,10 @@ jobs:
           django=myregistry.com/myproject:\${{ github.sha }}
 \`\`\`
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

@@ -1,10 +1,9 @@
-export const djangoOrmAdvancedTechniquesQuiz = {
-  title: 'Django ORM Advanced Techniques - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain the difference between F() expressions, Q() objects, and annotations in Django ORM. Provide real-world examples where each would be essential for building efficient queries.',
-      answer: `
+export const djangoOrmAdvancedTechniquesQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain the difference between F() expressions, Q() objects, and annotations in Django ORM. Provide real-world examples where each would be essential for building efficient queries.',
+    answer: `
 **F() Expressions:**
 
 F() expressions reference model field values directly in the database, avoiding race conditions and improving performance.
@@ -163,11 +162,11 @@ products = Product.objects.annotate(
 
 This single query efficiently computes all metrics at the database level, avoiding N+1 queries and reducing memory usage.
       `,
-    },
-    {
-      question:
-        "Describe Django's transaction management system. Explain the difference between ATOMIC_REQUESTS, atomic() decorator, and manual transaction control. When would you use each approach, and what are the potential pitfalls?",
-      answer: `
+  },
+  {
+    question:
+      "Describe Django's transaction management system. Explain the difference between ATOMIC_REQUESTS, atomic() decorator, and manual transaction control. When would you use each approach, and what are the potential pitfalls?",
+    answer: `
 **Django Transaction Management:**
 
 Django provides multiple ways to control database transactions, each suited for different scenarios.
@@ -369,11 +368,11 @@ def import_data(rows):
 
 Choose the right transaction strategy based on your specific use case, balancing between data consistency, performance, and code clarity.
       `,
-    },
-    {
-      question:
-        "Explain Django's database routing and multi-database support. How would you implement a read-replica setup with automatic routing, and what considerations are important for data consistency?",
-      answer: `
+  },
+  {
+    question:
+      "Explain Django's database routing and multi-database support. How would you implement a read-replica setup with automatic routing, and what considerations are important for data consistency?",
+    answer: `
 **Multi-Database Setup:**
 
 Django supports multiple databases for horizontal scaling, separating read/write traffic, and data isolation.
@@ -661,6 +660,10 @@ def check_database_health():
 
 This architecture allows horizontal scaling of read traffic while maintaining data consistency for writes.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

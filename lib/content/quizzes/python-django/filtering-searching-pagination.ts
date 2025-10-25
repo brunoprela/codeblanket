@@ -1,10 +1,9 @@
-export const filteringSearchingPaginationQuiz = {
-  title: 'Filtering, Searching & Pagination - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain django-filter integration with DRF, including FilterSet classes, custom filters, and filtering on related fields. Provide production examples.',
-      answer: `
+export const filteringSearchingPaginationQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain django-filter integration with DRF, including FilterSet classes, custom filters, and filtering on related fields. Provide production examples.',
+    answer: `
 **Basic django-filter Setup:**
 
 \`\`\`python
@@ -77,11 +76,11 @@ class ArticleFilter(django_filters.FilterSet):
         }
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Compare different DRF pagination classes (PageNumberPagination, LimitOffsetPagination, CursorPagination). When should you use each?',
-      answer: `
+  },
+  {
+    question:
+      'Compare different DRF pagination classes (PageNumberPagination, LimitOffsetPagination, CursorPagination). When should you use each?',
+    answer: `
 **PageNumberPagination:**
 Traditional page-based pagination.
 
@@ -146,11 +145,11 @@ class CustomPagination(PageNumberPagination):
         })
 \`\`\`
       `,
-    },
-    {
-      question:
-        'Describe DRF SearchFilter and OrderingFilter. How do you implement full-text search and optimize search performance?',
-      answer: `
+  },
+  {
+    question:
+      'Describe DRF SearchFilter and OrderingFilter. How do you implement full-text search and optimize search performance?',
+    answer: `
 **SearchFilter:**
 
 \`\`\`python
@@ -224,6 +223,10 @@ class Article(models.Model):
         ]
 \`\`\`
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

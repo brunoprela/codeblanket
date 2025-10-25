@@ -1,10 +1,9 @@
-export const signalsHooksQuiz = {
-  title: 'Signals & Hooks - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain Django signals, their use cases, and potential pitfalls. Compare signals with other approaches like overriding save() methods or using custom managers. When should you use signals vs alternatives?',
-      answer: `
+export const signalsHooksQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain Django signals, their use cases, and potential pitfalls. Compare signals with other approaches like overriding save() methods or using custom managers. When should you use signals vs alternatives?',
+    answer: `
 **Django Signals Overview:**
 
 Signals allow decoupled applications to get notified when actions occur elsewhere in the application. They implement the observer pattern.
@@ -190,11 +189,11 @@ class ArticleTest(TestCase):
 
 Signals are powerful but should be used judiciously. When in doubt, prefer explicit code (save() override or service layer) over "magic" (signals).
       `,
-    },
-    {
-      question:
-        'Describe how to implement a robust audit logging system using Django signals. Include handling of ManyToMany fields, tracking field changes, and performance considerations.',
-      answer: `
+  },
+  {
+    question:
+      'Describe how to implement a robust audit logging system using Django signals. Include handling of ManyToMany fields, tracking field changes, and performance considerations.',
+    answer: `
 **Comprehensive Audit Logging with Signals:**
 
 **1. Basic Audit Log Model:**
@@ -471,11 +470,11 @@ user_actions = AuditLog.objects.for_user(user).creates()
 
 This comprehensive audit system provides full change tracking while maintaining performance and compliance.
       `,
-    },
-    {
-      question:
-        'Explain how to build a plugin system using Django signals. Describe the architecture, registration mechanism, and how third-party apps can hook into your application without modifying core code.',
-      answer: `
+  },
+  {
+    question:
+      'Explain how to build a plugin system using Django signals. Describe the architecture, registration mechanism, and how third-party apps can hook into your application without modifying core code.',
+    answer: `
 **Plugin Architecture with Django Signals:**
 
 **1. Core Plugin System:**
@@ -810,6 +809,10 @@ PluginRegistry.register('seo_optimizer', SEOOptimizerPlugin)
 
 This architecture enables a flexible, extensible application where functionality can be added without touching core code.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

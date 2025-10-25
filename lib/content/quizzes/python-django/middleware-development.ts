@@ -1,10 +1,9 @@
-export const middlewareDevelopmentQuiz = {
-  title: 'Middleware Development - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain Django middleware architecture, execution order, and the request/response lifecycle. How would you implement middleware for request timing, logging, and error handling? Include both function-based and class-based approaches.',
-      answer: `
+export const middlewareDevelopmentQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain Django middleware architecture, execution order, and the request/response lifecycle. How would you implement middleware for request timing, logging, and error handling? Include both function-based and class-based approaches.',
+    answer: `
 **Django Middleware Architecture:**
 
 Middleware is a framework of hooks into Django's request/response processing. Each middleware component processes requests going in and responses going out.
@@ -272,11 +271,11 @@ MIDDLEWARE = [
 
 Middleware is powerful for cross-cutting concerns like logging, authentication, and monitoring.
       `,
-    },
-    {
-      question:
-        'Design a rate-limiting middleware system that can handle different limits based on user type, API endpoint, and time windows. Include Redis-based implementation and handling of distributed systems.',
-      answer: `
+  },
+  {
+    question:
+      'Design a rate-limiting middleware system that can handle different limits based on user type, API endpoint, and time windows. Include Redis-based implementation and handling of distributed systems.',
+    answer: `
 **Comprehensive Rate Limiting System:**
 
 **1. Basic Rate Limiting Middleware:**
@@ -637,11 +636,11 @@ def expensive_api_view(request):
 
 This comprehensive system provides flexible, scalable rate limiting for production APIs.
       `,
-    },
-    {
-      question:
-        'Explain how to implement a tenant isolation middleware for a multi-tenant SaaS application. Include database routing, request context management, and security considerations.',
-      answer: `
+  },
+  {
+    question:
+      'Explain how to implement a tenant isolation middleware for a multi-tenant SaaS application. Include database routing, request context management, and security considerations.',
+    answer: `
 **Multi-Tenant Isolation Middleware:**
 
 **Architecture Overview:**
@@ -977,6 +976,10 @@ class TenantAdmin(admin.ModelAdmin):
 
 This architecture provides secure, scalable multi-tenancy for SaaS applications.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

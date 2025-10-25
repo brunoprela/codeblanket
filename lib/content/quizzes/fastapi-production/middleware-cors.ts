@@ -1,9 +1,9 @@
 export const middlewareCorsQuiz = [
-    {
-      id: 1,
-      question:
-        'Design a comprehensive middleware stack for a production FastAPI application that includes: request logging, request ID generation, authentication, rate limiting, CORS, and security headers. Explain the order in which middleware should be applied and why order matters. Implement the complete stack showing how each middleware processes requests and responses.',
-      answer: `**Middleware Stack (Order Matters)**:
+  {
+    id: 1,
+    question:
+      'Design a comprehensive middleware stack for a production FastAPI application that includes: request logging, request ID generation, authentication, rate limiting, CORS, and security headers. Explain the order in which middleware should be applied and why order matters. Implement the complete stack showing how each middleware processes requests and responses.',
+    answer: `**Middleware Stack (Order Matters)**:
 
 Order (outer to inner):
 1. Exception handling (outermost - catches all)
@@ -65,12 +65,12 @@ async def rate_limit_middleware(request: Request, call_next):
 \`\`\`
 
 Why order matters: Exception handler must be outermost to catch errors from all other middleware. Request ID must be early so logging can use it. Rate limiting before auth prevents attackers from discovering valid credentials through timing attacks.`,
-    },
-    {
-      id: 2,
-      question:
-        'Explain CORS in detail: what problem does it solve, how the browser enforces it, and what each CORS header means (Access-Control-Allow-Origin, Allow-Credentials, Allow-Methods, Allow-Headers). Design CORS configuration for a production SaaS application where: (1) the marketing site is at example.com, (2) the web app is at app.example.com, (3) the mobile app needs access, and (4) third-party integrations should be blocked.',
-      answer: `**CORS (Cross-Origin Resource Sharing)**:
+  },
+  {
+    id: 2,
+    question:
+      'Explain CORS in detail: what problem does it solve, how the browser enforces it, and what each CORS header means (Access-Control-Allow-Origin, Allow-Credentials, Allow-Methods, Allow-Headers). Design CORS configuration for a production SaaS application where: (1) the marketing site is at example.com, (2) the web app is at app.example.com, (3) the mobile app needs access, and (4) third-party integrations should be blocked.',
+    answer: `**CORS (Cross-Origin Resource Sharing)**:
 
 **Problem**: Same-Origin Policy - browsers block JavaScript from making requests to different origins for security.
 
@@ -136,12 +136,12 @@ app.add_middleware(
 \`\`\`
 
 Third-party integrations: Use API keys (not CORS), server-to-server calls (no browser = no CORS).`,
-    },
-    {
-      id: 3,
-      question:
-        'Design a rate limiting strategy for a public API that has three tiers: (1) unauthenticated requests (by IP): 10/minute, (2) authenticated free users: 100/minute, (3) premium users: 1000/minute. Implement the rate limiting logic using Redis for distributed rate limiting across multiple API servers. How would you communicate rate limit information to clients (headers)? What happens when limits are exceeded?',
-      answer: `**Distributed Rate Limiting with Redis**:
+  },
+  {
+    id: 3,
+    question:
+      'Design a rate limiting strategy for a public API that has three tiers: (1) unauthenticated requests (by IP): 10/minute, (2) authenticated free users: 100/minute, (3) premium users: 1000/minute. Implement the rate limiting logic using Redis for distributed rate limiting across multiple API servers. How would you communicate rate limit information to clients (headers)? What happens when limits are exceeded?',
+    answer: `**Distributed Rate Limiting with Redis**:
 
 \`\`\`python
 import redis.asyncio as redis
@@ -270,6 +270,10 @@ async function apiCall() {
 \`\`\`
 
 **Distributed**: Redis ensures rate limits work across multiple API servers (all check same Redis instance).`,
-    },
-
-].map(({ id, ...q }, idx) => ({ id: `fastapi-middleware-cors-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `fastapi-middleware-cors-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

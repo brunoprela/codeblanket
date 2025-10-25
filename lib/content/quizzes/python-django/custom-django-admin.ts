@@ -1,10 +1,9 @@
-export const customDjangoAdminQuiz = {
-  title: 'Custom Django Admin - Discussion Questions',
-  questions: [
-    {
-      question:
-        'Explain how to customize Django Admin with custom actions, filters, and inline editing. Provide examples of advanced admin customization including custom views, dashboard widgets, and permission-based UI modifications.',
-      answer: `
+export const customDjangoAdminQuiz = [
+  {
+    id: 1,
+    question:
+      'Explain how to customize Django Admin with custom actions, filters, and inline editing. Provide examples of advanced admin customization including custom views, dashboard widgets, and permission-based UI modifications.',
+    answer: `
 **Django Admin Customization:**
 
 **1. ModelAdmin Basics:**
@@ -418,11 +417,11 @@ admin_site.register(Article, ArticleAdmin)
 
 Django Admin is extremely customizable and can handle sophisticated requirements with proper configuration.
       `,
-    },
-    {
-      question:
-        'Describe how to build a custom admin dashboard with charts, real-time statistics, and interactive widgets. Include integration with Chart.js or similar libraries and WebSocket updates.',
-      answer: `
+  },
+  {
+    question:
+      'Describe how to build a custom admin dashboard with charts, real-time statistics, and interactive widgets. Include integration with Chart.js or similar libraries and WebSocket updates.',
+    answer: `
 **Custom Admin Dashboard Implementation:**
 
 **1. Django Admin Site Override:**
@@ -898,11 +897,11 @@ def notify_dashboard(sender, instance, created, **kwargs):
 
 This creates a professional, real-time admin dashboard with rich data visualization.
       `,
-    },
-    {
-      question:
-        'Explain how to implement advanced admin features like bulk editing with formsets, custom change views with multiple tabs, and admin action confirmations with custom forms.',
-      answer: `
+  },
+  {
+    question:
+      'Explain how to implement advanced admin features like bulk editing with formsets, custom change views with multiple tabs, and admin action confirmations with custom forms.',
+    answer: `
 **Advanced Django Admin Features:**
 
 **1. Bulk Editing with Formsets:**
@@ -1276,6 +1275,10 @@ class ArticleAdmin(NestedModelAdmin):
 
 These advanced features create a powerful, user-friendly admin interface for content management.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({
+  id: `django-q-${idx + 1}`,
+  question: q.question,
+  sampleAnswer: String(q.answer),
+  keyPoints: [],
+}));

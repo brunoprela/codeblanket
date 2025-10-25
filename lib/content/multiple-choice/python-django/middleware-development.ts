@@ -1,17 +1,18 @@
-export const MiddlewareDevelopmentMultipleChoice = {
-  title: 'Middleware Development - Multiple Choice Questions',
-  questions: [
-    {
-      question:
-        'In Django middleware, what order do response processing methods execute?',
-      options: [
-        'A) Same order as defined in MIDDLEWARE setting',
-        'B) Reverse order of MIDDLEWARE setting',
-        'C) Random order based on load',
-        'D) Alphabetically by middleware name',
-      ],
-      correctAnswer: 1,
-      explanation: `
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const MiddlewareDevelopmentMultipleChoice = [
+  {
+    id: 1,
+    question:
+      'In Django middleware, what order do response processing methods execute?',
+    options: [
+      'A) Same order as defined in MIDDLEWARE setting',
+      'B) Reverse order of MIDDLEWARE setting',
+      'C) Random order based on load',
+      'D) Alphabetically by middleware name',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) Reverse order of MIDDLEWARE setting**
 
 Request processing goes top-to-bottom, response processing goes bottom-to-top through the MIDDLEWARE list.
@@ -27,18 +28,18 @@ MIDDLEWARE = [
 
 This allows outer middleware to wrap inner middleware responses.
       `,
-    },
-    {
-      question:
-        'What should middleware return to short-circuit the request and prevent the view from executing?',
-      options: [
-        'A) None',
-        'B) An HttpResponse object',
-        'C) False',
-        'D) raise HttpResponseForbidden',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      'What should middleware return to short-circuit the request and prevent the view from executing?',
+    options: [
+      'A) None',
+      'B) An HttpResponse object',
+      'C) False',
+      'D) raise HttpResponseForbidden',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) An HttpResponse object**
 
 Returning an HttpResponse from middleware skips the view and remaining middleware, immediately starting the response phase.
@@ -56,18 +57,18 @@ class RateLimitMiddleware:
 
 This is useful for authentication, rate limiting, and maintenance mode.
       `,
-    },
-    {
-      question:
-        'Which middleware hook is best for handling exceptions raised by views?',
-      options: [
-        'A) __call__',
-        'B) process_request',
-        'C) process_exception',
-        'D) process_response',
-      ],
-      correctAnswer: 2,
-      explanation: `
+  },
+  {
+    question:
+      'Which middleware hook is best for handling exceptions raised by views?',
+    options: [
+      'A) __call__',
+      'B) process_request',
+      'C) process_exception',
+      'D) process_response',
+    ],
+    correctAnswer: 2,
+    explanation: `
 **Correct Answer: C) process_exception**
 
 \`process_exception()\` is specifically designed to handle exceptions from views and other middleware.
@@ -86,18 +87,18 @@ class ErrorHandlingMiddleware:
 
 Return an HttpResponse to handle the exception, or None to propagate it.
       `,
-    },
-    {
-      question:
-        'When implementing request logging middleware, where should you store request-specific data?',
-      options: [
-        'A) In the middleware class instance',
-        'B) As request attributes',
-        'C) In global variables',
-        'D) In the response object',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      'When implementing request logging middleware, where should you store request-specific data?',
+    options: [
+      'A) In the middleware class instance',
+      'B) As request attributes',
+      'C) In global variables',
+      'D) In the response object',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) As request attributes**
 
 Store request-specific data as attributes on the request object to pass data between middleware and views.
@@ -119,18 +120,18 @@ class TimingMiddleware:
 
 Never use class instance variables (not thread-safe) or globals (shared across requests).
       `,
-    },
-    {
-      question:
-        'What is the purpose of the get_response parameter in middleware __init__?',
-      options: [
-        'A) To get the final HTTP response',
-        'B) To call the next middleware or view in the chain',
-        'C) To access the response headers',
-        'D) To bypass remaining middleware',
-      ],
-      correctAnswer: 1,
-      explanation: `
+  },
+  {
+    question:
+      'What is the purpose of the get_response parameter in middleware __init__?',
+    options: [
+      'A) To get the final HTTP response',
+      'B) To call the next middleware or view in the chain',
+      'C) To access the response headers',
+      'D) To bypass remaining middleware',
+    ],
+    correctAnswer: 1,
+    explanation: `
 **Correct Answer: B) To call the next middleware or view in the chain**
 
 \`get_response\` is a callable that invokes the next middleware in the chain or the view if this is the last middleware.
@@ -155,6 +156,5 @@ class CustomMiddleware:
 
 This creates a chain where each middleware wraps the next.
       `,
-    },
-  ],
-};
+  },
+].map(({ id, ...q }, idx) => ({ id: `django-mc-${idx + 1}`, ...q }));

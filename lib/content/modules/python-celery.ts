@@ -192,5 +192,4 @@ export const pythonCeleryModule: Module = {
       estimatedTime: '5 hours',
     },
   ],
-
 };
