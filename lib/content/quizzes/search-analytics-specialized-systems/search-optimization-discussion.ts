@@ -1,15 +1,11 @@
-import { Quiz } from '@/lib/types';
+import { QuizQuestion } from '@/lib/types';
 
-const searchOptimizationDiscussionQuiz: Quiz = {
-  id: 'search-optimization-discussion',
-  title: 'Search Optimization - Discussion Questions',
-  questions: [
-    {
-      id: 'search-opt-discussion-1',
-      type: 'discussion',
-      question:
-        'Your e-commerce search application is experiencing performance issues. Users report that searches for "laptop" return in 50ms, but searches for "smartphone case" take 2-3 seconds. After investigation, you discover that multi-word queries are significantly slower. The "title" field uses standard analysis, and you have 10 million products across 20 shards. Diagnose the likely causes and propose a comprehensive optimization strategy that addresses relevance, performance, and maintainability.',
-      sampleAnswer: `This is a classic phrase query performance problem. Let me analyze the root causes and provide a systematic solution:
+export const searchOptimizationDiscussionQuiz: QuizQuestion[] = [
+  {
+    id: 'search-opt-discussion-1',
+    question:
+      'Your e-commerce search application is experiencing performance issues. Users report that searches for "laptop" return in 50ms, but searches for "smartphone case" take 2-3 seconds. After investigation, you discover that multi-word queries are significantly slower. The "title" field uses standard analysis, and you have 10 million products across 20 shards. Diagnose the likely causes and propose a comprehensive optimization strategy that addresses relevance, performance, and maintainability.',
+    sampleAnswer: `This is a classic phrase query performance problem. Let me analyze the root causes and provide a systematic solution:
 
 **Root Cause Analysis:**
 
@@ -356,21 +352,20 @@ Week 5: 95% improvement + better UX
 **Final Recommendation:**
 
 Prioritize shingles (Week 2) for maximum impact with acceptable cost. Implement query-level caching (Week 3) for popular queries. Consider shard consolidation if coordination overhead is significant. This balanced approach delivers excellent performance without over-engineering.`,
-      keyPoints: [
-        'Phrase queries are expensive due to positional data checking across many documents',
-        'Shingles convert phrase queries into term queries (10x faster) at cost of index size',
-        'Fewer shards reduce coordination overhead for queries broadcast to all shards',
-        'Multi-field strategy: shingles for phrases, edge n-grams for prefix, standard for full-text',
-        'Application-level caching for popular queries provides massive performance gains',
-        "Measure query patterns to inform optimization decisions (don't optimize blindly)",
-      ],
-    },
-    {
-      id: 'search-opt-discussion-2',
-      type: 'discussion',
-      question:
-        "You're implementing autocomplete for a product search with 5 million products. Users expect results within 50ms as they type. You're debating between three approaches: (1) completion suggester, (2) edge n-grams on product titles, (3) prefix queries on keyword fields. Compare these approaches in terms of performance, relevance, index size, and maintenance complexity. Which would you choose and why?",
-      sampleAnswer: `This is an excellent question about choosing the right autocomplete strategy. Let me analyze each approach comprehensively:
+    keyPoints: [
+      'Phrase queries are expensive due to positional data checking across many documents',
+      'Shingles convert phrase queries into term queries (10x faster) at cost of index size',
+      'Fewer shards reduce coordination overhead for queries broadcast to all shards',
+      'Multi-field strategy: shingles for phrases, edge n-grams for prefix, standard for full-text',
+      'Application-level caching for popular queries provides massive performance gains',
+      "Measure query patterns to inform optimization decisions (don't optimize blindly)",
+    ],
+  },
+  {
+    id: 'search-opt-discussion-2',
+    question:
+      "You're implementing autocomplete for a product search with 5 million products. Users expect results within 50ms as they type. You're debating between three approaches: (1) completion suggester, (2) edge n-grams on product titles, (3) prefix queries on keyword fields. Compare these approaches in terms of performance, relevance, index size, and maintenance complexity. Which would you choose and why?",
+    sampleAnswer: `This is an excellent question about choosing the right autocomplete strategy. Let me analyze each approach comprehensively:
 
 **Approach 1: Completion Suggester**
 
@@ -802,21 +797,20 @@ function generateInputs(title, brand, category) {
 4. **Cache** top 1000 queries in Redis
 
 This provides optimal performance for the autocomplete use case while keeping infrastructure costs reasonable.`,
-      keyPoints: [
-        'Completion suggester is fastest (1-5ms) using in-memory FST, ideal for autocomplete',
-        'Edge n-grams provide flexibility and scoring but increase index size 2-3x',
-        'Prefix queries on keyword fields are too slow (100-500ms) for user-facing autocomplete',
-        'Hybrid approach: completion suggester for common queries, edge n-grams for fallback',
-        'Index size vs performance: completion (+25%), edge n-grams (+250%)',
-        'Weighted suggestions in completion type enable popularity-based ranking',
-      ],
-    },
-    {
-      id: 'search-opt-discussion-3',
-      type: 'discussion',
-      question:
-        'Your Elasticsearch cluster is experiencing high heap usage (85-90% consistently) and frequent long GC pauses (5-10 seconds), causing query timeouts and poor user experience. You have 10 data nodes with 32GB RAM each (16GB heap). The cluster stores 2TB of product data with heavy aggregation queries on high-cardinality fields. Diagnose the root causes and provide a detailed remediation plan covering both immediate fixes and long-term architectural improvements.',
-      sampleAnswer: `This is a critical production issue involving heap pressure and GC problems. Let me provide a comprehensive diagnosis and remediation strategy:
+    keyPoints: [
+      'Completion suggester is fastest (1-5ms) using in-memory FST, ideal for autocomplete',
+      'Edge n-grams provide flexibility and scoring but increase index size 2-3x',
+      'Prefix queries on keyword fields are too slow (100-500ms) for user-facing autocomplete',
+      'Hybrid approach: completion suggester for common queries, edge n-grams for fallback',
+      'Index size vs performance: completion (+25%), edge n-grams (+250%)',
+      'Weighted suggestions in completion type enable popularity-based ranking',
+    ],
+  },
+  {
+    id: 'search-opt-discussion-3',
+    question:
+      'Your Elasticsearch cluster is experiencing high heap usage (85-90% consistently) and frequent long GC pauses (5-10 seconds), causing query timeouts and poor user experience. You have 10 data nodes with 32GB RAM each (16GB heap). The cluster stores 2TB of product data with heavy aggregation queries on high-cardinality fields. Diagnose the root causes and provide a detailed remediation plan covering both immediate fixes and long-term architectural improvements.',
+    sampleAnswer: `This is a critical production issue involving heap pressure and GC problems. Let me provide a comprehensive diagnosis and remediation strategy:
 
 **Immediate Diagnosis (First Hour):**
 
@@ -1230,16 +1224,13 @@ GET /_nodes/stats/jvm
 The root cause is **aggregating on text fields** (loads entire inverted index into heap). The solution is **reindex with correct mappings** (use keyword fields with doc_values). Long-term, **separate workloads**, **increase capacity**, and **implement query governance** to prevent recurrence.
 
 **Priority:** This is a P0 incident. Implement immediate fixes within 4 hours, mapping fixes within 48 hours, and architectural changes within 4 weeks.`,
-      keyPoints: [
-        'High heap usage usually caused by fielddata (aggregating on text fields)',
-        'Text fields should never be used for aggregations/sorting; use keyword fields with doc_values',
-        'Doc_values store data on disk (memory-mapped) instead of heap, reducing heap pressure by 60-80%',
-        'High-cardinality aggregations require composite aggregations or cardinality approximations',
-        'Long GC pauses indicate heap thrashing; increase heap size (max 31GB) or reduce heap pressure',
-        'Separate search and analytics workloads onto different clusters for optimal performance',
-      ],
-    },
-  ],
-};
-
-export default searchOptimizationDiscussionQuiz;
+    keyPoints: [
+      'High heap usage usually caused by fielddata (aggregating on text fields)',
+      'Text fields should never be used for aggregations/sorting; use keyword fields with doc_values',
+      'Doc_values store data on disk (memory-mapped) instead of heap, reducing heap pressure by 60-80%',
+      'High-cardinality aggregations require composite aggregations or cardinality approximations',
+      'Long GC pauses indicate heap thrashing; increase heap size (max 31GB) or reduce heap pressure',
+      'Separate search and analytics workloads onto different clusters for optimal performance',
+    ],
+  },
+];

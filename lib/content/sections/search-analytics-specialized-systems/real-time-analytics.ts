@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const realTimeAnalyticsSection: Section = {
+const realTimeAnalyticsSection: ModuleSection = {
   id: 'real-time-analytics',
   title: 'Real-Time Analytics',
   content: `
@@ -1102,8 +1102,6 @@ Real-time analytics enables immediate insights and actions through:
 
 Real-time analytics is powerful but complex. Use it when the business value justifies the engineering cost.
 `,
-  mcqQuizId: 'real-time-analytics-mcq',
-  discussionQuizId: 'real-time-analytics-discussion',
 };
 
 export default realTimeAnalyticsSection;

@@ -13,28 +13,28 @@ import timeSeriesDatabasesSection from '../sections/search-analytics-specialized
 import graphDatabasesSection from '../sections/search-analytics-specialized-systems/graph-databases';
 
 // Import discussion quizzes
-import fullTextSearchFundamentalsDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/full-text-search-fundamentals-discussion';
-import elasticsearchArchitectureDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/elasticsearch-architecture-discussion';
-import searchOptimizationDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/search-optimization-discussion';
-import analyticsDataPipelineDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/analytics-data-pipeline-discussion';
-import columnOrientedDatabasesDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/column-oriented-databases-discussion';
-import dataWarehousingDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/data-warehousing-discussion';
-import realTimeAnalyticsDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/real-time-analytics-discussion';
-import logAnalyticsDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/log-analytics-discussion';
-import timeSeriesDatabasesDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/time-series-databases-discussion';
-import graphDatabasesDiscussionQuiz from '../quizzes/search-analytics-specialized-systems/graph-databases-discussion';
+import { fullTextSearchFundamentalsDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/full-text-search-fundamentals-discussion';
+import { elasticsearchArchitectureDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/elasticsearch-architecture-discussion';
+import { searchOptimizationDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/search-optimization-discussion';
+import { analyticsDataPipelineDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/analytics-data-pipeline-discussion';
+import { columnOrientedDatabasesDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/column-oriented-databases-discussion';
+import { dataWarehousingDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/data-warehousing-discussion';
+import { realTimeAnalyticsDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/real-time-analytics-discussion';
+import { logAnalyticsDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/log-analytics-discussion';
+import { timeSeriesDatabasesDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/time-series-databases-discussion';
+import { graphDatabasesDiscussionQuiz } from '../quizzes/search-analytics-specialized-systems/graph-databases-discussion';
 
 // Import multiple choice quizzes
-import fullTextSearchFundamentalsMCQ from '../multiple-choice/search-analytics-specialized-systems/full-text-search-fundamentals-mcq';
-import elasticsearchArchitectureMCQ from '../multiple-choice/search-analytics-specialized-systems/elasticsearch-architecture-mcq';
-import searchOptimizationMCQ from '../multiple-choice/search-analytics-specialized-systems/search-optimization-mcq';
-import analyticsDataPipelineMCQ from '../multiple-choice/search-analytics-specialized-systems/analytics-data-pipeline-mcq';
-import columnOrientedDatabasesMCQ from '../multiple-choice/search-analytics-specialized-systems/column-oriented-databases-mcq';
-import dataWarehousingMCQ from '../multiple-choice/search-analytics-specialized-systems/data-warehousing-mcq';
-import realTimeAnalyticsMCQ from '../multiple-choice/search-analytics-specialized-systems/real-time-analytics-mcq';
-import logAnalyticsMCQ from '../multiple-choice/search-analytics-specialized-systems/log-analytics-mcq';
-import timeSeriesDatabasesMCQ from '../multiple-choice/search-analytics-specialized-systems/time-series-databases-mcq';
-import graphDatabasesMCQ from '../multiple-choice/search-analytics-specialized-systems/graph-databases-mcq';
+import { fullTextSearchFundamentalsMCQ } from '../multiple-choice/search-analytics-specialized-systems/full-text-search-fundamentals-mcq';
+import { elasticsearchArchitectureMCQ } from '../multiple-choice/search-analytics-specialized-systems/elasticsearch-architecture-mcq';
+import { searchOptimizationMCQ } from '../multiple-choice/search-analytics-specialized-systems/search-optimization-mcq';
+import { analyticsDataPipelineMCQ } from '../multiple-choice/search-analytics-specialized-systems/analytics-data-pipeline-mcq';
+import { columnOrientedDatabasesMCQ } from '../multiple-choice/search-analytics-specialized-systems/column-oriented-databases-mcq';
+import { dataWarehousingMCQ } from '../multiple-choice/search-analytics-specialized-systems/data-warehousing-mcq';
+import { realTimeAnalyticsMCQ } from '../multiple-choice/search-analytics-specialized-systems/real-time-analytics-mcq';
+import { logAnalyticsMCQ } from '../multiple-choice/search-analytics-specialized-systems/log-analytics-mcq';
+import { timeSeriesDatabasesMCQ } from '../multiple-choice/search-analytics-specialized-systems/time-series-databases-mcq';
+import { graphDatabasesMCQ } from '../multiple-choice/search-analytics-specialized-systems/graph-databases-mcq';
 
 const searchAnalyticsSpecializedSystemsModule: Module = {
   id: 'search-analytics-specialized-systems',

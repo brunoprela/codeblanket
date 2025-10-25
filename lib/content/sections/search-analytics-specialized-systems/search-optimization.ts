@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const searchOptimizationSection: Section = {
+const searchOptimizationSection: ModuleSection = {
   id: 'search-optimization',
   title: 'Search Optimization',
   content: `
@@ -950,8 +950,6 @@ Search optimization involves:
 
 The key is measuring, identifying bottlenecks, and applying targeted optimizations while understanding trade-offs.
 `,
-  mcqQuizId: 'search-optimization-mcq',
-  discussionQuizId: 'search-optimization-discussion',
 };
 
 export default searchOptimizationSection;

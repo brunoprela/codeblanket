@@ -4,10 +4,8 @@
 
 export const typeaheadMultipleChoice = [
   {
-
     id: 'typeahead-q1',
 
-    
     question:
       "A Trie stores 10 million queries. At node 'n' → 'e' → 'w', you need to store the top 10 suggestions. The subtree under 'new' contains 10,000 queries. How would you efficiently compute which 10 suggestions to store at this node?",
     options: [
@@ -21,10 +19,8 @@ export const typeaheadMultipleChoice = [
       "The correct answer is using a min-heap of size 10 during DFS traversal, achieving O(n log k) time complexity where n=10,000 queries and k=10 suggestions. Here's why this is optimal: As we traverse the subtree (DFS), for each query we encounter, we compare its frequency to the min element in the heap (the 10th-highest frequency seen so far). If the new query's frequency is higher, we pop the min and insert the new query. The heap maintains exactly 10 elements throughout, keeping only the top 10. Time complexity: n queries × log(10) comparisons per query = n log k = 10,000 × 3.32 = 33,200 operations. Space: O(10) = O(k). Option B (full sort) has time complexity O(n log n) = 10,000 × 13.29 = 132,900 operations—4× slower than the heap approach, and unnecessary since we only need top 10, not a fully sorted list. Option C (sorted linked list of all 10,000) uses O(n) memory at each node—for a Trie with 150M nodes, this would be 1.5 trillion queries stored (infeasible), rather than 1.5 billion suggestions (150M nodes × 10). Option D (count-min sketch) is a probabilistic data structure for streaming approximation, not applicable here where we have all data and need exact top-k. The min-heap approach is used in practice because: (1) it's exact, not approximate, (2) minimal memory overhead (10 items per node), and (3) efficient build time (3× faster than sorting for our use case where k << n). This is why systems like Elasticsearch and Google's autocomplete use heap-based top-k algorithms.",
   },
   {
-
     id: 'typeahead-q2',
 
-    
     question:
       "Your typeahead system caches autocomplete results in Redis with 10-minute TTL. During a major news event, 'breaking news election results' becomes trending, but the cache for prefix 'bre' was populated 2 minutes ago and won't refresh for 8 more minutes. What's the best solution?",
     options: [
@@ -38,10 +34,8 @@ export const typeaheadMultipleChoice = [
       "The correct answer is to implement cache invalidation when trending queries are detected. Here's the complete reasoning: When the trending detection system identifies 'breaking news election results' as spiking (10× normal traffic), it should: (1) compute all relevant prefixes ('b', 'br', 'bre', 'brea', ..., 'breaking news election results'), and (2) delete those cache keys from Redis: `DEL autocomplete:b autocomplete:br autocomplete:bre ...`. The next request for those prefixes will be a cache miss, forcing fresh computation from the Trie with trending injection, then repopulating the cache. This is targeted and efficient—only invalidate affected prefixes, not the entire cache. Option A (reduce TTL to 1 minute globally) would increase cache misses from 10% to 50% (since TTL is 6× shorter), putting significantly more load on Trie servers—at 1M QPS, that's 500K additional Trie queries/sec. This is expensive and unnecessary for non-trending terms. Option C (accept lag) is poor UX—users searching for trending topics get stale results for 8 minutes, missing the purpose of trending detection. Option D (write-through) sounds good but is problematic: we can't update cached autocomplete results for all users simultaneously (millions of user-specific cache entries), and writing on every trending detection would cause Redis write storms. Cache invalidation is the standard pattern for this problem (used by Twitter, Reddit): detect change, invalidate affected cache entries, let fresh reads repopulate. The system self-heals: within seconds of trending detection, the cache is refreshed, and users see relevant suggestions. Monitoring: track cache invalidation rate—if >10% of cache entries are invalidated per hour, investigate (possible cache thrashing or over-sensitive trending detection).",
   },
   {
-
     id: 'typeahead-q3',
 
-    
     question:
       "A user in China types '北京' (Beijing in Chinese characters). Your Trie was built for English queries using character-by-character nodes. What problem will occur?",
     options: [
@@ -55,10 +49,8 @@ export const typeaheadMultipleChoice = [
       "The correct answer is that the Trie will fail to provide useful suggestions without proper Chinese word segmentation. Here's the detailed explanation: Chinese text doesn't use spaces between words, so '北京天气' (Beijing weather) appears as a continuous string. A character-level Trie would break this into: 北 → 京 → 天 → 气, treating each character as a separate node. The problem: Chinese characters are semantic units, and meaningful queries are multi-character words. For example: '北京' (Beijing, 2 chars, 1 word), '天气' (weather, 2 chars, 1 word), '北京天气' (Beijing weather, 4 chars, 2 words). If the Trie uses character-level nodes, a user typing '北' would match not just '北京' but also '北方' (north), '北美' (North America), '北极' (North Pole), etc.—too many results, poorly ranked. The solution: use a tokenizer like Jieba (Python library for Chinese) or HanLP to segment text into words before building the Trie. Process: '北京天气' → tokenize → ['北京', '天气'] → build Trie with word-level nodes. Now when user types '北京', the Trie suggests complete word-based queries: ['北京天气', '北京时间', '北京大学'] (Beijing weather, Beijing time, Beijing University). Option A is technically correct (Trie handles Unicode) but practically wrong—it provides poor suggestions. Option B identifies inefficiency but misses the core issue (lack of semantic meaning). Option D (UTF-8 encoding) is necessary but insufficient—encoding allows storage but doesn't solve the segmentation problem. Multi-language typeahead systems maintain separate Tries per language: trie_en (English, space-delimited), trie_zh (Chinese, Jieba tokenization), trie_ja (Japanese, MeCab tokenization). Route requests based on detected language: if query contains Chinese characters, use trie_zh. This architecture provides high-quality suggestions across languages while maintaining fast lookups.",
   },
   {
-
     id: 'typeahead-q4',
 
-    
     question:
       "Your typeahead Trie is partitioned across 26 servers based on first character ('a'-'z'). You notice server 's' handles 5× more traffic than server 'x'. What's the best solution?",
     options: [
@@ -72,10 +64,8 @@ export const typeaheadMultipleChoice = [
       "The correct answer is to re-partition using query hash instead of first character. Here's why: Partitioning by first character creates hotspots because English query frequency is highly non-uniform. Statistics show: 's' (search, sports, social) accounts for ~12% of queries, 't' (twitter, time, travel) ~10%, 'a' (amazon, apple) ~8%, while 'x' (x-ray, xerox) <1%. This creates severe imbalance: server 's' handles 1.2M QPS while server 'x' handles 100K QPS—a 12× difference. Option B (horizontal scaling for 's') helps but doesn't solve the root problem—you'd need to fine-tune many servers for different prefixes, and imbalance persists (within 's', 'se' queries might dominate 'sy'). Option A (vertical scaling) hits limits quickly—you can only scale a single server so far. Option D (caching) helps but doesn't eliminate the fundamental QPS imbalance. The solution: use hash-based partitioning: server_id = hash(full_query) % 26. This distributes queries uniformly regardless of their first character. However, this breaks prefix-based lookups—you can't ask 'which server handles prefix s?' because different 's' queries hash to different servers. The fix: replicate the entire Trie on all servers (10 GB × 26 = 260 GB total), but use hash partitioning for cache placement. Flow: (1) User types 's' → send to load balancer → route to any server (load balanced). (2) Server checks local cache (key = hash('s') % 26): if this server owns the hash, cache hit. If not, cache miss. (3) On cache miss, query local Trie (all servers have full Trie). (4) Return result and cache locally. This approach: evenly distributes cache load (hash-based), tolerates hotspots (full Trie replication), and maintains low latency (local lookups). Trade-off: 260 GB total memory vs 10 GB (26× more), but modern infrastructure makes this acceptable. Alternative for cost-sensitive scenarios: use consistent hashing with virtual nodes (100+ vnodes per server) to achieve 90%+ load balance while keeping the partitioned model. Real-world systems (Google, Bing) use replication + hash-based caching for consistent performance across all query prefixes.",
   },
   {
-
     id: 'typeahead-q5',
 
-    
     question:
       "Users report that typeahead for 'facebok' (typo) doesn't suggest 'facebook'. You have 'facebook' in the Trie with high frequency. Using edit distance, 'facebok' vs 'facebook' has distance 1 (1 deletion). What's the most efficient way to implement typo tolerance without exploring millions of Trie paths?",
     options: [

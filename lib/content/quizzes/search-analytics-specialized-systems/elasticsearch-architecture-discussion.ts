@@ -1,15 +1,11 @@
-import { Quiz } from '@/lib/types';
+import { QuizQuestion } from '@/lib/types';
 
-const elasticsearchArchitectureDiscussionQuiz: Quiz = {
-  id: 'elasticsearch-architecture-discussion',
-  title: 'Elasticsearch Architecture - Discussion Questions',
-  questions: [
-    {
-      id: 'es-arch-discussion-1',
-      type: 'discussion',
-      question:
-        "You're designing an Elasticsearch cluster for a logging system that will ingest 50GB of logs per day and retain them for 30 days. The system needs to support both recent log searches (last 24 hours) and historical analysis. Users report that searches across multiple days are very slow. How would you architect your index strategy, shard configuration, and node topology to optimize for both recent and historical queries? Discuss the trade-offs and specific Elasticsearch features you would leverage.",
-      sampleAnswer: `This scenario requires a **time-based index strategy** with **hot-warm-cold architecture** to balance performance and cost:
+export const elasticsearchArchitectureDiscussionQuiz: QuizQuestion[] = [
+  {
+    id: 'es-arch-discussion-1',
+    question:
+      "You're designing an Elasticsearch cluster for a logging system that will ingest 50GB of logs per day and retain them for 30 days. The system needs to support both recent log searches (last 24 hours) and historical analysis. Users report that searches across multiple days are very slow. How would you architect your index strategy, shard configuration, and node topology to optimize for both recent and historical queries? Discuss the trade-offs and specific Elasticsearch features you would leverage.",
+    sampleAnswer: `This scenario requires a **time-based index strategy** with **hot-warm-cold architecture** to balance performance and cost:
 
 **Index Strategy: Time-Based Indices**
 
@@ -183,21 +179,20 @@ For "deep historical" (30 days):
 - **Total**: ~$5,000/month vs $15,000/month for all hot storage
 
 **Result**: 80% of queries hit hot tier (sub-second), 15% hit warm tier (1-3 sec), 5% hit cold tier (5-10 sec), with 70% cost savings versus uniform infrastructure.`,
-      keyPoints: [
-        'Time-based indices enable easy deletion and optimized querying by time range',
-        'Hot-warm-cold architecture balances performance and cost for time-series data',
-        'Shard sizing: 10-50GB per shard, consider total shard count',
-        'Index Lifecycle Management (ILM) automates transitions between tiers',
-        'Force merge and compression optimize read performance for old data',
-        'Recent data (hot) gets fast storage and replicas, old data (cold) gets cheap storage',
-      ],
-    },
-    {
-      id: 'es-arch-discussion-2',
-      type: 'discussion',
-      question:
-        'During a routine deployment, your Elasticsearch cluster with 5 data nodes goes into "yellow" status. Node 3 becomes unresponsive, and you notice that the cluster is trying to reallocate 20 primary shards. Some queries are failing with "no available shards" errors. Walk through your diagnosis and remediation process. What cluster settings, shard allocation decisions, and recovery strategies would you employ to minimize downtime? Also discuss how you would prevent this scenario in the future.',
-      sampleAnswer: `This is a critical production incident requiring systematic diagnosis and remediation:
+    keyPoints: [
+      'Time-based indices enable easy deletion and optimized querying by time range',
+      'Hot-warm-cold architecture balances performance and cost for time-series data',
+      'Shard sizing: 10-50GB per shard, consider total shard count',
+      'Index Lifecycle Management (ILM) automates transitions between tiers',
+      'Force merge and compression optimize read performance for old data',
+      'Recent data (hot) gets fast storage and replicas, old data (cold) gets cheap storage',
+    ],
+  },
+  {
+    id: 'es-arch-discussion-2',
+    question:
+      'During a routine deployment, your Elasticsearch cluster with 5 data nodes goes into "yellow" status. Node 3 becomes unresponsive, and you notice that the cluster is trying to reallocate 20 primary shards. Some queries are failing with "no available shards" errors. Walk through your diagnosis and remediation process. What cluster settings, shard allocation decisions, and recovery strategies would you employ to minimize downtime? Also discuss how you would prevent this scenario in the future.',
+    sampleAnswer: `This is a critical production incident requiring systematic diagnosis and remediation:
 
 **Immediate Diagnosis (First 5 minutes):**
 
@@ -460,21 +455,20 @@ Metrics to track:
 If node-3 had contained primaries **without replicas**, status would be red and data loss would occur.
 
 **Key Lesson**: This incident highlights why **replicas are non-negotiable** in production. The cluster recovered gracefully because replica shards protected against node failure.`,
-      keyPoints: [
-        'Yellow status means primaries are active but replicas are missing (no data loss)',
-        'Check unassigned shard reasons: NODE_LEFT, ALLOCATION_FAILED, disk space',
-        'Temporarily increase concurrent_recoveries to speed up shard reallocation',
-        'Monitor disk space carefully; nodes near watermark limits will refuse allocations',
-        'Replicas are critical: They prevent data loss and enable zero-downtime recovery',
-        'Prevention: Monitor node health, use dedicated masters, automated deployments',
-      ],
-    },
-    {
-      id: 'es-arch-discussion-3',
-      type: 'discussion',
-      question:
-        'Your Elasticsearch cluster currently has a single "products" index with 5 primary shards and 1 replica, storing 100GB of product data. The business is projecting 10x growth over the next year (1TB total). You\'re experiencing slow queries and high query latency during peak hours. The team is debating whether to: (A) reindex into an index with 50 primary shards, (B) split the index by category into multiple indices, or (C) add more replica shards and nodes. Analyze each approach, discuss the trade-offs, and provide your recommendation with justification.',
-      sampleAnswer: `This is a critical architecture decision that requires analyzing query patterns, growth projections, and operational trade-offs:
+    keyPoints: [
+      'Yellow status means primaries are active but replicas are missing (no data loss)',
+      'Check unassigned shard reasons: NODE_LEFT, ALLOCATION_FAILED, disk space',
+      'Temporarily increase concurrent_recoveries to speed up shard reallocation',
+      'Monitor disk space carefully; nodes near watermark limits will refuse allocations',
+      'Replicas are critical: They prevent data loss and enable zero-downtime recovery',
+      'Prevention: Monitor node health, use dedicated masters, automated deployments',
+    ],
+  },
+  {
+    id: 'es-arch-discussion-3',
+    question:
+      'Your Elasticsearch cluster currently has a single "products" index with 5 primary shards and 1 replica, storing 100GB of product data. The business is projecting 10x growth over the next year (1TB total). You\'re experiencing slow queries and high query latency during peak hours. The team is debating whether to: (A) reindex into an index with 50 primary shards, (B) split the index by category into multiple indices, or (C) add more replica shards and nodes. Analyze each approach, discuss the trade-offs, and provide your recommendation with justification.',
+    sampleAnswer: `This is a critical architecture decision that requires analyzing query patterns, growth projections, and operational trade-offs:
 
 **Current State Analysis:**
 
@@ -767,16 +761,13 @@ GET /products_*/_search
 - Year 3: 5TB → Split largest categories further
 
 This approach balances immediate needs (more replicas) with long-term scalability (category-based indices) while maintaining query performance and operational flexibility.`,
-      keyPoints: [
-        'Over-sharding (50 shards for 100GB) causes coordination overhead and wastes resources',
-        'Category-based indices optimize performance when most queries are category-specific',
-        "Adding replicas helps read scaling but doesn't solve fundamental shard size issues",
-        "Ideal shard size: 10-50GB; plan for growth but don't over-optimize for distant future",
-        'Hybrid approach: immediate relief (replicas) + long-term architecture (split by category)',
-        'Analyze query patterns before architectural decisions; 80% of queries should drive design',
-      ],
-    },
-  ],
-};
-
-export default elasticsearchArchitectureDiscussionQuiz;
+    keyPoints: [
+      'Over-sharding (50 shards for 100GB) causes coordination overhead and wastes resources',
+      'Category-based indices optimize performance when most queries are category-specific',
+      "Adding replicas helps read scaling but doesn't solve fundamental shard size issues",
+      "Ideal shard size: 10-50GB; plan for growth but don't over-optimize for distant future",
+      'Hybrid approach: immediate relief (replicas) + long-term architecture (split by category)',
+      'Analyze query patterns before architectural decisions; 80% of queries should drive design',
+    ],
+  },
+];

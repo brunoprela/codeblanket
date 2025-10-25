@@ -1,15 +1,11 @@
-import { Quiz } from '@/lib/types';
+import { QuizQuestion } from '@/lib/types';
 
-const timeSeriesDatabasesDiscussionQuiz: Quiz = {
-  id: 'time-series-databases-discussion',
-  title: 'Time-Series Databases - Discussion Questions',
-  questions: [
-    {
-      id: 'tsdb-discussion-1',
-      type: 'discussion',
-      question:
-        "Your IoT platform collects temperature readings from 100,000 sensors every 10 seconds. That's 864 million datapoints per day. A year of data in PostgreSQL is 5TB and queries are slow. How would you redesign this using TimescaleDB with compression and downsampling?",
-      sampleAnswer: `**TimescaleDB Architecture:**
+export const timeSeriesDatabasesDiscussionQuiz: QuizQuestion[] = [
+  {
+    id: 'tsdb-discussion-1',
+    question:
+      "Your IoT platform collects temperature readings from 100,000 sensors every 10 seconds. That's 864 million datapoints per day. A year of data in PostgreSQL is 5TB and queries are slow. How would you redesign this using TimescaleDB with compression and downsampling?",
+    sampleAnswer: `**TimescaleDB Architecture:**
 
 \`\`\`sql
 CREATE TABLE sensor_readings (
@@ -57,20 +53,19 @@ GROUP BY hour, sensor_id;
 - >30 days: Daily aggregates
 
 **Result**: 5TB → 50GB total, queries 100x faster.`,
-      keyPoints: [
-        'Hypertables automatically partition by time for fast time-range queries',
-        'Compression after 7 days reduces storage by 90% (5TB → 500GB)',
-        'Continuous aggregates (materialized views) pre-compute hourly/daily summaries',
-        'Progressive downsampling: raw (7d) → hourly (30d) → daily (forever)',
-        'Storage reduction: 100x (5TB → 50GB) with 100x faster queries',
-      ],
-    },
-    {
-      id: 'tsdb-discussion-2',
-      type: 'discussion',
-      question:
-        'Your application monitoring system uses Prometheus to collect metrics from 1,000 services. Prometheus local storage is limited to 15 days due to disk constraints. Design a long-term storage solution using Thanos or Cortex.',
-      sampleAnswer: `**Thanos Architecture (Recommended):**
+    keyPoints: [
+      'Hypertables automatically partition by time for fast time-range queries',
+      'Compression after 7 days reduces storage by 90% (5TB → 500GB)',
+      'Continuous aggregates (materialized views) pre-compute hourly/daily summaries',
+      'Progressive downsampling: raw (7d) → hourly (30d) → daily (forever)',
+      'Storage reduction: 100x (5TB → 50GB) with 100x faster queries',
+    ],
+  },
+  {
+    id: 'tsdb-discussion-2',
+    question:
+      'Your application monitoring system uses Prometheus to collect metrics from 1,000 services. Prometheus local storage is limited to 15 days due to disk constraints. Design a long-term storage solution using Thanos or Cortex.',
+    sampleAnswer: `**Thanos Architecture (Recommended):**
 
 \`\`\`
 Prometheus (15 days local) → Thanos Sidecar → S3 (unlimited)
@@ -95,20 +90,19 @@ vs keeping 1 year in Prometheus local: $50k+ in SSDs
 \`\`\`
 rate(http_requests_total[5m])  # Works across 1 year!
 \`\`\``,
-      keyPoints: [
-        'Prometheus local storage limited; Thanos extends to unlimited S3 storage',
-        'Thanos Sidecar uploads blocks to object storage (S3)',
-        'Thanos Query provides unified interface across local + S3',
-        'Downsampling reduces storage for old data (5m → 1h resolution)',
-        'Cost: $8k/year (S3) vs $50k (local SSD) for 1-year retention',
-      ],
-    },
-    {
-      id: 'tsdb-discussion-3',
-      type: 'discussion',
-      question:
-        "You need to store stock market data (OHLCV) for 10,000 stocks with 1-second resolution. That's 86,400 datapoints per stock per day. Design a time-series database schema optimized for common queries: (1) latest price, (2) 1-minute candles, (3) moving averages.",
-      sampleAnswer: `**InfluxDB Schema:**
+    keyPoints: [
+      'Prometheus local storage limited; Thanos extends to unlimited S3 storage',
+      'Thanos Sidecar uploads blocks to object storage (S3)',
+      'Thanos Query provides unified interface across local + S3',
+      'Downsampling reduces storage for old data (5m → 1h resolution)',
+      'Cost: $8k/year (S3) vs $50k (local SSD) for 1-year retention',
+    ],
+  },
+  {
+    id: 'tsdb-discussion-3',
+    question:
+      "You need to store stock market data (OHLCV) for 10,000 stocks with 1-second resolution. That's 86,400 datapoints per stock per day. Design a time-series database schema optimized for common queries: (1) latest price, (2) 1-minute candles, (3) moving averages.",
+    sampleAnswer: `**InfluxDB Schema:**
 
 \`\`\`
 Measurement: stock_ticks
@@ -178,15 +172,12 @@ DURATION 365d  -- Keep 1-min candles 1 year
 \`\`\`
 
 **Result**: Sub-millisecond latest price queries, pre-computed candles, 1TB storage.`,
-      keyPoints: [
-        'Tags (symbol, exchange) are indexed for fast filtering',
-        'Fields (price, volume) are measurements, not indexed',
-        'Continuous queries auto-compute 1-minute candles (real-time aggregation)',
-        'Retention policies: raw ticks (1 day), candles (1 year)',
-        'Compression reduces 12TB → 1TB for raw ticks',
-      ],
-    },
-  ],
-};
-
-export default timeSeriesDatabasesDiscussionQuiz;
+    keyPoints: [
+      'Tags (symbol, exchange) are indexed for fast filtering',
+      'Fields (price, volume) are measurements, not indexed',
+      'Continuous queries auto-compute 1-minute candles (real-time aggregation)',
+      'Retention policies: raw ticks (1 day), candles (1 year)',
+      'Compression reduces 12TB → 1TB for raw ticks',
+    ],
+  },
+];

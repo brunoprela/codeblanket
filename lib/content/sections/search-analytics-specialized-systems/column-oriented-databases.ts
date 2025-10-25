@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const columnOrientedDatabasesSection: Section = {
+const columnOrientedDatabasesSection: ModuleSection = {
   id: 'column-oriented-databases',
   title: 'Column-Oriented Databases',
   content: `
@@ -662,8 +662,6 @@ Column-oriented databases revolutionize analytics through:
 
 Choose columnar storage for analytical workloads over billions of rows where you aggregate, filter, and group by dimensions—exactly what data warehouses and BI tools do.
 `,
-  mcqQuizId: 'column-oriented-databases-mcq',
-  discussionQuizId: 'column-oriented-databases-discussion',
 };
 
 export default columnOrientedDatabasesSection;

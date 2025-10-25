@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const analyticsDataPipelineSection: Section = {
+const analyticsDataPipelineSection: ModuleSection = {
   id: 'analytics-data-pipeline',
   title: 'Analytics Data Pipeline',
   content: `
@@ -619,8 +619,6 @@ Analytics pipelines transform raw data into insights through:
 
 Choose architecture based on latency requirements, scale, cost, and complexity tolerance.
 `,
-  mcqQuizId: 'analytics-data-pipeline-mcq',
-  discussionQuizId: 'analytics-data-pipeline-discussion',
 };
 
 export default analyticsDataPipelineSection;

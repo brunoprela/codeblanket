@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const elasticsearchArchitectureSection: Section = {
+const elasticsearchArchitectureSection: ModuleSection = {
   id: 'elasticsearch-architecture',
   title: 'Elasticsearch Architecture',
   content: `
@@ -784,8 +784,6 @@ Elasticsearch architecture is built on:
 
 Understanding these fundamentals allows you to design scalable search systems and make informed trade-offs in system design interviews.
 `,
-  mcqQuizId: 'elasticsearch-architecture-mcq',
-  discussionQuizId: 'elasticsearch-architecture-discussion',
 };
 
 export default elasticsearchArchitectureSection;

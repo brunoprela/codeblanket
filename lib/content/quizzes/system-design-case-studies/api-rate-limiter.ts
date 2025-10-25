@@ -4,10 +4,8 @@
 
 export const rateLimiterQuiz = [
   {
-
     id: 'rate-limiter-q1',
 
-    
     question:
       "Compare fixed window counter and sliding window counter algorithms for rate limiting. Explain the 'boundary problem' in fixed window counters with a concrete example, then describe how sliding window counters solve this problem using weighted calculations. When would fixed window counters still be acceptable despite their limitations?",
     sampleAnswer:
@@ -21,10 +19,8 @@ export const rateLimiterQuiz = [
     ],
   },
   {
-
     id: 'rate-limiter-q2',
 
-    
     question:
       "You're implementing distributed rate limiting across 10,000 API servers using Redis. Explain why you need Lua scripts for atomicity, what race conditions could occur without them, and how Lua scripts solve this problem. Additionally, discuss the fallback strategy if Redis becomes unavailable.",
     sampleAnswer:
@@ -38,10 +34,8 @@ export const rateLimiterQuiz = [
     ],
   },
   {
-
     id: 'rate-limiter-q3',
 
-    
     question:
       "Design a multi-tier rate limiting system where free users get 100 req/min, premium users get 1000 req/min, and enterprise users get 10,000 req/min. Additionally, implement per-endpoint limits where POST /api/upload is limited to 10 req/min regardless of user tier. Explain how you'd structure Redis keys, handle tier lookup efficiently, and prevent abuse through multiple free accounts.",
     sampleAnswer:

@@ -1,15 +1,11 @@
-import { Quiz } from '@/lib/types';
+import { QuizQuestion } from '@/lib/types';
 
-const graphDatabasesDiscussionQuiz: Quiz = {
-  id: 'graph-databases-discussion',
-  title: 'Graph Databases - Discussion Questions',
-  questions: [
-    {
-      id: 'graph-discussion-1',
-      type: 'discussion',
-      question:
-        'You\'re building a social network with 100M users. Each user has avg 200 friends. You need to show "friend recommendations" (friends of friends who aren\'t already friends). In PostgreSQL, this requires complex recursive CTEs that time out. Design a Neo4j solution with query examples and discuss performance characteristics.',
-      sampleAnswer: `**Neo4j Schema:**
+export const graphDatabasesDiscussionQuiz: QuizQuestion[] = [
+  {
+    id: 'graph-discussion-1',
+    question:
+      'You\'re building a social network with 100M users. Each user has avg 200 friends. You need to show "friend recommendations" (friends of friends who aren\'t already friends). In PostgreSQL, this requires complex recursive CTEs that time out. Design a Neo4j solution with query examples and discuss performance characteristics.',
+    sampleAnswer: `**Neo4j Schema:**
 
 \`\`\`cypher
 CREATE (u:User {id: 123, name: "Alice"})
@@ -42,20 +38,19 @@ LIMIT 10
 - Query time remains constant (only touches ~40k nodes)
 
 **Result:** Friend recommendations in <100ms vs PostgreSQL timeout.`,
-      keyPoints: [
-        'Graph databases use index-free adjacency: nodes store pointers to neighbors',
-        'Traversal is O(friends × friends) regardless of total graph size',
-        'No JOINs required—follow pointers from node to node',
-        'PostgreSQL requires self-joins on 20B edges (impossible at scale)',
-        'Query complexity in graphs is proportional to subgraph size, not total graph size',
-      ],
-    },
-    {
-      id: 'graph-discussion-2',
-      type: 'discussion',
-      question:
-        'Your fraud detection system needs to identify rings of suspicious accounts (accounts connected by shared devices, IP addresses, or transfers within 3 hops). This pattern matching is extremely difficult in SQL. Design a Neo4j solution using Cypher pattern matching.',
-      sampleAnswer: `**Neo4j Schema:**
+    keyPoints: [
+      'Graph databases use index-free adjacency: nodes store pointers to neighbors',
+      'Traversal is O(friends × friends) regardless of total graph size',
+      'No JOINs required—follow pointers from node to node',
+      'PostgreSQL requires self-joins on 20B edges (impossible at scale)',
+      'Query complexity in graphs is proportional to subgraph size, not total graph size',
+    ],
+  },
+  {
+    id: 'graph-discussion-2',
+    question:
+      'Your fraud detection system needs to identify rings of suspicious accounts (accounts connected by shared devices, IP addresses, or transfers within 3 hops). This pattern matching is extremely difficult in SQL. Design a Neo4j solution using Cypher pattern matching.',
+    sampleAnswer: `**Neo4j Schema:**
 
 \`\`\`cypher
 CREATE (a:Account {id: "A123", email: "user@example.com"})
@@ -99,20 +94,19 @@ RETURN path
 **SQL Equivalent (Impossible at Scale):**
 Would require recursive CTEs with UNION of multiple relationship tables,
 traversing up to 3 levels—query would timeout on realistic data.`,
-      keyPoints: [
-        'Graph pattern matching naturally expresses "find connected nodes"',
-        'Variable-depth traversal (*1..3) finds paths of different lengths',
-        'Multiple relationship types in single query (USES_DEVICE|ACCESSED_FROM)',
-        'SQL requires recursive CTEs with UNION across tables (complex, slow)',
-        'Fraud rings often 2-4 hops deep—graph databases handle this efficiently',
-      ],
-    },
-    {
-      id: 'graph-discussion-3',
-      type: 'discussion',
-      question:
-        'You\'re building a recommendation engine: "users who bought X also bought Y". With 10M users and 1M products, PostgreSQL queries with multiple JOINs time out. Design a collaborative filtering solution using Neo4j with specific queries for both item-based and user-based recommendations.',
-      sampleAnswer: `**Neo4j Schema:**
+    keyPoints: [
+      'Graph pattern matching naturally expresses "find connected nodes"',
+      'Variable-depth traversal (*1..3) finds paths of different lengths',
+      'Multiple relationship types in single query (USES_DEVICE|ACCESSED_FROM)',
+      'SQL requires recursive CTEs with UNION across tables (complex, slow)',
+      'Fraud rings often 2-4 hops deep—graph databases handle this efficiently',
+    ],
+  },
+  {
+    id: 'graph-discussion-3',
+    question:
+      'You\'re building a recommendation engine: "users who bought X also bought Y". With 10M users and 1M products, PostgreSQL queries with multiple JOINs time out. Design a collaborative filtering solution using Neo4j with specific queries for both item-based and user-based recommendations.',
+    sampleAnswer: `**Neo4j Schema:**
 
 \`\`\`cypher
 CREATE (u:User {id: 123, name: "Alice"})
@@ -217,15 +211,12 @@ LIMIT 10
 \`\`\`
 
 **Result:** Personalized recommendations in <100ms vs PostgreSQL timeout or 10+ seconds.`,
-      keyPoints: [
-        'Item-based: Find products co-purchased with target product',
-        'User-based: Find similar users (overlap in purchases), recommend their products',
-        'Graph traversal is local (only touches relevant subgraph)',
-        'PostgreSQL self-joins on 500M rows create massive intermediate results',
-        'Neo4j performance independent of total users/products (only depends on subgraph size)',
-      ],
-    },
-  ],
-};
-
-export default graphDatabasesDiscussionQuiz;
+    keyPoints: [
+      'Item-based: Find products co-purchased with target product',
+      'User-based: Find similar users (overlap in purchases), recommend their products',
+      'Graph traversal is local (only touches relevant subgraph)',
+      'PostgreSQL self-joins on 500M rows create massive intermediate results',
+      'Neo4j performance independent of total users/products (only depends on subgraph size)',
+    ],
+  },
+];

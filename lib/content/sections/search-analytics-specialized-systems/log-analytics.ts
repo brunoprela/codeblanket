@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const logAnalyticsSection: Section = {
+const logAnalyticsSection: ModuleSection = {
   id: 'log-analytics',
   title: 'Log Analytics',
   content: `
@@ -1206,8 +1206,6 @@ Log analytics involves:
 
 With proper log analytics infrastructure, logs become your most valuable operational intelligence tool—enabling fast debugging, proactive monitoring, security incident response, and compliance.
 `,
-  mcqQuizId: 'log-analytics-mcq',
-  discussionQuizId: 'log-analytics-discussion',
 };
 
 export default logAnalyticsSection;

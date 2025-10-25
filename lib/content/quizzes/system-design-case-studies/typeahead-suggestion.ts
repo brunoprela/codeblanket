@@ -4,10 +4,8 @@
 
 export const typeaheadQuiz = [
   {
-
     id: 'typeahead-q1',
 
-    
     question:
       "Explain why a Trie with pre-computed top suggestions at each node is superior to traversing the Trie on every request for a typeahead system serving 1 million QPS. Calculate the performance difference for a prefix 'new' that has 10,000 matching queries in the Trie, and discuss the memory trade-offs of pre-computation.",
     sampleAnswer:
@@ -21,10 +19,8 @@ export const typeaheadQuiz = [
     ],
   },
   {
-
     id: 'typeahead-q2',
 
-    
     question:
       "Your typeahead system serves global users. A user in New York types 'new' and should see 'new york' as the top suggestion, while a user in New Mexico types 'new' and should see 'new mexico' first. Design a solution that balances personalization with performance, considering that: (1) the Trie is shared across all users, (2) personalizing every request adds latency, and (3) you need to maintain sub-100ms response times.",
     sampleAnswer:
@@ -38,10 +34,8 @@ export const typeaheadQuiz = [
     ],
   },
   {
-
     id: 'typeahead-q3',
 
-    
     question:
       "Your typeahead system notices that 'taylor swift tickets' suddenly spikes from 100 searches/day to 100,000 searches/day (concert announcement). The Trie is rebuilt daily via batch jobs, so suggestions lag by 24 hours. Design a real-time trending query detection and injection system that can surface this query within 5 minutes while maintaining the integrity of the base Trie data structure.",
     sampleAnswer:

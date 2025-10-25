@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const dataWarehousingSection: Section = {
+const dataWarehousingSection: ModuleSection = {
   id: 'data-warehousing',
   title: 'Data Warehousing',
   content: `
@@ -437,8 +437,6 @@ Data warehousing enables business intelligence through:
 
 Modern warehouses separate compute and storage, enabling flexible scaling and pay-per-use pricing.
 `,
-  mcqQuizId: 'data-warehousing-mcq',
-  discussionQuizId: 'data-warehousing-discussion',
 };
 
 export default dataWarehousingSection;

@@ -1,15 +1,11 @@
-import { Quiz } from '@/lib/types';
+import { QuizQuestion } from '@/lib/types';
 
-const fullTextSearchFundamentalsDiscussionQuiz: Quiz = {
-  id: 'full-text-search-fundamentals-discussion',
-  title: 'Full-Text Search Fundamentals - Discussion Questions',
-  questions: [
-    {
-      id: 'fts-discussion-1',
-      type: 'discussion',
-      question:
-        'You\'re building search functionality for a large e-commerce platform with millions of products. Users search for products using natural language queries like "red running shoes size 10" or product codes like "ABC-123-XL". How would you design your text analysis pipeline to handle both types of queries effectively? Discuss the challenges and trade-offs of trying to handle both structured and unstructured queries in a single search interface.',
-      sampleAnswer: `To handle both natural language and structured queries effectively, I would implement a **multi-field indexing strategy** with different analyzers:
+export const fullTextSearchFundamentalsDiscussionQuiz: QuizQuestion[] = [
+  {
+    id: 'fts-discussion-1',
+    question:
+      'You\'re building search functionality for a large e-commerce platform with millions of products. Users search for products using natural language queries like "red running shoes size 10" or product codes like "ABC-123-XL". How would you design your text analysis pipeline to handle both types of queries effectively? Discuss the challenges and trade-offs of trying to handle both structured and unstructured queries in a single search interface.',
+    sampleAnswer: `To handle both natural language and structured queries effectively, I would implement a **multi-field indexing strategy** with different analyzers:
 
 **For natural language search (product titles, descriptions):**
 - Use standard analyzer with English language settings
@@ -55,20 +51,19 @@ Query strategy:
 - Use function score to incorporate business metrics
 
 This approach provides flexibility to handle diverse query types while maintaining relevance and performance.`,
-      keyPoints: [
-        'Multi-field indexing with different analyzers for different data types',
-        'Use keyword analyzers for exact matching of structured data (SKUs, codes)',
-        'Apply standard analyzers with stemming for natural language fields',
-        'Query ambiguity requires careful field boosting and business logic',
-        'Performance trade-offs between index size, query complexity, and relevance',
-      ],
-    },
-    {
-      id: 'fts-discussion-2',
-      type: 'discussion',
-      question:
-        'A user searches for "machine learning engineer" and you have two documents: Document A contains "machine learning engineer" as an exact phrase 10 times, while Document B contains "machine" 20 times, "learning" 15 times, and "engineer" 25 times scattered throughout a much longer document, but never together as a phrase. Using your knowledge of TF-IDF and BM25 scoring, explain which document should rank higher and why. What modifications to the scoring algorithm would you implement to improve relevance for this scenario?',
-      sampleAnswer: `**Which should rank higher?** Document A should rank higher because it contains the exact phrase "machine learning engineer", which is a much stronger signal of relevance than scattered individual terms.
+    keyPoints: [
+      'Multi-field indexing with different analyzers for different data types',
+      'Use keyword analyzers for exact matching of structured data (SKUs, codes)',
+      'Apply standard analyzers with stemming for natural language fields',
+      'Query ambiguity requires careful field boosting and business logic',
+      'Performance trade-offs between index size, query complexity, and relevance',
+    ],
+  },
+  {
+    id: 'fts-discussion-2',
+    question:
+      'A user searches for "machine learning engineer" and you have two documents: Document A contains "machine learning engineer" as an exact phrase 10 times, while Document B contains "machine" 20 times, "learning" 15 times, and "engineer" 25 times scattered throughout a much longer document, but never together as a phrase. Using your knowledge of TF-IDF and BM25 scoring, explain which document should rank higher and why. What modifications to the scoring algorithm would you implement to improve relevance for this scenario?',
+    sampleAnswer: `**Which should rank higher?** Document A should rank higher because it contains the exact phrase "machine learning engineer", which is a much stronger signal of relevance than scattered individual terms.
 
 **TF-IDF Analysis:**
 
@@ -167,20 +162,19 @@ Basic TF-IDF might actually rank Document B higher because:
 **Result**: Document A would score much higher due to phrase match boost, while Document B only gets credit for term matches. This aligns with user intent and provides better search experience.
 
 Modern search engines like Elasticsearch (using BM25 + phrase boosting) would correctly rank Document A higher by default, but explicit phrase query configuration ensures optimal results.`,
-      keyPoints: [
-        'Exact phrase matching is more relevant than scattered term occurrences',
-        'BM25 document length normalization prevents longer documents from dominating',
-        'Proximity scoring ensures terms appearing together rank higher',
-        'Phrase match boost (2x-5x) is critical for multi-word queries',
-        'Modern relevance requires combining term frequency, proximity, and phrase matching',
-      ],
-    },
-    {
-      id: 'fts-discussion-3',
-      type: 'discussion',
-      question:
-        'Your search application is experiencing slow query performance for wildcard queries like "elast*" and especially "e*rch". Users need this functionality for partial word matching. At the same time, you\'re seeing your index size has grown to 3x your original document size due to various optimizations. Discuss the engineering trade-offs between query flexibility, performance, and storage costs. What specific technical solutions would you propose to address both issues, and what would be the implementation considerations?',
-      sampleAnswer: `This scenario involves a classic **three-way trade-off** between **query flexibility**, **performance**, and **storage costs**. Let's analyze the problem and solutions:
+    keyPoints: [
+      'Exact phrase matching is more relevant than scattered term occurrences',
+      'BM25 document length normalization prevents longer documents from dominating',
+      'Proximity scoring ensures terms appearing together rank higher',
+      'Phrase match boost (2x-5x) is critical for multi-word queries',
+      'Modern relevance requires combining term frequency, proximity, and phrase matching',
+    ],
+  },
+  {
+    id: 'fts-discussion-3',
+    question:
+      'Your search application is experiencing slow query performance for wildcard queries like "elast*" and especially "e*rch". Users need this functionality for partial word matching. At the same time, you\'re seeing your index size has grown to 3x your original document size due to various optimizations. Discuss the engineering trade-offs between query flexibility, performance, and storage costs. What specific technical solutions would you propose to address both issues, and what would be the implementation considerations?',
+    sampleAnswer: `This scenario involves a classic **three-way trade-off** between **query flexibility**, **performance**, and **storage costs**. Let's analyze the problem and solutions:
 
 **Problem Analysis:**
 
@@ -328,16 +322,13 @@ For most applications:
 This provides 90% of desired functionality while keeping index size at ~1.5x (vs current 3x) and dramatically improving query performance for common patterns.
 
 The key insight: **Move work from query time to index time** for common patterns (prefixes), but don't over-optimize for rare patterns (wildcards with no prefix).`,
-      keyPoints: [
-        'Wildcard queries are slow because they require term enumeration, not direct lookup',
-        'Edge n-grams move work from query time to index time for prefix matching',
-        'Trade-off: 2-3x index size increase for 10x query performance improvement',
-        'Hybrid approach: Different field configurations for different query types',
-        'Query restrictions (minimum length, timeouts) protect system from expensive queries',
-        'Storage optimization: Remove unnecessary analyzers, disable _source when possible',
-      ],
-    },
-  ],
-};
-
-export default fullTextSearchFundamentalsDiscussionQuiz;
+    keyPoints: [
+      'Wildcard queries are slow because they require term enumeration, not direct lookup',
+      'Edge n-grams move work from query time to index time for prefix matching',
+      'Trade-off: 2-3x index size increase for 10x query performance improvement',
+      'Hybrid approach: Different field configurations for different query types',
+      'Query restrictions (minimum length, timeouts) protect system from expensive queries',
+      'Storage optimization: Remove unnecessary analyzers, disable _source when possible',
+    ],
+  },
+];

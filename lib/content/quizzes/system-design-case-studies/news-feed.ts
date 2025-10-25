@@ -4,10 +4,8 @@
 
 export const newsFeedQuiz = [
   {
-
     id: 'news-feed-q1',
 
-    
     question:
       'Compare push (fanout-on-write) and pull (fanout-on-read) models for news feed generation. A celebrity with 100 million followers posts a photo. Calculate the fanout cost for push model assuming 100ms per batch of 1000 writes, and explain why a hybrid approach is necessary. Then design the specific threshold and logic for determining when to use push vs pull.',
     sampleAnswer:
@@ -21,10 +19,8 @@ export const newsFeedQuiz = [
     ],
   },
   {
-
     id: 'news-feed-q2',
 
-    
     question:
       'Design a ranking algorithm for a news feed that balances recency, engagement (likes/comments/shares), user affinity, and content type. Provide specific formulas with weights, explain how to calculate affinity between users, and discuss how to avoid echo chambers where users only see content they already agree with.',
     sampleAnswer:
@@ -38,10 +34,8 @@ export const newsFeedQuiz = [
     ],
   },
   {
-
     id: 'news-feed-q3',
 
-    
     question:
       'Your news feed system experiences a 10× traffic spike during a major global event (e.g., World Cup final). Feed generation latency increases from 200ms (p95) to 2 seconds (p95). Diagnose the likely bottlenecks (Redis, database, ranking service, fanout lag) and propose specific scaling strategies with capacity calculations. Additionally, explain how to implement graceful degradation if some services remain overloaded.',
     sampleAnswer:

@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const graphDatabasesSection: Section = {
+const graphDatabasesSection: ModuleSection = {
   id: 'graph-databases',
   title: 'Graph Databases',
   content: `
@@ -861,8 +861,6 @@ Graph databases excel at:
 
 Use graph databases when relationships are as important as the data itself, and relational JOINs become a performance bottleneck.
 `,
-  mcqQuizId: 'graph-databases-mcq',
-  discussionQuizId: 'graph-databases-discussion',
 };
 
 export default graphDatabasesSection;

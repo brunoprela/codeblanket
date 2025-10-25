@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const fullTextSearchFundamentalsSection: Section = {
+const fullTextSearchFundamentalsSection: ModuleSection = {
   id: 'full-text-search-fundamentals',
   title: 'Full-Text Search Fundamentals',
   content: `
@@ -475,8 +475,6 @@ Full-text search is built on:
 
 Modern search engines like Elasticsearch, Solr, and Algolia handle these complexities, but understanding the fundamentals helps you design better search experiences, debug issues, and make informed architecture decisions.
 `,
-  mcqQuizId: 'full-text-search-fundamentals-mcq',
-  discussionQuizId: 'full-text-search-fundamentals-discussion',
 };
 
 export default fullTextSearchFundamentalsSection;

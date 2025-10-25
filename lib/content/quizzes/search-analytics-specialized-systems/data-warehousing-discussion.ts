@@ -1,15 +1,11 @@
-import { Quiz } from '@/lib/types';
+import { QuizQuestion } from '@/lib/types';
 
-const dataWarehousingDiscussionQuiz: Quiz = {
-  id: 'data-warehousing-discussion',
-  title: 'Data Warehousing - Discussion Questions',
-  questions: [
-    {
-      id: 'dw-discussion-1',
-      type: 'discussion',
-      question:
-        "Your e-commerce company stores customer addresses in the data warehouse. Customers frequently move, and business analysts need to report on: (1) where customers currently live, and (2) historical sales by the customer's address at the time of purchase. Which Slowly Changing Dimension (SCD) type should you implement and how would you design the schema to support both requirements efficiently?",
-      sampleAnswer: `This scenario requires **SCD Type 2** (add new row for each change) to maintain complete history while supporting both current and historical queries.
+export const dataWarehousingDiscussionQuiz: QuizQuestion[] = [
+  {
+    id: 'dw-discussion-1',
+    question:
+      "Your e-commerce company stores customer addresses in the data warehouse. Customers frequently move, and business analysts need to report on: (1) where customers currently live, and (2) historical sales by the customer's address at the time of purchase. Which Slowly Changing Dimension (SCD) type should you implement and how would you design the schema to support both requirements efficiently?",
+    sampleAnswer: `This scenario requires **SCD Type 2** (add new row for each change) to maintain complete history while supporting both current and historical queries.
 
 **Schema Design:**
 
@@ -187,21 +183,20 @@ CREATE TABLE dim_customer_historical PARTITION OF dim_customer
 \`\`\`
 
 This answer demonstrates understanding of: dimensional modeling, SCD Type 2 implementation, historical accuracy requirements, query patterns, and optimization strategies.`,
-      keyPoints: [
-        'SCD Type 2 maintains complete history by inserting new row for each change',
-        'Fact table stores surrogate key (customer_key) pointing to specific dimension version',
-        'is_current flag enables efficient lookup of current records',
-        'effective_date and expiration_date enable time-travel queries',
-        "Historical accuracy: sales are attributed to customer's address at time of sale",
-        'Trade-off: More storage vs complete historical accuracy',
-      ],
-    },
-    {
-      id: 'dw-discussion-2',
-      type: 'discussion',
-      question:
-        "You're designing a data warehouse for a retail company with 100M daily transactions. The business wants reports that aggregate sales by: time (hour/day/month/year), location (store/city/state/country), and product (SKU/category/department). Should you use a star schema or snowflake schema, and how would you handle the time dimension to optimize for common date-based queries?",
-      sampleAnswer: `**Recommendation: Star Schema with Specialized Date Dimension**
+    keyPoints: [
+      'SCD Type 2 maintains complete history by inserting new row for each change',
+      'Fact table stores surrogate key (customer_key) pointing to specific dimension version',
+      'is_current flag enables efficient lookup of current records',
+      'effective_date and expiration_date enable time-travel queries',
+      "Historical accuracy: sales are attributed to customer's address at time of sale",
+      'Trade-off: More storage vs complete historical accuracy',
+    ],
+  },
+  {
+    id: 'dw-discussion-2',
+    question:
+      "You're designing a data warehouse for a retail company with 100M daily transactions. The business wants reports that aggregate sales by: time (hour/day/month/year), location (store/city/state/country), and product (SKU/category/department). Should you use a star schema or snowflake schema, and how would you handle the time dimension to optimize for common date-based queries?",
+    sampleAnswer: `**Recommendation: Star Schema with Specialized Date Dimension**
 
 For this high-volume retail scenario, star schema is optimal for performance, and the date dimension should be pre-computed with all common date attributes.
 
@@ -526,21 +521,20 @@ fact_sales
 - Dimension tables are huge (rare in practice)
 
 **For this scenario (100M transactions/day), star schema is clearly superior.**`,
-      keyPoints: [
-        'Star schema provides better query performance for high-volume fact tables',
-        'Pre-computed date dimension eliminates expensive date functions in queries',
-        'Denormalized dimensions reduce joins from 7 to 3 for complex hierarchies',
-        'Partition fact table by date for query performance (only scan relevant partitions)',
-        'Separate time dimension enables hour-level analysis without bloating date dimension',
-        'Materialized views cache common aggregations for instant dashboard performance',
-      ],
-    },
-    {
-      id: 'dw-discussion-3',
-      type: 'discussion',
-      question:
-        "Your company is migrating from an on-premise Teradata data warehouse (10TB, $500k/year) to the cloud. You're evaluating Snowflake, Redshift, and BigQuery. The workload includes: 50 analysts running ad-hoc queries (8am-6pm weekdays), nightly ETL jobs (2am-5am), and ML model training (weekends). Discuss the architectural differences, pricing models, and provide a recommendation with cost analysis.",
-      sampleAnswer: `**Comprehensive Cloud Data Warehouse Evaluation:**
+    keyPoints: [
+      'Star schema provides better query performance for high-volume fact tables',
+      'Pre-computed date dimension eliminates expensive date functions in queries',
+      'Denormalized dimensions reduce joins from 7 to 3 for complex hierarchies',
+      'Partition fact table by date for query performance (only scan relevant partitions)',
+      'Separate time dimension enables hour-level analysis without bloating date dimension',
+      'Materialized views cache common aggregations for instant dashboard performance',
+    ],
+  },
+  {
+    id: 'dw-discussion-3',
+    question:
+      "Your company is migrating from an on-premise Teradata data warehouse (10TB, $500k/year) to the cloud. You're evaluating Snowflake, Redshift, and BigQuery. The workload includes: 50 analysts running ad-hoc queries (8am-6pm weekdays), nightly ETL jobs (2am-5am), and ML model training (weekends). Discuss the architectural differences, pricing models, and provide a recommendation with cost analysis.",
+    sampleAnswer: `**Comprehensive Cloud Data Warehouse Evaluation:**
 
 Let me analyze each option considering architecture, pricing, and workload patterns.
 
@@ -849,16 +843,13 @@ Total: $30,230/year (94% savings!)
 Use S3 as primary storage, Snowflake for regular analytics, BigQuery for ad-hoc exploration.
 
 **Final Recommendation: Snowflake at $61,832/year provides best balance of cost, performance, and flexibility for this workload.**`,
-      keyPoints: [
-        'Compute-storage separation (Snowflake, BigQuery) enables paying only for active compute',
-        'Redshift reserved instances provide predictable costs but pay 24/7 even when idle',
-        'BigQuery pay-per-query model expensive for high query volume (11k queries/month)',
-        'Workload isolation (separate warehouses) prevents ETL/ML from impacting analyst queries',
-        'Auto-suspend in Snowflake saves ~70% vs always-on clusters (50 hrs vs 168 hrs/week)',
-        'Cloud migration saves 85-88% vs on-premise Teradata ($60k vs $500k annually)',
-      ],
-    },
-  ],
-};
-
-export default dataWarehousingDiscussionQuiz;
+    keyPoints: [
+      'Compute-storage separation (Snowflake, BigQuery) enables paying only for active compute',
+      'Redshift reserved instances provide predictable costs but pay 24/7 even when idle',
+      'BigQuery pay-per-query model expensive for high query volume (11k queries/month)',
+      'Workload isolation (separate warehouses) prevents ETL/ML from impacting analyst queries',
+      'Auto-suspend in Snowflake saves ~70% vs always-on clusters (50 hrs vs 168 hrs/week)',
+      'Cloud migration saves 85-88% vs on-premise Teradata ($60k vs $500k annually)',
+    ],
+  },
+];

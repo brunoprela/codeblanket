@@ -1,15 +1,11 @@
-import { Quiz } from '@/lib/types';
+import { QuizQuestion } from '@/lib/types';
 
-const columnOrientedDatabasesDiscussionQuiz: Quiz = {
-  id: 'column-oriented-databases-discussion',
-  title: 'Column-Oriented Databases - Discussion Questions',
-  questions: [
-    {
-      id: 'col-db-discussion-1',
-      type: 'discussion',
-      question:
-        'Your company runs a data warehouse on PostgreSQL (row-oriented) with 5TB of sales data. Analytical queries like "total sales by region" take 10-15 minutes. The CTO suggests migrating to ClickHouse (columnar). The DevOps lead warns about operational complexity and suggests just adding more PostgreSQL replicas. Analyze both approaches, discuss the expected performance improvements, migration complexity, and provide a detailed recommendation with cost-benefit analysis.',
-      sampleAnswer: `This scenario requires careful analysis of the performance bottleneck, migration effort, and long-term costs. Let me provide a comprehensive evaluation:
+export const columnOrientedDatabasesDiscussionQuiz: QuizQuestion[] = [
+  {
+    id: 'col-db-discussion-1',
+    question:
+      'Your company runs a data warehouse on PostgreSQL (row-oriented) with 5TB of sales data. Analytical queries like "total sales by region" take 10-15 minutes. The CTO suggests migrating to ClickHouse (columnar). The DevOps lead warns about operational complexity and suggests just adding more PostgreSQL replicas. Analyze both approaches, discuss the expected performance improvements, migration complexity, and provide a detailed recommendation with cost-benefit analysis.',
+    sampleAnswer: `This scenario requires careful analysis of the performance bottleneck, migration effort, and long-term costs. Let me provide a comprehensive evaluation:
 
 **Current State Analysis:**
 
@@ -363,21 +359,20 @@ Migrate to ClickHouse. The 100x performance improvement and 5x cost savings over
 3. Team training and consulting support
 
 Adding PostgreSQL replicas is putting a band-aid on a broken leg—it doesn't address the fundamental architectural mismatch of using row-oriented storage for analytical workloads.`,
-      keyPoints: [
-        "Adding replicas doesn't solve row-oriented bottleneck; still scans all columns",
-        'ClickHouse provides 100x performance improvement through column pruning, compression, and vectorization',
-        'Storage cost: ClickHouse 20x cheaper (100GB vs 2TB) due to superior compression',
-        'Hybrid architecture: PostgreSQL for OLTP, ClickHouse for OLAP via CDC',
-        'Migration risk mitigation: parallel running, gradual cutover, managed services available',
-        'ROI: $20k investment, $93k savings over 3 years, 8-month payback period',
-      ],
-    },
-    {
-      id: 'col-db-discussion-2',
-      type: 'discussion',
-      question:
-        "You're designing a system that needs to handle both: (1) high-volume transaction inserts (100k/sec) with ACID guarantees, and (2) real-time analytics queries (<1 second) on the same data. Some engineers suggest a single ClickHouse cluster. Others propose PostgreSQL for transactions + ClickHouse for analytics with CDC. Discuss the trade-offs, performance implications, consistency models, and provide your recommendation for handling this hybrid OLTP/OLAP workload.",
-      sampleAnswer: `This is a classic hybrid workload challenge that requires careful consideration of consistency, performance, and complexity trade-offs. Let me analyze both approaches:
+    keyPoints: [
+      "Adding replicas doesn't solve row-oriented bottleneck; still scans all columns",
+      'ClickHouse provides 100x performance improvement through column pruning, compression, and vectorization',
+      'Storage cost: ClickHouse 20x cheaper (100GB vs 2TB) due to superior compression',
+      'Hybrid architecture: PostgreSQL for OLTP, ClickHouse for OLAP via CDC',
+      'Migration risk mitigation: parallel running, gradual cutover, managed services available',
+      'ROI: $20k investment, $93k savings over 3 years, 8-month payback period',
+    ],
+  },
+  {
+    id: 'col-db-discussion-2',
+    question:
+      "You're designing a system that needs to handle both: (1) high-volume transaction inserts (100k/sec) with ACID guarantees, and (2) real-time analytics queries (<1 second) on the same data. Some engineers suggest a single ClickHouse cluster. Others propose PostgreSQL for transactions + ClickHouse for analytics with CDC. Discuss the trade-offs, performance implications, consistency models, and provide your recommendation for handling this hybrid OLTP/OLAP workload.",
+    sampleAnswer: `This is a classic hybrid workload challenge that requires careful consideration of consistency, performance, and complexity trade-offs. Let me analyze both approaches:
 
 **Requirements:**
 - **OLTP**: 100k inserts/sec, ACID guarantees, point lookups
@@ -769,21 +764,20 @@ def transfer(from_user, to_user, amount):
 - ✅ Want simpler architecture
 
 For the stated requirements (ACID + 100k inserts/sec + real-time analytics), the hybrid architecture with PostgreSQL + ClickHouse is the only viable solution.`,
-      keyPoints: [
-        "ClickHouse alone can't provide ACID guarantees or handle 100k individual inserts/sec",
-        'Hybrid architecture separates OLTP (PostgreSQL) and OLAP (ClickHouse) concerns',
-        "CDC introduces 100-500ms lag, but most analytics queries don't need real-time data",
-        'For truly real-time dashboards, query recent data from PostgreSQL + historical from ClickHouse',
-        'Single ClickHouse works for append-only workloads with batching (logs, events, metrics)',
-        'Industry standard: OLTP database + CDC + columnar database for hybrid workloads',
-      ],
-    },
-    {
-      id: 'col-db-discussion-3',
-      type: 'discussion',
-      question:
-        "Your data science team wants to run complex ML queries on 10TB of historical transaction data. Currently stored in Parquet files on S3, they're using Athena which takes 5-10 minutes per query. You're evaluating: (1) loading into Redshift, (2) loading into ClickHouse, (3) keeping in S3 but using Presto/Trino. Discuss the trade-offs in terms of query performance, cost, data pipeline complexity, and ML workflow integration. What would you recommend and why?",
-      sampleAnswer: `This scenario involves choosing the right architecture for ML workloads on large datasets. Let me analyze each approach comprehensively:
+    keyPoints: [
+      "ClickHouse alone can't provide ACID guarantees or handle 100k individual inserts/sec",
+      'Hybrid architecture separates OLTP (PostgreSQL) and OLAP (ClickHouse) concerns',
+      "CDC introduces 100-500ms lag, but most analytics queries don't need real-time data",
+      'For truly real-time dashboards, query recent data from PostgreSQL + historical from ClickHouse',
+      'Single ClickHouse works for append-only workloads with batching (logs, events, metrics)',
+      'Industry standard: OLTP database + CDC + columnar database for hybrid workloads',
+    ],
+  },
+  {
+    id: 'col-db-discussion-3',
+    question:
+      "Your data science team wants to run complex ML queries on 10TB of historical transaction data. Currently stored in Parquet files on S3, they're using Athena which takes 5-10 minutes per query. You're evaluating: (1) loading into Redshift, (2) loading into ClickHouse, (3) keeping in S3 but using Presto/Trino. Discuss the trade-offs in terms of query performance, cost, data pipeline complexity, and ML workflow integration. What would you recommend and why?",
+    sampleAnswer: `This scenario involves choosing the right architecture for ML workloads on large datasets. Let me analyze each approach comprehensively:
 
 **Current State:**
 - 10TB historical transaction data
@@ -1144,16 +1138,13 @@ Start with **Presto/Trino** (quick win, no data movement), then add **ClickHouse
 - Operational simplicity
 
 If team has strong AWS preference and budget allows, Redshift is a solid choice. But for ML workloads with large datasets, the Presto + ClickHouse hybrid offers the best performance/cost ratio.`,
-      keyPoints: [
-        'Athena is slow (5-10 min) because it queries S3 directly; dedicated compute dramatically improves performance',
-        'Redshift: 30-60s queries but expensive ($540-1,615/month) with storage duplication',
-        'ClickHouse: 5-15s queries, 50x compression, best performance but storage duplication',
-        'Presto/Trino: Query S3 directly (no duplication), 60-120s queries, cheapest if auto-scaled',
-        'Hybrid approach: ClickHouse for hot data (last 3-6 months), Presto for cold data (full history)',
-        'ML workflows benefit from Parquet on S3 (native to PyTorch/TensorFlow), so avoid locking data in proprietary formats',
-      ],
-    },
-  ],
-};
-
-export default columnOrientedDatabasesDiscussionQuiz;
+    keyPoints: [
+      'Athena is slow (5-10 min) because it queries S3 directly; dedicated compute dramatically improves performance',
+      'Redshift: 30-60s queries but expensive ($540-1,615/month) with storage duplication',
+      'ClickHouse: 5-15s queries, 50x compression, best performance but storage duplication',
+      'Presto/Trino: Query S3 directly (no duplication), 60-120s queries, cheapest if auto-scaled',
+      'Hybrid approach: ClickHouse for hot data (last 3-6 months), Presto for cold data (full history)',
+      'ML workflows benefit from Parquet on S3 (native to PyTorch/TensorFlow), so avoid locking data in proprietary formats',
+    ],
+  },
+];

@@ -1,15 +1,11 @@
-import { Quiz } from '@/lib/types';
+import { QuizQuestion } from '@/lib/types';
 
-const analyticsDataPipelineDiscussionQuiz: Quiz = {
-  id: 'analytics-data-pipeline-discussion',
-  title: 'Analytics Data Pipeline - Discussion Questions',
-  questions: [
-    {
-      id: 'adp-discussion-1',
-      type: 'discussion',
-      question:
-        'Your e-commerce company needs to build an analytics pipeline that supports: (1) real-time fraud detection on transactions (latency < 100ms), (2) daily sales reports for executives, (3) ML model training on 6 months of historical data weekly. The system processes 10,000 transactions/sec and stores 2TB of data daily. Should you use Lambda architecture, Kappa architecture, or a hybrid approach? Justify your decision with specific technology choices and discuss the trade-offs.',
-      sampleAnswer: `This is a classic scenario requiring careful architecture design to balance real-time, batch, and ML workloads. Let me analyze each approach:
+export const analyticsDataPipelineDiscussionQuiz: QuizQuestion[] = [
+  {
+    id: 'adp-discussion-1',
+    question:
+      'Your e-commerce company needs to build an analytics pipeline that supports: (1) real-time fraud detection on transactions (latency < 100ms), (2) daily sales reports for executives, (3) ML model training on 6 months of historical data weekly. The system processes 10,000 transactions/sec and stores 2TB of data daily. Should you use Lambda architecture, Kappa architecture, or a hybrid approach? Justify your decision with specific technology choices and discuss the trade-offs.',
+    sampleAnswer: `This is a classic scenario requiring careful architecture design to balance real-time, batch, and ML workloads. Let me analyze each approach:
 
 **Requirements Analysis:**
 
@@ -345,21 +341,20 @@ metrics = {
 \`\`\`
 
 This hybrid approach provides the performance, cost-effectiveness, and operational simplicity needed for the described requirements.`,
-      keyPoints: [
-        'Lambda architecture duplicates logic but uses optimal tools for each workload',
-        'Kappa architecture simplifies code but requires expensive long-term Kafka retention',
-        'Hybrid approach: stream processing (Flink) for real-time + batch processing (Spark) for historical',
-        'Cost consideration: 7-day Kafka retention vs 6-month retention saves significant money',
-        'Separate data stores: Druid for real-time queries (<100ms), Snowflake for batch analytics',
-        'S3 data lake for cheap long-term storage, avoiding expensive Kafka retention',
-      ],
-    },
-    {
-      id: 'adp-discussion-2',
-      type: 'discussion',
-      question:
-        'Your data team is debating between ETL and ELT for ingesting e-commerce data into your analytics warehouse. The CTO argues for ETL (transform before loading) to ensure data quality and reduce storage costs, while the Data Science lead argues for ELT (load raw data first) to enable flexibility and exploration. The system ingests from 50+ sources including databases, APIs, and third-party services. What would you recommend and why? Discuss the technical implications, costs, and organizational considerations.',
-      sampleAnswer: `This is a strategic architecture decision with far-reaching implications. Let me analyze both approaches comprehensively:
+    keyPoints: [
+      'Lambda architecture duplicates logic but uses optimal tools for each workload',
+      'Kappa architecture simplifies code but requires expensive long-term Kafka retention',
+      'Hybrid approach: stream processing (Flink) for real-time + batch processing (Spark) for historical',
+      'Cost consideration: 7-day Kafka retention vs 6-month retention saves significant money',
+      'Separate data stores: Druid for real-time queries (<100ms), Snowflake for batch analytics',
+      'S3 data lake for cheap long-term storage, avoiding expensive Kafka retention',
+    ],
+  },
+  {
+    id: 'adp-discussion-2',
+    question:
+      'Your data team is debating between ETL and ELT for ingesting e-commerce data into your analytics warehouse. The CTO argues for ETL (transform before loading) to ensure data quality and reduce storage costs, while the Data Science lead argues for ELT (load raw data first) to enable flexibility and exploration. The system ingests from 50+ sources including databases, APIs, and third-party services. What would you recommend and why? Discuss the technical implications, costs, and organizational considerations.',
+    sampleAnswer: `This is a strategic architecture decision with far-reaching implications. Let me analyze both approaches comprehensively:
 
 **ETL (Extract, Transform, Load) - CTO's Argument**
 
@@ -744,21 +739,20 @@ models:
 5. Industry best practice (dbt + modern warehouse)
 
 This approach gives data scientists the flexibility they need while addressing the CTO's concerns about cost and data quality. It's become the de facto standard at data-driven companies.`,
-      keyPoints: [
-        'ETL optimizes for storage cost and data quality but sacrifices flexibility and reprocessing',
-        'ELT enables exploration and flexibility but dramatically increases storage costs',
-        'Hybrid approach: short-term raw data retention (7-30 days) + long-term transformed data',
-        'Layered architecture: Raw → Staging → Marts → Metrics with appropriate retention policies',
-        'PII handled in staging layer with restricted access to raw layer for compliance',
-        'Modern warehouses (Snowflake, BigQuery) make ELT viable with compute-storage separation',
-      ],
-    },
-    {
-      id: 'adp-discussion-3',
-      type: 'discussion',
-      question:
-        'Your analytics pipeline has been running smoothly for 6 months, processing 500GB daily. Suddenly, data quality issues emerge: duplicate records, missing timestamps, and incorrect aggregations. The executive dashboard shows sales dropped 40% overnight, triggering panic. Your CEO asks: "How did this happen, and how do we prevent it?" Design a comprehensive data quality framework including validation, monitoring, alerting, and incident response. Discuss specific tools, metrics, and processes.',
-      sampleAnswer: `This scenario represents a critical failure in data quality management. Let me design a comprehensive framework to prevent and quickly detect such issues:
+    keyPoints: [
+      'ETL optimizes for storage cost and data quality but sacrifices flexibility and reprocessing',
+      'ELT enables exploration and flexibility but dramatically increases storage costs',
+      'Hybrid approach: short-term raw data retention (7-30 days) + long-term transformed data',
+      'Layered architecture: Raw → Staging → Marts → Metrics with appropriate retention policies',
+      'PII handled in staging layer with restricted access to raw layer for compliance',
+      'Modern warehouses (Snowflake, BigQuery) make ELT viable with compute-storage separation',
+    ],
+  },
+  {
+    id: 'adp-discussion-3',
+    question:
+      'Your analytics pipeline has been running smoothly for 6 months, processing 500GB daily. Suddenly, data quality issues emerge: duplicate records, missing timestamps, and incorrect aggregations. The executive dashboard shows sales dropped 40% overnight, triggering panic. Your CEO asks: "How did this happen, and how do we prevent it?" Design a comprehensive data quality framework including validation, monitoring, alerting, and incident response. Discuss specific tools, metrics, and processes.',
+    sampleAnswer: `This scenario represents a critical failure in data quality management. Let me design a comprehensive framework to prevent and quickly detect such issues:
 
 **Root Cause Analysis (What Went Wrong):**
 
@@ -1266,16 +1260,13 @@ A comprehensive data quality framework requires:
 6. **Prevention**: CI/CD testing, shift-left quality
 
 The 40% sales drop should have been detected within minutes, not overnight. With this framework, such incidents become rare and quickly resolved.`,
-      keyPoints: [
-        'Multi-layer validation: source validation, transformation tests, anomaly detection, reconciliation',
-        'Great Expectations and dbt tests provide declarative data quality checks at each pipeline stage',
-        'Statistical anomaly detection catches issues that static thresholds miss (e.g., 40% sales drop)',
-        'Real-time monitoring with alerts (PagerDuty, Datadog) enables quick detection (<30 min)',
-        'Incident response playbook with severity levels ensures coordinated response',
-        'Shift-left testing: validate data quality in CI/CD before deploying pipeline changes',
-      ],
-    },
-  ],
-};
-
-export default analyticsDataPipelineDiscussionQuiz;
+    keyPoints: [
+      'Multi-layer validation: source validation, transformation tests, anomaly detection, reconciliation',
+      'Great Expectations and dbt tests provide declarative data quality checks at each pipeline stage',
+      'Statistical anomaly detection catches issues that static thresholds miss (e.g., 40% sales drop)',
+      'Real-time monitoring with alerts (PagerDuty, Datadog) enables quick detection (<30 min)',
+      'Incident response playbook with severity levels ensures coordinated response',
+      'Shift-left testing: validate data quality in CI/CD before deploying pipeline changes',
+    ],
+  },
+];

@@ -1,6 +1,6 @@
-import { Section } from '@/lib/types';
+import { ModuleSection } from '@/lib/types';
 
-const timeSeriesDatabasesSection: Section = {
+const timeSeriesDatabasesSection: ModuleSection = {
   id: 'time-series-databases',
   title: 'Time-Series Databases',
   content: `
@@ -961,8 +961,6 @@ Time-series databases optimize for:
 
 Time-series databases are essential for modern observability, IoT, and analytics use cases where data is indexed by time and queried by time ranges.
 `,
-  mcqQuizId: 'time-series-databases-mcq',
-  discussionQuizId: 'time-series-databases-discussion',
 };
 
 export default timeSeriesDatabasesSection;
