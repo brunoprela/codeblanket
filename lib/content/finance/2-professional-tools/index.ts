@@ -1,0 +1,21 @@
+export const module2Content = {
+    id: 'module-2',
+    title: 'Professional Finance Tools',
+    description: 'Master the tools that finance professionals use daily',
+    sections: [
+        '2-1-excel-power-user',
+        '2-2-bloomberg-terminal',
+        '2-3-financial-data-platforms',
+        '2-4-free-data-sources',
+        '2-5-charting-technical-analysis',
+        '2-6-jupyter-lab',
+        '2-7-git-for-trading',
+        '2-8-databases-financial-data',
+        '2-9-quant-workstation',
+        '2-10-project-data-aggregator'
+    ],
+    icon: '🛠️',
+    estimatedTime: '1-2 weeks',
+    difficulty: 'Beginner'
+};
+

@@ -1,0 +1,156 @@
+import { Module } from '../../types';
+
+// Import sections
+import { financialSystemOverview } from '@/lib/content/sections/finance-foundations/financial-system-overview';
+import { typesOfFinancialInstitutions } from '@/lib/content/sections/finance-foundations/types-of-financial-institutions';
+import { careerPathsEngineersFinance } from '@/lib/content/sections/finance-foundations/career-paths-engineers-finance';
+import { financialMarketsExplained } from '@/lib/content/sections/finance-foundations/financial-markets-explained';
+import { investmentVehiclesProducts } from '@/lib/content/sections/finance-foundations/investment-vehicles-products';
+import { howTradingWorks } from '@/lib/content/sections/finance-foundations/how-trading-works';
+import { regulatoryLandscapeEngineers } from '@/lib/content/sections/finance-foundations/regulatory-landscape-engineers';
+import { financeTerminologyDevelopers } from '@/lib/content/sections/finance-foundations/finance-terminology-developers';
+import { mathematicsForFinance } from '@/lib/content/sections/finance-foundations/mathematics-finance';
+import { readingFinancialNewsData } from '@/lib/content/sections/finance-foundations/reading-financial-news-data';
+import { learningEnvironment } from '@/lib/content/sections/finance-foundations/learning-environment';
+import { moduleProjectPersonalFinanceDashboard } from '@/lib/content/sections/finance-foundations/module-project-personal-finance-dashboard';
+
+// Import quizzes
+import { financialSystemOverviewQuiz } from '@/lib/content/quizzes/finance-foundations/financial-system-overview';
+import { typesOfFinancialInstitutionsQuiz } from '@/lib/content/quizzes/finance-foundations/types-of-financial-institutions';
+import { careerPathsEngineersFinanceQuiz } from '@/lib/content/quizzes/finance-foundations/career-paths-engineers-finance';
+import { financialMarketsExplainedQuiz } from '@/lib/content/quizzes/finance-foundations/financial-markets-explained';
+import { investmentVehiclesProductsQuiz } from '@/lib/content/quizzes/finance-foundations/investment-vehicles-products';
+import { howTradingWorksQuiz } from '@/lib/content/quizzes/finance-foundations/how-trading-works';
+import { regulatoryLandscapeEngineersQuiz } from '@/lib/content/quizzes/finance-foundations/regulatory-landscape-engineers';
+import { financeTerminologyDevelopersQuiz } from '@/lib/content/quizzes/finance-foundations/finance-terminology-developers';
+import { mathematicsFinanceQuiz } from '@/lib/content/quizzes/finance-foundations/mathematics-finance';
+import { readingFinancialNewsDataQuiz } from '@/lib/content/quizzes/finance-foundations/reading-financial-news-data';
+import { learningEnvironmentQuiz } from '@/lib/content/quizzes/finance-foundations/learning-environment';
+import { moduleProjectPersonalFinanceDashboardQuiz } from '@/lib/content/quizzes/finance-foundations/module-project-personal-finance-dashboard';
+
+// Import multiple choice
+import { financialSystemOverviewMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/financial-system-overview';
+import { typesOfFinancialInstitutionsMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/types-of-financial-institutions';
+import { careerPathsEngineersFinanceMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/career-paths-engineers-finance';
+import { financialMarketsExplainedMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/financial-markets-explained';
+import { investmentVehiclesProductsMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/investment-vehicles-products';
+import { howTradingWorksMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/how-trading-works';
+import { regulatoryLandscapeEngineersMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/regulatory-landscape-engineers';
+import { financeTerminologyDevelopersMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/finance-terminology-developers';
+import { mathematicsFinanceMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/mathematics-finance';
+import { readingFinancialNewsDataMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/reading-financial-news-data';
+import { learningEnvironmentMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/learning-environment';
+import { moduleProjectPersonalFinanceDashboardMultipleChoice } from '@/lib/content/multiple-choice/finance-foundations/module-project-personal-finance-dashboard';
+
+// Transform functions
+const transformQuiz = (quiz: any) => ({
+    id: quiz.id,
+    question: quiz.question,
+    sampleAnswer: quiz.sampleAnswer,
+    keyPoints: quiz.keyPoints,
+});
+
+const transformMC = (mc: any) => ({
+    id: mc.id,
+    question: mc.question,
+    options: mc.options,
+    correctAnswer: mc.correctAnswer,
+    explanation: mc.explanation,
+});
+
+export const financeFoundationsModule: Module = {
+    id: 'finance-foundations',
+    title: 'Finance Foundations for Engineers',
+    description: 'Understanding the financial landscape, career paths, and why finance matters for engineers',
+    sections: [
+        {
+            id: financialSystemOverview.id,
+            title: financialSystemOverview.title,
+            content: financialSystemOverview.content,
+        },
+        {
+            id: typesOfFinancialInstitutions.id,
+            title: typesOfFinancialInstitutions.title,
+            content: typesOfFinancialInstitutions.content,
+        },
+        {
+            id: careerPathsEngineersFinance.id,
+            title: careerPathsEngineersFinance.title,
+            content: careerPathsEngineersFinance.content,
+        },
+        {
+            id: financialMarketsExplained.id,
+            title: financialMarketsExplained.title,
+            content: financialMarketsExplained.content,
+        },
+        {
+            id: investmentVehiclesProducts.id,
+            title: investmentVehiclesProducts.title,
+            content: investmentVehiclesProducts.content,
+        },
+        {
+            id: howTradingWorks.id,
+            title: howTradingWorks.title,
+            content: howTradingWorks.content,
+        },
+        {
+            id: regulatoryLandscapeEngineers.id,
+            title: regulatoryLandscapeEngineers.title,
+            content: regulatoryLandscapeEngineers.content,
+        },
+        {
+            id: financeTerminologyDevelopers.id,
+            title: financeTerminologyDevelopers.title,
+            content: financeTerminologyDevelopers.content,
+        },
+        {
+            id: mathematicsForFinance.id,
+            title: mathematicsForFinance.title,
+            content: mathematicsForFinance.content,
+        },
+        {
+            id: readingFinancialNewsData.id,
+            title: readingFinancialNewsData.title,
+            content: readingFinancialNewsData.content,
+        },
+        {
+            id: learningEnvironment.id,
+            title: learningEnvironment.title,
+            content: learningEnvironment.content,
+        },
+        {
+            id: moduleProjectPersonalFinanceDashboard.id,
+            title: moduleProjectPersonalFinanceDashboard.title,
+            content: moduleProjectPersonalFinanceDashboard.content,
+        },
+    ],
+    quizzes: [
+        ...financialSystemOverviewQuiz.map(transformQuiz),
+        ...typesOfFinancialInstitutionsQuiz.map(transformQuiz),
+        ...careerPathsEngineersFinanceQuiz.map(transformQuiz),
+        ...financialMarketsExplainedQuiz.map(transformQuiz),
+        ...investmentVehiclesProductsQuiz.map(transformQuiz),
+        ...howTradingWorksQuiz.map(transformQuiz),
+        ...regulatoryLandscapeEngineersQuiz.map(transformQuiz),
+        ...financeTerminologyDevelopersQuiz.map(transformQuiz),
+        ...mathematicsFinanceQuiz.map(transformQuiz),
+        ...readingFinancialNewsDataQuiz.map(transformQuiz),
+        ...learningEnvironmentQuiz.map(transformQuiz),
+        ...moduleProjectPersonalFinanceDashboardQuiz.map(transformQuiz),
+    ],
+    multipleChoiceQuestions: [
+        ...financialSystemOverviewMultipleChoice.map(transformMC),
+        ...typesOfFinancialInstitutionsMultipleChoice.map(transformMC),
+        ...careerPathsEngineersFinanceMultipleChoice.map(transformMC),
+        ...financialMarketsExplainedMultipleChoice.map(transformMC),
+        ...investmentVehiclesProductsMultipleChoice.map(transformMC),
+        ...howTradingWorksMultipleChoice.map(transformMC),
+        ...regulatoryLandscapeEngineersMultipleChoice.map(transformMC),
+        ...financeTerminologyDevelopersMultipleChoice.map(transformMC),
+        ...mathematicsFinanceMultipleChoice.map(transformMC),
+        ...readingFinancialNewsDataMultipleChoice.map(transformMC),
+        ...learningEnvironmentMultipleChoice.map(transformMC),
+        ...moduleProjectPersonalFinanceDashboardMultipleChoice.map(transformMC),
+    ],
+};
+
