@@ -3,9 +3,9 @@
  */
 
 export const pinterestarchitectureSection = {
-    id: 'pinterest-architecture',
-    title: 'Pinterest Architecture',
-    content: `Pinterest is a visual discovery engine where users find and save ideas through "Pins" organized on boards. With 450+ million monthly active users saving 240+ billion Pins, Pinterest's architecture must handle massive image storage, visual search, personalized recommendations, and graph operations at scale. This section explores the technical systems that power Pinterest.
+  id: 'pinterest-architecture',
+  title: 'Pinterest Architecture',
+  content: `Pinterest is a visual discovery engine where users find and save ideas through "Pins" organized on boards. With 450+ million monthly active users saving 240+ billion Pins, Pinterest's architecture must handle massive image storage, visual search, personalized recommendations, and graph operations at scale. This section explores the technical systems that power Pinterest.
 
 ## Overview
 

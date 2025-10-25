@@ -3,9 +3,9 @@
  */
 
 export const typeaheadSection = {
-    id: 'typeahead-suggestion',
-    title: 'Design Typeahead Suggestion',
-    content: `Typeahead (autocomplete) suggests search queries as users type. Google search shows 10 suggestions after typing just a few characters. The challenges are: ultra-low latency (< 100ms), handling typos, ranking by relevance/popularity, updating suggestions with trending queries, and supporting billions of queries across millions of users.
+  id: 'typeahead-suggestion',
+  title: 'Design Typeahead Suggestion',
+  content: `Typeahead (autocomplete) suggests search queries as users type. Google search shows 10 suggestions after typing just a few characters. The challenges are: ultra-low latency (< 100ms), handling typos, ranking by relevance/popularity, updating suggestions with trending queries, and supporting billions of queries across millions of users.
 
 ## Problem Statement
 
@@ -692,4 +692,3 @@ def autocomplete_multi_lang(prefix, language="en"):
 
 A production typeahead system balances **speed** (< 100ms), **relevance** (ranking), and **freshness** (trending queries) to provide instant, helpful suggestions for billions of users worldwide.`,
 };
-

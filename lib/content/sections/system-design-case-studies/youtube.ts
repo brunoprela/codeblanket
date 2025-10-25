@@ -884,7 +884,7 @@ During playback of video X:
 2. Player silently downloads first segment of Y (in background)
 3. Stores in browser cache
 4. When user clicks Y, instant playback from cache
-\`\`\```
+\`\`\`
 
 ### 3. Intelligent Quality Selection
 

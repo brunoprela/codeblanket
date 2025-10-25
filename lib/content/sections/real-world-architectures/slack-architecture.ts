@@ -3,9 +3,9 @@
  */
 
 export const slackarchitectureSection = {
-    id: 'slack-architecture',
-    title: 'Slack Architecture',
-    content: `Slack is a business communication platform that has become essential for modern workplace collaboration. With 18+ million daily active users across 750,000+ organizations, Slack's architecture must handle real-time messaging, file sharing, search, notifications, and integrations at massive scale while maintaining 99.99% uptime. This section explores the technical systems behind Slack.
+  id: 'slack-architecture',
+  title: 'Slack Architecture',
+  content: `Slack is a business communication platform that has become essential for modern workplace collaboration. With 18+ million daily active users across 750,000+ organizations, Slack's architecture must handle real-time messaging, file sharing, search, notifications, and integrations at massive scale while maintaining 99.99% uptime. This section explores the technical systems behind Slack.
 
 ## Overview
 

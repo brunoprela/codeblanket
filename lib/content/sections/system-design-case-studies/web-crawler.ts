@@ -3,9 +3,9 @@
  */
 
 export const webCrawlerSection = {
-    id: 'web-crawler',
-    title: 'Design Web Crawler',
-    content: `A web crawler (or spider) is a system that systematically browses the web to index content for search engines. Google's crawler processes billions of web pages daily. The core challenges are: handling massive scale (billions of URLs), politeness (respecting robots.txt, rate limits), duplicate detection, handling dynamic content, and maintaining freshness of indexed data.
+  id: 'web-crawler',
+  title: 'Design Web Crawler',
+  content: `A web crawler (or spider) is a system that systematically browses the web to index content for search engines. Google's crawler processes billions of web pages daily. The core challenges are: handling massive scale (billions of URLs), politeness (respecting robots.txt, rate limits), duplicate detection, handling dynamic content, and maintaining freshness of indexed data.
 
 ## Problem Statement
 
@@ -821,4 +821,3 @@ else:
 
 A well-designed web crawler balances **speed** (billions of pages), **politeness** (respect server limits), and **efficiency** (minimize duplicates, storage costs) to systematically index the web for search engines.`,
 };
-

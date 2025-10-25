@@ -9,6 +9,7 @@ This document outlines a comprehensive **DevOps and AWS Infrastructure** curricu
 **Target Audience**: Developers and system administrators who want to become DevOps/Platform Engineers who can build and operate production systems at scale
 
 **Prerequisites**:
+
 - Basic programming knowledge (Python, Bash)
 - Understanding of web applications
 - Familiarity with command line
@@ -34,6 +35,7 @@ This curriculum is specifically designed to teach you how to **actually build an
 ### Real-World Engineering Focus
 
 #### 🏗️ **Complete Infrastructure Stack**
+
 - Linux system administration for production
 - AWS VPC networking and multi-tier architectures
 - Container orchestration with Kubernetes (EKS)
@@ -42,6 +44,7 @@ This curriculum is specifically designed to teach you how to **actually build an
 - Security hardening and compliance
 
 #### ☁️ **AWS Services Mastery**
+
 - Compute: EC2, ECS, EKS, Lambda, Fargate
 - Networking: VPC, Load Balancers, CloudFront, Route 53
 - Storage: S3, EBS, EFS, FSx
@@ -50,6 +53,7 @@ This curriculum is specifically designed to teach you how to **actually build an
 - Monitoring: CloudWatch, X-Ray, Prometheus, Grafana
 
 #### 🔧 **Infrastructure as Code**
+
 - Terraform for AWS infrastructure
 - Declarative infrastructure management
 - Module composition and reusability
@@ -58,6 +62,7 @@ This curriculum is specifically designed to teach you how to **actually build an
 - Production IaC patterns
 
 #### 🔐 **Security & Compliance**
+
 - IAM policies and roles
 - Network security (Security Groups, NACLs, WAF)
 - Secrets management
@@ -105,30 +110,31 @@ Throughout the curriculum, you'll build increasingly complex projects:
 
 ## 📚 Module Overview
 
-| Module | Title                                           | Sections | Difficulty   | Est. Time |
-| ------ | ----------------------------------------------- | -------- | ------------ | --------- |
+| Module | Title                                            | Sections | Difficulty   | Est. Time |
+| ------ | ------------------------------------------------ | -------- | ------------ | --------- |
 | 1      | Linux System Administration & DevOps Foundations | 14       | Beginner     | 2-3 weeks |
-| 2      | Networking Deep Dive for AWS                    | 16       | Intermediate | 3 weeks   |
-| 3      | AWS Compute Services                            | 14       | Intermediate | 2-3 weeks |
-| 4      | Infrastructure as Code with Terraform           | 13       | Intermediate | 2-3 weeks |
-| 5      | Docker & Containerization                       | 12       | Intermediate | 2 weeks   |
-| 6      | Kubernetes on AWS (EKS)                         | 18       | Advanced     | 3-4 weeks |
-| 7      | AWS Database Services                           | 15       | Intermediate | 3 weeks   |
-| 8      | CI/CD on AWS                                    | 16       | Intermediate | 3 weeks   |
-| 9      | Monitoring & Observability on AWS               | 16       | Intermediate | 3 weeks   |
-| 10     | Security & Compliance on AWS                    | 18       | Advanced     | 3-4 weeks |
-| 11     | AWS Storage Services                            | 12       | Intermediate | 2 weeks   |
-| 12     | AWS Serverless Architecture                     | 14       | Advanced     | 2-3 weeks |
-| 13     | AWS Messaging & Event Services                  | 11       | Intermediate | 2 weeks   |
-| 14     | AWS Networking Advanced                         | 13       | Advanced     | 2-3 weeks |
-| 15     | Disaster Recovery & High Availability           | 12       | Advanced     | 2-3 weeks |
-| 16     | AWS Cost Optimization & FinOps                  | 14       | Intermediate | 2 weeks   |
-| 17     | AWS Well-Architected Framework                  | 10       | Intermediate | 2 weeks   |
-| 18     | Real-World AWS Projects                         | 16       | Expert       | 4-5 weeks |
+| 2      | Networking Deep Dive for AWS                     | 16       | Intermediate | 3 weeks   |
+| 3      | AWS Compute Services                             | 14       | Intermediate | 2-3 weeks |
+| 4      | Infrastructure as Code with Terraform            | 13       | Intermediate | 2-3 weeks |
+| 5      | Docker & Containerization                        | 12       | Intermediate | 2 weeks   |
+| 6      | Kubernetes on AWS (EKS)                          | 18       | Advanced     | 3-4 weeks |
+| 7      | AWS Database Services                            | 15       | Intermediate | 3 weeks   |
+| 8      | CI/CD on AWS                                     | 16       | Intermediate | 3 weeks   |
+| 9      | Monitoring & Observability on AWS                | 16       | Intermediate | 3 weeks   |
+| 10     | Security & Compliance on AWS                     | 18       | Advanced     | 3-4 weeks |
+| 11     | AWS Storage Services                             | 12       | Intermediate | 2 weeks   |
+| 12     | AWS Serverless Architecture                      | 14       | Advanced     | 2-3 weeks |
+| 13     | AWS Messaging & Event Services                   | 11       | Intermediate | 2 weeks   |
+| 14     | AWS Networking Advanced                          | 13       | Advanced     | 2-3 weeks |
+| 15     | Disaster Recovery & High Availability            | 12       | Advanced     | 2-3 weeks |
+| 16     | AWS Cost Optimization & FinOps                   | 14       | Intermediate | 2 weeks   |
+| 17     | AWS Well-Architected Framework                   | 10       | Intermediate | 2 weeks   |
+| 18     | Real-World AWS Projects                          | 16       | Expert       | 4-5 weeks |
 
 **Total**: 241 sections, 45-50 weeks (comprehensive mastery)
 
 **Key Features**:
+
 - 🎯 **System Design Integration**: Implement architectures from System Design curriculum
 - ☁️ **AWS-First**: Every concept using AWS services
 - 💻 **150+ Labs**: Hands-on AWS deployments
@@ -993,17 +999,17 @@ For those who completed System Design curriculum
 
 ### How DevOps Implements System Design Concepts:
 
-| System Design Module                  | Concept Learned                      | DevOps Implementation                               |
-| ------------------------------------- | ------------------------------------ | --------------------------------------------------- |
-| **Module 2: Core Building Blocks**    | Load balancers, caching, CDN         | Deploy ALB/NLB, ElastiCache, CloudFront (Mod 2-3)  |
-| **Module 3: Database Design**         | CAP theorem, consistency             | Configure RDS Multi-AZ, DynamoDB (Mod 7)            |
-| **Module 4: Networking**              | TCP/IP, DNS, protocols               | AWS VPC, Route 53, security groups (Mod 2)          |
-| **Module 8: Microservices**           | Service mesh, inter-service comm     | Deploy EKS with Istio (Mod 6)                       |
-| **Module 9: Observability**           | SLIs, SLOs, distributed tracing      | CloudWatch, X-Ray, Prometheus (Mod 9)               |
-| **Module 11: Distributed Patterns**   | Leader election, WAL                 | Kubernetes etcd, RDS WAL (Mod 6-7)                  |
-| **Module 12: Message Queues**         | Kafka, event-driven                  | MSK, SQS, SNS, EventBridge (Mod 13)                 |
-| **Module 14: Distributed Databases**  | Cassandra, DynamoDB, Redis           | Deploy these databases on AWS (Mod 7)               |
-| **Module 15: Case Studies**           | System designs (Twitter, Uber, etc.) | Actually build and deploy on AWS (Mod 18)           |
+| System Design Module                 | Concept Learned                      | DevOps Implementation                             |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------- |
+| **Module 2: Core Building Blocks**   | Load balancers, caching, CDN         | Deploy ALB/NLB, ElastiCache, CloudFront (Mod 2-3) |
+| **Module 3: Database Design**        | CAP theorem, consistency             | Configure RDS Multi-AZ, DynamoDB (Mod 7)          |
+| **Module 4: Networking**             | TCP/IP, DNS, protocols               | AWS VPC, Route 53, security groups (Mod 2)        |
+| **Module 8: Microservices**          | Service mesh, inter-service comm     | Deploy EKS with Istio (Mod 6)                     |
+| **Module 9: Observability**          | SLIs, SLOs, distributed tracing      | CloudWatch, X-Ray, Prometheus (Mod 9)             |
+| **Module 11: Distributed Patterns**  | Leader election, WAL                 | Kubernetes etcd, RDS WAL (Mod 6-7)                |
+| **Module 12: Message Queues**        | Kafka, event-driven                  | MSK, SQS, SNS, EventBridge (Mod 13)               |
+| **Module 14: Distributed Databases** | Cassandra, DynamoDB, Redis           | Deploy these databases on AWS (Mod 7)             |
+| **Module 15: Case Studies**          | System designs (Twitter, Uber, etc.) | Actually build and deploy on AWS (Mod 18)         |
 
 ---
 
@@ -1025,6 +1031,7 @@ For those who completed System Design curriculum
 ## Key Technologies Covered
 
 ### AWS Services:
+
 - **Compute**: EC2, ECS, EKS, Lambda, Fargate, Batch
 - **Networking**: VPC, ALB/NLB, CloudFront, Route 53, Direct Connect
 - **Storage**: S3, EBS, EFS, FSx, Storage Gateway
@@ -1036,6 +1043,7 @@ For those who completed System Design curriculum
 - **Management**: Systems Manager, Config, CloudFormation, Organizations
 
 ### Infrastructure Tools:
+
 - **Terraform** for infrastructure as code
 - **Docker** for containerization
 - **Kubernetes (EKS)** for orchestration
@@ -1046,6 +1054,7 @@ For those who completed System Design curriculum
 - **Jenkins/GitHub Actions** for CI/CD
 
 ### Programming & Scripting:
+
 - **Bash** for shell scripting
 - **Python** for automation
 - **AWS CLI** for AWS operations
@@ -1060,6 +1069,7 @@ For those who completed System Design curriculum
 **Status**: 0/18 modules complete
 
 **Completion**:
+
 - 🔲 Module 1: Linux System Administration & DevOps Foundations (14 sections)
 - 🔲 Module 2: Networking Deep Dive for AWS (16 sections)
 - 🔲 Module 3: AWS Compute Services (14 sections)
@@ -1080,6 +1090,7 @@ For those who completed System Design curriculum
 - 🔲 Module 18: Real-World AWS Projects (16 sections)
 
 **Next Steps**:
+
 1. Detailed content creation for each section (400-600 lines per section)
 2. Terraform code for all infrastructure
 3. Hands-on labs with step-by-step instructions
@@ -1099,7 +1110,7 @@ For those who completed System Design curriculum
 ✅ **Cost-Conscious**: AWS cost optimization in every module  
 ✅ **Production-Ready**: Focus on what actually runs in production  
 ✅ **Complete Stack**: Linux → Kubernetes → CI/CD → Monitoring → Security  
-✅ **16 Capstone Projects**: From URL shortener to complete production platform  
+✅ **16 Capstone Projects**: From URL shortener to complete production platform
 
 ---
 
@@ -1108,6 +1119,7 @@ For those who completed System Design curriculum
 **Goal**: Enable students to build, deploy, and operate production systems on AWS by implementing System Design architectures
 
 **Curriculum Highlights**:
+
 - 🎓 **241 comprehensive sections** covering Linux to production AWS
 - ☁️ **AWS-centric approach** with every service covered
 - 💻 **150+ hands-on labs** with actual AWS deployments
@@ -1120,4 +1132,3 @@ For those who completed System Design curriculum
 - 🌍 **Multi-region architectures**: Global systems and disaster recovery
 
 **Target Outcome**: Students will be able to **build and operate any system** on AWS, from simple web applications to complex multi-region architectures supporting millions of users. They will understand the **complete DevOps lifecycle** from provisioning infrastructure to monitoring production systems, with deep AWS expertise and the ability to implement any System Design architecture pattern on AWS infrastructure.
-

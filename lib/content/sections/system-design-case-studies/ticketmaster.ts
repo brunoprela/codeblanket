@@ -3,9 +3,9 @@
  */
 
 export const ticketmasterSection = {
-    id: 'ticketmaster',
-    title: 'Design Ticketmaster',
-    content: `Ticketmaster is a ticket booking platform for concerts, sports, and events. The core challenges are: handling massive concurrent traffic (100K+ users competing for 10K tickets), preventing double-booking, fighting bots and scalpers, implementing virtual queuing, and ensuring fairness in high-demand ticket sales.
+  id: 'ticketmaster',
+  title: 'Design Ticketmaster',
+  content: `Ticketmaster is a ticket booking platform for concerts, sports, and events. The core challenges are: handling massive concurrent traffic (100K+ users competing for 10K tickets), preventing double-booking, fighting bots and scalpers, implementing virtual queuing, and ensuring fairness in high-demand ticket sales.
 
 ## Problem Statement
 
@@ -698,4 +698,3 @@ CREATE TABLE orders (
 
 Ticketmaster's design prioritizes **strong consistency** (no double-booking), **fairness** (virtual queue), and **security** (bot prevention) over pure performance, ensuring reliable ticket sales even during extreme traffic spikes.`,
 };
-

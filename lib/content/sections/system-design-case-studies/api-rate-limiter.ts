@@ -3,9 +3,9 @@
  */
 
 export const rateLimiterSection = {
-    id: 'api-rate-limiter',
-    title: 'Design API Rate Limiter',
-    content: `An API rate limiter controls how many requests a client can make to an API within a time window. It prevents abuse, ensures fair resource allocation, protects against DDoS attacks, and maintains service quality for all users. Rate limiting is critical for public APIs (Twitter, GitHub, Stripe) and internal microservices.
+  id: 'api-rate-limiter',
+  title: 'Design API Rate Limiter',
+  content: `An API rate limiter controls how many requests a client can make to an API within a time window. It prevents abuse, ensures fair resource allocation, protects against DDoS attacks, and maintains service quality for all users. Rate limiting is critical for public APIs (Twitter, GitHub, Stripe) and internal microservices.
 
 ## Problem Statement
 
@@ -766,4 +766,3 @@ Retry-After: 45
 
 A production rate limiter ensures **fair resource allocation**, **prevents abuse**, and **maintains service quality** for all users while handling massive scale across distributed systems.`,
 };
-

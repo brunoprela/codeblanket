@@ -3,9 +3,9 @@
  */
 
 export const uberSection = {
-    id: 'uber',
-    title: 'Design Uber',
-    content: `Uber is a ride-hailing platform connecting riders and drivers in real-time. The core challenges include: real-time location tracking, efficient matching algorithms, ETA calculations, surge pricing, and handling millions of concurrent connections globally.
+  id: 'uber',
+  title: 'Design Uber',
+  content: `Uber is a ride-hailing platform connecting riders and drivers in real-time. The core challenges include: real-time location tracking, efficient matching algorithms, ETA calculations, surge pricing, and handling millions of concurrent connections globally.
 
 ## Problem Statement
 
@@ -614,7 +614,7 @@ stripe.charges.create(
     idempotency_key=f'trip_{trip_id}'  # Unique per trip
 )
 # If retried with same key, Stripe returns original charge (no duplicate)
-\`\`\```
+\`\`\`
 
 ---
 
@@ -689,7 +689,7 @@ Shard 3: Los Angeles (Region 3)
 \`\`\`cql
 PRIMARY KEY (trip_id)
 -- trips distributed across cluster by trip_id hash
-\`\`\```
+\`\`\`
 
 **Query patterns**:
 - Get trip by ID: Single partition query (fast)
@@ -723,7 +723,7 @@ Features:
 Output: Probability of demand per grid cell
 
 Action: Incentivize drivers to position in high-probability areas
-\`\`\```
+\`\`\`
 
 ### 2. Route Optimization
 
@@ -869,4 +869,3 @@ Action: Incentivize drivers to position in high-probability areas
 
 This design handles **Uber-scale operations** across **600+ cities globally** with **real-time location tracking**, **efficient geospatial matching**, and **sub-second response times** for location queries, while maintaining high availability and handling millions of concurrent connections.`,
 };
-

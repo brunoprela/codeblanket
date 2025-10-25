@@ -3,9 +3,9 @@
  */
 
 export const dropboxSection = {
-    id: 'dropbox',
-    title: 'Design Dropbox',
-    content: `Dropbox is a cloud file storage and synchronization service with 700M users storing petabytes of data. The core challenges are: efficiently syncing files across devices, handling large files (up to 50 GB), detecting and resolving conflicts, and minimizing bandwidth usage through delta sync and deduplication.
+  id: 'dropbox',
+  title: 'Design Dropbox',
+  content: `Dropbox is a cloud file storage and synchronization service with 700M users storing petabytes of data. The core challenges are: efficiently syncing files across devices, handling large files (up to 50 GB), detecting and resolving conflicts, and minimizing bandwidth usage through delta sync and deduplication.
 
 ## Problem Statement
 
@@ -529,4 +529,3 @@ Benefits:
 
 Dropbox's design prioritizes **bandwidth and storage efficiency** through chunking and deduplication, while maintaining **simplicity** in conflict resolution and **reliability** in sync operations.`,
 };
-

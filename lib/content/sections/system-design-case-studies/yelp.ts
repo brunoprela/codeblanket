@@ -3,9 +3,9 @@
  */
 
 export const yelpSection = {
-    id: 'yelp',
-    title: 'Design Yelp (Nearby Places)',
-    content: `Yelp is a local business discovery platform where users search for nearby restaurants, shops, and services based on location, ratings, and preferences. The core challenges are: efficient geospatial queries (find businesses within radius), handling massive read traffic (100M+ searches/day), aggregating millions of reviews in real-time, ranking results by relevance/quality/distance, and maintaining data freshness as businesses update hours/menus.
+  id: 'yelp',
+  title: 'Design Yelp (Nearby Places)',
+  content: `Yelp is a local business discovery platform where users search for nearby restaurants, shops, and services based on location, ratings, and preferences. The core challenges are: efficient geospatial queries (find businesses within radius), handling massive read traffic (100M+ searches/day), aggregating millions of reviews in real-time, ranking results by relevance/quality/distance, and maintaining data freshness as businesses update hours/menus.
 
 ## Problem Statement
 
@@ -1077,4 +1077,3 @@ CREATE TABLE review_responses (
 
 Yelp's architecture prioritizes **low-latency search** (< 200ms), **accurate geospatial queries** (within radius), and **relevant ranking** (best results first) to help millions of users discover local businesses worldwide.`,
 };
-

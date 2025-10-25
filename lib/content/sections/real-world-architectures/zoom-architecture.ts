@@ -1,11 +1,11 @@
 /**
- * Zoom Architecture Section  
+ * Zoom Architecture Section
  */
 
 export const zoomarchitectureSection = {
-    id: 'zoom-architecture',
-    title: 'Zoom Architecture',
-    content: `Zoom is a video conferencing platform that became essential during the COVID-19 pandemic. With 300+ million daily meeting participants at peak, Zoom's architecture must handle massive-scale video/audio streaming with minimal latency while ensuring quality and reliability even under poor network conditions. This section explores the technical systems behind Zoom.
+  id: 'zoom-architecture',
+  title: 'Zoom Architecture',
+  content: `Zoom is a video conferencing platform that became essential during the COVID-19 pandemic. With 300+ million daily meeting participants at peak, Zoom's architecture must handle massive-scale video/audio streaming with minimal latency while ensuring quality and reliability even under poor network conditions. This section explores the technical systems behind Zoom.
 
 ## Overview
 

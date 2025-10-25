@@ -3,9 +3,9 @@
  */
 
 export const newsFeedSection = {
-    id: 'news-feed',
-    title: 'Design News Feed',
-    content: `A news feed (Facebook, Twitter, Instagram) shows personalized posts from friends/followees. The challenges are: generating feeds for billions of users, ranking posts by relevance, handling millions of new posts per day, real-time updates, and keeping feed generation fast (< 500ms) while maintaining consistency.
+  id: 'news-feed',
+  title: 'Design News Feed',
+  content: `A news feed (Facebook, Twitter, Instagram) shows personalized posts from friends/followees. The challenges are: generating feeds for billions of users, ranking posts by relevance, handling millions of new posts per day, real-time updates, and keeping feed generation fast (< 500ms) while maintaining consistency.
 
 ## Problem Statement
 
@@ -684,4 +684,3 @@ SELECT * FROM posts WHERE ... AND created_at < '2023-01-15T10:30:00' ORDER BY cr
 
 A production news feed system balances **speed** (< 500ms), **scalability** (billions of users), and **relevance** (ranked posts) to deliver personalized content at massive scale.`,
 };
-
