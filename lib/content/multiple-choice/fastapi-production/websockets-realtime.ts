@@ -1,8 +1,7 @@
-export const websocketsRealtimeMultipleChoice = {
-  title: 'WebSockets & Real-Time Communication - Multiple Choice',
-  id: 'websockets-realtime-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const websocketsRealtimeMultipleChoice = [
+  {
       id: 1,
       question:
         'What is the primary advantage of WebSockets over HTTP polling for real-time applications?',
@@ -72,5 +71,4 @@ export const websocketsRealtimeMultipleChoice = {
       explanation:
         "WebSocket authentication must happen BEFORE accepting the connection because once accepted, the client has an open channel. Best practice: pass JWT in query parameter: ws://example.com/ws/chat?token=<JWT>. Implementation: 1) Extract token from query params, 2) Validate JWT, 3) If valid, call websocket.accept(), 4) If invalid, call websocket.close(code=1008) and return. Why NOT option 2 (auth after connect): Once connection accepted, client can start sending data before auth completes—security risk. Why NOT option 3 (inherit from HTTP session): WebSockets upgrade from HTTP, but don't maintain session state automatically—you must explicitly pass credentials. Why NOT option 4 (Basic Auth): While possible, JWT is preferred in modern apps (stateless, contains user info, expires). The pattern: async def websocket_endpoint(websocket: WebSocket, token: str): user = await verify_jwt(token); if not user: await websocket.close(1008); return; await websocket.accept(); # Now authenticated. Alternative: pass token in Sec-WebSocket-Protocol header, but query param is simpler and more widely supported.",
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

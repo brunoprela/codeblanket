@@ -1,8 +1,7 @@
 import { MultipleChoiceQuestion } from '@/lib/types';
 
-export const requestResponseModelsPydanticMultipleChoice: MultipleChoiceQuestion[] =
-  [
-    {
+export const requestResponseModelsPydanticMultipleChoice = [
+  {
       id: 'fastapi-pydantic-mc-1',
       question: 'What is the purpose of response_model in a FastAPI endpoint?',
       options: [

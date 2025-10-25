@@ -1,7 +1,4 @@
-export const apiDocumentationQuiz = {
-  title: 'API Documentation - Discussion Questions',
-  id: 'api-documentation-quiz',
-  questions: [
+export const apiDocumentationQuiz = [
     {
       id: 1,
       question:
@@ -20,5 +17,5 @@ export const apiDocumentationQuiz = {
         'Design a documentation strategy for a public API that supports multiple programming languages (Python, JavaScript, Go, Ruby). The strategy should include: generating client SDKs from OpenAPI spec, versioning documentation, deprecation notices, migration guides, and code examples in each language. Implement the OpenAPI customization needed to generate high-quality SDKs.',
       answer: `Multi-language API documentation strategy with OpenAPI spec customization for SDK generation, versioning, and comprehensive developer experience across languages.`,
     },
-  ],
-};
+
+].map(({ id, ...q }, idx) => ({ id: `fastapi-api-documentation-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));

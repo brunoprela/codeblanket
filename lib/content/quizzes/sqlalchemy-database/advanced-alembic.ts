@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const advancedAlembicQuiz = [
   {
     id: 'sql-adv-alembic-q-1',

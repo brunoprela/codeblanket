@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const databaseFundamentalsQuiz = [
   {
     id: 'sql-db-fund-q-1',

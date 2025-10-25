@@ -1,8 +1,7 @@
-export const backgroundTasksMultipleChoice = {
-  title: 'Background Tasks - Multiple Choice',
-  id: 'background-tasks-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const backgroundTasksMultipleChoice = [
+  {
       id: 1,
       question:
         "When should you use FastAPI's built-in BackgroundTasks instead of Celery?",
@@ -72,5 +71,4 @@ export const backgroundTasksMultipleChoice = {
       explanation:
         "A dead letter queue (DLQ) collects tasks that have permanently failed after exhausting all retries. Purpose: Some tasks fail permanently (invalid data, external service down for hours, bugs). After max retries (e.g., 5 attempts), these tasks should: 1) Not block the queue, 2) Not be silently dropped, 3) Be investigated by humans. DLQ implementation: When task fails permanently, send to separate queue/database for manual review. Example: Payment fails 5 times → move to DLQ → alert finance team → create support ticket → human investigates root cause. DLQ enables: 1) Automatic alerting (finance team notified), 2) Audit trail (all failures recorded), 3) Manual recovery (fix issue, reprocess task), 4) Root cause analysis (why did it fail?). Without DLQ, failed tasks disappear—lost revenue, angry customers, no visibility. Production pattern: on_failure() hook in Celery task sends to DLQ, which triggers alerts and creates tickets. This is different from temporary storage during restarts (option 2), task prioritization (option 3), or result caching (option 4)—it's specifically for handling permanent failures gracefully.",
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const definingModelsQuiz = [
   {
     id: 'sql-models-q-1',

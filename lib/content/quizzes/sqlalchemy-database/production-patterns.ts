@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const productionPatternsQuiz = [
   {
     id: 'sql-prod-q-1',

@@ -1,8 +1,7 @@
-export const errorHandlingValidationMultipleChoice = {
-  title: 'Error Handling & Validation - Multiple Choice',
-  id: 'error-handling-validation-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const errorHandlingValidationMultipleChoice = [
+  {
       id: 1,
       question:
         "What is the correct HTTP status code for a request where the user is authenticated but doesn't have permission to access the resource?",
@@ -72,5 +71,4 @@ export const errorHandlingValidationMultipleChoice = {
       explanation:
         'Custom validation error handlers provide better UX by formatting errors clearly. Default FastAPI validation response: {"detail": [{"loc": ["body", "email"], "msg": "field required", "type": "value_error.missing"}]}. Not user-friendly! Custom formatted response: {"error": "validation_error", "message": "Invalid input", "details": [{"field": "email", "message": "Email is required", "code": "value_error.missing"}]}. Benefits: 1) Clean field names (email vs body.email), 2) Human-readable messages, 3) Frontend can map errors to form fields, 4) Error codes for programmatic handling. Implementation: @app.exception_handler(RequestValidationError) to intercept and reformat. Letting FastAPI use default (option 2) works but UX suffers. Returning generic 400 without details (option 3) prevents users from fixing issues. Using 500 (option 4) is wrong—validation is client error (4xx), not server error (5xx). Production pattern: Custom handler formats errors, includes request_id, maintains error context for frontend form field highlighting.',
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

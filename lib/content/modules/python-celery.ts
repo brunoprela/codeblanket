@@ -4,52 +4,52 @@
  * Complete guide to building scalable background task systems with Celery
  */
 
-import { Module } from '../types';
+import { Module } from '../../types';
 
 // Section imports
-import { taskQueueFundamentals } from './sections/python-celery/task-queue-fundamentals';
-import { celeryArchitecture } from './sections/python-celery/celery-architecture';
-import { writingFirstTasks } from './sections/python-celery/writing-first-tasks';
-import { taskConfigurationRouting } from './sections/python-celery/task-configuration-routing';
-import { celeryBeatPeriodicTasks } from './sections/python-celery/celery-beat-periodic-tasks';
-import { taskResultsStateManagement } from './sections/python-celery/task-results-state-management';
-import { errorHandlingRetriesTimeouts } from './sections/python-celery/error-handling-retries-timeouts';
-import { monitoringWithFlower } from './sections/python-celery/monitoring-with-flower';
-import { redisVsRabbitmq } from './sections/python-celery/redis-vs-rabbitmq';
-import { distributedTaskProcessingPatterns } from './sections/python-celery/distributed-task-processing-patterns';
-import { canvasChainsGroupsChords } from './sections/python-celery/canvas-chains-groups-chords';
-import { celeryInProduction } from './sections/python-celery/celery-in-production';
-import { alternativeTaskQueues } from './sections/python-celery/alternative-task-queues';
+import { taskQueueFundamentals } from '../sections/python-celery/task-queue-fundamentals';
+import { celeryArchitecture } from '../sections/python-celery/celery-architecture';
+import { writingFirstTasks } from '../sections/python-celery/writing-first-tasks';
+import { taskConfigurationRouting } from '../sections/python-celery/task-configuration-routing';
+import { celeryBeatPeriodicTasks } from '../sections/python-celery/celery-beat-periodic-tasks';
+import { taskResultsStateManagement } from '../sections/python-celery/task-results-state-management';
+import { errorHandlingRetriesTimeouts } from '../sections/python-celery/error-handling-retries-timeouts';
+import { monitoringWithFlower } from '../sections/python-celery/monitoring-with-flower';
+import { redisVsRabbitmq } from '../sections/python-celery/redis-vs-rabbitmq';
+import { distributedTaskProcessingPatterns } from '../sections/python-celery/distributed-task-processing-patterns';
+import { canvasChainsGroupsChords } from '../sections/python-celery/canvas-chains-groups-chords';
+import { celeryInProduction } from '../sections/python-celery/celery-in-production';
+import { alternativeTaskQueues } from '../sections/python-celery/alternative-task-queues';
 
 // Quiz imports
-import { taskQueueFundamentalsQuiz } from './quizzes/python-celery/task-queue-fundamentals';
-import { celeryArchitectureQuiz } from './quizzes/python-celery/celery-architecture';
-import { writingFirstTasksQuiz } from './quizzes/python-celery/writing-first-tasks';
-import { taskConfigurationRoutingQuiz } from './quizzes/python-celery/task-configuration-routing';
-import { celeryBeatPeriodicTasksQuiz } from './quizzes/python-celery/celery-beat-periodic-tasks';
-import { taskResultsStateManagementQuiz } from './quizzes/python-celery/task-results-state-management';
-import { errorHandlingRetriesTimeoutsQuiz } from './quizzes/python-celery/error-handling-retries-timeouts';
-import { monitoringWithFlowerQuiz } from './quizzes/python-celery/monitoring-with-flower';
-import { redisVsRabbitmqQuiz } from './quizzes/python-celery/redis-vs-rabbitmq';
-import { distributedTaskProcessingPatternsQuiz } from './quizzes/python-celery/distributed-task-processing-patterns';
-import { canvasChainsGroupsChordsQuiz } from './quizzes/python-celery/canvas-chains-groups-chords';
-import { celeryInProductionQuiz } from './quizzes/python-celery/celery-in-production';
-import { alternativeTaskQueuesQuiz } from './quizzes/python-celery/alternative-task-queues';
+import { taskQueueFundamentalsQuiz } from '../quizzes/python-celery/task-queue-fundamentals';
+import { celeryArchitectureQuiz } from '../quizzes/python-celery/celery-architecture';
+import { writingFirstTasksQuiz } from '../quizzes/python-celery/writing-first-tasks';
+import { taskConfigurationRoutingQuiz } from '../quizzes/python-celery/task-configuration-routing';
+import { celeryBeatPeriodicTasksQuiz } from '../quizzes/python-celery/celery-beat-periodic-tasks';
+import { taskResultsStateManagementQuiz } from '../quizzes/python-celery/task-results-state-management';
+import { errorHandlingRetriesTimeoutsQuiz } from '../quizzes/python-celery/error-handling-retries-timeouts';
+import { monitoringWithFlowerQuiz } from '../quizzes/python-celery/monitoring-with-flower';
+import { redisVsRabbitmqQuiz } from '../quizzes/python-celery/redis-vs-rabbitmq';
+import { distributedTaskProcessingPatternsQuiz } from '../quizzes/python-celery/distributed-task-processing-patterns';
+import { canvasChainsGroupsChordsQuiz } from '../quizzes/python-celery/canvas-chains-groups-chords';
+import { celeryInProductionQuiz } from '../quizzes/python-celery/celery-in-production';
+import { alternativeTaskQueuesQuiz } from '../quizzes/python-celery/alternative-task-queues';
 
 // Multiple choice imports
-import { taskQueueFundamentalsMultipleChoice } from './multiple-choice/python-celery/task-queue-fundamentals';
-import { celeryArchitectureMultipleChoice } from './multiple-choice/python-celery/celery-architecture';
-import { writingFirstTasksMultipleChoice } from './multiple-choice/python-celery/writing-first-tasks';
-import { taskConfigurationRoutingMultipleChoice } from './multiple-choice/python-celery/task-configuration-routing';
-import { celeryBeatPeriodicTasksMultipleChoice } from './multiple-choice/python-celery/celery-beat-periodic-tasks';
-import { taskResultsStateManagementMultipleChoice } from './multiple-choice/python-celery/task-results-state-management';
-import { errorHandlingRetriesTimeoutsMultipleChoice } from './multiple-choice/python-celery/error-handling-retries-timeouts';
-import { monitoringWithFlowerMultipleChoice } from './multiple-choice/python-celery/monitoring-with-flower';
-import { redisVsRabbitmqMultipleChoice } from './multiple-choice/python-celery/redis-vs-rabbitmq';
-import { distributedTaskProcessingPatternsMultipleChoice } from './multiple-choice/python-celery/distributed-task-processing-patterns';
-import { canvasChainsGroupsChordsMultipleChoice } from './multiple-choice/python-celery/canvas-chains-groups-chords';
-import { celeryInProductionMultipleChoice } from './multiple-choice/python-celery/celery-in-production';
-import { alternativeTaskQueuesMultipleChoice } from './multiple-choice/python-celery/alternative-task-queues';
+import { taskQueueFundamentalsMultipleChoice } from '../multiple-choice/python-celery/task-queue-fundamentals';
+import { celeryArchitectureMultipleChoice } from '../multiple-choice/python-celery/celery-architecture';
+import { writingFirstTasksMultipleChoice } from '../multiple-choice/python-celery/writing-first-tasks';
+import { taskConfigurationRoutingMultipleChoice } from '../multiple-choice/python-celery/task-configuration-routing';
+import { celeryBeatPeriodicTasksMultipleChoice } from '../multiple-choice/python-celery/celery-beat-periodic-tasks';
+import { taskResultsStateManagementMultipleChoice } from '../multiple-choice/python-celery/task-results-state-management';
+import { errorHandlingRetriesTimeoutsMultipleChoice } from '../multiple-choice/python-celery/error-handling-retries-timeouts';
+import { monitoringWithFlowerMultipleChoice } from '../multiple-choice/python-celery/monitoring-with-flower';
+import { redisVsRabbitmqMultipleChoice } from '../multiple-choice/python-celery/redis-vs-rabbitmq';
+import { distributedTaskProcessingPatternsMultipleChoice } from '../multiple-choice/python-celery/distributed-task-processing-patterns';
+import { canvasChainsGroupsChordsMultipleChoice } from '../multiple-choice/python-celery/canvas-chains-groups-chords';
+import { celeryInProductionMultipleChoice } from '../multiple-choice/python-celery/celery-in-production';
+import { alternativeTaskQueuesMultipleChoice } from '../multiple-choice/python-celery/alternative-task-queues';
 
 export const pythonCeleryModule: Module = {
   id: 'python-celery',
@@ -58,127 +58,73 @@ export const pythonCeleryModule: Module = {
     'Master asynchronous task processing with Celery. Build scalable background job systems for email sending, report generation, data processing, and scheduled tasks. Learn Redis vs RabbitMQ, error handling, monitoring, and production deployment.',
   icon: '🔄',
   difficulty: 'Intermediate',
-  estimatedHours: 24,
-  topic: 'Python',
-  curriculum: 'python',
+  estimatedTime: '24 hours',
 
   sections: [
     {
-      id: 'task-queue-fundamentals',
-      title: 'Task Queue Fundamentals',
-      content: taskQueueFundamentals.content,
+      ...taskQueueFundamentals,
       quiz: taskQueueFundamentalsQuiz,
       multipleChoice: taskQueueFundamentalsMultipleChoice,
-      order: 1,
-      estimatedMinutes: 90,
     },
     {
-      id: 'celery-architecture',
-      title: 'Celery Architecture & Components',
-      content: celeryArchitecture.content,
+      ...celeryArchitecture,
       quiz: celeryArchitectureQuiz,
       multipleChoice: celeryArchitectureMultipleChoice,
-      order: 2,
-      estimatedMinutes: 100,
     },
     {
-      id: 'writing-first-tasks',
-      title: 'Writing Your First Celery Tasks',
-      content: writingFirstTasks.content,
+      ...writingFirstTasks,
       quiz: writingFirstTasksQuiz,
       multipleChoice: writingFirstTasksMultipleChoice,
-      order: 3,
-      estimatedMinutes: 120,
     },
     {
-      id: 'task-configuration-routing',
-      title: 'Task Configuration & Routing',
-      content: taskConfigurationRouting.content,
+      ...taskConfigurationRouting,
       quiz: taskConfigurationRoutingQuiz,
       multipleChoice: taskConfigurationRoutingMultipleChoice,
-      order: 4,
-      estimatedMinutes: 110,
     },
     {
-      id: 'celery-beat-periodic-tasks',
-      title: 'Celery Beat & Periodic Tasks',
-      content: celeryBeatPeriodicTasks.content,
+      ...celeryBeatPeriodicTasks,
       quiz: celeryBeatPeriodicTasksQuiz,
       multipleChoice: celeryBeatPeriodicTasksMultipleChoice,
-      order: 5,
-      estimatedMinutes: 100,
     },
     {
-      id: 'task-results-state-management',
-      title: 'Task Results & State Management',
-      content: taskResultsStateManagement.content,
+      ...taskResultsStateManagement,
       quiz: taskResultsStateManagementQuiz,
       multipleChoice: taskResultsStateManagementMultipleChoice,
-      order: 6,
-      estimatedMinutes: 90,
     },
     {
-      id: 'error-handling-retries-timeouts',
-      title: 'Error Handling, Retries & Timeouts',
-      content: errorHandlingRetriesTimeouts.content,
+      ...errorHandlingRetriesTimeouts,
       quiz: errorHandlingRetriesTimeoutsQuiz,
       multipleChoice: errorHandlingRetriesTimeoutsMultipleChoice,
-      order: 7,
-      estimatedMinutes: 110,
     },
     {
-      id: 'monitoring-with-flower',
-      title: 'Task Monitoring with Flower',
-      content: monitoringWithFlower.content,
+      ...monitoringWithFlower,
       quiz: monitoringWithFlowerQuiz,
       multipleChoice: monitoringWithFlowerMultipleChoice,
-      order: 8,
-      estimatedMinutes: 90,
     },
     {
-      id: 'redis-vs-rabbitmq',
-      title: 'Redis vs RabbitMQ as Message Broker',
-      content: redisVsRabbitmq.content,
+      ...redisVsRabbitmq,
       quiz: redisVsRabbitmqQuiz,
       multipleChoice: redisVsRabbitmqMultipleChoice,
-      order: 9,
-      estimatedMinutes: 100,
     },
     {
-      id: 'distributed-task-processing-patterns',
-      title: 'Distributed Task Processing Patterns',
-      content: distributedTaskProcessingPatterns.content,
+      ...distributedTaskProcessingPatterns,
       quiz: distributedTaskProcessingPatternsQuiz,
       multipleChoice: distributedTaskProcessingPatternsMultipleChoice,
-      order: 10,
-      estimatedMinutes: 120,
     },
     {
-      id: 'canvas-chains-groups-chords',
-      title: 'Canvas: Chains, Groups, Chords',
-      content: canvasChainsGroupsChords.content,
+      ...canvasChainsGroupsChords,
       quiz: canvasChainsGroupsChordsQuiz,
       multipleChoice: canvasChainsGroupsChordsMultipleChoice,
-      order: 11,
-      estimatedMinutes: 110,
     },
     {
-      id: 'celery-in-production',
-      title: 'Celery in Production',
-      content: celeryInProduction.content,
+      ...celeryInProduction,
       quiz: celeryInProductionQuiz,
       multipleChoice: celeryInProductionMultipleChoice,
-      order: 12,
-      estimatedMinutes: 130,
     },
     {
-      id: 'alternative-task-queues',
-      title: 'Alternative Task Queues (RQ, Dramatiq, Huey)',
-      content: alternativeTaskQueues.content,
+      ...alternativeTaskQueues,
       quiz: alternativeTaskQueuesQuiz,
       multipleChoice: alternativeTaskQueuesMultipleChoice,
-      order: 13,
-      estimatedMinutes: 80,
     },
   ],
 
@@ -222,66 +168,29 @@ export const pythonCeleryModule: Module = {
       description:
         'Build a system to send 1M marketing emails using Celery with rate limiting, retry logic, and progress tracking',
       difficulty: 'Intermediate',
-      estimatedHours: 6,
+      estimatedTime: '6 hours',
     },
     {
       title: 'Video Processing Pipeline',
       description:
         'Create a video processing pipeline: upload, transcode to multiple formats, generate thumbnails, and deliver via CDN',
       difficulty: 'Advanced',
-      estimatedHours: 10,
+      estimatedTime: '10 hours',
     },
     {
       title: 'Financial Report Generator',
       description:
         'Build a daily report generator using map-reduce to process millions of transactions and generate PDFs',
       difficulty: 'Advanced',
-      estimatedHours: 8,
+      estimatedTime: '8 hours',
     },
     {
       title: 'Social Media Scheduler',
       description:
         'Implement a social media post scheduler with Celery Beat for multiple platforms (Twitter, Facebook, LinkedIn)',
       difficulty: 'Intermediate',
-      estimatedHours: 5,
+      estimatedTime: '5 hours',
     },
   ],
 
-  resources: [
-    {
-      title: 'Official Celery Documentation',
-      url: 'https://docs.celeryq.dev',
-      type: 'documentation',
-    },
-    {
-      title: 'Flower Documentation',
-      url: 'https://flower.readthedocs.io',
-      type: 'documentation',
-    },
-    {
-      title: 'Redis Documentation',
-      url: 'https://redis.io/docs',
-      type: 'documentation',
-    },
-    {
-      title: 'RabbitMQ Tutorials',
-      url: 'https://www.rabbitmq.com/getstarted.html',
-      type: 'tutorial',
-    },
-  ],
-
-  tags: [
-    'celery',
-    'task-queue',
-    'async',
-    'background-jobs',
-    'redis',
-    'rabbitmq',
-    'distributed-systems',
-    'scalability',
-    'monitoring',
-    'production',
-    'workflow',
-    'scheduling',
-  ],
 };

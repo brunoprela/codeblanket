@@ -1,8 +1,7 @@
-export const testingFastapiMultipleChoice = {
-  title: 'Testing FastAPI Applications - Multiple Choice',
-  id: 'testing-fastapi-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const testingFastapiMultipleChoice = [
+  {
       id: 1,
       question:
         "What is the primary advantage of using FastAPI's TestClient for testing?",
@@ -70,5 +69,4 @@ export const testingFastapiMultipleChoice = {
       explanation:
         'Pytest fixtures enable DRY testing by providing reusable setup/teardown. Common fixtures: @pytest.fixture def client(): return TestClient(app) (test client), @pytest.fixture def db(): (database session with rollback), @pytest.fixture def authenticated_client(): (client with auth token). Fixtures can depend on other fixtures, have different scopes (function, session), and automatically handle cleanup with yield. Benefits: Reduce boilerplate, ensure consistent test setup, automatic cleanup, composition through fixture dependencies.',
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

@@ -1,8 +1,7 @@
-export const fileUploadsStreamingMultipleChoice = {
-  title: 'File Uploads & Streaming Responses - Multiple Choice',
-  id: 'file-uploads-streaming-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const fileUploadsStreamingMultipleChoice = [
+  {
       id: 1,
       question:
         'Why should you validate file types using "magic numbers" instead of file extensions?',
@@ -72,5 +71,4 @@ export const fileUploadsStreamingMultipleChoice = {
       explanation:
         'Content-Disposition controls how browsers handle the response. Without it: Browser might display PDF inline, try to render CSV as text, play video instead of downloading. With Content-Disposition: attachment: Browser downloads file. With filename: Browser uses your specified filename (not ugly UUID). Example: headers={"Content-Disposition": "attachment; filename=report_2024.csv"}. Result: Browser downloads as "report_2024.csv". Without filename: Browser uses URL path or generates random name. Security consideration: Sanitize filename to prevent path traversal attacks (../../etc/passwd). Options: 1) attachment → download, 2) inline → display in browser (for images, PDFs). Content-Disposition doesn\'t encrypt (option 2—use TLS), doesn\'t compress (option 3—use Content-Encoding: gzip), and isn\'t required for streaming (option 4—streaming works without it, but UX suffers). Production pattern: StreamingResponse(..., headers={"Content-Disposition": f"attachment; filename={safe_filename}"}). This ensures users get properly named downloads instead of "download.bin" or inline display.',
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

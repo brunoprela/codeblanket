@@ -1,7 +1,4 @@
-export const websocketsRealtimeQuiz = {
-  title: 'WebSockets & Real-Time Communication - Discussion Questions',
-  id: 'websockets-realtime-quiz',
-  questions: [
+export const websocketsRealtimeQuiz = [
     {
       id: 1,
       question:
@@ -1400,5 +1397,5 @@ async def dashboard_websocket(
 - Server sends aggregated state + missing historical data
 - Resume real-time updates`,
     },
-  ],
-};
+
+].map(({ id, ...q }, idx) => ({ id: `fastapi-websockets-realtime-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));

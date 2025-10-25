@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const relationshipLoadingQuiz = [
   {
     id: 'sql-loading-q-1',

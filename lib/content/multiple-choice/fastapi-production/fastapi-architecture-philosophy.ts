@@ -1,8 +1,7 @@
 import { MultipleChoiceQuestion } from '@/lib/types';
 
-export const fastapiArchitecturePhilosophyMultipleChoice: MultipleChoiceQuestion[] =
-  [
-    {
+export const fastapiArchitecturePhilosophyMultipleChoice = [
+  {
       id: 'fastapi-arch-mc-1',
       question:
         'What is the primary reason FastAPI achieves performance comparable to NodeJS and Go?',

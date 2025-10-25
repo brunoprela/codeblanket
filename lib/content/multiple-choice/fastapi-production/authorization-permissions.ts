@@ -1,8 +1,7 @@
-export const authorizationPermissionsMultipleChoice = {
-  title: 'Authorization & Permissions - Multiple Choice',
-  id: 'authorization-permissions-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const authorizationPermissionsMultipleChoice = [
+  {
       id: 1,
       question:
         'What is the primary difference between authentication and authorization in FastAPI applications?',
@@ -72,5 +71,4 @@ export const authorizationPermissionsMultipleChoice = {
       explanation:
         'HIPAA requires comprehensive audit trails that log ALL access attempts (success and failure) with detailed context. This provides: 1) Forensic investigation capability (who accessed what when), 2) Breach detection (unusual access patterns), 3) Compliance evidence (demonstrate due diligence), 4) Anomaly detection (multiple failed attempts may indicate attack). The audit log should include: timestamp, user_id, action (read_patient, update_diagnosis), resource (patient:123), result (success/denied), reason (why denied), and metadata (IP address, user agent). Logging only denials (option 2) misses the critical "who accessed what" data. Logging only sensitive fields (option 3) misses context. Logging only admins (option 4) violates least privilege—all users should be audited. The pattern: use a decorator or dependency that wraps every protected endpoint and logs before/after execution.',
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

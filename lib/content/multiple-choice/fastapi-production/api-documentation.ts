@@ -1,8 +1,7 @@
-export const apiDocumentationMultipleChoice = {
-  title: 'API Documentation - Multiple Choice',
-  id: 'api-documentation-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const apiDocumentationMultipleChoice = [
+  {
       id: 1,
       question:
         "What is the primary advantage of FastAPI's automatic OpenAPI documentation generation?",
@@ -71,5 +70,4 @@ export const apiDocumentationMultipleChoice = {
       explanation:
         'OpenAPI Generator (openapi-generator-cli) generates client SDKs in Python, TypeScript, Go, Java, Ruby, PHP, etc. from /openapi.json. Ensures clients stay in sync with API and reduces manual SDK maintenance.',
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

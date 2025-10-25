@@ -1,8 +1,7 @@
 import { MultipleChoiceQuestion } from '@/lib/types';
 
-export const pathOperationsRoutingMultipleChoice: MultipleChoiceQuestion[] = [
+export const pathOperationsRoutingMultipleChoice = [
   {
-    id: 'fastapi-routing-mc-1',
     question:
       'What is the correct HTTP method for partially updating a resource?',
     options: [
@@ -69,4 +68,4 @@ export const pathOperationsRoutingMultipleChoice: MultipleChoiceQuestion[] = [
     explanation:
       '{path:path} syntax allows capturing paths with slashes. Example: @app.get("/files/{file_path:path}") allows GET /files/docs/api/readme.md where file_path = "docs/api/readme.md". Without :path, slashes would be interpreted as separate path segments and cause 404. Regular parameter {file_path} would only match until first slash. Use cases: file serving, nested resource paths, proxy endpoints. Alternative: URL encode slashes (%2F), but :path is cleaner and more idiomatic.',
   },
-];
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

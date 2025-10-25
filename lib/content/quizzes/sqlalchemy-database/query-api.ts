@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const queryApiQuiz = [
   {
     id: 'sql-query-q-1',

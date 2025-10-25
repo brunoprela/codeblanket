@@ -1,8 +1,7 @@
 import { MultipleChoiceQuestion } from '@/lib/types';
 
-export const databaseIntegrationSqlalchemyMultipleChoice: MultipleChoiceQuestion[] =
-  [
-    {
+export const databaseIntegrationSqlalchemyMultipleChoice = [
+  {
       id: 'fastapi-db-mc-1',
       question:
         'What is the purpose of pool_pre_ping in SQLAlchemy engine configuration?',

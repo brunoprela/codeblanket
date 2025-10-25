@@ -1,8 +1,7 @@
-export const productionDeploymentMultipleChoice = {
-  title: 'Production Deployment - Multiple Choice',
-  id: 'production-deployment-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const productionDeploymentMultipleChoice = [
+  {
       id: 1,
       question:
         'What is the role of Gunicorn when deploying FastAPI to production?',
@@ -72,5 +71,4 @@ export const productionDeploymentMultipleChoice = {
       explanation:
         "Multi-stage build pattern: Stage 1 (builder): FROM python:3.11, install build tools (gcc, make), pip install packages. Stage 2 (final): FROM python:3.11-slim, copy only installed packages from builder, copy application code. Result: Build dependencies (gcc, pip cache) not in final image. Benefits: Smaller images (500MB → 150MB), faster deployments, fewer attack vectors (no build tools in production), lower storage costs. Doesn't affect runtime performance (option 2). Not required (option 3) but highly recommended. Not about multiple environments (option 4) - use separate images for that. Example: Builder installs psycopg2 (needs gcc), final image only has compiled psycopg2 (no gcc).",
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

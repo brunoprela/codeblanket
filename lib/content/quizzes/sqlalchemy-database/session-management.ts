@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const sessionManagementQuiz = [
   {
     id: 'sql-session-q-1',

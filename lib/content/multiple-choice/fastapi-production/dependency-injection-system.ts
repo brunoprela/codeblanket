@@ -1,8 +1,7 @@
 import { MultipleChoiceQuestion } from '@/lib/types';
 
-export const dependencyInjectionSystemMultipleChoice: MultipleChoiceQuestion[] =
-  [
-    {
+export const dependencyInjectionSystemMultipleChoice = [
+  {
       id: 'fastapi-di-mc-1',
       question:
         'How does FastAPI handle dependencies that are used multiple times in a single request?',

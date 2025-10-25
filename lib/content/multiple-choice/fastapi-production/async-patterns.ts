@@ -1,8 +1,7 @@
-export const asyncPatternsMultipleChoice = {
-  title: 'Async FastAPI Patterns - Multiple Choice',
-  id: 'async-patterns-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const asyncPatternsMultipleChoice = [
+  {
       id: 1,
       question:
         'When should you use async endpoints vs sync endpoints in FastAPI?',
@@ -70,5 +69,4 @@ export const asyncPatternsMultipleChoice = {
       explanation:
         "Common mistake: async def endpoint(): result = sync_db_query() (blocks event loop!). Sync operations in async functions don't automatically become async (option 4). Mixing is allowed (option 3) but requires care. Pattern for fixing: Use asyncio.to_thread() to run blocking code: result = await asyncio.to_thread(sync_function). Or use async alternatives: async with httpx.AsyncClient(), async SQLAlchemy. The danger: One blocking call in an async endpoint blocks all other requests. Not a syntax error (option 2) but a performance killer. Always use async versions of libraries in async endpoints.",
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

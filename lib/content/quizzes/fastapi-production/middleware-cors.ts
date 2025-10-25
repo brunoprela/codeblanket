@@ -1,7 +1,4 @@
-export const middlewareCorsQuiz = {
-  title: 'Middleware & CORS - Discussion Questions',
-  id: 'middleware-cors-quiz',
-  questions: [
+export const middlewareCorsQuiz = [
     {
       id: 1,
       question:
@@ -274,5 +271,5 @@ async function apiCall() {
 
 **Distributed**: Redis ensures rate limits work across multiple API servers (all check same Redis instance).`,
     },
-  ],
-};
+
+].map(({ id, ...q }, idx) => ({ id: `fastapi-middleware-cors-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));

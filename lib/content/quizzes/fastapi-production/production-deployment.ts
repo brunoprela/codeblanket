@@ -1,7 +1,4 @@
-export const productionDeploymentQuiz = {
-  title: 'Production Deployment - Discussion Questions',
-  id: 'production-deployment-quiz',
-  questions: [
+export const productionDeploymentQuiz = [
     {
       id: 1,
       question:
@@ -20,13 +17,14 @@ export const productionDeploymentQuiz = {
         'Design a comprehensive monitoring and observability strategy for production FastAPI deployment. The system must track: API response times, error rates, request throughput, database connection pool usage, Redis cache hit/miss ratio, CPU/memory usage, and custom business metrics. Implement Prometheus metrics collection, Grafana dashboards, alerting rules (when to alert on-call engineer), structured logging with context (request IDs), and integration with error tracking (Sentry). Show how to debug a production issue using logs and metrics.',
       answer: `Complete observability stack with Prometheus metrics (request_duration, error_rate, db_pool_usage), Grafana dashboards (golden signals: latency, traffic, errors, saturation), alerting rules (error rate > 5% for 5min), structured logging with request IDs for tracing, and Sentry integration for error tracking. Includes debugging workflow using correlated logs and metrics.`,
     },
-  ],
-};
+  ].map(({ id, ...q }, idx) => ({
+    id: `fastapi-deployment-q-${idx + 1}`,
+    question: q.question,
+    sampleAnswer: String(q.answer),
+    keyPoints: []
+  }));
 
-export const productionDeploymentMultipleChoice = {
-  title: 'Production Deployment - Multiple Choice',
-  id: 'production-deployment-mc',
-  questions: [
+export const productionDeploymentMultipleChoice = [
     {
       id: 1,
       question:
@@ -97,5 +95,4 @@ export const productionDeploymentMultipleChoice = {
       explanation:
         "Multi-stage build pattern: Stage 1 (builder): FROM python:3.11, install build tools (gcc, make), pip install packages. Stage 2 (final): FROM python:3.11-slim, copy only installed packages from builder, copy application code. Result: Build dependencies (gcc, pip cache) not in final image. Benefits: Smaller images (500MB → 150MB), faster deployments, fewer attack vectors (no build tools in production), lower storage costs. Doesn't affect runtime performance (option 2). Not required (option 3) but highly recommended. Not about multiple environments (option 4) - use separate images for that. Example: Builder installs psycopg2 (needs gcc), final image only has compiled psycopg2 (no gcc).",
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `production-deployment-mc-${idx + 1}`, ...q }));

@@ -1,8 +1,7 @@
-export const middlewareCorsMultipleChoice = {
-  title: 'Middleware & CORS - Multiple Choice',
-  id: 'middleware-cors-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const middlewareCorsMultipleChoice = [
+  {
       id: 1,
       question:
         'In FastAPI middleware, why does the order in which middleware is added matter?',
@@ -72,5 +71,4 @@ export const middlewareCorsMultipleChoice = {
       explanation:
         "Rate limiting prevents abuse: DDoS attacks, credential stuffing, API scraping, resource exhaustion. Implementation: Track requests per identifier (IP for anonymous, user_id for authenticated), limit to N requests per time window (e.g., 100/minute), return 429 Too Many Requests when exceeded. Position in middleware stack: BEFORE authentication. Why before auth: Prevents attackers from discovering valid credentials through timing attacks - if auth is first, attacker can make 1000 login attempts to find valid usernames/passwords before rate limit applies. If rate limit is first, attacker is blocked at 10 attempts regardless of auth outcome. Example: Attacker tries user@example.com with 1000 passwords → rate limit blocks after 10 attempts → protects auth system. Rate limiting isn't for load balancing (option 2 - that's load balancer's job), and shouldn't be after auth (option 3 - defeats security purpose). Rate limiting is crucial for both public AND authenticated APIs (option 4) - authenticated users can still abuse. Common limits: Anonymous: 10-100/min, Free users: 100-1000/min, Premium: 10,000/min. Implementation: Use Redis for distributed rate limiting across multiple API servers.",
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

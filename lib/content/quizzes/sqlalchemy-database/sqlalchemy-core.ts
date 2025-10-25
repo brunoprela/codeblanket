@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const sqlalchemyCoreQuiz = [
   {
     id: 'sql-core-q-1',

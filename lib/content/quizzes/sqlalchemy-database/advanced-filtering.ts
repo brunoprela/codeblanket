@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const advancedFilteringQuiz = [
   {
     id: 'sql-filter-q-1',

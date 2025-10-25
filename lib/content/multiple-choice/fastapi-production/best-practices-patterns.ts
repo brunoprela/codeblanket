@@ -1,8 +1,7 @@
-export const bestPracticesPatternsMultipleChoice = {
-  title: 'FastAPI Best Practices & Patterns - Multiple Choice',
-  id: 'best-practices-patterns-mc',
-  questions: [
-    {
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const bestPracticesPatternsMultipleChoice = [
+  {
       id: 1,
       question:
         'What is the recommended way to manage configuration and secrets in production FastAPI applications?',
@@ -70,5 +69,4 @@ export const bestPracticesPatternsMultipleChoice = {
       explanation:
         "Code quality tool benefits: Black (consistent formatting, no style debates), isort (organized imports), ruff (fast linting, catches bugs like unused variables), mypy (type checking catches type errors before runtime). Benefits: Team consistency (code looks uniform), catch bugs early (mypy finds type mismatches), faster reviews (no style discussions), easier onboarding (predictable code). Setup: pre-commit hooks run tools automatically on git commit. They don't affect runtime performance (option 2), aren't required by FastAPI (option 3), and don't fix logic bugs automatically (option 4) - they catch potential issues and enforce standards. Production pattern: Run in CI/CD, block merge if checks fail.",
     },
-  ],
-};
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

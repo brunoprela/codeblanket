@@ -1,7 +1,4 @@
-export const fileUploadsStreamingQuiz = {
-  title: 'File Uploads & Streaming Responses - Discussion Questions',
-  id: 'file-uploads-streaming-quiz',
-  questions: [
+export const fileUploadsStreamingQuiz = [
     {
       id: 1,
       question:
@@ -627,5 +624,5 @@ async function cancelDownload(exportId) {
 5. **Cancellation**: Set flag, check in generator loop
 6. **Cleanup**: Background task removes old progress data`,
     },
-  ],
-};
+
+].map(({ id, ...q }, idx) => ({ id: `fastapi-file-uploads-streaming-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));

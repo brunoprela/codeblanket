@@ -1,7 +1,4 @@
-export const backgroundTasksQuiz = {
-  title: 'Background Tasks - Discussion Questions',
-  id: 'background-tasks-quiz',
-  questions: [
+export const backgroundTasksQuiz = [
     {
       id: 1,
       question:
@@ -1272,12 +1269,10 @@ celery_app.conf.broker_pool_limit = 10
 ✅ Track: Task success/failure rate, duration, queue length, worker status  
 ✅ Alert: High failure rate, queue backlog, no workers, slow tasks  
 ✅ Dashboard: Real-time Grafana with task throughput and latency graphs  
-✅ Health checks: Expose ` /
-        health /
-        celery` endpoint  
+✅ Health checks: Expose \`/health/celery\` endpoint  
 ✅ Logging: Structured logs with task_id, task_name, duration  
 ✅ Diagnostic tools: Scripts to identify stuck queues  
 ✅ Regular reviews: Analyze slow tasks weekly`,
     },
-  ],
-};
+
+].map(({ id, ...q }, idx) => ({ id: `fastapi-background-tasks-q-${idx + 1}`, question: q.question, sampleAnswer: String(q.answer), keyPoints: [] }));

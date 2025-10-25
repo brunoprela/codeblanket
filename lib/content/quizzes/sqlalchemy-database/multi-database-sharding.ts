@@ -1,3 +1,5 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
 export const multiDatabaseShardingQuiz = [
   {
     id: 'sql-multi-db-q-1',

@@ -1,8 +1,7 @@
 import { MultipleChoiceQuestion } from '@/lib/types';
 
-export const authenticationJwtOauth2MultipleChoice: MultipleChoiceQuestion[] = [
+export const authenticationJwtOauth2MultipleChoice = [
   {
-    id: 'fastapi-auth-mc-1',
     question: 'Why should passwords be hashed with bcrypt instead of SHA256?',
     options: [
       'bcrypt is faster than SHA256',
@@ -68,4 +67,4 @@ export const authenticationJwtOauth2MultipleChoice: MultipleChoiceQuestion[] = [
     explanation:
       'Hardcoding secrets in code is CRITICAL security vulnerability. If code is: pushed to GitHub (even private repos—can be leaked), shared with contractors, deployed (logs may expose it), anyone with code access can forge tokens! Environment variables: not in version control (.env in .gitignore), different per environment (dev/staging/prod keys separate), can be rotated without code changes, stored in secure secret managers (AWS Secrets Manager, HashiCorp Vault). Usage: SECRET_KEY = os.getenv("JWT_SECRET_KEY") or settings.jwt_secret_key. Never: SECRET_KEY = "hardcoded-secret-key" in code. If secret exposed: Rotate immediately, invalidate all tokens, audit for unauthorized access.',
   },
-];
+].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));
