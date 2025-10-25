@@ -793,5 +793,5 @@ Now that you master async error handling, you'll learn:
 - Production deployment
 
 **Remember**: Proper error handling is critical for reliable async applications!
-\`,
+`,
 };

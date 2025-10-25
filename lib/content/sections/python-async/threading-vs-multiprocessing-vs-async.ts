@@ -703,5 +703,5 @@ Now that you understand concurrency models, we'll explore:
 - Advanced async patterns
 
 **Remember**: Choose based on workload type (CPU vs I/O) and concurrency level!
-\`,
+`,
 };

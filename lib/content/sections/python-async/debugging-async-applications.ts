@@ -542,5 +542,5 @@ async def handle_request(user_id):
 - Handle all background task errors
 
 **Remember**: Debug mode is your friend—use it in development to catch async bugs early!
-\`,
+`,
 };

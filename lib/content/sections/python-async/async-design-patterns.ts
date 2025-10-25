@@ -506,5 +506,5 @@ asyncio.run(main())
 - Pipeline + Worker Pool: Parallel processing at each stage
 
 **Remember**: Choose patterns based on your concurrency requirements!
-\`,
+`,
 };

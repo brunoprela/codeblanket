@@ -603,5 +603,5 @@ Now that you master concurrent.futures, we'll explore:
 - Advanced production patterns
 
 **Remember**: concurrent.futures is the simplest way to add concurrency to Python!
-\`,
+`,
 };

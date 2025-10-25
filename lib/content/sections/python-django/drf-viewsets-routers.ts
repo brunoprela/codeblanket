@@ -747,5 +747,5 @@ class ArticleViewSet(viewsets.ModelViewSet):
 - ✅ Test all endpoints
 
 ViewSets and Routers are the recommended way to build DRF APIs - they reduce code while maintaining flexibility and following best practices.
-\`,
+`,
 };

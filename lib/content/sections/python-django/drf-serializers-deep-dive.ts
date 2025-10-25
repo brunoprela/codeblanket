@@ -742,5 +742,5 @@ class ArticleSerializer(DynamicFieldsModelSerializer):
 - Context-aware serialization (user permissions, etc.)
 
 Serializers are the heart of DRF - mastering them is essential for building robust, efficient APIs.
-\`,
+`,
 };

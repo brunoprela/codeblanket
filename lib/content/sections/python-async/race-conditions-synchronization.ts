@@ -600,5 +600,5 @@ asyncio.run(main())
 - Use context managers (\`with lock\`) for safety
 
 **Remember**: Synchronization is essential for shared state in concurrent programs!
-\`,
+`,
 };

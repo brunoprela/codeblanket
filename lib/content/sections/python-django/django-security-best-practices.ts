@@ -597,5 +597,5 @@ LOGGING = {
 10. **Insufficient Logging**: Log security events
 
 Security is not optional - it's essential for production Django applications.
-\`,
+`,
 };

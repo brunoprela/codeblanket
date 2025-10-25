@@ -654,5 +654,5 @@ pool = await create_pool(
 - Metrics for monitoring
 
 **Congratulations!** You've mastered asynchronous Python from fundamentals to production deployment!
-\`,
+`,
 };

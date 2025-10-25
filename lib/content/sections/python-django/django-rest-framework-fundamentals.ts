@@ -677,5 +677,5 @@ REST_FRAMEWORK = {
 - ✅ Test all endpoints
 
 DRF provides everything needed to build production APIs quickly while following REST best practices. The framework handles the repetitive parts so you can focus on business logic.
-\`,
+`,
 };

@@ -674,5 +674,5 @@ jobs:
 - Auto-scaling
 
 Django is production-ready out of the box, but proper configuration and infrastructure are essential for scalable, secure deployments.
-\`
+`,
 };

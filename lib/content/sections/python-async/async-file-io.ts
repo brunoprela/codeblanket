@@ -544,5 +544,5 @@ Now that you master async file I/O, we'll explore:
 - Complete application examples
 
 **Remember**: Async file I/O enables concurrent file processing without blocking!
-\`,
+`,
 };

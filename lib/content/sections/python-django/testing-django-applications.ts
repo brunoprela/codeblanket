@@ -620,5 +620,5 @@ open htmlcov/index.html
 - ✅ Run tests in CI/CD
 
 Comprehensive testing ensures Django applications are reliable, maintainable, and production-ready.
-\`,
+`,
 };

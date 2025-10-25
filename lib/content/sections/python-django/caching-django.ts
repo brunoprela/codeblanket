@@ -614,5 +614,5 @@ def get_cached_data_safe(key, fallback_fn, timeout=300):
 - Version cache keys to avoid stale data
 
 Caching is one of the most effective ways to improve Django application performance. Start with simple view caching, then add granular caching as needed.
-\`,
+`,
 };

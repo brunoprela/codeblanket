@@ -574,5 +574,5 @@ class ArticleFilter(django_filters.FilterSet):
 - Full-text search with PostgreSQL
 
 Efficient filtering, searching, and pagination are essential for building usable, scalable APIs that handle large datasets gracefully.
-\`,
+`,
 };

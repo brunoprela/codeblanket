@@ -1,7 +1,7 @@
 export const authenticationPermissionsDrf = {
-    title: 'Authentication & Permissions in DRF',
-    id: 'authentication-permissions-drf',
-    content: `
+  title: 'Authentication & Permissions in DRF',
+  id: 'authentication-permissions-drf',
+  content: `
 # Authentication & Permissions in DRF
 
 ## Introduction
@@ -453,5 +453,5 @@ class ArticleViewSet(viewsets.ModelViewSet):
 - ✅ Add MFA for sensitive operations
 
 Authentication and permissions are critical for API security. Choose the right authentication scheme for your use case and implement granular permissions to control access.
-\`,
+`,
 };

@@ -572,5 +572,5 @@ WantedBy=multi-user.target
 - ✅ Test tasks thoroughly
 
 Celery transforms Django applications by enabling background processing, scheduled tasks, and distributed computing. It's essential for building scalable, responsive applications.
-\`,
+`,
 };

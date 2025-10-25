@@ -699,5 +699,5 @@ Now that you master async databases, we'll explore:
 - Production deployment
 
 **Remember**: Async databases enable thousands of concurrent queries with minimal overhead!
-\`,
+`,
 };
