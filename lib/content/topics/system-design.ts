@@ -25,6 +25,5 @@ export const systemDesignTopic = {
     'distributed-file-systems-databases',
     'system-design-case-studies',
     'real-world-architectures',
-    'system-design-trading',
   ],
 };
