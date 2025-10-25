@@ -12,5 +12,11 @@ export const pythonTopic = {
     'python-intermediate',
     'python-advanced',
     'python-oop',
+    'sqlalchemy-database',
+    'python-async',
+    'python-celery',
+    'python-django',
+    'fastapi-production',
+    'python-testing',
   ],
 };

@@ -27,5 +27,7 @@ export const quantitativeProgrammingTopic = {
     'quantitative-finance',
     'time-series-financial-ml',
     'ml-ai-llm-applications-finance',
+    'quant-interview-prep',
+    'system-design-trading',
   ],
 };

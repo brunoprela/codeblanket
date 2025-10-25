@@ -1,0 +1,21 @@
+export const advancedAlembicQuiz = [
+    {
+        id: 'sql-adv-alembic-q-1',
+        question: 'Explain how to create a custom Alembic operation for creating database views. Include: (1) why views need custom operations, (2) complete implementation with upgrade/downgrade, (3) handling dependencies, (4) testing strategy.',
+        sampleAnswer: `Custom view operation: (1) Views need custom ops because Alembic autogenerate doesn\'t detect views (only tables/columns). Must manually create. (2) Implementation: @Operations.register_operation("create_view") class CreateViewOp(MigrateOperation). Usage: op.create_view("active_users", "SELECT * FROM users WHERE active=true"). Downgrade: op.execute("DROP VIEW active_users"). (3) Dependencies: Views depend on tables - ensure table migrations run first. (4) Test: Verify view exists, query works, downgrade drops view.',
+        keyPoints: ['Views not auto-detected', 'Custom operation with @register_operation', 'Dependencies: tables before views', 'Test: create, query, drop']
+    },
+    {
+        id: 'sql-adv-alembic-q-2',
+        question: 'Design a migration strategy for renaming a table with foreign key constraints from other tables. Address all constraint recreation steps.',
+        sampleAnswer: `Table rename with FKs: (1) Drop all FK constraints referencing table, (2) Rename table, (3) Recreate FK constraints with new table name. Must handle multiple referring tables. Batch in single migration to maintain referential integrity. Test thoroughly - FK violations break production.',
+        keyPoints: ['Drop FKs first', 'Rename table', 'Recreate FKs', 'Single transaction', 'Test referential integrity']
+    },
+    {
+        id: 'sql-adv-alembic-q-3',
+        question: 'Explain batch operations in Alembic for SQLite and when they are necessary. Include limitations and workarounds.',
+        sampleAnswer: `SQLite batch mode: SQLite doesn\'t support many ALTER TABLE operations (add FK, drop column, etc). Batch mode creates temp table, copies data, renames. Syntax: with op.batch_alter_table("users"): batch_op.add_column(...). Necessary for: dropping columns, adding FKs, renaming columns. Limitation: Slow for large tables (full table copy). Workaround: Consider PostgreSQL for production if schema changes frequent.',
+        keyPoints: ['SQLite ALTER TABLE limited', 'Batch: temp table + copy + rename', 'Slow for large tables', 'Use for: drop column, add FK', 'PostgreSQL better for production']
+    }
+];
+

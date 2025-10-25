@@ -1,0 +1,59 @@
+export const productionPatternsQuiz = [
+    {
+        id: 'sql-prod-q-1',
+        question: 'Design a complete production database configuration for a high-traffic web application (10K requests/second). Address: (1) connection pool sizing, (2) caching strategy, (3) monitoring setup, (4) error handling, (5) health checks. Include complete code examples.',
+        sampleAnswer: \'Production database configuration: (1) Connection pool sizing: Formula: pool_size = number_of_app_threads. Example: 10 gunicorn workers * 4 threads = 40 threads. pool_size=40, max_overflow=80 (2x for burst), pool_timeout=30, pool_recycle=3600 (prevent stale), pool_pre_ping=True (catch disconnects before use). Total capacity: 40 + 80 = 120 connections. PostgreSQL max_connections=200 (allow headroom). (2) Caching strategy: Redis query result cache. TTL: 5 minutes for frequently read data (user profiles, posts). Invalidation: Explicit on write - invalidate_user_cache(user_id) after update. Pattern: Check cache → if miss, query DB → store in cache. Benefit: 80% cache hit rate = 80% fewer DB queries. (3) Monitoring: Prometheus metrics - db_query_total (counter by operation), db_query_duration_seconds (histogram), db_pool_checked_out (gauge). Grafana dashboards: query latency p50/p95/p99, pool utilization, slow queries. Alerts: Pool > 80% utilized, query > 1s, replication lag > 500ms. Logging: Slow queries (> 100ms) with EXPLAIN plans. (4) Error handling: Retry with tenacity - @retry(stop_after_attempt=3, wait=wait_exponential, retry=retry_if_exception_type(OperationalError)). Graceful degradation: On DB error, return cached data or error message (don\'t crash). Circuit breaker: After N failures, stop querying DB for X seconds (prevent cascade failure). (5) Health checks: /health endpoint - test SELECT 1, check pool status (alert if > 80% utilized), return 200 OK or 503 Service Unavailable. Load balancer uses health check to route traffic. Result: 10K req/s supported, 80% cache hit rate, <50ms p95 query latency, 99.9% uptime.\',
+        keyPoints: [\'Pool sizing: pool_size = app_threads (40), max_overflow = 2x (80)\', \'Caching: Redis 5min TTL + explicit invalidation on write, 80% hit rate\', \'Monitoring: Prometheus metrics, Grafana dashboards, slow query alerts\', \'Error handling: Retry exponential backoff, circuit breaker, graceful degradation\', \'Health checks: /health endpoint, test DB + pool, 200 OK or 503 unavailable\']
+    },
+    {
+        id: 'sql-prod-q-2',
+        question: 'Explain the Repository and Unit of Work patterns. Include: (1) when to use them, (2) benefits, (3) implementation, (4) testing, (5) integration with SQLAlchemy. Provide complete code examples.',
+        sampleAnswer: \'Repository and Unit of Work patterns: (1) When to use: Repository pattern - abstract data access, hide SQLAlchemy from business logic. Unit of Work - manage transactions across multiple repositories. Use in: large applications, domain-driven design, testing (mock repositories). (2) Benefits: Repository - testable (mock repositories in unit tests), swappable (change database without changing business logic), organized (all User queries in UserRepository). Unit of Work - single transaction for multiple operations, automatic rollback on error, consistent state. (3) Repository implementation: class UserRepository(ABC): abstractmethods for find_by_id, find_by_email, create, update, delete. class SQLAlchemyUserRepository(UserRepository): implements with session.execute(select(User)...). Benefit: business logic depends on interface, not SQLAlchemy. (4) Unit of Work implementation: class UnitOfWork: __enter__ creates session and repositories, __exit__ commits or rolls back. Usage: with UnitOfWork() as uow: uow.users.create(user); uow.posts.create(post); uow.commit(). Both succeed or both fail. (5) Testing: Unit tests mock repositories - no database needed. Integration tests use real repositories + test database. Example: def test_create_user_service(mock_user_repo): service = UserService(mock_user_repo); service.register("test@example.com"); mock_user_repo.create.assert_called_once(). Fast unit tests + thorough integration tests. (6) SQLAlchemy integration: Repository wraps session, Unit of Work manages session lifecycle. Repositories use session.execute(), Unit of Work commits session. Clean separation: SQLAlchemy in repositories, business logic in services. Result: Testable, maintainable, scalable architecture.\',
+        keyPoints: [\'Repository: Abstract data access, hide SQLAlchemy from business logic\', \'Unit of Work: Manage transactions across repositories, commit or rollback all\', \'Benefits: Testable (mock), swappable (change DB), organized (all queries in one place)\', \'Testing: Mock repos for unit tests, real repos for integration tests\', \'Implementation: Repository wraps session, UnitOfWork manages session lifecycle\']
+    },
+    {
+        id: 'sql-prod-q-3',
+        question: 'You notice your application is slow and making too many database queries. Explain: (1) how to diagnose the issue, (2) caching strategies, (3) query optimization, (4) connection pool tuning, (5) monitoring. Include specific tools and techniques.',
+        sampleAnswer: \'Diagnosing slow database: (1) Diagnosis tools: Enable slow query logging (@event before_cursor_execute / after_cursor_execute, log if duration > 100ms). Check logs for N+1 problems (many small queries instead of one with join). Use EXPLAIN ANALYZE on slow queries - look for Seq Scan (bad), want Index Scan. Check pool stats - if checked_out near pool_size, need more connections. (2) Caching strategies: Redis query cache with TTL. Cache frequently read, rarely changed data (user profiles). Example: @cache_query("user_by_id", ttl=600). Invalidate on write: invalidate_user_cache(user_id) after update. Application-level cache: lru_cache for pure functions. Benefit: 80% cache hit = 5x faster, 80% less DB load. (3) Query optimization: Fix N+1: use selectinload(User.posts) instead of lazy load. Add indexes: CREATE INDEX idx_users_email ON users(email). Use bulk operations: bulk_insert_mappings() instead of session.add() loop. Avoid SELECT *: select only needed columns. Use pagination: LIMIT/OFFSET. Result: 10x faster queries. (4) Connection pool tuning: If pool_checked_out near pool_size, increase pool_size + max_overflow. Formula: pool_size = app_threads. Monitor: track pool_checked_out, alert if > 80%. pool_pre_ping=True prevents connection errors. (5) Monitoring: Prometheus metrics: query count, duration histogram, pool status. Grafana dashboard: p50/p95/p99 latency, queries per second, pool utilization. Alerts: Query > 1s, pool > 80%, error rate > 1%. APM tools: New Relic, DataDog - trace slow transactions. Result: Identify bottlenecks, optimize systematically, monitor continuously.\',
+        keyPoints: [\'Diagnosis: Slow query logging, N+1 detection, EXPLAIN ANALYZE, pool stats\', \'Caching: Redis 5min TTL, invalidate on write, 80% hit rate, 5x faster\', \'Optimization: Fix N+1 (selectinload), indexes, bulk ops, pagination\', \'Pool tuning: pool_size = app_threads, monitor checked_out, increase if > 80%\', \'Monitoring: Prometheus metrics, Grafana dashboards, p95 latency, alerts\']
+    }
+];
+
+export const productionPatternsMultipleChoice: MultipleChoiceQuestion[] = [
+    {
+        id: 'sql-prod-mc-1',
+        question: 'What is the purpose of pool_pre_ping=True?',
+        options: ['Faster queries', 'Test connection before checkout to catch disconnects', 'Increase pool size', 'Enable caching'],
+        correctAnswer: 1,
+        explanation: 'pool_pre_ping=True tests connection before checkout. Problem: Connections can die (network issue, database restart, idle timeout). Without pre_ping: Application gets dead connection, query fails with error. With pre_ping: Engine tests connection (SELECT 1), if dead, creates new connection, application gets working connection. Small overhead (extra ping), but prevents errors. Critical for production reliability. Use always in production.'
+    },
+    {
+        id: 'sql-prod-mc-2',
+        question: 'How should you size the connection pool?',
+        options: ['pool_size=1000 (as large as possible)', 'pool_size = number_of_application_threads', 'pool_size=5 (keep it small)', 'pool_size = number_of_CPU_cores'],
+        correctAnswer: 1,
+        explanation: 'pool_size = number_of_application_threads. Reasoning: Each thread needs one connection when executing query. Example: 10 gunicorn workers * 4 threads = 40 threads → pool_size=40. max_overflow = 2 * pool_size for burst capacity. Too large: Wastes DB resources, connections idle. Too small: Threads wait for connections, pool_timeout errors. Formula: pool_size + max_overflow < database_max_connections. PostgreSQL default max_connections=100, so pool_size=40 + max_overflow=40 = 80 (safe).'
+    },
+    {
+        id: 'sql-prod-mc-3',
+        question: 'When should you cache query results?',
+        options: ['Always', 'Never', 'For frequently read, rarely changed data', 'Only in development'],
+        correctAnswer: 2,
+        explanation: 'Cache frequently read, rarely changed data. Examples: User profiles (read 1000x/sec, updated 1x/day), product catalog, blog posts. Don\'t cache: Real-time data (stock prices), frequently changing data (shopping cart), user-specific data (unless scoped by user). Strategy: Redis cache with 5-15min TTL. Invalidate on write: delete cache key after update. Benefits: 5-10x faster response, reduced DB load. Costs: Stale data (eventual consistency), complexity (cache invalidation hard). Production: 70-90% cache hit rate typical.'
+    },
+    {
+        id: 'sql-prod-mc-4',
+        question: 'What does the Repository pattern provide?',
+        options: ['Faster queries', 'Abstract data access layer - hide SQLAlchemy from business logic', 'Automatic caching', 'Connection pooling'],
+        correctAnswer: 1,
+        explanation: 'Repository pattern abstracts data access. Benefits: (1) Testable - mock repositories in unit tests, no database needed. (2) Swappable - change database (SQLAlchemy → MongoDB) without changing business logic. (3) Organized - all User queries in UserRepository. (4) Clean architecture - business logic depends on interface (UserRepository), not implementation (SQLAlchemy). Example: UserService depends on UserRepository interface. Unit test: mock repository. Integration test: real SQLAlchemy repository. Production: Use for large applications, domain-driven design.'
+    },
+    {
+        id: 'sql-prod-mc-5',
+        question: 'What should a database health check endpoint test?',
+        options: ['Only HTTP server', 'Database connectivity (SELECT 1) and connection pool status', 'Only application code', 'User authentication'],
+        correctAnswer: 1,
+        explanation: 'Health check tests: (1) Database connectivity - execute SELECT 1, if fails, DB down. (2) Connection pool status - checked_out vs size, if > 80% pool nearly exhausted (degraded). Return: 200 OK if healthy, 503 Service Unavailable if unhealthy. Load balancer uses: routes traffic only to healthy instances. Example: Instance A - DB down, health check returns 503, LB stops sending requests. Instance B - healthy, health check returns 200, LB sends all requests to B. Critical for zero-downtime deployments and automatic failover.'
+    }
+];
+

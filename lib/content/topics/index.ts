@@ -17,6 +17,9 @@ export * from './applied-ai';
 export * from './product-management';
 export * from './engineering-management';
 export * from './finance';
+export * from './big-data';
+export * from './competitive-programming';
+export * from './crypto';
 
 // Import topics for aggregation
 import {
@@ -31,6 +34,9 @@ import {
   productManagementTopic,
   engineeringManagementTopic,
   financeTopic,
+  bigDataTopic,
+  competitiveProgrammingTopic,
+  cryptoTopic,
 } from '.';
 
 // Import all modules
@@ -38,6 +44,12 @@ import { pythonFundamentalsModule } from '../modules/python-fundamentals';
 import { pythonIntermediateModule } from '../modules/python-intermediate';
 import { pythonAdvancedModule } from '../modules/python-advanced';
 import { pythonOopModule } from '../modules/python-oop';
+import { sqlalchemyDatabaseModule } from '../modules/sqlalchemy-database';
+import { pythonAsyncModule } from '../modules/python-async';
+import { pythonCeleryModule } from '../modules/python-celery';
+import { pythonDjangoModule } from '../modules/python-django';
+import { fastapiProductionModule } from '../modules/fastapi-production';
+import { pythonTestingModule } from '../modules/python-testing';
 
 import { timeSpaceComplexityModule } from '../modules/time-space-complexity';
 import { arraysHashingModule } from '../modules/arrays-hashing';
@@ -83,6 +95,7 @@ import { distributedFileSystemsDatabasesModule } from '../modules/distributed-fi
 import { systemDesignMessageQueuesModule } from '../modules/system-design-message-queues';
 import { realWorldArchitecturesModule } from '../modules/real-world-architectures';
 import { systemDesignCaseStudiesModule } from '../modules/system-design-case-studies';
+import { systemDesignTradingModule } from '../modules/system-design-trading';
 
 import { mlMathematicalFoundationsModule } from '../modules/ml-mathematical-foundations';
 import { mlCalculusFundamentalsModule } from '../modules/ml-calculus-fundamentals';
@@ -102,6 +115,7 @@ import { largeLanguageModelsModule } from '../modules/large-language-models';
 import { quantitativeFinanceModule } from '../modules/quantitative-finance';
 import { timeSeriesFinancialMlModule } from '../modules/time-series-financial-ml';
 import { llmApplicationsFinanceModule } from '../modules/llm-applications-finance';
+import { quantInterviewPrepModule } from '../modules/quant-interview-prep';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -126,6 +140,12 @@ const allModulesMap: Record<string, Module> = {
   'python-intermediate': pythonIntermediateModule,
   'python-advanced': pythonAdvancedModule,
   'python-oop': pythonOopModule,
+  'sqlalchemy-database': sqlalchemyDatabaseModule,
+  'python-async': pythonAsyncModule,
+  'python-celery': pythonCeleryModule,
+  'python-django': pythonDjangoModule,
+  'fastapi-production': fastapiProductionModule,
+  'python-testing': pythonTestingModule,
 
   'time-space-complexity': timeSpaceComplexityModule,
   'arrays-hashing': arraysHashingModule,
@@ -172,6 +192,7 @@ const allModulesMap: Record<string, Module> = {
   'system-design-message-queues': systemDesignMessageQueuesModule,
   'real-world-architectures': realWorldArchitecturesModule,
   'system-design-case-studies': systemDesignCaseStudiesModule,
+  'system-design-trading': systemDesignTradingModule,
 
   'ml-mathematical-foundations': mlMathematicalFoundationsModule,
   'ml-calculus-fundamentals': mlCalculusFundamentalsModule,
@@ -191,6 +212,7 @@ const allModulesMap: Record<string, Module> = {
   'quantitative-finance': quantitativeFinanceModule,
   'time-series-financial-ml': timeSeriesFinancialMlModule,
   'ml-ai-llm-applications-finance': llmApplicationsFinanceModule,
+  'quant-interview-prep': quantInterviewPrepModule,
 
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,
   'applied-ai-prompt-engineering': promptEngineeringOptimizationModule,
@@ -212,17 +234,20 @@ const allModulesMap: Record<string, Module> = {
 
 // Define all topics in order
 const allTopics = [
-  frontendDevelopmentTopic,
   pythonTopic,
   algorithmsDataStructuresTopic,
+  competitiveProgrammingTopic,
+  financeTopic,
+  cryptoTopic,
   quantitativeProgrammingTopic,
   appliedAiTopic,
   devopsTopic,
+  bigDataTopic,
   systemDesignTopic,
+  frontendDevelopmentTopic,
   productManagementTopic,
   engineeringManagementTopic,
   behavioralTopic,
-  financeTopic,
 ];
 
 // Build moduleCategories for backward compatibility
