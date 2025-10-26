@@ -1,4 +1,5 @@
 export const section12 = {
+  slug: 'project',
   title: 'Module 3 Capstone Project',
   content: `
 # Module 3 Capstone Project: Complete Financial Analysis Platform

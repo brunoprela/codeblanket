@@ -4,15 +4,15 @@ import { Module } from '../../types';
 import { fundamentals } from '@/lib/content/sections/financial-statements-analysis/fundamentals';
 import { incomeStatement } from '@/lib/content/sections/financial-statements-analysis/income-statement';
 import { balanceSheet } from '@/lib/content/sections/financial-statements-analysis/balance-sheet';
-import { cashFlow } from '@/lib/content/sections/financial-statements-analysis/cash-flow';
-import { ratios } from '@/lib/content/sections/financial-statements-analysis/ratios';
-import { edgar } from '@/lib/content/sections/financial-statements-analysis/edgar';
-import { quality } from '@/lib/content/sections/financial-statements-analysis/quality';
-import { credit } from '@/lib/content/sections/financial-statements-analysis/credit';
-import { peers } from '@/lib/content/sections/financial-statements-analysis/peers';
-import { pipeline } from '@/lib/content/sections/financial-statements-analysis/pipeline';
-import { nlp } from '@/lib/content/sections/financial-statements-analysis/nlp';
-import { project } from '@/lib/content/sections/financial-statements-analysis/project';
+import { section4 as cashFlow } from '@/lib/content/sections/financial-statements-analysis/cash-flow';
+import { section5 as ratios } from '@/lib/content/sections/financial-statements-analysis/ratios';
+import { section6 as edgar } from '@/lib/content/sections/financial-statements-analysis/edgar';
+import { section7 as quality } from '@/lib/content/sections/financial-statements-analysis/quality';
+import { section8 as credit } from '@/lib/content/sections/financial-statements-analysis/credit';
+import { section9 as peers } from '@/lib/content/sections/financial-statements-analysis/peers';
+import { section10 as pipeline } from '@/lib/content/sections/financial-statements-analysis/pipeline';
+import { section11 as nlp } from '@/lib/content/sections/financial-statements-analysis/nlp';
+import { section12 as project } from '@/lib/content/sections/financial-statements-analysis/project';
 
 // Import quizzes (discussion questions)
 import { fundamentalsDiscussionQuestions } from '@/lib/content/quizzes/financial-statements-analysis/fundamentals';
@@ -52,85 +52,85 @@ export const financialStatementsAnalysisModule: Module = {
       id: fundamentals.slug,
       title: fundamentals.title,
       content: fundamentals.content,
-      discussionQuestions: fundamentalsDiscussionQuestions,
-      multipleChoiceQuestions: fundamentalsMultipleChoiceQuestions,
+      quiz: fundamentalsDiscussionQuestions,
+      multipleChoice: fundamentalsMultipleChoiceQuestions,
     },
     {
       id: incomeStatement.slug,
       title: incomeStatement.title,
       content: incomeStatement.content,
-      discussionQuestions: incomeStatementDiscussionQuestions,
-      multipleChoiceQuestions: incomeStatementMultipleChoiceQuestions,
+      quiz: incomeStatementDiscussionQuestions,
+      multipleChoice: incomeStatementMultipleChoiceQuestions,
     },
     {
       id: balanceSheet.slug,
       title: balanceSheet.title,
       content: balanceSheet.content,
-      discussionQuestions: balanceSheetDiscussionQuestions,
-      multipleChoiceQuestions: balanceSheetMultipleChoiceQuestions,
+      quiz: balanceSheetDiscussionQuestions,
+      multipleChoice: balanceSheetMultipleChoiceQuestions,
     },
     {
       id: cashFlow.slug,
       title: cashFlow.title,
       content: cashFlow.content,
-      discussionQuestions: cashFlowDiscussionQuestions,
-      multipleChoiceQuestions: cashFlowMultipleChoiceQuestions,
+      quiz: cashFlowDiscussionQuestions,
+      multipleChoice: cashFlowMultipleChoiceQuestions,
     },
     {
       id: ratios.slug,
       title: ratios.title,
       content: ratios.content,
-      discussionQuestions: ratiosDiscussionQuestions,
-      multipleChoiceQuestions: ratiosMultipleChoiceQuestions,
+      quiz: ratiosDiscussionQuestions,
+      multipleChoice: ratiosMultipleChoiceQuestions,
     },
     {
       id: edgar.slug,
       title: edgar.title,
       content: edgar.content,
-      discussionQuestions: edgarDiscussionQuestions,
-      multipleChoiceQuestions: edgarMultipleChoiceQuestions,
+      quiz: edgarDiscussionQuestions,
+      multipleChoice: edgarMultipleChoiceQuestions,
     },
     {
       id: quality.slug,
       title: quality.title,
       content: quality.content,
-      discussionQuestions: qualityDiscussionQuestions,
-      multipleChoiceQuestions: qualityMultipleChoiceQuestions,
+      quiz: qualityDiscussionQuestions,
+      multipleChoice: qualityMultipleChoiceQuestions,
     },
     {
       id: credit.slug,
       title: credit.title,
       content: credit.content,
-      discussionQuestions: creditDiscussionQuestions,
-      multipleChoiceQuestions: creditMultipleChoiceQuestions,
+      quiz: creditDiscussionQuestions,
+      multipleChoice: creditMultipleChoiceQuestions,
     },
     {
       id: peers.slug,
       title: peers.title,
       content: peers.content,
-      discussionQuestions: peersDiscussionQuestions,
-      multipleChoiceQuestions: peersMultipleChoiceQuestions,
+      quiz: peersDiscussionQuestions,
+      multipleChoice: peersMultipleChoiceQuestions,
     },
     {
       id: pipeline.slug,
       title: pipeline.title,
       content: pipeline.content,
-      discussionQuestions: pipelineDiscussionQuestions,
-      multipleChoiceQuestions: pipelineMultipleChoiceQuestions,
+      quiz: pipelineDiscussionQuestions,
+      multipleChoice: pipelineMultipleChoiceQuestions,
     },
     {
       id: nlp.slug,
       title: nlp.title,
       content: nlp.content,
-      discussionQuestions: nlpDiscussionQuestions,
-      multipleChoiceQuestions: nlpMultipleChoiceQuestions,
+      quiz: nlpDiscussionQuestions,
+      multipleChoice: nlpMultipleChoiceQuestions,
     },
     {
       id: project.slug,
       title: project.title,
       content: project.content,
-      discussionQuestions: projectDiscussionQuestions,
-      multipleChoiceQuestions: projectMultipleChoiceQuestions,
+      quiz: projectDiscussionQuestions,
+      multipleChoice: projectMultipleChoiceQuestions,
     },
   ],
 };

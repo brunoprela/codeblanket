@@ -1,5 +1,6 @@
 export const section4 = {
   title: 'Cash Flow Statement Mastery',
+  slug: 'cash-flow',
   content: `
 # Cash Flow Statement Mastery
 

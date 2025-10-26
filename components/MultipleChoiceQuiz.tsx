@@ -15,12 +15,14 @@ export function MultipleChoiceQuiz({
   moduleId,
 }: MultipleChoiceQuizProps) {
   const [selectedAnswers, setSelectedAnswers] = useState<
-    Record<string, number>
+    Record<string | number, number>
   >({});
-  const [showResults, setShowResults] = useState<Record<string, boolean>>({});
-  const [completedQuestions, setCompletedQuestions] = useState<Set<string>>(
-    new Set(),
-  );
+  const [showResults, setShowResults] = useState<
+    Record<string | number, boolean>
+  >({});
+  const [completedQuestions, setCompletedQuestions] = useState<
+    Set<string | number>
+  >(new Set());
 
   // Load completed questions from localStorage
   useEffect(() => {
@@ -40,13 +42,13 @@ export function MultipleChoiceQuiz({
           );
         }
 
-        setCompletedQuestions(new Set(uniqueCompleted as string[]));
+        setCompletedQuestions(new Set(uniqueCompleted as (string | number)[]));
       } catch (e) {
         console.error('Failed to load completed questions:', e);
       }
     } else {
       // CRITICAL: Reset state when no stored data for this section
-      setCompletedQuestions(new Set());
+      setCompletedQuestions(new Set<string | number>());
     }
 
     // Also reset UI state when changing sections
@@ -55,13 +57,13 @@ export function MultipleChoiceQuiz({
   }, [moduleId, sectionId]);
 
   // Save completed questions to localStorage
-  const saveProgress = (questionId: string) => {
+  const saveProgress = (questionId: string | number) => {
     // CRITICAL: Always read fresh data from localStorage to avoid cross-contamination
     const storageKey = `mc-quiz-${moduleId}-${sectionId}`;
     const stored = localStorage.getItem(storageKey);
     const currentCompleted = stored
-      ? new Set<string>(JSON.parse(stored) as string[])
-      : new Set<string>();
+      ? new Set<string | number>(JSON.parse(stored) as (string | number)[])
+      : new Set<string | number>();
 
     // Add the new question
     currentCompleted.add(questionId);
@@ -99,7 +101,7 @@ export function MultipleChoiceQuiz({
     }
   };
 
-  const handleTryAgain = (questionId: string) => {
+  const handleTryAgain = (questionId: string | number) => {
     setShowResults((prev) => ({ ...prev, [questionId]: false }));
     setSelectedAnswers((prev) => {
       const newAnswers = { ...prev };
@@ -108,7 +110,7 @@ export function MultipleChoiceQuiz({
     });
   };
 
-  const handleResetQuestion = (questionId: string) => {
+  const handleResetQuestion = (questionId: string | number) => {
     // Remove from completed
     const newCompleted = new Set(completedQuestions);
     newCompleted.delete(questionId);

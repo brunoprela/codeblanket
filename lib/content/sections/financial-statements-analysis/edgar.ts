@@ -1,4 +1,5 @@
 export const section6 = {
+  slug: 'edgar',
   title: 'SEC EDGAR & Automated Filing Analysis',
   content: `
 # SEC EDGAR & Automated Filing Analysis

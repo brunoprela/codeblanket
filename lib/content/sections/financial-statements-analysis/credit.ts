@@ -1,4 +1,5 @@
 export const section8 = {
+  slug: 'credit',
   title: 'Credit Analysis & Default Risk',
   content: `
 # Credit Analysis & Default Risk

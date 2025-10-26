@@ -66,16 +66,17 @@ export interface TestResult {
  */
 
 export interface QuizQuestion {
-  id: string;
+  id: string | number;
   question: string;
   hint?: string;
-  sampleAnswer: string;
-  keyPoints: string[];
+  sampleAnswer?: string;
+  answer?: string;
+  keyPoints?: string[];
   multipleChoice?: MultipleChoiceQuestion[];
 }
 
 export interface MultipleChoiceQuestion {
-  id: string;
+  id: string | number;
   question: string;
   options: string[];
   correctAnswer: number; // Index of correct option (0-based)
@@ -91,9 +92,12 @@ export interface DiscussionItem {
 }
 
 export interface ModuleSection {
-  id: string;
+  id?: string;
   title: string;
   content: string;
+  slug?: string;
+  description?: string;
+  exercises?: Exercise[];
   codeExample?: string;
   videoUrl?: string;
   quiz?: QuizQuestion[]; // Made optional since most modules use multipleChoiceQuestions instead
@@ -119,16 +123,19 @@ export interface Module {
   category?: string;
   difficulty?: string;
   estimatedTime?: string;
+  estimatedHours?: number;
   duration?: string;
   prerequisites?: string[];
-  icon: string;
+  icon?: string;
   sections: ModuleSection[];
-  keyTakeaways: string[];
+  keyTakeaways?: string[];
   learningObjectives?: string[];
   timeComplexity?: string;
   spaceComplexity?: string;
   relatedProblems?: string[]; // Array of problem IDs
   practicalProjects?: PracticalProject[];
+  quizzes?: QuizQuestion[];
+  multipleChoiceQuestions?: MultipleChoiceQuestion[];
 }
 
 export interface ModuleCategory {
@@ -146,4 +153,51 @@ export interface TopicSection {
   description: string;
   icon: string;
   modules: ModuleCategory[];
+}
+
+export interface ContentSection {
+  title: string;
+  content: string;
+}
+
+export interface Exercise {
+  id?: string;
+  title?: string;
+  question?: string;
+  description?: string;
+  difficulty?: string;
+  hints?: string[];
+  steps?: string[];
+  prompt?: string;
+  solution?: string;
+}
+
+export interface Content {
+  id?: string;
+  title: string;
+  subtitle?: string;
+  description: string;
+  content?: string;
+  sections?: ContentSection[];
+  exercises?: Exercise[];
+}
+
+export interface DiscussionQuestion {
+  id: string | number;
+  question: string;
+  answer?: string;
+  sampleAnswer?: string;
+  keyPoints?: string[];
+}
+
+export interface Discussion {
+  title: string;
+  description: string;
+  questions: DiscussionQuestion[];
+}
+
+export interface Quiz {
+  title: string;
+  description: string;
+  questions: MultipleChoiceQuestion[];
 }

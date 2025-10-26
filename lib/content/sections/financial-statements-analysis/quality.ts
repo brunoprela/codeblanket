@@ -1,4 +1,5 @@
 export const section7 = {
+  slug: 'quality',
   title: 'Financial Statement Quality & Red Flags',
   content: `
 # Financial Statement Quality & Red Flags

@@ -1,12 +1,13 @@
 import { Content } from '@/lib/types';
 
 export const gitTradingStrategiesContent: Content = {
-  title: "Git for Trading Strategies",
-  subtitle: "Version control and collaboration for quantitative research",
-  description: "Master Git and GitHub for managing trading strategies, backtests, and quantitative research. Learn professional workflows used by quant teams at hedge funds and prop trading firms.",
+  title: 'Git for Trading Strategies',
+  subtitle: 'Version control and collaboration for quantitative research',
+  description:
+    'Master Git and GitHub for managing trading strategies, backtests, and quantitative research. Learn professional workflows used by quant teams at hedge funds and prop trading firms.',
   sections: [
     {
-      title: "Why Version Control for Trading?",
+      title: 'Why Version Control for Trading?',
       content: `
 # The Critical Need for Version Control in Trading
 
@@ -75,10 +76,10 @@ Recreate exact environment and results from any point in history
 
 ### 6. Code Review
 Team reviews changes before merging to production
-      `
+      `,
     },
     {
-      title: "Git Fundamentals for Quants",
+      title: 'Git Fundamentals for Quants',
       content: `
 # Essential Git Concepts and Commands
 
@@ -386,10 +387,10 @@ git diff notebook.ipynb
 # Web-based diff viewer
 nbdiff-web notebook_old.ipynb notebook_new.ipynb
 \`\`\`
-      `
+      `,
     },
     {
-      title: "Collaborative Workflows",
+      title: 'Collaborative Workflows',
       content: `
 # Team Collaboration for Quantitative Research
 
@@ -743,10 +744,10 @@ jobs:
         name: backtest-results
         path: results/
 \`\`\`
-      `
+      `,
     },
     {
-      title: "Advanced Git for Production Trading",
+      title: 'Advanced Git for Production Trading',
       content: `
 # Production-Grade Version Control
 
@@ -1077,7 +1078,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: \${{ runner.os }}-pip-\${{ hashFiles('**/requirements.txt') }}
     
     - name: Install dependencies
       run: |
@@ -1109,10 +1110,10 @@ jobs:
       with:
         file: ./coverage.xml
 \`\`\`
-      `
+      `,
     },
     {
-      title: "Git Best Practices for Quants",
+      title: 'Git Best Practices for Quants',
       content: `
 # Professional Git Practices for Quantitative Trading
 
@@ -1426,14 +1427,14 @@ Brief description of strategy logic and philosophy.
 git clone https://github.com/company/momentum-strategy.git
 cd momentum-strategy
 python -m venv venv
-source venv/bin/activate  # or `venv\\Scripts\\activate` on Windows
+source venv/bin/activate  # or venv\\\\Scripts\\\\activate on Windows
 pip install -r requirements.txt
 \`\`\`
 
 ### Configuration
-1. Copy `config / secrets.yaml.template` to `config / secrets.yaml`
-2. Add API keys to `config / secrets.yaml`
-3. Adjust parameters in `config / config.yaml`
+1. Copy config/secrets.yaml.template to config/secrets.yaml
+2. Add API keys to config/secrets.yaml
+3. Adjust parameters in config/config.yaml
 
 ## Usage
 
@@ -1464,11 +1465,11 @@ pytest tests/ -v
 Detailed explanation of strategy logic, indicators used, entry/exit rules, etc.
 
 ## Contributing
-1. Create feature branch: `git checkout - b feature / your - feature`
+1. Create feature branch: git checkout -b feature/your-feature
 2. Make changes and add tests
-3. Run test suite: `pytest tests / `
-4. Commit: `git commit - m "feat: add your feature"`
-5. Push: `git push origin feature / your - feature`
+3. Run test suite: pytest tests/
+4. Commit: git commit -m "feat: add your feature"
+5. Push: git push origin feature/your-feature
 6. Create Pull Request
 
 ## License
@@ -1538,54 +1539,58 @@ All notable changes to this project will be documented in this file.
 10. **Learn advanced commands** for efficiency
 
 Git is not just version control - it's the foundation for reproducible, collaborative, production-grade quantitative research.
-      `
-}
+      `,
+    },
   ],
-exercises: [
-  {
-    title: "Git Workflow Setup",
-    description: "Initialize a new quantitative trading project with proper Git configuration, including .gitignore, README, and initial structure.",
-    difficulty: "beginner",
-    hints: [
-      "Create comprehensive .gitignore for Python, Jupyter, data files",
-      "Set up nbstripout for notebook output management",
-      "Write clear README with setup instructions",
-      "Create initial directory structure following best practices"
-    ]
-  },
-  {
-    title: "Feature Branch Workflow",
-    description: "Implement a new strategy feature using feature branches, pull requests, and code review process.",
-    difficulty: "intermediate",
-    hints: [
-      "Create feature branch from main",
-      "Make multiple atomic commits with good messages",
-      "Write tests for new feature",
-      "Create pull request with detailed description including backtest results"
-    ]
-  },
-  {
-    title: "Production Deployment Tracking",
-    description: "Set up a deployment tracking system using Git tags, maintain deployment log, and implement rollback procedure.",
-    difficulty: "intermediate",
-    hints: [
-      "Create semantic version tags for releases",
-      "Maintain deployment_log.md with deployment history",
-      "Write rollback script that can revert to previous tag",
-      "Document what's currently running in production"
-    ]
-  },
-  {
-    title: "CI/CD Pipeline",
-    description: "Implement a GitHub Actions workflow that runs tests, performs backtests, and checks for common issues on every push.",
-    difficulty: "advanced",
-    hints: [
-      "Create .github/workflows/ci.yml",
-      "Run pytest, black, flake8",
-      "Execute quick backtest to verify strategy still works",
-      "Check for lookahead bias programmatically",
-      "Upload backtest results as artifacts"
-    ]
-  }
-]
+  exercises: [
+    {
+      title: 'Git Workflow Setup',
+      description:
+        'Initialize a new quantitative trading project with proper Git configuration, including .gitignore, README, and initial structure.',
+      difficulty: 'beginner',
+      hints: [
+        'Create comprehensive .gitignore for Python, Jupyter, data files',
+        'Set up nbstripout for notebook output management',
+        'Write clear README with setup instructions',
+        'Create initial directory structure following best practices',
+      ],
+    },
+    {
+      title: 'Feature Branch Workflow',
+      description:
+        'Implement a new strategy feature using feature branches, pull requests, and code review process.',
+      difficulty: 'intermediate',
+      hints: [
+        'Create feature branch from main',
+        'Make multiple atomic commits with good messages',
+        'Write tests for new feature',
+        'Create pull request with detailed description including backtest results',
+      ],
+    },
+    {
+      title: 'Production Deployment Tracking',
+      description:
+        'Set up a deployment tracking system using Git tags, maintain deployment log, and implement rollback procedure.',
+      difficulty: 'intermediate',
+      hints: [
+        'Create semantic version tags for releases',
+        'Maintain deployment_log.md with deployment history',
+        'Write rollback script that can revert to previous tag',
+        "Document what's currently running in production",
+      ],
+    },
+    {
+      title: 'CI/CD Pipeline',
+      description:
+        'Implement a GitHub Actions workflow that runs tests, performs backtests, and checks for common issues on every push.',
+      difficulty: 'advanced',
+      hints: [
+        'Create .github/workflows/ci.yml',
+        'Run pytest, black, flake8',
+        'Execute quick backtest to verify strategy still works',
+        'Check for lookahead bias programmatically',
+        'Upload backtest results as artifacts',
+      ],
+    },
+  ],
 };

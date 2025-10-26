@@ -53,15 +53,17 @@ const transformQuiz = (
         questions: Array<{
           id: string;
           question: string;
-          sampleAnswer: string;
-          keyPoints: string[];
+          sampleAnswer?: string;
+          answer?: string;
+          keyPoints?: string[];
         }>;
       }
     | Array<{
         id: string;
         question: string;
-        sampleAnswer: string;
-        keyPoints: string[];
+        sampleAnswer?: string;
+        answer?: string;
+        keyPoints?: string[];
       }>,
 ) => {
   if (Array.isArray(quiz)) {
@@ -75,7 +77,7 @@ const transformMC = (
   mc:
     | {
         questions: Array<{
-          id: string;
+          id: string | number;
           question: string;
           options: string[];
           correctAnswer: number;
@@ -83,7 +85,7 @@ const transformMC = (
         }>;
       }
     | Array<{
-        id: string;
+        id: string | number;
         question: string;
         options: string[];
         correctAnswer: number;

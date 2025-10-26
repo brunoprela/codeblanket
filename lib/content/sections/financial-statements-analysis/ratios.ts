@@ -1,4 +1,5 @@
 export const section5 = {
+  slug: 'ratios',
   title: 'Financial Ratios & Metrics Deep Dive',
   content: `
 # Financial Ratios & Metrics Deep Dive

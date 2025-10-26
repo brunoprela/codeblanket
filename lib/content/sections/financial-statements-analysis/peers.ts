@@ -1,4 +1,5 @@
 export const section9 = {
+  slug: 'peers',
   title: 'Peer Comparison & Relative Valuation',
   content: `
 # Peer Comparison & Relative Valuation

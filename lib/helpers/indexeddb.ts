@@ -391,14 +391,15 @@ export function getTotalMultipleChoiceQuestionsCount(
 export function getCompletedMultipleChoiceQuestionsCount(
   modules: Array<{
     id: string;
-    module: { sections: Array<{ id: string; multipleChoice?: unknown[] }> };
+    module: { sections: Array<{ id?: string; multipleChoice?: unknown[] }> };
   }>,
 ): number {
   let completed = 0;
   modules.forEach((moduleCategory) => {
-    moduleCategory.module.sections.forEach((section) => {
+    moduleCategory.module.sections.forEach((section, sectionIndex) => {
+      const sectionId = section.id || `section-${sectionIndex}`;
       if (section.multipleChoice && section.multipleChoice.length > 0) {
-        const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
+        const storageKey = `mc-quiz-${moduleCategory.id}-${sectionId}`;
         const stored = localStorage.getItem(storageKey);
         if (stored) {
           try {

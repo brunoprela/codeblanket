@@ -20,7 +20,8 @@ import {
 /**
  * Formats sample answer text with markdown support (headers, lists, code blocks, bold, etc.)
  */
-function formatSampleAnswer(text: string): ReactNode[] {
+function formatSampleAnswer(text: string | undefined): ReactNode[] {
+  if (!text) return [];
   const elements: ReactNode[] = [];
   let elementKey = 0;
 
@@ -226,10 +227,11 @@ export default function ModulePage({
   useEffect(() => {
     const loadVideos = async () => {
       const urlsMap: Record<string, Array<{ id: string; url: string }>> = {};
-      for (const section of moduleData.sections) {
+      for (const [sectionIndex, section] of moduleData.sections.entries()) {
+        const sectionId = section.id || `section-${sectionIndex}`;
         if (section.quiz) {
           for (const question of section.quiz) {
-            const questionId = `${slug}-${section.id}-${question.id}`;
+            const questionId = `${slug}-${sectionId}-${question.id}`;
             const videos = await getVideosForQuestion(questionId);
             if (videos.length > 0) {
               urlsMap[questionId] = videos.map((video) => ({
@@ -321,9 +323,10 @@ export default function ModulePage({
 
       // Load multiple choice progress
       let mcCompleted = 0;
-      for (const section of moduleData.sections) {
+      for (const [sectionIndex, section] of moduleData.sections.entries()) {
+        const sectionId = section.id || `section-${sectionIndex}`;
         if (section.multipleChoice && section.multipleChoice.length > 0) {
-          const storageKey = `mc-quiz-${slug}-${section.id}`;
+          const storageKey = `mc-quiz-${slug}-${sectionId}`;
           const stored = localStorage.getItem(storageKey);
           if (stored) {
             try {
@@ -353,10 +356,11 @@ export default function ModulePage({
 
       // Load discussion progress (count videos)
       let discussionCompleted = 0;
-      for (const section of moduleData.sections) {
+      for (const [sectionIndex, section] of moduleData.sections.entries()) {
+        const sectionId = section.id || `section-${sectionIndex}`;
         if (section.quiz) {
           for (const question of section.quiz) {
-            const questionId = `${slug}-${section.id}-${question.id}`;
+            const questionId = `${slug}-${sectionId}-${question.id}`;
             const videos = await getVideosForQuestion(questionId);
             if (videos.length > 0) {
               discussionCompleted++;
@@ -383,9 +387,10 @@ export default function ModulePage({
 
         // Update multiple choice
         let mcCompleted = 0;
-        for (const section of moduleData.sections) {
+        for (const [sectionIndex, section] of moduleData.sections.entries()) {
+          const sectionId = section.id || `section-${sectionIndex}`;
           if (section.multipleChoice && section.multipleChoice.length > 0) {
-            const storageKey = `mc-quiz-${slug}-${section.id}`;
+            const storageKey = `mc-quiz-${slug}-${sectionId}`;
             const stored = localStorage.getItem(storageKey);
             if (stored) {
               try {
@@ -403,10 +408,11 @@ export default function ModulePage({
 
         // Update discussion progress
         let discussionCompleted = 0;
-        for (const section of moduleData.sections) {
+        for (const [sectionIndex, section] of moduleData.sections.entries()) {
+          const sectionId = section.id || `section-${sectionIndex}`;
           if (section.quiz) {
             for (const question of section.quiz) {
-              const questionId = `${slug}-${section.id}-${question.id}`;
+              const questionId = `${slug}-${sectionId}-${question.id}`;
               const videos = await getVideosForQuestion(questionId);
               if (videos.length > 0) {
                 discussionCompleted++;
@@ -441,8 +447,16 @@ export default function ModulePage({
 
   // Get selected section
   const selectedSection = moduleData.sections.find(
-    (s) => s.id === selectedSectionId,
+    (s, index) => (s.id || `section-${index}`) === selectedSectionId,
   );
+
+  const selectedSectionIndex = moduleData.sections.findIndex(
+    (s, index) => (s.id || `section-${index}`) === selectedSectionId,
+  );
+
+  const selectedSectionIdResolved = selectedSection
+    ? selectedSection.id || `section-${selectedSectionIndex}`
+    : selectedSectionId;
 
   // Save completed sections to localStorage
   const toggleSectionComplete = (sectionId: string) => {
@@ -464,7 +478,7 @@ export default function ModulePage({
     });
   };
 
-  const toggleSolution = (sectionId: string, questionId: string) => {
+  const toggleSolution = (sectionId: string, questionId: string | number) => {
     const key = `${sectionId}-${questionId}`;
     setShowSolutions((prev) => {
       const newSet = new Set(prev);
@@ -645,13 +659,14 @@ export default function ModulePage({
             </div>
             <div className="max-h-[300px] overflow-y-auto p-2 lg:max-h-[calc(100vh-200px)]">
               {moduleData.sections.map((section, index) => {
-                const isSelected = selectedSectionId === section.id;
-                const isCompleted = completedSections.has(section.id);
+                const sectionId = section.id || `section-${index}`;
+                const isSelected = selectedSectionId === sectionId;
+                const isCompleted = completedSections.has(sectionId);
 
                 return (
                   <button
-                    key={section.id}
-                    onClick={() => setSelectedSectionId(section.id)}
+                    key={sectionId}
+                    onClick={() => setSelectedSectionId(sectionId)}
                     className={`mb-2 w-full rounded-lg border-2 p-2 text-left transition-all sm:p-3 ${
                       isSelected
                         ? 'border-[#bd93f9] bg-[#bd93f9]/20'
@@ -730,19 +745,21 @@ export default function ModulePage({
 
                 {/* Completed Checkbox */}
                 <button
-                  onClick={() => toggleSectionComplete(selectedSection.id)}
+                  onClick={() =>
+                    toggleSectionComplete(selectedSectionIdResolved)
+                  }
                   className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border-2 transition-colors sm:h-10 sm:w-10 ${
-                    completedSections.has(selectedSection.id)
+                    completedSections.has(selectedSectionIdResolved)
                       ? 'border-[#50fa7b] bg-[#50fa7b] text-[#282a36]'
                       : 'border-[#6272a4] bg-transparent text-transparent hover:border-[#50fa7b]'
                   }`}
                   title={
-                    completedSections.has(selectedSection.id)
+                    completedSections.has(selectedSectionIdResolved)
                       ? 'Mark as incomplete'
                       : 'Mark as completed'
                   }
                 >
-                  {completedSections.has(selectedSection.id) && (
+                  {completedSections.has(selectedSectionIdResolved) && (
                     <svg
                       className="h-5 w-5 sm:h-6 sm:w-6"
                       fill="none"
@@ -1097,7 +1114,7 @@ export default function ModulePage({
                     </div>
                     <MultipleChoiceQuiz
                       questions={selectedSection.multipleChoice}
-                      sectionId={selectedSection.id}
+                      sectionId={selectedSectionIdResolved}
                       moduleId={slug}
                     />
                   </div>
@@ -1129,8 +1146,8 @@ export default function ModulePage({
 
                     <div className="space-y-4 sm:space-y-5">
                       {selectedSection.quiz.map((question, qIndex) => {
-                        const questionKey = `${selectedSection.id}-${question.id}`;
-                        const questionId = `${slug}-${selectedSection.id}-${question.id}`;
+                        const questionKey = `${selectedSectionIdResolved}-${question.id}`;
+                        const questionId = `${slug}-${selectedSectionIdResolved}-${question.id}`;
                         const showSolution = showSolutions.has(questionKey);
 
                         return (
@@ -1154,7 +1171,10 @@ export default function ModulePage({
 
                             <button
                               onClick={() =>
-                                toggleSolution(selectedSection.id, question.id)
+                                toggleSolution(
+                                  selectedSectionIdResolved,
+                                  question.id,
+                                )
                               }
                               className="rounded-lg bg-[#bd93f9] px-3 py-2 text-xs font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6] sm:px-4 sm:text-sm"
                             >
@@ -1185,7 +1205,9 @@ export default function ModulePage({
                                     Sample Answer
                                   </div>
                                   <div className="space-y-2 text-sm">
-                                    {formatSampleAnswer(question.sampleAnswer)}
+                                    {formatSampleAnswer(
+                                      question.sampleAnswer || question.answer,
+                                    )}
                                   </div>
                                 </div>
 
@@ -1245,7 +1267,7 @@ export default function ModulePage({
           🎯 Key Takeaways
         </h2>
         <ul className="space-y-2 sm:space-y-3">
-          {moduleData.keyTakeaways.map((takeaway, index) => (
+          {moduleData.keyTakeaways?.map((takeaway, index) => (
             <li key={index} className="flex items-start gap-2 sm:gap-3">
               <span className="mt-1 flex-shrink-0 text-[#50fa7b]">✓</span>
               <span className="text-sm text-[#f8f8f2] sm:text-base">

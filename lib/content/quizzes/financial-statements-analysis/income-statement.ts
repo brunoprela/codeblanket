@@ -1,9 +1,9 @@
 export const incomeStatementDiscussionQuestions = [
-    {
-        id: 1,
-        question:
-            "You're building a machine learning model to predict quarterly earnings surprises (actual EPS vs analyst estimates). Design a feature engineering pipeline that extracts predictive signals from income statements. What features would you create from the revenue, expense, and margin data? How would you handle seasonality, one-time items, and the fact that companies can manage earnings to meet targets?",
-        answer: `A sophisticated earnings prediction model requires careful feature engineering that captures both fundamental trends and potential earnings management:
+  {
+    id: 1,
+    question:
+      "You're building a machine learning model to predict quarterly earnings surprises (actual EPS vs analyst estimates). Design a feature engineering pipeline that extracts predictive signals from income statements. What features would you create from the revenue, expense, and margin data? How would you handle seasonality, one-time items, and the fact that companies can manage earnings to meet targets?",
+    answer: `A sophisticated earnings prediction model requires careful feature engineering that captures both fundamental trends and potential earnings management:
 
 **1. Core Financial Features**
 
@@ -457,13 +457,13 @@ class EarningsSurprisePredictor:
 - Combine with alternative data (credit card spending, web traffic)
 
 This approach has been used successfully by quantitative hedge funds to generate alpha from earnings announcements.`,
-    },
+  },
 
-    {
-        id: 2,
-        question:
-            "Design a system to automatically classify operating expenses (SG&A, R&D, etc.) from unstructured 10-K text when companies don't break them out clearly. You have the full text of the filing but line items are aggregated or described inconsistently. How would you extract and normalize these figures across thousands of companies with different reporting formats?",
-        answer: `Building a robust expense classification system requires combining NLP, accounting knowledge, and pattern matching:
+  {
+    id: 2,
+    question:
+      "Design a system to automatically classify operating expenses (SG&A, R&D, etc.) from unstructured 10-K text when companies don't break them out clearly. You have the full text of the filing but line items are aggregated or described inconsistently. How would you extract and normalize these figures across thousands of companies with different reporting formats?",
+    answer: `Building a robust expense classification system requires combining NLP, accounting knowledge, and pattern matching:
 
 **1. System Architecture**
 
@@ -1007,13 +1007,13 @@ class EdgeCaseHandler:
 Solution: Normalize to common categories but preserve original structure in metadata for transparency.
 
 This system can achieve ~95% accuracy on standard filings and ~75% on non-standard formats.`,
-    },
+  },
 
-    {
-        id: 3,
-        question:
-            "You're analyzing two companies: Company A (SaaS) has 80% gross margins, Company B (Hardware) has 35% gross margins. Company B's stock trades at a higher P/E ratio. Explain the economic factors that could justify this valuation difference, and build a framework to compare companies with fundamentally different business models based on their income statements.",
-        answer: `Comparing companies across different business models requires understanding the **economic drivers** behind margins and translating them into comparable metrics:
+  {
+    id: 3,
+    question:
+      "You're analyzing two companies: Company A (SaaS) has 80% gross margins, Company B (Hardware) has 35% gross margins. Company B's stock trades at a higher P/E ratio. Explain the economic factors that could justify this valuation difference, and build a framework to compare companies with fundamentally different business models based on their income statements.",
+    answer: `Comparing companies across different business models requires understanding the **economic drivers** behind margins and translating them into comparable metrics:
 
 **1. Why Gross Margin Differences Don't Tell the Full Story**
 
@@ -1400,6 +1400,5 @@ def find_true_comparables (target_company: Dict, universe: List[Dict]) -> List[D
 \`\`\`
 
 **Bottom Line**: P/E ratios are meaningless without context. A hardware company at 30x P/E generating 20% ROIC might be cheaper than a SaaS company at 20x P/E with 15% ROIC and negative FCF. Always look at ROIC, FCF, and growth-adjusted metrics.`,
-    },
-],
+  },
 ];

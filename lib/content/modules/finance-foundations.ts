@@ -68,61 +68,90 @@ export const financeFoundationsModule: Module = {
       id: financialSystemOverview.id,
       title: financialSystemOverview.title,
       content: financialSystemOverview.content,
+      quiz: financialSystemOverviewQuiz.map(transformQuiz),
+      multipleChoice: financialSystemOverviewMultipleChoice.map(transformMC),
     },
     {
       id: typesOfFinancialInstitutions.id,
       title: typesOfFinancialInstitutions.title,
       content: typesOfFinancialInstitutions.content,
+      quiz: typesOfFinancialInstitutionsQuiz.map(transformQuiz),
+      multipleChoice:
+        typesOfFinancialInstitutionsMultipleChoice.map(transformMC),
     },
     {
       id: careerPathsEngineersFinance.id,
       title: careerPathsEngineersFinance.title,
       content: careerPathsEngineersFinance.content,
+      quiz: careerPathsEngineersFinanceQuiz.map(transformQuiz),
+      multipleChoice:
+        careerPathsEngineersFinanceMultipleChoice.map(transformMC),
     },
     {
       id: financialMarketsExplained.id,
       title: financialMarketsExplained.title,
       content: financialMarketsExplained.content,
+      quiz: financialMarketsExplainedQuiz.map(transformQuiz),
+      multipleChoice: financialMarketsExplainedMultipleChoice.map(transformMC),
     },
     {
       id: investmentVehiclesProducts.id,
       title: investmentVehiclesProducts.title,
       content: investmentVehiclesProducts.content,
+      quiz: investmentVehiclesProductsQuiz.map(transformQuiz),
+      multipleChoice: investmentVehiclesProductsMultipleChoice.map(transformMC),
     },
     {
       id: howTradingWorks.id,
       title: howTradingWorks.title,
       content: howTradingWorks.content,
+      quiz: howTradingWorksQuiz.map(transformQuiz),
+      multipleChoice: howTradingWorksMultipleChoice.map(transformMC),
     },
     {
       id: regulatoryLandscapeEngineers.id,
       title: regulatoryLandscapeEngineers.title,
       content: regulatoryLandscapeEngineers.content,
+      quiz: regulatoryLandscapeEngineersQuiz.map(transformQuiz),
+      multipleChoice:
+        regulatoryLandscapeEngineersMultipleChoice.map(transformMC),
     },
     {
       id: financeTerminologyDevelopers.id,
       title: financeTerminologyDevelopers.title,
       content: financeTerminologyDevelopers.content,
+      quiz: financeTerminologyDevelopersQuiz.map(transformQuiz),
+      multipleChoice:
+        financeTerminologyDevelopersMultipleChoice.map(transformMC),
     },
     {
       id: mathematicsForFinance.id,
       title: mathematicsForFinance.title,
       content: mathematicsForFinance.content,
+      quiz: mathematicsFinanceQuiz.map(transformQuiz),
+      multipleChoice: mathematicsFinanceMultipleChoice.map(transformMC),
     },
     {
       id: readingFinancialNewsData.id,
       title: readingFinancialNewsData.title,
       content: readingFinancialNewsData.content,
+      quiz: readingFinancialNewsDataQuiz.map(transformQuiz),
+      multipleChoice: readingFinancialNewsDataMultipleChoice.map(transformMC),
     },
     {
       id: learningEnvironment.id,
       title: learningEnvironment.title,
       content: learningEnvironment.content,
+      quiz: learningEnvironmentQuiz.map(transformQuiz),
+      multipleChoice: learningEnvironmentMultipleChoice.map(transformMC),
     },
     {
       id: moduleProjectPersonalFinanceDashboard.id,
       title: moduleProjectPersonalFinanceDashboard.title,
       content: moduleProjectPersonalFinanceDashboard.content,
+      quiz: moduleProjectPersonalFinanceDashboardQuiz.map(transformQuiz),
+      multipleChoice:
+        moduleProjectPersonalFinanceDashboardMultipleChoice.map(transformMC),
     },
   ],
   quizzes: [

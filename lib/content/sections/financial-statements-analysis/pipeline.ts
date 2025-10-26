@@ -1,4 +1,5 @@
 export const section10 = {
+  slug: 'pipeline',
   title: 'Building a Financial Data Pipeline',
   content: `
 # Building a Financial Data Pipeline

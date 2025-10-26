@@ -1,4 +1,5 @@
 export const section11 = {
+  slug: 'nlp',
   title: 'NLP for Financial Documents',
   content: `
 # NLP for Financial Documents

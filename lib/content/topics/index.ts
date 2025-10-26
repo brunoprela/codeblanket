@@ -120,6 +120,7 @@ import { financeFoundationsModule } from '../modules/finance-foundations';
 import { professionalToolsModule } from '../modules/professional-tools';
 import { corporateFinanceModule } from '../modules/corporate-finance';
 import { financialMarketsInstrumentsModule } from '../modules/financial-markets-instruments';
+import { financialStatementsAnalysisModule } from '../modules/financial-statements-analysis';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -219,6 +220,7 @@ const allModulesMap: Record<string, Module> = {
   'quant-interview-prep': quantInterviewPrepModule,
   'finance-foundations': financeFoundationsModule,
   'professional-tools': professionalToolsModule,
+  'financial-statements-analysis': financialStatementsAnalysisModule,
   'corporate-finance': corporateFinanceModule,
   'financial-markets-instruments': financialMarketsInstrumentsModule,
 

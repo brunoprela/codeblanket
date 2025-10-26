@@ -36,6 +36,15 @@ import { databasesFinancialDataMultipleChoice } from '@/lib/content/multiple-cho
 import { quantWorkstationMultipleChoice } from '@/lib/content/multiple-choice/professional-tools/2-9-quant-workstation';
 import { moduleProjectMultipleChoice } from '@/lib/content/multiple-choice/professional-tools/2-10-module-project';
 
+// Helper to flatten Content sections into single content string
+const flattenContent = (contentObj: any) => {
+  if (contentObj.content) return contentObj.content;
+  if (contentObj.sections && contentObj.sections.length > 0) {
+    return contentObj.sections.map((s: any) => s.content).join('\n\n');
+  }
+  return '';
+};
+
 // Transform functions
 const transformQuiz = (quiz: any) => ({
   id: quiz.id,
@@ -61,72 +70,84 @@ export const professionalToolsModule: Module = {
     {
       id: excelPowerUser.id,
       title: excelPowerUser.title,
-      content: excelPowerUser.content,
+      content: flattenContent(excelPowerUser),
       quiz: excelPowerUserQuiz.map(transformQuiz),
       multipleChoice: excelPowerUserMultipleChoice.map(transformMC),
     },
     {
       id: bloombergTerminal.id,
       title: bloombergTerminal.title,
-      content: bloombergTerminal.content,
+      content: flattenContent(bloombergTerminal),
       quiz: bloombergTerminalQuiz.map(transformQuiz),
       multipleChoice: bloombergTerminalMultipleChoice.map(transformMC),
     },
     {
       id: financialDataPlatforms.id,
       title: financialDataPlatforms.title,
-      content: financialDataPlatforms.content,
+      content: flattenContent(financialDataPlatforms),
       quiz: financialDataPlatformsQuiz.map(transformQuiz),
       multipleChoice: financialDataPlatformsMultipleChoice.map(transformMC),
     },
     {
       id: freeDataSources.id,
       title: freeDataSources.title,
-      content: freeDataSources.content,
+      content: flattenContent(freeDataSources),
       quiz: freeDataSourcesQuiz.map(transformQuiz),
       multipleChoice: freeDataSourcesMultipleChoice.map(transformMC),
     },
     {
-      id: chartingTechnicalAnalysis.id,
+      id: chartingTechnicalAnalysis.id || '2-5-charting-technical-analysis',
       title: chartingTechnicalAnalysis.title,
-      content: chartingTechnicalAnalysis.content,
-      quiz: chartingTechnicalAnalysisQuiz.map(transformQuiz),
-      multipleChoice: chartingTechnicalAnalysisMultipleChoice.map(transformMC),
+      content: flattenContent(chartingTechnicalAnalysis),
+      quiz: (chartingTechnicalAnalysisQuiz.questions || []).map(transformQuiz),
+      multipleChoice: (
+        chartingTechnicalAnalysisMultipleChoice.questions || []
+      ).map(transformMC),
     },
     {
       id: jupyterLabQuant.id,
       title: jupyterLabQuant.title,
-      content: jupyterLabQuant.content,
-      quiz: jupyterLabQuantQuiz.map(transformQuiz),
-      multipleChoice: jupyterLabQuantMultipleChoice.map(transformMC),
+      content: flattenContent(jupyterLabQuant),
+      quiz: (jupyterLabQuantQuiz.questions || []).map(transformQuiz),
+      multipleChoice: (jupyterLabQuantMultipleChoice.questions || []).map(
+        transformMC,
+      ),
     },
     {
       id: gitTradingStrategies.id,
       title: gitTradingStrategies.title,
-      content: gitTradingStrategies.content,
-      quiz: gitTradingStrategiesQuiz.map(transformQuiz),
-      multipleChoice: gitTradingStrategiesMultipleChoice.map(transformMC),
+      content: flattenContent(gitTradingStrategies),
+      quiz: (gitTradingStrategiesQuiz.questions || []).map(transformQuiz),
+      multipleChoice: (gitTradingStrategiesMultipleChoice.questions || []).map(
+        transformMC,
+      ),
     },
     {
       id: databasesFinancialData.id,
       title: databasesFinancialData.title,
-      content: databasesFinancialData.content,
-      quiz: databasesFinancialDataQuiz.map(transformQuiz),
-      multipleChoice: databasesFinancialDataMultipleChoice.map(transformMC),
+      content: flattenContent(databasesFinancialData),
+      quiz: (databasesFinancialDataQuiz.questions || []).map(transformQuiz),
+      multipleChoice: (
+        databasesFinancialDataMultipleChoice.questions || []
+      ).map(transformMC),
     },
     {
       id: quantWorkstation.id,
       title: quantWorkstation.title,
-      content: quantWorkstation.content,
-      quiz: quantWorkstationQuiz.map(transformQuiz),
-      multipleChoice: quantWorkstationMultipleChoice.map(transformMC),
+      content: flattenContent(quantWorkstation),
+      quiz: (quantWorkstationQuiz.questions || []).map(transformQuiz),
+      multipleChoice: (quantWorkstationMultipleChoice.questions || []).map(
+        transformMC,
+      ),
     },
     {
       id: moduleProject.id,
       title: moduleProject.title,
-      content: moduleProject.content,
-      quiz: moduleProjectQuiz.map(transformQuiz),
-      multipleChoice: moduleProjectMultipleChoice.map(transformMC),
+      content: flattenContent(moduleProject),
+      quiz: (moduleProjectQuiz.questions || []).map(transformQuiz),
+      multipleChoice: (moduleProjectMultipleChoice.questions || []).map(
+        transformMC,
+      ),
     },
   ],
 };
