@@ -1,0 +1,45 @@
+export const straddlesStranglesQuiz = [
+  {
+    id: 'straddles-strangles-q-1',
+    question:
+      'Design an "earnings straddle trading system" that identifies profitable earnings plays. The system should: (1) Calculate implied move from straddle prices before earnings, (2) Compare to historical earnings moves (past 8 quarters), (3) Determine if straddle is overpriced or underpriced, (4) Account for volatility crush after earnings, (5) Implement entry/exit rules (when to buy, when to sell), (6) Backtest on 100+ earnings events to measure profitability. Explain the edge and risk management.',
+    sampleAnswer:
+      'Earnings Straddle System: **Implied Move Calculation**: Straddle price approximates expected move: Implied Move % = (ATM Straddle Price / Stock Price) × 85% (empirical adjustment). Example: Stock $200, ATM straddle $20 → implied move = $20/$200 × 0.85 = 8.5%. **Historical Analysis**: Get past 8 quarters earnings moves: Q1-2023: +12%, Q2: -8%, Q3: +6%, Q4: -4%, Q1-2024: +15%, Q2: -10%, Q3: +7%, Q4: +9%. Average absolute move: 8.9%. **Edge Detection**: If historical avg > implied move → UNDERPRICED, buy straddle. If historical avg < implied move → OVERPRICED, skip or sell. Example: Historical 8.9% vs Implied 8.5% → slight edge to buy. **Vol Crush Factor**: IV typically drops 30-50% after earnings announcement, Even if stock moves 10%, straddle may lose value if IV crashes, Must exit SAME DAY post-earnings (before full IV collapse). **Entry Rules**: Buy straddle 1-2 days before earnings (after IV has risen but before peak), Only if historical move > implied move + 20% margin, Max 3% of capital per trade (high risk). **Exit Rules**: If up 50%+ immediately after earnings → SELL (lock profit), If down 30% → SELL (cut loss, don\'t hold through full vol crush), Never hold > 1 day post-earnings. **Backtest Results (100 earnings plays 2020-2023)**: Total trades: 100, Winners: 42 (42%), Losers: 58, Avg winner: +$850, Avg loser: -$450, Expected value: 0.42×$850 - 0.58×$450 = $357 - $261 = $96 per trade. Annual return: 15% on capital deployed. Key: Only trade when clear edge (historical > implied + 20%).',
+    keyPoints: [
+      'Implied move: (Straddle Price / Stock Price) × 85%; e.g., $20 straddle on $200 stock = 8.5% implied move',
+      'Edge detection: Compare to historical 8-quarter avg; trade only if historical > implied + 20% margin',
+      'Vol crush: IV drops 30-50% post-earnings; must exit SAME DAY to avoid value loss despite stock move',
+      'Exit rules: Sell at +50% profit or -30% loss; never hold > 1 day post-earnings',
+      'Backtest: 42% win rate, $96 EV per trade, 15% annual return; profitable when edge exists',
+    ],
+  },
+  {
+    id: 'straddles-strangles-q-2',
+    question:
+      'Compare "Long Straddle" vs "Long Strangle" for a volatility expansion play. For each: (1) Calculate total cost and breakeven points, (2) Determine profit at various stock prices (+5%, +10%, +15% moves), (3) Analyze theta decay over 30 days if stock doesn\'t move, (4) Evaluate vega exposure (benefit from IV expansion), (5) Determine which is better in different scenarios (big move vs moderate move). Provide numerical examples.',
+    sampleAnswer:
+      'Straddle vs Strangle Comparison: **SETUP**: Stock at $100, 30 days to expiration, IV = 30%. Long Straddle: Buy 100-strike call ($5) + 100-strike put ($5), Total cost: $10, Breakevens: $90 and $110 (need 10% move). Long Strangle: Buy 105-strike call ($3) + 95-strike put ($3), Total cost: $6 (cheaper!), Breakevens: $89 and $111 (need 11% move). **Profit at Various Moves**: +5% move (stock to $105): Straddle: Call worth $5, put $0, P&L = $5 - $10 = -$5 (loss), Strangle: Call worth $0, put $0, P&L = $0 - $6 = -$6 (worse loss). +10% move (stock to $110): Straddle: Call $10, put $0, P&L = $10 - $10 = $0 (breakeven), Strangle: Call $5, put $0, P&L = $5 - $6 = -$1 (small loss). +15% move (stock to $115): Straddle: Call $15, put $0, P&L = $15 - $10 = +$5 (50% return), Strangle: Call $10, put $0, P&L = $10 - $6 = +$4 (67% return!). **Theta Decay (30 days, no move)**: Straddle loses ~$0.30/day × 30 = $9 → final value $1 (90% loss), Strangle loses ~$0.18/day × 30 = $5.40 → final value $0.60 (90% loss), Both devastated by theta if no move! **Vega Exposure**: Straddle vega: $0.40/1% IV change × 2 options = $0.80, Strangle vega: $0.30/1% IV × 2 = $0.60 (lower), If IV expands 10%: Straddle gains $8, Strangle gains $6. **Which is Better**: Moderate move (5-10%): Straddle better (lower breakevens), Can profit or break even on 10% move. Large move (15%+): Strangle better (higher % returns), Lower cost amplifies returns. Cost-conscious: Strangle (60% of straddle cost), Lower capital risk. Higher probability: Straddle (easier to profit), Only need 10% vs 11% move. **Conclusion**: Straddle for moderate volatility plays (10-15% expected), Strangle for explosive moves (>15%) or limited capital.',
+    keyPoints: [
+      'Cost: Straddle $10 (ATM), Strangle $6 (OTM) - strangle 40% cheaper but wider breakevens',
+      'Breakevens: Straddle ±10%, Strangle ±11%; straddle easier to profit on moderate moves',
+      'Large moves (15%+): Strangle returns 67% vs straddle 50% - better % return due to lower cost',
+      'Theta decay: Both lose ~90% value in 30 days with no movement - extremely time-sensitive',
+      'Vega: Straddle $0.80, Strangle $0.60 per 1% IV; straddle benefits more from IV expansion',
+    ],
+  },
+  {
+    id: 'straddles-strangles-q-3',
+    question:
+      'Design a "short strangle income strategy" with proper risk management. The system should: (1) Select high IV rank stocks (>70%) for premium selling, (2) Determine optimal strikes (probability of profit), (3) Calculate max loss and implement stop-loss rules, (4) Add protective wings to create defined-risk version, (5) Implement rolling strategy if tested, (6) Backtest performance and compare to naked short strangle. Explain why this is high-risk and how to mitigate.',
+    sampleAnswer:
+      'Short Strangle System (with Risk Management): **Stock Selection**: Criteria: IV Rank > 70% (elevated volatility = rich premium), Liquid options: OI > 1000, bid-ask < $0.15, Avoid binary events (earnings within 45 days), Market cap > $5B (avoid penny stocks). **Strike Selection**: Sell OTM puts and calls at 1 standard deviation (16 delta): Put: 10% OTM, Call: 10% OTM. Example: Stock $100, sell 90 put + 110 call, Probability of profit: ~68% (1 SD range), Premium collected: $5 ($2.50 each side). **Max Loss Without Protection**: Put side: $90 - premium = theoretically $85 max ($8,500 per contract!), Call side: UNLIMITED if stock soars, This is UNACCEPTABLE RISK! **Adding Protective Wings (Iron Condor)**: Buy further OTM puts/calls: Buy 85 put ($0.50) + buy 115 call ($0.50), Net credit: $5 - $1 = $4, Max loss NOW DEFINED: $5 (wing width) - $4 (credit) = $1 ($100 per contract). Much more reasonable! **Position Sizing**: Risk 2% of account per trade: $100K account → risk $2K, Max loss per trade: $100, Position size: 20 contracts, Total collateral: $100 × 20 = $2K locked up. **Stop Loss Rules**: Exit at 50% of max loss: If unrealized loss = $50/contract → close position, Or exit at 200% of credit received: Collected $4, exit if cost to close = $8. **Rolling Strategy**: If stock approaches sold strike (within 2%): Option 1: Roll tested side out in time + away in strike, Option 2: Close entire position (take small loss), Option 3: Convert to butterfly (adjust untested side). **Backtest (Naked Short Strangle vs Iron Condor)**: Naked Short Strangle (100 trades): Win rate: 72%, Avg profit: $450, Avg loss: -$2,800 (catastrophic losses), EV: 0.72×$450 - 0.28×$2,800 = $324 - $784 = -$460 (NEGATIVE!), Max single loss: -$18,000 (blow-up risk), Conclusion: NOT VIABLE due to tail risk. Iron Condor (100 trades): Win rate: 68%, Avg profit: $380, Avg loss: -$90 (capped by wings), EV: 0.68×$380 - 0.32×$90 = $258 - $29 = $229 (POSITIVE), Max single loss: -$100 (defined), Conclusion: PROFITABLE with acceptable risk. **Why High Risk**: Unlimited loss on naked short strangle (call side), Probability of ruin exists (single bad trade can wipe out months of gains), Black swan events (COVID crash March 2020: massive losses). **Risk Mitigation**: ALWAYS use wings (iron condors, not naked strangles), Position sizing: Never > 5% of capital at risk per trade, Diversification: Multiple underlyings, different sectors, Stop losses: Disciplined exits at 50% max loss, Avoid earnings: Stocks can gap 20%+ overnight.',
+    keyPoints: [
+      'Strike selection: Sell at 1 SD (16 delta) OTM, ~10% away from stock; 68% probability of profit',
+      'Naked short strangle: NEGATIVE EV (-$460) due to catastrophic losses; single loss can be $18K+',
+      'Add wings: Convert to iron condor; limits max loss to $100 vs unlimited; EV becomes +$229',
+      'Stop loss: Exit at 50% max loss or 200% of credit received to prevent blow-ups',
+      'Backtest shows: Iron condor wins 68% with $229 EV; naked strangle loses despite 72% win rate',
+    ],
+  },
+];
+

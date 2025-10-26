@@ -1,0 +1,65 @@
+import { MultipleChoiceQuestion } from '@/lib/types';
+
+export const governmentSecuritiesMultipleChoice: MultipleChoiceQuestion[] = [
+  {
+    id: 'gs-mc-1',
+    question:
+      'A 10-year Treasury note has a nominal yield of 4.5% while a 10-year TIPS has a real yield of 2.0%. What is the market-implied breakeven inflation rate?',
+    options: ['2.5%', '6.5%', '2.25%', '4.5%'],
+    correctAnswer: 0,
+    explanation:
+      'Breakeven Inflation = Nominal Treasury Yield - TIPS Real Yield. Calculation: 4.5% - 2.0% = 2.5%. Interpretation: The market expects average annual inflation of 2.5% over the next 10 years. If actual inflation > 2.5%: TIPS will outperform nominal Treasuries (inflation-adjusted principal increases more than expected). If actual inflation < 2.5%: Nominal Treasuries will outperform (locked in higher fixed coupon). Trading strategy: Bullish on inflation (expect >2.5%): Buy TIPS, sell nominal Treasuries. Bearish on inflation (expect <2.5%): Buy nominal Treasuries, avoid TIPS. Real-world example (2021): Breakeven inflation reached 2.8% (market expected elevated inflation). Actual inflation 2021-2023 averaged 5%+ (TIPS significantly outperformed). Investors who bought TIPS based on >2.5% inflation view made substantial profits. Why 2.5%? Direct subtraction: 4.5% total return = 2.0% real return + 2.5% inflation compensation. Why not 6.5%? That would be adding yields (4.5% + 2.0%), incorrect formula. Addition makes no economic sense (can\'t earn both nominal AND real simultaneously). Why not 2.25%? Close but not exact calculation result. Might confuse with 2yr-10yr spread monitoring (different concept). Why not 4.5%? That\'s just the nominal yield, ignoring the TIPS comparison. Important: Breakeven includes inflation risk premium (~10-30bp typically). True expected inflation may be slightly lower than breakeven. Adjust: Expected_inflation ≈ Breakeven - Risk_premium. Also consider: Liquidity differences (TIPS less liquid, may have higher yield). Tax treatment (TIPS phantom income disadvantage in taxable accounts).',
+  },
+  {
+    id: 'gs-mc-2',
+    question:
+      'In a Treasury auction, the bid-to-cover ratio was 2.4 and the tail was 2 basis points. How should this auction be characterized?',
+    options: [
+      'Moderate demand with reasonable yield distribution',
+      'Weak demand with wide yield dispersion',
+      'Strong demand with tight yield clustering',
+      'Failed auction requiring dealer support',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Bid-to-cover 2.4 with 2bp tail indicates moderate/solid auction. Bid-to-cover ratio analysis: BTC = 2.4 means $2.40 of bids for every $1.00 offered. Strong: BTC > 2.5 (high demand), Moderate: BTC 2.0-2.5 (adequate demand), Weak: BTC < 2.0 (low demand). 2.4 is just below "strong" threshold, solidly in moderate range. Tail analysis: Tail = Stop-out yield - Median/Low yield. 2bp tail means highest accepted bid was 2bp above median. Strong: Tail < 1bp (bids very tight, consensus view), Moderate: Tail 1-3bp (reasonable dispersion), Weak: Tail > 3bp (wide disagreement, desperate to fill). 2bp is middle of moderate range. Combined assessment: BTC 2.4 + Tail 2bp = Solid but not spectacular auction. Demand adequate to absorb supply without stress. Yield dispersion reasonable (not too tight, not too wide). Market functioning normally. Real-world benchmarks: 10-year Treasury auctions (2023): Average BTC ≈ 2.5, Average tail ≈ 1.5bp. This auction: Slightly below average BTC, slightly above average tail. Assessment: Moderate/adequate, not concerning. Why not "weak demand"? Weak would be BTC < 2.0 and tail > 3bp. This auction had better metrics (2.4 BTC, 2bp tail). Still shows adequate investor interest. Why not "strong demand"? Strong would require BTC > 2.5 and tail < 1bp. This falls just short of strong thresholds. Good but not exceptional. Why not "failed auction"? Failed = BTC < 1.5, tail > 5bp, primary dealers forced to take >40%. Extremely rare for Treasuries (happens sometimes in peripheral European bonds). This auction orderly and successful. Context matters: If previous auctions averaged BTC 2.8: This 2.4 represents weakening demand, somewhat concerning. If supply was very large ($50B vs usual $38B): BTC 2.4 is actually quite good given extra supply. Market impact: Moderate auction → minimal yield movement post-auction. Perhaps 0-2bp tightening (slight relief supply absorbed). Vs strong auction → 2-5bp tightening, weak auction → 3-8bp widening.',
+  },
+  {
+    id: 'gs-mc-3',
+    question:
+      'What does an inverted yield curve (2-year yield > 10-year yield) typically signal?',
+    options: [
+      'Market expects recession and Fed rate cuts',
+      'Strong economic growth ahead',
+      'High inflation expectations',
+      'Currency devaluation risk',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Inverted yield curve is reliable recession predictor. Mechanism: Fed hikes short-term rates aggressively to combat inflation/overheat. 2-year yield rises (reflects current Fed policy and near-term expectations). 10-year yield stays lower (market expects Fed will cut rates in future recession). Inversion: 2yr > 10yr means market expects lower rates ahead = slower growth/recession. Historical track record: Since 1980: 7 inversions, all followed by recession within 6-24 months. Perfect predictor with 2-year lead time. Examples: 1989 inversion → 1990 recession, 2000 inversion → 2001 recession, 2006 inversion → 2008 financial crisis, 2019 inversion → 2020 COVID recession (would have happened anyway), 2022-2023 inversion → ? (longest inversion, recession expected 2024-2025). Recent case study (2022-2023): March 2022: Fed starts hiking from 0%, 2yr yield surges to 5%. 10yr yield rises but lags (supply concerns, growth worry offset). July 2022: Curve inverts (2yr 3.0%, 10yr 2.8%). Inverted for 12+ consecutive months (deepest since 1980s). Interpretation: Market expects Fed will overtighten, cause recession, then cut rates back to 3% by 2025-2026. Why recession signal? Higher short rates squeeze economy (expensive to borrow for businesses/consumers). Reduced investment → slower growth → layoffs → recession. Fed typically cuts rates during recession (stimulate economy). Long-term bond investors anticipate these cuts (buy 10yr, lock in higher yield before rates fall). Self-fulfilling: Inversion tightens financial conditions (harder to get loans), accelerating slowdown. Why not "strong growth"? Strong growth → normal upward-sloping curve (2yr < 10yr). Investors demand higher return for longer-term risk. Inversion is opposite of this. Why not "high inflation"? High inflation → steep curve (long rates much higher). All rates rise, but long end more (inflation compounds over time). Inverted curve suggests FALLING inflation ahead (recession → deflation pressure). Why not "currency devaluation"? That would raise ALL yields (foreign investors demand premium). Wouldn\'t specifically invert curve. More likely: parallel shift upward. Important caveats: Lead time: 6-24 months (not immediate). Can stay inverted for extended period. False positives: Rare but possible (mid-1960s brief inversions without recession). 3mo-10yr vs 2yr-10yr: Some economists prefer 3mo-10yr spread (more predictive). Trading implications: Inversion → reduce risk assets (stocks, credit), extend duration (long-term bonds will rally in recession), buy defensive sectors (utilities, consumer staples), avoid cyclicals (autos, industrials).',
+  },
+  {
+    id: 'gs-mc-4',
+    question:
+      'A TIPS bond was issued at $1,000 with a 2.5% coupon when CPI was 260. If CPI is now 280, what is the semi-annual coupon payment?',
+    options: ['$13.46', '$12.50', '$25.00', '$26.92'],
+    correctAnswer: 0,
+    explanation:
+      'TIPS coupon = Fixed Rate × Inflation-Adjusted Principal / Frequency. Step 1: Calculate inflation adjustment: Index_ratio = Current_CPI / Issue_CPI = 280 / 260 = 1.0769. Inflation = 7.69% since issuance. Step 2: Adjusted principal: Adjusted_principal = Original × Index_ratio = $1,000 × 1.0769 = $1,076.90. Principal has increased by $76.90 to keep pace with inflation. Step 3: Semi-annual coupon: Annual_coupon_rate = 2.5% = 0.025. Semi-annual payment = (0.025 × $1,076.90) / 2 = $26.92 / 2 = $13.46. Why this matters: TIPS coupons grow with inflation (unlike nominal bonds). Protects purchasing power of income stream. Original coupon (if CPI unchanged): 2.5% × $1,000 / 2 = $12.50. With inflation: Coupon increased to $13.46 (7.69% higher, matching CPI increase). Real value maintained. Why not $12.50? That would be coupon on ORIGINAL principal ($1,000). Ignores inflation adjustment. TIPS always apply fixed rate to ADJUSTED principal. Why not $25.00? That\'s annual coupon on adjusted principal ($1,076.90 × 2.5% = $26.92). But TIPS pay semi-annually, so divide by 2 → $13.46. If question asked annual, $26.92 would be close (but rounded to $25 is wrong). Why not $26.92? That\'s the ANNUAL coupon on adjusted principal. TIPS pay semi-annually (twice per year). Must divide by 2: $26.92 / 2 = $13.46. Tax implications: Investor receives $13.46 cash payment. But also owes tax on $76.90 principal increase ("phantom income"). If in 37% tax bracket: Tax on phantom = $76.90 × 37% = $28.45 (no cash to pay this!). Tax drag: Must pay $28.45 tax from other sources. Problematic in taxable accounts. Solution: Hold TIPS in tax-deferred accounts (IRA, 401k). No annual tax on phantom income. Comparison to nominal bond: Nominal $1,000 bond, 2.5% coupon: Always pays $12.50 semi-annually (fixed). With 7.69% inflation: Real value eroded to $12.50 / 1.0769 = $11.61 in real terms. TIPS: Pays $13.46, maintains real purchasing power. This is the key benefit of TIPS.',
+  },
+  {
+    id: 'gs-mc-5',
+    question:
+      'The Federal Reserve announces $80 billion per month of Treasury purchases (Quantitative Easing). What is the most likely immediate impact on Treasury yields?',
+    options: [
+      'Yields decrease (prices increase)',
+      'Yields increase (prices decrease)',
+      'No impact on yields',
+      'Yields become more volatile',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Quantitative Easing (QE) → Treasury yields fall (prices rise). Mechanism: Fed creates money and buys Treasuries from dealers/investors. Demand for Treasuries increases dramatically ($80B/month = $960B/year). Higher demand → prices rise → yields fall (inverse relationship). Particularly impacts long-end (10yr, 30yr bonds - Fed typically targets these). Example (2020 COVID QE): March 2020: 10-year yield spikes to 1.9% (panic selling). Fed announces unlimited QE. Within weeks: 10-year yield falls to 0.5% (Fed buying overwhelms market). Sustained QE: Yields stayed below 1% through 2021. Why yields fall: Supply/demand: Fed removes $960B/year supply from market. Private investors must compete for remaining bonds. Bid prices up to secure inventory. Forward guidance: Fed buying signals rates will stay low (accommodative policy). Expectations of low future rates pull down long-term yields today. Portfolio rebalancing: Investors sell Treasuries to Fed, must buy other assets (stocks, corporate bonds, real estate). Reduced Treasury alternative → accept lower yields on remaining Treasuries. Quantitative impact: Empirical studies: $100B/month QE reduces 10yr yield by ~15-25bp. $80B/month: Expected impact ~12-20bp decline. Effect larger if unexpected, smaller if already priced in. Why not "yields increase"? That would be Quantitative Tightening (QT) - Fed selling or not reinvesting. QT reduces demand → lower prices → higher yields. Opposite of QE. Example: 2022 Fed QT contributed to 10yr yield rising from 1.5% to 4.2%. Why not "no impact"? Market definitely reacts to Fed QE announcements. Immediately priced in (yields fall within hours of announcement). Persistent effect as long as QE continues. Only if fully anticipated might impact be muted. Why not "more volatile"? QE generally REDUCES volatility (Fed backstop). Investors know Fed is buyer of last resort. Volatility decreases (especially tail risk). Increased volatility might occur at program end (taper tantrum 2013). Curve impact: QE flattens curve: Short-end: Anchored by Fed Funds rate (Fed controls directly). Long-end: Falls due to QE buying. Spread narrows: 2yr-10yr spread compresses (flatter curve). Historical: Normal spread 100-150bp, with QE might flatten to 20-50bp. Trading implications: Front-run QE: Buy Treasuries before Fed (sell at higher prices to Fed). Duration extension: QE pushes investors out the curve (seek yield). Risk assets: QE bullish for stocks (liquidity, low rates, portfolio rebalancing). Credit: Corporate spreads tighten (investors reach for yield). Important: Effect reverses when QE ends or QT begins. 2022-2023: QT major headwind for Treasuries (yields rose sharply).',
+  },
+];
+

@@ -121,6 +121,8 @@ import { professionalToolsModule } from '../modules/professional-tools';
 import { corporateFinanceModule } from '../modules/corporate-finance';
 import { financialMarketsInstrumentsModule } from '../modules/financial-markets-instruments';
 import { financialStatementsAnalysisModule } from '../modules/financial-statements-analysis';
+import { financialModelingValuationModule } from '../modules/financial-modeling-valuation';
+import { optionsTradingGreeksModule } from '../modules/options-trading-greeks';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -221,7 +223,9 @@ const allModulesMap: Record<string, Module> = {
   'finance-foundations': financeFoundationsModule,
   'professional-tools': professionalToolsModule,
   'financial-statements-analysis': financialStatementsAnalysisModule,
+  'financial-modeling-valuation': financialModelingValuationModule,
   'corporate-finance': corporateFinanceModule,
+  'options-trading-greeks': optionsTradingGreeksModule,
   'financial-markets-instruments': financialMarketsInstrumentsModule,
 
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,
