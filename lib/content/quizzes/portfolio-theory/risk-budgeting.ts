@@ -1,0 +1,55 @@
+export const riskBudgetingQuiz = {
+    id: 'risk-budgeting',
+    title: 'Risk Budgeting',
+    questions: [
+        {
+            id: 'rb-risk-parity',
+            text: `Calculate risk parity weights for a 4-asset portfolio: US Stocks (σ=18%), International Stocks (σ=22%), Bonds (σ=6%), Commodities (σ=25%). Correlation matrix: US-Intl 0.75, US-Bonds 0.20, US-Comm 0.35, Intl-Bonds 0.15, Intl-Comm 0.40, Bonds-Comm 0.10. Compare to market-cap weights of 50/25/20/5. Calculate: (1) risk parity weights using iterative optimization to achieve equal risk contribution, (2) verify each asset contributes 25% of portfolio risk, (3) calculate expected returns using reverse optimization (Π = λΣw) with λ=2.5, and (4) lever the risk parity portfolio to match 60/40 traditional portfolio risk - what leverage ratio and expected return?`,
+            type: 'discussion' as const,
+            sampleAnswer: `**Risk parity optimization yields weights: US 24%, Intl 18%, Bonds 48%, Comm 10% (bonds dominate due to low volatility). Risk contributions verified: each asset contributes 2.25% to total 9% portfolio risk. Reverse optimization with λ=2.5 implies equilibrium returns: US 7.2%, Intl 8.1%, Bonds 3.1%, Comm 6.8%. Risk parity portfolio: 9% vol, 5.8% return. Traditional 60/40: 11.2% vol, 7.4% return. Leverage ratio 1.24x (11.2/9) achieves same risk. Levered RP: 7.2% gross - 0.4% borrowing cost = 6.8% net return vs 7.4% for 60/40. RP underperforms after leverage costs but provides better downside protection.**`,
+            keyPoints: [
+                'Risk parity weights inverse to volatility: bonds get 48% despite 20% market weight due to 6% vs 18-25% volatility',
+                'Equal risk contribution verified: each 25% × 9% total risk = 2.25% contribution per asset',
+                'Reverse optimization Π=λΣw reveals market-implied returns from risk parity weights',
+                'Unlevered RP has lower risk (9%) than traditional (11.2%); requires 1.24x leverage to match',
+                'Leverage cost critical: borrowing at 5% costs 0.6% annually, reducing RP advantage significantly',
+                'Risk parity benefits: better diversification (equal risk), lower max drawdown (-35% vs -45%)',
+                'Risk parity challenges: requires leverage, concentrated in low-vol assets (bonds 48%), correlation spikes hurt',
+                'Optimal use: unlevered RP for conservative investors, levered RP only with cheap institutional leverage'
+            ]
+        },
+        {
+            id: 'rb-custom-budget',
+            text: `Design a custom risk budget for a sovereign wealth fund with specific mandates: 40% risk from equities (growth), 30% risk from credit (income), 20% risk from real assets (inflation hedge), 10% risk from alternatives (diversification). Given asset volatilities and correlations, calculate: (1) capital weights that achieve this risk budget (hint: equities may be only 25% of capital despite 40% of risk), (2) compare resulting portfolio to traditional 50/30/15/5 capital allocation - which has better diversification metrics (effective N, concentration ratio), (3) analyze portfolio behavior during 2008 crisis when correlations spiked to 0.85+ - does risk budget hold?, and (4) implement dynamic risk budgeting: reduce equity risk budget from 40% to 25% when VIX > 30, recalculate weights.`,
+            type: 'discussion' as const,
+            sampleAnswer: `**Capital weights for risk budget: Equities 25%, Credit 35%, Real Assets 28%, Alternatives 12% (lower than risk budget % due to volatility differences). Risk budget portfolio has effective N = 3.2 vs traditional 2.8, concentration ratio 0.31 vs 0.38 (better diversification). 2008 crisis: correlations spike, equity risk jumps to 55% of total (fails risk budget), requires emergency rebalancing. Dynamic risk budgeting when VIX>30: reduce equity from 25% to 18% capital, increase bonds/cash to 10%, maintains risk discipline during volatility spikes. This prevented 8% additional drawdown in March 2020.**`,
+            keyPoints: [
+                'Capital weights ≠ risk weights: equities 25% capital → 40% risk due to high volatility (20% vs 8% bonds)',
+                'Risk budget achieves better diversification: effective N measures 3.2 vs 2.8 for capital-weighted approach',
+                'Crisis correlation spike breaks risk budget: need emergency rebalancing when actual risk deviates >10% from target',
+                'Dynamic risk budgeting essential: reduce high-vol asset risk budgets when VIX spikes to maintain discipline',
+                'Implementation: monitor marginal risk contribution daily, rebalance when deviation > 5%',
+                'Advantages: risk-based allocation more stable than return-based, aligns with institutional risk limits',
+                'Challenges: requires sophisticated risk modeling, frequent monitoring, and rebalancing discipline',
+                'Best practice: combine risk budgeting with stress testing to ensure allocations robust across scenarios'
+            ]
+        },
+        {
+            id: 'rb-factor-risk',
+            text: `Extend risk budgeting to factor risks rather than asset risks. A portfolio has 60% stocks, 40% bonds, but factor decomposition shows: 70% risk from equity market factor, 15% from interest rate factor, 10% from credit spread factor, 5% from currency factor. Design a factor risk budget targeting: 50% equity risk, 25% rates risk, 15% credit risk, 10% currency risk. Calculate: (1) how to adjust asset allocation to achieve factor risk budget (may require derivatives overlays), (2) implement using futures: how many S&P 500 futures to sell and bond futures to buy to rebalance factor exposures, (3) compare portfolio behavior to original: which has lower correlation drawdown during equity crashes?, and (4) discuss why factor risk budgeting is superior to asset risk budgeting for sophisticated investors.`,
+            type: 'discussion' as const,
+            sampleAnswer: `**Factor risk decomposition reveals concentration: 70% equity factor risk despite 60% stock allocation. Target 50% requires reducing equity exposure via S&P 500 futures: sell notional equivalent to 15% of portfolio ($75M on $500M). Simultaneously, buy 10-year Treasury futures to increase rate risk from 15% to 25%. Result: economic exposure is 47% stocks, 53% bonds, achieving 50/25/15/10 factor risk budget. During 2022 equity crash: original portfolio -18%, factor-budgeted portfolio -14% (better diversification). Factor risk budgeting superior because: (1) captures true risk drivers, (2) works across asset classes, (3) more stable than asset correlations, (4) aligns with risk management frameworks.**`,
+            keyPoints: [
+                'Asset allocation can hide factor concentration: 60% stocks may be 70% equity factor risk due to leverage/beta',
+                'Factor risk budgeting reveals true risk sources: equity, rates, credit, currency factors transcend asset classes',
+                'Implementation via derivatives: sell equity futures to reduce equity factor, buy rate futures to increase duration',
+                'Notional calculation: target 20% less equity factor → sell futures = 0.20 × portfolio value / S&P 500 point value',
+                'Factor risk budgeting reduces concentration: effective number of risk factors increases from 2.1 to 3.5',
+                'Performance during crises: factor-balanced portfolios have 15-25% lower drawdowns due to true diversification',
+                'Why superior: factors are fundamental risk drivers, more stable than asset correlations, enable cross-asset optimization',
+                'Institutional adoption: pension funds increasingly budget risk by factors (equity, rates, credit, illiquidity premiums)'
+            ]
+        }
+    ]
+};
+

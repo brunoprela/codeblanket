@@ -1,0 +1,55 @@
+export const factorModelsQuiz = {
+    id: 'factor-models',
+    title: 'Factor Models (Fama-French)',
+    questions: [
+        {
+            id: 'fm-three-factor',
+            text: `Run a Fama-French 3-factor regression on a mutual fund's 5-year monthly returns. The fund returned 14% annually with 19% volatility. Regression results: Alpha = 0.15% monthly (t-stat 2.1), Market Beta = 1.15 (t-stat 18.3), SMB Beta = 0.42 (t-stat 4.8), HML Beta = 0.31 (t-stat 3.2), R² = 0.89. Factor returns: Market = 0.65% monthly, SMB = 0.22% monthly, HML = 0.38% monthly. Analyze: (1) calculate the fund's annualized alpha and determine if it's statistically significant, (2) decompose the fund's 14% return into factor contributions (market, size, value) and true alpha, (3) explain what the factor loadings reveal about the fund's investment style, and (4) compare this fund to an S&P 500 index fund with beta = 1.0, SMB = -0.05, HML = 0.02 - which offers better risk-adjusted returns?`,
+            type: 'discussion' as const,
+            sampleAnswer: `**Full factor regression analysis showing annualized alpha of 1.8% (0.15% × 12) is statistically significant (t>2), decomposition revealing 7.8% from market beta, 1.1% from size tilt, 1.4% from value tilt, 1.8% from alpha, totaling 12.1% explained return. Factor loadings indicate small-cap value fund (SMB 0.42, HML 0.31). Risk-adjusted comparison: fund Sharpe 0.58 vs index 0.52, fund wins but carries 19% vs 18% volatility and factor concentration risk. Information ratio of 0.42 suggests good active management skill.**`,
+            keyPoints: [
+                'Annualized alpha: 0.15% × 12 = 1.8%; t-stat 2.1 > 2.0 critical value → statistically significant at 95%',
+                'Return decomposition: Market 7.8% + SMB 1.1% + HML 1.4% + Alpha 1.8% = 12.1% explained',
+                'Factor loadings reveal small-cap value tilt: SMB 0.42 (moderate small tilt), HML 0.31 (moderate value tilt)',
+                'R² = 0.89 means 89% of return variance explained by 3 factors; remaining 11% is idiosyncratic + alpha',
+                'Fund vs Index: Sharpe 0.58 vs 0.52, but fund has factor concentration risk (size + value)',
+                'Information ratio: 1.8% alpha / 4.2% tracking error = 0.43; excellent active management',
+                'Statistical significance critical: only trust alpha if t-stat > 2 with sufficient sample (60+ months)',
+                'Factor exposure interpretation: positive SMB/HML = small-cap value style, negative = large-cap growth style'
+            ]
+        },
+        {
+            id: 'fm-five-factor',
+            text: `Compare Fama-French 3-factor versus 5-factor models for explaining portfolio returns. A quantitative fund shows: 3-factor R² = 0.82, HML beta = 0.48; 5-factor R² = 0.91, HML beta = 0.22, RMW beta = 0.35, CMA beta = 0.29. Discuss: (1) why HML coefficient drops from 0.48 to 0.22 when adding profitability and investment factors, (2) calculate the incremental R² and determine if the additional factors are statistically justified using F-test, (3) interpret what RMW = 0.35 and CMA = 0.29 reveal about the fund's stock selection criteria, and (4) explain Fama-French's finding that the value premium (HML) becomes weaker when controlling for profitability and investment - implications for value investing strategies.`,
+            type: 'discussion' as const,
+            sampleAnswer: `**Comprehensive analysis showing HML drops because profitability and investment factors capture much of what was attributed to value (value stocks often have low profitability/high investment). Incremental R² of 0.09 (9% additional variance explained) is statistically significant with F-stat > 3.0. RMW 0.35 indicates preference for profitable companies, CMA 0.29 shows preference for conservative investors. Fama-French result: value premium is partly profitability/investment premium in disguise - pure value (low P/B) without profitability is less profitable. Modern implication: quality-value strategies combining low valuations with high profitability outperform traditional value.**`,
+            keyPoints: [
+                'HML drops from 0.48 to 0.22 because RMW and CMA capture variance previously attributed to HML',
+                'Value stocks (high B/M) often have low profitability and high investment; 5-factor model separates these effects',
+                'Incremental R²: 0.91 - 0.82 = 0.09; F-test confirms statistical significance (typically F > 3.0 required)',
+                'RMW 0.35: fund prefers profitable companies (robust operating margins); positive profitability tilt',
+                'CMA 0.29: fund prefers conservative capital allocators; avoids aggressive growth capex',
+                'Fama-French finding: "value premium" is mix of valuation + quality factors; pure value weaker',
+                'Investment implication: screen for low P/B AND high profitability (quality-value) beats low P/B alone',
+                'Modern factor investing: use 5-factor model to separate true alpha from profitability/investment exposures'
+            ]
+        },
+        {
+            id: 'fm-factor-timing',
+            text: `Evaluate a factor timing strategy that rotates between factors based on valuations and momentum. Strategy: overweight Value (HML) when value spread (cheapest 20% P/B vs expensive 20%) exceeds 75th percentile historically; overweight Momentum (UMD) when trailing 12-month performance spread exceeds median. Backtest 2000-2023 shows: static equal-weight factors returned 8.2% with Sharpe 0.48, timing strategy returned 10.1% with Sharpe 0.52, but with 85% turnover vs 35% for static. Analyze: (1) calculate after-cost returns assuming 10 bps per trade, (2) test if 0.4 Sharpe improvement is statistically significant over 23 years, (3) explain why factor timing is challenging (correlations change, spreads mean-revert slowly), and (4) compare to simpler alternative: constant 70/30 value/momentum based on historical Sharpe ratios.`,
+            type: 'discussion' as const,
+            sampleAnswer: `**After-cost analysis: timing strategy 85% turnover × 10 bps = 0.85% annual drag → net return 9.25% vs static 8.55% (35% turnover × 10 bps = 0.35% drag). Net Sharpe: timing 0.47 vs static 0.47 → timing advantage disappears after costs! Statistical test: 0.04 Sharpe difference not significant (need 0.10+ over 23 years for significance). Factor timing challenges: value spread reverts slowly (5-10 year cycles), momentum timing risks whipsaws, correlation instability. Simple 70/30 value/momentum static allocation achieves 8.9% return, 0.50 Sharpe, 30% turnover → best risk-adjusted returns after costs.**`,
+            keyPoints: [
+                'Transaction costs eliminate timing advantage: 85% turnover costs 0.85%, static costs 0.35%, 0.50% difference erases 0.30% outperformance',
+                'Statistical significance test: need Sharpe difference > 0.10 over 23 years for 95% confidence; 0.04 difference not significant',
+                'Factor timing difficulty: value spreads mean-revert over 5-10 years (too slow for tactical), momentum whipsaws in choppy markets',
+                'Empirical evidence: most factor timing strategies fail to outperform constant allocation after costs and taxes',
+                'Simple 70/30 constant allocation beats timing: higher weight to value (higher historical premium), lower turnover',
+                'Optimal approach: strategic constant factor allocation, not tactical timing; rebalance annually not monthly',
+                'Exception: extreme valuation signals (>95th percentile spread) may justify modest tactical tilts (±10% not ±30%)',
+                'Academic consensus: factor premiums exist but timing them is as hard as timing markets; stick with constant exposure'
+            ]
+        }
+    ]
+};
+

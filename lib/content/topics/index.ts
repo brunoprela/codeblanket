@@ -122,7 +122,13 @@ import { corporateFinanceModule } from '../modules/corporate-finance';
 import { financialMarketsInstrumentsModule } from '../modules/financial-markets-instruments';
 import { financialStatementsAnalysisModule } from '../modules/financial-statements-analysis';
 import { financialModelingValuationModule } from '../modules/financial-modeling-valuation';
+import { portfolioTheoryModule } from '../modules/portfolio-theory';
 import { optionsTradingGreeksModule } from '../modules/options-trading-greeks';
+import { timeSeriesAnalysisModule } from '../modules/time-series-analysis';
+import { marketDataRealTimeProcessingModule } from '../modules/market-data-real-time-processing';
+import { fixedIncomeDerivativesModule } from '../modules/fixed-income-derivatives';
+import { algorithmicTradingStrategiesModule } from '../modules/algorithmic-trading-strategies';
+import { buildingTradingInfrastructureModule } from '../modules/building-trading-infrastructure';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -224,8 +230,14 @@ const allModulesMap: Record<string, Module> = {
   'professional-tools': professionalToolsModule,
   'financial-statements-analysis': financialStatementsAnalysisModule,
   'financial-modeling-valuation': financialModelingValuationModule,
+  'portfolio-theory': portfolioTheoryModule,
   'corporate-finance': corporateFinanceModule,
   'options-trading-greeks': optionsTradingGreeksModule,
+  'time-series-analysis': timeSeriesAnalysisModule,
+  'market-data-real-time-processing': marketDataRealTimeProcessingModule,
+  'fixed-income-derivatives': fixedIncomeDerivativesModule,
+  'algorithmic-trading-strategies': algorithmicTradingStrategiesModule,
+  'building-trading-infrastructure': buildingTradingInfrastructureModule,
   'financial-markets-instruments': financialMarketsInstrumentsModule,
 
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,

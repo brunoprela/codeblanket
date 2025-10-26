@@ -1,0 +1,44 @@
+export const realTimeDataPipelinesQuiz = [
+  {
+    id: 'real-time-data-pipelines-q-1',
+    question:
+      'Design a real-time market data pipeline using Kafka that processes 500 symbols at 10 updates/second per symbol (5000 msg/sec total). Requirements: (1) Partition strategy for ordering guarantees, (2) Consumer groups for scaling (10 strategy instances), (3) Monitoring for lag, (4) Replay capability for backtesting, (5) Cost analysis. Provide architecture, Python implementation, and performance benchmarks.',
+    sampleAnswer:
+      'Production Kafka pipeline architecture:\n\n**Partitioning Strategy**: Use symbol as partition key. Kafka guarantees ordering within partitions. All AAPL messages go to same partition → strict ordering for AAPL. With 500 symbols and say 50 partitions, ~10 symbols/partition.\n\n**Consumer Groups**: Create "strategy-group-1" with 10 consumer instances. Kafka distributes partitions across consumers (50 partitions / 10 consumers = 5 partitions per consumer). Each consumer processes ~50 symbols. This provides horizontal scaling.\n\n**Implementation**: [Python code for Kafka producer/consumer with proper partitioning, consumer groups, offset management, lag monitoring]\n\n**Performance**: 5000 msg/sec = well within Kafka limits (single broker: 100K msg/sec). Latency: 5-20ms (producer → consumer). Lag monitoring: Track consumer offset vs log end offset. Alert if lag > 1000 messages.\n\n**Replay**: Set consumer auto_offset_reset=\'earliest\' to replay from beginning. For specific date range, use offset_for_times() API. Kafka retains 7 days by default (configurable to months).\n\n**Cost**: AWS MSK (managed Kafka): 3 brokers × $0.21/hr = $453/mo. Storage: 5000 msg/sec × 200 bytes × 86400 sec/day × 7 days = 6 GB retained, storage free under 10GB. Total: ~$500/mo.',
+    keyPoints: [
+      'Partitioning: Symbol as key ensures ordering per symbol, distribute 500 symbols across 50 partitions (~10 each)',
+      'Consumer groups: 10 instances process 50 partitions = 5 partitions/consumer = ~50 symbols each, horizontally scalable',
+      'Lag monitoring: Track offset lag (current - committed), alert if > 1000 messages (indicates slow consumer)',
+      'Replay: Use auto_offset_reset="earliest" or offset_for_times() to replay specific date ranges for backtesting',
+      'Cost: AWS MSK 3 brokers $453/mo + storage, handles 5K msg/sec easily (Kafka scales to 100K+ msg/sec per broker)',
+    ],
+  },
+  {
+    id: 'real-time-data-pipelines-q-2',
+    question:
+      'Compare Redis Pub/Sub vs Kafka for real-time market data distribution. Analyze: (1) Latency, (2) Persistence, (3) Scalability, (4) Message guarantees, (5) Cost. Scenario: 100 symbols, 50 updates/sec per symbol (5000 msg/sec), 20 strategy instances. Recommend which to use.',
+    sampleAnswer:
+      'Redis vs Kafka comparison:\n\n**Latency**: Redis Pub/Sub: 1-5ms (in-memory, single hop). Kafka: 5-20ms (disk writes, replication). Winner: Redis (4× faster).\n\n**Persistence**: Redis: None (messages lost if no subscriber or Redis restarts). Kafka: Durable (written to disk, replicated, retained 7+ days). Winner: Kafka (critical for compliance and replay).\n\n**Scalability**: Redis: 1M msg/sec single instance, but limited by single-threaded pub/sub. Kafka: 100K msg/sec per broker, horizontally scalable (add more brokers). At 5K msg/sec both handle easily. Winner: Tie at this scale, Kafka wins at > 100K msg/sec.\n\n**Message Guarantees**: Redis: At-most-once (fire-and-forget, no acks). Kafka: At-least-once (configurable to exactly-once with transactions). Winner: Kafka (production requires guarantees).\n\n**Cost**: Redis: $50-100/mo (managed Redis, 1GB). Kafka: $400-500/mo (3-broker cluster). Winner: Redis (5× cheaper).\n\n**Recommendation**: \n- Use **Redis** if: Need lowest latency (< 5ms), no persistence required, cost-sensitive, simple architecture.\n- Use **Kafka** if: Need persistence (compliance, replay), message guarantees, multi-consumer with independent offsets, production-grade reliability.\n\nFor this scenario (5K msg/sec, 20 strategies): **Kafka recommended**. Persistence and message guarantees are critical for trading (audit trail, backtesting, disaster recovery). 5-20ms latency acceptable for most strategies. Redis only if ultra-low-latency HFT (< 5ms required) and can tolerate message loss.',
+    keyPoints: [
+      'Latency: Redis 1-5ms (in-memory) vs Kafka 5-20ms (disk writes), Redis 4× faster',
+      'Persistence: Redis none (messages lost on restart) vs Kafka durable (7+ days retention), critical for compliance',
+      'Guarantees: Redis at-most-once (no ack) vs Kafka at-least-once (ack required), Kafka more reliable',
+      'Cost: Redis $50-100/mo vs Kafka $400-500/mo, Redis 5× cheaper but lacks enterprise features',
+      'Recommendation: Kafka for production (persistence + guarantees), Redis only for ultra-low-latency HFT with no persistence needs',
+    ],
+  },
+  {
+    id: 'real-time-data-pipelines-q-3',
+    question:
+      'You notice Kafka consumer lag increasing from 0 to 10,000 messages over 10 minutes. This indicates consumers can\'t keep up. Debug: (1) Identify root causes, (2) Measure consumer throughput, (3) Optimize processing, (4) Scale consumers. Provide diagnostic approach and solutions.',
+    sampleAnswer:
+      'Kafka consumer lag debugging:\n\n**Root Cause Analysis**:\n\n1. **Slow processing**: Consumer spends 50ms per message (should be < 5ms). Check: Strategy computation, database writes, external API calls.\n\n2. **Garbage collection pauses**: JVM/Python GC pauses block consumer thread. Check: GC logs, memory usage spikes.\n\n3. **Network issues**: Consumer-broker connection slow. Check: Network latency, packet loss.\n\n4. **Insufficient consumers**: 10 consumers for 50 partitions = 5 partitions each. If uneven distribution, some consumers overloaded.\n\n5. **Broker bottleneck**: Disk I/O saturation, CPU maxed. Check: Broker metrics (disk util, CPU %).\n\n**Measurement**:\n\n```python\nimport time\n\nclass ConsumerMonitor:\n    def __init__(self):\n        self.messages_processed = 0\n        self.total_time = 0.0\n        self.start_time = time.time()\n    \n    def record_message(self, process_time_ms):\n        self.messages_processed += 1\n        self.total_time += process_time_ms\n    \n    def get_stats(self):\n        elapsed = time.time() - self.start_time\n        throughput = self.messages_processed / elapsed\n        avg_latency = self.total_time / self.messages_processed if self.messages_processed > 0 else 0\n        \n        return {\n            \'throughput_msg_per_sec\': throughput,\n            \'avg_process_time_ms\': avg_latency,\n            \'total_messages\': self.messages_processed\n        }\n\nmonitor = ConsumerMonitor()\n\nasync for message in consumer:\n    start = time.perf_counter()\n    \n    # Process message\n    await process_quote(message.value)\n    \n    process_time = (time.perf_counter() - start) * 1000\n    monitor.record_message(process_time)\n    \n    if monitor.messages_processed % 1000 == 0:\n        stats = monitor.get_stats()\n        print(f"Throughput: {stats[\'throughput_msg_per_sec\']:.0f} msg/sec, ")\n              f"Avg latency: {stats[\'avg_process_time_ms\']:.2f}ms")\n```\n\n**Optimization**:\n\n1. **Reduce processing time**: Profile code, optimize hot paths. Example: Use NumPy for calculations (10× faster than loops).\n\n2. **Batch processing**: Process 100 messages at once instead of 1 at a time (reduces overhead).\n\n3. **Async I/O**: Don\'t block on database writes. Use async/await or fire-and-forget.\n\n4. **Remove unnecessary work**: Are you computing metrics you don\'t need? Logging too verbosely?\n\n**Scaling**:\n\nIncrease consumers from 10 to 20 (now each handles 2.5 partitions = 25 symbols). Lag should decrease proportionally. Monitor new lag - if still increasing, repeat scaling.\n\nAlternatively: Increase partitions from 50 to 100 (requires Kafka topic modification + rebalancing). More partitions = finer-grained distribution.\n\n**Success Criteria**: Lag returns to 0 within 5 minutes, stays at 0 during normal operation. Throughput: Each consumer processes 500-1000 msg/sec (5K total / 10 consumers = 500 msg/sec/consumer baseline).',
+    keyPoints: [
+      'Root causes: Slow processing (50ms vs 5ms target), GC pauses, network issues, uneven partition distribution, broker bottlenecks',
+      'Measurement: Track throughput (msg/sec) and avg processing time (ms), should be 500-1000 msg/sec per consumer',
+      'Optimization: Reduce processing time (profile code, use NumPy), batch processing (100 msg at once), async I/O',
+      'Scaling: Increase consumers (10 → 20 = 2× throughput) or partitions (50 → 100 = finer distribution)',
+      'Success: Lag returns to 0 within 5 minutes, each consumer handles 500-1000 msg/sec sustainably',
+    ],
+  },
+];
