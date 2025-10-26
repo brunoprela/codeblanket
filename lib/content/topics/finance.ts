@@ -9,8 +9,8 @@ export const financeTopic = {
     'Master financial markets, quantitative analysis, trading strategies, and portfolio management',
   icon: '💰',
   modules: [
-    'financial-markets-instruments',
     'finance-foundations',
+    'financial-markets-instruments',
     'professional-tools',
     'financial-statements-analysis',
     'finance-fundamentals',
