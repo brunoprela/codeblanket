@@ -1,7 +1,7 @@
 export const systemMonitoringAlerting = {
-    title: 'System Monitoring and Alerting',
-    id: 'system-monitoring-alerting',
-    content: `
+  title: 'System Monitoring and Alerting',
+  id: 'system-monitoring-alerting',
+  content: `
 # System Monitoring and Alerting
 
 ## Introduction

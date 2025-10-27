@@ -726,16 +726,15 @@ def run_simulation():
     # Display order book
     print("\\n[ORDER BOOK] Market data after MM quotes:")
     snapshot = engine.order_book.get_market_data()
-    print(f"  NBBO: ${snapshot.best_bid: .2f
-} x ${ snapshot.best_ask:.2f }")
-print(f"  Spread: ${snapshot.spread:.2f} ({snapshot.spread/snapshot.midpoint*10000:.1f} bps)")
-print(f"  Midpoint: ${snapshot.midpoint:.2f}")
-print(f"\\n  Bid Depth:")
-for price in sorted(snapshot.bid_depth.keys(), reverse = True)[: 5]:
-print(f"    ${price:.2f}: {snapshot.bid_depth[price]:,} shares")
-print(f"\\n  Ask Depth:")
-for price in sorted(snapshot.ask_depth.keys())[: 5]:
-print(f"    ${price:.2f}: {snapshot.ask_depth[price]:,} shares")
+    print(f"  NBBO: \${snapshot.best_bid:.2f} x \${snapshot.best_ask:.2f}")
+    print(f"  Spread: \${snapshot.spread:.2f} ({snapshot.spread/snapshot.midpoint*10000:.1f} bps)")
+    print(f"  Midpoint: \${snapshot.midpoint:.2f}")
+    print(f"\\n  Bid Depth:")
+    for price in sorted(snapshot.bid_depth.keys(), reverse=True)[:5]:
+        print(f"    \${price:.2f}: {snapshot.bid_depth[price]:,} shares")
+    print(f"\\n  Ask Depth:")
+    for price in sorted(snapshot.ask_depth.keys())[:5]:
+        print(f"    \${price:.2f}: {snapshot.ask_depth[price]:,} shares")
     
     # Simulate retail trader orders
 print("\\n" + "=" * 80)
@@ -754,10 +753,10 @@ order1 = Order(
 )
 result1 = engine.submit_order(order1)
 print(f"  Status: {result1['status']}")
-print(f"  Fills: {len(result1['fills'])}")
-for fill in result1['fills']:
-    print(f"    - {fill.quantity} @ ${fill.price:.2f}")
-print(f"  Latency: {result1['latency_ns'] / 1000:.2f} μs")
+    print(f"  Fills: {len(result1['fills'])}")
+    for fill in result1['fills']:
+        print(f"    - {fill.quantity} @ \${fill.price:.2f}")
+    print(f"  Latency: {result1['latency_ns'] / 1000:.2f} μs")
     
     # Order 2: Limit buy below market
 print("\\n[TRADER 2] Limit buy 200 @ $149.90")
@@ -788,9 +787,9 @@ order3 = Order(
 )
 result3 = engine.submit_order(order3)
 print(f"  Status: {result3['status']}")
-print(f"  Fills: {len(result3['fills'])}")
-for fill in result3['fills']:
-    print(f"    - {fill.quantity} @ ${fill.price:.2f}")
+    print(f"  Fills: {len(result3['fills'])}")
+    for fill in result3['fills']:
+        print(f"    - {fill.quantity} @ \${fill.price:.2f}")
     
     # Order 4: FOK order(will reject if can't fill completely)
 print("\\n[TRADER 4] FOK sell 1000 @ $149.95")
@@ -816,16 +815,16 @@ print(f"  Position: {market_maker.position} shares")
     # Final order book state
 print("\\n" + "=" * 80)
 print("[ORDER BOOK] Final State")
-print("=" * 80)
-snapshot = engine.order_book.get_market_data()
-print(f"\\nNBBO: ${snapshot.best_bid:.2f} x ${snapshot.best_ask:.2f}")
-print(f"Midpoint: ${snapshot.midpoint:.2f}")
-print(f"\\nTop 5 Bid Levels:")
-for price in sorted(snapshot.bid_depth.keys(), reverse = True)[: 5]:
-print(f"  ${price:.2f}: {snapshot.bid_depth[price]:,} shares")
-print(f"\\nTop 5 Ask Levels:")
-for price in sorted(snapshot.ask_depth.keys())[: 5]:
-print(f"  ${price:.2f}: {snapshot.ask_depth[price]:,} shares")
+    print("=" * 80)
+    snapshot = engine.order_book.get_market_data()
+    print(f"\\nNBBO: \${snapshot.best_bid:.2f} x \${snapshot.best_ask:.2f}")
+    print(f"Midpoint: \${snapshot.midpoint:.2f}")
+    print(f"\\nTop 5 Bid Levels:")
+    for price in sorted(snapshot.bid_depth.keys(), reverse=True)[:5]:
+        print(f"  \${price:.2f}: {snapshot.bid_depth[price]:,} shares")
+    print(f"\\nTop 5 Ask Levels:")
+    for price in sorted(snapshot.ask_depth.keys())[:5]:
+        print(f"  \${price:.2f}: {snapshot.bid_depth[price]:,} shares")
     
     # Statistics
 print("\\n" + "=" * 80)
@@ -938,6 +937,5 @@ This capstone project integrates every concept from the Market Microstructure mo
 Building this order book simulator provides deep understanding of modern electronic markets and prepares you for roles in exchange technology, HFT infrastructure, or quantitative trading systems.
 
 **Congratulations on completing Module 12: Market Microstructure & Order Flow!** 🎉
-`
+`,
 };
-

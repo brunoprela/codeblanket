@@ -1,7 +1,8 @@
 export const straddlesStranglesMC = [
   {
     id: 'straddles-strangles-mc-1',
-    question: 'A Long Straddle involves buying both an ATM call and an ATM put. What is the breakeven point(s) for this strategy?',
+    question:
+      'A Long Straddle involves buying both an ATM call and an ATM put. What is the breakeven point(s) for this strategy?',
     options: [
       'Only one breakeven at the strike price',
       'Two breakevens: Strike plus total premium, and strike minus total premium',
@@ -14,7 +15,8 @@ export const straddlesStranglesMC = [
   },
   {
     id: 'straddles-strangles-mc-2',
-    question: 'What is the primary advantage of a Long Strangle compared to a Long Straddle?',
+    question:
+      'What is the primary advantage of a Long Strangle compared to a Long Straddle?',
     options: [
       'Higher maximum profit potential',
       'Lower cost to establish (using OTM options instead of ATM)',
@@ -23,11 +25,12 @@ export const straddlesStranglesMC = [
     ],
     correctAnswer: 1,
     explanation:
-      'Long Strangle\'s main advantage is LOWER COST because it uses OTM options instead of ATM. Example: Straddle $10 (ATM), Strangle $6 (OTM). Trade-off: Strangle requires a BIGGER move to profit (wider breakevens). Both strategies suffer from theta decay and are NOT guaranteed profits. Max profit is technically unlimited for both, but strangle gives better percentage returns on large moves due to lower initial cost.',
+      "Long Strangle's main advantage is LOWER COST because it uses OTM options instead of ATM. Example: Straddle $10 (ATM), Strangle $6 (OTM). Trade-off: Strangle requires a BIGGER move to profit (wider breakevens). Both strategies suffer from theta decay and are NOT guaranteed profits. Max profit is technically unlimited for both, but strangle gives better percentage returns on large moves due to lower initial cost.",
   },
   {
     id: 'straddles-strangles-mc-3',
-    question: 'For an "earnings straddle" play, what is the typical challenge that can lead to losses even if the stock moves significantly?',
+    question:
+      'For an "earnings straddle" play, what is the typical challenge that can lead to losses even if the stock moves significantly?',
     options: [
       'The options expire before earnings are announced',
       'Implied volatility crush after earnings announcement',
@@ -40,7 +43,8 @@ export const straddlesStranglesMC = [
   },
   {
     id: 'straddles-strangles-mc-4',
-    question: 'Why is a "Short Straddle" considered an extremely high-risk strategy?',
+    question:
+      'Why is a "Short Straddle" considered an extremely high-risk strategy?',
     options: [
       'It has limited profit potential capped at the premium received',
       'It has unlimited loss potential on both sides (call and put)',
@@ -53,7 +57,8 @@ export const straddlesStranglesMC = [
   },
   {
     id: 'straddles-strangles-mc-5',
-    question: 'In a Long Straddle, which Greek is most favorable, and which is most detrimental to the position?',
+    question:
+      'In a Long Straddle, which Greek is most favorable, and which is most detrimental to the position?',
     options: [
       'Favorable: Theta (time decay), Detrimental: Vega (volatility)',
       'Favorable: Vega (volatility), Detrimental: Theta (time decay)',
@@ -65,4 +70,3 @@ export const straddlesStranglesMC = [
       'For Long Straddle: FAVORABLE: Vega (positive vega) - benefits from IV expansion, Gamma (positive gamma) - benefits from large stock moves. DETRIMENTAL: Theta (negative theta) - loses value every day from time decay. Example: $10 straddle loses ~$0.30/day to theta, but gains $0.80 per 1% IV increase. This is why straddles are best bought in LOW IV (cheap options) BEFORE events that will expand volatility.',
   },
 ];
-

@@ -8,7 +8,7 @@ export const forecastingEvaluationQuiz = [
   {
     id: 2,
     question:
-      "Design a forecast combination strategy that averages predictions from ARIMA, GARCH, VAR, and ML models. Should weights be equal, or optimized? If optimized, what objective function? Address: out-of-sample weight selection, regime-dependent weights, robustness to model mis-specification, and implementation in production system.",
+      'Design a forecast combination strategy that averages predictions from ARIMA, GARCH, VAR, and ML models. Should weights be equal, or optimized? If optimized, what objective function? Address: out-of-sample weight selection, regime-dependent weights, robustness to model mis-specification, and implementation in production system.',
     answer: `[Strategy: (1) Equal weights (1/N rule) surprisingly robust - Timmermann's finding; (2) Optimal weights via minimum forecast error variance - requires covariance matrix; (3) Time-varying weights using exponential smoothing on past performance; (4) Regime-dependent: GARCH higher weight in volatile periods, ML in stable; Out-of-sample: estimate weights on validation set, not test; Production: rolling 3-month weight updates, constrain to [0, 0.5] per model for diversification; Empirical: ensemble often beats individual models due to diversification.]`,
   },
   {
@@ -18,4 +18,3 @@ export const forecastingEvaluationQuiz = [
     answer: `[Critique: Correlation measures association not prediction; R² in-sample overstates out-of-sample; Both ignore timing (lag) and direction; Better metrics: (1) Accuracy: Out-of-sample RMSE, MAE, direction accuracy, (2) Trading: Sharpe ratio of strategy, max drawdown, hit ratio, (3) Risk: Coverage of prediction intervals, VaR accuracy, (4) Economic: Utility-based, transaction-cost adjusted returns, certainty equivalent; Key: Always use out-of-sample, economically relevant metrics, not in-sample statistical fit!]`,
   },
 ];
-

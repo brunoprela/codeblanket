@@ -37,9 +37,8 @@ export const durationConvexityQuiz = [
       'Analytical (fast): Mac_duration = Σ(t × PV_t) / P, Mod = Mac/(1+y/m), Convexity = Σ[t(t+1) × PV_t] / [P×(1+y)^2], vectorize with numpy (10μs per bond)',
       'Numerical (callables): Eff_duration = (P_down - P_up) / (2 × P_0 × Δy), Δy=1bp, 3 price calcs, captures embedded options, works for MBS/callables',
       'Callable bonds: Duration shortens near call price, use effective duration (captures optionality), or calculate to worst (min of to-call and to-maturity)',
-      'Negative convexity: MBS prepay when rates fall (price doesn\'t rise much), effective convexity = (P_up + P_down - 2P_0) / (P_0 × Δy^2), may be negative',
+      "Negative convexity: MBS prepay when rates fall (price doesn't rise much), effective convexity = (P_up + P_down - 2P_0) / (P_0 × Δy^2), may be negative",
       'Key rate durations: KRD_j = ΔP / (P × Δs_j) for maturity bucket j, sum ≈ effective duration, different KRD profiles even if same duration (barbell vs bullet)',
     ],
   },
 ];
-

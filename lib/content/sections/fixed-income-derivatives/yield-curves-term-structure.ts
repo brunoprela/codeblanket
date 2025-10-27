@@ -544,4 +544,3 @@ Example: Borrow $1M in 1 year for 1 year at 5.01% (forward rate), regardless of 
 **Next Section**: Duration and Convexity - measuring interest rate risk.
 `,
 };
-

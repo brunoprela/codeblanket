@@ -1,7 +1,7 @@
 export const durationConvexity = {
-  title: 'Duration and Convexity',
-  id: 'duration-convexity',
-  content: `
+    title: 'Duration and Convexity',
+    id: 'duration-convexity',
+    content: `
 # Duration and Convexity
 
 ## Introduction
@@ -224,7 +224,7 @@ class DurationCalculator:
         
         dv01 = mod_duration * price * 0.0001
         
-        logger.debug(f"DV01: ${dv01:.4f}")
+        logger.debug(f"DV01: \${dv01:.4f}")
         
         return dv01
     
@@ -380,159 +380,160 @@ class PortfolioDuration:
             'metrics': metrics,
         })
         
-        logger.info(f"Added position: MV=${market_value:,.0f}, Duration={metrics['modified_duration']:.2f}")
+        logger.info(f"Added position: MV=${market_value:, .0f
+}, Duration = { metrics['modified_duration']: .2f }")
     
     def aggregate_metrics(self) -> Dict[str, float]:
-        """
-        Calculate portfolio-level metrics (value-weighted average)
-        
-        Returns:
+"""
+        Calculate portfolio - level metrics(value - weighted average)
+
+Returns:
             Aggregated duration and convexity
-        """
-        if not self.positions:
+"""
+if not self.positions:
             raise ValueError("Portfolio is empty")
-        
-        total_mv = sum(p['market_value'] for p in self.positions)
+
+total_mv = sum(p['market_value'] for p in self.positions)
         
         # Weighted average duration
-        weighted_mac_duration = sum(
-            p['market_value'] * p['metrics']['macaulay_duration']
+weighted_mac_duration = sum(
+    p['market_value'] * p['metrics']['macaulay_duration']
             for p in self.positions
-        ) / total_mv
+) / total_mv
+
+weighted_mod_duration = sum(
+    p['market_value'] * p['metrics']['modified_duration']
+            for p in self.positions
+) / total_mv
         
-        weighted_mod_duration = sum(
-            p['market_value'] * p['metrics']['modified_duration']
+        # Portfolio DV01(sum, not average)
+portfolio_dv01 = sum(
+    p['metrics']['dv01'] * (p['market_value'] / p['metrics']['price'])
             for p in self.positions
-        ) / total_mv
-        
-        # Portfolio DV01 (sum, not average)
-        portfolio_dv01 = sum(
-            p['metrics']['dv01'] * (p['market_value'] / p['metrics']['price'])
-            for p in self.positions
-        )
+)
         
         # Weighted convexity
-        weighted_convexity = sum(
-            p['market_value'] * p['metrics']['convexity']
+weighted_convexity = sum(
+    p['market_value'] * p['metrics']['convexity']
             for p in self.positions
-        ) / total_mv
-        
-        return {
-            'total_market_value': total_mv,
-            'macaulay_duration': weighted_mac_duration,
-            'modified_duration': weighted_mod_duration,
-            'dv01': portfolio_dv01,
-            'convexity': weighted_convexity,
-            'num_positions': len(self.positions),
-        }
+) / total_mv
+
+return {
+    'total_market_value': total_mv,
+    'macaulay_duration': weighted_mac_duration,
+    'modified_duration': weighted_mod_duration,
+    'dv01': portfolio_dv01,
+    'convexity': weighted_convexity,
+    'num_positions': len(self.positions),
+}
     
     def duration_matching_hedge(self, target_duration: float = 0) -> Dict:
-        """
+"""
         Calculate hedge needed to achieve target duration
-        
-        Args:
-            target_duration: Desired modified duration (default 0 = immunized)
-        
-        Returns:
+
+Args:
+target_duration: Desired modified duration(default 0 = immunized)
+
+Returns:
             Hedge recommendations
-        """
-        current_metrics = self.aggregate_metrics()
-        current_duration = current_metrics['modified_duration']
-        current_dv01 = current_metrics['dv01']
-        total_mv = current_metrics['total_market_value']
+"""
+current_metrics = self.aggregate_metrics()
+current_duration = current_metrics['modified_duration']
+current_dv01 = current_metrics['dv01']
+total_mv = current_metrics['total_market_value']
         
         # Required change in duration
-        duration_change_needed = target_duration - current_duration
+duration_change_needed = target_duration - current_duration
         
         # DV01 change needed
-        dv01_change_needed = duration_change_needed * total_mv * 0.0001
-        
-        return {
-            'current_duration': current_duration,
-            'target_duration': target_duration,
-            'duration_gap': duration_change_needed,
-            'current_dv01': current_dv01,
-            'dv01_change_needed': dv01_change_needed,
-            'action': 'short' if dv01_change_needed < 0 else 'long',
-        }
+dv01_change_needed = duration_change_needed * total_mv * 0.0001
+
+return {
+    'current_duration': current_duration,
+    'target_duration': target_duration,
+    'duration_gap': duration_change_needed,
+    'current_dv01': current_dv01,
+    'dv01_change_needed': dv01_change_needed,
+    'action': 'short' if dv01_change_needed < 0 else 'long',
+}
 
 
 # Example usage
 if __name__ == "__main__":
     from bond_pricing_fundamentals import Bond, Frequency
+
+print("=== Duration and Convexity Analysis ===\\n")
     
-    print("=== Duration and Convexity Analysis ===\\n")
-    
-    # Create 10-year bond
-    bond = Bond(
-        face_value=1000,
-        coupon_rate=0.05,  # 5% coupon
-        years_to_maturity=10,
-        frequency=Frequency.SEMI_ANNUAL
-    )
-    
-    ytm = 0.06  # 6% yield
+    # Create 10 - year bond
+bond = Bond(
+    face_value = 1000,
+    coupon_rate = 0.05,  # 5 % coupon
+        years_to_maturity = 10,
+    frequency = Frequency.SEMI_ANNUAL
+)
+
+ytm = 0.06  # 6 % yield
     
     # Calculate metrics
-    calc = DurationCalculator(bond)
-    metrics = calc.calculate_metrics(ytm)
-    
-    print("Bond Metrics:")
-    print(f"  Price: ${metrics['price']:.2f}")
-    print(f"  Macaulay Duration: {metrics['macaulay_duration']:.2f} years")
-    print(f"  Modified Duration: {metrics['modified_duration']:.2f}")
-    print(f"  DV01: ${metrics['dv01']:.4f}")
-    print(f"  Convexity: {metrics['convexity']:.2f}")
+calc = DurationCalculator(bond)
+metrics = calc.calculate_metrics(ytm)
+
+print("Bond Metrics:")
+print(f"  Price: ${metrics['price']:.2f}")
+print(f"  Macaulay Duration: {metrics['macaulay_duration']:.2f} years")
+print(f"  Modified Duration: {metrics['modified_duration']:.2f}")
+print(f"  DV01: ${metrics['dv01']:.4f}")
+print(f"  Convexity: {metrics['convexity']:.2f}")
     
     # Test price sensitivity
-    print("\\n=== Price Sensitivity Analysis ===\\n")
-    
-    yield_changes = [-0.02, -0.01, 0.01, 0.02]  # ±1%, ±2%
+print("\\n=== Price Sensitivity Analysis ===\\n")
+
+yield_changes = [-0.02, -0.01, 0.01, 0.02]  # ±1 %, ±2 %
     
     for dy in yield_changes:
-        result = calc.price_change_estimate(ytm, dy, use_convexity=True)
-        
-        print(f"Yield change: {dy*100:+.0f}%")
-        print(f"  Duration estimate: {result['duration_estimate']*100:.2f}%")
-        print(f"  Convexity adj: {result['convexity_adjustment']*100:.2f}%")
-        print(f"  Total estimate: {result['total_estimate']*100:.2f}%")
-        print(f"  Actual change: {result['actual_change']*100:.2f}%")
-        print(f"  Error: {result['error']*100:.2f}%")
-        print()
+    result = calc.price_change_estimate(ytm, dy, use_convexity = True)
+
+print(f"Yield change: {dy*100:+.0f}%")
+print(f"  Duration estimate: {result['duration_estimate']*100:.2f}%")
+print(f"  Convexity adj: {result['convexity_adjustment']*100:.2f}%")
+print(f"  Total estimate: {result['total_estimate']*100:.2f}%")
+print(f"  Actual change: {result['actual_change']*100:.2f}%")
+print(f"  Error: {result['error']*100:.2f}%")
+print()
     
     # Portfolio example
-    print("=== Portfolio Duration ===\\n")
-    
-    portfolio = PortfolioDuration()
+print("=== Portfolio Duration ===\\n")
+
+portfolio = PortfolioDuration()
     
     # Add positions
-    bond_short = Bond(1000, 0.04, 2, Frequency.SEMI_ANNUAL)
-    bond_medium = Bond(1000, 0.05, 5, Frequency.SEMI_ANNUAL)
-    bond_long = Bond(1000, 0.06, 10, Frequency.SEMI_ANNUAL)
-    
-    portfolio.add_position(bond_short, market_value=1_000_000, ytm=0.045)
-    portfolio.add_position(bond_medium, market_value=2_000_000, ytm=0.055)
-    portfolio.add_position(bond_long, market_value=1_500_000, ytm=0.065)
+bond_short = Bond(1000, 0.04, 2, Frequency.SEMI_ANNUAL)
+bond_medium = Bond(1000, 0.05, 5, Frequency.SEMI_ANNUAL)
+bond_long = Bond(1000, 0.06, 10, Frequency.SEMI_ANNUAL)
+
+portfolio.add_position(bond_short, market_value = 1_000_000, ytm = 0.045)
+portfolio.add_position(bond_medium, market_value = 2_000_000, ytm = 0.055)
+portfolio.add_position(bond_long, market_value = 1_500_000, ytm = 0.065)
     
     # Aggregate
-    port_metrics = portfolio.aggregate_metrics()
-    
-    print(f"Portfolio Metrics:")
-    print(f"  Total Value: ${port_metrics['total_market_value']:,.0f}")
-    print(f"  Modified Duration: {port_metrics['modified_duration']:.2f}")
-    print(f"  DV01: ${port_metrics['dv01']:,.2f}")
-    print(f"  Convexity: {port_metrics['convexity']:.2f}")
+port_metrics = portfolio.aggregate_metrics()
+
+print(f"Portfolio Metrics:")
+print(f"  Total Value: ${port_metrics['total_market_value']:,.0f}")
+print(f"  Modified Duration: {port_metrics['modified_duration']:.2f}")
+print(f"  DV01: ${port_metrics['dv01']:,.2f}")
+print(f"  Convexity: {port_metrics['convexity']:.2f}")
     
     # Immunization hedge
-    print("\\n=== Duration Matching Hedge ===\\n")
-    
-    hedge = portfolio.duration_matching_hedge(target_duration=0)
-    
-    print(f"Current Duration: {hedge['current_duration']:.2f}")
-    print(f"Target Duration: {hedge['target_duration']:.2f}")
-    print(f"Duration Gap: {hedge['duration_gap']:.2f}")
-    print(f"Action: {hedge['action'].upper()} duration")
-    print(f"DV01 Change Needed: ${hedge['dv01_change_needed']:,.2f}")
+print("\\n=== Duration Matching Hedge ===\\n")
+
+hedge = portfolio.duration_matching_hedge(target_duration = 0)
+
+print(f"Current Duration: {hedge['current_duration']:.2f}")
+print(f"Target Duration: {hedge['target_duration']:.2f}")
+print(f"Duration Gap: {hedge['duration_gap']:.2f}")
+print(f"Action: {hedge['action'].upper()} duration")
+print(f"DV01 Change Needed: ${hedge['dv01_change_needed']:,.2f}")
 \`\`\`
 
 ---

@@ -1,7 +1,7 @@
 export const financialModelingFundamentals = {
-  title: 'Financial Modeling Fundamentals',
-  id: 'financial-modeling-fundamentals',
-  content: `
+    title: 'Financial Modeling Fundamentals',
+    id: 'financial-modeling-fundamentals',
+    content: `
 # Financial Modeling Fundamentals
 
 ## Introduction
@@ -862,7 +862,7 @@ result = solve_circular_model(
 print("Circular Model Solution:")
 for key, value in result.items():
     if key != 'iterations':
-        print(f"{key.title()}: ${value:,.0f}")
+        print(f"{key.title()}: \${value:,.0f}")
     else:
         print(f"{key.title()}: {value}")
 \`\`\`
@@ -896,72 +896,73 @@ class ModelValidator:
         if difference > tolerance:
             raise ValueError(
                 f"Balance sheet doesn't balance! "
-                f"Assets: ${assets:,.0f}, L+E: ${liabilities + equity:,.0f}, "
+                f"Assets: ${assets:, .0f
+}, L+E: ${ liabilities + equity:, .0f }, "
                 f"Difference: ${difference:,.0f}"
             )
-        print(f"✓ Balance sheet balances (diff: ${difference:.2f})")
-    
-    @staticmethod
+print(f"✓ Balance sheet balances (diff: ${difference:.2f})")
+
+@staticmethod
     def check_cash_flow(
-        beginning_cash: float,
-        cash_from_operations: float,
-        cash_from_investing: float,
-        cash_from_financing: float,
-        ending_cash: float,
-        tolerance: float = 1.0
-    ) -> None:
-        """Verify cash flow statement ties"""
-        calculated_ending = (
-            beginning_cash + 
-            cash_from_operations + 
-            cash_from_investing + 
-            cash_from_financing
-        )
-        difference = abs(ending_cash - calculated_ending)
-        if difference > tolerance:
+    beginning_cash: float,
+    cash_from_operations: float,
+    cash_from_investing: float,
+    cash_from_financing: float,
+    ending_cash: float,
+    tolerance: float = 1.0
+) -> None:
+"""Verify cash flow statement ties"""
+calculated_ending = (
+    beginning_cash +
+    cash_from_operations +
+    cash_from_investing +
+    cash_from_financing
+)
+difference = abs(ending_cash - calculated_ending)
+if difference > tolerance:
             raise ValueError(
-                f"Cash flow doesn't tie! "
+    f"Cash flow doesn't tie! "
                 f"Expected: ${calculated_ending:,.0f}, "
                 f"Actual: ${ending_cash:,.0f}, "
                 f"Difference: ${difference:,.0f}"
-            )
-        print(f"✓ Cash flow ties (diff: ${difference:.2f})")
-    
-    @staticmethod
+)
+print(f"✓ Cash flow ties (diff: ${difference:.2f})")
+
+@staticmethod
     def check_reasonableness(
-        metric_name: str,
-        value: float,
-        expected_range: Tuple[float, float]
-    ) -> None:
-        """Check if metric is in reasonable range"""
-        min_val, max_val = expected_range
-        if not (min_val <= value <= max_val):
-            print(
-                f"⚠ WARNING: {metric_name} = {value:.1%} "
+    metric_name: str,
+    value: float,
+    expected_range: Tuple[float, float]
+) -> None:
+"""Check if metric is in reasonable range"""
+min_val, max_val = expected_range
+if not(min_val <= value <= max_val):
+    print(
+        f"⚠ WARNING: {metric_name} = {value:.1%} "
                 f"outside expected range [{min_val:.1%}, {max_val:.1%}]"
-            )
-        else:
-            print(f"✓ {metric_name} = {value:.1%} is reasonable")
+    )
+else:
+print(f"✓ {metric_name} = {value:.1%} is reasonable")
 
 # Example validation
 validator = ModelValidator()
 
 validator.check_balance_sheet(
-    assets=1_000_000,
-    liabilities=600_000,
-    equity=400_000
+    assets = 1_000_000,
+    liabilities = 600_000,
+    equity = 400_000
 )
 
 validator.check_reasonableness(
     "Gross Margin",
-    value=0.42,
-    expected_range=(0.20, 0.70)
+    value = 0.42,
+    expected_range = (0.20, 0.70)
 )
 
 validator.check_reasonableness(
     "Revenue Growth",
-    value=0.95,  # 95% - suspicious!
-    expected_range=(- 0.10, 0.30)
+    value = 0.95,  # 95 % - suspicious!
+    expected_range = (- 0.10, 0.30)
 )
 \`\`\`
 

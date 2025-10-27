@@ -1,9 +1,9 @@
 export const stateSpaceModels = {
-    title: 'State Space Models',
-    slug: 'state-space-models',
-    description:
-        'General framework for dynamic systems and unobserved components',
-    content: `
+  title: 'State Space Models',
+  slug: 'state-space-models',
+  description:
+    'General framework for dynamic systems and unobserved components',
+  content: `
 # State Space Models
 
 ## Introduction: A Unified Framework

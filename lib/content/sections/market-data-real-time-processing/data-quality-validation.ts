@@ -1,7 +1,7 @@
 export const dataQualityValidation = {
-  title: 'Data Quality and Validation',
-  id: 'data-quality-validation',
-  content: `
+    title: 'Data Quality and Validation',
+    id: 'data-quality-validation',
+    content: `
 # Data Quality and Validation
 
 ## Introduction
@@ -287,8 +287,7 @@ detector = AnomalyDetector(window_size=100, threshold_sigma=3.0)
 result = detector.detect_price_anomaly('AAPL', 155.50)
 if result['is_anomaly']:
     print(f"Price anomaly detected! Z-score: {result['z_score']:.2f}")
-    print(f"Price: $155.50 vs Mean: ${result['mean']: .2f
-}(±${ result['std']: .2f })")
+    print(f"Price: $155.50 vs Mean: \${result['mean']:.2f}(±\${result['std']:.2f})")
 \`\`\`
 
 ---

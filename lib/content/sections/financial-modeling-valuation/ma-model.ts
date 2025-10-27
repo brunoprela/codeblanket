@@ -1,7 +1,7 @@
 export const maModel = {
-  title: 'M&A (Merger & Acquisition) Model',
-  id: 'ma-model',
-  content: `
+    title: 'M&A (Merger & Acquisition) Model',
+    id: 'ma-model',
+    content: `
 # M&A (Merger & Acquisition) Model
 
 ## Introduction
@@ -349,7 +349,7 @@ purchase = transaction_stock.calculate_purchase_price()
 print("\\nPURCHASE PRICE:")
 for key, value in purchase.items():
     if 'Price' in key or '$' in key or 'Cap' in key:
-        print(f"  {key:.<45} ${value:>15,.2f}")
+        print(f"  {key:.<45} \${value:>15,.2f}")
     elif '%' in key:
         print(f"  {key:.<45} {value:>15.1%}")
     else:
@@ -364,7 +364,7 @@ for key, value in consideration.items():
     elif 'Ratio' in key:
         print(f"  {key:.<45} {value:>15.4f}")
     elif isinstance(value, (int, float)):
-        print(f"  {key:.<45} ${value:>15,.0f}")
+        print(f"  {key:.<45} ${value:> 15,.0f}")
 
 # Pro forma
 pro_forma = transaction_stock.calculate_pro_forma()
@@ -373,24 +373,24 @@ for key, value in pro_forma.items():
     if 'EPS' in key:
         print(f"  {key:.<45} ${value:>15.2f}")
     elif isinstance(value, (int, float)):
-        print(f"  {key:.<45} ${value:>15,.0f}")
+print(f"  {key:.<45} ${value:>15,.0f}")
 
-# Accretion/Dilution
+# Accretion / Dilution
 accretion = transaction_stock.calculate_accretion_dilution()
 print("\\n\\nACCRETION/DILUTION ANALYSIS:")
 for key, value in accretion.items():
     if 'EPS' in key and '$' in key:
-        print(f"  {key:.<45} ${value:>15.2f}")
+print(f"  {key:.<45} ${value:>15.2f}")
     elif 'EPS' in key:
-        print(f"  {key:.<45} ${value:>15.2f}")
+print(f"  {key:.<45} ${value:>15.2f}")
     elif '%' in key:
-        color = "ACCRETIVE" if value > 0 else "DILUTIVE"
-        print(f"  {key:.<45} {value:>14.2%} ({color})")
+color = "ACCRETIVE" if value > 0 else "DILUTIVE"
+print(f"  {key:.<45} {value:>14.2%} ({color})")
     elif 'Is Accretive' in key:
-        result = "YES ✓" if value else "NO ✗"
-        print(f"  {key:.<45} {result:>15}")
+result = "YES ✓" if value else "NO ✗"
+print(f"  {key:.<45} {result:>15}")
     elif isinstance(value, (int, float)):
-        print(f"  {key:.<45} {value:>15,.0f}")
+print(f"  {key:.<45} {value:>15,.0f}")
 
 # Breakeven
 breakeven = transaction_stock.breakeven_analysis()
@@ -399,7 +399,7 @@ for key, value in breakeven.items():
     if '%' in key:
         print(f"  {key:.<45} {value:>15.2%}")
     elif isinstance(value, (int, float)):
-        print(f"  {key:.<45} ${value:>15,.0f}")
+print(f"  {key:.<45} ${value:>15,.0f}")
 \`\`\`
 
 ---
@@ -491,26 +491,26 @@ def accretion_sensitivity_table(
     
     df = pd.DataFrame(
         results,
-        index=[f"${s/1_000_000:.0f}M" for s in synergy_range],
-        columns=[f"{p:.0%}" for p in premium_range]
+        index=[f"${s / 1_000_000: .0f}M" for s in synergy_range],
+columns = [f"{p:.0%}" for p in premium_range]
     )
-    df.index.name = 'Synergies →'
-    df.columns.name = 'Premium →'
-    
-    return df
+df.index.name = 'Synergies →'
+df.columns.name = 'Premium →'
+
+return df
 
 # Sensitivity analysis
 print("\\n\\nSENSITIVITY ANALYSIS: Accretion/Dilution %")
-print("="*70)
+print("=" * 70)
 
 sensitivity = accretion_sensitivity_table(
-    acquirer=acquirer,
-    target=target,
-    base_premium=0.30,
-    base_synergies=100_000_000,
-    premium_range=[0.20, 0.25, 0.30, 0.35, 0.40],
-    synergy_range=[50_000_000, 75_000_000, 100_000_000, 125_000_000, 150_000_000],
-    cash_pct=0.0
+    acquirer = acquirer,
+    target = target,
+    base_premium = 0.30,
+    base_synergies = 100_000_000,
+    premium_range = [0.20, 0.25, 0.30, 0.35, 0.40],
+    synergy_range = [50_000_000, 75_000_000, 100_000_000, 125_000_000, 150_000_000],
+    cash_pct = 0.0
 )
 
 print((sensitivity * 100).round(2).to_string())

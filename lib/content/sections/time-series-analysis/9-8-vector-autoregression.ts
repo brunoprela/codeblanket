@@ -1,9 +1,9 @@
 export const vectorAutoregression = {
-    title: 'Vector Autoregression (VAR)',
-    slug: 'vector-autoregression',
-    description:
-        'Model multivariate time series relationships and Granger causality',
-    content: `
+  title: 'Vector Autoregression (VAR)',
+  slug: 'vector-autoregression',
+  description:
+    'Model multivariate time series relationships and Granger causality',
+  content: `
 # Vector Autoregression (VAR)
 
 ## Introduction: Multivariate Time Series

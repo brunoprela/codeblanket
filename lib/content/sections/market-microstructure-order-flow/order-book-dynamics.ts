@@ -49,8 +49,7 @@ class PriceLevel:
     num_orders: int = 1
     
     def __repr__(self):
-        return f"${float(self.price): .2f
-} x { self.quantity } ({ self.num_orders })"
+        return f"\${float(self.price):.2f} x {self.quantity} ({self.num_orders})"
 
 class OrderBook:
 """
@@ -198,7 +197,8 @@ mid = self.get_mid_price()
 
 print(f"\\n{'-'*60}")
 if mid:
-    print(f"Mid: ${float(mid):.4f}")
+    print(f"Mid: ${float(mid): .4f
+}")
 if spread:
     print(f"Spread: ${float(spread):.4f} ({spread_bps:.2f} bps)")
 print(f"{'='*60}\\n")

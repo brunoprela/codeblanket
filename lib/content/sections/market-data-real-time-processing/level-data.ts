@@ -1,7 +1,7 @@
 export const levelData = {
-    title: 'Level 1, Level 2, Level 3 Data',
-    id: 'level-data',
-    content: `
+  title: 'Level 1, Level 2, Level 3 Data',
+  id: 'level-data',
+  content: `
 # Level 1, Level 2, Level 3 Data
 
 ## Introduction
@@ -557,4 +557,3 @@ print(f"Order flow: {flow}")
 Now you can build order books from L1/L2/L3 data for any trading strategy!
 `,
 };
-

@@ -757,4 +757,3 @@ Given: 2.5 Sharpe in backtest, 0.8 in live → classic overfitting signature
     ],
   },
 ];
-

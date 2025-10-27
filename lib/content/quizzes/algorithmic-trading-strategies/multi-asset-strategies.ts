@@ -1,6 +1,41 @@
 export const multiAssetStrategiesQuiz = [
-    { id: 'ats-12-1-q-1', question: "Design multi-asset portfolio (equities, bonds, commodities, currencies): (1) Target weights, (2) Rebalancing rules, (3) Risk management. Historical: equities 12% return/18% vol, bonds 5%/6%, commodities 8%/20%, currencies 3%/10%. Calculate optimal allocation and expected Sharpe.", sampleAnswer: `**Multi-Asset Portfolio**: (1) Weights: Equities 40%, Bonds 30%, Commodities 15%, Currencies 10%, Alternatives 5%; (2) Rebalance quarterly or when drift >5%; (3) Risk: max 50% in any asset, min 5% in each. Calculation: E[R]=0.4×12%+0.3×5%+0.15×8%+0.1×3%+0.05×10%=8.5%; Vol=√(0.4²×18²+0.3²×6²+...+2×ρ×weights)≈9.5%; Sharpe=8.5/9.5=0.89 (assuming ρ=0.3).`, keyPoints: ['Target allocation: Equities 40% (growth), Bonds 30% (safety), Commodities 15% (inflation hedge), Currencies 10% (diversification), Alternatives 5%', 'Expected return: 0.4×12% + 0.3×5% + 0.15×8% + 0.1×3% + 0.05×10% = 8.5% annual', 'Portfolio volatility: 9.5% (with correlations), vs 18% equities-only (47% reduction in risk)', 'Sharpe ratio: 8.5% / 9.5% = 0.89 (vs 0.67 for equities-only); 33% improvement from diversification', 'Rebalancing: quarterly or when any asset drifts >5% from target; costs ~20bps/year but maintains risk profile'] },
-    { id: 'ats-12-1-q-2', question: "Explain risk parity: Equal risk contribution from each asset. Calculate risk parity weights for portfolio: equities (18% vol), bonds (6% vol), commodities (20% vol). Compare to equal-weight (33% each). Which has better Sharpe?", sampleAnswer: `**Risk Parity**: Allocate inversely to volatility for equal risk contribution. Calculation: inverse vols = 1/18, 1/6, 1/20 = 0.056, 0.167, 0.050; sum=0.273; weights = 0.056/0.273=20% equities, 0.167/0.273=61% bonds, 0.050/0.273=18% commodities. Equal-weight: 33% each = unequal risk (equities contribute 60% of risk). Risk parity: Sharpe 1.2 vs equal-weight 0.9 (33% better).`, keyPoints: ['Risk parity calculation: weight_i = (1/vol_i) / Σ(1/vol_j); equities 20%, bonds 61%, commodities 18%', 'Equal-weight problem: 33% each, but equities contribute 60% of portfolio risk (high vol); bonds 20%, commodities 20%', 'Risk parity: each asset contributes 33% of risk; more balanced, lower portfolio vol (10% vs 13% equal-weight)', 'Performance: risk parity Sharpe 1.2 vs equal-weight 0.9; risk parity has lower drawdown (-15% vs -20%)', 'Implementation: use leverage on bonds (low vol) to increase return while maintaining risk balance; target 10% portfolio vol'] },
-    { id: 'ats-12-1-q-3', question: "Design tactical asset allocation (TAA) system: Adjust weights based on market conditions. Rules for recession vs expansion. Historical: recession bonds +10%, equities -20%; expansion equities +15%, bonds +3%. Calculate performance.", sampleAnswer: `**Tactical Asset Allocation**: Base: 60/40 equities/bonds. Recession (detected via yield curve inversion): shift to 30/70. Expansion (GDP growth >3%): shift to 75/25. Calculation: recession 20% of time → 0.2×(0.3×-20% + 0.7×10%) = -0.6%; expansion 80% → 0.8×(0.75×15% + 0.25×3%) = 9.6%; total = 9.0% (vs 7.8% static 60/40). TAA adds +1.2% annual, Sharpe 1.1 vs 0.9 static.`, keyPoints: ['Base allocation: 60% equities / 40% bonds (long-term strategic weights)', 'Recession signals: yield curve inverted, unemployment rising, PMI <50 → shift to 30/70 (defensive)', 'Expansion signals: GDP growth >3%, yield curve steep, PMI >55 → shift to 75/25 (aggressive)', 'Performance: TAA 9.0% return vs static 7.8% (+1.2% alpha); Sharpe 1.1 vs 0.9 (better risk-adjusted)', 'Risk: false signals (whipsaw in transitions), timing risk (late detection), implementation costs (rebalancing 20bps per shift)'] },
+  {
+    id: 'ats-12-1-q-1',
+    question:
+      'Design multi-asset portfolio (equities, bonds, commodities, currencies): (1) Target weights, (2) Rebalancing rules, (3) Risk management. Historical: equities 12% return/18% vol, bonds 5%/6%, commodities 8%/20%, currencies 3%/10%. Calculate optimal allocation and expected Sharpe.',
+    sampleAnswer: `**Multi-Asset Portfolio**: (1) Weights: Equities 40%, Bonds 30%, Commodities 15%, Currencies 10%, Alternatives 5%; (2) Rebalance quarterly or when drift >5%; (3) Risk: max 50% in any asset, min 5% in each. Calculation: E[R]=0.4×12%+0.3×5%+0.15×8%+0.1×3%+0.05×10%=8.5%; Vol=√(0.4²×18²+0.3²×6²+...+2×ρ×weights)≈9.5%; Sharpe=8.5/9.5=0.89 (assuming ρ=0.3).`,
+    keyPoints: [
+      'Target allocation: Equities 40% (growth), Bonds 30% (safety), Commodities 15% (inflation hedge), Currencies 10% (diversification), Alternatives 5%',
+      'Expected return: 0.4×12% + 0.3×5% + 0.15×8% + 0.1×3% + 0.05×10% = 8.5% annual',
+      'Portfolio volatility: 9.5% (with correlations), vs 18% equities-only (47% reduction in risk)',
+      'Sharpe ratio: 8.5% / 9.5% = 0.89 (vs 0.67 for equities-only); 33% improvement from diversification',
+      'Rebalancing: quarterly or when any asset drifts >5% from target; costs ~20bps/year but maintains risk profile',
+    ],
+  },
+  {
+    id: 'ats-12-1-q-2',
+    question:
+      'Explain risk parity: Equal risk contribution from each asset. Calculate risk parity weights for portfolio: equities (18% vol), bonds (6% vol), commodities (20% vol). Compare to equal-weight (33% each). Which has better Sharpe?',
+    sampleAnswer: `**Risk Parity**: Allocate inversely to volatility for equal risk contribution. Calculation: inverse vols = 1/18, 1/6, 1/20 = 0.056, 0.167, 0.050; sum=0.273; weights = 0.056/0.273=20% equities, 0.167/0.273=61% bonds, 0.050/0.273=18% commodities. Equal-weight: 33% each = unequal risk (equities contribute 60% of risk). Risk parity: Sharpe 1.2 vs equal-weight 0.9 (33% better).`,
+    keyPoints: [
+      'Risk parity calculation: weight_i = (1/vol_i) / Σ(1/vol_j); equities 20%, bonds 61%, commodities 18%',
+      'Equal-weight problem: 33% each, but equities contribute 60% of portfolio risk (high vol); bonds 20%, commodities 20%',
+      'Risk parity: each asset contributes 33% of risk; more balanced, lower portfolio vol (10% vs 13% equal-weight)',
+      'Performance: risk parity Sharpe 1.2 vs equal-weight 0.9; risk parity has lower drawdown (-15% vs -20%)',
+      'Implementation: use leverage on bonds (low vol) to increase return while maintaining risk balance; target 10% portfolio vol',
+    ],
+  },
+  {
+    id: 'ats-12-1-q-3',
+    question:
+      'Design tactical asset allocation (TAA) system: Adjust weights based on market conditions. Rules for recession vs expansion. Historical: recession bonds +10%, equities -20%; expansion equities +15%, bonds +3%. Calculate performance.',
+    sampleAnswer: `**Tactical Asset Allocation**: Base: 60/40 equities/bonds. Recession (detected via yield curve inversion): shift to 30/70. Expansion (GDP growth >3%): shift to 75/25. Calculation: recession 20% of time → 0.2×(0.3×-20% + 0.7×10%) = -0.6%; expansion 80% → 0.8×(0.75×15% + 0.25×3%) = 9.6%; total = 9.0% (vs 7.8% static 60/40). TAA adds +1.2% annual, Sharpe 1.1 vs 0.9 static.`,
+    keyPoints: [
+      'Base allocation: 60% equities / 40% bonds (long-term strategic weights)',
+      'Recession signals: yield curve inverted, unemployment rising, PMI <50 → shift to 30/70 (defensive)',
+      'Expansion signals: GDP growth >3%, yield curve steep, PMI >55 → shift to 75/25 (aggressive)',
+      'Performance: TAA 9.0% return vs static 7.8% (+1.2% alpha); Sharpe 1.1 vs 0.9 (better risk-adjusted)',
+      'Risk: false signals (whipsaw in transitions), timing risk (late detection), implementation costs (rebalancing 20bps per shift)',
+    ],
+  },
 ];
-

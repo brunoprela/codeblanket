@@ -1,12 +1,12 @@
 export const blackLittermanModelQuiz = {
-    id: 'black-litterman-model',
-    title: 'Black-Litterman Model',
-    questions: [
-        {
-            id: 'bl-equilibrium',
-            text: `The Black-Litterman model starts with market equilibrium returns (reverse optimization) rather than historical returns. Given a market portfolio with the following allocations: 60% US Stocks, 30% International Stocks, 10% Bonds, and assuming market risk aversion λ = 2.5, and covariance matrix with US stocks σ = 18%, International σ = 22%, Bonds σ = 6%, calculate: (1) the implied equilibrium returns for each asset class using reverse optimization (Π = λΣw_market), (2) explain why these equilibrium returns are more stable than historical sample means, (3) demonstrate how market cap weights reveal the market's consensus expected returns, and (4) discuss what happens during bubbles when market weights become distorted (e.g., tech stocks 60% in 2000).`,
-            type: 'discussion' as const,
-            sampleAnswer: `**1. Calculating Implied Equilibrium Returns**
+  id: 'black-litterman-model',
+  title: 'Black-Litterman Model',
+  questions: [
+    {
+      id: 'bl-equilibrium',
+      text: `The Black-Litterman model starts with market equilibrium returns (reverse optimization) rather than historical returns. Given a market portfolio with the following allocations: 60% US Stocks, 30% International Stocks, 10% Bonds, and assuming market risk aversion λ = 2.5, and covariance matrix with US stocks σ = 18%, International σ = 22%, Bonds σ = 6%, calculate: (1) the implied equilibrium returns for each asset class using reverse optimization (Π = λΣw_market), (2) explain why these equilibrium returns are more stable than historical sample means, (3) demonstrate how market cap weights reveal the market's consensus expected returns, and (4) discuss what happens during bubbles when market weights become distorted (e.g., tech stocks 60% in 2000).`,
+      type: 'discussion' as const,
+      sampleAnswer: `**1. Calculating Implied Equilibrium Returns**
 
 **Reverse Optimization Formula:**
 
@@ -415,49 +415,48 @@ Black-Litterman's use of equilibrium returns is brilliant for stability, but req
 - **Ultimate insight:** No model is autopilot - judgment required
 
 The irony: Black-Litterman solves the estimation error problem by using market equilibrium, but you need judgment to know when market equilibrium itself is wrong!`,
-            keyPoints: [
-                'Equilibrium returns Π = λΣw_market; reverse engineer returns that make market portfolio optimal',
-                'Example: 60% US, 30% Intl, 10% Bonds with λ=2.5 implies 7.14%, 8.14%, 0.57% returns respectively',
-                'Equilibrium returns 24x more stable than historical estimates; standard deviation 0.2% vs 4.8%',
-                'Market cap weights reveal consensus: large weight = low required return, small weight = high required return',
-                'Bubbles distort weights: Tech 35% in 2000 implied 20% returns but reality was -78% crash',
-                'Handle bubbles by: using historical average weights, adjusting risk aversion, expressing contrarian views, or factor-based weights',
-                'Black-Litterman view mechanism designed exactly for overriding distorted equilibrium during bubbles',
-                'No model is autopilot: equilibrium returns excellent in normal markets but require judgment during extremes'
-            ]
-        },
-        {
-            id: 'bl-views',
-            text: `The power of Black-Litterman is incorporating investor views with appropriate uncertainty. You believe: "US stocks will outperform International stocks by 3% over the next year" with 70% confidence, and "Bonds will return 4%" with 90% confidence. Given equilibrium returns of US=7%, Intl=8%, Bonds=3%, explain: (1) how to express these views mathematically using the P (pick matrix) and Q (view vector) formulation, (2) how confidence levels translate to the Ω (omega) matrix and why this is critical, (3) derive the combined posterior returns using the Black-Litterman formula, showing how equilibrium and views are blended, and (4) demonstrate what happens to portfolio weights as confidence ranges from 0% (ignore views) to 100% (fully trust views).`,
-            type: 'discussion' as const,
-            sampleAnswer: `**[Full comprehensive 8000+ word answer on view formulation, confidence specifications, Bayesian blending mathematics, and portfolio sensitivity analysis with practical examples]**`,
-            keyPoints: [
-                'Views expressed via P matrix (which assets) and Q vector (magnitude); relative views are linear combinations',
-                'Confidence translated to Ω = τP∑P^T where τ scales uncertainty; 70% confidence ≈ τ=0.3, 90% ≈ τ=0.1',
-                'Posterior returns: E[R] = [(τ∑)^-1 + P^TΩ^-1P]^-1[(τ∑)^-1Π + P^TΩ^-1Q]; weighted average of equilibrium and views',
-                'High confidence (90%) → posterior close to view, low confidence (50%) → posterior close to equilibrium',
-                'Example: 3% US>Intl view with 70% confidence adjusts US from 7% to 7.8%, Intl from 8% to 7.2%',
-                'Portfolio weight changes proportional to view confidence and risk contribution',
-                'Black-Litterman automatically prevents extreme positions from uncertain views unlike raw MVO',
-                'Practical rule: express only high-conviction views (70%+ confidence), ignore marginal views to avoid overfitting'
-            ]
-        },
-        {
-            id: 'bl-practical',
-            text: `Implement a complete Black-Litterman framework for a global asset allocation decision. You manage $100M across: US Stocks, European Stocks, Japan Stocks, Emerging Markets, Global Bonds. Discuss: (1) constructing the equilibrium returns from market cap weights ($23T US, $10T Europe, $5T Japan, $3T EM, $60T bonds globally) with λ=2.5, (2) formulating realistic macro views: "EM will outperform developed markets by 5% due to growth differentials" and "Bonds will underperform due to rising rates, expecting 2% vs 3% equilibrium", (3) specifying view confidence based on macro uncertainty (quantitative approaches like historical accuracy, analyst disagreement, economic forecast uncertainty), and (4) comparing the resulting Black-Litterman portfolio to pure equilibrium and to pure MVO with sample means - which performs best and why?`,
-            type: 'discussion' as const,
-            sampleAnswer: `**[Full 8000+ word implementation guide covering equilibrium construction from global market caps, view formulation from macroeconomic analysis, confidence calibration methodologies, performance comparison across approaches, and institutional best practices]**`,
-            keyPoints: [
-                'Global market caps: $41T equities, $60T bonds → equilibrium 40.6% equities, 59.4% bonds before optimization',
-                'Regional equity equilibrium from caps: US 56%, Europe 24%, Japan 12%, EM 7% within equity allocation',
-                'Macro views require confidence calibration: historical macro forecast R² ~0.3 suggests 50-60% confidence maximum',
-                'View confidence from analyst disagreement: high dispersion → low confidence; consensus → higher confidence',
-                'Black-Litterman portfolio typically 80-90% equilibrium, 10-20% view-driven adjustments for modest views',
-                'BL outperforms equilibrium by 0.5-1.0% Sharpe, outperforms sample MVO by 1.0-2.0% Sharpe (less estimation error)',
-                'BL generates moderate turnover (20-40% annually) vs MVO (80-150%) vs equilibrium (5-10%)',
-                'Institutional preference: BL for strategic + active tilts; pure equilibrium for passive core; avoid raw MVO'
-            ]
-        }
-    ]
+      keyPoints: [
+        'Equilibrium returns Π = λΣw_market; reverse engineer returns that make market portfolio optimal',
+        'Example: 60% US, 30% Intl, 10% Bonds with λ=2.5 implies 7.14%, 8.14%, 0.57% returns respectively',
+        'Equilibrium returns 24x more stable than historical estimates; standard deviation 0.2% vs 4.8%',
+        'Market cap weights reveal consensus: large weight = low required return, small weight = high required return',
+        'Bubbles distort weights: Tech 35% in 2000 implied 20% returns but reality was -78% crash',
+        'Handle bubbles by: using historical average weights, adjusting risk aversion, expressing contrarian views, or factor-based weights',
+        'Black-Litterman view mechanism designed exactly for overriding distorted equilibrium during bubbles',
+        'No model is autopilot: equilibrium returns excellent in normal markets but require judgment during extremes',
+      ],
+    },
+    {
+      id: 'bl-views',
+      text: `The power of Black-Litterman is incorporating investor views with appropriate uncertainty. You believe: "US stocks will outperform International stocks by 3% over the next year" with 70% confidence, and "Bonds will return 4%" with 90% confidence. Given equilibrium returns of US=7%, Intl=8%, Bonds=3%, explain: (1) how to express these views mathematically using the P (pick matrix) and Q (view vector) formulation, (2) how confidence levels translate to the Ω (omega) matrix and why this is critical, (3) derive the combined posterior returns using the Black-Litterman formula, showing how equilibrium and views are blended, and (4) demonstrate what happens to portfolio weights as confidence ranges from 0% (ignore views) to 100% (fully trust views).`,
+      type: 'discussion' as const,
+      sampleAnswer: `**[Full comprehensive 8000+ word answer on view formulation, confidence specifications, Bayesian blending mathematics, and portfolio sensitivity analysis with practical examples]**`,
+      keyPoints: [
+        'Views expressed via P matrix (which assets) and Q vector (magnitude); relative views are linear combinations',
+        'Confidence translated to Ω = τP∑P^T where τ scales uncertainty; 70% confidence ≈ τ=0.3, 90% ≈ τ=0.1',
+        'Posterior returns: E[R] = [(τ∑)^-1 + P^TΩ^-1P]^-1[(τ∑)^-1Π + P^TΩ^-1Q]; weighted average of equilibrium and views',
+        'High confidence (90%) → posterior close to view, low confidence (50%) → posterior close to equilibrium',
+        'Example: 3% US>Intl view with 70% confidence adjusts US from 7% to 7.8%, Intl from 8% to 7.2%',
+        'Portfolio weight changes proportional to view confidence and risk contribution',
+        'Black-Litterman automatically prevents extreme positions from uncertain views unlike raw MVO',
+        'Practical rule: express only high-conviction views (70%+ confidence), ignore marginal views to avoid overfitting',
+      ],
+    },
+    {
+      id: 'bl-practical',
+      text: `Implement a complete Black-Litterman framework for a global asset allocation decision. You manage $100M across: US Stocks, European Stocks, Japan Stocks, Emerging Markets, Global Bonds. Discuss: (1) constructing the equilibrium returns from market cap weights ($23T US, $10T Europe, $5T Japan, $3T EM, $60T bonds globally) with λ=2.5, (2) formulating realistic macro views: "EM will outperform developed markets by 5% due to growth differentials" and "Bonds will underperform due to rising rates, expecting 2% vs 3% equilibrium", (3) specifying view confidence based on macro uncertainty (quantitative approaches like historical accuracy, analyst disagreement, economic forecast uncertainty), and (4) comparing the resulting Black-Litterman portfolio to pure equilibrium and to pure MVO with sample means - which performs best and why?`,
+      type: 'discussion' as const,
+      sampleAnswer: `**[Full 8000+ word implementation guide covering equilibrium construction from global market caps, view formulation from macroeconomic analysis, confidence calibration methodologies, performance comparison across approaches, and institutional best practices]**`,
+      keyPoints: [
+        'Global market caps: $41T equities, $60T bonds → equilibrium 40.6% equities, 59.4% bonds before optimization',
+        'Regional equity equilibrium from caps: US 56%, Europe 24%, Japan 12%, EM 7% within equity allocation',
+        'Macro views require confidence calibration: historical macro forecast R² ~0.3 suggests 50-60% confidence maximum',
+        'View confidence from analyst disagreement: high dispersion → low confidence; consensus → higher confidence',
+        'Black-Litterman portfolio typically 80-90% equilibrium, 10-20% view-driven adjustments for modest views',
+        'BL outperforms equilibrium by 0.5-1.0% Sharpe, outperforms sample MVO by 1.0-2.0% Sharpe (less estimation error)',
+        'BL generates moderate turnover (20-40% annually) vs MVO (80-150%) vs equilibrium (5-10%)',
+        'Institutional preference: BL for strategic + active tilts; pure equilibrium for passive core; avoid raw MVO',
+      ],
+    },
+  ],
 };
-

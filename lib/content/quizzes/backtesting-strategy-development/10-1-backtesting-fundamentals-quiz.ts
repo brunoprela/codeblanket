@@ -17,8 +17,7 @@ export const backtestingFundamentalsQuiz = [
   },
   {
     id: 2,
-    question:
-      'Which of the following code snippets contains look-ahead bias?',
+    question: 'Which of the following code snippets contains look-ahead bias?',
     options: [
       "df['Signal'] = np.where(df['Close'] > df['Close'].shift(1), 1, -1)",
       "df['SMA_50'] = df['Close'].rolling(50).mean(); df['Signal'] = np.where(df['Close'] > df['SMA_50'], 1, -1)",
@@ -76,8 +75,7 @@ export const backtestingFundamentalsQuiz = [
     ],
     correctAnswer: 2,
     explanation:
-      "Even with excellent backtest results, you should **never deploy directly to live trading**. The proper progression is:\n\n**Stage 1: Backtest** (✓ Done - Sharpe 2.5 is excellent)\n**Stage 2: Paper Trading** - Run for **3-6 months** with real-time data and simulated execution. This reveals:\n- How strategy behaves with live market conditions\n- Execution challenges (slippage, partial fills)\n- Data feed issues\n- Operational problems in your code\n- Whether backtest results were realistic\n\n**Typical degradation**: Expect 20-50% worse performance in paper trading vs backtest.\n\n**Stage 3: Live Trading** - Start with **small capital** (1-5% of intended size):\n- Monitor for 30-60 days\n- Scale up gradually if performance matches expectations\n- Be ready to shut down if performance degrades\n\n**Real-world**: Renaissance Technologies and Two Sigma run paper trading for 6-12 months. Most strategies that pass backtest **fail in paper trading**. Option C is the professional approach.",
+      'Even with excellent backtest results, you should **never deploy directly to live trading**. The proper progression is:\n\n**Stage 1: Backtest** (✓ Done - Sharpe 2.5 is excellent)\n**Stage 2: Paper Trading** - Run for **3-6 months** with real-time data and simulated execution. This reveals:\n- How strategy behaves with live market conditions\n- Execution challenges (slippage, partial fills)\n- Data feed issues\n- Operational problems in your code\n- Whether backtest results were realistic\n\n**Typical degradation**: Expect 20-50% worse performance in paper trading vs backtest.\n\n**Stage 3: Live Trading** - Start with **small capital** (1-5% of intended size):\n- Monitor for 30-60 days\n- Scale up gradually if performance matches expectations\n- Be ready to shut down if performance degrades\n\n**Real-world**: Renaissance Technologies and Two Sigma run paper trading for 6-12 months. Most strategies that pass backtest **fail in paper trading**. Option C is the professional approach.',
     difficulty: 'beginner',
   },
 ];
-

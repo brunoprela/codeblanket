@@ -1,7 +1,7 @@
 export const databaseDesignTrading = {
-    title: 'Database Design for Trading Systems',
-    id: 'database-design-trading',
-    content: `
+  title: 'Database Design for Trading Systems',
+  id: 'database-design-trading',
+  content: `
 # Database Design for Trading Systems
 
 ## Introduction

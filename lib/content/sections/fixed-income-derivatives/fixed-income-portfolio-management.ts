@@ -284,9 +284,8 @@ class PerformanceAttribution:
         
         logger.info(
             f"Initialized attribution: "
-            f"Portfolio ${self.portfolio_value / 1e6: .1f
-}M, "
-            f"Benchmark ${self.benchmark_value/1e6:.1f}M"
+            f"Portfolio \${self.portfolio_value / 1e6:.1f}M, "
+            f"Benchmark \${self.benchmark_value/1e6:.1f}M"
         )
     
     def duration_effect(self) -> float:
@@ -565,4 +564,3 @@ Test portfolio under stress scenarios:
 **Next Section**: Derivative Risk Management - VaR, stress testing, risk limits, compliance.
 `,
 };
-

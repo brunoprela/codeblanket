@@ -1,7 +1,8 @@
 export const coveredCallsProtectivePutsMC = [
   {
     id: 'covered-calls-protective-puts-mc-1',
-    question: 'In a Covered Call strategy, what is the maximum profit potential?',
+    question:
+      'In a Covered Call strategy, what is the maximum profit potential?',
     options: [
       'Unlimited profit as the stock price rises',
       'The premium received from selling the call option',
@@ -38,7 +39,7 @@ export const coveredCallsProtectivePutsMC = [
     ],
     correctAnswer: 1,
     explanation:
-      'Covered Calls: BEST in HIGH IV because you\'re SELLING options - you want to collect inflated premium. High IV Rank (>75%) ideal. Protective Puts: BEST in LOW IV because you\'re BUYING options - you want cheap insurance. Low IV Rank (<25%) ideal. This is the fundamental principle: sell options when expensive (high IV), buy options when cheap (low IV).',
+      "Covered Calls: BEST in HIGH IV because you're SELLING options - you want to collect inflated premium. High IV Rank (>75%) ideal. Protective Puts: BEST in LOW IV because you're BUYING options - you want cheap insurance. Low IV Rank (<25%) ideal. This is the fundamental principle: sell options when expensive (high IV), buy options when cheap (low IV).",
   },
   {
     id: 'covered-calls-protective-puts-mc-4',
@@ -69,4 +70,3 @@ export const coveredCallsProtectivePutsMC = [
       'Realistic covered call income: 10-18% annually from premiums alone. Breakdown: Selling 30-45 day calls 2-5% OTM generates 1-1.5% monthly premium (12-18% annualized) in favorable conditions (IV Rank > 50%). Lower IV = 0.8-1.2% monthly (10-14% annualized). This is ON TOP of: stock appreciation (capped at strike), dividends (1-2% for dividend stocks). Total returns: 15-25% annually are achievable. 3-5% is too conservative, 25%+ premium alone is unrealistic without high risk.',
   },
 ];
-

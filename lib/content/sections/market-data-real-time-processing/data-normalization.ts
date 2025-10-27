@@ -1,7 +1,7 @@
 export const dataNormalization = {
-    title: 'Data Normalization',
-    id: 'data-normalization',
-    content: `
+  title: 'Data Normalization',
+  id: 'data-normalization',
+  content: `
 # Data Normalization
 
 ## Introduction
@@ -306,4 +306,3 @@ class NormalizationPipeline:
 Now you can normalize market data from any exchange into a unified format!
 `,
 };
-

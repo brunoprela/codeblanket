@@ -1,7 +1,7 @@
 export const timestampManagement = {
-    title: 'Timestamp Management and Clock Sync',
-    id: 'timestamp-management',
-    content: `
+  title: 'Timestamp Management and Clock Sync',
+  id: 'timestamp-management',
+  content: `
 # Timestamp Management and Clock Sync
 
 ## Introduction
@@ -299,4 +299,3 @@ print(f"Corrected: {exchange_ts} → {corrected_ts}")
 Now you can properly manage timestamps and synchronize clocks for trading systems!
 `,
 };
-

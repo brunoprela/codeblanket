@@ -19,20 +19,14 @@ export const callPutDeepDiveMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'call-put-deep-dive-mc-2',
     question:
       'Put-call parity states C - P = S - K×e^(-rT). If a call is trading at $8, stock at $100, strike is $100, and risk-free rate is 5% with 3 months to expiration, what should the put be worth (ignoring dividends)?',
-    options: [
-      '$6.76',
-      '$7.00',
-      '$6.76',
-      '$8.00',
-    ],
+    options: ['$6.76', '$7.00', '$6.76', '$8.00'],
     correctAnswer: 0,
     explanation:
       'Using put-call parity: C - P = S - K×e^(-rT). Solve for P: P = C - S + K×e^(-rT). Given: C = $8, S = $100, K = $100, r = 0.05, T = 0.25 years. K×e^(-rT) = $100 × e^(-0.05 × 0.25) = $100 × e^(-0.0125) = $100 × 0.9876 = $98.76. P = $8 - $100 + $98.76 = $6.76. The put should trade at $6.76. If the put is trading at a significantly different price (e.g., $7.50), an arbitrage opportunity exists. The present value of the strike ($98.76) is slightly less than $100 due to the time value of money - you could invest $98.76 today at 5% to have $100 in 3 months.',
   },
   {
     id: 'call-put-deep-dive-mc-3',
-    question:
-      'What is a synthetic long stock position?',
+    question: 'What is a synthetic long stock position?',
     options: [
       'Long call + Long put (same strike)',
       'Long call + Short put (same strike)',
@@ -55,7 +49,7 @@ export const callPutDeepDiveMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'This is a protective put (portfolio insurance). At expiration with stock at $150: Stock loss = ($150 - $200) × 100 = -$5,000. Put profit = max($190 - $150, 0) × 100 = $4,000. Premium paid = $5 × 100 = -$500. Total P&L = -$5,000 + $4,000 - $500 = -$1,500. Wait, that\'s option A! Let me recalculate... Actually, net loss = Stock fell $50 ($200→$150) = -$5,000, Put protects below $190: Intrinsic value = ($190-$150)×100 = $4,000, Subtract premium paid = -$500. Net loss = $200 - $150 - $5 = $55 per share lost, but put protects at $190, so: Loss capped at ($200-$190) + $5 premium = $15 per share × 100 = -$1,500. The put limited your loss to $15/share instead of $50/share.',
+      "This is a protective put (portfolio insurance). At expiration with stock at $150: Stock loss = ($150 - $200) × 100 = -$5,000. Put profit = max($190 - $150, 0) × 100 = $4,000. Premium paid = $5 × 100 = -$500. Total P&L = -$5,000 + $4,000 - $500 = -$1,500. Wait, that's option A! Let me recalculate... Actually, net loss = Stock fell $50 ($200→$150) = -$5,000, Put protects below $190: Intrinsic value = ($190-$150)×100 = $4,000, Subtract premium paid = -$500. Net loss = $200 - $150 - $5 = $55 per share lost, but put protects at $190, so: Loss capped at ($200-$190) + $5 premium = $15 per share × 100 = -$1,500. The put limited your loss to $15/share instead of $50/share.",
   },
   {
     id: 'call-put-deep-dive-mc-5',
@@ -72,4 +66,3 @@ export const callPutDeepDiveMultipleChoice: MultipleChoiceQuestion[] = [
       'Calculate annual costs: Short stock directly: $100 × 15% borrow rate = $15 per share = $1,500 per 100 shares annually. Synthetic short (sell call + buy put): Net cost = $0.30 per share = $30 per 100 shares (one-time, not annual). For 1-year horizon: Short stock total cost = $1,500. Synthetic total cost = $30. Savings = $1,470 by using synthetic! This is why professional traders use synthetic positions for hard-to-borrow stocks - the borrow cost is eliminated. The $0.30 synthetic cost is just the bid-ask spread, while 15% borrow cost is $15 per share annually. Synthetic shorts are vastly cheaper for expensive borrows.',
   },
 ];
-

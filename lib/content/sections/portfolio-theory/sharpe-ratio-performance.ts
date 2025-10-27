@@ -1,7 +1,7 @@
 export const sharpeRatioPerformance = {
-    title: 'Sharpe Ratio and Performance Metrics',
-    id: 'sharpe-ratio-performance',
-    content: `
+  title: 'Sharpe Ratio and Performance Metrics',
+  id: 'sharpe-ratio-performance',
+  content: `
 # Sharpe Ratio and Performance Metrics
 
 ## Introduction
@@ -923,4 +923,3 @@ Build web app where user can:
 In the next section, we'll explore **Mean-Variance Optimization**: the mathematical techniques for constructing optimal portfolios.
 `,
 };
-

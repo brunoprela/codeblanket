@@ -126,9 +126,8 @@ print("Time Series Properties:")
 print(f"Start Date: {prices.index[0].strftime('%Y-%m-%d')}")
 print(f"End Date: {prices.index[-1].strftime('%Y-%m-%d')}")
 print(f"Observations: {len(prices)}")
-print(f"Start Price: ${prices.iloc[0]: .2f
-}")
-print(f"End Price: ${prices.iloc[-1]:.2f}")
+print(f"Start Price: \${prices.iloc[0]:.2f}")
+print(f"End Price: \${prices.iloc[-1]:.2f}")
 print(f"Total Return: {(prices.iloc[-1] / prices.iloc[0] - 1) * 100:.2f}%")
 \`\`\`
 
@@ -457,7 +456,8 @@ simple_ret = calc.simple_returns(prices)
 log_ret = calc.log_returns(prices)
 
 print("Price Series:")
-print(f"Start: ${prices.iloc[0]: .2f}")
+print(f"Start: ${prices.iloc[0]: .2f
+}")
 print(f"End: ${prices.iloc[-1]:.2f}")
 print(f"Total Change: {(prices.iloc[-1]/prices.iloc[0] - 1)*100:.2f}%\\n")
 

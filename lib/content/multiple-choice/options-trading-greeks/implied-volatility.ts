@@ -1,16 +1,17 @@
 export const impliedVolatilityMC = [
   {
     id: 'implied-volatility-mc-1',
-    question: 'What is the primary difference between Historical Volatility (HV) and Implied Volatility (IV)?',
+    question:
+      'What is the primary difference between Historical Volatility (HV) and Implied Volatility (IV)?',
     options: [
       'HV is always higher than IV in bull markets',
-      'HV measures past realized volatility, IV measures market\'s expectation of future volatility',
+      "HV measures past realized volatility, IV measures market's expectation of future volatility",
       'HV is calculated from option prices, IV is calculated from stock prices',
       'HV and IV are the same, just different names for the same measure',
     ],
     correctAnswer: 1,
     explanation:
-      'Historical Volatility is backward-looking (calculated from past stock price movements), while Implied Volatility is forward-looking (derived from current option prices and represents the market\'s expectation of future volatility). HV is calculated from stock prices, IV is backed out from option prices using the Black-Scholes model.',
+      "Historical Volatility is backward-looking (calculated from past stock price movements), while Implied Volatility is forward-looking (derived from current option prices and represents the market's expectation of future volatility). HV is calculated from stock prices, IV is backed out from option prices using the Black-Scholes model.",
   },
   {
     id: 'implied-volatility-mc-2',
@@ -69,4 +70,3 @@ export const impliedVolatilityMC = [
       'Equity markets exhibit negative skew (left skew): OTM puts have higher IV than OTM calls. This occurs because: (1) demand for downside protection (portfolio insurance), (2) leverage effect (stock down → volatility up), and (3) market crashes are more common than explosive rallies. Example: Stock at $100, 90-strike put IV = 25%, 110-strike call IV = 18%. This is opposite of the Black-Scholes assumption of constant volatility.',
   },
 ];
-

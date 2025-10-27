@@ -54,92 +54,94 @@ import { strategyPerformanceAttributionMC } from '../multiple-choice/algorithmic
 import { projectMultiStrategyTradingSystemMC } from '../multiple-choice/algorithmic-trading-strategies/project-multi-strategy-trading-system';
 
 export const algorithmicTradingStrategiesModule: Module = {
-    id: 'algorithmic-trading-strategies',
-    title: 'Algorithmic Trading Strategies',
-    description:
-        'Master systematic trading strategies from trend following to multi-strategy systems with production-ready implementations',
-    estimatedHours: 35,
-    prerequisites: ['financial-markets-instruments', 'backtesting-strategy-development'],
-    learningObjectives: [
-        'Implement trend following, mean reversion, and statistical arbitrage strategies',
-        'Build pairs trading systems with cointegration analysis',
-        'Design market making and execution algorithms (VWAP, TWAP, POV)',
-        'Trade on news and sentiment using NLP and alternative data',
-        'Construct multi-factor and multi-asset portfolios',
-        'Attribute performance to alpha, beta, and factor exposures',
-        'Build production-ready multi-strategy trading systems',
-    ],
-    sections: [
-        {
-            ...algorithmicTradingOverview,
-            quiz: algorithmicTradingOverviewQuiz,
-            multipleChoice: algorithmicTradingOverviewMC,
-        },
-        {
-            ...trendFollowingStrategies,
-            quiz: trendFollowingStrategiesQuiz,
-            multipleChoice: trendFollowingStrategiesMC,
-        },
-        {
-            ...meanReversionStrategies,
-            quiz: meanReversionStrategiesQuiz,
-            multipleChoice: meanReversionStrategiesMC,
-        },
-        {
-            ...statisticalArbitrage,
-            quiz: statisticalArbitrageQuiz,
-            multipleChoice: statisticalArbitrageMC,
-        },
-        {
-            ...pairsTrading,
-            quiz: pairsTradingQuiz,
-            multipleChoice: pairsTradingMC,
-        },
-        {
-            ...momentumStrategies,
-            quiz: momentumStrategiesQuiz,
-            multipleChoice: momentumStrategiesMC,
-        },
-        {
-            ...marketMakingStrategies,
-            quiz: marketMakingStrategiesQuiz,
-            multipleChoice: marketMakingStrategiesMC,
-        },
-        {
-            ...executionAlgorithms,
-            quiz: executionAlgorithmsQuiz,
-            multipleChoice: executionAlgorithmsMC,
-        },
-        {
-            ...newsBasedTrading,
-            quiz: newsBasedTradingQuiz,
-            multipleChoice: newsBasedTradingMC,
-        },
-        {
-            ...sentimentAnalysisTrading,
-            quiz: sentimentAnalysisTradingQuiz,
-            multipleChoice: sentimentAnalysisTradingMC,
-        },
-        {
-            ...factorInvestingStrategies,
-            quiz: factorInvestingStrategiesQuiz,
-            multipleChoice: factorInvestingStrategiesMC,
-        },
-        {
-            ...multiAssetStrategies,
-            quiz: multiAssetStrategiesQuiz,
-            multipleChoice: multiAssetStrategiesMC,
-        },
-        {
-            ...strategyPerformanceAttribution,
-            quiz: strategyPerformanceAttributionQuiz,
-            multipleChoice: strategyPerformanceAttributionMC,
-        },
-        {
-            ...projectMultiStrategyTradingSystem,
-            quiz: projectMultiStrategyTradingSystemQuiz,
-            multipleChoice: projectMultiStrategyTradingSystemMC,
-        },
-    ],
+  id: 'algorithmic-trading-strategies',
+  title: 'Algorithmic Trading Strategies',
+  description:
+    'Master systematic trading strategies from trend following to multi-strategy systems with production-ready implementations',
+  estimatedHours: 35,
+  prerequisites: [
+    'financial-markets-instruments',
+    'backtesting-strategy-development',
+  ],
+  learningObjectives: [
+    'Implement trend following, mean reversion, and statistical arbitrage strategies',
+    'Build pairs trading systems with cointegration analysis',
+    'Design market making and execution algorithms (VWAP, TWAP, POV)',
+    'Trade on news and sentiment using NLP and alternative data',
+    'Construct multi-factor and multi-asset portfolios',
+    'Attribute performance to alpha, beta, and factor exposures',
+    'Build production-ready multi-strategy trading systems',
+  ],
+  sections: [
+    {
+      ...algorithmicTradingOverview,
+      quiz: algorithmicTradingOverviewQuiz,
+      multipleChoice: algorithmicTradingOverviewMC,
+    },
+    {
+      ...trendFollowingStrategies,
+      quiz: trendFollowingStrategiesQuiz,
+      multipleChoice: trendFollowingStrategiesMC,
+    },
+    {
+      ...meanReversionStrategies,
+      quiz: meanReversionStrategiesQuiz,
+      multipleChoice: meanReversionStrategiesMC,
+    },
+    {
+      ...statisticalArbitrage,
+      quiz: statisticalArbitrageQuiz,
+      multipleChoice: statisticalArbitrageMC,
+    },
+    {
+      ...pairsTrading,
+      quiz: pairsTradingQuiz,
+      multipleChoice: pairsTradingMC,
+    },
+    {
+      ...momentumStrategies,
+      quiz: momentumStrategiesQuiz,
+      multipleChoice: momentumStrategiesMC,
+    },
+    {
+      ...marketMakingStrategies,
+      quiz: marketMakingStrategiesQuiz,
+      multipleChoice: marketMakingStrategiesMC,
+    },
+    {
+      ...executionAlgorithms,
+      quiz: executionAlgorithmsQuiz,
+      multipleChoice: executionAlgorithmsMC,
+    },
+    {
+      ...newsBasedTrading,
+      quiz: newsBasedTradingQuiz,
+      multipleChoice: newsBasedTradingMC,
+    },
+    {
+      ...sentimentAnalysisTrading,
+      quiz: sentimentAnalysisTradingQuiz,
+      multipleChoice: sentimentAnalysisTradingMC,
+    },
+    {
+      ...factorInvestingStrategies,
+      quiz: factorInvestingStrategiesQuiz,
+      multipleChoice: factorInvestingStrategiesMC,
+    },
+    {
+      ...multiAssetStrategies,
+      quiz: multiAssetStrategiesQuiz,
+      multipleChoice: multiAssetStrategiesMC,
+    },
+    {
+      ...strategyPerformanceAttribution,
+      quiz: strategyPerformanceAttributionQuiz,
+      multipleChoice: strategyPerformanceAttributionMC,
+    },
+    {
+      ...projectMultiStrategyTradingSystem,
+      quiz: projectMultiStrategyTradingSystemQuiz,
+      multipleChoice: projectMultiStrategyTradingSystemMC,
+    },
+  ],
 };
-

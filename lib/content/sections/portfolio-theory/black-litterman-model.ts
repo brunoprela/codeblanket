@@ -897,4 +897,3 @@ Historical simulation:
 In the next section, we'll explore **Asset Allocation Strategies**: different approaches to building portfolios beyond pure optimization.
 `,
 };
-

@@ -241,8 +241,7 @@ order_sizes = [1000, 5000, 10000, 25000, 50000, 100000]
 
 print("Market Impact Analysis (Square-Root Law)")
 print("=" * 70)
-print(f"Stock Price: ${price: .2f
-}")
+print(f"Stock Price: \${price:.2f}")
 print(f"Daily Volume: {daily_volume:,} shares")
 print(f"Volatility: {volatility*100:.1f}%")
 print(f"Gamma: {model.gamma}")
@@ -645,6 +644,5 @@ class VWAPAlgorithm:
 
 4. **Grinold, R., & Kahn, R. (1999).** *Active Portfolio Management.*
    - Chapter on transaction costs and implementation shortfall.
-`
+`,
 };
-

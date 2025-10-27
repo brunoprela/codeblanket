@@ -1,9 +1,9 @@
 export const trendFollowingStrategiesQuiz = [
-    {
-        id: 'ats-2-1-q-1',
-        question:
-            "Design a trend-following system that trades S&P 500 futures with $1M capital. Include: (1) Entry/exit rules using Donchian channels, (2) ATR-based position sizing risking 1% per trade, (3) Pyramiding rules for adding to winners, (4) ADX filter to avoid choppy markets. Provide complete Python implementation with realistic parameters.",
-        sampleAnswer: `**Complete Trend Following System for S&P 500 Futures:**
+  {
+    id: 'ats-2-1-q-1',
+    question:
+      'Design a trend-following system that trades S&P 500 futures with $1M capital. Include: (1) Entry/exit rules using Donchian channels, (2) ATR-based position sizing risking 1% per trade, (3) Pyramiding rules for adding to winners, (4) ADX filter to avoid choppy markets. Provide complete Python implementation with realistic parameters.',
+    sampleAnswer: `**Complete Trend Following System for S&P 500 Futures:**
 
 **System Specifications:**
 - Market: S&P 500 E-mini futures (ES)
@@ -392,19 +392,19 @@ if __name__ == "__main__":
 - **Capital**: $1M adequate for proper position sizing
 - **Patience**: Trends are rare, most trades are small losses
 - **Diversification**: Should trade multiple futures markets, not just ES`,
-        keyPoints: [
-            'S&P 500 futures system using 20-day Donchian breakouts, 10-day exits, ADX > 25 filter',
-            'Position sizing: risk 1% per trade ($10K) using ATR-based stops (2× ATR)',
-            'Pyramiding: add unit every 0.5× ATR profit, max 4 units total (Turtle Trading principle)',
-            'Complete implementation with indicators, entry/exit logic, pyramiding, and performance tracking',
-            'Expected: 30-40% win rate, 2-3x profit factor, 1.0-1.5 Sharpe, 20-30% max drawdown',
-        ],
-    },
-    {
-        id: 'ats-2-1-q-2',
-        question:
-            'Analyze why trend following strategies typically have low win rates (35-45%) but high profit factors (2.5-3.5x). Design a hybrid strategy that improves win rate to 50-55% while maintaining profit factor above 2.0. What are the trade-offs?',
-        sampleAnswer: `**Why Trend Following Has Low Win Rates But High Profit Factors:**
+    keyPoints: [
+      'S&P 500 futures system using 20-day Donchian breakouts, 10-day exits, ADX > 25 filter',
+      'Position sizing: risk 1% per trade ($10K) using ATR-based stops (2× ATR)',
+      'Pyramiding: add unit every 0.5× ATR profit, max 4 units total (Turtle Trading principle)',
+      'Complete implementation with indicators, entry/exit logic, pyramiding, and performance tracking',
+      'Expected: 30-40% win rate, 2-3x profit factor, 1.0-1.5 Sharpe, 20-30% max drawdown',
+    ],
+  },
+  {
+    id: 'ats-2-1-q-2',
+    question:
+      'Analyze why trend following strategies typically have low win rates (35-45%) but high profit factors (2.5-3.5x). Design a hybrid strategy that improves win rate to 50-55% while maintaining profit factor above 2.0. What are the trade-offs?',
+    sampleAnswer: `**Why Trend Following Has Low Win Rates But High Profit Factors:**
 
 **The Mathematics:**
 
@@ -726,19 +726,19 @@ class HybridTrendMeanReversion:
 - **Pure Trend**: Bull markets, volatile regimes, futures/commodities
 - **Pure MR**: Low volatility, range-bound markets, high-liquidity stocks
 - **Hybrid**: Most practical for retail/small funds (better consistency)`,
-        keyPoints: [
-            'Trend following: low win rate (35-40%) × large winners (+12%) = positive expectancy (+3% per trade)',
-            'High win rate requires early profit-taking → smaller winners → lower profit factor (trade-off is fundamental)',
-            'Hybrid approach: 70% trend following (trending regimes) + 30% mean reversion (consolidating regimes)',
-            'Hybrid achieves 52% win rate, 2.1x profit factor by diversifying across market regimes, not changing economics',
-            'Trade-offs: increased complexity, lower peak profit factor, but smoother returns and better psychological experience',
-        ],
-    },
-    {
-        id: 'ats-2-1-q-3',
-        question:
-            'The Turtle Traders achieved 80% annual returns in the 1980s using simple trend following, but the strategy returns only 10-15% today. Analyze: (1) Why performance degraded, (2) What adaptations are needed for modern markets, (3) Design a "Turtles 2.0" strategy for 2024+.',
-        sampleAnswer: `**Why Turtle Trading Performance Degraded (1980s → 2024):**
+    keyPoints: [
+      'Trend following: low win rate (35-40%) × large winners (+12%) = positive expectancy (+3% per trade)',
+      'High win rate requires early profit-taking → smaller winners → lower profit factor (trade-off is fundamental)',
+      'Hybrid approach: 70% trend following (trending regimes) + 30% mean reversion (consolidating regimes)',
+      'Hybrid achieves 52% win rate, 2.1x profit factor by diversifying across market regimes, not changing economics',
+      'Trade-offs: increased complexity, lower peak profit factor, but smoother returns and better psychological experience',
+    ],
+  },
+  {
+    id: 'ats-2-1-q-3',
+    question:
+      'The Turtle Traders achieved 80% annual returns in the 1980s using simple trend following, but the strategy returns only 10-15% today. Analyze: (1) Why performance degraded, (2) What adaptations are needed for modern markets, (3) Design a "Turtles 2.0" strategy for 2024+.',
+    sampleAnswer: `**Why Turtle Trading Performance Degraded (1980s → 2024):**
 
 **Historical Context (1980s):**
 - Original Turtle returns: 80%+ annually (1983-1987)
@@ -1121,13 +1121,12 @@ class Turtles20Strategy:
 - But 25-30% is achievable with adaptations
 - Requires more capital ($10M vs $1M) and sophistication
 - Still beats buy-and-hold by 2-3x`,
-        keyPoints: [
-            'Turtle performance degraded 80% → 15% due to: crowding (50x more traders), HFT, central bank intervention',
-            'Modern adaptations: faster signals (10-day vs 20-day), 100+ markets (vs 20), volatility regime filters',
-            'Turtles 2.0 strategy: 10-day breakouts, ADX > 25 + VIX > 15 filters, 0.5% risk per trade, 50 max positions',
-            'Expected modern performance: 25-30% annual (vs 80% original) but still 2-3x better than S&P 500',
-            'Requires $10M+ capital (vs $1M original) due to diversification needs and market impact concerns',
-        ],
-    },
+    keyPoints: [
+      'Turtle performance degraded 80% → 15% due to: crowding (50x more traders), HFT, central bank intervention',
+      'Modern adaptations: faster signals (10-day vs 20-day), 100+ markets (vs 20), volatility regime filters',
+      'Turtles 2.0 strategy: 10-day breakouts, ADX > 25 + VIX > 15 filters, 0.5% risk per trade, 50 max positions',
+      'Expected modern performance: 25-30% annual (vs 80% original) but still 2-3x better than S&P 500',
+      'Requires $10M+ capital (vs $1M original) due to diversification needs and market impact concerns',
+    ],
+  },
 ];
-

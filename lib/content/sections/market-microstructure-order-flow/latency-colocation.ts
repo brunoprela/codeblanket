@@ -1,7 +1,7 @@
 export const latencyColocation = {
-    title: 'Latency and Co-location',
-    id: 'latency-colocation',
-    content: `
+  title: 'Latency and Co-location',
+  id: 'latency-colocation',
+  content: `
 # Latency and Co-location
 
 ## Introduction
@@ -503,6 +503,5 @@ class TradingPipeline:
 3. **Clock Synchronization Standards:** Exchanges must publish clock sync methodology.
 
 4. **Latency Disclosure:** Some jurisdictions require disclosure of typical execution latency to clients.
-`
+`,
 };
-

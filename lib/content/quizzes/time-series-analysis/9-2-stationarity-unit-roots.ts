@@ -1,9 +1,9 @@
 export const stationarityUnitRootsQuiz = [
-    {
-        id: 1,
-        question:
-            "Your quantitative trading firm is analyzing a potential pairs trading strategy between two tech stocks. The ADF test on Stock A shows p-value = 0.30 (non-stationary), Stock B shows p-value = 0.25 (non-stationary), but their first differences both show p-value < 0.01 (stationary). The cointegration test on the price levels shows p-value = 0.03. Your junior analyst concludes: 'Both stocks are non-stationary, so we should difference them before testing cointegration.' Explain why this recommendation is WRONG, what the correct approach is, and how misunderstanding the relationship between differencing and cointegration could cause you to miss profitable trading opportunities.",
-        answer: `## Comprehensive Answer:
+  {
+    id: 1,
+    question:
+      "Your quantitative trading firm is analyzing a potential pairs trading strategy between two tech stocks. The ADF test on Stock A shows p-value = 0.30 (non-stationary), Stock B shows p-value = 0.25 (non-stationary), but their first differences both show p-value < 0.01 (stationary). The cointegration test on the price levels shows p-value = 0.03. Your junior analyst concludes: 'Both stocks are non-stationary, so we should difference them before testing cointegration.' Explain why this recommendation is WRONG, what the correct approach is, and how misunderstanding the relationship between differencing and cointegration could cause you to miss profitable trading opportunities.",
+    answer: `## Comprehensive Answer:
 
 ### Why the Recommendation is Wrong
 
@@ -224,12 +224,12 @@ If you differentiate first, you lose the relationship between levels that create
 4. False negatives cost millions in missed opportunities
 
 **Remember:** Cointegration is about **non-stationary series with stationary linear combination** - that combination is what we trade!`,
-    },
-    {
-        id: 2,
-        question:
-            "You run an ADF test on a stock's daily returns and get p-value = 0.001 (strongly stationary). Great! But then you also run a KPSS test and get p-value = 0.02 (rejecting stationarity at 5% level). The tests disagree. Your risk manager says 'The tests contradict each other, so we can't trust either - let's not model this data.' Explain: (1) Why the tests might disagree (what are they actually testing?), (2) How to interpret conflicting results, (3) Three additional diagnostic tests you would run to resolve the ambiguity, and (4) Whether the risk manager's conclusion to avoid modeling is justified.",
-        answer: `## Comprehensive Answer:
+  },
+  {
+    id: 2,
+    question:
+      "You run an ADF test on a stock's daily returns and get p-value = 0.001 (strongly stationary). Great! But then you also run a KPSS test and get p-value = 0.02 (rejecting stationarity at 5% level). The tests disagree. Your risk manager says 'The tests contradict each other, so we can't trust either - let's not model this data.' Explain: (1) Why the tests might disagree (what are they actually testing?), (2) How to interpret conflicting results, (3) Three additional diagnostic tests you would run to resolve the ambiguity, and (4) Whether the risk manager's conclusion to avoid modeling is justified.",
+    answer: `## Comprehensive Answer:
 
 ### Why the Tests Disagree
 
@@ -563,12 +563,12 @@ Don't avoid modeling - instead:
 - Use robust modeling approaches
 - Validate on out-of-sample data
 - DON'T give up on modeling`,
-    },
-    {
-        id: 3,
-        question:
-            "A machine learning engineer on your team proposes: 'Instead of manually testing for stationarity and applying transformations, let's just feed raw price data into an LSTM neural network. Deep learning can automatically learn the patterns without these classical statistics assumptions.' The LSTM achieves impressive in-sample R² = 0.92 predicting next-day prices. Explain: (1) What specific problems arise from training ML models on non-stationary price data, (2) Why high in-sample R² is misleading here, (3) How to properly validate if the model has learned real patterns vs exploiting non-stationarity, and (4) The correct way to prepare financial time series data for ML models.",
-        answer: `## Comprehensive Answer:
+  },
+  {
+    id: 3,
+    question:
+      "A machine learning engineer on your team proposes: 'Instead of manually testing for stationarity and applying transformations, let's just feed raw price data into an LSTM neural network. Deep learning can automatically learn the patterns without these classical statistics assumptions.' The LSTM achieves impressive in-sample R² = 0.92 predicting next-day prices. Explain: (1) What specific problems arise from training ML models on non-stationary price data, (2) Why high in-sample R² is misleading here, (3) How to properly validate if the model has learned real patterns vs exploiting non-stationarity, and (4) The correct way to prepare financial time series data for ML models.",
+    answer: `## Comprehensive Answer:
 
 ### Problem 1: Spurious Patterns from Non-Stationarity
 
@@ -996,6 +996,5 @@ class ProperMLPipeline:
 - ✓ Valid for trading
 
 **Always:** Transform → Validate → Model → Test economically`,
-    },
+  },
 ];
-

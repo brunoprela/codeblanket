@@ -1,7 +1,7 @@
 export const governmentSecurities = {
-  title: 'Government Securities',
-  id: 'government-securities',
-  content: `
+    title: 'Government Securities',
+    id: 'government-securities',
+    content: `
 # Government Securities
 
 ## Introduction
@@ -274,7 +274,7 @@ class TIPSBond:
         ...     maturity_years=10
         ... )
         >>> value = tips.value(current_cpi=280.0, real_yield=0.02)
-        >>> print(f"TIPS value: ${value:.2f}")
+        >>> print(f"TIPS value: \${value:.2f}")
     """
     original_principal: float
     coupon_rate: float  # Real coupon rate (fixed)
@@ -393,19 +393,19 @@ if __name__ == "__main__":
     adj_principal = tips.adjusted_principal(current_cpi)
     coupon = tips.coupon_payment(current_cpi)
     
-    print(f"Original Principal: ${tips.original_principal:,.2f}")
+    print(f"Original Principal: \${tips.original_principal:,.2f}")
     print(f"Issue CPI: {tips.issue_cpi}")
     print(f"Current CPI: {current_cpi}")
     print(f"Inflation: {(current_cpi/tips.issue_cpi - 1)*100:.2f}%")
-    print(f"\\nAdjusted Principal: ${adj_principal:,.2f}")
-    print(f"Semi-annual Coupon: ${coupon:.2f}")
+    print(f"\\nAdjusted Principal: \${adj_principal:,.2f}")
+    print(f"Semi-annual Coupon: \${coupon:.2f}")
     
     # Value at different real yields
     print("\\n=== TIPS Pricing ===\\n")
     
     for real_yield in [0.015, 0.020, 0.025, 0.030]:
         price = tips.value(current_cpi, real_yield)
-        print(f"Real Yield {real_yield*100:.2f}%: Price ${price:.2f}")
+        print(f"Real Yield {real_yield*100:.2f}%: Price \${price:.2f}")
     
     # Breakeven inflation
     print("\\n=== Breakeven Inflation ===\\n")
@@ -539,4 +539,3 @@ Corporate Yield = Treasury Yield + Credit Spread
 **Next Section**: Derivatives Overview - forwards, futures, options, swaps fundamentals.
 `,
 };
-

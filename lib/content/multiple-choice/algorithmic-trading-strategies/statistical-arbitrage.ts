@@ -1,16 +1,16 @@
 export const statisticalArbitrageMC = [
-    {
-        id: 'ats-4-mc-1',
-        question:
-            'Two assets have correlation 0.90 but cointegration p-value 0.15. Should you trade this pair?',
-        options: [
-            'Yes, 0.90 correlation is strong enough',
-            'No, p-value > 0.05 means not cointegrated (spread not stationary)',
-            'Yes, but only with tight stop losses',
-            'Yes, but use Kalman filter instead of OLS',
-        ],
-        correctAnswer: 1,
-        explanation: `**Correct: No, p-value > 0.05 means not cointegrated.**
+  {
+    id: 'ats-4-mc-1',
+    question:
+      'Two assets have correlation 0.90 but cointegration p-value 0.15. Should you trade this pair?',
+    options: [
+      'Yes, 0.90 correlation is strong enough',
+      'No, p-value > 0.05 means not cointegrated (spread not stationary)',
+      'Yes, but only with tight stop losses',
+      'Yes, but use Kalman filter instead of OLS',
+    ],
+    correctAnswer: 1,
+    explanation: `**Correct: No, p-value > 0.05 means not cointegrated.**
 
 **Why correlation ≠ cointegration:**
 
@@ -41,19 +41,19 @@ export const statisticalArbitrageMC = [
 **Why Other Answers Wrong:**
 - "Tight stop losses": Won't help if spread diverges permanently
 - "Kalman filter": Can't fix broken cointegration, will adapt to wrong relationship`,
-    },
-    {
-        id: 'ats-4-mc-2',
-        question:
-            'Your pairs strategy has half-life 80 days. What does this mean and should you trade it?',
-        options: [
-            'Spread reverts to mean in 80 days on average; too slow, do not trade',
-            'Strategy holds positions for 80 days; acceptable',
-            'Spread volatility doubles every 80 days; too risky',
-            'Half-life measures correlation; 80 days is good',
-        ],
-        correctAnswer: 0,
-        explanation: `**Correct: Spread reverts to mean in 80 days on average; too slow, do not trade.**
+  },
+  {
+    id: 'ats-4-mc-2',
+    question:
+      'Your pairs strategy has half-life 80 days. What does this mean and should you trade it?',
+    options: [
+      'Spread reverts to mean in 80 days on average; too slow, do not trade',
+      'Strategy holds positions for 80 days; acceptable',
+      'Spread volatility doubles every 80 days; too risky',
+      'Half-life measures correlation; 80 days is good',
+    ],
+    correctAnswer: 0,
+    explanation: `**Correct: Spread reverts to mean in 80 days on average; too slow, do not trade.**
 
 **What Is Half-Life?**
 
@@ -106,19 +106,18 @@ if half_life > 60:
 - "Measures correlation": Half-life measures mean reversion, not correlation
 
 **Bottom Line**: Reject pairs with half-life > 60 days. They tie up capital too long and have regime risk.`,
-    },
-    {
-        id: 'ats-4-mc-3',
-        question:
-            'Kalman filter hedge ratio vs OLS: which statement is correct?',
-        options: [
-            'OLS always performs better because it uses more data',
-            'Kalman filter adapts to time-varying relationships but adds complexity',
-            'Kalman filter only works for high-frequency trading',
-            'OLS and Kalman produce identical results in practice',
-        ],
-        correctAnswer: 1,
-        explanation: `**Correct: Kalman filter adapts to time-varying relationships but adds complexity.**
+  },
+  {
+    id: 'ats-4-mc-3',
+    question: 'Kalman filter hedge ratio vs OLS: which statement is correct?',
+    options: [
+      'OLS always performs better because it uses more data',
+      'Kalman filter adapts to time-varying relationships but adds complexity',
+      'Kalman filter only works for high-frequency trading',
+      'OLS and Kalman produce identical results in practice',
+    ],
+    correctAnswer: 1,
+    explanation: `**Correct: Kalman filter adapts to time-varying relationships but adds complexity.**
 
 **Key Differences:**
 
@@ -188,19 +187,19 @@ hedge_ratios = kf.filter(price_A)  # Time series of hedge ratios
 - "Identical results": Different; Kalman has time-varying hedge ratio
 
 **Bottom Line**: Kalman filter improves performance (+0.5 Sharpe) but adds complexity (10x code). Worth it when relationships evolve, not worth it for stable pairs.`,
-    },
-    {
-        id: 'ats-4-mc-4',
-        question:
-            'PCA stat arb extracts 5 factors from 20 stocks. Factor 1 explains 60% of variance. What should you do?',
-        options: [
-            'Increase to 10 factors to capture more variance',
-            'Trade the residuals (40% unexplained variance), which is idiosyncratic risk',
-            'Only trade Factor 1 since it explains most variance',
-            'Reduce to 3 factors to avoid overfitting',
-        ],
-        correctAnswer: 1,
-        explanation: `**Correct: Trade the residuals (40% unexplained variance), which is idiosyncratic risk.**
+  },
+  {
+    id: 'ats-4-mc-4',
+    question:
+      'PCA stat arb extracts 5 factors from 20 stocks. Factor 1 explains 60% of variance. What should you do?',
+    options: [
+      'Increase to 10 factors to capture more variance',
+      'Trade the residuals (40% unexplained variance), which is idiosyncratic risk',
+      'Only trade Factor 1 since it explains most variance',
+      'Reduce to 3 factors to avoid overfitting',
+    ],
+    correctAnswer: 1,
+    explanation: `**Correct: Trade the residuals (40% unexplained variance), which is idiosyncratic risk.**
 
 **PCA Decomposition:**
 
@@ -316,19 +315,19 @@ class PCAStatArb:
 - "Reduce to 3 factors": Residuals still have systematic risk
 
 **Bottom Line**: Trade the residuals (idiosyncratic risk), not the factors (systematic risk). 5 factors explaining 80% variance is ideal, leaves 20% residual variance to trade.`,
-    },
-    {
-        id: 'ats-4-mc-5',
-        question:
-            'Your stat arb portfolio has 20 pairs. Pair correlation matrix shows average 0.60 correlation. What is the risk?',
-        options: [
-            'No risk; pairs are diversified',
-            'High concentration risk; pairs are correlated and will lose together',
-            'Low risk; 0.60 correlation is acceptable',
-            'Need more pairs to achieve diversification',
-        ],
-        correctAnswer: 1,
-        explanation: `**Correct: High concentration risk; pairs are correlated and will lose together.**
+  },
+  {
+    id: 'ats-4-mc-5',
+    question:
+      'Your stat arb portfolio has 20 pairs. Pair correlation matrix shows average 0.60 correlation. What is the risk?',
+    options: [
+      'No risk; pairs are diversified',
+      'High concentration risk; pairs are correlated and will lose together',
+      'Low risk; 0.60 correlation is acceptable',
+      'Need more pairs to achieve diversification',
+    ],
+    correctAnswer: 1,
+    explanation: `**Correct: High concentration risk; pairs are correlated and will lose together.**
 
 **Problem: Correlated Pairs**
 
@@ -444,6 +443,5 @@ effective_n_crisis = 20 / (1 + 19 × 0.90) = 1.1 bets
 - "Need more pairs": 100 pairs with 0.60 correlation still concentrated
 
 **Bottom Line**: 20 pairs with 0.60 correlation = 1.6 independent bets (not 20). High concentration risk. Diversify across sectors, target avg correlation <0.3. In crisis, all pairs correlate → simultaneous losses.`,
-    },
+  },
 ];
-

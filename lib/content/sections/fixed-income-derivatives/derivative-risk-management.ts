@@ -1,7 +1,7 @@
 export const derivativeRiskManagement = {
-    title: 'Derivative Risk Management',
-    id: 'derivative-risk-management',
-    content: `
+        title: 'Derivative Risk Management',
+        id: 'derivative-risk-management',
+        content: `
 # Derivative Risk Management
 
 ## Introduction
@@ -195,9 +195,8 @@ class VaRCalculator:
         ... ]
         >>> calc = VaRCalculator(positions, confidence=0.95, horizon_days=1)
         >>> var = calc.calculate(method=VaRMethod.HISTORICAL, historical_returns=returns_df)
-        >>> print(f"95% 1-day VaR: ${var:, .0f
-}")
-"""
+        >>> print(f"95% 1-day VaR: \${var:,.0f}")
+        """
     
     def __init__(
     self,
@@ -226,7 +225,8 @@ self.horizon_days = horizon_days
 self.portfolio_value = sum(p.market_value for p in positions)
 
     logger.info(
-        f"Initialized VaR: ${self.portfolio_value/1e6:.1f}M portfolio, "
+        f"Initialized VaR: ${self.portfolio_value / 1e6: .1f
+}M portfolio, "
             f"{confidence*100:.0f}% confidence, {horizon_days}day horizon"
     )
     
@@ -234,7 +234,7 @@ self.portfolio_value = sum(p.market_value for p in positions)
         self,
         historical_returns: pd.DataFrame,
         lookback_days: int = 250
-    ) -> float:
+) -> float:
 """
         Calculate VaR using historical simulation
 
@@ -251,9 +251,9 @@ Returns:
 VaR(positive number represents loss)
 """
 if len(historical_returns) < lookback_days:
-    logger.warning(
-        f"Insufficient historical data: {len(historical_returns)} < {lookback_days}"
-    )
+        logger.warning(
+                f"Insufficient historical data: {len(historical_returns)} < {lookback_days}"
+        )
 lookback_days = len(historical_returns)
         
         # Use last N days
@@ -273,16 +273,16 @@ var_return = np.percentile(scaled_returns, percentile)
 var_dollar = abs(var_return * self.portfolio_value)
 
 logger.debug(
-    f"Historical VaR: {var_dollar/1e6:.2f}M "
+        f"Historical VaR: {var_dollar/1e6:.2f}M "
             f"({var_return*100:.2f}% of portfolio)"
 )
 
 return var_dollar
     
     def parametric_var(
-    self,
-    expected_return: float = 0.0,
-    volatility: float = 0.01  # 1 % daily vol
+        self,
+        expected_return: float = 0.0,
+        volatility: float = 0.01  # 1 % daily vol
 ) -> float:
 """
         Calculate VaR using variance-covariance(parametric) method
@@ -292,8 +292,8 @@ VaR = Portfolio_value × σ × Z_α × √T
 
 Where:
 - σ = portfolio volatility
-    - Z_α = standard normal quantile(e.g., 1.65 for 95 %)
-    - T = time horizon
+        - Z_α = standard normal quantile(e.g., 1.65 for 95 %)
+        - T = time horizon
 
 Args:
 expected_return: Expected daily return
@@ -316,17 +316,17 @@ var_return = horizon_return + z_score * horizon_vol
 var_dollar = abs(var_return * self.portfolio_value)
 
 logger.debug(
-    f"Parametric VaR: ${var_dollar/1e6:.2f}M "
+        f"Parametric VaR: ${var_dollar/1e6:.2f}M "
             f"(vol={volatility*100:.2f}%, z={z_score:.2f})"
 )
 
 return var_dollar
     
     def monte_carlo_var(
-    self,
-    num_simulations: int = 10000,
-    volatility: float = 0.01,
-    expected_return: float = 0.0
+        self,
+        num_simulations: int = 10000,
+        volatility: float = 0.01,
+        expected_return: float = 0.0
 ) -> float:
 """
         Calculate VaR using Monte Carlo simulation
@@ -352,8 +352,8 @@ z = np.random.standard_normal(num_simulations)
         
         # Simulated returns
 simulated_returns = (
-    expected_return * dt +
-    volatility * np.sqrt(dt) * z
+        expected_return * dt +
+        volatility * np.sqrt(dt) * z
 )
         
         # Portfolio P & L
@@ -364,15 +364,15 @@ percentile = (1 - self.confidence) * 100
 var_dollar = abs(np.percentile(portfolio_pnl, percentile))
 
 logger.debug(
-    f"Monte Carlo VaR ({num_simulations} sims): ${var_dollar/1e6:.2f}M"
+        f"Monte Carlo VaR ({num_simulations} sims): ${var_dollar/1e6:.2f}M"
 )
 
 return var_dollar
     
     def incremental_var(
-    self,
-    position_index: int,
-    method: VaRMethod,
+        self,
+        position_index: int,
+        method: VaRMethod,
         ** kwargs
 ) -> float:
 """
@@ -383,7 +383,7 @@ return var_dollar
 Args:
 position_index: Index of position to analyze
 method: VaR calculation method
-    ** kwargs: Additional args for VaR method
+        ** kwargs: Additional args for VaR method
         
         Returns:
             Incremental VaR(positive = position adds risk)
@@ -404,15 +404,15 @@ self.positions.insert(position_index, removed_position)
 incremental = full_var - reduced_var
 
 logger.debug(
-    f"Incremental VaR for {removed_position.instrument_id}: "
+        f"Incremental VaR for {removed_position.instrument_id}: "
             f"${incremental/1e6:.2f}M"
 )
 
 return incremental
     
     def component_var(
-    self,
-    method: VaRMethod,
+        self,
+        method: VaRMethod,
         ** kwargs
 ) -> Dict[str, float]:
 """
@@ -426,7 +426,7 @@ Returns:
 components = {}
 
 for i, position in enumerate(self.positions):
-    inc_var = self.incremental_var(i, method, ** kwargs)
+        inc_var = self.incremental_var(i, method, ** kwargs)
 components[position.instrument_id] = inc_var
 
 return components
@@ -437,13 +437,13 @@ return components
 
 Args:
 method: VaR methodology
-    ** kwargs: Method - specific parameters
+        ** kwargs: Method - specific parameters
 
 Returns:
 VaR in dollars
 """
 if method == VaRMethod.HISTORICAL:
-    if 'historical_returns' not in kwargs:
+        if 'historical_returns' not in kwargs:
                 raise ValueError("Historical method requires 'historical_returns'")
 return self.historical_var(** kwargs)
         
@@ -457,8 +457,8 @@ return self.monte_carlo_var(** kwargs)
             raise ValueError(f"Unknown method: {method}")
     
     def _calculate_portfolio_returns(
-    self,
-    market_returns: pd.DataFrame
+        self,
+        market_returns: pd.DataFrame
 ) -> np.ndarray:
 """
         Calculate portfolio returns from market returns
@@ -467,7 +467,7 @@ Simplified: assumes positions are linear in market factor
 """
         # If single market factor
 if isinstance(market_returns, pd.Series):
-    market_returns = market_returns.to_frame('market')
+        market_returns = market_returns.to_frame('market')
         
         # Weighted average(simplified)
 weights = np.array([p.market_value for p in self.positions])
@@ -480,9 +480,9 @@ port_returns = market_returns.iloc[:, 0].values
 return port_returns
     
     def backtest(
-    self,
-    actual_returns: pd.Series,
-    method: VaRMethod,
+        self,
+        actual_returns: pd.Series,
+        method: VaRMethod,
         ** kwargs
 ) -> Dict:
 """
@@ -490,12 +490,12 @@ return port_returns
 
 Measures:
 - Exceedances: How often actual loss > VaR
-    - Expected: Should be(1 - confidence) × num_days
+        - Expected: Should be(1 - confidence) × num_days
 
 Args:
 actual_returns: Historical actual portfolio returns
 method: VaR method to test
-    ** kwargs: Method - specific parameters
+        ** kwargs: Method - specific parameters
 
 Returns:
             Dict with backtest statistics
@@ -506,7 +506,7 @@ Returns:
         for i in range(len(actual_returns) - 250):
             # Use trailing 250 days for VaR estimation
             if method == VaRMethod.HISTORICAL:
-        hist_data = actual_returns.iloc[i: i + 250]
+                hist_data = actual_returns.iloc[i: i + 250]
 kwargs['historical_returns'] = hist_data
 
 var = self.calculate(method, ** kwargs)
@@ -523,16 +523,16 @@ expected_exceedances = len(var_estimates) * (1 - self.confidence)
         
         # Backtest result
 results = {
-    'num_observations': len(var_estimates),
-    'exceedances': exceedances,
-    'expected_exceedances': expected_exceedances,
-    'exceedance_rate': exceedances / len(var_estimates),
-    'expected_rate': 1 - self.confidence,
-    'pass': abs(exceedances - expected_exceedances) <= 3 * np.sqrt(expected_exceedances),
+        'num_observations': len(var_estimates),
+        'exceedances': exceedances,
+        'expected_exceedances': expected_exceedances,
+        'exceedance_rate': exceedances / len(var_estimates),
+        'expected_rate': 1 - self.confidence,
+        'pass': abs(exceedances - expected_exceedances) <= 3 * np.sqrt(expected_exceedances),
 }
 
 logger.info(
-    f"Backtest: {exceedances} exceedances vs {expected_exceedances:.1f} expected "
+        f"Backtest: {exceedances} exceedances vs {expected_exceedances:.1f} expected "
             f"({'PASS' if results['pass'] else 'FAIL'})"
 )
 
@@ -541,20 +541,20 @@ return results
 
 # Example usage
 if __name__ == "__main__":
-    print("=== VaR Calculation Example ===\\n")
+        print("=== VaR Calculation Example ===\\n")
     
     # Portfolio positions
 positions = [
-    Position('BOND_10YR', 10_000_000, 'bond', delta = 7.5),
-    Position('BOND_5YR', 5_000_000, 'bond', delta = 4.5),
-    Position('SWAP_7YR', 3_000_000, 'swap', delta = 6.0),
+        Position('BOND_10YR', 10_000_000, 'bond', delta = 7.5),
+        Position('BOND_5YR', 5_000_000, 'bond', delta = 4.5),
+        Position('SWAP_7YR', 3_000_000, 'swap', delta = 6.0),
 ]
     
     # Create calculator
 calc = VaRCalculator(
-    positions = positions,
-    confidence = 0.95,
-    horizon_days = 1
+        positions = positions,
+        confidence = 0.95,
+        horizon_days = 1
 )
 
 print(f"Portfolio Value: ${calc.portfolio_value/1e6:.1f}M")
@@ -572,7 +572,7 @@ print(f"Monte Carlo VaR: ${mc_var/1e6:.2f}M ({mc_var/calc.portfolio_value*100:.2
     # Generate fake historical returns for demonstration
     np.random.seed(42)
     historical_returns = pd.DataFrame({
-    'market': np.random.normal(0.0001, 0.008, 500)
+        'market': np.random.normal(0.0001, 0.008, 500)
 })
     
     hist_var = calc.historical_var(historical_returns, lookback_days = 250)
@@ -584,7 +584,7 @@ print("\\n=== Component VaR Analysis ===\\n")
 components = calc.component_var(VaRMethod.PARAMETRIC, volatility = 0.008)
 
 for position_id, comp_var in components.items():
-    print(f"{position_id:15}: ${comp_var/1e6:.2f}M ({comp_var/calc.portfolio_value*100:.2f}%)")
+        print(f"{position_id:15}: ${comp_var/1e6:.2f}M ({comp_var/calc.portfolio_value*100:.2f}%)")
     
     # Backtesting
 print("\\n=== VaR Backtesting ===\\n")
@@ -592,9 +592,9 @@ print("\\n=== VaR Backtesting ===\\n")
 actual_returns = pd.Series(np.random.normal(0.0001, 0.008, 500))
 
 backtest_results = calc.backtest(
-    actual_returns,
-    VaRMethod.PARAMETRIC,
-    volatility = 0.008
+        actual_returns,
+        VaRMethod.PARAMETRIC,
+        volatility = 0.008
 )
 
 print(f"Observations: {backtest_results['num_observations']}")

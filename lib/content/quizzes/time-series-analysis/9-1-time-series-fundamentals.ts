@@ -1,9 +1,9 @@
 export const timeSeriesFundamentalsQuiz = [
-    {
-        id: 1,
-        question:
-            "You're building a backtesting engine for a quantitative hedge fund. The PM insists on using simple (arithmetic) returns for all calculations because they're 'more intuitive.' However, your analysis shows that the strategy's cumulative performance calculations are incorrect when you aggregate daily returns over multiple years. Explain the mathematical problem with using simple returns for time-aggregation, demonstrate with a concrete example why this causes errors, and propose a solution that maintains both mathematical correctness and intuitive interpretation for stakeholders.",
-        answer: `## Comprehensive Answer:
+  {
+    id: 1,
+    question:
+      "You're building a backtesting engine for a quantitative hedge fund. The PM insists on using simple (arithmetic) returns for all calculations because they're 'more intuitive.' However, your analysis shows that the strategy's cumulative performance calculations are incorrect when you aggregate daily returns over multiple years. Explain the mathematical problem with using simple returns for time-aggregation, demonstrate with a concrete example why this causes errors, and propose a solution that maintains both mathematical correctness and intuitive interpretation for stakeholders.",
+    answer: `## Comprehensive Answer:
 
 ### The Mathematical Problem
 
@@ -130,12 +130,12 @@ class BacktestEngine:
 3. **Document clearly** which return type is used where
 
 This approach maintains mathematical rigor while keeping reports intuitive for non-quants.`,
-    },
-    {
-        id: 2,
-        question:
-            "Your trading system processes real-time tick data from multiple exchanges (NYSE, NASDAQ, BATS) and needs to construct 1-minute OHLCV bars for 3,000 stocks simultaneously. The data arrives irregularly (some stocks trade every millisecond, others once per minute), and you notice the system is falling behind during market open volatility. Design a scalable architecture for this high-frequency time series processing pipeline, addressing: (1) How to handle irregular tick spacing, (2) Bar construction methods and edge cases, (3) Memory and compute optimizations, (4) Data quality checks, and (5) Ensuring no look-ahead bias.",
-        answer: `## Comprehensive Answer:
+  },
+  {
+    id: 2,
+    question:
+      'Your trading system processes real-time tick data from multiple exchanges (NYSE, NASDAQ, BATS) and needs to construct 1-minute OHLCV bars for 3,000 stocks simultaneously. The data arrives irregularly (some stocks trade every millisecond, others once per minute), and you notice the system is falling behind during market open volatility. Design a scalable architecture for this high-frequency time series processing pipeline, addressing: (1) How to handle irregular tick spacing, (2) Bar construction methods and edge cases, (3) Memory and compute optimizations, (4) Data quality checks, and (5) Ensuring no look-ahead bias.',
+    answer: `## Comprehensive Answer:
 
 ### Architecture Overview
 
@@ -522,12 +522,12 @@ class NoLookAheadBarStore:
 - [ ] Backpressure: Slow down ingestion if falling behind
 
 This architecture handles billions of ticks per day with sub-second latency while maintaining data integrity and preventing look-ahead bias.`,
-    },
-    {
-        id: 3,
-        question:
-            "A portfolio manager claims their strategy generated 'consistent alpha' because it had positive returns in 23 out of 24 months. However, when you analyze the returns time series, you notice: (1) returns are highly autocorrelated (lag-1 correlation = 0.65), (2) volatility clusters (high volatility days follow high volatility days), and (3) the distribution has fat tails (kurtosis = 8.4). Explain why each of these properties challenges the PM's claim about the strategy being truly skill-based. What additional time series analyses would you run to determine if the strategy has genuine alpha versus exploiting autocorrelation or taking hidden risks? Provide specific statistical tests and their interpretations.",
-        answer: `## Comprehensive Answer:
+  },
+  {
+    id: 3,
+    question:
+      "A portfolio manager claims their strategy generated 'consistent alpha' because it had positive returns in 23 out of 24 months. However, when you analyze the returns time series, you notice: (1) returns are highly autocorrelated (lag-1 correlation = 0.65), (2) volatility clusters (high volatility days follow high volatility days), and (3) the distribution has fat tails (kurtosis = 8.4). Explain why each of these properties challenges the PM's claim about the strategy being truly skill-based. What additional time series analyses would you run to determine if the strategy has genuine alpha versus exploiting autocorrelation or taking hidden risks? Provide specific statistical tests and their interpretations.",
+    answer: `## Comprehensive Answer:
 
 ### The Problem: Time Series Properties vs. Random Walk
 
@@ -855,6 +855,5 @@ We need to:
 - Test strategy across different market regimes
 
 The strategy may be profitable, but it's likely not true 'alpha' – it's risk premium harvesting. We should size positions accordingly and hedge tail risk."`,
-    },
+  },
 ];
-

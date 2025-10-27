@@ -1,7 +1,7 @@
 export const tickDataProcessing = {
-    title: 'Tick Data Processing',
-    id: 'tick-data-processing',
-    content: `
+  title: 'Tick Data Processing',
+  id: 'tick-data-processing',
+  content: `
 # Tick Data Processing
 
 ## Introduction
@@ -859,4 +859,3 @@ Now you can:
 Tick processing is foundational - every trading system processes ticks, whether in real-time or historical backtesting.
 `,
 };
-

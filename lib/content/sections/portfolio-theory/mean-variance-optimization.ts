@@ -1,7 +1,7 @@
 export const meanVarianceOptimization = {
-    title: 'Mean-Variance Optimization',
-    id: 'mean-variance-optimization',
-    content: `
+  title: 'Mean-Variance Optimization',
+  id: 'mean-variance-optimization',
+  content: `
 # Mean-Variance Optimization
 
 ## Introduction
@@ -1016,4 +1016,3 @@ Add transaction costs to MVO. Show optimal rebalancing frequency.
 In the next section, we'll explore the **Black-Litterman Model**, which solves many of MVO's practical problems by combining market equilibrium with investor views.
 `,
 };
-

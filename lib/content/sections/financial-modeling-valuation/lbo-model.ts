@@ -1,7 +1,7 @@
 export const lboModel = {
-  title: 'Leveraged Buyout (LBO) Model',
-  id: 'lbo-model',
-  content: `
+    title: 'Leveraged Buyout (LBO) Model',
+    id: 'lbo-model',
+    content: `
 # Leveraged Buyout (LBO) Model
 
 ## Introduction
@@ -184,11 +184,11 @@ sources_uses = transaction.calculate_sources_uses(ebitda=150_000_000)
 print("LBO Sources and Uses ($ millions):\\n")
 print("USES:")
 for item, value in sources_uses['Uses'].items():
-    print(f"  {item:.<40} ${value/1_000_000:>10,.0f}")
+    print(f"  {item:.<40} \${value/1_000_000:>10,.0f}")
 
 print("\\nSOURCES:")
 for item, value in sources_uses['Sources'].items():
-    print(f"  {item:.<40} ${value/1_000_000:>10,.0f}")
+    print(f"  {item:.<40} \${value/1_000_000:>10,.0f}")
 
 print("\\nMETRICS:")
 for item, value in sources_uses['Metrics'].items():
@@ -551,17 +551,17 @@ for key, value in exit_analysis.items():
     elif 'IRR' in key:
         print(f"  {key:.<40} {value:.1%}")
     elif isinstance(value, (int, float)) and 'Year' not in key:
-        print(f"  {key:.<40} ${value/1_000_000:>10,.0f}M")
+        print(f"  {key:.<40} ${value / 1_000_000:> 10,.0f}M")
     else:
-        print(f"  {key:.<40} {value}")
+print(f"  {key:.<40} {value}")
 
 # Sensitivity analysis
 print("\\n\\nIRR Sensitivity Analysis:")
 sensitivity = lbo.returns_sensitivity(
-    exit_year=5,
-    debt_at_exit=250_000_000,
-    exit_multiples=[6.5, 7.0, 7.5, 8.0, 8.5],
-    ebitda_growth_cases=[-0.10, -0.05, 0.00, 0.05, 0.10]
+    exit_year = 5,
+    debt_at_exit = 250_000_000,
+    exit_multiples = [6.5, 7.0, 7.5, 8.0, 8.5],
+    ebitda_growth_cases = [-0.10, -0.05, 0.00, 0.05, 0.10]
 )
 print((sensitivity * 100).round(1).to_string())
 \`\`\`

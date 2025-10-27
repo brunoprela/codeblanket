@@ -1,9 +1,8 @@
 export const forecastingEvaluation = {
-    title: 'Forecasting and Evaluation',
-    slug: 'forecasting-evaluation',
-    description:
-        'Rigorous forecast evaluation and model comparison',
-    content: `
+  title: 'Forecasting and Evaluation',
+  slug: 'forecasting-evaluation',
+  description: 'Rigorous forecast evaluation and model comparison',
+  content: `
 # Forecasting and Evaluation
 
 ## Introduction: Beyond In-Sample Fit

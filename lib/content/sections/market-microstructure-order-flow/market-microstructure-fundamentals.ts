@@ -534,16 +534,16 @@ class OrderBook:
             if i < len(bid_prices):
                 price = bid_prices[i]
                 qty = self.bids[price].total_quantity
-                bid_str = f"${price: .2f
-} x { qty }"
+                bid_str = f"\${price:.2f} x {qty}"
             else:
-bid_str = ""
+                bid_str = ""
             
             # Ask side
 if i < len(ask_prices):
     price = ask_prices[i]
 qty = self.asks[price].total_quantity
-ask_str = f"${price:.2f} x {qty}"
+ask_str = f"${price: .2f
+} x { qty }"
             else:
 ask_str = ""
 

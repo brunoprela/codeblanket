@@ -13,7 +13,7 @@ export const threeStatementModelMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Option 2 is correct. D&A is a non-cash expense that reduces net income on the income statement. In the cash flow statement, we ADD BACK the $50M in Operating Cash Flow because no actual cash left the company (non-cash expense). On the balance sheet, Accumulated Depreciation increases by $50M (contra-asset account), which reduces net PP&E. The full flow: Income Statement: -$50M D&A expense (reduces net income). Cash Flow Statement: +$50M add-back in Operating CF section (to reconcile net income to cash). Balance Sheet: +$50M Accumulated Depreciation (reduces PP&E net value). Cash on balance sheet does NOT decrease because D&A doesn\'t use cash. This is why profitable companies with high D&A (capital-intensive industries) can have strong cash flow despite lower net income.',
+      "Option 2 is correct. D&A is a non-cash expense that reduces net income on the income statement. In the cash flow statement, we ADD BACK the $50M in Operating Cash Flow because no actual cash left the company (non-cash expense). On the balance sheet, Accumulated Depreciation increases by $50M (contra-asset account), which reduces net PP&E. The full flow: Income Statement: -$50M D&A expense (reduces net income). Cash Flow Statement: +$50M add-back in Operating CF section (to reconcile net income to cash). Balance Sheet: +$50M Accumulated Depreciation (reduces PP&E net value). Cash on balance sheet does NOT decrease because D&A doesn't use cash. This is why profitable companies with high D&A (capital-intensive industries) can have strong cash flow despite lower net income.",
   },
   {
     id: 'tsm-mc-2',
@@ -27,14 +27,14 @@ export const threeStatementModelMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Option 2 is correct: -$15M in Operating Cash Flow (cash use). When Accounts Receivable increases, it means the company made sales (recorded as revenue) but hasn\'t collected cash yet—customers owe more. This is a use of cash because the company provided goods/services but hasn\'t received payment. In the cash flow statement Operating section: Start with Net Income ($100M), then adjust for changes in working capital: "Increase in Accounts Receivable" = -$15M (reduces operating CF). Intuition: If AR goes up, cash goes down (relative to net income). If AR goes down, customers paid, cash goes up. Option 1 is wrong (wrong sign), Option 3 is wrong category (AR is working capital, part of operations, not investing), Option 4 misses the working capital adjustment that\'s critical to reconciling accrual income to cash flow.',
+      "Option 2 is correct: -$15M in Operating Cash Flow (cash use). When Accounts Receivable increases, it means the company made sales (recorded as revenue) but hasn't collected cash yet—customers owe more. This is a use of cash because the company provided goods/services but hasn't received payment. In the cash flow statement Operating section: Start with Net Income ($100M), then adjust for changes in working capital: \"Increase in Accounts Receivable\" = -$15M (reduces operating CF). Intuition: If AR goes up, cash goes down (relative to net income). If AR goes down, customers paid, cash goes up. Option 1 is wrong (wrong sign), Option 3 is wrong category (AR is working capital, part of operations, not investing), Option 4 misses the working capital adjustment that's critical to reconciling accrual income to cash flow.",
   },
   {
     id: 'tsm-mc-3',
     question:
-      'In Year 1 of your model, the Balance Sheet shows Total Assets = $500M and Liabilities + Equity = $498M (doesn\'t balance). Which is the LEAST likely explanation?',
+      "In Year 1 of your model, the Balance Sheet shows Total Assets = $500M and Liabilities + Equity = $498M (doesn't balance). Which is the LEAST likely explanation?",
     options: [
-      'Retained Earnings formula doesn\'t include Net Income from Income Statement',
+      "Retained Earnings formula doesn't include Net Income from Income Statement",
       'Cash on Balance Sheet is hard-coded instead of linked to Cash Flow Statement',
       'Capital Expenditures were recorded on the Balance Sheet incorrectly',
       'The Depreciation rate on PP&E is too high compared to industry average',
@@ -67,4 +67,3 @@ export const threeStatementModelMultipleChoice: MultipleChoiceQuestion[] = [
       'Option 2 (enable iterative calculation) is the most professional solution. Circular references in financial models are often unavoidable and legitimate—cash balance affects interest income, which flows through to net income and back to cash. This is real economics, not a modeling error. Excel\'s iterative calculation feature (File → Options → Formulas → Enable iterative calculation) solves this by repeatedly calculating until values converge (typically 100-1000 iterations, converges in <1 second). Set maximum iterations to 100 and convergence to 0.01. Option 1 (delete interest) loses realism—cash does earn interest in reality. Option 3 (hard-code) defeats purpose of dynamic model and requires manual recalculation if any assumption changes. Option 4 (Python) solves circular references well (via iterative solvers), but switching platforms just to avoid circular references is overkill when Excel handles it natively. Alternative professional solution: Restructure model to make cash a"plug" or balancing item calculated as Assets - (Liabilities + Equity), which breaks the circular dependency. But iterative calculation is simpler and standard practice in investment banking/private equity models.',
   },
 ];
-

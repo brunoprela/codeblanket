@@ -1,7 +1,7 @@
 export const dividendDiscountModel = {
-  title: 'Dividend Discount Model (DDM)',
-  id: 'dividend-discount-model',
-  content: `
+    title: 'Dividend Discount Model (DDM)',
+    id: 'dividend-discount-model',
+    content: `
 # Dividend Discount Model (DDM)
 
 ## Introduction
@@ -106,11 +106,11 @@ required_return = 0.09  # 9% required return
 price = gordon_growth_model(current_div, growth, required_return)
 
 print(f"Stock Value (Gordon Growth Model):")
-print(f"  Current Dividend (D0):    ${current_div:.2f}")
+print(f"  Current Dividend (D0):    \${current_div:.2f}")
 print(f"  Growth Rate:              {growth:.1%}")
 print(f"  Required Return:          {required_return:.1%}")
-print(f"  Next Year Dividend (D1):  ${current_div * (1 + growth):.2f}")
-print(f"  Stock Price:              ${price:.2f}")
+print(f"  Next Year Dividend (D1):  \${current_div * (1 + growth):.2f}")
+print(f"  Stock Price:              \${price:.2f}")
 print(f"  Dividend Yield:           {(current_div * (1 + growth)) / price:.2%}")
 \`\`\`
 
@@ -202,7 +202,8 @@ for key, value in result.items():
     if '%' in key:
         print(f"  {key:.<35} {value:.1%}")
     else:
-        print(f"  {key:.<35} ${value:.2f}")
+        print(f"  {key:.<35} ${value: .2f
+}")
 \`\`\`
 
 ---

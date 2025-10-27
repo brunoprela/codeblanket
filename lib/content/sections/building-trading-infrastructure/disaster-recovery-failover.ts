@@ -1,7 +1,7 @@
 export const disasterRecoveryFailover = {
-    title: 'Disaster Recovery and Failover',
-    id: 'disaster-recovery-failover',
-    content: `
+  title: 'Disaster Recovery and Failover',
+  id: 'disaster-recovery-failover',
+  content: `
 # Disaster Recovery and Failover
 
 ## Introduction

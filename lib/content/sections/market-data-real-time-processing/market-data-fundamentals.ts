@@ -883,4 +883,3 @@ Now that you understand market data fundamentals, you're ready to:
 Market data is the foundation - everything else (trading, risk, analytics) builds on top of reliable, fast, accurate data feeds.
 `,
 };
-

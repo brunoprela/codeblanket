@@ -12,7 +12,7 @@ export const vectorAutoregressionMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "6 parameters per equation. VAR(p) with k variables: Each equation has k×p parameters. Here: k=3 variables, p=2 lags → 3×2 = 6 parameters per equation. Structure: $X_t = c + a_1 X_{t-1} + a_2 Y_{t-1} + a_3 Z_{t-1} + a_4 X_{t-2} + a_5 Y_{t-2} + a_6 Z_{t-2} + ε_t$. Total parameters in system: 3 equations × (6 + 1 intercept) = 21. This rapid parameter growth is why VAR needs sufficient data: Rule of thumb: Need T > k²p observations minimum. For VAR(2) with 3 variables: Need > 18 observations (preferably 10× = 180).",
+      '6 parameters per equation. VAR(p) with k variables: Each equation has k×p parameters. Here: k=3 variables, p=2 lags → 3×2 = 6 parameters per equation. Structure: $X_t = c + a_1 X_{t-1} + a_2 Y_{t-1} + a_3 Z_{t-1} + a_4 X_{t-2} + a_5 Y_{t-2} + a_6 Z_{t-2} + ε_t$. Total parameters in system: 3 equations × (6 + 1 intercept) = 21. This rapid parameter growth is why VAR needs sufficient data: Rule of thumb: Need T > k²p observations minimum. For VAR(2) with 3 variables: Need > 18 observations (preferably 10× = 180).',
     difficulty: 'intermediate',
   },
   {
@@ -60,7 +60,7 @@ export const vectorAutoregressionMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Negative impact with monotonic decay. IRF interpretation: Period 0 (impact): -0.5% (immediate effect), Period 1: -0.3% (still negative but declining), Period 2: -0.1% (approaching zero), Period 3+: ≈0% (shock dissipates). This shows: (1) Negative relationship (higher rates → lower stocks), (2) Temporary effect (not permanent), (3) Stable VAR (shock dies out). Cumulative effect: -0.5% -0.3% -0.1% = -0.9% total. Compare to permanent effect: IRF would not converge to zero (unit root). Compare to overshooting: IRF might go positive before converging (oscillation). Financial interpretation: Rate hike negatively impacts stocks but market adjusts over ~3-5 periods. Use for trading: Initial move tradable, but effect temporary.",
+      'Negative impact with monotonic decay. IRF interpretation: Period 0 (impact): -0.5% (immediate effect), Period 1: -0.3% (still negative but declining), Period 2: -0.1% (approaching zero), Period 3+: ≈0% (shock dissipates). This shows: (1) Negative relationship (higher rates → lower stocks), (2) Temporary effect (not permanent), (3) Stable VAR (shock dies out). Cumulative effect: -0.5% -0.3% -0.1% = -0.9% total. Compare to permanent effect: IRF would not converge to zero (unit root). Compare to overshooting: IRF might go positive before converging (oscillation). Financial interpretation: Rate hike negatively impacts stocks but market adjusts over ~3-5 periods. Use for trading: Initial move tradable, but effect temporary.',
     difficulty: 'advanced',
   },
   {
@@ -76,8 +76,7 @@ export const vectorAutoregressionMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "2,500+ parameters cause overfitting. VAR(1) with k=50 variables: Parameters per equation: 50 (lags) + 1 (intercept) = 51. Total parameters: 50 equations × 51 = 2,550 parameters. Issues: (1) Overfitting: Even with 10,000 observations, too many degrees of freedom → captures noise not signal, (2) Numerical instability: Matrix inversion difficult, (3) Out-of-sample performance poor, (4) Many spurious Granger causality relationships. Rule of thumb: k²p << T for reliable estimates. Here: k²p = 50² × 1 = 2,500 vs T = 10,000 → ratio too high. Solutions: (A) Bayesian VAR with shrinkage (Minnesota prior), (B) Factor VAR: Extract 5-10 factors, then VAR on factors, (C) Elastic net / lasso for variable selection, (D) Block VAR: Group related variables. Modern approach: BVAR or FAVAR for high-dimensional systems.",
+      '2,500+ parameters cause overfitting. VAR(1) with k=50 variables: Parameters per equation: 50 (lags) + 1 (intercept) = 51. Total parameters: 50 equations × 51 = 2,550 parameters. Issues: (1) Overfitting: Even with 10,000 observations, too many degrees of freedom → captures noise not signal, (2) Numerical instability: Matrix inversion difficult, (3) Out-of-sample performance poor, (4) Many spurious Granger causality relationships. Rule of thumb: k²p << T for reliable estimates. Here: k²p = 50² × 1 = 2,500 vs T = 10,000 → ratio too high. Solutions: (A) Bayesian VAR with shrinkage (Minnesota prior), (B) Factor VAR: Extract 5-10 factors, then VAR on factors, (C) Elastic net / lasso for variable selection, (D) Block VAR: Group related variables. Modern approach: BVAR or FAVAR for high-dimensional systems.',
     difficulty: 'advanced',
   },
 ];
-

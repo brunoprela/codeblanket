@@ -1,9 +1,9 @@
 export const cointegrationPairsTrading = {
-  title: 'Cointegration and Pairs Trading',
-  slug: 'cointegration-pairs-trading',
-  description:
-    'Master cointegration theory and build profitable pairs trading strategies',
-  content: `
+    title: 'Cointegration and Pairs Trading',
+    slug: 'cointegration-pairs-trading',
+    description:
+        'Master cointegration theory and build profitable pairs trading strategies',
+    content: `
 # Cointegration and Pairs Trading
 
 ## Introduction: Beyond Correlation
@@ -527,7 +527,7 @@ position = calculate_position_size(
 
 print("\\n=== Position Sizing ===")
 print(f"Kelly fraction: {position['kelly_fraction']:.2%}")
-print(f"Position value: ${position['position_value']:,.0f}")
+print(f"Position value: \${position['position_value']:,.0f}")
 print(f"Risk: {position['risk_percentage']:.2f}% of portfolio")
 \`\`\`
 
@@ -546,4 +546,3 @@ print(f"Risk: {position['risk_percentage']:.2f}% of portfolio")
 **Next:** Vector Autoregression for multivariate modeling!
 `,
 };
-

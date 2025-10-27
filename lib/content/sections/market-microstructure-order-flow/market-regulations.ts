@@ -122,10 +122,9 @@ class NBBOCalculator:
             if execution_price > nbbo['ask']:
                 return {
                     'violation': True,
-                    'reason': f"Buy at ${execution_price: .2f
-} > NBBO ask ${ nbbo['ask']:.2f }",
-'nbbo_price': nbbo['ask'],
-    'nbbo_exchanges': nbbo['ask_exchanges'],
+                    'reason': f"Buy at \${execution_price:.2f} > NBBO ask \${nbbo['ask']:.2f}",
+                    'nbbo_price': nbbo['ask'],
+                    'nbbo_exchanges': nbbo['ask_exchanges'],
         'price_difference': execution_price - nbbo['ask']
                 }
         else:  # SELL
@@ -133,9 +132,10 @@ class NBBOCalculator:
 if execution_price < nbbo['bid']:
     return {
         'violation': True,
-        'reason': f"Sell at ${execution_price:.2f} < NBBO bid ${nbbo['bid']:.2f}",
-        'nbbo_price': nbbo['bid'],
-        'nbbo_exchanges': nbbo['bid_exchanges'],
+        'reason': f"Sell at ${execution_price: .2f
+} < NBBO bid ${ nbbo['bid']:.2f }",
+'nbbo_price': nbbo['bid'],
+    'nbbo_exchanges': nbbo['bid_exchanges'],
         'price_difference': nbbo['bid'] - execution_price
     }
 

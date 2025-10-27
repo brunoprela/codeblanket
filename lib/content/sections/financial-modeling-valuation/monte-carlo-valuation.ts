@@ -402,10 +402,9 @@ class MonteCarloValuation:
         # Histogram
         ax = axes[0, 0]
         ax.hist(ev, bins=50, edgecolor='black', alpha=0.7)
-        ax.axvline(ev.median(), color='red', linestyle='--', linewidth=2, label=f'Median: ${ev.median(): .2f
-}B')
-ax.axvline(ev.quantile(0.10), color = 'orange', linestyle = '--', label = f'P10: ${ev.quantile(0.10):.2f}B')
-ax.axvline(ev.quantile(0.90), color = 'green', linestyle = '--', label = f'P90: ${ev.quantile(0.90):.2f}B')
+        ax.axvline(ev.median(), color='red', linestyle='--', linewidth=2, label=f'Median: \${ev.median():.2f}B')
+        ax.axvline(ev.quantile(0.10), color='orange', linestyle='--', label=f'P10: \${ev.quantile(0.10):.2f}B')
+        ax.axvline(ev.quantile(0.90), color='green', linestyle='--', label=f'P90: \${ev.quantile(0.90):.2f}B')
 ax.set_xlabel('Enterprise Value ($ Billions)')
 ax.set_ylabel('Frequency')
 ax.set_title('Distribution of Enterprise Value')
@@ -472,7 +471,7 @@ print("MONTE CARLO DCF ANALYSIS")
 print("=" * 70)
 
 print("\\nCENTRAL TENDENCY:")
-print(f"  Mean:                      ${analysis['mean']/1e9:>10,.2f}B")
+print(f"  Mean:                      ${analysis['mean'] / 1e9:> 10,.2f}B")
 print(f"  Median (P50):              ${analysis['median']/1e9:>10,.2f}B")
 print(f"  Standard Deviation:        ${analysis['std']/1e9:>10,.2f}B")
 print(f"  Coefficient of Variation:  {analysis['coefficient_of_variation']:>10.1%}")

@@ -632,4 +632,3 @@ print("\\nBest model (lowest RMSE): ",
 **Next:** Cointegration and pairs trading!
 `,
 };
-

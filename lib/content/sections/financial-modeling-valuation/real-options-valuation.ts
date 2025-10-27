@@ -1,7 +1,7 @@
 export const realOptionsValuation = {
-  title: 'Real Options Valuation',
-  id: 'real-options-valuation',
-  content: `
+    title: 'Real Options Valuation',
+    id: 'real-options-valuation',
+    content: `
 # Real Options Valuation
 
 ## Introduction
@@ -100,9 +100,9 @@ sigma = 0.40  # 40% volatility
 
 option_value = black_scholes_call(S, K, T, r, sigma)
 
-print(f"Traditional NPV: ${S - K:,.0f} (REJECT)")
-print(f"Option to delay value: ${option_value:,.0f}")
-print(f"Total project value: ${option_value:,.0f} (may be worth waiting)")
+print(f"Traditional NPV: \${S - K:,.0f} (REJECT)")
+print(f"Option to delay value: \${option_value:,.0f}")
+print(f"Total project value: \${option_value:,.0f} (may be worth waiting)")
 \`\`\`
 
 ---

@@ -1,7 +1,7 @@
 export const productionDeployment = {
-    title: 'Production Deployment',
-    id: 'production-deployment',
-    content: `
+  title: 'Production Deployment',
+  id: 'production-deployment',
+  content: `
 # Production Deployment
 
 ## Introduction

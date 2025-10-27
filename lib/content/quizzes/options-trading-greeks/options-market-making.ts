@@ -37,9 +37,8 @@ export const optionsMarketMakingQuiz = [
       'Gamma scalping: Rehedge delta-neutral position; buy low (delta decreases), sell high (delta increases)',
       'Profitability: Requires realized volatility > implied volatility; gamma profits must exceed theta decay',
       'Example: Buy straddle @ 30% IV, scalp daily; if realized 35%, profit $2; if realized 25%, lose $2',
-      'Risks: Overnight gaps (can\'t scalp), transaction costs ($0.01/share adds up), slippage on large orders',
+      "Risks: Overnight gaps (can't scalp), transaction costs ($0.01/share adds up), slippage on large orders",
       'vs Simple hedge: Gamma scalping captures volatility profits but requires active management and costs',
     ],
   },
 ];
-

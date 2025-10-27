@@ -1,9 +1,8 @@
 export const regimeSwitching = {
-    title: 'Structural Breaks and Regime Switching',
-    slug: 'regime-switching',
-    description:
-        'Detect and model regime changes in financial markets',
-    content: `
+  title: 'Structural Breaks and Regime Switching',
+  slug: 'regime-switching',
+  description: 'Detect and model regime changes in financial markets',
+  content: `
 # Structural Breaks and Regime Switching
 
 ## Introduction: Non-Linear Dynamics

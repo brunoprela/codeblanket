@@ -1,7 +1,7 @@
 export const forwardFuturesContracts = {
-  title: 'Forward and Futures Contracts',
-  id: 'forward-futures-contracts',
-  content: `
+    title: 'Forward and Futures Contracts',
+    id: 'forward-futures-contracts',
+    content: `
 # Forward and Futures Contracts
 
 ## Introduction
@@ -292,7 +292,7 @@ class TreasuryFutures:
         self.risk_free_rate = risk_free_rate
         
         logger.info(
-            f"Initialized Treasury futures: ${contract_size:,.0f} face, "
+            f"Initialized Treasury futures: \${contract_size:,.0f} face, "
             f"price {futures_price}, {len(deliverable_bonds)} deliverable bonds"
         )
     
@@ -451,18 +451,19 @@ if __name__ == "__main__":
         
         print(f"{bond.cusip}:")
         print(f"  Coupon: {bond.coupon_rate*100:.2f}%")
-        print(f"  Price: ${bond.price:.2f}")
-        print(f"  Conversion Factor: {cf:.4f}")
-        print(f"  Implied Repo: {repo:.2f}%")
-        print()
+        print(f"  Price: ${bond.price: .2f
+}")
+print(f"  Conversion Factor: {cf:.4f}")
+print(f"  Implied Repo: {repo:.2f}%")
+print()
     
     # Identify CTD
-    ctd = futures.cheapest_to_deliver()
-    
-    print("\\n=== Cheapest-to-Deliver ===")
-    print(f"CUSIP: {ctd['cusip']}")
-    print(f"Coupon: {ctd['coupon']*100:.2f}%")
-    print(f"Implied Repo: {ctd['implied_repo']:.2f}% (highest)")
+ctd = futures.cheapest_to_deliver()
+
+print("\\n=== Cheapest-to-Deliver ===")
+print(f"CUSIP: {ctd['cusip']}")
+print(f"Coupon: {ctd['coupon']*100:.2f}%")
+print(f"Implied Repo: {ctd['implied_repo']:.2f}% (highest)")
 \`\`\`
 
 ---

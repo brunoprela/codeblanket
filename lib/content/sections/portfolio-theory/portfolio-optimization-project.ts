@@ -1,7 +1,7 @@
 export const portfolioOptimizationProject = {
-    title: 'Module Project: Portfolio Optimization Platform',
-    id: 'portfolio-optimization-project',
-    content: `
+  title: 'Module Project: Portfolio Optimization Platform',
+  id: 'portfolio-optimization-project',
+  content: `
 # Module Project: Portfolio Optimization Platform
 
 ## Project Overview
@@ -1010,4 +1010,3 @@ services:
 **Congratulations!** You've completed Module 6: Portfolio Theory & Asset Allocation. You now have the skills to build production-grade portfolio optimization systems used by hedge funds, asset managers, and fintech companies. This platform can serve as the foundation for a robo-advisor, investment management tool, or quantitative research system.
 `,
 };
-

@@ -232,8 +232,7 @@ class InterestRateSwap:
         logger.info(
             f"Created {tenor_years}yr swap: "
             f"{'Pay' if pay_fixed else 'Receive'} {fixed_rate*100:.2f}% fixed, "
-            f"${notional:, .0f
-} notional"
+            f"\${notional:,.0f} notional"
         )
     
     def _generate_schedule(self) -> List[date]:
@@ -296,7 +295,7 @@ npv = pv_floating - pv_fixed
             # Receive fixed, pay floating
 npv = pv_fixed - pv_floating
 
-logger.debug(f"Swap NPV: ${npv:,.2f}")
+logger.debug(f"Swap NPV: \${npv:,.2f}")
 
 return npv
     
@@ -347,11 +346,11 @@ swap = InterestRateSwap(
     
     # Value swap
 npv = swap.value(curve)
-print(f"Swap NPV: ${npv:,.2f}")
+print(f"Swap NPV: \${npv:,.2f}")
     
     # Calculate DV01
 dv01 = swap.dv01(curve)
-print(f"DV01: ${dv01:,.2f} per bp")
+print(f"DV01: \${dv01:,.2f} per bp")
     
     # Scenario analysis
 print("\\n=== Rate Shock Scenarios ===\\n")
@@ -364,7 +363,7 @@ shocked_curve = DiscountCurve(dates, shocked_dfs)
 shocked_npv = swap.value(shocked_curve)
 pnl = shocked_npv - npv
 
-print(f"Rates {shock_bp:+4d}bp: NPV ${shocked_npv:>12,.0f}, P&L ${pnl:>10,.0f}")
+print(f"Rates {shock_bp:+4d}bp: NPV \${shocked_npv:>12,.0f}, P&L \${pnl:>10,.0f}")
 \`\`\`
 
 ---
@@ -442,4 +441,3 @@ Both get needed currency without FX transaction costs
 **Next Section**: Credit Default Swaps - CDS pricing, curve building, index trading.
 `,
 };
-

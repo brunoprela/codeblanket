@@ -169,8 +169,8 @@ The 50% difference between Sharpe and Sortino reveals:
         'Sortino better aligns with investor psychology: downside risk matters more than upside volatility',
         'Report both ratios: Sortino/Sharpe ratio > 1.4 indicates strong positive skew',
         'Strategies with protective features (puts, stop-losses, dynamic hedging) look better under Sortino than Sharpe',
-        'For symmetric return distributions (index funds, balanced portfolios), both ratios converge and Sharpe suffices'
-      ]
+        'For symmetric return distributions (index funds, balanced portfolios), both ratios converge and Sharpe suffices',
+      ],
     },
     {
       id: 'rrm-drawdown-analysis',
@@ -452,8 +452,8 @@ For 95% of investors, Fund A's drawdown profile is far more appropriate.`,
         'Calmar Ratio = Return/|Max Drawdown| directly captures drawdown-adjusted performance',
         'Ulcer Index measures both magnitude and duration of drawdowns; superior to simple max drawdown',
         'Recovery from -45% requires +82% gain; compounding asymmetry makes deep losses catastrophic',
-        'Professional investors should report Calmar Ratio, max drawdown, and recovery time alongside Sharpe ratio'
-      ]
+        'Professional investors should report Calmar Ratio, max drawdown, and recovery time alongside Sharpe ratio',
+      ],
     },
     {
       id: 'rrm-risk-metrics-portfolio',
@@ -836,9 +836,8 @@ Strong risk management and promising alpha, but needs longer track record or low
         'VaR estimates maximum loss at given confidence level; CVaR estimates expected loss beyond VaR threshold',
         'Statistical significance testing essential: alpha t-stat must exceed ~2.0 for 95% confidence over 10 years',
         'Comprehensive evaluation requires multiple metrics: Sharpe, IR, alpha, max DD, VaR - no single metric sufficient',
-        'Fee justification requires post-fee returns to exceed benchmark, or superior risk management to justify value-add'
-      ]
-    }
-  ]
+        'Fee justification requires post-fee returns to exceed benchmark, or superior risk management to justify value-add',
+      ],
+    },
+  ],
 };
-

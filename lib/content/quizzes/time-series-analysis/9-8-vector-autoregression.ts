@@ -8,14 +8,13 @@ export const vectorAutoregressionQuiz = [
   {
     id: 2,
     question:
-      "Compare forecasting S&P 500 returns using: (A) Univariate ARIMA(1,1,1), (B) Multivariate VAR(2) with S&P, VIX, and Treasury yields, (C) VECM (Vector Error Correction Model) if cointegration exists. Design a horse-race comparison including: forecast horizons (1-day, 1-week, 1-month), evaluation metrics, computational costs, and practical implementation challenges. Under what conditions would each approach win?",
+      'Compare forecasting S&P 500 returns using: (A) Univariate ARIMA(1,1,1), (B) Multivariate VAR(2) with S&P, VIX, and Treasury yields, (C) VECM (Vector Error Correction Model) if cointegration exists. Design a horse-race comparison including: forecast horizons (1-day, 1-week, 1-month), evaluation metrics, computational costs, and practical implementation challenges. Under what conditions would each approach win?',
     answer: `[Comprehensive outline: ARIMA wins for 1-day (simplicity, low noise), VAR wins for 1-week (captures cross-asset dynamics), VECM wins if true cointegration (incorporates equilibrium relationships); Metrics: RMSE for accuracy, direction accuracy for trading, Sharpe for strategies; ARIMA fastest, VECM slowest but most informative; Implementation: ARIMA robust, VAR needs stationarity, VECM requires cointegration testing. Code framework for comparison.]`,
   },
   {
     id: 3,
     question:
-      "A VAR(5) model with 10 variables has 10 × (10×5 + 1) = 510 parameters. With only 500 daily observations, this is severely overparameterized. Propose solutions: (1) Shrinkage methods (ridge, lasso, elastic net), (2) Bayesian VAR with priors, (3) Factor-augmented VAR, (4) Structural VAR with economic restrictions. For each, explain the methodology, implementation, pros/cons, and when to use.",
+      'A VAR(5) model with 10 variables has 10 × (10×5 + 1) = 510 parameters. With only 500 daily observations, this is severely overparameterized. Propose solutions: (1) Shrinkage methods (ridge, lasso, elastic net), (2) Bayesian VAR with priors, (3) Factor-augmented VAR, (4) Structural VAR with economic restrictions. For each, explain the methodology, implementation, pros/cons, and when to use.',
     answer: `[Outline: Ridge/Lasso penalizes large coefficients, reduces overfitting, easy to implement but lacks economic interpretation; BVAR uses Minnesota prior (recent lags more important, own lags more important than cross), principled uncertainty quantification; FAVAR extracts common factors first, reduces dimensionality; SVAR imposes economic structure (instantaneous effects), interpretable but requires theory. Use cases: BVAR for forecasting, SVAR for policy analysis, FAVAR for large datasets. Implementation code for each.]`,
   },
 ];
-

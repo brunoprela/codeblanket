@@ -1,7 +1,7 @@
 export const bondPricingFundamentals = {
-  title: 'Bond Pricing Fundamentals',
-  id: 'bond-pricing-fundamentals',
-  content: `
+    title: 'Bond Pricing Fundamentals',
+    id: 'bond-pricing-fundamentals',
+    content: `
 # Bond Pricing Fundamentals
 
 ## Introduction
@@ -114,7 +114,7 @@ class Bond:
         ...     frequency=Frequency.SEMI_ANNUAL
         ... )
         >>> price = bond.price(ytm=0.048)
-        >>> print(f"Price: ${price:.2f}")
+        >>> print(f"Price: \${price:.2f}")
         Price: $982.14
     """
     
@@ -196,120 +196,121 @@ class Bond:
         
         price = pv_coupons + pv_principal
         
-        logger.debug(f"Price calculation: YTM={ytm*100:.2f}%, Price=${price:.2f}")
-        
-        return price
+        logger.debug(f"Price calculation: YTM={ytm*100:.2f}%, Price=${price: .2f
+}")
+
+return price
     
     def yield_to_maturity(
-        self,
-        market_price: float,
-        precision: float = 0.0001,
-        max_iterations: int = 100
-    ) -> float:
-        """
-        Calculate YTM given market price (using Newton-Raphson)
+    self,
+    market_price: float,
+    precision: float = 0.0001,
+    max_iterations: int = 100
+) -> float:
+"""
+        Calculate YTM given market price(using Newton - Raphson)
         
         YTM is the rate that makes NPV = 0:
-        Price = Σ CF_t / (1+ytm)^t
-        
-        Args:
-            market_price: Current market price
-            precision: Convergence tolerance
-            max_iterations: Maximum iterations
-        
-        Returns:
-            Yield to maturity (annual)
-        """
-        if market_price <= 0:
+Price = Σ CF_t / (1 + ytm) ^ t
+
+Args:
+market_price: Current market price
+precision: Convergence tolerance
+max_iterations: Maximum iterations
+
+Returns:
+            Yield to maturity(annual)
+"""
+if market_price <= 0:
             raise ValueError("Market price must be positive")
         
-        # Initial guess: Current yield + adjustment for premium/discount
+        # Initial guess: Current yield + adjustment for premium / discount
         current_yield = (self.coupon_payment * self.periods_per_year) / market_price
         
         if market_price > self.face_value:
             # Premium bond: YTM < current yield
-            ytm_guess = current_yield * 0.9
+ytm_guess = current_yield * 0.9
         else:
             # Discount bond: YTM > current yield
-            ytm_guess = current_yield * 1.1
+ytm_guess = current_yield * 1.1
         
-        # Newton-Raphson iteration
-        for i in range(max_iterations):
-            price_at_guess = self.price(ytm_guess)
-            error = price_at_guess - market_price
+        # Newton - Raphson iteration
+for i in range(max_iterations):
+    price_at_guess = self.price(ytm_guess)
+error = price_at_guess - market_price
+
+if abs(error) < precision:
+    logger.info(f"YTM converged in {i+1} iterations: {ytm_guess*100:.4f}%")
+return ytm_guess
             
-            if abs(error) < precision:
-                logger.info(f"YTM converged in {i+1} iterations: {ytm_guess*100:.4f}%")
-                return ytm_guess
+            # Calculate derivative(modified duration approximation)
+delta = 0.0001
+price_up = self.price(ytm_guess + delta)
+derivative = (price_up - price_at_guess) / delta
             
-            # Calculate derivative (modified duration approximation)
-            delta = 0.0001
-            price_up = self.price(ytm_guess + delta)
-            derivative = (price_up - price_at_guess) / delta
-            
-            # Newton-Raphson update
-            if abs(derivative) > 1e-10:
-                ytm_guess = ytm_guess - error / derivative
-            else:
+            # Newton - Raphson update
+if abs(derivative) > 1e-10:
+    ytm_guess = ytm_guess - error / derivative
+else:
                 # Fallback to bisection
-                ytm_guess += 0.001 if error > 0 else -0.001
+ytm_guess += 0.001 if error > 0 else -0.001
             
             # Bound check
-            ytm_guess = max(0.0001, min(ytm_guess, 1.0))  # YTM between 0.01% and 100%
-        
-        logger.warning(f"YTM did not converge after {max_iterations} iterations")
-        return ytm_guess
+ytm_guess = max(0.0001, min(ytm_guess, 1.0))  # YTM between 0.01 % and 100 %
+
+    logger.warning(f"YTM did not converge after {max_iterations} iterations")
+return ytm_guess
     
     def current_yield(self, market_price: float) -> float:
-        """
+"""
         Current yield = Annual coupon payment / Market price
         
-        Simpler metric than YTM (ignores capital gain/loss)
-        """
-        annual_coupon = self.coupon_payment * self.periods_per_year
-        return annual_coupon / market_price
+        Simpler metric than YTM(ignores capital gain / loss)
+"""
+annual_coupon = self.coupon_payment * self.periods_per_year
+return annual_coupon / market_price
     
     def __repr__(self) -> str:
-        return (
-            f"Bond(FV={self.face_value}, Coupon={self.coupon_rate*100:.2f}%, "
+return (
+    f"Bond(FV={self.face_value}, Coupon={self.coupon_rate*100:.2f}%, "
             f"Maturity={self.years_to_maturity}yr)"
         )
 
 
 # Example usage
 if __name__ == "__main__":
-    # Create 10-year Treasury note
-    treasury = Bond(
-        face_value=1000,
-        coupon_rate=0.045,  # 4.5% coupon
-        years_to_maturity=10,
-        frequency=Frequency.SEMI_ANNUAL
-    )
-    
-    print("=== Bond Pricing Demo ===\\n")
+    # Create 10 - year Treasury note
+treasury = Bond(
+    face_value = 1000,
+    coupon_rate = 0.045,  # 4.5 % coupon
+        years_to_maturity = 10,
+    frequency = Frequency.SEMI_ANNUAL
+)
+
+print("=== Bond Pricing Demo ===\\n")
     
     # Price at different yields
-    yields = [0.03, 0.045, 0.05, 0.06]
-    
-    for ytm in yields:
-        price = treasury.price(ytm)
-        premium_discount = "Premium" if price > 1000 else "Discount" if price < 1000 else "Par"
-        
-        print(f"YTM: {ytm*100:.2f}% → Price: ${price:.2f} ({premium_discount})")
-    
-    print("\\n=== Yield Calculation ===\\n")
+yields = [0.03, 0.045, 0.05, 0.06]
+
+for ytm in yields:
+    price = treasury.price(ytm)
+premium_discount = "Premium" if price > 1000 else "Discount" if price < 1000 else "Par"
+
+print(f"YTM: {ytm*100:.2f}% → Price: ${price:.2f} ({premium_discount})")
+
+print("\\n=== Yield Calculation ===\\n")
     
     # Calculate YTM from market price
-    market_price = 982.14
-    calculated_ytm = treasury.yield_to_maturity(market_price)
-    
-    print(f"Market Price: ${market_price:.2f}")
-    print(f"Calculated YTM: {calculated_ytm*100:.4f}%")
-    print(f"Current Yield: {treasury.current_yield(market_price)*100:.2f}%")
+market_price = 982.14
+calculated_ytm = treasury.yield_to_maturity(market_price)
+
+print(f"Market Price: ${market_price:.2f}")
+print(f"Calculated YTM: {calculated_ytm*100:.4f}%")
+print(f"Current Yield: {treasury.current_yield(market_price)*100:.2f}%")
     
     # Verify
-    verify_price = treasury.price(calculated_ytm)
-    print(f"Verification: Price at calculated YTM = ${verify_price:.2f}")
+verify_price = treasury.price(calculated_ytm)
+print(f"Verification: Price at calculated YTM = ${verify_price:.2f}")
 \`\`\`
 
 **Output**:
@@ -533,7 +534,7 @@ clean_price = 1020.00  # Quoted price
 accrued = bond.accrued_interest(settlement, last_coupon, next_coupon)
 dirty = bond.dirty_price(clean_price, settlement, last_coupon, next_coupon)
 
-print(f"Clean Price: ${clean_price:.2f}")
+print(f"Clean Price: ${clean_price: .2f}")
 print(f"Accrued Interest: ${accrued:.2f}")
 print(f"Dirty Price (settlement): ${dirty:.2f}")
 print(f"\\nBuyer pays: ${dirty:.2f}")
@@ -574,31 +575,31 @@ def price_treasury_note():
     print(f"Coupon: {treasury.coupon_rate*100:.3f}%")
     print(f"Maturity: {treasury.years_to_maturity:.2f} years")
     print(f"Market YTM: {market_ytm*100:.2f}%")
-    print(f"\\nTheoretical Price: ${theoretical_price:.4f}")
-    print(f"Price as % of Par: {theoretical_price/10:.2f}")
+    print(f"\\nTheoretical Price: ${theoretical_price: .4f}")
+print(f"Price as % of Par: {theoretical_price/10:.2f}")
     
     # Analysis
-    if theoretical_price > 1000:
-        print(f"\\n✓ Trading at PREMIUM (YTM {market_ytm*100:.2f}% < Coupon {treasury.coupon_rate*100:.2f}%)")
+if theoretical_price > 1000:
+    print(f"\\n✓ Trading at PREMIUM (YTM {market_ytm*100:.2f}% < Coupon {treasury.coupon_rate*100:.2f}%)")
     elif theoretical_price < 1000:
-        print(f"\\n✓ Trading at DISCOUNT (YTM {market_ytm*100:.2f}% > Coupon {treasury.coupon_rate*100:.2f}%)")
+print(f"\\n✓ Trading at DISCOUNT (YTM {market_ytm*100:.2f}% > Coupon {treasury.coupon_rate*100:.2f}%)")
     else:
-        print(f"\\n✓ Trading at PAR (YTM = Coupon)")
+print(f"\\n✓ Trading at PAR (YTM = Coupon)")
     
-    # Calculate accrued interest if trading mid-period
-    last_coupon = date(2024, 10, 15)
-    settlement = date(2024, 11, 20)
-    next_coupon = date(2025, 4, 15)
-    
-    accrued = treasury.accrued_interest(settlement, last_coupon, next_coupon)
-    dirty_price = theoretical_price + accrued
-    
-    print(f"\\n=== If Trading on {settlement} ===")
-    print(f"Clean Price: ${theoretical_price:.2f}")
-    print(f"Accrued Interest: ${accrued:.2f}")
-    print(f"Dirty Price: ${dirty_price:.2f}")
-    
-    return treasury, theoretical_price
+    # Calculate accrued interest if trading mid - period
+last_coupon = date(2024, 10, 15)
+settlement = date(2024, 11, 20)
+next_coupon = date(2025, 4, 15)
+
+accrued = treasury.accrued_interest(settlement, last_coupon, next_coupon)
+dirty_price = theoretical_price + accrued
+
+print(f"\\n=== If Trading on {settlement} ===")
+print(f"Clean Price: ${theoretical_price:.2f}")
+print(f"Accrued Interest: ${accrued:.2f}")
+print(f"Dirty Price: ${dirty_price:.2f}")
+
+return treasury, theoretical_price
 
 
 # Run example

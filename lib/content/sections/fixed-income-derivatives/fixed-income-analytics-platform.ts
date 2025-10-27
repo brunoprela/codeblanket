@@ -1,7 +1,7 @@
 export const fixedIncomeAnalyticsPlatform = {
-    title: 'Project: Fixed Income Analytics Platform',
-    id: 'fixed-income-analytics-platform',
-    content: `
+  title: 'Project: Fixed Income Analytics Platform',
+  id: 'fixed-income-analytics-platform',
+  content: `
 # Project: Fixed Income Analytics Platform
 
 ## Project Overview
@@ -306,4 +306,3 @@ This project synthesizes all concepts from the module into a production-grade sy
 - Risk management implementation
 `,
 };
-

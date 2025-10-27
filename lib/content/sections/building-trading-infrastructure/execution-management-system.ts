@@ -1,7 +1,7 @@
 export const executionManagementSystem = {
-    title: 'Execution Management System (EMS)',
-    id: 'execution-management-system',
-    content: `
+  title: 'Execution Management System (EMS)',
+  id: 'execution-management-system',
+  content: `
 # Execution Management System (EMS)
 
 ## Introduction
@@ -731,4 +731,3 @@ async def ems_example():
 **Next Section**: Module 14.4 - FIX Protocol Deep Dive
 `,
 };
-

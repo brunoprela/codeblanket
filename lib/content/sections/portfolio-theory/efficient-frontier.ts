@@ -726,4 +726,3 @@ Build web app where user can:
 In the next section, we'll see how adding a risk-free asset transforms the efficient frontier into the Capital Market Line, leading to the **Two-Fund Separation Theorem**.
 `,
 };
-

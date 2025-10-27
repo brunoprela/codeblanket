@@ -1,7 +1,7 @@
 export const ohlcvBarConstruction = {
-    title: 'OHLCV Bar Construction',
-    id: 'ohlcv-bar-construction',
-    content: `
+  title: 'OHLCV Bar Construction',
+  id: 'ohlcv-bar-construction',
+  content: `
 # OHLCV Bar Construction
 
 ## Introduction
@@ -696,4 +696,3 @@ Now you can:
 Bar construction is fundamental to trading - every candlestick chart starts here.
 `,
 };
-

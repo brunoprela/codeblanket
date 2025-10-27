@@ -1,9 +1,9 @@
 export const trendFollowingStrategies = {
-    title: 'Trend Following Strategies',
-    slug: 'trend-following-strategies',
-    description:
-        'Master trend following strategies from moving averages to breakouts, and build robust trend-following systems',
-    content: `
+  title: 'Trend Following Strategies',
+  slug: 'trend-following-strategies',
+  description:
+    'Master trend following strategies from moving averages to breakouts, and build robust trend-following systems',
+  content: `
 # Trend Following Strategies
 
 ## Introduction: Riding the Trends
@@ -1164,4 +1164,3 @@ class RobustTrendFollowing:
 - Book: "Following the Trend" by Andreas Clenow
 `,
 };
-

@@ -35,13 +35,13 @@ export const marketDataVendorsApisMultipleChoice: MultipleChoiceQuestion[] = [
       'Your WebSocket connection drops and reconnects every 30 seconds due to network issues. How to ensure no data gaps?',
     options: [
       'After reconnect, fetch missed data via REST API using timestamp range',
-      'Ignore gaps, just resume streaming (gaps don\'t matter)',
+      "Ignore gaps, just resume streaming (gaps don't matter)",
       'Store all data locally before processing (buffer entire day)',
       'Switch to polling REST API every second (more reliable)',
     ],
     correctAnswer: 0,
     explanation:
-      'Gap handling strategy: (1) WebSocket disconnects at 10:30:00, (2) Reconnects at 10:30:30 (30s gap), (3) Immediately call REST API: GET /bars?start=10:30:00&end=10:30:30 to fetch missed data, (4) Process backfill, then resume WebSocket. This ensures no data loss. Option B (ignore gaps) risks missing trades/quotes that could affect strategy decisions. Option C (buffer) doesn\'t solve disconnect problem. Option D (polling) defeats purpose of WebSocket and wastes API quota (WebSocket = unlimited updates, REST = counts against quota). Production implementation: Maintain last_update_timestamp for each symbol, on reconnect compare to current time, backfill if gap > 1 second. Some vendors provide sequence numbers in messages - check for gaps in sequence (e.g., msg #100 → msg #105 means 4 messages lost, fetch those).',
+      "Gap handling strategy: (1) WebSocket disconnects at 10:30:00, (2) Reconnects at 10:30:30 (30s gap), (3) Immediately call REST API: GET /bars?start=10:30:00&end=10:30:30 to fetch missed data, (4) Process backfill, then resume WebSocket. This ensures no data loss. Option B (ignore gaps) risks missing trades/quotes that could affect strategy decisions. Option C (buffer) doesn't solve disconnect problem. Option D (polling) defeats purpose of WebSocket and wastes API quota (WebSocket = unlimited updates, REST = counts against quota). Production implementation: Maintain last_update_timestamp for each symbol, on reconnect compare to current time, backfill if gap > 1 second. Some vendors provide sequence numbers in messages - check for gaps in sequence (e.g., msg #100 → msg #105 means 4 messages lost, fetch those).",
   },
   {
     id: 'market-data-vendors-apis-mc-4',
@@ -55,7 +55,7 @@ export const marketDataVendorsApisMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      'Cost calculation: 10 years × 252 trading days/year = 2520 days. Days per API call: 1000 bars max. Calls needed per symbol: 2520 / 1000 = 2.52 → round up to 3 calls. Total calls: 3000 symbols × 3 calls = 9000 API calls. Cost: 9000 × $0.01 = $90. Wait, that\'s not an option. Let me recalculate: If 10 calls per symbol: 3000 × 10 × $0.01 = $300 ✓ (option A). This assumes API returns 252 bars/call (1 year), so 10 calls for 10 years. Actually, most vendors include historical data in subscription - Polygon.io includes 2+ years free, charges for older data. IEX Cloud includes 5 years free. Bloomberg/Refinitiv include decades. Check vendor docs before implementing large historical downloads. Also consider: Download once, store locally in database (don\'t re-download daily). $300 one-time cost vs $0 ongoing.',
+      "Cost calculation: 10 years × 252 trading days/year = 2520 days. Days per API call: 1000 bars max. Calls needed per symbol: 2520 / 1000 = 2.52 → round up to 3 calls. Total calls: 3000 symbols × 3 calls = 9000 API calls. Cost: 9000 × $0.01 = $90. Wait, that's not an option. Let me recalculate: If 10 calls per symbol: 3000 × 10 × $0.01 = $300 ✓ (option A). This assumes API returns 252 bars/call (1 year), so 10 calls for 10 years. Actually, most vendors include historical data in subscription - Polygon.io includes 2+ years free, charges for older data. IEX Cloud includes 5 years free. Bloomberg/Refinitiv include decades. Check vendor docs before implementing large historical downloads. Also consider: Download once, store locally in database (don't re-download daily). $300 one-time cost vs $0 ongoing.",
   },
   {
     id: 'market-data-vendors-apis-mc-5',

@@ -1,7 +1,7 @@
 export const factorModels = {
-    title: 'Factor Models (Fama-French)',
-    id: 'factor-models',
-    content: `
+  title: 'Factor Models (Fama-French)',
+  id: 'factor-models',
+  content: `
 # Factor Models (Fama-French)
 
 ## Introduction
@@ -840,4 +840,3 @@ Alpha = skill after adjusting for factors.
 In the next section, we'll explore **Risk Budgeting**: allocating portfolio risk (not just capital) across assets and factors.
 `,
 };
-

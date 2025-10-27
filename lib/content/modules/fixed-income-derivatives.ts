@@ -49,104 +49,104 @@ import { fixedIncomeAnalyticsPlatformMultipleChoice } from '../multiple-choice/f
 import { Module } from '@/lib/types';
 
 const transformQuiz = (questions: any[]) => {
-    return questions.map((q) => ({
-        id: q.id,
-        question: q.question,
-        sampleAnswer: q.sampleAnswer || '',
-        keyPoints: q.keyPoints || [],
-    }));
+  return questions.map((q) => ({
+    id: q.id,
+    question: q.question,
+    sampleAnswer: q.sampleAnswer || '',
+    keyPoints: q.keyPoints || [],
+  }));
 };
 
 const transformMC = (questions: any[]) => {
-    return questions.map((q) => ({
-        id: q.id,
-        question: q.question,
-        options: q.options || [],
-        correctAnswer: q.correctAnswer ?? 0,
-        explanation: q.explanation || '',
-    }));
+  return questions.map((q) => ({
+    id: q.id,
+    question: q.question,
+    options: q.options || [],
+    correctAnswer: q.correctAnswer ?? 0,
+    explanation: q.explanation || '',
+  }));
 };
 
 export const fixedIncomeDerivativesModule: Module = {
-    id: 'fixed-income-derivatives',
-    title: 'Fixed Income & Derivatives',
-    description: 'Master bond pricing, yield curves, duration/convexity, derivatives (swaps, CDS, options), hedging strategies, portfolio management, and risk management for fixed income markets.',
-    sections: [
-        {
-            ...bondPricingFundamentals,
-            quiz: transformQuiz(bondPricingFundamentalsQuiz),
-            multipleChoice: transformMC(bondPricingFundamentalsMultipleChoice),
-        },
-        {
-            ...yieldCurvesTermStructure,
-            quiz: transformQuiz(yieldCurvesTermStructureQuiz),
-            multipleChoice: transformMC(yieldCurvesTermStructureMultipleChoice),
-        },
-        {
-            ...durationConvexity,
-            quiz: transformQuiz(durationConvexityQuiz),
-            multipleChoice: transformMC(durationConvexityMultipleChoice),
-        },
-        {
-            ...creditRiskSpreads,
-            quiz: transformQuiz(creditRiskSpreadsQuiz),
-            multipleChoice: transformMC(creditRiskSpreadsMultipleChoice),
-        },
-        {
-            ...corporateBonds,
-            quiz: transformQuiz(corporateBondsQuiz),
-            multipleChoice: transformMC(corporateBondsMultipleChoice),
-        },
-        {
-            ...governmentSecurities,
-            quiz: transformQuiz(governmentSecuritiesQuiz),
-            multipleChoice: transformMC(governmentSecuritiesMultipleChoice),
-        },
-        {
-            ...derivativesOverview,
-            quiz: transformQuiz(derivativesOverviewQuiz),
-            multipleChoice: transformMC(derivativesOverviewMultipleChoice),
-        },
-        {
-            ...forwardFuturesContracts,
-            quiz: transformQuiz(forwardFuturesContractsQuiz),
-            multipleChoice: transformMC(forwardFuturesContractsMultipleChoice),
-        },
-        {
-            ...swaps,
-            quiz: transformQuiz(swapsQuiz),
-            multipleChoice: transformMC(swapsMultipleChoice),
-        },
-        {
-            ...creditDefaultSwaps,
-            quiz: transformQuiz(creditDefaultSwapsQuiz),
-            multipleChoice: transformMC(creditDefaultSwapsMultipleChoice),
-        },
-        {
-            ...exoticDerivatives,
-            quiz: transformQuiz(exoticDerivativesQuiz),
-            multipleChoice: transformMC(exoticDerivativesMultipleChoice),
-        },
-        {
-            ...hedgingStrategies,
-            quiz: transformQuiz(hedgingStrategiesQuiz),
-            multipleChoice: transformMC(hedgingStrategiesMultipleChoice),
-        },
-        {
-            ...fixedIncomePortfolioManagement,
-            quiz: transformQuiz(fixedIncomePortfolioManagementQuiz),
-            multipleChoice: transformMC(fixedIncomePortfolioManagementMultipleChoice),
-        },
-        {
-            ...derivativeRiskManagement,
-            quiz: transformQuiz(derivativeRiskManagementQuiz),
-            multipleChoice: transformMC(derivativeRiskManagementMultipleChoice),
-        },
-        {
-            ...fixedIncomeAnalyticsPlatform,
-            quiz: transformQuiz(fixedIncomeAnalyticsPlatformQuiz),
-            multipleChoice: transformMC(fixedIncomeAnalyticsPlatformMultipleChoice),
-        },
-    ],
+  id: 'fixed-income-derivatives',
+  title: 'Fixed Income & Derivatives',
+  description:
+    'Master bond pricing, yield curves, duration/convexity, derivatives (swaps, CDS, options), hedging strategies, portfolio management, and risk management for fixed income markets.',
+  sections: [
+    {
+      ...bondPricingFundamentals,
+      quiz: transformQuiz(bondPricingFundamentalsQuiz),
+      multipleChoice: transformMC(bondPricingFundamentalsMultipleChoice),
+    },
+    {
+      ...yieldCurvesTermStructure,
+      quiz: transformQuiz(yieldCurvesTermStructureQuiz),
+      multipleChoice: transformMC(yieldCurvesTermStructureMultipleChoice),
+    },
+    {
+      ...durationConvexity,
+      quiz: transformQuiz(durationConvexityQuiz),
+      multipleChoice: transformMC(durationConvexityMultipleChoice),
+    },
+    {
+      ...creditRiskSpreads,
+      quiz: transformQuiz(creditRiskSpreadsQuiz),
+      multipleChoice: transformMC(creditRiskSpreadsMultipleChoice),
+    },
+    {
+      ...corporateBonds,
+      quiz: transformQuiz(corporateBondsQuiz),
+      multipleChoice: transformMC(corporateBondsMultipleChoice),
+    },
+    {
+      ...governmentSecurities,
+      quiz: transformQuiz(governmentSecuritiesQuiz),
+      multipleChoice: transformMC(governmentSecuritiesMultipleChoice),
+    },
+    {
+      ...derivativesOverview,
+      quiz: transformQuiz(derivativesOverviewQuiz),
+      multipleChoice: transformMC(derivativesOverviewMultipleChoice),
+    },
+    {
+      ...forwardFuturesContracts,
+      quiz: transformQuiz(forwardFuturesContractsQuiz),
+      multipleChoice: transformMC(forwardFuturesContractsMultipleChoice),
+    },
+    {
+      ...swaps,
+      quiz: transformQuiz(swapsQuiz),
+      multipleChoice: transformMC(swapsMultipleChoice),
+    },
+    {
+      ...creditDefaultSwaps,
+      quiz: transformQuiz(creditDefaultSwapsQuiz),
+      multipleChoice: transformMC(creditDefaultSwapsMultipleChoice),
+    },
+    {
+      ...exoticDerivatives,
+      quiz: transformQuiz(exoticDerivativesQuiz),
+      multipleChoice: transformMC(exoticDerivativesMultipleChoice),
+    },
+    {
+      ...hedgingStrategies,
+      quiz: transformQuiz(hedgingStrategiesQuiz),
+      multipleChoice: transformMC(hedgingStrategiesMultipleChoice),
+    },
+    {
+      ...fixedIncomePortfolioManagement,
+      quiz: transformQuiz(fixedIncomePortfolioManagementQuiz),
+      multipleChoice: transformMC(fixedIncomePortfolioManagementMultipleChoice),
+    },
+    {
+      ...derivativeRiskManagement,
+      quiz: transformQuiz(derivativeRiskManagementQuiz),
+      multipleChoice: transformMC(derivativeRiskManagementMultipleChoice),
+    },
+    {
+      ...fixedIncomeAnalyticsPlatform,
+      quiz: transformQuiz(fixedIncomeAnalyticsPlatformQuiz),
+      multipleChoice: transformMC(fixedIncomeAnalyticsPlatformMultipleChoice),
+    },
+  ],
 };
-

@@ -1,8 +1,9 @@
 export const multiAssetStrategies = {
-    title: 'Multi-Asset Strategies',
-    slug: 'multi-asset-strategies',
-    description: 'Cross-asset trading strategies across equities, bonds, currencies, commodities, and cryptocurrencies',
-    content: `
+  title: 'Multi-Asset Strategies',
+  slug: 'multi-asset-strategies',
+  description:
+    'Cross-asset trading strategies across equities, bonds, currencies, commodities, and cryptocurrencies',
+  content: `
 # Multi-Asset Strategies
 
 ## Introduction: Diversification Across Asset Classes

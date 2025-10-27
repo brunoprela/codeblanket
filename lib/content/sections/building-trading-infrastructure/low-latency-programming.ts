@@ -1,7 +1,7 @@
 export const lowLatencyProgramming = {
-    title: 'Low-Latency Programming Techniques',
-    id: 'low-latency-programming',
-    content: `
+  title: 'Low-Latency Programming Techniques',
+  id: 'low-latency-programming',
+  content: `
 # Low-Latency Programming Techniques
 
 ## Introduction

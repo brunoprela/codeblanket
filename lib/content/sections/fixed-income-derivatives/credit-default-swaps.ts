@@ -287,10 +287,9 @@ class CDSContract:
         # MTM for protection buyer
         mtm = pv_protection - pv_premium_market
         
-        logger.info(f"CDS MTM: ${mtm:, .2f
-}")
-
-return mtm
+        logger.info(f"CDS MTM: \${mtm:,.2f}")
+        
+        return mtm
 
 
 # Example usage
@@ -325,7 +324,8 @@ mtm = cds.mark_to_market(market_spread, hazard_rate)
 
 print(f"Market spread: {market_spread*10000:.0f} bp")
 print(f"Contract spread: {cds.spread*10000:.0f} bp")
-print(f"MTM (buyer): ${mtm:,.2f}")
+print(f"MTM (buyer): ${mtm:, .2f
+}")
 
 if mtm > 0:
     print("→ Protection buyer has GAIN (spreads widened)")

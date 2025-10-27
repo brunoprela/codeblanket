@@ -1,6 +1,41 @@
 export const executionAlgorithmsQuiz = [
-    { id: 'ats-8-1-q-1', question: "Design VWAP algorithm to execute 500K shares over 6 hours. Historical volume profile shows 20% volume in first hour, 15% each in hours 2-5, 20% in last hour. Calculate target shares per hour and explain how to handle deviation from profile.", sampleAnswer: `**VWAP Algorithm Design**: Target shares: Hour 1: 100K (20%), Hours 2-5: 75K each (15%), Hour 6: 100K (20%). Participation rate: max 10% of volume per slice. Deviation handling: if actual volume lower than expected, reduce execution (don't exceed 10% POV); if behind schedule, increase participation to 15% in remaining hours; track VWAP benchmark continuously.`, keyPoints: ['Target allocation: 100K, 75K, 75K, 75K, 75K, 100K shares based on historical volume profile', 'Participation limit: never exceed 10-15% of current volume to minimize market impact', 'Deviation handling: if behind schedule by hour 3, increase participation rate from 10% to 12-15% in remaining hours', 'VWAP tracking: calculate running VWAP vs executed average price; target <5bps deviation', 'Risk management: hard stop if market price moves >2% adverse; alert if completion <80% by hour 5'] },
-    { id: 'ats-8-1-q-2', question: "Compare VWAP vs TWAP vs POV for executing 1M shares. When should you use each? Calculate expected market impact for each (assume 10M daily volume, 30bps spread, market impact = participation_rate^0.5).", sampleAnswer: `**Algorithm Comparison**: VWAP: use when tracking benchmark is priority, follows volume (low impact); TWAP: use when volume unpredictable, equal slices (medium impact); POV: use when must complete order, maintains market share (variable impact). Market impact calculation: VWAP at 10% POV: impact = 0.10^0.5 = 31.6% of spread = 9.5bps; TWAP: similar ~10bps; POV at 10%: same 9.5bps but duration varies.`, keyPoints: ['VWAP: best for benchmark tracking, follows historical volume patterns, impact ~10bps at 10% participation', 'TWAP: best when volume unpredictable or want to avoid signaling, equal time slices, impact ~10-12bps', 'POV: best when must complete order (not conditional), maintains constant market share (10% of volume), impact ~9.5bps but completion time varies', 'Market impact formula: impact = k × participation^0.5 × volatility; at 10% POV: 0.316 × spread', 'Selection criteria: VWAP for passive/benchmark; TWAP for simple/unpredictable; POV for guaranteed completion'] },
-    { id: 'ats-8-1-q-3', question: "Implementation Shortfall (IS) algorithm: Explain concept, calculate IS for order where decision price $100, VWAP $100.50, final price $101. How does IS differ from VWAP? Design IS optimization.", sampleAnswer: `**Implementation Shortfall**: IS measures total cost from decision to completion. Calculation: decision $100, executed $100.50, final $101. IS = ($100.50-$100)/$100 = 0.50% = 50bps. Components: timing cost ($101-$100.50 = 50bps), execution cost ($100.50-$100 = 50bps). IS vs VWAP: IS measures total cost from decision; VWAP measures tracking error vs benchmark. IS optimization: trade off urgency (faster = higher impact) vs delay (slower = price risk).`, keyPoints: ['IS components: delay cost (decision to start), execution cost (market impact/spread), timing cost (price moves during execution), opportunity cost (not executed)', 'Calculation example: IS = 50bps total (50bps execution + 50bps timing)', 'IS vs VWAP: IS minimizes total cost from decision; VWAP minimizes deviation from benchmark; IS is superior for performance measurement', 'Optimization: urgent trades (high urgency param) → execute faster, accept higher impact; patient trades → execute slower, risk price moves', 'Implementation: dynamic schedule, forecast volume/volatility, adjust participation based on price moves'] },
+  {
+    id: 'ats-8-1-q-1',
+    question:
+      'Design VWAP algorithm to execute 500K shares over 6 hours. Historical volume profile shows 20% volume in first hour, 15% each in hours 2-5, 20% in last hour. Calculate target shares per hour and explain how to handle deviation from profile.',
+    sampleAnswer: `**VWAP Algorithm Design**: Target shares: Hour 1: 100K (20%), Hours 2-5: 75K each (15%), Hour 6: 100K (20%). Participation rate: max 10% of volume per slice. Deviation handling: if actual volume lower than expected, reduce execution (don't exceed 10% POV); if behind schedule, increase participation to 15% in remaining hours; track VWAP benchmark continuously.`,
+    keyPoints: [
+      'Target allocation: 100K, 75K, 75K, 75K, 75K, 100K shares based on historical volume profile',
+      'Participation limit: never exceed 10-15% of current volume to minimize market impact',
+      'Deviation handling: if behind schedule by hour 3, increase participation rate from 10% to 12-15% in remaining hours',
+      'VWAP tracking: calculate running VWAP vs executed average price; target <5bps deviation',
+      'Risk management: hard stop if market price moves >2% adverse; alert if completion <80% by hour 5',
+    ],
+  },
+  {
+    id: 'ats-8-1-q-2',
+    question:
+      'Compare VWAP vs TWAP vs POV for executing 1M shares. When should you use each? Calculate expected market impact for each (assume 10M daily volume, 30bps spread, market impact = participation_rate^0.5).',
+    sampleAnswer: `**Algorithm Comparison**: VWAP: use when tracking benchmark is priority, follows volume (low impact); TWAP: use when volume unpredictable, equal slices (medium impact); POV: use when must complete order, maintains market share (variable impact). Market impact calculation: VWAP at 10% POV: impact = 0.10^0.5 = 31.6% of spread = 9.5bps; TWAP: similar ~10bps; POV at 10%: same 9.5bps but duration varies.`,
+    keyPoints: [
+      'VWAP: best for benchmark tracking, follows historical volume patterns, impact ~10bps at 10% participation',
+      'TWAP: best when volume unpredictable or want to avoid signaling, equal time slices, impact ~10-12bps',
+      'POV: best when must complete order (not conditional), maintains constant market share (10% of volume), impact ~9.5bps but completion time varies',
+      'Market impact formula: impact = k × participation^0.5 × volatility; at 10% POV: 0.316 × spread',
+      'Selection criteria: VWAP for passive/benchmark; TWAP for simple/unpredictable; POV for guaranteed completion',
+    ],
+  },
+  {
+    id: 'ats-8-1-q-3',
+    question:
+      'Implementation Shortfall (IS) algorithm: Explain concept, calculate IS for order where decision price $100, VWAP $100.50, final price $101. How does IS differ from VWAP? Design IS optimization.',
+    sampleAnswer: `**Implementation Shortfall**: IS measures total cost from decision to completion. Calculation: decision $100, executed $100.50, final $101. IS = ($100.50-$100)/$100 = 0.50% = 50bps. Components: timing cost ($101-$100.50 = 50bps), execution cost ($100.50-$100 = 50bps). IS vs VWAP: IS measures total cost from decision; VWAP measures tracking error vs benchmark. IS optimization: trade off urgency (faster = higher impact) vs delay (slower = price risk).`,
+    keyPoints: [
+      'IS components: delay cost (decision to start), execution cost (market impact/spread), timing cost (price moves during execution), opportunity cost (not executed)',
+      'Calculation example: IS = 50bps total (50bps execution + 50bps timing)',
+      'IS vs VWAP: IS minimizes total cost from decision; VWAP minimizes deviation from benchmark; IS is superior for performance measurement',
+      'Optimization: urgent trades (high urgency param) → execute faster, accept higher impact; patient trades → execute slower, risk price moves',
+      'Implementation: dynamic schedule, forecast volume/volatility, adjust participation based on price moves',
+    ],
+  },
 ];
-

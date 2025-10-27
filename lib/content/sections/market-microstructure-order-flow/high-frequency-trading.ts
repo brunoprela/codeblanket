@@ -364,9 +364,8 @@ print("Market Making Simulation Results")
 print("=" * 60)
 print(f"Total trades executed: {mm.trades_executed}")
 print(f"Final inventory: {mm.inventory} shares")
-print(f"Final PnL: ${mm.get_pnl(pnl_df.iloc[-1]['price']): .2f
-}")
-print(f"Average PnL per trade: ${mm.get_pnl(pnl_df.iloc[-1]['price']) / mm.trades_executed:.2f}")
+print(f"Final PnL: \${mm.get_pnl(pnl_df.iloc[-1]['price']):.2f}")
+print(f"Average PnL per trade: \${mm.get_pnl(pnl_df.iloc[-1]['price']) / mm.trades_executed:.2f}")
 print()
 
 # Plot PnL over time
@@ -515,6 +514,5 @@ class LatencyMonitor:
 4. **Best Execution:** Must execute client orders at best available prices, considering all venues. Can't systematically route to venues that pay higher rebates if prices are worse.
 
 5. **MiFID II (Europe):** Requires algo trading firms to test algorithms, maintain kill switches, and provide detailed disclosures. Higher capital requirements for HFT firms.
-`
+`,
 };
-

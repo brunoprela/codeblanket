@@ -1,9 +1,9 @@
 export const meanReversionStrategies = {
-    title: 'Mean Reversion Strategies',
-    slug: 'mean-reversion-strategies',
-    description:
-        'Master mean reversion strategies from Bollinger Bands to RSI, and understand when markets revert vs trend',
-    content: `
+  title: 'Mean Reversion Strategies',
+  slug: 'mean-reversion-strategies',
+  description:
+    'Master mean reversion strategies from Bollinger Bands to RSI, and understand when markets revert vs trend',
+  content: `
 # Mean Reversion Strategies
 
 ## Introduction: Trading the Rubber Band Effect
@@ -950,4 +950,3 @@ class MeanReversionRiskManagement:
 - Pairs Trading: Relative value mean reversion
 `,
 };
-

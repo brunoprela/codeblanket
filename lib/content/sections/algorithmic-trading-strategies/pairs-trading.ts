@@ -1,9 +1,9 @@
 export const pairsTrading = {
-    title: 'Pairs Trading',
-    slug: 'pairs-trading',
-    description:
-        'Deep dive into pairs trading: selection, execution, risk management, and real-world case studies',
-    content: `
+  title: 'Pairs Trading',
+  slug: 'pairs-trading',
+  description:
+    'Deep dive into pairs trading: selection, execution, risk management, and real-world case studies',
+  content: `
 # Pairs Trading
 
 ## Introduction: The Original Stat Arb Strategy
@@ -594,4 +594,3 @@ class PairsRiskManager:
 **Next Section**: Momentum Strategies
 `,
 };
-

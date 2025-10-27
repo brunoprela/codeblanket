@@ -1,8 +1,61 @@
 export const marketMakingStrategiesMC = [
-    { id: 'ats-7-mc-1', question: 'Market maker quotes bid $99.95, ask $100.05. What is the spread?', options: ['$0.10 (10 cents)', '$0.05 (5 cents)', '10 bps', '5 bps'], correctAnswer: 0, explanation: 'Correct: $0.10 (10 cents). Spread = ask - bid = $100.05 - $99.95 = $0.10. In basis points: ($0.10 / $100) × 10000 = 10 bps.' },
-    { id: 'ats-7-mc-2', question: 'Market maker has +1000 share inventory (long). How should quotes be adjusted?', options: ['Widen spread equally', 'Shift both bid/ask lower (encourage selling)', 'Shift both bid/ask higher (encourage buying)', 'No adjustment needed'], correctAnswer: 1, explanation: 'Correct: Shift both bid/ask lower. When long inventory, want to sell. Lower quotes make it more attractive for others to buy (at your ask), reducing inventory.' },
-    { id: 'ats-7-mc-3', question: 'Adverse selection costs market makers money when:', options: ['Spread is too wide', 'Informed traders pick off stale quotes before price moves', 'Inventory is zero', 'Volume is high'], correctAnswer: 1, explanation: 'Correct: Informed traders pick off stale quotes. Informed trader knows price will rise, buys at your (stale) ask before you can cancel. You end up short before price rises = loss.' },
-    { id: 'ats-7-mc-4', question: 'High-frequency market makers typically achieve Sharpe ratios of:', options: ['0.5-1.0', '1.0-2.0', '2.0-5.0', '>5.0'], correctAnswer: 2, explanation: 'Correct: 2.0-5.0. Market making generates consistent small profits with managed risk. Top HFT firms (Citadel Securities, Virtu) achieve Sharpe 3-5 due to tight risk management and fast execution.' },
-    { id: 'ats-7-mc-5', question: 'Market maker earns $500/day on 100K shares at 5bp spread. What is the capture rate?', options: ['100% (earned full spread)', '50% (earned half spread)', '25% (earned quarter spread)', 'Cannot determine'], correctAnswer: 0, explanation: 'Correct: 100% (earned full spread). 100K shares × 5bps = 100K × 0.0005 = $500. This assumes zero adverse selection and perfect spread capture, which is theoretical best-case.' },
+  {
+    id: 'ats-7-mc-1',
+    question:
+      'Market maker quotes bid $99.95, ask $100.05. What is the spread?',
+    options: ['$0.10 (10 cents)', '$0.05 (5 cents)', '10 bps', '5 bps'],
+    correctAnswer: 0,
+    explanation:
+      'Correct: $0.10 (10 cents). Spread = ask - bid = $100.05 - $99.95 = $0.10. In basis points: ($0.10 / $100) × 10000 = 10 bps.',
+  },
+  {
+    id: 'ats-7-mc-2',
+    question:
+      'Market maker has +1000 share inventory (long). How should quotes be adjusted?',
+    options: [
+      'Widen spread equally',
+      'Shift both bid/ask lower (encourage selling)',
+      'Shift both bid/ask higher (encourage buying)',
+      'No adjustment needed',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Correct: Shift both bid/ask lower. When long inventory, want to sell. Lower quotes make it more attractive for others to buy (at your ask), reducing inventory.',
+  },
+  {
+    id: 'ats-7-mc-3',
+    question: 'Adverse selection costs market makers money when:',
+    options: [
+      'Spread is too wide',
+      'Informed traders pick off stale quotes before price moves',
+      'Inventory is zero',
+      'Volume is high',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Correct: Informed traders pick off stale quotes. Informed trader knows price will rise, buys at your (stale) ask before you can cancel. You end up short before price rises = loss.',
+  },
+  {
+    id: 'ats-7-mc-4',
+    question:
+      'High-frequency market makers typically achieve Sharpe ratios of:',
+    options: ['0.5-1.0', '1.0-2.0', '2.0-5.0', '>5.0'],
+    correctAnswer: 2,
+    explanation:
+      'Correct: 2.0-5.0. Market making generates consistent small profits with managed risk. Top HFT firms (Citadel Securities, Virtu) achieve Sharpe 3-5 due to tight risk management and fast execution.',
+  },
+  {
+    id: 'ats-7-mc-5',
+    question:
+      'Market maker earns $500/day on 100K shares at 5bp spread. What is the capture rate?',
+    options: [
+      '100% (earned full spread)',
+      '50% (earned half spread)',
+      '25% (earned quarter spread)',
+      'Cannot determine',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Correct: 100% (earned full spread). 100K shares × 5bps = 100K × 0.0005 = $500. This assumes zero adverse selection and perfect spread capture, which is theoretical best-case.',
+  },
 ];
-

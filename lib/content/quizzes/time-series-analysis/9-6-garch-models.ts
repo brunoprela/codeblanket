@@ -74,4 +74,3 @@ GARCH automatically increased risk estimate by $1.23M.
     answer: `[Comprehensive answer: VIX measures 30-day implied vol, GARCH forecasts realized vol - not identical due to variance risk premium (VIX typically 3-5% above realized); VIX futures in contango (~70% of time) creates negative roll yield; Strategy needs adjustment for: term structure, risk premium, forecasting horizon; Improved strategy: Combine GARCH vol forecast with DCC-GARCH for correlation forecasting; Trade when both vol AND correlation are mispriced; Backtest shows ~8% Sharpe but with significant drawdowns during vol regime changes; Include risk management: stop-loss at 2σ GARCH forecast error. Full implementation with code demonstrating DCC-GARCH, VIX futures pricing, and complete risk-adjusted performance analysis.]`,
   },
 ];
-

@@ -360,10 +360,9 @@ for key, value in premium_analysis.items():
         if 'Premium' in key and '(%)' in key:
             print(f"  {key:.<40} {value:.1%}")
         elif '$' in key or 'Price' in key:
-            print(f"  {key:.<40} ${value: .2f
-}")
-    else:
-print(f"  {key:.<40} {value}")
+            print(f"  {key:.<40} \${value:.2f}")
+        else:
+            print(f"  {key:.<40} {value}")
 
 # Example: Premium statistics from comp group
 comp_premiums = [0.28, 0.35, 0.42, 0.31, 0.38, 0.29]
@@ -568,7 +567,8 @@ for key, value in valuation.items():
     if 'Premium' in key:
         print(f"  {key:.<50} {value:.1%}")
     else:
-        print(f"  {key:.<50} ${value / 1_000_000:, .0f}M")
+        print(f"  {key:.<50} ${value / 1_000_000:, .0f
+}M")
 
 # Strategic vs Financial
 print("\\n\\nStrategic vs Financial Buyer Multiples:")

@@ -1,7 +1,7 @@
 export const fixProtocolDeepDive = {
-    title: 'FIX Protocol Deep Dive',
-    id: 'fix-protocol-deep-dive',
-    content: `
+  title: 'FIX Protocol Deep Dive',
+  id: 'fix-protocol-deep-dive',
+  content: `
 # FIX Protocol Deep Dive
 
 ## Introduction
@@ -609,4 +609,3 @@ class FIXSession:
 **Next Section**: Module 14.5 - Smart Order Routing (advanced routing logic)
 `,
 };
-

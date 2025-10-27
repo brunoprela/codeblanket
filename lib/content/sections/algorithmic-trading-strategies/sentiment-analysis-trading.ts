@@ -1,8 +1,9 @@
 export const sentimentAnalysisTrading = {
-    title: 'Sentiment Analysis Trading',
-    slug: 'sentiment-analysis-trading',
-    description: 'Build sentiment-driven strategies using social media, analyst reports, and alternative data',
-    content: `
+  title: 'Sentiment Analysis Trading',
+  slug: 'sentiment-analysis-trading',
+  description:
+    'Build sentiment-driven strategies using social media, analyst reports, and alternative data',
+  content: `
 # Sentiment Analysis Trading
 
 ## Introduction: Measuring Market Emotion

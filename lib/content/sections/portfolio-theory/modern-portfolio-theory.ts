@@ -768,4 +768,3 @@ Modern Portfolio Theory revolutionized finance by showing that **portfolio risk 
 In the next section, we'll define and calculate the key **risk and return metrics** used to evaluate portfolios.
 `,
 };
-

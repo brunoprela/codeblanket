@@ -157,9 +157,8 @@ class DarkPoolMatcher:
         midpoint = nbbo.midpoint()
         executions = []
         
-        print(f"\\n[{self.name}] Matching at midpoint ${midpoint: .2f
-}")
-print(f"  NBBO: ${nbbo.bid:.2f} x ${nbbo.ask:.2f} (spread: {nbbo.spread_bps():.1f} bps)")
+        print(f"\\n[{self.name}] Matching at midpoint \${midpoint:.2f}")
+        print(f"  NBBO: \${nbbo.bid:.2f} x \${nbbo.ask:.2f} (spread: {nbbo.spread_bps():.1f} bps)")
         
         # Simple FIFO matching at midpoint
 while self.buy_orders and self.sell_orders:
@@ -168,7 +167,8 @@ sell_order = self.sell_orders[0]
             
             # Check if orders can trade at midpoint
 if buy_order.max_price and buy_order.max_price < midpoint:
-print(f"  Buy order ${buy_order.max_price:.2f} limit < midpoint ${midpoint:.2f}, skipping")
+print(f"  Buy order ${buy_order.max_price: .2f
+} limit <midpoint ${ midpoint: .2f }, skipping")
 self.buy_orders.pop(0)
 continue
 

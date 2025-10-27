@@ -1,9 +1,9 @@
 export const momentumStrategies = {
-    title: 'Momentum Strategies',
-    slug: 'momentum-strategies',
-    description:
-        'Master momentum trading: cross-sectional momentum, time-series momentum, and factor-based approaches',
-    content: `
+  title: 'Momentum Strategies',
+  slug: 'momentum-strategies',
+  description:
+    'Master momentum trading: cross-sectional momentum, time-series momentum, and factor-based approaches',
+  content: `
 # Momentum Strategies
 
 ## Introduction: Trading Persistence
@@ -500,4 +500,3 @@ class MomentumRiskManager:
 **Next Section**: Market Making Strategies
 `,
 };
-

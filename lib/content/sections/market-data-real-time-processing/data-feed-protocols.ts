@@ -1,7 +1,7 @@
 export const dataFeedProtocols = {
-  title: 'Data Feed Protocols (FIX, FAST, ITCH)',
-  id: 'data-feed-protocols',
-  content: `
+    title: 'Data Feed Protocols (FIX, FAST, ITCH)',
+    id: 'data-feed-protocols',
+    content: `
 # Data Feed Protocols (FIX, FAST, ITCH)
 
 ## Introduction
@@ -39,7 +39,7 @@ FIX is the **de facto standard** for electronic trading communication. Created i
 
 **FIX Characteristics:**
 - **Text-based**: Human-readable (but can be binary with FAST)
-- **Tag-value pairs**: `Tag=Value|` format
+- **Tag-value pairs**: \`Tag=Value|\` format
 - **Session-level**: Logon, heartbeat, sequence numbers
 - **Application-level**: New Order, Execution Report, etc.
 - **Versioning**: FIX 4.0, 4.2, 4.4, 5.0 SP2
@@ -299,7 +299,7 @@ FAST (20 bytes):
 
 **Delta Operator:**
 - Send difference from previous value
-- Ideal for prices: `delta = new_price - prev_price`
+- Ideal for prices: \`delta = new_price - prev_price\`
 
 **Increment Operator:**
 - Increment previous value by 1
@@ -631,7 +631,7 @@ print(f"Type: {message.message_type}")
 print(f"Stock: {message.data['stock']}")
 print(f"Side: {message.data['side']}")
 print(f"Shares: {message.data['shares']}")
-print(f"Price: ${message.data['price']:.2f}")
+print(f"Price: ${message.data['price']: .2f}")
 # Type: A
 # Stock: AAPL
 # Side: BUY

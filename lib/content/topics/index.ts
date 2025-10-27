@@ -128,7 +128,9 @@ import { timeSeriesAnalysisModule } from '../modules/time-series-analysis';
 import { marketDataRealTimeProcessingModule } from '../modules/market-data-real-time-processing';
 import { fixedIncomeDerivativesModule } from '../modules/fixed-income-derivatives';
 import { algorithmicTradingStrategiesModule } from '../modules/algorithmic-trading-strategies';
+import { marketMicrostructureOrderFlowModule } from '../modules/market-microstructure-order-flow';
 import { buildingTradingInfrastructureModule } from '../modules/building-trading-infrastructure';
+import { backtestingStrategyDevelopmentModule } from '../modules/backtesting-strategy-development';
 
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
@@ -237,7 +239,9 @@ const allModulesMap: Record<string, Module> = {
   'market-data-real-time-processing': marketDataRealTimeProcessingModule,
   'fixed-income-derivatives': fixedIncomeDerivativesModule,
   'algorithmic-trading-strategies': algorithmicTradingStrategiesModule,
+  'market-microstructure-order-flow': marketMicrostructureOrderFlowModule,
   'building-trading-infrastructure': buildingTradingInfrastructureModule,
+  'backtesting-strategy-development': backtestingStrategyDevelopmentModule,
   'financial-markets-instruments': financialMarketsInstrumentsModule,
 
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,

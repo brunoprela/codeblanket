@@ -1,7 +1,7 @@
 export const portfolioConstraints = {
-    title: 'Portfolio Construction Constraints',
-    id: 'portfolio-constraints',
-    content: `
+  title: 'Portfolio Construction Constraints',
+  id: 'portfolio-constraints',
+  content: `
 # Portfolio Construction Constraints
 
 ## Introduction
@@ -886,4 +886,3 @@ Implement full constraint stack:
 In the next section, we'll explore **Backtesting Portfolios**: how to test portfolio strategies on historical data with realistic assumptions about costs, slippage, and rebalancing.
 `,
 };
-

@@ -586,4 +586,3 @@ cml.plot_cml(n_frontier_points=50)
 In the next section, we'll dive deeper into **Sharpe Ratio and Performance Metrics**, exploring how to measure and compare portfolio performance comprehensively.
 `,
 };
-

@@ -1,9 +1,9 @@
 export const autocorrelationPartialAutocorrelation = {
-    title: 'Autocorrelation and Partial Autocorrelation',
-    slug: 'autocorrelation-partial-autocorrelation',
-    description:
-        'Master ACF and PACF analysis for identifying time series patterns and selecting appropriate models',
-    content: `
+  title: 'Autocorrelation and Partial Autocorrelation',
+  slug: 'autocorrelation-partial-autocorrelation',
+  description:
+    'Master ACF and PACF analysis for identifying time series patterns and selecting appropriate models',
+  content: `
 # Autocorrelation and Partial Autocorrelation
 
 ## Introduction: Understanding Temporal Dependencies
@@ -773,4 +773,3 @@ Individual ACF values can be significant by chance. Use Ljung-Box test for joint
 Next, we'll use ACF/PACF patterns to build ARMA models for forecasting.
 `,
 };
-

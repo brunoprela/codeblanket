@@ -1,7 +1,7 @@
 export const completeTradingSystem = {
-    title: 'Project: Complete Trading System',
-    id: 'complete-trading-system',
-    content: `
+  title: 'Project: Complete Trading System',
+  id: 'complete-trading-system',
+  content: `
 # Project: Complete Trading System
 
 ## Project Overview

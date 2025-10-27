@@ -1,9 +1,9 @@
 export const stationarityUnitRoots = {
-    title: 'Stationarity and Unit Roots',
-    slug: 'stationarity-unit-roots',
-    description:
-        'Master stationarity concepts, unit root testing, and transformation techniques essential for time series modeling',
-    content: `
+  title: 'Stationarity and Unit Roots',
+  slug: 'stationarity-unit-roots',
+  description:
+    'Master stationarity concepts, unit root testing, and transformation techniques essential for time series modeling',
+  content: `
 # Stationarity and Unit Roots
 
 ## Introduction: Why Stationarity Matters
@@ -908,4 +908,3 @@ A series can fail stationarity tests due to structural breaks (regime changes), 
 In the next section, we'll use stationary series to analyze autocorrelation and build forecasting models.
 `,
 };
-

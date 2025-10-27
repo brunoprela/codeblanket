@@ -1,9 +1,9 @@
 export const statisticalArbitrageQuiz = [
-    {
-        id: 'ats-4-1-q-1',
-        question:
-            "You're testing pairs: (AAPL, MSFT) has correlation 0.85, cointegration p-value 0.12, half-life 35 days. (XOM, CVX) has correlation 0.75, cointegration p-value 0.02, half-life 25 days. Which should you trade and why? Design a complete z-score strategy with entry/exit rules.",
-        sampleAnswer: `**Pair Selection Analysis:**
+  {
+    id: 'ats-4-1-q-1',
+    question:
+      "You're testing pairs: (AAPL, MSFT) has correlation 0.85, cointegration p-value 0.12, half-life 35 days. (XOM, CVX) has correlation 0.75, cointegration p-value 0.02, half-life 25 days. Which should you trade and why? Design a complete z-score strategy with entry/exit rules.",
+    sampleAnswer: `**Pair Selection Analysis:**
 
 **Pair 1: AAPL/MSFT**
 - Correlation: 0.85 ✓ (strong)
@@ -247,19 +247,19 @@ Despite 0.85 correlation, p-value 0.12 means spread NOT stationary. Would experi
 - Eventually stop out (relationship broke)
 
 **Bottom Line**: Cointegration > Correlation. Always test statistically. XOM/CVX is tradeable, AAPL/MSFT is not.`,
-        keyPoints: [
-            'XOM/CVX: cointegration p=0.02 (significant), half-life 25 days → TRADE; AAPL/MSFT: p=0.12 (not cointegrated) → DO NOT TRADE',
-            'Cointegration means spread is stationary (mean-reverts); correlation only means assets move together (can diverge permanently)',
-            'Strategy: long spread when z<-2, short when z>+2, exit at z=±0.5, stop at z=±3',
-            'Position sizing: dollar-neutral (equal long/short), risk 2% on 2σ spread move, calculate from spread volatility',
-            'Expected: 60% win rate, 2.5 Sharpe, 18% annual return, 12-day average hold',
-        ],
-    },
-    {
-        id: 'ats-4-1-q-2',
-        question:
-            "Explain why Kalman filters are superior to static hedge ratios for pairs trading. Implement a Kalman filter hedge ratio calculator and compare performance to OLS regression. Under what conditions does the added complexity justify the gain?",
-        sampleAnswer: `**Static vs Dynamic Hedge Ratios:**
+    keyPoints: [
+      'XOM/CVX: cointegration p=0.02 (significant), half-life 25 days → TRADE; AAPL/MSFT: p=0.12 (not cointegrated) → DO NOT TRADE',
+      'Cointegration means spread is stationary (mean-reverts); correlation only means assets move together (can diverge permanently)',
+      'Strategy: long spread when z<-2, short when z>+2, exit at z=±0.5, stop at z=±3',
+      'Position sizing: dollar-neutral (equal long/short), risk 2% on 2σ spread move, calculate from spread volatility',
+      'Expected: 60% win rate, 2.5 Sharpe, 18% annual return, 12-day average hold',
+    ],
+  },
+  {
+    id: 'ats-4-1-q-2',
+    question:
+      'Explain why Kalman filters are superior to static hedge ratios for pairs trading. Implement a Kalman filter hedge ratio calculator and compare performance to OLS regression. Under what conditions does the added complexity justify the gain?',
+    sampleAnswer: `**Static vs Dynamic Hedge Ratios:**
 
 **Problem with Static Hedge Ratios (OLS):**
 
@@ -558,19 +558,19 @@ class ComparisonStudy:
 
 **Bottom Line:**
 Kalman filters provide significant performance gains (+ 0.5 Sharpe, +4% annual return) but add complexity. Justified for professional funds, evolving relationships, and volatile markets. Start with OLS, upgrade to Kalman when relationships drift or scale increases.`,
-        keyPoints: [
-            'Static OLS assumes constant relationship; fails when relationships drift (sector rotations, regime changes)',
-            'Kalman filter: time-varying hedge ratio, adapts online, provides uncertainty estimates, reduces spread noise',
-            'Performance gain: +0.5 Sharpe (1.5→2.0), +4% annual return (12%→16%), -5% max drawdown, +4% win rate',
-            'Use Kalman when: relationships evolve, long periods, volatile markets, multiple pairs; use OLS when: stable relationships, short periods, simplicity preferred',
-            'Complexity trade-off: 10x more code for 0.5 Sharpe gain; worth it for funds >$1M, not for small retail',
-        ],
-    },
-    {
-        id: 'ats-4-1-q-3',
-        question:
-            "Design a multi-asset statistical arbitrage system using PCA. Universe: 20 tech stocks. Include: (1) PCA implementation to extract 5 factors, (2) Calculate residuals (idiosyncratic risk), (3) Signal generation when residuals extreme (>2σ), (4) Portfolio construction with 10 simultaneous positions. What are the advantages over simple pairs trading?",
-        sampleAnswer: `**Multi-Asset PCA Statistical Arbitrage System:**
+    keyPoints: [
+      'Static OLS assumes constant relationship; fails when relationships drift (sector rotations, regime changes)',
+      'Kalman filter: time-varying hedge ratio, adapts online, provides uncertainty estimates, reduces spread noise',
+      'Performance gain: +0.5 Sharpe (1.5→2.0), +4% annual return (12%→16%), -5% max drawdown, +4% win rate',
+      'Use Kalman when: relationships evolve, long periods, volatile markets, multiple pairs; use OLS when: stable relationships, short periods, simplicity preferred',
+      'Complexity trade-off: 10x more code for 0.5 Sharpe gain; worth it for funds >$1M, not for small retail',
+    ],
+  },
+  {
+    id: 'ats-4-1-q-3',
+    question:
+      'Design a multi-asset statistical arbitrage system using PCA. Universe: 20 tech stocks. Include: (1) PCA implementation to extract 5 factors, (2) Calculate residuals (idiosyncratic risk), (3) Signal generation when residuals extreme (>2σ), (4) Portfolio construction with 10 simultaneous positions. What are the advantages over simple pairs trading?',
+    sampleAnswer: `**Multi-Asset PCA Statistical Arbitrage System:**
 
 **Concept:**
 Instead of trading pairs (2 assets), trade baskets (20+ assets) using Principal Component Analysis to separate systematic (factor) risk from idiosyncratic risk.
@@ -935,13 +935,12 @@ print(f"Exit Threshold: Z-score ±0.5")
 
 **Bottom Line:**
 PCA stat arb provides better diversification, factor hedging, and scalability vs pairs trading. Worth the complexity for funds >$50M. Sharpe improves from 1.5-2.0 (pairs) to 2.5-3.5 (PCA multi-asset).`,
-        keyPoints: [
-            'PCA extracts 5 factors (systematic risk), residuals = stock-specific risk; trade when residuals >2σ from mean',
-            'Portfolio: 10 positions (5 long, 5 short), factor-neutral (hedged), dollar-neutral (equal long/short)',
-            'Advantages: diversification (20 stocks vs 2), factor-hedged (no sector beta), scalable ($500M vs $50M capacity)',
-            'Performance: Sharpe 2.5-3.5 (vs 1.5-2.0 pairs), max drawdown -10% (vs -15%), near-zero market beta',
-            'Trade-off: 10x complexity for +1.0 Sharpe gain; worth it for funds >$50M, not for small retail',
-        ],
-    },
+    keyPoints: [
+      'PCA extracts 5 factors (systematic risk), residuals = stock-specific risk; trade when residuals >2σ from mean',
+      'Portfolio: 10 positions (5 long, 5 short), factor-neutral (hedged), dollar-neutral (equal long/short)',
+      'Advantages: diversification (20 stocks vs 2), factor-hedged (no sector beta), scalable ($500M vs $50M capacity)',
+      'Performance: Sharpe 2.5-3.5 (vs 1.5-2.0 pairs), max drawdown -10% (vs -15%), near-zero market beta',
+      'Trade-off: 10x complexity for +1.0 Sharpe gain; worth it for funds >$50M, not for small retail',
+    ],
+  },
 ];
-

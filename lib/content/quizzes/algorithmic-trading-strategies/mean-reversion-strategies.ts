@@ -1,9 +1,9 @@
 export const meanReversionStrategiesQuiz = [
-    {
-        id: 'ats-3-1-q-1',
-        question:
-            "Design a complete Bollinger Bands mean reversion system for trading SPY with $500K capital. Include: (1) Entry rules with filters, (2) Position sizing with scaling (add to losers), (3) Stop loss at what level, (4) When to shut down strategy (regime change detection). Why is 'averaging into losers' dangerous for mean reversion but acceptable?",
-        sampleAnswer: `**Complete Bollinger Bands Mean Reversion System for SPY:**
+  {
+    id: 'ats-3-1-q-1',
+    question:
+      "Design a complete Bollinger Bands mean reversion system for trading SPY with $500K capital. Include: (1) Entry rules with filters, (2) Position sizing with scaling (add to losers), (3) Stop loss at what level, (4) When to shut down strategy (regime change detection). Why is 'averaging into losers' dangerous for mean reversion but acceptable?",
+    sampleAnswer: `**Complete Bollinger Bands Mean Reversion System for SPY:**
 
 **System Specifications:**
 - Asset: SPY (S&P 500 ETF)
@@ -330,19 +330,19 @@ Risk/Reward: 1:1.75 (acceptable)
 
 **Key Rule:**
 Only average down if you have STATISTICAL EVIDENCE of mean reversion and STRICT RISK LIMITS. Otherwise, averaging down is a recipe for disaster (see: every blown-up trader ever).`,
-        keyPoints: [
-            'Entry filters: price < lower BB, ADX < 25, VIX < 30, volume > average, not at 52w lows',
-            'Scaling: 3 entries (initial, -0.5× ATR, -1× ATR), each 1/3 size, stop 2× ATR from average entry',
-            'Shutdown triggers: ADX > 30, 5+ consecutive losses, 10%+ drawdown, VIX > 40, Hurst > 0.55',
-            'Averaging down dangerous: only acceptable with statistical edge, strict limits (max 3 adds), small sizes',
-            'Key difference: trend following pyramids into winners, mean reversion averages into losers (riskier)',
-        ],
-    },
-    {
-        id: 'ats-3-1-q-2',
-        question:
-            "Calculate and interpret: (1) Hurst exponent for SPY (2010-2024), (2) Half-life of mean reversion, (3) What these metrics tell you about trading strategy choice. If Hurst = 0.52 and half-life = 45 days, would you use trend following or mean reversion? Why?",
-        sampleAnswer: `**Statistical Analysis of SPY Mean Reversion Properties:**
+    keyPoints: [
+      'Entry filters: price < lower BB, ADX < 25, VIX < 30, volume > average, not at 52w lows',
+      'Scaling: 3 entries (initial, -0.5× ATR, -1× ATR), each 1/3 size, stop 2× ATR from average entry',
+      'Shutdown triggers: ADX > 30, 5+ consecutive losses, 10%+ drawdown, VIX > 40, Hurst > 0.55',
+      'Averaging down dangerous: only acceptable with statistical edge, strict limits (max 3 adds), small sizes',
+      'Key difference: trend following pyramids into winners, mean reversion averages into losers (riskier)',
+    ],
+  },
+  {
+    id: 'ats-3-1-q-2',
+    question:
+      'Calculate and interpret: (1) Hurst exponent for SPY (2010-2024), (2) Half-life of mean reversion, (3) What these metrics tell you about trading strategy choice. If Hurst = 0.52 and half-life = 45 days, would you use trend following or mean reversion? Why?',
+    sampleAnswer: `**Statistical Analysis of SPY Mean Reversion Properties:**
 
 **1. Hurst Exponent Calculation for SPY (2010-2024):**
 
@@ -674,19 +674,19 @@ When Hurst ≈ 0.5 and half-life > 30 days, market is quite efficient. Neither p
 1. Longer timeframes (months, not days)
 2. Combine both (hybrid strategy)
 3. Or just buy-and-hold index (lowest cost)`,
-        keyPoints: [
-            'Hurst exponent: <0.5 mean-reverting, =0.5 random walk, >0.5 trending; SPY typically 0.52 (slight trend bias)',
-            'Half-life: time to revert halfway to mean; <20 days good for mean reversion, >60 days better for trend following',
-            'H=0.52, HL=45: recommend long-term trend following (50/200 MA), hold 2-6 months, avoid short-term mean reversion',
-            'Near random walk (H≈0.5) means market efficient: neither strategy has strong edge, consider buy-and-hold',
-            'Optimal mean reversion needs H<0.45 AND half-life <20 days; otherwise trending or buy-hold better',
-        ],
-    },
-    {
-        id: 'ats-3-1-q-3',
-        question:
-            'Mean reversion strategies had Sharpe ratios of 2-3 in the 2010-2019 period but dropped to 0.5-1.0 in 2020-2024. Analyze: (1) Why performance degraded (regime change, crowding, volatility), (2) Specific changes in 2020-2024 that broke mean reversion, (3) Adaptations needed for modern mean reversion.',
-        sampleAnswer: `**Mean Reversion Performance Collapse: 2010-2019 vs 2020-2024**
+    keyPoints: [
+      'Hurst exponent: <0.5 mean-reverting, =0.5 random walk, >0.5 trending; SPY typically 0.52 (slight trend bias)',
+      'Half-life: time to revert halfway to mean; <20 days good for mean reversion, >60 days better for trend following',
+      'H=0.52, HL=45: recommend long-term trend following (50/200 MA), hold 2-6 months, avoid short-term mean reversion',
+      'Near random walk (H≈0.5) means market efficient: neither strategy has strong edge, consider buy-and-hold',
+      'Optimal mean reversion needs H<0.45 AND half-life <20 days; otherwise trending or buy-hold better',
+    ],
+  },
+  {
+    id: 'ats-3-1-q-3',
+    question:
+      'Mean reversion strategies had Sharpe ratios of 2-3 in the 2010-2019 period but dropped to 0.5-1.0 in 2020-2024. Analyze: (1) Why performance degraded (regime change, crowding, volatility), (2) Specific changes in 2020-2024 that broke mean reversion, (3) Adaptations needed for modern mean reversion.',
+    sampleAnswer: `**Mean Reversion Performance Collapse: 2010-2019 vs 2020-2024**
 
 **Historical Performance:**
 - **2010-2019**: Sharpe 2-3, steady returns, low drawdowns
@@ -1021,13 +1021,12 @@ If stock drops to $350 (another COVID):
 5. Diversify to crypto (less crowded)
 
 Can't go back to 2010s (market changed). Must adapt or perish.`,
-        keyPoints: [
-            '2010-2019 golden age: VIX 14, low vol (10%), QE, range-bound (Sharpe 2-3); 2020-2024: VIX 19, high vol (18%), rate hikes, trending (Sharpe 0.8)',
-            'Specific breakers: COVID crash (-35% in 23 days), retail explosion (Robinhood), correlation breakdown (stocks+bonds down), 0DTE options',
-            'Adaptations: (1) Intraday timeframes (1-6 hours vs 3-10 days), (2) Dynamic thresholds (percentile-based vs fixed)',
-            'More adaptations: (3) Strict regime filters (ADX<20, Hurst<0.5, VIX<25, trade only 30% of time), (4) Options for defined risk',
-            'Diversification: Add crypto mean reversion (Hurst 0.45-0.48, 8-24hr half-life, Sharpe 1.5-2.5 vs stock 0.8)',
-        ],
-    },
+    keyPoints: [
+      '2010-2019 golden age: VIX 14, low vol (10%), QE, range-bound (Sharpe 2-3); 2020-2024: VIX 19, high vol (18%), rate hikes, trending (Sharpe 0.8)',
+      'Specific breakers: COVID crash (-35% in 23 days), retail explosion (Robinhood), correlation breakdown (stocks+bonds down), 0DTE options',
+      'Adaptations: (1) Intraday timeframes (1-6 hours vs 3-10 days), (2) Dynamic thresholds (percentile-based vs fixed)',
+      'More adaptations: (3) Strict regime filters (ADX<20, Hurst<0.5, VIX<25, trade only 30% of time), (4) Options for defined risk',
+      'Diversification: Add crypto mean reversion (Hurst 0.45-0.48, 8-24hr half-life, Sharpe 1.5-2.5 vs stock 0.8)',
+    ],
+  },
 ];
-

@@ -1,8 +1,9 @@
 export const projectMultiStrategyTradingSystem = {
-    title: 'Project: Multi-Strategy Trading System',
-    slug: 'project-multi-strategy-trading-system',
-    description: 'Build a complete production-ready multi-strategy trading system with backtesting, execution, and monitoring',
-    content: `
+  title: 'Project: Multi-Strategy Trading System',
+  slug: 'project-multi-strategy-trading-system',
+  description:
+    'Build a complete production-ready multi-strategy trading system with backtesting, execution, and monitoring',
+  content: `
 # Project: Multi-Strategy Trading System
 
 ## Introduction: Building Production-Grade Infrastructure

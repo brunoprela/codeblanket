@@ -1,9 +1,9 @@
 export const backtestingFundamentals = {
-  title: 'Backtesting Fundamentals',
-  slug: 'backtesting-fundamentals',
-  description:
-    'Master the foundations of backtesting trading strategies and understand why proper backtesting is critical for successful algorithmic trading',
-  content: `
+    title: 'Backtesting Fundamentals',
+    slug: 'backtesting-fundamentals',
+    description:
+        'Master the foundations of backtesting trading strategies and understand why proper backtesting is critical for successful algorithmic trading',
+    content: `
 # Backtesting Fundamentals
 
 ## Introduction: Why Backtesting Matters for Engineers
@@ -672,33 +672,33 @@ class StrategyValidator:
         - Monitor closely for first 30-60 days
         - Be ready to shut down if performance degrades
         """
-        print(f"Stage 3: Live trading starting with ${initial_capital:,.0f}")
+        print(f"Stage 3: Live trading starting with \${initial_capital:,.0f}")
         print("⚠️  Trading with REAL MONEY - monitor closely!")
-        
-        return {
-            'status': 'live',
-            'capital': initial_capital,
-            'message': 'Monitor performance for 30-60 days before scaling up',
-            'scale_up_plan': 'If Sharpe > 0.8 of paper, 2x capital every 60 days'
-        }
+
+return {
+    'status': 'live',
+    'capital': initial_capital,
+    'message': 'Monitor performance for 30-60 days before scaling up',
+    'scale_up_plan': 'If Sharpe > 0.8 of paper, 2x capital every 60 days'
+}
     
-    def calculate_strategy_returns(self, 
-                                  data: pd.DataFrame,
-                                  signals: pd.Series) -> pd.Series:
-        """Calculate strategy returns"""
-        returns = data['Close'].pct_change()
-        strategy_returns = signals.shift(1) * returns
-        return strategy_returns.dropna()
+    def calculate_strategy_returns(self,
+    data: pd.DataFrame,
+    signals: pd.Series) -> pd.Series:
+"""Calculate strategy returns"""
+returns = data['Close'].pct_change()
+strategy_returns = signals.shift(1) * returns
+return strategy_returns.dropna()
     
-    def calculate_sharpe_ratio(self, 
-                              returns: pd.Series,
-                              risk_free_rate: float = 0.02) -> float:
-        """Calculate annualized Sharpe ratio"""
-        excess_returns = returns - (risk_free_rate / 252)
-        if returns.std() == 0:
-            return 0.0
-        sharpe = np.sqrt(252) * (excess_returns.mean() / returns.std())
-        return sharpe
+    def calculate_sharpe_ratio(self,
+    returns: pd.Series,
+    risk_free_rate: float = 0.02) -> float:
+"""Calculate annualized Sharpe ratio"""
+excess_returns = returns - (risk_free_rate / 252)
+if returns.std() == 0:
+    return 0.0
+sharpe = np.sqrt(252) * (excess_returns.mean() / returns.std())
+return sharpe
 
 # The progression
 progression_timeline = {
@@ -980,19 +980,18 @@ Before deploying a strategy to live trading:
 
 You now understand why proper backtesting is complex and critical. Ready to build production-grade infrastructure!
 `,
-  exercises: [
-    {
-      prompt:
-        'Implement a backtest comparison tool that runs the same strategy with and without look-ahead bias, survivorship bias, and realistic transaction costs. Show how each bias affects the results.',
-      solution:
-        '// Implementation would include: 1) Base strategy implementation, 2) Version with look-ahead bias (peek at future data), 3) Version with survivorship bias (only current stocks), 4) Version with no transaction costs, 5) Clean version with all biases removed, 6) Side-by-side comparison showing degradation at each step, 7) Visualization of equity curves for each version',
-    },
-    {
-      prompt:
-        'Build an event-driven backtesting framework that processes market data, generates signals, creates orders, and tracks fills. Include realistic order execution simulation with slippage and partial fills.',
-      solution:
-        '// Implementation would include: 1) Event class hierarchy (MarketEvent, SignalEvent, OrderEvent, FillEvent), 2) Event queue system, 3) Strategy interface, 4) Portfolio manager tracking positions, 5) Execution handler simulating realistic fills, 6) Performance calculator, 7) Order book simulation for partial fills',
-    },
-  ],
+    exercises: [
+        {
+            prompt:
+                'Implement a backtest comparison tool that runs the same strategy with and without look-ahead bias, survivorship bias, and realistic transaction costs. Show how each bias affects the results.',
+            solution:
+                '// Implementation would include: 1) Base strategy implementation, 2) Version with look-ahead bias (peek at future data), 3) Version with survivorship bias (only current stocks), 4) Version with no transaction costs, 5) Clean version with all biases removed, 6) Side-by-side comparison showing degradation at each step, 7) Visualization of equity curves for each version',
+        },
+        {
+            prompt:
+                'Build an event-driven backtesting framework that processes market data, generates signals, creates orders, and tracks fills. Include realistic order execution simulation with slippage and partial fills.',
+            solution:
+                '// Implementation would include: 1) Event class hierarchy (MarketEvent, SignalEvent, OrderEvent, FillEvent), 2) Event queue system, 3) Strategy interface, 4) Portfolio manager tracking positions, 5) Execution handler simulating realistic fills, 6) Performance calculator, 7) Order book simulation for partial fills',
+        },
+    ],
 };
-

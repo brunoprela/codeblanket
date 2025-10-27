@@ -74,8 +74,8 @@ Two assets, equal weighted (50/50):
         'Zero correlation (0) provides substantial diversification; portfolio risk is lower than weighted average',
         'Negative correlation (<0) provides maximum diversification; assets partially or fully hedge each other',
         'Real-world diversification benefits depend on finding asset pairs with low or negative correlations',
-        'Crisis periods often see correlation convergence toward +1, reducing diversification benefits'
-      ]
+        'Crisis periods often see correlation convergence toward +1, reducing diversification benefits',
+      ],
     },
     {
       id: 'mpt-efficient-set',
@@ -234,8 +234,8 @@ New risk: ~13.2% (slightly higher, but better risk-adjusted return)
         'Sharpe ratio helps compare risk-adjusted returns across portfolios',
         'Mean-variance optimization finds efficient portfolios by maximizing return for given risk constraint',
         'Practical portfolio improvement involves shifting weights toward higher-return, appropriately-correlated assets',
-        'Low-return assets should only receive substantial allocation if they provide significant diversification benefits through low correlation'
-      ]
+        'Low-return assets should only receive substantial allocation if they provide significant diversification benefits through low correlation',
+      ],
     },
     {
       id: 'mpt-limitations',
@@ -467,9 +467,8 @@ Modern portfolio management uses MPT as starting point but incorporates these ex
         'Transaction costs and taxes can consume 0.5-10%+ annually, making theoretically optimal strategies inferior after frictions',
         'Real-world constraints (no shorting, leverage limits) change the shape of efficient frontier dramatically',
         'Modern approaches include CVaR, dynamic correlation models, Black-Litterman, robust optimization, and explicit friction modeling',
-        '2008 and 2020 crises demonstrated all these limitations simultaneously: fat tails, correlation spikes, and liquidity crises'
-      ]
-    }
-  ]
+        '2008 and 2020 crises demonstrated all these limitations simultaneously: fat tails, correlation spikes, and liquidity crises',
+      ],
+    },
+  ],
 };
-

@@ -1,7 +1,8 @@
 export const optionsMarketMakingMC = [
   {
     id: 'options-market-making-mc-1',
-    question: 'What is the primary goal of "delta hedging" for an options market maker?',
+    question:
+      'What is the primary goal of "delta hedging" for an options market maker?',
     options: [
       'To maximize directional profit from stock price movements',
       'To remain delta-neutral and profit from the bid-ask spread rather than directional moves',
@@ -14,12 +15,13 @@ export const optionsMarketMakingMC = [
   },
   {
     id: 'options-market-making-mc-2',
-    question: 'In bid-ask spread pricing, how should a market maker adjust quotes when they have a large LONG inventory position?',
+    question:
+      'In bid-ask spread pricing, how should a market maker adjust quotes when they have a large LONG inventory position?',
     options: [
       'Widen both bid and ask to reduce trading volume',
       'Tighten the ask (lower it) to attract buyers and unload inventory',
       'Tighten the bid (raise it) to attract more buyers',
-      'Keep quotes unchanged since inventory doesn\'t affect pricing',
+      "Keep quotes unchanged since inventory doesn't affect pricing",
     ],
     correctAnswer: 1,
     explanation:
@@ -27,7 +29,8 @@ export const optionsMarketMakingMC = [
   },
   {
     id: 'options-market-making-mc-3',
-    question: 'What is "gamma scalping" and when is it profitable for market makers?',
+    question:
+      'What is "gamma scalping" and when is it profitable for market makers?',
     options: [
       'Buying low gamma options to reduce risk',
       'Continuously rehedging a delta-neutral position; profitable when realized volatility exceeds implied volatility',
@@ -53,7 +56,8 @@ export const optionsMarketMakingMC = [
   },
   {
     id: 'options-market-making-mc-5',
-    question: 'What is the typical relationship between liquidity and bid-ask spread for options?',
+    question:
+      'What is the typical relationship between liquidity and bid-ask spread for options?',
     options: [
       'Higher liquidity leads to wider spreads',
       'Lower liquidity leads to tighter spreads',
@@ -65,4 +69,3 @@ export const optionsMarketMakingMC = [
       'HIGHER liquidity → TIGHTER spreads. Liquid options (high volume, open interest): $0.05-0.10 spreads, more competition among market makers. Illiquid options (low volume): $0.20-0.50+ spreads, higher risk for market makers (harder to unload inventory). Example: SPY options (liquid) → $0.05 spread. Low-volume stock options (illiquid) → $0.30+ spread. Liquidity reduces risk for MMs, allowing tighter quotes.',
   },
 ];
-

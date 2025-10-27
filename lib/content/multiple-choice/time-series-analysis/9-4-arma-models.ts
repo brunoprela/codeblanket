@@ -12,7 +12,7 @@ export const armaModelsMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "MA(1) ACF formula: ρ₁ = θ/(1+θ²). For θ=0.6: ρ₁ = 0.6/(1+0.36) = 0.6/1.36 = 0.44 (approximately 0.38 depending on rounding). AR(1) ACF: ρ₁ = φ = 0.6 directly. Key differences: (1) MA(1) ACF cuts off after lag 1 (ρ₂=ρ₃=...=0), AR(1) decays geometrically (ρ₂=0.36, ρ₃=0.22, ...), (2) MA(1) always has |ρ₁| < 0.5 regardless of θ, AR(1) can approach 1. This distinction is critical for model identification: sharp cutoff → MA, gradual decay → AR. Common error: thinking MA coefficient directly equals ACF (only true for AR).",
+      'MA(1) ACF formula: ρ₁ = θ/(1+θ²). For θ=0.6: ρ₁ = 0.6/(1+0.36) = 0.6/1.36 = 0.44 (approximately 0.38 depending on rounding). AR(1) ACF: ρ₁ = φ = 0.6 directly. Key differences: (1) MA(1) ACF cuts off after lag 1 (ρ₂=ρ₃=...=0), AR(1) decays geometrically (ρ₂=0.36, ρ₃=0.22, ...), (2) MA(1) always has |ρ₁| < 0.5 regardless of θ, AR(1) can approach 1. This distinction is critical for model identification: sharp cutoff → MA, gradual decay → AR. Common error: thinking MA coefficient directly equals ACF (only true for AR).',
     difficulty: 'intermediate',
   },
   {
@@ -60,7 +60,7 @@ export const armaModelsMultipleChoice = [
     ],
     correctAnswer: 2,
     explanation:
-      "Half-life formula: t½ = -ln(2)/ln(φ). For φ=0.95: t½ = -0.693/ln(0.95) = -0.693/(-0.0513) ≈ 13.5 periods. This indicates VERY SLOW mean reversion. Implications: (1) Shocks persist for ~14 periods before decaying 50%, (2) Full decay (to 1%) takes ~90 periods, (3) Trading requires long holding periods (weeks if daily data), (4) High φ ≈ 1 means near-random walk behavior, (5) Not suitable for day trading or short-term strategies. Compare: φ=0.5 → t½≈1 period (fast), φ=0.7 → t½≈2.4 periods (moderate), φ=0.95 → t½≈13.5 periods (very slow). For mean-reversion trading: prefer φ < 0.7 (faster convergence). High persistence (φ→1) better suited for momentum strategies, not mean reversion. Key insight: higher φ ≠ better for trading, often means slower convergence and higher risk.",
+      'Half-life formula: t½ = -ln(2)/ln(φ). For φ=0.95: t½ = -0.693/ln(0.95) = -0.693/(-0.0513) ≈ 13.5 periods. This indicates VERY SLOW mean reversion. Implications: (1) Shocks persist for ~14 periods before decaying 50%, (2) Full decay (to 1%) takes ~90 periods, (3) Trading requires long holding periods (weeks if daily data), (4) High φ ≈ 1 means near-random walk behavior, (5) Not suitable for day trading or short-term strategies. Compare: φ=0.5 → t½≈1 period (fast), φ=0.7 → t½≈2.4 periods (moderate), φ=0.95 → t½≈13.5 periods (very slow). For mean-reversion trading: prefer φ < 0.7 (faster convergence). High persistence (φ→1) better suited for momentum strategies, not mean reversion. Key insight: higher φ ≠ better for trading, often means slower convergence and higher risk.',
     difficulty: 'advanced',
   },
   {
@@ -80,4 +80,3 @@ export const armaModelsMultipleChoice = [
     difficulty: 'advanced',
   },
 ];
-

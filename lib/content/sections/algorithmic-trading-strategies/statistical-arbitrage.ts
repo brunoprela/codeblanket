@@ -1,9 +1,9 @@
 export const statisticalArbitrage = {
-    title: 'Statistical Arbitrage',
-    slug: 'statistical-arbitrage',
-    description:
-        'Master statistical arbitrage strategies including pairs trading, basket arbitrage, and PCA-based stat arb',
-    content: `
+  title: 'Statistical Arbitrage',
+  slug: 'statistical-arbitrage',
+  description:
+    'Master statistical arbitrage strategies including pairs trading, basket arbitrage, and PCA-based stat arb',
+  content: `
 # Statistical Arbitrage
 
 ## Introduction: Trading Statistical Relationships
@@ -892,4 +892,3 @@ class StatArbRiskManager:
 **Next Section**: Pairs Trading (deep dive into specific pair selection and execution)
 `,
 };
-

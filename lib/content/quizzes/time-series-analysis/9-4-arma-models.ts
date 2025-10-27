@@ -885,7 +885,7 @@ print(disaster)
   {
     id: 3,
     question:
-      "Design a production ARMA forecasting system for a hedge fund that trades 500 stocks daily. The system must: (1) Automatically select ARMA order for each stock, (2) Retrain models weekly, (3) Generate next-day return forecasts every night after market close, (4) Provide confidence intervals, (5) Flag models that fail diagnostics, and (6) Scale to handle all 500 stocks in under 30 minutes. Address: system architecture, parallel processing strategy, model validation pipeline, failure handling, monitoring, and how to prevent the system from generating systematically biased forecasts that could lead to portfolio-wide losses.",
+      'Design a production ARMA forecasting system for a hedge fund that trades 500 stocks daily. The system must: (1) Automatically select ARMA order for each stock, (2) Retrain models weekly, (3) Generate next-day return forecasts every night after market close, (4) Provide confidence intervals, (5) Flag models that fail diagnostics, and (6) Scale to handle all 500 stocks in under 30 minutes. Address: system architecture, parallel processing strategy, model validation pipeline, failure handling, monitoring, and how to prevent the system from generating systematically biased forecasts that could lead to portfolio-wide losses.',
     answer: `## Comprehensive Answer:
 
 ### System Architecture
@@ -1374,4 +1374,3 @@ def main_forecasting_pipeline():
 This production system handles scale, reliability, and prevents systematic errors that could cause portfolio losses!`,
   },
 ];
-

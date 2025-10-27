@@ -1,7 +1,7 @@
 export const marketDataVendorsApis = {
-    title: 'Market Data Vendors and APIs',
-    id: 'market-data-vendors-apis',
-    content: `
+  title: 'Market Data Vendors and APIs',
+  id: 'market-data-vendors-apis',
+  content: `
 # Market Data Vendors and APIs
 
 ## Introduction
@@ -510,4 +510,3 @@ bars = polygon.get_daily_bars("AAPL", "2024-01-01", "2024-01-31")
 Now you can integrate any market data vendor into your trading system!
 `,
 };
-

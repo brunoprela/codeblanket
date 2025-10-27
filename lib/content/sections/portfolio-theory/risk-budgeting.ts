@@ -1,7 +1,7 @@
 export const riskBudgeting = {
-    title: 'Risk Budgeting',
-    id: 'risk-budgeting',
-    content: `
+  title: 'Risk Budgeting',
+  id: 'risk-budgeting',
+  content: `
 # Risk Budgeting
 
 ## Introduction
@@ -813,4 +813,3 @@ CR_i = w_i \\times \\frac{(\\Sigma w)_i}{\\sigma_p}
 In the next section, we'll explore **Portfolio Construction Constraints**: how to build optimal portfolios with real-world restrictions (position limits, turnover, sector constraints, ESG, etc.).
 `,
 };
-

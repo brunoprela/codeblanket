@@ -120,9 +120,8 @@ class CallableBond:
         ...     call_schedule=call_schedule
         ... )
         >>> price = bond.price(ytm=0.05, volatility=0.15)
-        >>> print(f"Callable bond price: ${price: .2f
-}")
-"""
+        >>> print(f"Callable bond price: \${price:.2f}")
+        """
     
     def __init__(
     self,
@@ -332,7 +331,8 @@ callable_price = callable.price(ytm, volatility = 0.15)
 
 call_option_value = straight_price - callable_price
 
-print(f"Straight Bond Price: ${straight_price:.2f}")
+print(f"Straight Bond Price: ${straight_price: .2f
+}")
 print(f"Callable Bond Price: ${callable_price:.2f}")
 print(f"Call Option Value: ${call_option_value:.2f}")
 print(f"  ({call_option_value/straight_price*100:.2f}% of straight bond value)")

@@ -689,4 +689,3 @@ for i, ret in enumerate(results['return_forecast_pct'], 1):
 **Next:** GARCH models for volatility forecasting!
 `,
 };
-

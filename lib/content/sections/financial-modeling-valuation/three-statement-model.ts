@@ -1,7 +1,7 @@
 export const threeStatementModel = {
-  title: 'Three-Statement Model Building',
-  id: 'three-statement-model',
-  content: `
+    title: 'Three-Statement Model Building',
+    id: 'three-statement-model',
+    content: `
 # Three-Statement Model Building
 
 ## Introduction
@@ -738,7 +738,7 @@ class ThreeStatementModel:
             if abs(diff) > tolerance:
                 results['balance_sheet_balanced'] = False
                 results['errors'].append(
-                    f"Year {year + 1}: Balance sheet doesn't balance (diff: ${diff:,.0f})"
+                    f"Year {year + 1}: Balance sheet doesn't balance (diff: \${diff:,.0f})"
                 )
         
         # Check 2: Cash flow ties
@@ -747,31 +747,32 @@ class ThreeStatementModel:
             if abs(diff) > tolerance:
                 results['cash_flow_ties'] = False
                 results['errors'].append(
-                    f"Year {year + 1}: Cash flow doesn't tie (diff: ${diff:,.0f})"
+                    f"Year {year + 1}: Cash flow doesn't tie (diff: ${diff:, .0f
+})"
                 )
-        
-        return results
+
+return results
     
     def export_summary(self) -> pd.DataFrame:
-        """Export key metrics summary"""
-        
-        summary = pd.DataFrame({
-            'Year': self.income_statement['Year'],
-            'Revenue': self.income_statement['Revenue'],
-            'EBIT': self.income_statement['EBIT'],
-            'Net Income': self.income_statement['Net Income'],
-            'Operating CF': self.cash_flow['Operating CF'],
-            'Free Cash Flow': self.cash_flow['Operating CF'] + self.cash_flow['CapEx'],
-            'Total Assets': self.balance_sheet['Total Assets'],
-            'Total Debt': self.balance_sheet['Debt'],
-            'Total Equity': self.balance_sheet['Total Equity']
-        })
+"""Export key metrics summary"""
+
+summary = pd.DataFrame({
+    'Year': self.income_statement['Year'],
+    'Revenue': self.income_statement['Revenue'],
+    'EBIT': self.income_statement['EBIT'],
+    'Net Income': self.income_statement['Net Income'],
+    'Operating CF': self.cash_flow['Operating CF'],
+    'Free Cash Flow': self.cash_flow['Operating CF'] + self.cash_flow['CapEx'],
+    'Total Assets': self.balance_sheet['Total Assets'],
+    'Total Debt': self.balance_sheet['Debt'],
+    'Total Equity': self.balance_sheet['Total Equity']
+})
         
         # Add margins
-        summary['EBIT Margin'] = summary['EBIT'] / summary['Revenue']
-        summary['FCF Margin'] = summary['Free Cash Flow'] / summary['Revenue']
-        
-        return summary
+summary['EBIT Margin'] = summary['EBIT'] / summary['Revenue']
+summary['FCF Margin'] = summary['Free Cash Flow'] / summary['Revenue']
+
+return summary
 
 # Build complete model
 model = ThreeStatementModel("ACME Corp")
@@ -812,9 +813,9 @@ assumptions = {
 
 # Build model
 statements = model.build(
-    base_year_financials=base_financials,
-    assumptions=assumptions,
-    projection_years=5
+    base_year_financials = base_financials,
+    assumptions = assumptions,
+    projection_years = 5
 )
 
 # Validate
@@ -824,13 +825,13 @@ print(f"  Balance Sheet Balanced: {validation['balance_sheet_balanced']}")
 print(f"  Cash Flow Ties: {validation['cash_flow_ties']}")
 if validation['errors']:
     print("  Errors:")
-    for error in validation['errors']:
-        print(f"    - {error}")
+for error in validation['errors']:
+    print(f"    - {error}")
 
 # Export summary
 summary = model.export_summary()
 print("\\nModel Summary ($ millions):")
-print((summary[['Year', 'Revenue', 'EBIT', 'Free Cash Flow', 'Total Assets']] / 1_000_000).to_string(index=False))
+print((summary[['Year', 'Revenue', 'EBIT', 'Free Cash Flow', 'Total Assets']] / 1_000_000).to_string(index = False))
 \`\`\`
 
 ---
@@ -908,9 +909,9 @@ result = solve_circular_model(
 print("\\nCircular Model Solution:")
 for key, value in result.items():
     if key != 'iterations':
-        print(f"{key.replace('_', ' ').title()}: ${value:,.0f}")
+        print(f"{key.replace('_', ' ').title()}: ${value:, .0f}")
     else:
-        print(f"{key.title()}: {value}")
+print(f"{key.title()}: {value}")
 \`\`\`
 
 ---

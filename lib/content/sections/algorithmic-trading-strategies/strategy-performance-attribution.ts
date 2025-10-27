@@ -1,8 +1,9 @@
 export const strategyPerformanceAttribution = {
-    title: 'Strategy Performance Attribution',
-    slug: 'strategy-performance-attribution',
-    description: 'Analyze and decompose strategy returns: factor attribution, alpha/beta, risk decomposition',
-    content: `
+  title: 'Strategy Performance Attribution',
+  slug: 'strategy-performance-attribution',
+  description:
+    'Analyze and decompose strategy returns: factor attribution, alpha/beta, risk decomposition',
+  content: `
 # Strategy Performance Attribution
 
 ## Introduction: Understanding the "Why" Behind Returns

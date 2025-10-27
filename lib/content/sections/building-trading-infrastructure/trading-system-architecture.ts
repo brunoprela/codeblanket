@@ -1,7 +1,7 @@
 export const tradingSystemArchitecture = {
-    title: 'Trading System Architecture',
-    id: 'trading-system-architecture',
-    content: `
+  title: 'Trading System Architecture',
+  id: 'trading-system-architecture',
+  content: `
 # Trading System Architecture
 
 ## Introduction
@@ -972,4 +972,3 @@ def measure_latency(monitor: PerformanceMonitor, component: str, operation: str)
 This architecture provides the **foundation** for a production trading system. Each component will be explored in detail in subsequent sections.
 `,
 };
-

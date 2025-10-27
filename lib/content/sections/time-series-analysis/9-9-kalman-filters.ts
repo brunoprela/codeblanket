@@ -1,9 +1,8 @@
 export const kalmanFilters = {
-    title: 'Kalman Filters',
-    slug: 'kalman-filters',
-    description:
-        'State space models and optimal filtering for dynamic systems',
-    content: `
+  title: 'Kalman Filters',
+  slug: 'kalman-filters',
+  description: 'State space models and optimal filtering for dynamic systems',
+  content: `
 # Kalman Filters
 
 ## Introduction: Optimal State Estimation

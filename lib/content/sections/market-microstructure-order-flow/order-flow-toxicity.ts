@@ -1,7 +1,7 @@
 export const orderFlowToxicity = {
-    title: 'Order Flow Toxicity',
-    id: 'order-flow-toxicity',
-    content: `
+  title: 'Order Flow Toxicity',
+  id: 'order-flow-toxicity',
+  content: `
 # Order Flow Toxicity
 
 ## Introduction
@@ -631,6 +631,5 @@ class ToxicityMonitor:
 3. **Best Execution:** Cannot systematically discriminate against certain order flow without justification (avoiding toxic flow is acceptable if done fairly).
 
 4. **Data Privacy:** If using client-specific data for toxicity classification, must comply with privacy regulations.
-`
+`,
 };
-

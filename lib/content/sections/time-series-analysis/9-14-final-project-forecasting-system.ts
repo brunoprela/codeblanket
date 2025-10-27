@@ -1,9 +1,9 @@
 export const finalProjectForecastingSystem = {
-    title: 'Final Project: Time Series Forecasting System',
-    slug: 'final-project-forecasting-system',
-    description:
-        'Build a production-grade multi-model forecasting platform with real-time monitoring',
-    content: `
+  title: 'Final Project: Time Series Forecasting System',
+  slug: 'final-project-forecasting-system',
+  description:
+    'Build a production-grade multi-model forecasting platform with real-time monitoring',
+  content: `
 # Final Project: Time Series Forecasting System
 
 ## Project Overview
@@ -844,4 +844,3 @@ This final project integrates everything you've learned:
 Congratulations on completing the Time Series Analysis module!
 `,
 };
-

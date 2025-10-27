@@ -562,7 +562,7 @@ valuation = analysis.apply_to_target(
 
 print("\\n\\nTarget Company Implied Valuation ($ millions):")
 for method, value in valuation.items():
-    print(f"  {method:.<45} ${value:> 10,.0f}")
+    print(f"  {method:.<45} \${value:> 10,.0f}")
 \`\`\`
 
 ---
@@ -750,7 +750,8 @@ def create_football_field(
         ax.add_patch(rect)
         
         # Add value labels
-        ax.text(low, y_pos, f'${low: .1f}B', 
+        ax.text(low, y_pos, f'${low: .1f
+}B', 
 va = 'center', ha = 'right', fontsize = 10, fontweight = 'bold')
 ax.text(high, y_pos, f'${high:.1f}B',
     va = 'center', ha = 'left', fontsize = 10, fontweight = 'bold')

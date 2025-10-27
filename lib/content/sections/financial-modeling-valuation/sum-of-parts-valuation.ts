@@ -1,7 +1,7 @@
 export const sumOfPartsValuation = {
-  title: 'Sum-of-the-Parts (SOTP) Valuation',
-  id: 'sum-of-parts-valuation',
-  content: `
+    title: 'Sum-of-the-Parts (SOTP) Valuation',
+    id: 'sum-of-parts-valuation',
+    content: `
 # Sum-of-the-Parts (SOTP) Valuation
 
 ## Introduction
@@ -264,7 +264,7 @@ print("\\n\\nSOTP SUMMARY:")
 for key, value in sotp_result.items():
     if key != 'Segment Details':
         if isinstance(value, (int, float)):
-            print(f"  {key:.<45} ${value/1_000_000:>10,.0f}M")
+            print(f"  {key:.<45} \${value/1_000_000:>10,.0f}M")
 
 # Conglomerate discount
 discount_analysis = sotp_model.conglomerate_discount(
@@ -277,20 +277,20 @@ for key, value in discount_analysis.items():
     if '%' in key:
         print(f"  {key:.<45} {value:>10.1%}")
     elif isinstance(value, (int, float)):
-        print(f"  {key:.<45} ${value/1_000_000:>10,.0f}M")
+        print(f"  {key:.<45} ${value / 1_000_000:> 10,.0f}M")
 
 print("\\n\\nINTERPRETATION:")
 discount_pct = discount_analysis['Conglomerate Discount (%)']
 if discount_pct > 0:
     print(f"  The market is valuing this conglomerate at a {discount_pct:.1%} DISCOUNT")
-    print(f"  to its sum-of-the-parts value.")
-    print(f"  ")
-    print(f"  Potential value unlock through:")
-    print(f"    - Spin-off of segments")
-    print(f"    - Activist intervention")
-    print(f"    - Strategic divestitures")
+print(f"  to its sum-of-the-parts value.")
+print(f"  ")
+print(f"  Potential value unlock through:")
+print(f"    - Spin-off of segments")
+print(f"    - Activist intervention")
+print(f"    - Strategic divestitures")
 else:
-    print(f"  No conglomerate discount detected.")
+print(f"  No conglomerate discount detected.")
 \`\`\`
 
 ---

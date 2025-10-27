@@ -1,6 +1,41 @@
 export const sentimentAnalysisTradingQuiz = [
-    { id: 'ats-10-1-q-1', question: "Design Twitter sentiment trading strategy for $SPY: (1) Data collection (how many tweets?), (2) Sentiment scoring (FinBERT vs keywords), (3) Signal generation (thresholds), (4) Holding period. Backtest shows: sentiment >0.7 → +0.5% next day. Calculate Sharpe.", sampleAnswer: `**Twitter Sentiment Strategy**: (1) Data: 1000+ tweets/day mentioning $SPY, filter for quality (followers >100); (2) Sentiment: FinBERT (85% accuracy), score -1 to +1; (3) Signals: long if sentiment >0.7 AND agreement >70%, short if <-0.7; (4) Holding: 1 day (close before market close). Backtest: +0.5% per signal, 100 signals/year, 60% win rate, volatility 1% per trade → Sharpe = 0.5 × 0.6 / 1% = 30% per trade, annualized = 30% × √100 = 3.0.`, keyPoints: ['Data collection: 1000+ tweets/day for $SPY, filter spam (followers >100, not bots), real-time stream via Twitter API', 'Sentiment scoring: FinBERT achieves 85% accuracy (vs 70% keywords); score each tweet -1 to +1, aggregate by average', 'Signal generation: require sentiment >0.7 (strong positive) AND agreement >70% (most tweets agree); threshold prevents false signals', 'Holding period: 1-day hold (sentiment decays quickly), enter at market open, exit at close', 'Expected performance: 0.5% per trade × 60% win rate = 0.3% per trade; 100 trades/year × 0.3% = 30% annual return; Sharpe 3.0'] },
-    { id: 'ats-10-1-q-2', question: "Explain sentiment mean reversion: When sentiment hits 90% bullish, should you go long or short? Design contrarian sentiment strategy with entry/exit rules. Why does this work?", sampleAnswer: `**Contrarian Sentiment Strategy**: When 90% bullish → SHORT (extreme optimism, overbought). Entry: sentiment >85% bullish OR <15% bullish; Exit: sentiment reverts to 40-60% neutral. Works because: (1) Extreme sentiment = no buyers left (exhaustion), (2) Contrarian indicators (VIX, put/call ratio), (3) Mean reversion in sentiment (oscillates 30-70%). Backtest: short at >85% bullish yields +2% over 5 days (65% win rate).`, keyPoints: ['Sentiment extremes: >85% bullish = too optimistic (short), <15% bullish = too pessimistic (long)', 'Entry rules: wait for extreme sentiment (>85% or <15%) + price confirmation (RSI >70 or <30)', 'Exit rules: (1) sentiment reverts to 40-60% neutral, (2) 5-day hold max, (3) 2% profit target or 1% stop', 'Why it works: extreme sentiment = exhaustion (no new buyers at 90% bullish), forced mean reversion', 'Historical performance: short at 90% bullish → +2% avg return over 5 days, 65% win rate, Sharpe 1.5'] },
-    { id: 'ats-10-1-q-3', question: "Compare sentiment sources: Twitter vs Reddit vs News vs Earnings Calls. Which is fastest? Most accurate? Best for short-term trading? Design multi-source sentiment aggregation system.", sampleAnswer: `**Sentiment Source Comparison**: Twitter (fastest, <1s lag, 70% accuracy, noisy); Reddit (fast, 1-5min lag, 75% accuracy, mob mentality); News (moderate, 1-30min lag, 85% accuracy, professional); Earnings Calls (slow, hours lag, 90% accuracy, high quality). Multi-source: weight Twitter 20%, Reddit 20%, News 40%, Earnings 20%; require 3/4 sources agree for signal. Twitter best for short-term (<1 hour), News best for day trading, Earnings best for swing trading (days-weeks).`, keyPoints: ['Speed ranking: Twitter (<1s) > Reddit (1-5min) > News (1-30min) > Earnings Calls (hours)', 'Accuracy ranking: Earnings Calls (90%) > News (85%) > Reddit (75%) > Twitter (70%)', 'Short-term trading: Twitter best (fastest) despite lower accuracy; use for <1 hour trades', 'Multi-source aggregation: weighted average (Twitter 20%, Reddit 20%, News 40%, Earnings 20%), require consensus from 3/4 sources', 'Use case optimization: Twitter for intraday, News for day trading, Earnings for swing trading (days-weeks)'] },
+  {
+    id: 'ats-10-1-q-1',
+    question:
+      'Design Twitter sentiment trading strategy for $SPY: (1) Data collection (how many tweets?), (2) Sentiment scoring (FinBERT vs keywords), (3) Signal generation (thresholds), (4) Holding period. Backtest shows: sentiment >0.7 → +0.5% next day. Calculate Sharpe.',
+    sampleAnswer: `**Twitter Sentiment Strategy**: (1) Data: 1000+ tweets/day mentioning $SPY, filter for quality (followers >100); (2) Sentiment: FinBERT (85% accuracy), score -1 to +1; (3) Signals: long if sentiment >0.7 AND agreement >70%, short if <-0.7; (4) Holding: 1 day (close before market close). Backtest: +0.5% per signal, 100 signals/year, 60% win rate, volatility 1% per trade → Sharpe = 0.5 × 0.6 / 1% = 30% per trade, annualized = 30% × √100 = 3.0.`,
+    keyPoints: [
+      'Data collection: 1000+ tweets/day for $SPY, filter spam (followers >100, not bots), real-time stream via Twitter API',
+      'Sentiment scoring: FinBERT achieves 85% accuracy (vs 70% keywords); score each tweet -1 to +1, aggregate by average',
+      'Signal generation: require sentiment >0.7 (strong positive) AND agreement >70% (most tweets agree); threshold prevents false signals',
+      'Holding period: 1-day hold (sentiment decays quickly), enter at market open, exit at close',
+      'Expected performance: 0.5% per trade × 60% win rate = 0.3% per trade; 100 trades/year × 0.3% = 30% annual return; Sharpe 3.0',
+    ],
+  },
+  {
+    id: 'ats-10-1-q-2',
+    question:
+      'Explain sentiment mean reversion: When sentiment hits 90% bullish, should you go long or short? Design contrarian sentiment strategy with entry/exit rules. Why does this work?',
+    sampleAnswer: `**Contrarian Sentiment Strategy**: When 90% bullish → SHORT (extreme optimism, overbought). Entry: sentiment >85% bullish OR <15% bullish; Exit: sentiment reverts to 40-60% neutral. Works because: (1) Extreme sentiment = no buyers left (exhaustion), (2) Contrarian indicators (VIX, put/call ratio), (3) Mean reversion in sentiment (oscillates 30-70%). Backtest: short at >85% bullish yields +2% over 5 days (65% win rate).`,
+    keyPoints: [
+      'Sentiment extremes: >85% bullish = too optimistic (short), <15% bullish = too pessimistic (long)',
+      'Entry rules: wait for extreme sentiment (>85% or <15%) + price confirmation (RSI >70 or <30)',
+      'Exit rules: (1) sentiment reverts to 40-60% neutral, (2) 5-day hold max, (3) 2% profit target or 1% stop',
+      'Why it works: extreme sentiment = exhaustion (no new buyers at 90% bullish), forced mean reversion',
+      'Historical performance: short at 90% bullish → +2% avg return over 5 days, 65% win rate, Sharpe 1.5',
+    ],
+  },
+  {
+    id: 'ats-10-1-q-3',
+    question:
+      'Compare sentiment sources: Twitter vs Reddit vs News vs Earnings Calls. Which is fastest? Most accurate? Best for short-term trading? Design multi-source sentiment aggregation system.',
+    sampleAnswer: `**Sentiment Source Comparison**: Twitter (fastest, <1s lag, 70% accuracy, noisy); Reddit (fast, 1-5min lag, 75% accuracy, mob mentality); News (moderate, 1-30min lag, 85% accuracy, professional); Earnings Calls (slow, hours lag, 90% accuracy, high quality). Multi-source: weight Twitter 20%, Reddit 20%, News 40%, Earnings 20%; require 3/4 sources agree for signal. Twitter best for short-term (<1 hour), News best for day trading, Earnings best for swing trading (days-weeks).`,
+    keyPoints: [
+      'Speed ranking: Twitter (<1s) > Reddit (1-5min) > News (1-30min) > Earnings Calls (hours)',
+      'Accuracy ranking: Earnings Calls (90%) > News (85%) > Reddit (75%) > Twitter (70%)',
+      'Short-term trading: Twitter best (fastest) despite lower accuracy; use for <1 hour trades',
+      'Multi-source aggregation: weighted average (Twitter 20%, Reddit 20%, News 40%, Earnings 20%), require consensus from 3/4 sources',
+      'Use case optimization: Twitter for intraday, News for day trading, Earnings for swing trading (days-weeks)',
+    ],
+  },
 ];
-

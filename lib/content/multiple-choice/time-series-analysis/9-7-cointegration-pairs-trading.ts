@@ -12,7 +12,7 @@ export const cointegrationPairsTradingMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "No - correlation and cointegration are different concepts. Correlation measures the linear relationship between RETURNS (or changes): $\\rho = Corr(\\Delta X, \\Delta Y)$. High correlation (0.95) means returns move together but says nothing about a stable long-run relationship in LEVELS. Cointegration requires: (1) Both series are I(1) (non-stationary in levels), (2) Linear combination is I(0) (stationary), (3) Implies mean-reverting spread. Example: Two random walks can have high correlation (by chance) but are not cointegrated. Conversely: Spot and futures prices are cointegrated (linked by arbitrage) even if daily returns have moderate correlation. For pairs trading: Need cointegration, not just correlation. High correlation without cointegration → no mean reversion → no trading signal. Test: Run Engle-Granger or Johansen test on price levels, not returns. Common error: Confusing co-movement (correlation) with equilibrium relationship (cointegration).",
+      'No - correlation and cointegration are different concepts. Correlation measures the linear relationship between RETURNS (or changes): $\\rho = Corr(\\Delta X, \\Delta Y)$. High correlation (0.95) means returns move together but says nothing about a stable long-run relationship in LEVELS. Cointegration requires: (1) Both series are I(1) (non-stationary in levels), (2) Linear combination is I(0) (stationary), (3) Implies mean-reverting spread. Example: Two random walks can have high correlation (by chance) but are not cointegrated. Conversely: Spot and futures prices are cointegrated (linked by arbitrage) even if daily returns have moderate correlation. For pairs trading: Need cointegration, not just correlation. High correlation without cointegration → no mean reversion → no trading signal. Test: Run Engle-Granger or Johansen test on price levels, not returns. Common error: Confusing co-movement (correlation) with equilibrium relationship (cointegration).',
     difficulty: 'intermediate',
   },
   {
@@ -34,7 +34,7 @@ export const cointegrationPairsTradingMultipleChoice = [
   {
     id: 3,
     question:
-      'A pairs trading strategy uses hedge ratio β=1.5 (estimated from regression Y = α + βX). Current prices: X=$100, Y=$155. The spread is:', 
+      'A pairs trading strategy uses hedge ratio β=1.5 (estimated from regression Y = α + βX). Current prices: X=$100, Y=$155. The spread is:',
     options: [
       '$155 - $150 = $5 (Y - β×X)',
       '$155 - $100 = $55 (Y - X)',
@@ -44,7 +44,7 @@ export const cointegrationPairsTradingMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      "Spread = Y - β×X = $155 - 1.5×$100 = $155 - $150 = $5. Definition: Spread is the residual from cointegrating regression: $\\epsilon_t = Y_t - \\alpha - \\beta X_t$. If intercept α≈0 (common after demeaning), spread ≈ Y - βX. Here: β=1.5 is the hedge ratio. Interpretation: Hold $1 of Y, short $1.5 of X → total position is the spread. Current spread = $5. Trading rules: Mean spread (from history) ≈ $0, Std(spread) ≈ $2. Z-score = ($5 - $0) / $2 = 2.5 → Sell spread (sell Y, buy X). Why not Y - X? That assumes β=1 (not estimated hedge ratio). Why not Y/X? Ratio is not stationary even if Y and X are cointegrated (multiplicative not additive). The spread MUST be stationary for pairs trading to work. Monitor spread using: rolling mean, rolling std, z-score. Entry: |z| > 2, Exit: |z| < 0.5. Position sizing: Proportional to 1/z (stronger signal = larger position).",
+      'Spread = Y - β×X = $155 - 1.5×$100 = $155 - $150 = $5. Definition: Spread is the residual from cointegrating regression: $\\epsilon_t = Y_t - \\alpha - \\beta X_t$. If intercept α≈0 (common after demeaning), spread ≈ Y - βX. Here: β=1.5 is the hedge ratio. Interpretation: Hold $1 of Y, short $1.5 of X → total position is the spread. Current spread = $5. Trading rules: Mean spread (from history) ≈ $0, Std(spread) ≈ $2. Z-score = ($5 - $0) / $2 = 2.5 → Sell spread (sell Y, buy X). Why not Y - X? That assumes β=1 (not estimated hedge ratio). Why not Y/X? Ratio is not stationary even if Y and X are cointegrated (multiplicative not additive). The spread MUST be stationary for pairs trading to work. Monitor spread using: rolling mean, rolling std, z-score. Entry: |z| > 2, Exit: |z| < 0.5. Position sizing: Proportional to 1/z (stronger signal = larger position).',
     difficulty: 'intermediate',
   },
   {
@@ -80,4 +80,3 @@ export const cointegrationPairsTradingMultipleChoice = [
     difficulty: 'advanced',
   },
 ];
-

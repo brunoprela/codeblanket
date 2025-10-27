@@ -1,7 +1,7 @@
 export const derivativesOverview = {
-  title: 'Derivatives Overview',
-  id: 'derivatives-overview',
-  content: `
+    title: 'Derivatives Overview',
+    id: 'derivatives-overview',
+    content: `
 # Derivatives Overview
 
 ## Introduction
@@ -243,7 +243,7 @@ class ForwardContract:
         else:  # short
             mtm = (self.forward_price - current_forward) * self.notional * df
         
-        logger.info(f"MTM: ${mtm:,.2f}")
+        logger.info(f"MTM: \${mtm:,.2f}")
         
         return mtm
 
@@ -283,7 +283,8 @@ class FuturesContract:
         else:  # short
             pnl = -num_ticks * self.tick_value * self.contracts
         
-        logger.info(f"Daily P&L: ${pnl:,.2f}")
+        logger.info(f"Daily P&L: ${pnl:, .2f
+}")
         
         # Update futures price for next day
         self.futures_price = new_price
@@ -291,183 +292,183 @@ class FuturesContract:
         return pnl
     
     def margin_requirement(
-        self,
-        initial_margin_per_contract: float
-    ) -> float:
-        """Calculate total margin required"""
-        return initial_margin_per_contract * self.contracts
+    self,
+    initial_margin_per_contract: float
+) -> float:
+"""Calculate total margin required"""
+return initial_margin_per_contract * self.contracts
 
 
 class BlackScholesOption:
-    """
-    Black-Scholes option pricing
-    
-    Example:
+"""
+Black - Scholes option pricing
+
+Example:
         >>> option = BlackScholesOption(
-        ...     spot_price=110.0,
-        ...     strike_price=112.0,
-        ...     time_to_expiry=0.25,  # 3 months
-        ...     risk_free_rate=0.04,
-        ...     volatility=0.15
+    ...spot_price = 110.0,
+    ...strike_price = 112.0,
+    ...time_to_expiry = 0.25,  # 3 months
+        ...risk_free_rate = 0.04,
+    ...volatility = 0.15
         ... )
-        >>> call_price = option.price(OptionType.CALL)
+    >>> call_price = option.price(OptionType.CALL)
         >>> greeks = option.greeks(OptionType.CALL)
-    """
+"""
     
     def __init__(
-        self,
-        spot_price: float,
-        strike_price: float,
-        time_to_expiry: float,
-        risk_free_rate: float,
-        volatility: float
-    ):
-        self.S = spot_price
-        self.K = strike_price
-        self.T = time_to_expiry
-        self.r = risk_free_rate
-        self.sigma = volatility
+    self,
+    spot_price: float,
+    strike_price: float,
+    time_to_expiry: float,
+    risk_free_rate: float,
+    volatility: float
+):
+self.S = spot_price
+self.K = strike_price
+self.T = time_to_expiry
+self.r = risk_free_rate
+self.sigma = volatility
         
         # Calculate d1 and d2
-        self.d1 = (
-            (np.log(self.S / self.K) + (self.r + 0.5 * self.sigma ** 2) * self.T) /
-            (self.sigma * np.sqrt(self.T))
-        )
-        self.d2 = self.d1 - self.sigma * np.sqrt(self.T)
+self.d1 = (
+    (np.log(self.S / self.K) + (self.r + 0.5 * self.sigma ** 2) * self.T) /
+    (self.sigma * np.sqrt(self.T))
+)
+self.d2 = self.d1 - self.sigma * np.sqrt(self.T)
     
     def price(self, option_type: OptionType) -> float:
-        """
+"""
         Calculate option price
-        
-        Call: S×N(d1) - K×e^(-rT)×N(d2)
-        Put: K×e^(-rT)×N(-d2) - S×N(-d1)
-        """
-        if option_type == OptionType.CALL:
-            price = (
-                self.S * norm.cdf(self.d1) -
-                self.K * np.exp(-self.r * self.T) * norm.cdf(self.d2)
-            )
-        else:  # PUT
-            price = (
-                self.K * np.exp(-self.r * self.T) * norm.cdf(-self.d2) -
-                self.S * norm.cdf(-self.d1)
-            )
-        
-        logger.info(f"{option_type.value} option price: ${price:.2f}")
-        
-        return price
+
+Call: S×N(d1) - K×e ^ (-rT)×N(d2)
+Put: K×e ^ (-rT)×N(-d2) - S×N(-d1)
+"""
+if option_type == OptionType.CALL:
+    price = (
+        self.S * norm.cdf(self.d1) -
+        self.K * np.exp(-self.r * self.T) * norm.cdf(self.d2)
+    )
+else:  # PUT
+price = (
+    self.K * np.exp(-self.r * self.T) * norm.cdf(-self.d2) -
+    self.S * norm.cdf(-self.d1)
+)
+
+logger.info(f"{option_type.value} option price: ${price:.2f}")
+
+return price
     
     def greeks(self, option_type: OptionType) -> Dict[str, float]:
-        """
+"""
         Calculate option Greeks
-        
-        Returns:
+
+Returns:
             Dict with delta, gamma, vega, theta, rho
         """
         # Delta
-        if option_type == OptionType.CALL:
-            delta = norm.cdf(self.d1)
-        else:
-            delta = norm.cdf(self.d1) - 1
+if option_type == OptionType.CALL:
+    delta = norm.cdf(self.d1)
+else:
+delta = norm.cdf(self.d1) - 1
         
-        # Gamma (same for call and put)
-        gamma = norm.pdf(self.d1) / (self.S * self.sigma * np.sqrt(self.T))
+        # Gamma(same for call and put)
+    gamma = norm.pdf(self.d1) / (self.S * self.sigma * np.sqrt(self.T))
         
-        # Vega (same for call and put)
-        vega = self.S * norm.pdf(self.d1) * np.sqrt(self.T) / 100  # Per 1% vol change
+        # Vega(same for call and put)
+    vega = self.S * norm.pdf(self.d1) * np.sqrt(self.T) / 100  # Per 1 % vol change
         
         # Theta
-        if option_type == OptionType.CALL:
-            theta = (
-                -(self.S * norm.pdf(self.d1) * self.sigma) / (2 * np.sqrt(self.T)) -
-                self.r * self.K * np.exp(-self.r * self.T) * norm.cdf(self.d2)
-            ) / 365  # Per day
+if option_type == OptionType.CALL:
+    theta = (
+        -(self.S * norm.pdf(self.d1) * self.sigma) / (2 * np.sqrt(self.T)) -
+        self.r * self.K * np.exp(-self.r * self.T) * norm.cdf(self.d2)
+    ) / 365  # Per day
         else:
-            theta = (
-                -(self.S * norm.pdf(self.d1) * self.sigma) / (2 * np.sqrt(self.T)) +
-                self.r * self.K * np.exp(-self.r * self.T) * norm.cdf(-self.d2)
-            ) / 365  # Per day
+theta = (
+    -(self.S * norm.pdf(self.d1) * self.sigma) / (2 * np.sqrt(self.T)) +
+    self.r * self.K * np.exp(-self.r * self.T) * norm.cdf(-self.d2)
+) / 365  # Per day
         
         # Rho
-        if option_type == OptionType.CALL:
-            rho = (
-                self.K * self.T * np.exp(-self.r * self.T) * norm.cdf(self.d2) / 100
-            )  # Per 1% rate change
+if option_type == OptionType.CALL:
+    rho = (
+        self.K * self.T * np.exp(-self.r * self.T) * norm.cdf(self.d2) / 100
+    )  # Per 1 % rate change
         else:
-            rho = (
-                -self.K * self.T * np.exp(-self.r * self.T) * norm.cdf(-self.d2) / 100
-            )
-        
-        return {
-            'delta': delta,
-            'gamma': gamma,
-            'vega': vega,
-            'theta': theta,
-            'rho': rho
-        }
+rho = (
+    -self.K * self.T * np.exp(-self.r * self.T) * norm.cdf(-self.d2) / 100
+)
+
+return {
+    'delta': delta,
+    'gamma': gamma,
+    'vega': vega,
+    'theta': theta,
+    'rho': rho
+}
 
 
 # Example usage
 if __name__ == "__main__":
     print("=== Forward Contract ===\\n")
+
+forward = ForwardContract(
+    spot_price = 110.0,
+    forward_price = 112.0,
+    maturity_years = 0.5,
+    risk_free_rate = 0.04,
+    notional = 10_000_000
+)
+
+fair_price = forward.fair_forward_price()
+print(f"Fair forward price: {fair_price:.2f}")
+print(f"Agreed forward price: {forward.forward_price:.2f}")
     
-    forward = ForwardContract(
-        spot_price=110.0,
-        forward_price=112.0,
-        maturity_years=0.5,
-        risk_free_rate=0.04,
-        notional=10_000_000
-    )
-    
-    fair_price = forward.fair_forward_price()
-    print(f"Fair forward price: {fair_price:.2f}")
-    print(f"Agreed forward price: {forward.forward_price:.2f}")
-    
-    # Mark-to-market
-    mtm = forward.mark_to_market(current_forward=113.0)
-    print(f"MTM value: ${mtm:,.2f}")
-    
-    print("\\n=== Futures Contract ===\\n")
-    
-    futures = FuturesContract(
-        futures_price=110.0,
-        tick_size=0.015625,
-        tick_value=15.625,
-        contracts=10
-    )
+    # Mark - to - market
+mtm = forward.mark_to_market(current_forward = 113.0)
+print(f"MTM value: ${mtm:,.2f}")
+
+print("\\n=== Futures Contract ===\\n")
+
+futures = FuturesContract(
+    futures_price = 110.0,
+    tick_size = 0.015625,
+    tick_value = 15.625,
+    contracts = 10
+)
     
     # Daily settlement
-    pnl_day1 = futures.daily_settlement(new_price=110.5)
-    print(f"Day 1 P&L: ${pnl_day1:,.2f}")
-    
-    pnl_day2 = futures.daily_settlement(new_price=110.25)
-    print(f"Day 2 P&L: ${pnl_day2:,.2f}")
-    
-    print("\\n=== Options ===\\n")
-    
-    option = BlackScholesOption(
-        spot_price=110.0,
-        strike_price=112.0,
-        time_to_expiry=0.25,
-        risk_free_rate=0.04,
-        volatility=0.15
-    )
-    
-    call_price = option.price(OptionType.CALL)
-    put_price = option.price(OptionType.PUT)
-    
-    print(f"Call option price: ${call_price:.2f}")
-    print(f"Put option price: ${put_price:.2f}")
+pnl_day1 = futures.daily_settlement(new_price = 110.5)
+print(f"Day 1 P&L: ${pnl_day1:,.2f}")
+
+pnl_day2 = futures.daily_settlement(new_price = 110.25)
+print(f"Day 2 P&L: ${pnl_day2:,.2f}")
+
+print("\\n=== Options ===\\n")
+
+option = BlackScholesOption(
+    spot_price = 110.0,
+    strike_price = 112.0,
+    time_to_expiry = 0.25,
+    risk_free_rate = 0.04,
+    volatility = 0.15
+)
+
+call_price = option.price(OptionType.CALL)
+put_price = option.price(OptionType.PUT)
+
+print(f"Call option price: ${call_price:.2f}")
+print(f"Put option price: ${put_price:.2f}")
     
     # Greeks
-    call_greeks = option.greeks(OptionType.CALL)
-    
-    print("\\nCall Option Greeks:")
-    print(f"  Delta: {call_greeks['delta']:.4f}")
-    print(f"  Gamma: {call_greeks['gamma']:.4f}")
-    print(f"  Vega: ${call_greeks['vega']:.2f}")
-    print(f"  Theta: ${call_greeks['theta']:.2f}/day")
-    print(f"  Rho: ${call_greeks['rho']:.2f}")
+call_greeks = option.greeks(OptionType.CALL)
+
+print("\\nCall Option Greeks:")
+print(f"  Delta: {call_greeks['delta']:.4f}")
+print(f"  Gamma: {call_greeks['gamma']:.4f}")
+print(f"  Vega: ${call_greeks['vega']:.2f}")
+print(f"  Theta: ${call_greeks['theta']:.2f}/day")
+print(f"  Rho: ${call_greeks['rho']:.2f}")
 \`\`\`
 
 ---

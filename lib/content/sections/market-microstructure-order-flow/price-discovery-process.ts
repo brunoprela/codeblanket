@@ -176,8 +176,7 @@ trades = [
 ]
 
 result = glosten_harris_spread(trades)
-print(f"Spread: ${result['spread']: .4f
-}")
+print(f"Spread: \${result['spread']:.4f}")
 print(f"Adverse Selection: {result['adverse_selection_pct']:.1%}")
 # High adverse selection % → Many informed traders
 # Low adverse selection % → Mostly uninformed flow
@@ -660,6 +659,5 @@ for hour, qty in enumerate(schedule):
 6. **Flash crashes** represent price discovery breakdown (detected by high volatility, reversals)
 
 **Next Section**: Bid-ask spread decomposition - breaking down spread into order processing, inventory, and adverse selection components using Roll, Kyle, and Glosten-Harris models.
-`
+`,
 };
-

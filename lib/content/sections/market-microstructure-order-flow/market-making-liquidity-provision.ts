@@ -431,9 +431,8 @@ print("Avellaneda-Stoikov Market Making Simulation")
 print("=" * 70)
 print(f"Total trades executed: {len(mm.trades)}")
 print(f"Final inventory: {mm.inventory} shares")
-print(f"Final P&L: ${mm.get_pnl(pnl_df.iloc[-1]['midpoint']): .2f
-}")
-print(f"Average spread: ${pnl_df['spread'].mean():.4f}")
+print(f"Final P&L: \${mm.get_pnl(pnl_df.iloc[-1]['midpoint']):.2f}")
+print(f"Average spread: \${pnl_df['spread'].mean():.4f}")
 print(f"Max inventory: {pnl_df['inventory'].abs().max()} shares")
 print()
 
@@ -543,7 +542,8 @@ print("=" * 70)
 for key, value in analysis.items():
     if isinstance(value, float):
         if 'per_share' in key:
-            print(f"{key:>30}: ${value: .4f}")
+            print(f"{key:>30}: ${value: .4f
+}")
         elif 'margin' in key:
 print(f"{key:>30}: {value:.2f}%")
         else:

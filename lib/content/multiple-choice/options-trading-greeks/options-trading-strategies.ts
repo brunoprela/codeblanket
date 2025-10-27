@@ -1,7 +1,8 @@
 export const optionsTradingStrategiesMC = [
   {
     id: 'options-trading-strategies-mc-1',
-    question: 'A Bull Call Spread involves buying a lower strike call and selling a higher strike call. What is the primary advantage compared to buying a naked call?',
+    question:
+      'A Bull Call Spread involves buying a lower strike call and selling a higher strike call. What is the primary advantage compared to buying a naked call?',
     options: [
       'Unlimited profit potential instead of capped profit',
       'Lower capital requirement due to premium received from sold call offsetting cost',
@@ -32,7 +33,7 @@ export const optionsTradingStrategiesMC = [
       'When comparing a Short Put to a Bull Call Spread for a bullish outlook, the Short Put typically requires:',
     options: [
       'Much less capital because you receive a credit',
-      'No margin or collateral since it\'s a credit trade',
+      "No margin or collateral since it's a credit trade",
       'Significantly more capital (cash-secured or margin) but has positive theta',
       'The same capital as the Bull Call Spread',
     ],
@@ -66,7 +67,6 @@ export const optionsTradingStrategiesMC = [
     ],
     correctAnswer: 2,
     explanation:
-      'In HIGH IV environments (IV Rank > 75%), SELLING PREMIUM is most favorable (short strangles, iron condors, credit spreads). High IV means options are expensive, so you collect inflated premium. These strategies have positive theta (time decay) and negative vega (benefit when IV inevitably contracts back to the mean). Buying options in high IV is generally unfavorable because you\'re paying elevated prices, and IV contraction will hurt the position even if you\'re directionally correct.',
+      "In HIGH IV environments (IV Rank > 75%), SELLING PREMIUM is most favorable (short strangles, iron condors, credit spreads). High IV means options are expensive, so you collect inflated premium. These strategies have positive theta (time decay) and negative vega (benefit when IV inevitably contracts back to the mean). Buying options in high IV is generally unfavorable because you're paying elevated prices, and IV contraction will hurt the position even if you're directionally correct.",
   },
 ];
-

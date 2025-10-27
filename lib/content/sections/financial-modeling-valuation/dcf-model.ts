@@ -192,14 +192,13 @@ fcf = FCFCalculator.from_ebit(
     change_in_nwc=5_000_000   # $5M NWC increase
 )
 
-print(f"Unlevered Free Cash Flow: ${fcf:, .0f
-}")
+print(f"Unlevered Free Cash Flow: \${fcf:,.0f}")
 print(f"\\nBreakdown:")
-print(f"  NOPAT (EBIT × 0.79):      ${100_000_000 * 0.79:,.0f}")
-print(f"  + D&A:                     ${20_000_000:,.0f}")
-print(f"  - CapEx:                   -${30_000_000:,.0f}")
-print(f"  - ∆NWC:                    -${5_000_000:,.0f}")
-print(f"  = FCF:                     ${fcf:,.0f}")
+print(f"  NOPAT (EBIT × 0.79):      \${100_000_000 * 0.79:,.0f}")
+print(f"  + D&A:                     \${20_000_000:,.0f}")
+print(f"  - CapEx:                   -\${30_000_000:,.0f}")
+print(f"  - ∆NWC:                    -\${5_000_000:,.0f}")
+print(f"  = FCF:                     \${fcf:,.0f}")
 \`\`\`
 
 **Output:**
@@ -352,7 +351,7 @@ revenues = RevenueProjector.historical_growth(
 print("Revenue Projection ($ millions):")
 for year, rev in enumerate(revenues):
     growth = "—" if year == 0 else f"{(rev / revenues[year-1] - 1):.1%}"
-    print(f"  Year {year}: ${rev / 1_000_000:, .0f}M(Growth: { growth })")
+    print(f"  Year {year}: \${rev / 1_000_000:,.0f}M (Growth: {growth})")
 \`\`\`
 
 ### Operating Margins
@@ -603,7 +602,7 @@ g = 0.025  # 2.5% perpetual growth
 wacc = 0.095  # 9.5% WACC
 
 tv = terminal_value_perpetuity(fcf_year_10, g, wacc)
-print(f"Terminal Value (Perpetuity): ${tv:, .0f}")
+print(f"Terminal Value (Perpetuity): \${tv:,.0f}")
 print(f"Implied Exit Multiple: {tv / fcf_year_10:.1f}x")
 \`\`\`
 
@@ -646,12 +645,12 @@ ebitda_year_10 = 750_000_000  # $750M EBITDA
 exit_multiple = 12.0  # 12x EV/EBITDA (from comps)
 
 tv_multiple = terminal_value_exit_multiple(ebitda_year_10, exit_multiple)
-print(f"\\nTerminal Value (Exit Multiple): ${tv_multiple:, .0f}")
+print(f"\\nTerminal Value (Exit Multiple): \${tv_multiple:,.0f}")
 
 # Compare methods
 print(f"\\nComparison:")
-print(f"  Perpetuity Method: ${tv:,.0f}")
-print(f"  Exit Multiple:     ${tv_multiple:,.0f}")
+print(f"  Perpetuity Method: \${tv:,.0f}")
+print(f"  Exit Multiple:     \${tv_multiple:,.0f}")
 print(f"  Difference:        {abs(tv - tv_multiple) / tv:.1%}")
 \`\`\`
 
@@ -816,9 +815,9 @@ pv_cash_flows = discount_cash_flows(fcf_stream, wacc, mid_year_convention=True)
 
 print("\\nCash Flow Discounting:")
 for year, (fcf, pv) in enumerate(zip(fcf_stream, pv_cash_flows), start=1):
-    print(f"  Year {year}: FCF ${fcf}M → PV ${pv: .1f}M")
+    print(f"  Year {year}: FCF \${fcf}M → PV \${pv:.1f}M")
 
-print(f"\\nSum of PV(FCF): ${sum(pv_cash_flows):.1f}M")
+print(f"\\nSum of PV(FCF): \${sum(pv_cash_flows):.1f}M")
 \`\`\`
 
 ---
@@ -1019,18 +1018,18 @@ for key, value in results.items():
     if value is None:
         continue
     elif 'Value' in key or 'FCF' in key or 'Revenue' in key or 'Debt' in key or 'Assets' in key:
-        print(f"{key:.<40} ${value:> 15, .0f}")
+        print(f"{key:.<40} \${value:>15,.0f}")
     elif '%' in key:
-print(f"{key:.<40} {value:>15.1%}")
+        print(f"{key:.<40} {value:>15.1%}")
     elif 'Rate' in key or 'WACC' in key:
-print(f"{key:.<40} {value:>15.2%}")
+        print(f"{key:.<40} {value:>15.2%}")
     elif 'Shares' in key or 'Share' in key:
-if 'Per Share' in key:
-    print(f"{key:.<40} ${value:>15.2f}")
-else:
-print(f"{key:.<40} {value:>15,.0f}")
+        if 'Per Share' in key:
+            print(f"{key:.<40} \${value:>15.2f}")
+        else:
+            print(f"{key:.<40} {value:>15,.0f}")
     else:
-print(f"{key:.<40} {value:>15}")
+        print(f"{key:.<40} {value:>15}")
 
 # Sensitivity Analysis
 print("\\n\\nSensitivity Analysis: Enterprise Value ($ millions)")
@@ -1133,7 +1132,7 @@ print("\\nEnterprise to Equity Value Bridge ($ millions):")
 print("=" * 60)
 for key, value in bridge.items():
     sign = "+" if value > 0 else ""
-    print(f"{key:.<45} {sign}${value / 1_000_000:> 10, .0f}")
+    print(f"{key:.<45} {sign}\${value / 1_000_000:>10,.0f}")
 \`\`\`
 
 ---
@@ -1211,4 +1210,3 @@ The DCF is the **foundation of valuation**. Master this, and you can value anyth
 **Next Section**: [Comparable Company Analysis](./comparable-company-analysis) →
 `,
 };
-

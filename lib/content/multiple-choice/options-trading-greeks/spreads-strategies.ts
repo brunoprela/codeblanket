@@ -1,7 +1,8 @@
 export const spreadsStrategiesMC = [
   {
     id: 'spreads-strategies-mc-1',
-    question: 'What is the primary difference between a Bull Call Spread and a Bull Put Spread in terms of cash flow?',
+    question:
+      'What is the primary difference between a Bull Call Spread and a Bull Put Spread in terms of cash flow?',
     options: [
       'Both require paying a debit',
       'Bull Call Spread requires a debit (pay), Bull Put Spread generates a credit (receive)',
@@ -14,7 +15,8 @@ export const spreadsStrategiesMC = [
   },
   {
     id: 'spreads-strategies-mc-2',
-    question: 'In a Long Call Butterfly spread, where is the maximum profit achieved?',
+    question:
+      'In a Long Call Butterfly spread, where is the maximum profit achieved?',
     options: [
       'When the stock is at or below the lowest strike',
       'When the stock is exactly at the middle strike',
@@ -27,7 +29,8 @@ export const spreadsStrategiesMC = [
   },
   {
     id: 'spreads-strategies-mc-3',
-    question: 'What is the key advantage of an Iron Condor compared to an Iron Butterfly?',
+    question:
+      'What is the key advantage of an Iron Condor compared to an Iron Butterfly?',
     options: [
       'Higher maximum profit potential',
       'Wider profit range and higher probability of profit',
@@ -40,7 +43,8 @@ export const spreadsStrategiesMC = [
   },
   {
     id: 'spreads-strategies-mc-4',
-    question: 'In a Calendar Spread (Time Spread), what is the primary source of profit?',
+    question:
+      'In a Calendar Spread (Time Spread), what is the primary source of profit?',
     options: [
       'The stock making a large directional move',
       'Implied volatility decreasing significantly',
@@ -65,4 +69,3 @@ export const spreadsStrategiesMC = [
       'Bear Call Spread (sell lower strike call, buy higher strike call) has MAX LOSS when stock closes AT OR ABOVE THE HIGHER STRIKE. Max Loss = (Higher Strike - Lower Strike) - Credit Received. Example: Sell 100 call, buy 105 call, receive $2 credit → max loss = $5 - $2 = $3 (at $105+). Max profit = $2 credit (at $100 or below). This is a bearish/neutral strategy for credit collection.',
   },
 ];
-

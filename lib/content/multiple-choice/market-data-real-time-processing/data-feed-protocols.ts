@@ -36,7 +36,7 @@ export const dataFeedProtocolsMultipleChoice: MultipleChoiceQuestion[] = [
     options: [
       'No order for ref 12345 (fully executed)',
       'Order ref 12345: 300 shares remaining at bid',
-      'Order ref 12345: 500 shares at bid (execute doesn\'t change book)',
+      "Order ref 12345: 500 shares at bid (execute doesn't change book)",
       'Order ref 12345: 200 shares executed, 300 shares cancelled',
     ],
     correctAnswer: 1,
@@ -55,21 +55,20 @@ export const dataFeedProtocolsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Send a Resend Request (MsgType 2) for sequences 1-4. FIX session management requires continuous sequence numbers - gaps indicate missed messages. The broker starting at sequence 5 suggests either: (1) They have state from a previous session, (2) They sent messages 1-4 before Logon (unusual), (3) Network issue caused missed messages. Requesting resend allows gap recovery. If broker responds with Gap Fill messages or actual messages 1-4, your sequence tracking synchronizes. If broker cannot resend (e.g., new session), they should respond with Gap Fill (MsgType 4) indicating sequences 1-4 don\'t exist. Never accept gaps silently - this violates FIX protocol and causes order management issues (missed fills, duplicate orders). Production systems maintain message store (persisted to disk) for exactly this purpose. Option A (accepting gap) risks missing important messages like execution reports. Option B (logout) is too aggressive - try recovery first. Option D (reset expectations) loses audit trail.',
+      "Send a Resend Request (MsgType 2) for sequences 1-4. FIX session management requires continuous sequence numbers - gaps indicate missed messages. The broker starting at sequence 5 suggests either: (1) They have state from a previous session, (2) They sent messages 1-4 before Logon (unusual), (3) Network issue caused missed messages. Requesting resend allows gap recovery. If broker responds with Gap Fill messages or actual messages 1-4, your sequence tracking synchronizes. If broker cannot resend (e.g., new session), they should respond with Gap Fill (MsgType 4) indicating sequences 1-4 don't exist. Never accept gaps silently - this violates FIX protocol and causes order management issues (missed fills, duplicate orders). Production systems maintain message store (persisted to disk) for exactly this purpose. Option A (accepting gap) risks missing important messages like execution reports. Option B (logout) is too aggressive - try recovery first. Option D (reset expectations) loses audit trail.",
   },
   {
     id: 'data-feed-protocols-mc-5',
     question:
-      'A trading firm is choosing between direct exchange feeds (ITCH/FAST) vs vendor feeds (Bloomberg/Refinitiv) for market data. Direct feeds offer 1-10 μs latency but cost $300K setup + $50K/month. Vendor feeds offer 10-100 ms latency at $0 setup + $30K/month. The firm\'s fastest strategy has 5ms reaction time. Which should they choose?',
+      "A trading firm is choosing between direct exchange feeds (ITCH/FAST) vs vendor feeds (Bloomberg/Refinitiv) for market data. Direct feeds offer 1-10 μs latency but cost $300K setup + $50K/month. Vendor feeds offer 10-100 ms latency at $0 setup + $30K/month. The firm's fastest strategy has 5ms reaction time. Which should they choose?",
     options: [
       'Direct feeds - always choose lowest latency',
-      'Vendor feeds - their strategy can\'t exploit sub-ms latency',
+      "Vendor feeds - their strategy can't exploit sub-ms latency",
       'Direct feeds - the cost difference is negligible for a trading firm',
       'Vendor feeds initially, upgrade to direct feeds later if needed',
     ],
     correctAnswer: 1,
     explanation:
-      'Vendor feeds are the correct choice. The firm\'s fastest strategy has 5ms (5,000 μs) reaction time, so sub-10μs data latency provides no benefit - the strategy cannot react faster than 5ms regardless. Direct feeds would save 90-99 μs (0.09-0.099 ms), which is 2% of the 5ms reaction time - negligible. Cost analysis: Direct feeds: $300K + ($50K × 12) = $900K first year. Vendor feeds: $0 + ($30K × 12) = $360K first year. Savings: $540K/year. This money is better spent on strategy research or infrastructure. Direct feeds only make sense for HFT strategies with < 100 μs reaction time, where every microsecond counts. At 5ms reaction time, the bottleneck is strategy logic, not data latency. Many firms waste money on ultra-low-latency feeds they cannot exploit. Correct approach: Start with vendor feeds, measure strategy performance, upgrade to direct feeds only if data latency is proven bottleneck (profile your system first). Exception: Market making strategies that need full order book depth may require ITCH regardless of latency.',
+      "Vendor feeds are the correct choice. The firm's fastest strategy has 5ms (5,000 μs) reaction time, so sub-10μs data latency provides no benefit - the strategy cannot react faster than 5ms regardless. Direct feeds would save 90-99 μs (0.09-0.099 ms), which is 2% of the 5ms reaction time - negligible. Cost analysis: Direct feeds: $300K + ($50K × 12) = $900K first year. Vendor feeds: $0 + ($30K × 12) = $360K first year. Savings: $540K/year. This money is better spent on strategy research or infrastructure. Direct feeds only make sense for HFT strategies with < 100 μs reaction time, where every microsecond counts. At 5ms reaction time, the bottleneck is strategy logic, not data latency. Many firms waste money on ultra-low-latency feeds they cannot exploit. Correct approach: Start with vendor feeds, measure strategy performance, upgrade to direct feeds only if data latency is proven bottleneck (profile your system first). Exception: Market making strategies that need full order book depth may require ITCH regardless of latency.",
   },
 ];
-
