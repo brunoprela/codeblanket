@@ -843,21 +843,14 @@ for file, file_edits in edits.items():
 1. **Analyze before refactoring** - understand dependencies
 2. **Update all references** automatically
 3. **Preserve behavior** - only change structure
-4. **Test after refactoring**
-5. **Use transactional application** with rollback
+4. **Test after refactoring**5. **Use transactional application** with rollback
 6. **Generate descriptive names** for extracted functions
 7. **Maintain code style** throughout
 8. **Update imports** as needed
 
 ### ❌ DON'T:
-1. **Refactor without understanding context**
-2. **Break existing functionality**
-3. **Rename without updating all references**
-4. **Extract without proper parameter analysis**
-5. **Skip validation** after changes
-6. **Ignore type information**
-7. **Make changes without backups**
-8. **Forget to update documentation**
+1. **Refactor without understanding context**2. **Break existing functionality**3. **Rename without updating all references**4. **Extract without proper parameter analysis**5. **Skip validation** after changes
+6. **Ignore type information**7. **Make changes without backups**8. **Forget to update documentation**
 
 ## Next Steps
 

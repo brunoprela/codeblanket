@@ -375,9 +375,7 @@ transactions
 
 Flink provides **exactly-once processing guarantees** through checkpointing.
 
-**How it works:**
-1. Every N seconds (e.g., 60s), Flink takes a **checkpoint**
-2. Checkpoint captures:
+**How it works:**1. Every N seconds (e.g., 60s), Flink takes a **checkpoint**2. Checkpoint captures:
    - Current offset in Kafka
    - All operator state (totalSpent, recentTransactions, etc.)
    - In-flight records

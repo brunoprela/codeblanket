@@ -1,9 +1,9 @@
 export const cointegrationPairsTrading = {
-    title: 'Cointegration and Pairs Trading',
-    slug: 'cointegration-pairs-trading',
-    description:
-        'Master cointegration theory and build profitable pairs trading strategies',
-    content: `
+  title: 'Cointegration and Pairs Trading',
+  slug: 'cointegration-pairs-trading',
+  description:
+    'Master cointegration theory and build profitable pairs trading strategies',
+  content: `
 # Cointegration and Pairs Trading
 
 ## Introduction: Beyond Correlation
@@ -535,9 +535,7 @@ print(f"Risk: {position['risk_percentage']:.2f}% of portfolio")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Cointegration ≠ Correlation**: Long-run equilibrium vs co-movement
+**Key Takeaways:**1. **Cointegration ≠ Correlation**: Long-run equilibrium vs co-movement
 2. **Engle-Granger**: Two-step test for pair cointegration
 3. **Johansen**: Multiple cointegration relationships
 4. **Pairs Trading**: Market-neutral, mean-reversion strategy

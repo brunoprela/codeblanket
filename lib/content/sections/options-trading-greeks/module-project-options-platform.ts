@@ -1,7 +1,7 @@
 export const moduleProjectOptionsPlatform = {
-    title: 'Module Project: Options Pricing & Trading Platform',
-    id: 'module-project-options-platform',
-    content: `
+  title: 'Module Project: Options Pricing & Trading Platform',
+  id: 'module-project-options-platform',
+  content: `
 # Module Project: Options Pricing & Trading Platform
 
 ## Project Overview
@@ -159,20 +159,19 @@ if __name__ == "__main__":
     print("OPTIONS PRICING ENGINE - TEST")
     print("=" * 70)
     print(f"\\nATM Call (S=$100, K=$100, T=30d, σ=25%):")
-    print(f"  Price: ${option.price: .4f
-}")
+    print(f"  Price: \${option.price:.4f})"
 print(f"  Delta: {option.delta:.4f}")
 print(f"  Gamma: {option.gamma:.4f}")
-print(f"  Theta: ${option.theta:.4f}/day")
-print(f"  Vega: ${option.vega:.4f} per 1% IV")
-print(f"  Rho: ${option.rho:.4f} per 1% rate")
+print(f"  Theta: \${option.theta:.4f}/day")
+print(f"  Vega: \${option.vega:.4f} per 1% IV")
+print(f"  Rho: \${option.rho:.4f} per 1% rate")
     
     # Calculate IV
 market_price = 3.50
 iv = engine.calculate_implied_volatility(
     market_price = market_price, S = 100, K = 100, T = 30 / 365, option_type = 'call'
 )
-print(f"\\nImplied Volatility for ${market_price} market price: {iv*100:.2f}%")
+print(f"\\nImplied Volatility for \${market_price} market price: {iv*100:.2f}%")
 \`\`\`
 
 ---
@@ -444,11 +443,11 @@ class Portfolio:
             
             results.append({
                 'Scenario': scenario['name'],
-                'Price': f"${new_price: .2f}",
-'Delta P&L': f"${delta_pnl:,.0f}",
-    'Gamma P&L': f"${gamma_pnl:,.0f}",
-        'Vega P&L': f"${vega_pnl:,.0f}",
-            'Total P&L': f"${total_pnl:,.0f}",
+                'Price': f"\${new_price:.2f}",
+'Delta P&L': f"\${delta_pnl:,.0f}",
+    'Gamma P&L': f"\${gamma_pnl:,.0f}",
+        'Vega P&L': f"\${vega_pnl:,.0f}",
+            'Total P&L': f"\${total_pnl:,.0f}",
                 'Portfolio %': f"{(total_pnl/self.capital*100):.2f}%"
             })
 
@@ -469,7 +468,7 @@ alerts = portfolio.check_risk_limits(greeks)
 print("=" * 70)
 print("PORTFOLIO MANAGER TEST")
 print("=" * 70)
-print(f"\\nPortfolio Capital: ${portfolio.capital:,.0f}")
+print(f"\\nPortfolio Capital: \${portfolio.capital:,.0f}")
 print(f"Positions: {len(portfolio.positions)}")
 print(f"\\nPortfolio Greeks:")
 for greek, value in greeks.items():
@@ -580,4 +579,3 @@ class Backtester:
 This is your capstone project - demonstrate mastery of all Module 8 concepts!
 `,
 };
-

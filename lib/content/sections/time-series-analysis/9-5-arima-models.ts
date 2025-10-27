@@ -370,9 +370,7 @@ Systematic approach to ARIMA modeling:
 
 ### Step 1: Identification
 
-**Determine (p, d, q):**
-
-1. **Find d**: Test stationarity, difference if needed
+**Determine (p, d, q):**1. **Find d**: Test stationarity, difference if needed
 2. **Find p**: Look at PACF of differenced series
 3. **Find q**: Look at ACF of differenced series
 
@@ -677,9 +675,7 @@ for i, ret in enumerate(results['return_forecast_pct'], 1):
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **ARIMA = ARMA + Differencing**: Handles non-stationary data
+**Key Takeaways:**1. **ARIMA = ARMA + Differencing**: Handles non-stationary data
 2. **Differencing order (d)**: Determined by stationarity tests
 3. **Box-Jenkins**: Systematic modeling methodology
 4. **SARIMA**: Adds seasonal components for periodic patterns

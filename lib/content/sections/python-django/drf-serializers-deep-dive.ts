@@ -710,9 +710,7 @@ class ArticleSerializer(DynamicFieldsModelSerializer):
 
 ## Summary
 
-**Key Serializer Concepts:**
-
-1. **ModelSerializer**: Automatic serialization from Django models
+**Key Serializer Concepts:**1. **ModelSerializer**: Automatic serialization from Django models
 2. **SerializerMethodField**: Custom computed fields
 3. **Nested Serializers**: Handle related objects
 4. **Validation**: Field-level and object-level validation

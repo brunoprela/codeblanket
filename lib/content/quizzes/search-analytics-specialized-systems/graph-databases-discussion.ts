@@ -27,8 +27,7 @@ LIMIT 10
 - Neo4j: O(friends × friends) = O(200 × 200) = 40,000 traversals (< 50ms)
 - PostgreSQL: Multiple self-joins on 100M × 200 = 20B edges (timeout!)
 
-**Why Neo4j is faster:**
-1. **Index-free adjacency**: Each node stores pointers to connected nodes
+**Why Neo4j is faster:**1. **Index-free adjacency**: Each node stores pointers to connected nodes
 2. **Native traversal**: Follow pointers, no JOIN operations
 3. **Local operation**: Only touches friends and friends-of-friends
 
@@ -85,8 +84,7 @@ WHERE ALL(rel IN relationships (path) WHERE rel.amount > 1000)
 RETURN path
 \`\`\`
 
-**Why Graph Databases Excel:**
-1. **Pattern matching**: Cypher naturally expresses "accounts connected via shared resources"
+**Why Graph Databases Excel:**1. **Pattern matching**: Cypher naturally expresses "accounts connected via shared resources"
 2. **Variable-depth traversal**: *1..3 finds paths of 1-3 hops
 3. **Relationship types**: Multiple relationship types in single query
 4. **Fast traversal**: Finds rings in seconds vs hours in SQL
@@ -130,8 +128,7 @@ ORDER BY frequency DESC, avg_rating DESC
 LIMIT 10
 \`\`\`
 
-**How it works:**
-1. Find users who bought target product
+**How it works:**1. Find users who bought target product
 2. Find other products those users bought
 3. Count frequency and average rating
 4. Return top 10
@@ -158,8 +155,7 @@ ORDER BY frequency DESC
 LIMIT 10
 \`\`\`
 
-**How it works:**
-1. Find my purchased products
+**How it works:**1. Find my purchased products
 2. Find users who bought ≥3 of the same products (similar users)
 3. Find products those similar users bought that I haven't
 4. Return top 10

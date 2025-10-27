@@ -24,7 +24,7 @@ def reverse (head):
 def reverse (head):
     if not head or not head.next:  # Check edge cases
         return head
-    
+
     prev = None
     curr = head
     while curr:
@@ -99,7 +99,7 @@ def remove_val (head, val):
     # Special case for head
     while head and head.val == val:
         head = head.next
-    
+
     # Regular case
     curr = head
     while curr and curr.next:
@@ -116,13 +116,13 @@ def remove_val (head, val):
     dummy = ListNode(0)
     dummy.next = head
     curr = dummy
-    
+
     while curr.next:
         if curr.next.val == val:
             curr.next = curr.next.next
         else:
             curr = curr.next
-    
+
     return dummy.next  # Uniform logic!
 \`\`\`
 

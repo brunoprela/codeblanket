@@ -167,8 +167,7 @@ sell_order = self.sell_orders[0]
             
             # Check if orders can trade at midpoint
 if buy_order.max_price and buy_order.max_price < midpoint:
-print(f"  Buy order ${buy_order.max_price: .2f
-} limit <midpoint ${ midpoint: .2f }, skipping")
+print(f"  Buy order ${buy_order.max_price:.2f} limit <midpoint ${ midpoint:.2f }, skipping")
 self.buy_orders.pop(0)
 continue
 
@@ -569,7 +568,7 @@ class IEXSpeedBump:
         self.current_nbbo = new_nbbo
         
         print(f"\\n[IEX] NBBO Update:")
-        print(f"  Old: ${old_nbbo.bid: .2f} x ${ old_nbbo.ask: .2f } ")
+        print(f"  Old: ${old_nbbo.bid:.2f} x ${ old_nbbo.ask:.2f } ")
 print(f"  New: ${new_nbbo.bid:.2f} x ${new_nbbo.ask:.2f}")
         
         # Cancel resting orders that are now at stale prices

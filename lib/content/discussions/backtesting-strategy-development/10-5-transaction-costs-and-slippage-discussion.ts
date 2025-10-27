@@ -1,13 +1,13 @@
 import { Content } from '@/lib/types';
 
 const transactionCostsAndSlippageDiscussion: Content = {
-    title: 'Transaction Costs and Slippage - Discussion Questions',
-    description:
-        'Deep-dive discussion questions on transaction cost modeling, slippage estimation, and production TCA systems',
-    sections: [
-        {
-            title: 'Discussion Questions',
-            content: `
+  title: 'Transaction Costs and Slippage - Discussion Questions',
+  description:
+    'Deep-dive discussion questions on transaction cost modeling, slippage estimation, and production TCA systems',
+  sections: [
+    {
+      title: 'Discussion Questions',
+      content: `
 # Discussion Questions: Transaction Costs and Slippage
 
 ## Question 1: Design a Production-Grade TCA System
@@ -1512,8 +1512,8 @@ To prevent and detect cost model degradation:
 
 The key is to catch degradation early before it impacts P&L significantly. A 30-40% underestimation error should never persist for more than a few days with proper monitoring.
 `,
-        },
-    ],
+    },
+  ],
 };
 
 export default transactionCostsAndSlippageDiscussion;

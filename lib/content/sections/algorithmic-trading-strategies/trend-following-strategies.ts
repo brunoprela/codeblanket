@@ -1146,8 +1146,7 @@ class RobustTrendFollowing:
 - Over-leveraged (risk too much per trade)
 - Single market exposure
 
-**Critical Success Factors:**
-1. **Risk Management**: More important than entries
+**Critical Success Factors:**1. **Risk Management**: More important than entries
 2. **Discipline**: Follow system without emotion
 3. **Diversification**: Multiple uncorrelated markets
 4. **Patience**: Big trends are rare, wait for them

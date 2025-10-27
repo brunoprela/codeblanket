@@ -53,9 +53,7 @@ What options do we have at each step?
 
 **Interview Communication:**
 
-**Example: Generate Subsets**
-
-1. **Clarify:**
+**Example: Generate Subsets**1. **Clarify:**
    - "Should the empty set be included?" (Yes)
    - "Are there duplicates in input?" (Affects algorithm)
    - "Does order matter?" (Usually no for subsets)
@@ -109,9 +107,7 @@ What options do we have at each step?
 
 ---
 
-**Practice Plan:**
-
-1. **Basics (Day 1-2):**
+**Practice Plan:**1. **Basics (Day 1-2):**
    - Subsets
    - Permutations
    - Combinations

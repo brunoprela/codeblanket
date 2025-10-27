@@ -1,7 +1,7 @@
 export const positionTrackingReconciliation = {
-    title: 'Position Tracking and Reconciliation',
-    id: 'position-tracking-reconciliation',
-    content: `
+  title: 'Position Tracking and Reconciliation',
+  id: 'position-tracking-reconciliation',
+  content: `
 # Position Tracking and Reconciliation
 
 ## Introduction
@@ -212,8 +212,7 @@ class PositionTracker:
         
         print(f"[PositionTracker] {symbol} {side} {quantity} @ {price}")
         print(f"  New position: {position.quantity} @ avg {position.avg_cost}")
-        print(f"  Realized P&L: ${position.realized_pnl: .2f
-}")
+        print(f"  Realized P&L: \${position.realized_pnl:.2f})"
     
     def update_market_price(self, symbol: str, price: Decimal):
 """Update market price for symbol"""
@@ -312,17 +311,17 @@ for position in sorted(self.positions.values(), key = lambda p: p.symbol):
                     f"{position.account:<15} "
                     f"{position.strategy:<15} "
                     f"{float(position.quantity):>10.2f} "
-                    f"${float(position.avg_cost):>11.2f} "
-                    f"${float(position.unrealized_pnl):>14.2f} "
-                    f"${float(position.realized_pnl):>14.2f}"
+                    f"\${float(position.avg_cost):>11.2f} "
+                    f"\${float(position.unrealized_pnl):>14.2f} "
+                    f"\${float(position.realized_pnl):>14.2f}"
         )
 
 summary = self.get_portfolio_summary()
 print("-" * 100)
 print(f"Total: {summary['total_positions']} positions, "
-              f"Realized: ${summary['total_realized_pnl']:.2f}, "
-              f"Unrealized: ${summary['total_unrealized_pnl']:.2f}, "
-              f"Total P&L: ${summary['total_pnl']:.2f}")
+              f"Realized: \${summary['total_realized_pnl']:.2f}, "
+              f"Unrealized: \${summary['total_unrealized_pnl']:.2f}, "
+              f"Total P&L: \${summary['total_pnl']:.2f}")
 
 
 # Example usage
@@ -358,8 +357,8 @@ tracker.print_positions()
     # Aggregate view
 print("\\n5. Aggregate position:")
 agg = tracker.get_aggregate_position("AAPL")
-print(f"  Total AAPL: {agg.quantity} shares @ avg ${agg.avg_cost:.2f}")
-print(f"  Total P&L: ${agg.total_pnl():.2f}")
+print(f"  Total AAPL: {agg.quantity} shares @ avg \${agg.avg_cost:.2f}")
+print(f"  Total P&L: \${agg.total_pnl():.2f}")
 
 # asyncio.run(position_tracking_example())
 \`\`\`
@@ -605,8 +604,7 @@ async def reconciliation_example():
 
 ## Summary
 
-**Position Tracking Essentials:**
-1. **Real-time updates**: Process fills immediately
+**Position Tracking Essentials:**1. **Real-time updates**: Process fills immediately
 2. **Multi-dimensional**: Track by account, strategy, trader
 3. **Cost basis**: Weighted average for P&L accuracy
 4. **Mark-to-market**: Update unrealized P&L continuously
@@ -622,4 +620,3 @@ async def reconciliation_example():
 **Next Section**: Module 14.7 - P&L Calculation (Real-time and EOD)
 `,
 };
-

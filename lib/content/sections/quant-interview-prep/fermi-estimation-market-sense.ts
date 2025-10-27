@@ -15,8 +15,7 @@ Fermi estimation problems test your ability to make reasonable approximations wi
 - Communicating your reasoning clearly
 - Demonstrating market intuition
 
-**Why Trading Firms Test This:**
-1. **Real-world trading** requires constant estimation (order size, market impact, risk)
+**Why Trading Firms Test This:**1. **Real-world trading** requires constant estimation (order size, market impact, risk)
 2. **Quick decision-making** under incomplete information
 3. **Structured thinking** - can you decompose problems?
 4. **Market sense** - do you understand how markets work?
@@ -485,10 +484,7 @@ Interpretation:
 ### Sanity Checks
 
 Always ask:
-1. **Is this the right order of magnitude?**
-2. **Does this pass common sense?**
-3. **Can I verify with a different approach?**
-4. **What are the extreme cases?**
+1. **Is this the right order of magnitude?**2. **Does this pass common sense?**3. **Can I verify with a different approach?**4. **What are the extreme cases?**
 
 ---
 
@@ -542,18 +538,15 @@ Always ask:
 
 Try these on your own:
 
-**Easy:**
-1. Daily revenue of a McDonald's location
+**Easy:**1. Daily revenue of a McDonald's location
 2. Number of iPhones sold per year
 3. Total length of roads in the US
 
-**Medium:**
-4. AUM (assets under management) of Vanguard
+**Medium:**4. AUM (assets under management) of Vanguard
 5. Daily P&L of a volatility trader
 6. Number of algorithmic trading firms
 
-**Hard:**
-7. Optimal number of market makers in SPY
+**Hard:**7. Optimal number of market makers in SPY
 8. Expected slippage for a $1B block trade
 9. Total clearing fees paid by all US traders annually
 
@@ -563,8 +556,7 @@ Try these on your own:
 
 ## Summary
 
-**Key Skills:**
-1. Break down complex problems
+**Key Skills:**1. Break down complex problems
 2. Make reasonable assumptions
 3. Estimate efficiently
 4. Sanity check results

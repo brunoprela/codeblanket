@@ -1,7 +1,7 @@
 export const dcfModel = {
-    title: 'DCF (Discounted Cash Flow) Model',
-    id: 'dcf-model',
-    content: `
+  title: 'DCF (Discounted Cash Flow) Model',
+  id: 'dcf-model',
+  content: `
 # DCF (Discounted Cash Flow) Model
 
 ## Introduction

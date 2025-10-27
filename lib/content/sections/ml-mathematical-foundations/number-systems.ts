@@ -87,7 +87,7 @@ print(f"As decimal: {float (r1 + r2)}")  # 1.25
 
 **Definition**: The set of all rational and irrational numbers. Includes all points on the number line.
 
-**Examples**: 
+**Examples**:
 - Rational: 1, -5, 1/2, 0.333...
 - Irrational: π, e, √2, √3
 

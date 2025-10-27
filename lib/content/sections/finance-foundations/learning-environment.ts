@@ -344,7 +344,7 @@ print(f"USDT: {balance['USDT']['free']}")
 
 # Place order
 order = exchange.create_market_buy_order('BTC/USDT', 0.001)  # 0.001 BTC
-print(f"Bought at \${order['average']}")
+print(f"Bought at \\\${order['average']}")
 \`\`\`
 
 ---

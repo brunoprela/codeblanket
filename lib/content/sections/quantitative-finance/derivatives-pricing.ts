@@ -14,8 +14,7 @@ Derivatives are financial contracts whose value derives from an underlying asset
 - **Options**: Already covered in Options Fundamentals and Black-Scholes
 - **Exotic options**: Path-dependent, barrier, Asian, lookback options
 
-**Pricing principles:**
-1. **No-arbitrage**: Prevents risk-free profits (law of one price)
+**Pricing principles:**1. **No-arbitrage**: Prevents risk-free profits (law of one price)
 2. **Replication**: Derivatives can be replicated with underlying assets
 3. **Risk-neutral valuation**: Price as expected payoff under risk-neutral measure
 

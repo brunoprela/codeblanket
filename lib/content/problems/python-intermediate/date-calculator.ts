@@ -12,8 +12,7 @@ export const intermediate_date_calculatorProblem: Problem = {
   difficulty: 'Medium',
   description: `Create a utility for common date calculations.
 
-**Functions to Implement:**
-1. Calculate age from birthdate
+**Functions to Implement:**1. Calculate age from birthdate
 2. Find business days between two dates (exclude weekends)
 3. Get all dates in a month
 4. Check if date is in range

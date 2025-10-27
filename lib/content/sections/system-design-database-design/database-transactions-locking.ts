@@ -73,12 +73,12 @@ When multiple transactions run concurrently, several anomalies can occur:
 \`\`\`
 Transaction A                   Transaction B
 BEGIN                           BEGIN
-UPDATE accounts                 
-  SET balance = 500             
-  WHERE id = 1                  
+UPDATE accounts
+  SET balance = 500
+  WHERE id = 1
                                 SELECT balance FROM accounts WHERE id = 1
                                 -- Reads 500 (uncommitted)
-ROLLBACK                        
+ROLLBACK
 -- Balance is actually 1000     -- But B thinks it's 500 (dirty read!)
 \`\`\`
 
@@ -91,14 +91,14 @@ ROLLBACK
 \`\`\`
 Transaction A                   Transaction B
 BEGIN                           BEGIN
-SELECT balance FROM accounts    
-  WHERE id = 1                  
--- Reads 1000                   
+SELECT balance FROM accounts
+  WHERE id = 1
+-- Reads 1000
                                 UPDATE accounts SET balance = 500 WHERE id = 1
                                 COMMIT
-SELECT balance FROM accounts    
-  WHERE id = 1                  
--- Reads 500                    
+SELECT balance FROM accounts
+  WHERE id = 1
+-- Reads 500
 -- Same query, different result!
 \`\`\`
 
@@ -111,13 +111,13 @@ SELECT balance FROM accounts
 \`\`\`
 Transaction A                   Transaction B
 BEGIN                           BEGIN
-SELECT COUNT(*) FROM orders     
-  WHERE user_id = 123           
--- Returns 5                    
+SELECT COUNT(*) FROM orders
+  WHERE user_id = 123
+-- Returns 5
                                 INSERT INTO orders (user_id, ...) VALUES (123, ...)
                                 COMMIT
-SELECT COUNT(*) FROM orders     
-  WHERE user_id = 123           
+SELECT COUNT(*) FROM orders
+  WHERE user_id = 123
 -- Returns 6 (phantom row appeared!)
 \`\`\`
 
@@ -396,10 +396,10 @@ COMMIT;
 \`\`\`sql
 -- Job queue: Get next available job (skip locked ones)
 BEGIN;
-SELECT * FROM jobs 
-WHERE status = 'pending' 
-ORDER BY created_at 
-LIMIT 1 
+SELECT * FROM jobs
+WHERE status = 'pending'
+ORDER BY created_at
+LIMIT 1
 FOR UPDATE SKIP LOCKED;
 
 -- Process job...
@@ -497,9 +497,9 @@ def transfer_with_retry (from_account, to_account, amount, max_retries=3):
     for attempt in range (max_retries):
         try:
             with db.transaction():
-                db.execute("UPDATE accounts SET balance = balance - %s WHERE id = %s", 
+                db.execute("UPDATE accounts SET balance = balance - %s WHERE id = %s",
                           (amount, from_account))
-                db.execute("UPDATE accounts SET balance = balance + %s WHERE id = %s", 
+                db.execute("UPDATE accounts SET balance = balance + %s WHERE id = %s",
                           (amount, to_account))
                 return True
         except DeadlockDetected:
@@ -554,8 +554,8 @@ SELECT product_id, stock_quantity, version FROM products WHERE product_id = 123;
 new_quantity = stock_quantity - 1
 
 -- Update with version check
-UPDATE products 
-SET stock_quantity = new_quantity, version = version + 1 
+UPDATE products
+SET stock_quantity = new_quantity, version = version + 1
 WHERE product_id = 123 AND version = 5;
 
 -- Check affected rows
@@ -595,16 +595,16 @@ CREATE TABLE products (
 -- Application code
 def update_product (product_id, new_data):
     product = db.query("SELECT * FROM products WHERE product_id = %s", product_id)
-    
+
     # User modifies data...
-    
+
     # Update with version check
     result = db.execute("""
-        UPDATE products 
-        SET name = %s, stock_quantity = %s, version = version + 1 
+        UPDATE products
+        SET name = %s, stock_quantity = %s, version = version + 1
         WHERE product_id = %s AND version = %s
     """, (new_data.name, new_data.stock, product_id, product.version))
-    
+
     if result.rowcount == 0:
         raise ConcurrentModificationError("Product was modified by another user")
 \`\`\`
@@ -633,7 +633,7 @@ BEGIN;
 SELECT stock_quantity FROM products WHERE product_id = 123 FOR UPDATE;
 
 IF stock_quantity >= order_quantity THEN
-    UPDATE products SET stock_quantity = stock_quantity - order_quantity 
+    UPDATE products SET stock_quantity = stock_quantity - order_quantity
     WHERE product_id = 123;
     -- Create order...
     COMMIT;
@@ -651,8 +651,8 @@ SELECT stock_quantity FROM products WHERE product_id = 123;
 -- Create order...
 
 -- Atomic decrement with check
-UPDATE products 
-SET stock_quantity = stock_quantity - order_quantity 
+UPDATE products
+SET stock_quantity = stock_quantity - order_quantity
 WHERE product_id = 123 AND stock_quantity >= order_quantity;
 
 IF affected_rows = 0 THEN
@@ -708,14 +708,14 @@ EXCEPTION WHEN lock_not_available THEN
 -- Worker pulls next available job
 BEGIN;
 
-SELECT * FROM jobs 
-WHERE status = 'pending' 
-ORDER BY priority DESC, created_at ASC 
-LIMIT 1 
+SELECT * FROM jobs
+WHERE status = 'pending'
+ORDER BY priority DESC, created_at ASC
+LIMIT 1
 FOR UPDATE SKIP LOCKED;
 
 -- Update job status
-UPDATE jobs SET status = 'processing', worker_id = current_worker 
+UPDATE jobs SET status = 'processing', worker_id = current_worker
 WHERE job_id = selected_job_id;
 
 COMMIT;
@@ -749,8 +749,8 @@ CREATE TABLE counters (
 );
 
 -- Increment random shard (reduces contention)
-UPDATE counters 
-SET count = count + 1 
+UPDATE counters
+SET count = count + 1
 WHERE counter_id = 'page_views' AND shard_id = RANDOM_INT(0, 9);
 
 -- Read total (sum all shards)
@@ -764,8 +764,7 @@ SELECT SUM(count) FROM counters WHERE counter_id = 'page_views';
 - **Repeatable Read:** Financial reports, multi-step calculations needing consistency
 - **Serializable:** Critical operations where any anomaly is unacceptable (banking, booking)
 
-**Q: "How do you prevent deadlocks?"**
-1. Acquire locks in consistent order
+**Q: "How do you prevent deadlocks?"**1. Acquire locks in consistent order
 2. Keep transactions short
 3. Use lower isolation levels when possible
 4. Implement retry logic with exponential backoff
@@ -787,14 +786,7 @@ SELECT SUM(count) FROM counters WHERE counter_id = 'page_views';
 
 1. **Transactions ensure ACID properties** (atomicity, consistency, isolation, durability)
 2. **Isolation levels trade consistency for performance** (Read Committed → Serializable)
-3. **Read Committed is default and suitable for most applications**
-4. **Serializable provides strongest guarantees but lowest performance**
-5. **Locks prevent conflicts: Shared (read) vs Exclusive (write)**
-6. **Row-level locks enable high concurrency; table locks for batch operations**
-7. **Deadlocks occur when transactions wait in a cycle; database auto-resolves by aborting one**
-8. **Prevent deadlocks: consistent lock order, short transactions, retry logic**
-9. **Pessimistic locking: acquire locks early (high contention)**
-10. **Optimistic locking: detect conflicts at commit (low contention, higher concurrency)**
+3. **Read Committed is default and suitable for most applications**4. **Serializable provides strongest guarantees but lowest performance**5. **Locks prevent conflicts: Shared (read) vs Exclusive (write)**6. **Row-level locks enable high concurrency; table locks for batch operations**7. **Deadlocks occur when transactions wait in a cycle; database auto-resolves by aborting one**8. **Prevent deadlocks: consistent lock order, short transactions, retry logic**9. **Pessimistic locking: acquire locks early (high contention)**10. **Optimistic locking: detect conflicts at commit (low contention, higher concurrency)**
 
 ## Summary
 

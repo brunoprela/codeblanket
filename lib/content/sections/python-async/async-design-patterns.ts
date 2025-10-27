@@ -55,7 +55,7 @@ async def producer (queue, n_items):
         await queue.put (item)
         print(f"Produced {item}")
         await asyncio.sleep (random.uniform(0.1, 0.5))
-    
+
     # Signal completion
     await queue.put(None)
 
@@ -63,19 +63,19 @@ async def consumer (queue, name):
     """Consume items"""
     while True:
         item = await queue.get()
-        
+
         if item is None:
             # End signal
             await queue.put(None)  # Pass to other consumers
             break
-        
+
         print(f"{name} consuming {item}")
         await asyncio.sleep (random.uniform(0.2, 0.6))
         queue.task_done()
 
 async def main():
     queue = asyncio.Queue (maxsize=10)  # Bounded queue
-    
+
     # Start producer and consumers
     await asyncio.gather(
         producer (queue, 20),
@@ -105,15 +105,15 @@ class WorkerPool:
         self.queue = asyncio.Queue()
         self.workers = []
         self.n_workers = n_workers
-    
+
     async def worker (self, worker_id):
         """Worker that processes tasks"""
         while True:
             task = await self.queue.get()
-            
+
             if task is None:
                 break
-            
+
             try:
                 func, args, kwargs = task
                 result = await func(*args, **kwargs)
@@ -122,24 +122,24 @@ class WorkerPool:
                 print(f"Worker-{worker_id} error: {e}")
             finally:
                 self.queue.task_done()
-    
+
     async def start (self):
         """Start all workers"""
         self.workers = [
             asyncio.create_task (self.worker (i))
             for i in range (self.n_workers)
         ]
-    
+
     async def submit (self, func, *args, **kwargs):
         """Submit task to pool"""
         await self.queue.put((func, args, kwargs))
-    
+
     async def shutdown (self):
         """Shutdown pool"""
         # Send stop signals
         for _ in range (self.n_workers):
             await self.queue.put(None)
-        
+
         # Wait for workers
         await asyncio.gather(*self.workers)
 
@@ -151,11 +151,11 @@ async def task (n):
 async def main():
     pool = WorkerPool (n_workers=5)
     await pool.start()
-    
+
     # Submit tasks
     for i in range(20):
         await pool.submit (task, i)
-    
+
     # Wait for completion
     await pool.queue.join()
     await pool.shutdown()
@@ -188,20 +188,20 @@ class RateLimiter:
         self.allowance = rate
         self.last_check = time.time()
         self.lock = asyncio.Lock()
-    
+
     async def acquire (self):
         """Acquire permission to proceed"""
         async with self.lock:
             current = time.time()
             time_passed = current - self.last_check
             self.last_check = current
-            
+
             # Add tokens based on time passed
             self.allowance += time_passed * (self.rate / self.per)
-            
+
             if self.allowance > self.rate:
                 self.allowance = self.rate
-            
+
             if self.allowance < 1.0:
                 # Not enough tokens, wait
                 sleep_time = (1.0 - self.allowance) * (self.per / self.rate)
@@ -218,7 +218,7 @@ async def api_call (limiter, n):
 
 async def main():
     limiter = RateLimiter (rate=10, per=1.0)  # 10 requests/second
-    
+
     await asyncio.gather(*[api_call (limiter, i) for i in range(50)])
 
 asyncio.run (main())
@@ -254,12 +254,12 @@ class CircuitBreaker:
         self.failure_threshold = failure_threshold
         self.recovery_timeout = recovery_timeout
         self.expected_exception = expected_exception
-        
+
         self.state = CircuitState.CLOSED
         self.failure_count = 0
         self.last_failure_time = None
         self.lock = asyncio.Lock()
-    
+
     async def call (self, func, *args, **kwargs):
         """Execute function through circuit breaker"""
         async with self.lock:
@@ -270,28 +270,28 @@ class CircuitBreaker:
                     print("Circuit HALF_OPEN")
                 else:
                     raise Exception("Circuit breaker is OPEN")
-        
+
         try:
             result = await func(*args, **kwargs)
-            
+
             # Success
             async with self.lock:
                 if self.state == CircuitState.HALF_OPEN:
                     self.state = CircuitState.CLOSED
                     print("Circuit CLOSED")
                 self.failure_count = 0
-            
+
             return result
-        
+
         except self.expected_exception as e:
             async with self.lock:
                 self.failure_count += 1
                 self.last_failure_time = time.time()
-                
+
                 if self.failure_count >= self.failure_threshold:
                     self.state = CircuitState.OPEN
                     print(f"Circuit OPEN (failures: {self.failure_count})")
-            
+
             raise
 
 # Usage
@@ -310,7 +310,7 @@ async def main():
             print(f"Request {i}: {result}")
         except Exception as e:
             print(f"Request {i}: {e}")
-        
+
         await asyncio.sleep(1)
 
 asyncio.run (main())
@@ -344,23 +344,23 @@ async def retry_with_backoff(
 ) -> T:
     """Retry function with exponential backoff"""
     delay = initial_delay
-    
+
     for attempt in range (max_attempts):
         try:
             return await func(*args, **kwargs)
         except Exception as e:
             if attempt == max_attempts - 1:
                 raise
-            
+
             # Add jitter to prevent thundering herd
             if jitter:
                 actual_delay = delay * (0.5 + random.random())
             else:
                 actual_delay = delay
-            
+
             print(f"Attempt {attempt + 1} failed: {e}")
             print(f"Retrying in {actual_delay:.2f}s...")
-            
+
             await asyncio.sleep (actual_delay)
             delay *= backoff_factor
 
@@ -399,28 +399,28 @@ import asyncio
 class Pipeline:
     def __init__(self):
         self.stages = []
-    
+
     def add_stage (self, func):
         """Add processing stage"""
         self.stages.append (func)
         return self
-    
+
     async def process (self, items):
         """Process items through pipeline"""
         queue_in = asyncio.Queue()
         queue_out = asyncio.Queue()
-        
+
         # Load initial items
         for item in items:
             await queue_in.put (item)
         await queue_in.put(None)  # End marker
-        
+
         # Process through stages
         for stage_func in self.stages:
             await self._process_stage (stage_func, queue_in, queue_out)
             queue_in = queue_out
             queue_out = asyncio.Queue()
-        
+
         # Collect results
         results = []
         while True:
@@ -428,18 +428,18 @@ class Pipeline:
             if item is None:
                 break
             results.append (item)
-        
+
         return results
-    
+
     async def _process_stage (self, func, queue_in, queue_out):
         """Process single stage"""
         while True:
             item = await queue_in.get()
-            
+
             if item is None:
                 await queue_out.put(None)
                 break
-            
+
             try:
                 result = await func (item)
                 await queue_out.put (result)
@@ -469,7 +469,7 @@ async def main():
     pipeline.add_stage (stage1)
     pipeline.add_stage (stage2)
     pipeline.add_stage (stage3)
-    
+
     items = list (range(10))
     results = await pipeline.process (items)
     print(f"Results: {len (results)} items processed")

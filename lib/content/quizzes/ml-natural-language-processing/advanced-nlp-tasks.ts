@@ -12,8 +12,7 @@ Selects and combines existing sentences:
 - No new text generated
 - Example: Document has 50 sentences, extractive picks top 5
 
-**How it works:**
-1. Score each sentence by importance (TF-IDF, graph-based, neural)
+**How it works:**1. Score each sentence by importance (TF-IDF, graph-based, neural)
 2. Select top-scoring sentences
 3. Order sentences (chronologically or by score)
 
@@ -37,8 +36,7 @@ Generates new sentences capturing meaning:
 - Can rephrase and synthesize
 - Example: "Revenue grew 15% to $5.2B while margins expanded" (synthesized from multiple sentences)
 
-**How it works:**
-1. Encoder processes full document
+**How it works:**1. Encoder processes full document
 2. Decoder generates summary token-by-token
 3. Attention mechanism focuses on relevant parts
 
@@ -58,8 +56,7 @@ Generates new sentences capturing meaning:
 
 **Recommendation: Start with Abstractive, verify with Extractive**
 
-**Why abstractive:**
-1. **Synthesis needed**: Earnings reports discuss metrics across different sections
+**Why abstractive:**1. **Synthesis needed**: Earnings reports discuss metrics across different sections
    - Revenue in one section, guidance in another
    - Abstractive can combine: "Revenue exceeded guidance at $5.2B (+15% YoY)"
 
@@ -71,8 +68,7 @@ Generates new sentences capturing meaning:
    - Revenue, earnings, margins, guidance
    - Generate structured summaries (consistent format)
 
-**But with safeguards:**
-1. **Hallucination detection**: Cross-reference generated facts with source
+**But with safeguards:**1. **Hallucination detection**: Cross-reference generated facts with source
 2. **Extractive backup**: Include source sentences for key claims
 3. **Number validation**: Verify all financial figures appear in source
 4. **Human review**: Critical financial decisions require human verification
@@ -116,9 +112,7 @@ def financial_summary_hybrid (earnings_report):
 - Source quotes for each claim
 - Confidence scores
 
-**Key Considerations for Financial Applications:**
-
-1. **Accuracy > Fluency**: In finance, a single wrong number can be catastrophic
+**Key Considerations for Financial Applications:**1. **Accuracy > Fluency**: In finance, a single wrong number can be catastrophic
 2. **Regulatory compliance**: SEC requires accurate disclosure
 3. **Liability**: False summaries can lead to investor lawsuits
 4. **Trust**: Stakeholders need to trust the summaries
@@ -180,9 +174,7 @@ News: Amazon faces antitrust investigation
 Sentiment: [MODEL GENERATES]"
 \`\`\`
 
-**Why it works:**
-
-1. **In-context learning**: GPT-3+ models learn patterns from prompt context
+**Why it works:**1. **In-context learning**: GPT-3+ models learn patterns from prompt context
 2. **Emergent ability**: Larger models (>10B parameters) show strong few-shot performance
 3. **Pre-training**: Models saw similar tasks during pre-training
 4. **Pattern matching**: Model identifies task structure from examples
@@ -312,17 +304,13 @@ classifier = DynamicFewShotClassifier (large_example_pool)
 sentiment = classifier.classify("Tech giant announces massive layoffs")
 \`\`\`
 
-**Advantages of Few-Shot for Financial Sentiment:**
-
-1. **No labeled data needed**: Just need ~5-10 good examples
+**Advantages of Few-Shot for Financial Sentiment:**1. **No labeled data needed**: Just need ~5-10 good examples
 2. **Fast deployment**: No training/fine-tuning required
 3. **Flexible**: Can easily change task definition or add classes
 4. **Interpretable**: Can see examples model is using
 5. **Domain adaptation**: Include finance-specific examples
 
-**Limitations:**
-
-1. **API costs**: GPT-3/GPT-4 API calls can be expensive at scale
+**Limitations:**1. **API costs**: GPT-3/GPT-4 API calls can be expensive at scale
 2. **Latency**: Longer prompts = slower inference
 3. **Less accurate than fine-tuning**: Fine-tuned models usually better
 4. **Context length limits**: GPT-3 has 4K token limit
@@ -363,9 +351,7 @@ finbert = fine_tune_finbert (verified_labels)
 # Production: fine-tuned model (faster, cheaper, more accurate)
 \`\`\`
 
-**Best Practices:**
-
-1. **Example quality > quantity**: 5 great examples > 20 mediocre ones
+**Best Practices:**1. **Example quality > quantity**: 5 great examples > 20 mediocre ones
 2. **Include edge cases**: Ambiguous, mixed sentiment
 3. **Finance-specific**: Use financial terminology
 4. **Consistent format**: Keep examples structurally consistent

@@ -800,13 +800,7 @@ else:
 
 ### ❌ DON'T:
 1. **Never exec() untrusted code** directly
-2. **Don't assume syntax is valid**
-3. **Don't skip import validation**
-4. **Don't generate without retries**
-5. **Don't ignore test failures**
-6. **Don't allow unlimited execution time**
-7. **Don't trust hallucinated APIs**
-8. **Don't use high temperature** for code
+2. **Don't assume syntax is valid**3. **Don't skip import validation**4. **Don't generate without retries**5. **Don't ignore test failures**6. **Don't allow unlimited execution time**7. **Don't trust hallucinated APIs**8. **Don't use high temperature** for code
 
 ## Next Steps
 

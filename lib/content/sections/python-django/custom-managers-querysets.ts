@@ -750,9 +750,7 @@ articles = Article.objects.published().with_related()
 
 ## Summary
 
-**Key Concepts:**
-
-1. **Custom Managers**: Encapsulate query logic at the manager level
+**Key Concepts:**1. **Custom Managers**: Encapsulate query logic at the manager level
 2. **Custom QuerySets**: Chainable methods for flexible queries
 3. **Multiple Managers**: Different default filters for different use cases
 4. **Factory Methods**: Standardized model creation in managers

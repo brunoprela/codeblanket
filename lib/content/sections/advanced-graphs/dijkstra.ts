@@ -7,8 +7,7 @@ export const dijkstraSection = {
   title: 'Dijkstra',
   content: `**Dijkstra's Algorithm** finds the shortest path from a source to all other vertices in a **weighted graph with non-negative weights**.
 
-**Algorithm:**
-1. Initialize distances: source = 0, others = ∞
+**Algorithm:**1. Initialize distances: source = 0, others = ∞
 2. Use min-heap to always process closest unvisited vertex
 3. For each neighbor, try to relax (improve) distance
 4. Mark vertex as visited once processed

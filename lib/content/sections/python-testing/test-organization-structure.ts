@@ -282,18 +282,18 @@ from payment import PaymentProcessor, Payment
 
 class TestPaymentCreation:
     """Tests for creating Payment objects"""
-    
+
     def test_create_payment_with_valid_data (self):
         """Should create payment with valid data"""
         payment = Payment (amount=100.0, currency="USD")
         assert payment.amount == 100.0
         assert payment.currency == "USD"
-    
+
     def test_create_payment_with_negative_amount (self):
         """Should raise error for negative amount"""
         with pytest.raises(ValueError):
             Payment (amount=-100.0, currency="USD")
-    
+
     def test_create_payment_with_zero_amount (self):
         """Should raise error for zero amount"""
         with pytest.raises(ValueError):
@@ -302,21 +302,21 @@ class TestPaymentCreation:
 
 class TestPaymentProcessing:
     """Tests for processing payments"""
-    
+
     def test_process_payment_success (self):
         """Should process valid payment successfully"""
         processor = PaymentProcessor (api_key="test")
         payment = Payment (amount=100.0, currency="USD")
         result = processor.process_payment (payment)
         assert result is True
-    
+
     def test_process_payment_without_api_key (self):
         """Should fail without API key"""
         processor = PaymentProcessor (api_key="")
         payment = Payment (amount=100.0, currency="USD")
         with pytest.raises(ValueError):
             processor.process_payment (payment)
-    
+
     def test_process_payment_already_processed (self):
         """Should not process payment twice"""
         processor = PaymentProcessor (api_key="test")
@@ -328,7 +328,7 @@ class TestPaymentProcessing:
 
 class TestPaymentRefunds:
     """Tests for refunding payments"""
-    
+
     def test_refund_completed_payment (self):
         """Should refund completed payment"""
         processor = PaymentProcessor (api_key="test")
@@ -336,7 +336,7 @@ class TestPaymentRefunds:
         processor.process_payment (payment)
         result = processor.refund_payment (payment)
         assert result is True
-    
+
     def test_refund_pending_payment (self):
         """Should not refund pending payment"""
         processor = PaymentProcessor (api_key="test")
@@ -402,12 +402,12 @@ from myapp.database import Base
 def db_engine():
     """Database engine for testing (created once per session)"""
     engine = create_engine("postgresql://test:test@localhost/test_db")
-    
+
     # Create all tables
     Base.metadata.create_all (engine)
-    
+
     yield engine
-    
+
     # Cleanup after all tests
     Base.metadata.drop_all (engine)
     engine.dispose()
@@ -418,12 +418,12 @@ def db_session (db_engine):
     """Clean database session for each test"""
     connection = db_engine.connect()
     transaction = connection.begin()
-    
+
     Session = sessionmaker (bind=connection)
     session = Session()
-    
+
     yield session
-    
+
     # Rollback transaction (clean database)
     session.close()
     transaction.rollback()
@@ -434,9 +434,9 @@ def db_session (db_engine):
 def redis_client():
     """Redis client for testing"""
     client = Redis (host="localhost", port=6379, db=15)
-    
+
     yield client
-    
+
     # Cleanup
     client.flushdb()
     client.close()
@@ -446,7 +446,7 @@ def redis_client():
 def api_client():
     """Flask/FastAPI test client"""
     app = create_app (config="testing")
-    
+
     with app.test_client() as client:
         yield client
 
@@ -459,17 +459,17 @@ def authenticated_api_client (api_client, db_session):
     user.set_password("password")
     db_session.add (user)
     db_session.commit()
-    
+
     # Login
     response = api_client.post("/auth/login", json={
         "username": "testuser",
         "password": "password"
     })
     token = response.json["token"]
-    
+
     # Set authorization header
     api_client.headers["Authorization"] = f"Bearer {token}"
-    
+
     return api_client
 \`\`\`
 
@@ -483,14 +483,14 @@ def authenticated_api_client (api_client, db_session):
 def test_create_user (db_session, api_client):
     """Test creating user via API"""
     # db_session and api_client from conftest.py (no import needed)
-    
+
     response = api_client.post("/users", json={
         "username": "newuser",
         "email": "new@example.com"
     })
-    
+
     assert response.status_code == 201
-    
+
     # Verify in database
     user = db_session.query(User).filter_by (username="newuser").first()
     assert user is not None
@@ -500,9 +500,9 @@ def test_create_user (db_session, api_client):
 def test_get_user_profile (authenticated_api_client):
     """Test getting user profile (requires authentication)"""
     # authenticated_api_client from conftest.py
-    
+
     response = authenticated_api_client.get("/users/me")
-    
+
     assert response.status_code == 200
     assert response.json["username"] == "testuser"
 \`\`\`
@@ -549,7 +549,7 @@ import docker
 def docker_services():
     """Start Docker containers for integration tests"""
     client = docker.from_env()
-    
+
     # Start PostgreSQL container
     db_container = client.containers.run(
         "postgres:15",
@@ -557,9 +557,9 @@ def docker_services():
         ports={"5432/tcp": 5432},
         detach=True
     )
-    
+
     yield
-    
+
     # Stop container after tests
     db_container.stop()
     db_container.remove()
@@ -607,10 +607,10 @@ from myapp.models import User, Payment
 
 class UserFactory (factory.Factory):
     """Create test users"""
-    
+
     class Meta:
         model = User
-    
+
     username = factory.Sequence (lambda n: f"user{n}")
     email = factory.LazyAttribute (lambda obj: f"{obj.username}@example.com")
     age = factory.Faker("random_int", min=18, max=80)
@@ -618,10 +618,10 @@ class UserFactory (factory.Factory):
 
 class PaymentFactory (factory.Factory):
     """Create test payments"""
-    
+
     class Meta:
         model = Payment
-    
+
     amount = factory.Faker("pyfloat", min_value=10, max_value=1000)
     currency = factory.Iterator(["USD", "EUR", "GBP"])
     status = "pending"
@@ -648,11 +648,11 @@ def create_test_user (db_session, **kwargs):
         "age": 25
     }
     defaults.update (kwargs)
-    
+
     user = User(**defaults)
     db_session.add (user)
     db_session.commit()
-    
+
     return user
 
 
@@ -660,13 +660,13 @@ def wait_for_async_task (task_id, timeout=10):
     """Wait for async task to complete"""
     import time
     start = time.time()
-    
+
     while time.time() - start < timeout:
         task = get_task_status (task_id)
         if task.status in ["completed", "failed"]:
             return task
         time.sleep(0.1)
-    
+
     raise TimeoutError (f"Task {task_id} did not complete in {timeout}s")
 \`\`\`
 
@@ -685,10 +685,10 @@ def test_user_creation (db_session):
         username="alice",
         email=generate_random_email()
     )
-    
+
     db_session.add (user)
     db_session.commit()
-    
+
     assert user.id is not None
 
 
@@ -697,12 +697,12 @@ def test_user_authentication (db_session, api_client):
     user = UserFactory.create()
     db_session.add (user)
     db_session.commit()
-    
+
     response = api_client.post("/auth/login", json={
         "username": user.username,
         "password": "password"
     })
-    
+
     assert_user_authenticated (response.json["user"])
 \`\`\`
 
@@ -774,10 +774,10 @@ payment_platform/
 class TestPaymentProcessing:
     def test_process_success (self):
         ...
-    
+
     def test_process_insufficient_funds (self):
         ...
-    
+
     def test_process_invalid_card (self):
         ...
 \`\`\`
@@ -786,7 +786,7 @@ class TestPaymentProcessing:
 
 ### 2. Use Descriptive Names
 
-✅ **Good**: \`test_payment_processing_fails_with_expired_card\`  
+✅ **Good**: \`test_payment_processing_fails_with_expired_card\`
 ❌ **Bad**: \`test_payment_1\`
 
 ### 3. Mirror Source Structure

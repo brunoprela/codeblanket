@@ -9,8 +9,7 @@ export const patternsSection = {
 
 Most common pattern for interval problems.
 
-**Steps:**
-1. Sort intervals by start time
+**Steps:**1. Sort intervals by start time
 2. Iterate and compare with last merged
 3. Merge if overlap, otherwise add new
 
@@ -48,8 +47,7 @@ for time, delta in events:
 
 Select maximum non-overlapping intervals.
 
-**Greedy Approach:**
-1. Sort by end time (earliest finish first)
+**Greedy Approach:**1. Sort by end time (earliest finish first)
 2. Select if doesn't overlap with last selected
 
 \`\`\`python

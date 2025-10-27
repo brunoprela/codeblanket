@@ -271,14 +271,14 @@ Fixtures can also be parametrized:
 def database (request):
     """Fixture parametrized by database type"""
     db_type = request.param
-    
+
     if db_type == "sqlite":
         db = SQLiteDB(":memory:")
     elif db_type == "postgresql":
         db = PostgreSQLDB("localhost")
     elif db_type == "mysql":
         db = MySQLDB("localhost")
-    
+
     db.connect()
     yield db
     db.disconnect()
@@ -486,7 +486,7 @@ def test_file_line_count (tmp_path, filename, expected_lines):
     # Create test file
     file_path = tmp_path / filename
     file_path.write_text("\\n" * expected_lines)
-    
+
     # Test
     result = count_lines (file_path)
     assert result == expected_lines

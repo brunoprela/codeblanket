@@ -163,9 +163,7 @@ Problem: WAL grows indefinitely, recovery takes longer.
 
 **Solution**: Periodic **checkpoints** - snapshots of the database state.
 
-### **How Checkpointing Works**
-
-1. **Trigger**: After N operations or T seconds
+### **How Checkpointing Works**1. **Trigger**: After N operations or T seconds
 2. **Flush**: Write all dirty pages to disk
 3. **Checkpoint Record**: Write checkpoint marker to WAL
    - Includes list of active transactions
@@ -588,9 +586,7 @@ Event Sourcing:
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **Why WAL**: Durability, atomicity, performance (sequential writes)
+### **Key Concepts to Explain**1. **Why WAL**: Durability, atomicity, performance (sequential writes)
 2. **How it works**: Log before apply, recovery by replay
 3. **Checkpointing**: Limit recovery time, truncate log
 4. **Trade-offs**: Durability vs performance (fsync cost)

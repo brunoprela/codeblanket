@@ -250,7 +250,7 @@ from sympy import symbols, solve, Eq
 def solve_quadratic (a, b, c):
     """Solve quadratic equation ax² + bx + c = 0"""
     discriminant = b**2 - 4*a*c
-    
+
     if discriminant > 0:
         x1 = (-b + np.sqrt (discriminant)) / (2*a)
         x2 = (-b - np.sqrt (discriminant)) / (2*a)

@@ -146,9 +146,7 @@ WHERE c.customer_id = %s
   AND c.is_current = TRUE;
 \`\`\`
 
-**Why This Works:**
-
-1. **Historical Accuracy**: Fact table stores customer_key (not customer_id), which points to the exact version of customer dimension at sale time
+**Why This Works:**1. **Historical Accuracy**: Fact table stores customer_key (not customer_id), which points to the exact version of customer dimension at sale time
 2. **Current Data**: is_current flag enables instant lookup of latest info
 3. **Efficient Queries**: Indexed properly for both access patterns
 
@@ -200,9 +198,7 @@ This answer demonstrates understanding of: dimensional modeling, SCD Type 2 impl
 
 For this high-volume retail scenario, star schema is optimal for performance, and the date dimension should be pre-computed with all common date attributes.
 
-**Why Star Schema:**
-
-1. **Query Performance**: 100M daily transactions means 36B transactions/year. Complex joins (snowflake) would be too slow.
+**Why Star Schema:**1. **Query Performance**: 100M daily transactions means 36B transactions/year. Complex joins (snowflake) would be too slow.
 2. **BI Tool Compatibility**: Most tools assume star schema
 3. **Simplicity**: Business users understand star schema more easily
 
@@ -475,9 +471,7 @@ GROUP BY s.region, s.state, s.store_name
 HAVING RANK() <= 10;  -- Top 10 per region
 \`\`\`
 
-**Performance Optimizations:**
-
-1. **Partitioning**: Fact table partitioned by date_key (monthly partitions)
+**Performance Optimizations:**1. **Partitioning**: Fact table partitioned by date_key (monthly partitions)
 2. **Indexes**: Dimension foreign keys indexed on fact table
 3. **Materialized Views**: For common aggregations
 4. **Columnar Storage**: Use columnar format (Redshift, BigQuery)
@@ -735,9 +729,7 @@ Total: $72,960/year
 
 **My Recommendation: Snowflake**
 
-**Why Snowflake:**
-
-1. **Workload Isolation**: Separate warehouses for analysts, ETL, ML
+**Why Snowflake:**1. **Workload Isolation**: Separate warehouses for analysts, ETL, ML
    - ETL doesn't impact analyst queries
    - ML training doesn't slow down dashboards
    - Each workload independently scalable
@@ -807,9 +799,7 @@ FROM fact_sales
 GROUP BY date_key;
 \`\`\`
 
-**Cost Optimization Strategies:**
-
-1. **Resource Monitors**:
+**Cost Optimization Strategies:**1. **Resource Monitors**:
 \`\`\`sql
 CREATE RESOURCE MONITOR analyst_monitor
 WITH CREDIT_QUOTA = 100  -- $100/month limit

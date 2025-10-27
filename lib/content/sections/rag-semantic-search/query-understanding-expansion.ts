@@ -797,8 +797,7 @@ Query processing dramatically improves RAG retrieval:
 
 **Key Takeaway:** Invest in query processing early. It's often easier and cheaper than improving the retrieval model itself.
 
-**Production Pattern:**
-1. Always clean and normalize
+**Production Pattern:**1. Always clean and normalize
 2. Extract entities for filtering
 3. Expand for important queries
 4. Use LLM rewriting sparingly (cost)

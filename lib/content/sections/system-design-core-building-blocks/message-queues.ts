@@ -187,8 +187,7 @@ export const messagequeuesSection = {
 
 **Guarantee**: Message delivered 0 or 1 times (may be lost, never duplicated).
 
-**How it works:**
-1. Producer sends message (no acknowledgment required)
+**How it works:**1. Producer sends message (no acknowledgment required)
 2. Message may be lost in transit
 3. Consumer receives message, processes it (no acknowledgment)
 
@@ -202,8 +201,7 @@ export const messagequeuesSection = {
 
 **Guarantee**: Message delivered 1 or more times (never lost, may be duplicated).
 
-**How it works:**
-1. Producer sends message, waits for acknowledgment
+**How it works:**1. Producer sends message, waits for acknowledgment
 2. If no ack, producer retries (may result in duplicate)
 3. Consumer receives message, processes it, sends acknowledgment
 4. If consumer crashes before ack, message redelivered
@@ -278,8 +276,7 @@ export const messagequeuesSection = {
 
 **Solution**: After N retries, move message to Dead Letter Queue.
 
-**Flow:**
-1. Consumer tries to process message
+**Flow:**1. Consumer tries to process message
 2. Processing fails (exception)
 3. Message returned to queue
 4. Retry 3 times (configurable)

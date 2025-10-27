@@ -656,8 +656,7 @@ REST_FRAMEWORK = {
 
 ## Summary
 
-**DRF Key Components:**
-1. **Serializers**: Convert data to/from JSON
+**DRF Key Components:**1. **Serializers**: Convert data to/from JSON
 2. **Views**: Handle HTTP methods (GET, POST, etc.)
 3. **Permissions**: Control access
 4. **Authentication**: Verify user identity

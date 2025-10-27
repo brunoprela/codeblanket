@@ -32,8 +32,7 @@ export const speechToTextWhisper = {
 
 Whisper is an encoder-decoder transformer trained on 680,000 hours of multilingual data:
 
-**Pipeline:**
-1. **Audio Preprocessing**: Convert audio to mel spectrogram
+**Pipeline:**1. **Audio Preprocessing**: Convert audio to mel spectrogram
 2. **Encoder**: Process audio features with transformer
 3. **Decoder**: Generate text tokens autoregressively
 4. **Post-processing**: Format, punctuate, add timestamps

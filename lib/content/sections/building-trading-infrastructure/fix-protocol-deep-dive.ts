@@ -593,8 +593,7 @@ class FIXSession:
 
 ## Summary
 
-**FIX Protocol Essentials:**
-1. **Message Structure**: Tag=Value pairs separated by SOH
+**FIX Protocol Essentials:**1. **Message Structure**: Tag=Value pairs separated by SOH
 2. **Session Management**: Sequence numbers, heartbeats, logon/logout
 3. **Order Flow**: NewOrderSingle → ExecutionReport (acks, fills)
 4. **Message Types**: 100+ defined, most common are D (order), 8 (execution)

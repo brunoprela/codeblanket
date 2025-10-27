@@ -34,9 +34,7 @@ z = -4.0*x₁ - 2.5*x₂ - 3.8 < 0 for most (x₁, x₂)
 → Dead neuron!
 \`\`\`
 
-**How to Detect in Practice:**
-
-1. **Monitor Activation Statistics:**
+**How to Detect in Practice:**1. **Monitor Activation Statistics:**
 \`\`\`python
 def check_dead_neurons (activations):
     """
@@ -278,9 +276,7 @@ class StockReturnPredictor:
         return output
 \`\`\`
 
-**Problems That Might Arise:**
-
-1. **With Sigmoid/Tanh (if used):**
+**Problems That Might Arise:**1. **With Sigmoid/Tanh (if used):**
    - Vanishing gradients → training fails
    - Early layers barely update
    - Model cannot learn complex patterns
@@ -297,9 +293,7 @@ class StockReturnPredictor:
    - Dead neurons cannot adapt to new patterns
    - Non-stationary data amplifies all problems
 
-**Mitigation Strategies:**
-
-1. **Use Leaky ReLU instead of ReLU**:
+**Mitigation Strategies:**1. **Use Leaky ReLU instead of ReLU**:
    - Prevents dying neurons
    - Minimal computational overhead
    - alpha=0.01 works well
@@ -358,9 +352,7 @@ Softmax with temperature T:
 softmax_T(zᵢ) = exp (zᵢ/T) / Σⱼ exp (zⱼ/T)
 \`\`\`
 
-**Effect of Temperature:**
-
-1. **T = 1**: Standard softmax (default)
+**Effect of Temperature:**1. **T = 1**: Standard softmax (default)
 
 2. **T < 1** (e.g., T=0.5): "Sharper" distribution
    - Increases difference between probabilities
@@ -597,9 +589,7 @@ probs_explore = softmax_temperature (strategy_logits, T=2.0)  # [0.35, 0.31, 0.2
 - T > 1: Creative, diverse (potentially nonsensical)
 - Adjust based on application needs
 
-**Financial ML Considerations:**
-
-1. **Model Calibration Critical**:
+**Financial ML Considerations:**1. **Model Calibration Critical**:
    - Probabilities guide position sizing
    - Miscalibration causes over/under-betting
    - Use temperature scaling to calibrate

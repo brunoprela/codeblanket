@@ -1,10 +1,10 @@
 export const sharpeRatioPerformanceQuiz = {
-    id: 'sharpe-ratio-performance',
-    title: 'Sharpe Ratio and Performance Metrics',
-    questions: [
-        {
-            id: 'srp-comparison',
-            text: `Three fund managers present their 5-year track records:
+  id: 'sharpe-ratio-performance',
+  title: 'Sharpe Ratio and Performance Metrics',
+  questions: [
+    {
+      id: 'srp-comparison',
+      text: `Three fund managers present their 5-year track records:
 
 Manager A: 18% return, 22% volatility, 15% downside deviation
 Manager B: 14% return, 16% volatility, 10% downside deviation  
@@ -13,8 +13,8 @@ Manager C: 12% return, 12% volatility, 8% downside deviation
 Risk-free rate: 4%, S&P 500 benchmark: 11% return, 18% volatility
 
 Calculate and compare: (1) Sharpe ratio, Sortino ratio, and Treynor ratio (assume betas: A=1.2, B=0.9, C=0.7), (2) explain which manager performed best and why your answer depends on the metric chosen, (3) calculate the M² (Modigliani-Modigliani) measure to compare on a common risk basis, and (4) discuss why Sharpe ratio can be misleading for hedge funds with non-normal return distributions.`,
-            type: 'discussion' as const,
-            sampleAnswer: `**Complete Risk-Adjusted Performance Analysis**
+      type: 'discussion' as const,
+      sampleAnswer: `**Complete Risk-Adjusted Performance Analysis**
 
 **1. Sharpe Ratio Calculations:**
 
@@ -122,9 +122,7 @@ Sharpe ratio assumes returns are **normally distributed** (symmetric bell curve)
 - Sharpe overstates risk-adjusted performance
 - Example: Madoff reported impossibly consistent returns with Sharpe > 2.5 (fraud, but red flag)
 
-**Better Alternatives for Hedge Funds:**
-
-1. **Omega Ratio**: Ratio of probability-weighted gains to losses. Captures full distribution, not just first two moments.
+**Better Alternatives for Hedge Funds:**1. **Omega Ratio**: Ratio of probability-weighted gains to losses. Captures full distribution, not just first two moments.
 
 2. **Sortino Ratio**: Penalizes only downside volatility. Better for asymmetric strategies.
 
@@ -138,22 +136,22 @@ Sharpe ratio assumes returns are **normally distributed** (symmetric bell curve)
 - **Stress testing** critical: How does fund perform in 2008-style crisis?
 
 **Key Insight:** Sharpe ratio is excellent for traditional long-only investments (stocks, bonds, 60/40). For complex strategies with options, leverage, or dynamic allocation, it's necessary but insufficient. Always complement with distribution-aware metrics and scenario analysis.`,
-            keyPoints: [
-                'Sharpe ratio = (Return - Rf) / Volatility; measures return per unit of total risk',
-                'Sortino ratio uses downside deviation instead of total volatility; better for asymmetric returns',
-                'Treynor ratio = (Return - Rf) / Beta; measures return per unit of systematic risk',
-                'M² adjusts portfolios to benchmark volatility for direct return comparison',
-                'Different metrics can rank managers differently based on what risk is measured',
-                'Sharpe ratio misleading for hedge funds due to fat tails, skewness, autocorrelation',
-                'Manager selection depends on investor context: diversified vs concentrated portfolio',
-                'Multiple metrics needed for comprehensive performance evaluation: no single "best" measure'
-            ]
-        },
-        {
-            id: 'srp-information-ratio',
-            text: `An active equity fund reports: portfolio return 13.5%, benchmark return 11%, tracking error 4.2%. Calculate: (1) the information ratio and interpret what it means for the fund's active management quality, (2) decompose the fund's total Sharpe ratio into benchmark Sharpe ratio and information ratio contributions, (3) determine how much tracking error is "worth it" given the information ratio, and (4) compare this fund to another with 15% return, 7% tracking error at the same benchmark - which demonstrates better active management skill?`,
-            type: 'discussion' as const,
-            sampleAnswer: `**Comprehensive Information Ratio Analysis**
+      keyPoints: [
+        'Sharpe ratio = (Return - Rf) / Volatility; measures return per unit of total risk',
+        'Sortino ratio uses downside deviation instead of total volatility; better for asymmetric returns',
+        'Treynor ratio = (Return - Rf) / Beta; measures return per unit of systematic risk',
+        'M² adjusts portfolios to benchmark volatility for direct return comparison',
+        'Different metrics can rank managers differently based on what risk is measured',
+        'Sharpe ratio misleading for hedge funds due to fat tails, skewness, autocorrelation',
+        'Manager selection depends on investor context: diversified vs concentrated portfolio',
+        'Multiple metrics needed for comprehensive performance evaluation: no single "best" measure',
+      ],
+    },
+    {
+      id: 'srp-information-ratio',
+      text: `An active equity fund reports: portfolio return 13.5%, benchmark return 11%, tracking error 4.2%. Calculate: (1) the information ratio and interpret what it means for the fund's active management quality, (2) decompose the fund's total Sharpe ratio into benchmark Sharpe ratio and information ratio contributions, (3) determine how much tracking error is "worth it" given the information ratio, and (4) compare this fund to another with 15% return, 7% tracking error at the same benchmark - which demonstrates better active management skill?`,
+      type: 'discussion' as const,
+      sampleAnswer: `**Comprehensive Information Ratio Analysis**
 
 **1. Information Ratio Calculation:**
 
@@ -209,7 +207,7 @@ Assume:
 - Added value (from active management): 0.135
 - Total Sharpe: 0.635
 
-**Verification:** 0.50 + 0.135 ≈ 0.635 ✓ (close, small differences due to approximation)
+**Verification:**0.50 + 0.135 ≈ 0.635 ✓ (close, small differences due to approximation)
 
 **Insight:** The Information Ratio (0.595) contributes approximately 0.135 to the Sharpe ratio. This is substantial! The fund improved risk-adjusted returns by 27% (0.635 vs 0.50) through active management.
 
@@ -281,9 +279,7 @@ TE* = (0.595 × 16%) / (3 × 0.50) = 9.52% / 1.5 = **6.35%**
 **For Risk-Adjusted Return Seekers:**
 - Fund A has better efficiency (IR 0.595 > 0.571)
 
-**Practical Considerations:**
-
-1. **Capacity**: Fund A likely has higher capacity (lower TE = less extreme positions)
+**Practical Considerations:**1. **Capacity**: Fund A likely has higher capacity (lower TE = less extreme positions)
 2. **Stability**: IR 0.595 more likely to persist than high-alpha-high-TE strategies
 3. **Career Risk**: Fund B manager takes bigger bets; riskier for their job
 4. **Fees**: If Fund B charges higher fees, Fund A clearly wins
@@ -301,22 +297,22 @@ Both are statistically significant, but Fund A is slightly more robust.
 **Fund A demonstrates superior active management skill** due to higher Information Ratio. While Fund B delivers more alpha, it does so at a higher risk level. Fund A is more efficient, consistent, and likely sustainable. For most institutional investors, Fund A is the better choice unless they have specific reasons to target higher tracking error.
 
 **Key Principle:** In active management, it's not about how much you make, but how efficiently you make it relative to the active risk taken. Information Ratio is the gold standard for measuring manager skill, more important than absolute alpha.`,
-            keyPoints: [
-                'Information ratio = Active return / Tracking error; measures consistency of outperformance',
-                'IR > 0.5 is excellent, 0.25-0.5 is good, <0.25 is marginal active management',
-                'Portfolio Sharpe ≈ Benchmark Sharpe + IR (fundamental law of active management)',
-                'Optimal tracking error increases with higher information ratio but constrained by risk aversion',
-                'High tracking error only justified if IR is proportionally high (efficient alpha generation)',
-                'IR more stable than raw alpha; better measure of manager skill over time',
-                'Fund A: IR=0.595 vs Fund B: IR=0.571; Fund A shows better skill despite lower absolute alpha',
-                'Consistency matters more than magnitude for long-term active management success and sustainability'
-            ]
-        },
-        {
-            id: 'srp-advanced-metrics',
-            text: `You're evaluating a market-neutral hedge fund with the following 3-year statistics: Annual return 8%, volatility 12%, skewness -0.8, kurtosis 6.0, maximum drawdown -18%, worst month -8%, average month 0.6%, correlation with S&P 500: 0.15. The fund charges 2% management fee and 20% performance fee. Analyze: (1) why traditional Sharpe ratio understates the fund's risk given its negative skewness and high kurtosis, (2) calculate alternative risk-adjusted metrics (Omega ratio, Sortino ratio, Calmar ratio) that better capture tail risk, (3) adjust returns for fees and calculate investor Sharpe ratio vs gross Sharpe ratio, and (4) determine if the fund's low market correlation justifies its high fees for portfolio diversification.`,
-            type: 'discussion' as const,
-            sampleAnswer: `**Comprehensive Hedge Fund Performance Evaluation with Non-Normal Distribution Analysis**
+      keyPoints: [
+        'Information ratio = Active return / Tracking error; measures consistency of outperformance',
+        'IR > 0.5 is excellent, 0.25-0.5 is good, <0.25 is marginal active management',
+        'Portfolio Sharpe ≈ Benchmark Sharpe + IR (fundamental law of active management)',
+        'Optimal tracking error increases with higher information ratio but constrained by risk aversion',
+        'High tracking error only justified if IR is proportionally high (efficient alpha generation)',
+        'IR more stable than raw alpha; better measure of manager skill over time',
+        'Fund A: IR=0.595 vs Fund B: IR=0.571; Fund A shows better skill despite lower absolute alpha',
+        'Consistency matters more than magnitude for long-term active management success and sustainability',
+      ],
+    },
+    {
+      id: 'srp-advanced-metrics',
+      text: `You're evaluating a market-neutral hedge fund with the following 3-year statistics: Annual return 8%, volatility 12%, skewness -0.8, kurtosis 6.0, maximum drawdown -18%, worst month -8%, average month 0.6%, correlation with S&P 500: 0.15. The fund charges 2% management fee and 20% performance fee. Analyze: (1) why traditional Sharpe ratio understates the fund's risk given its negative skewness and high kurtosis, (2) calculate alternative risk-adjusted metrics (Omega ratio, Sortino ratio, Calmar ratio) that better capture tail risk, (3) adjust returns for fees and calculate investor Sharpe ratio vs gross Sharpe ratio, and (4) determine if the fund's low market correlation justifies its high fees for portfolio diversification.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**Comprehensive Hedge Fund Performance Evaluation with Non-Normal Distribution Analysis**
 
 **Given Statistics:**
 - Annual return: 8%
@@ -349,10 +345,10 @@ This fund: skewness = -0.8 (strongly negatively skewed)
 - **"Picking up pennies in front of steamroller" pattern**
 
 **Visual Distribution:**
-```
+\`\`\`
 Normal(skew = 0): Bell curve symmetric
 This fund(skew = -0.8):  ⟋ Compressed right, extended left
-```
+\`\`\`
 
 Most months: +0.6% to +2% (small gains)
 Rare months: -8% to worse (large losses)
@@ -475,11 +471,11 @@ With net Sharpe 0.117, the fund barely beats risk-free after fees!
 **The 60/40 has 3.3× better risk-adjusted performance!**
 
 **Fee Impact Visualization:**
-```
+\`\`\`
 Gross: 8 % return → Sharpe 0.417 ✓
     After mgmt fee: 6 % → Sharpe 0.250 ✗
     After perf fee: 4.4 % → Sharpe 0.117 ✗✗
-```
+\`\`\`
 
 **Is Fee Structure Fair?**
 
@@ -547,9 +543,7 @@ The fund needs to provide:
 
 **Final Verdict:**
 
-**Fund Does NOT Justify High Fees:**
-
-1. **Risk Understatement:** Sharpe 0.417 looks okay, but negative skew + high kurtosis = hidden tail risk
+**Fund Does NOT Justify High Fees:**1. **Risk Understatement:** Sharpe 0.417 looks okay, but negative skew + high kurtosis = hidden tail risk
 2. **Poor Net Performance:** Net Sharpe 0.117 is abysmal after 3.6% fees
 3. **Alternative Metrics:** Sortino 0.347, Calmar 0.444, Omega 1.296 all reveal mediocre risk-adjusted performance
 4. **Diversification Failure:** Low correlation helps modestly, but bonds deliver same benefit at 1/72nd the cost
@@ -566,7 +560,7 @@ The fund needs to provide:
 - -18% drawdown in benign period suggests worse to come
 
 **Key Lesson:** Always adjust for fees and non-normal distributions when evaluating hedge funds. Sharpe ratio alone is dangerously misleading. Most hedge funds don't justify 2/20 fees after proper risk adjustment.`,
-    keyPoints: [
+      keyPoints: [
         'Negative skewness (-0.8) and high kurtosis (6.0) indicate fat left tail; Sharpe ratio ignores this tail risk',
         'Omega ratio captures full return distribution; better for non-normal returns and asymmetric strategies',
         'Sortino (0.347) and Calmar (0.444) ratios focus on downside; more appropriate for tail risk assessment',
@@ -574,8 +568,8 @@ The fund needs to provide:
         'Gross Sharpe 0.417 vs Net Sharpe 0.117 after fees; 72% degradation reveals fee impact',
         'Low correlation (0.15) adds modest diversification value but bonds achieve similar benefit at far lower cost',
         'Hedge fund justification requires crisis alpha or unique exposures; this fund fails both tests',
-        'Most hedge funds fail to justify fees after adjusting for non-normal distribution risks and comparing alternatives'
-    ]
-    }
-  ]
+        'Most hedge funds fail to justify fees after adjusting for non-normal distribution risks and comparing alternatives',
+      ],
+    },
+  ],
 };

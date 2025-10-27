@@ -719,8 +719,7 @@ class SolarflareOnload:
 
 ## Summary
 
-**Low-Latency Essentials:**
-1. **Memory optimization**: Pre-allocate, object pooling, zero-copy
+**Low-Latency Essentials:**1. **Memory optimization**: Pre-allocate, object pooling, zero-copy
 2. **CPU optimization**: Core pinning, high priority, disable frequency scaling
 3. **Lock-free**: Atomic operations, ring buffers, no mutexes
 4. **Kernel bypass**: DPDK, Solarflare Onload for network

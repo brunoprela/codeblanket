@@ -20,9 +20,7 @@ Partitions divide a topic into multiple ordered logs distributed across brokers.
 - Can be consumed independently
 - Maintains ordering within the partition only
 
-**Scalability Through Partitioning:**
-
-1. **Write Scalability:** Multiple partitions = parallel writes across brokers
+**Scalability Through Partitioning:**1. **Write Scalability:** Multiple partitions = parallel writes across brokers
 2. **Read Scalability:** Multiple consumers = parallel reads (one consumer per partition in a group)
 3. **Storage Scalability:** Partitions distributed across brokers (topic larger than single server)
 
@@ -295,9 +293,7 @@ Dashboard:
 - Bar chart: Partition size distribution
 \`\`\`
 
-**Key Takeaways:**
-
-1. **Partition count balances parallelism and overhead** (24 partitions = sweet spot)
+**Key Takeaways:**1. **Partition count balances parallelism and overhead** (24 partitions = sweet spot)
 2. **Customer ID as partition key ensures ordering** per customer
 3. **Hot keys handled with custom partitioner** (VIP partitions or salting)
 4. **Over-partition for future growth** (easier than repartitioning)
@@ -339,8 +335,7 @@ Followers: Continuously replicate from leader
 
 ISR = Set of replicas that are "caught up" with leader
 
-**Criteria for being in ISR:**
-1. Replica is alive (sending heartbeats to ZooKeeper)
+**Criteria for being in ISR:**1. Replica is alive (sending heartbeats to ZooKeeper)
 2. Replica has fetched messages within last 10 seconds (default: replica.lag.time.max.ms)
 3. Replica has fetched all messages up to high watermark
 
@@ -619,9 +614,7 @@ Alerts:
 - Leader election rate > 10/hour → Warning
 \`\`\`
 
-**Key Takeaways:**
-
-1. **ISR guarantees data durability** (committed = replicated to all ISR)
+**Key Takeaways:**1. **ISR guarantees data durability** (committed = replicated to all ISR)
 2. **acks=all + min.insync.replicas=2 prevents data loss** (recommended for critical data)
 3. **Leader election takes 5-10 seconds** (automatic, no data loss with acks=all)
 4. **Replication factor 3, min.insync.replicas=2** (balance: tolerate 1 failure, no data loss)
@@ -708,9 +701,7 @@ This replication mechanism makes Kafka highly fault-tolerant, surviving broker f
 
 **Choice: Apache Kafka ✅**
 
-**Why Kafka:**
-
-1. **High Throughput:**
+**Why Kafka:**1. **High Throughput:**
 \`\`\`
 Click volume: 10M clicks/day = 115 clicks/sec average
 Peak: 3× = 345 clicks/sec
@@ -784,9 +775,7 @@ Website → Load Balancer → API Servers → Kafka Topic: "clicks"
 
 **Choice: AWS SQS (if on AWS) or RabbitMQ (self-hosted) ✅**
 
-**Why SQS (AWS environment):**
-
-1. **Zero Ops:**
+**Why SQS (AWS environment):**1. **Zero Ops:**
 \`\`\`
 - No servers to manage
 - Auto-scaling (no capacity planning)
@@ -855,9 +844,7 @@ If not on AWS or need lower latency:
 
 **Choice: Redis Pub/Sub ✅**
 
-**Why Redis Pub/Sub:**
-
-1. **Lowest Latency:**
+**Why Redis Pub/Sub:**1. **Lowest Latency:**
 \`\`\`
 Redis latency: <1ms (in-memory)
 vs Kafka: 5-10ms
@@ -932,9 +919,7 @@ Still low latency (~1ms) but more features than Pub/Sub
 
 **Choice: Apache Kafka ✅**
 
-**Why Kafka:**
-
-1. **Immutable Log:**
+**Why Kafka:**1. **Immutable Log:**
 \`\`\`
 Kafka = append-only commit log (perfect for event sourcing)
 

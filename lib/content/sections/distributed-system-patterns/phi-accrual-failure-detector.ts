@@ -452,9 +452,7 @@ if phi > threshold:
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is phi accrual**: Continuous suspicion level instead of binary alive/dead
+### **Key Concepts to Explain**1. **What is phi accrual**: Continuous suspicion level instead of binary alive/dead
 2. **Why better than fixed timeout**: Adapts to network conditions, flexible thresholds
 3. **How it works**: Learn mean/stddev from heartbeat history, calculate phi based on deviation
 4. **Phi interpretation**: phi = 8 means ~99.999999% confidence node is dead

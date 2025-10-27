@@ -1097,8 +1097,7 @@ print("\\n=== LLM Context ===")
 print(resolver.generate_context_for_llm(12))
 \`\`\`
 
-**Exercise Tasks:**
-1. Add support for method resolution (obj.method)
+**Exercise Tasks:**1. Add support for method resolution (obj.method)
 2. Implement scope-aware resolution
 3. Add type inference for better resolution
 4. Build an index for faster lookups

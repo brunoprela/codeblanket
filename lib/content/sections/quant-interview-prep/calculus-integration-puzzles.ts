@@ -251,7 +251,7 @@ e^0.1 ≈ 1 + 0.1 + (0.1)²/2 + (0.1)³/6
 
 **Actual value:** e^0.1 = 1.10517...
 
-**Error:** 0.00017 (0.015%)
+**Error:**0.00017 (0.015%)
 
 **Interview tip:** For small x, keep first 2-3 terms for quick approximation.
 
@@ -532,9 +532,7 @@ ln(10) ≈ 2.303
 
 ## Summary
 
-**Key calculus skills for interviews:**
-
-1. **Optimization:** Find maxima/minima with or without constraints
+**Key calculus skills for interviews:**1. **Optimization:** Find maxima/minima with or without constraints
 2. **Integration:** Evaluate common integrals, expected values
 3. **Approximation:** Taylor series for quick estimates
 4. **Differential equations:** Solve growth, decay, mean reversion

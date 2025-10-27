@@ -246,9 +246,7 @@ class IncidentResponse:
         }
 \`\`\`
 
-**Prevention Measures:**
-
-1. **Database**:
+**Prevention Measures:**1. **Database**:
    - Continuous WAL archiving (5-min RPO)
    - Automated snapshots every 6 hours
    - Streaming replication to standby (hot failover)
@@ -277,8 +275,7 @@ class IncidentResponse:
 
 **Your firm is scaling research from 20 quants to 200 quants. Backtest volume will increase 50x (from 20/day to 1000+/day). Your current single-server system cannot handle this.**
 
-**Design a scalable architecture that:**
-1. Handles 1000+ concurrent backtests
+**Design a scalable architecture that:**1. Handles 1000+ concurrent backtests
 2. Maintains <5 second response time for status queries
 3. Costs <$10,000/month in AWS
 4. Scales automatically based on load
@@ -436,9 +433,7 @@ class ECSWorkerPool:
         )
 \`\`\`
 
-**Key Architectural Decisions:**
-
-1. **Decouple API from Workers**: API handles submissions/queries, workers process jobs
+**Key Architectural Decisions:**1. **Decouple API from Workers**: API handles submissions/queries, workers process jobs
 2. **Use Job Queue**: SQS provides durability, auto-scaling trigger, retry logic
 3. **Spot Instances**: 70% cost savings for workers (acceptable for batch processing)
 4. **Read Replicas**: Distribute query load across multiple database instances

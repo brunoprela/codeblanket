@@ -617,20 +617,11 @@ services:
 4. **Provide multiple interfaces** (CLI, Web, API)
 5. **Use sandboxing** for code execution
 6. **Implement undo/redo** functionality
-7. **Add comprehensive validation**
-8. **Save backups** before editing
-9. **Support multiple languages**
-10. **Provide good UX** with clear feedback
+7. **Add comprehensive validation**8. **Save backups** before editing
+9. **Support multiple languages**10. **Provide good UX** with clear feedback
 
 ### ❌ DON'T:
-1. **Skip error handling**
-2. **Forget to backup files**
-3. **Execute code without sandboxing**
-4. **Ignore user confirmation**
-5. **Skip validation**
-6. **Forget multi-language support**
-7. **Neglect documentation**
-8. **Skip testing**
+1. **Skip error handling**2. **Forget to backup files**3. **Execute code without sandboxing**4. **Ignore user confirmation**5. **Skip validation**6. **Forget multi-language support**7. **Neglect documentation**8. **Skip testing**
 
 ## Capstone Project
 

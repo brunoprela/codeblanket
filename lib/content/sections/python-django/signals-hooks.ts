@@ -553,8 +553,7 @@ class SignalTests(TestCase):
 ❌ Slow operations (use Celery tasks instead)
 ❌ Modifying sender (causes infinite loops)
 
-**Best Practices:**
-1. Keep receivers fast (use Celery for slow operations)
+**Best Practices:**1. Keep receivers fast (use Celery for slow operations)
 2. Avoid signal cascades (use update() to skip signals)
 3. Use dispatch_uid to prevent duplicates
 4. Register signals in AppConfig.ready()

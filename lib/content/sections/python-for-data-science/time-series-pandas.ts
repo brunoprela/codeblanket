@@ -46,7 +46,7 @@ print(df['date'].dtype)  # datetime64[ns]
 # Set as index
 df = df.set_index('date')
 print(df.index)
-# DatetimeIndex(['2024-01-01', '2024-01-02', '2024-01-03', '2024-01-04'], 
+# DatetimeIndex(['2024-01-01', '2024-01-02', '2024-01-03', '2024-01-04'],
 #               dtype='datetime64[ns]', name='date', freq=None)
 \`\`\`
 
@@ -72,7 +72,7 @@ df = df.set_index('date')
 
 print(df.head())
 #             value
-# date             
+# date
 # 2024-01-01  100.5
 # 2024-01-02   99.8
 # 2024-01-03  101.2
@@ -84,7 +84,7 @@ print(df.head())
 \`\`\`python
 # Frequency codes:
 # D  - calendar day
-# B  - business day  
+# B  - business day
 # W  - weekly
 # M  - month end
 # MS - month start
@@ -156,7 +156,7 @@ df['day_name'] = df.index.day_name()
 
 print(df.head())
 #             value  year  month  day  dayofweek  quarter  month_name day_name
-# date                                                                        
+# date
 # 2024-01-01  100.5  2024      1    1          0        1     January   Monday
 # 2024-01-02   99.8  2024      1    2          1        1     January  Tuesday
 # ...
@@ -555,7 +555,7 @@ print(daily[daily['anomaly']][['total_visitors', 'rolling_mean', 'z_score']].hea
 \`\`\`python
 # Simulate sensor readings with irregular intervals
 base_time = pd.Timestamp('2024-01-01')
-irregular_times = [base_time + pd.Timedelta (seconds=np.random.randint(0, 3600)) 
+irregular_times = [base_time + pd.Timedelta (seconds=np.random.randint(0, 3600))
                    for _ in range(1000)]
 irregular_times = sorted (irregular_times)
 

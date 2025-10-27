@@ -42,9 +42,7 @@ Real-time collaboration is **hard** because:
 
 ### Synchronization Strategies
 
-**Three approaches to real-time sync:**
-
-1. **Pessimistic Locking** (Traditional)
+**Three approaches to real-time sync:**1. **Pessimistic Locking** (Traditional)
    - User locks resource, makes changes, unlocks
    - Simple but terrible UX (blocking, slow)
    - Used by old systems (SVN, shared drives)
@@ -100,9 +98,7 @@ Real-time collaboration is **hard** because:
 └──────────────────────────────────────────────────────────────┘
 \`\`\`
 
-**Key Components:**
-
-1. **WebSocket Server**: Maintains persistent connections with all clients
+**Key Components:**1. **WebSocket Server**: Maintains persistent connections with all clients
 2. **CRDT Engine**: Resolves concurrent edits without conflicts
 3. **Redis PubSub**: Broadcasts changes across server instances (horizontal scaling)
 4. **PostgreSQL**: Persists document state and operation history
@@ -592,7 +588,7 @@ class CollaborativeAIAssistant {
           },
           {
             role: 'user',
-            content: \`Current code:\\n\${content}\\n\\nSuggest one improvement.\`
+            content: `Current code:\\n\${content}\\n\\nSuggest one improvement.\`
           }
         ],
         temperature: 0.3

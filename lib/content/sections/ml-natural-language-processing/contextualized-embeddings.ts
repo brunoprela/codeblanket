@@ -73,8 +73,7 @@ Weighted combination of layers
 Contextualized embedding for each word
 \`\`\`
 
-**Key Features:**
-1. **Bidirectional**: Reads text forward and backward
+**Key Features:**1. **Bidirectional**: Reads text forward and backward
 2. **Deep**: Multiple LSTM layers capture different linguistic aspects
 3. **Character-based**: Handles OOV words via character CNN
 4. **Pre-trained**: Trained on large corpus (1 Billion Word Benchmark)
@@ -385,8 +384,7 @@ ELMo demonstrated contextualized embeddings work, but:
 
 ## Summary
 
-**Key Takeaways:**
-1. Contextualized embeddings solve polysemy with context-dependent vectors
+**Key Takeaways:**1. Contextualized embeddings solve polysemy with context-dependent vectors
 2. ELMo uses bidirectional LSTMs to generate dynamic representations
 3. Same word in different contexts gets different embeddings
 4. Dramatically improves downstream task performance

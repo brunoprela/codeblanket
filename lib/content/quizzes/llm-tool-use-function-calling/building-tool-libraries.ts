@@ -101,8 +101,7 @@ class DynamicToolLoader:
                 return tool
 \`\`\`
 
-**Performance Optimizations:**
-1. Lazy loading - only load tools when needed
+**Performance Optimizations:**1. Lazy loading - only load tools when needed
 2. Caching - LRU cache for frequently used tools
 3. Indexing - fast lookups by category, tags, keywords
 4. Batch operations - register multiple tools efficiently
@@ -202,9 +201,7 @@ def create_tool_dynamically (name: str, description: str,
     return {"success": True, "tool": name}
 \`\`\`
 
-**Security Considerations:**
-
-1. **Code Validation:**
+**Security Considerations:**1. **Code Validation:**
 \`\`\`python
 def validate_code_safety (code: str) -> bool:
     # Parse code
@@ -248,8 +245,7 @@ class ToolPermissions:
         return user.has_permission("tool.modify")
 \`\`\`
 
-**Use Cases:**
-1. **API Integration:** Auto-generate tools from API specs
+**Use Cases:**1. **API Integration:** Auto-generate tools from API specs
 2. **Custom Workflows:** Users create domain-specific tools
 3. **Testing:** Generate mock tools for testing
 4. **Optimization:** Create specialized tools from general ones
@@ -275,8 +271,7 @@ class ToolPermissions:
       'Design a tool testing and validation framework that ensures tools work correctly, have good documentation, and perform well. Include unit tests, integration tests, and performance benchmarks.',
     sampleAnswer: `Comprehensive tool testing requires multiple layers:
 
-**Test Pyramid:**
-1. Unit Tests (fast, many)
+**Test Pyramid:**1. Unit Tests (fast, many)
 2. Integration Tests (medium speed, moderate)
 3. End-to-End Tests (slow, few)
 4. Performance Tests (periodic)

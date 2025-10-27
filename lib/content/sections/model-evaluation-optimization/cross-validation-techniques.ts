@@ -9,9 +9,7 @@ Cross-validation is one of the most powerful techniques in machine learning for 
 
 **The Core Idea**: Instead of splitting data once, split it multiple times in different ways, train and evaluate the model on each split, and aggregate the results.
 
-**Why Cross-Validation?**
-
-1. **More reliable estimates**: Single split can be lucky or unlucky; averaging multiple splits reduces variance
+**Why Cross-Validation?**1. **More reliable estimates**: Single split can be lucky or unlucky; averaging multiple splits reduces variance
 2. **Better use of data**: Every sample gets to be in both training and test sets
 3. **Model stability assessment**: Variance across folds indicates model robustness
 4. **Small dataset utility**: Particularly valuable when data is limited

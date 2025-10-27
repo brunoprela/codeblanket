@@ -31,8 +31,7 @@ Orders Table:
 +----------+-------------+----------------+--------------+---------------+
 \`\`\`
 
-**Problems:**
-1. **Update Anomaly:** If Alice changes email, must update multiple rows
+**Problems:**1. **Update Anomaly:** If Alice changes email, must update multiple rows
 2. **Insertion Anomaly:** Can't add customer without order
 3. **Deletion Anomaly:** Deleting Bob\'s order loses Bob's info entirely
 4. **Storage Waste:** Alice's info duplicated
@@ -330,7 +329,7 @@ CREATE TABLE comments (
 );
 
 -- To display comments, need JOIN to get username
-SELECT c.content, u.username 
+SELECT c.content, u.username
 FROM comments c
 JOIN users u ON c.user_id = u.user_id
 WHERE c.post_id = 123;
@@ -347,8 +346,8 @@ CREATE TABLE comments (
 );
 
 -- No JOIN needed
-SELECT content, username 
-FROM comments 
+SELECT content, username
+FROM comments
 WHERE post_id = 123;
 \`\`\`
 
@@ -391,7 +390,7 @@ SELECT post_id, like_count FROM posts WHERE post_id = 123;
 
 \`\`\`sql
 -- Complex join query (slow: 500ms)
-SELECT 
+SELECT
     p.product_id,
     p.name,
     c.category_name,
@@ -409,7 +408,7 @@ GROUP BY p.product_id, p.name, c.category_name;
 \`\`\`sql
 -- PostgreSQL
 CREATE MATERIALIZED VIEW product_stats AS
-SELECT 
+SELECT
     p.product_id,
     p.name,
     c.category_name,
@@ -663,8 +662,8 @@ CREATE TABLE events_daily (
 );
 
 -- Background job: aggregate raw events into rollup tables
-INSERT INTO events_hourly 
-SELECT 
+INSERT INTO events_hourly
+SELECT
     date_trunc('hour', created_at) as hour,
     event_type,
     COUNT(*) as event_count,
@@ -730,16 +729,7 @@ GROUP BY hour, event_type;
 
 ## Key Takeaways
 
-1. **Normalization eliminates redundancy and ensures data integrity**
-2. **Denormalization trades consistency for read performance**
-3. **3NF is sufficient for most transactional systems**
-4. **Most production systems use hybrid approaches**
-5. **Normalize the write path (source of truth)**
-6. **Denormalize the read path (performance)**
-7. **Use materialized views, caching, and search indexes for denormalization**
-8. **Event-driven architectures enable normalized writes + denormalized reads**
-9. **Choose based on workload: write-heavy → normalize, read-heavy → denormalize**
-10. **Consistency mechanisms are essential for denormalized systems**
+1. **Normalization eliminates redundancy and ensures data integrity**2. **Denormalization trades consistency for read performance**3. **3NF is sufficient for most transactional systems**4. **Most production systems use hybrid approaches**5. **Normalize the write path (source of truth)**6. **Denormalize the read path (performance)**7. **Use materialized views, caching, and search indexes for denormalization**8. **Event-driven architectures enable normalized writes + denormalized reads**9. **Choose based on workload: write-heavy → normalize, read-heavy → denormalize**10. **Consistency mechanisms are essential for denormalized systems**
 
 ## Summary
 

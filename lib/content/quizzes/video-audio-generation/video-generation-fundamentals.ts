@@ -111,9 +111,7 @@ Choose **Image-to-Video** for:
 - Cost-sensitive applications
 - When you need reliable, predictable results
 
-**Hybrid Approach for Optimal Results:**
-
-1. **Cascade**: Use T2V to generate key frames, then I2V to interpolate between them
+**Hybrid Approach for Optimal Results:**1. **Cascade**: Use T2V to generate key frames, then I2V to interpolate between them
 2. **Guided generation**: Start with T2V but use reference images as style guidance
 3. **Selective animation**: Use T2V for backgrounds, I2V for main subjects
 4. **Iterative refinement**: Generate with T2V, extract best frame, continue with I2V

@@ -74,14 +74,12 @@ Transaction Comps: 16x EBITDA (control + synergies, +33% premium)
 
 ### Search Criteria
 
-**Primary Filters:**
-1. **Industry/Sector** - Same industry as target
+**Primary Filters:**1. **Industry/Sector** - Same industry as target
 2. **Time Period** - Last 3-5 years (more recent = more relevant)
 3. **Deal Size** - Comparable transaction value ($100M target shouldn't use $10B deals)
 4. **Geography** - Similar markets (U.S., Europe, Asia)
 
-**Secondary Filters:**
-5. **Buyer Type** - Strategic vs financial (PE) buyer
+**Secondary Filters:**5. **Buyer Type** - Strategic vs financial (PE) buyer
 6. **Deal Structure** - 100% acquisition vs majority stake
 7. **Payment Method** - Cash vs stock (cash deals trade at premium)
 
@@ -567,7 +565,7 @@ for key, value in valuation.items():
     if 'Premium' in key:
         print(f"  {key:.<50} {value:.1%}")
     else:
-        print(f"  {key:.<50} ${value / 1_000_000:, .0f
+        print(f"  {key:.<50} ${value / 1_000_000:,.0f
 }M")
 
 # Strategic vs Financial
@@ -583,9 +581,7 @@ print(analysis.strategic_vs_financial_comparison().to_string())
 
 **Problem**: 2020 transaction at 15x EBITDA may not be relevant for 2024 deal if market conditions changed.
 
-**Adjustment Methods:**
-
-1. **Index to Current Market**
+**Adjustment Methods:**1. **Index to Current Market**
    - If S&P 500 up 30% since transaction, adjust multiple up proportionally
    - Crude but better than ignoring time
 
@@ -659,7 +655,7 @@ for key, value in result.items():
     if '%' in key or 'Probability' in key:
         print(f"  {key:.<40} {value:.1%}")
     else:
-        print(f"  {key:.<40} ${value / 1_000_000:, .0f}M")
+        print(f"  {key:.<40} ${value / 1_000_000:,.0f}M")
 \`\`\`
 
 ---

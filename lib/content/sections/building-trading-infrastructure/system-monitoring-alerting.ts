@@ -1059,8 +1059,7 @@ logger.log_risk_breach(
 | ELK Stack | Log aggregation | Error logs, Audit trail | Log-based alerts |
 | Datadog/New Relic | APM | Distributed tracing | Performance alerts |
 
-**Key Metrics to Monitor:**
-1. **Latency**: Order latency (p50/p95/p99 <100ms target)
+**Key Metrics to Monitor:**1. **Latency**: Order latency (p50/p95/p99 <100ms target)
 2. **Throughput**: Orders/sec, Fills/sec
 3. **Success Rate**: Order acceptance rate (>99%), Fill rate (>95%)
 4. **P&L**: Real-time P&L, Daily high/low, Limit utilization
@@ -1072,8 +1071,7 @@ logger.log_risk_breach(
 - **Warning** (Slack): High latency, Order rejection rate >5%, Position approaching limit
 - **Info** (Logs): Normal operations, Successful orders
 
-**Production Best Practices:**
-1. Monitor everything that can impact P&L
+**Production Best Practices:**1. Monitor everything that can impact P&L
 2. Alert on trends, not just absolute values
 3. Set alert thresholds with 20% buffer before actual limits
 4. Test alerts monthly (chaos engineering)

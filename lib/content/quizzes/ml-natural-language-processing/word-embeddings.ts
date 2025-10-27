@@ -25,9 +25,7 @@ Example: "I love machine learning"
 - Output: "machine" (target)
 - Averages context embeddings to predict target
 
-**Key Differences:**
-
-1. **Training Examples:**
+**Key Differences:**1. **Training Examples:**
    - Skip-gram: One target → many contexts (more training signals)
    - CBOW: Many contexts → one target (fewer training signals)
 
@@ -266,9 +264,7 @@ Transformer models (BERT) use subword tokenization (BPE, WordPiece) which provid
 vector("king") - vector("man") + vector("woman") ≈ vector("queen")
 \`\`\`
 
-**What This Means:**
-
-1. **Gender as a Vector:**
+**What This Means:**1. **Gender as a Vector:**
    - vector("king") - vector("man") ≈ "royalty + masculine"
    - This difference captures the "masculine gender" direction
    - Adding vector("woman") adds "feminine gender"
@@ -349,9 +345,7 @@ Document: "I deposited check at bank"
 - "bank" embedding includes river semantics
 - Model might find spurious similarity with water-related docs
 
-**Attempted Solutions (Pre-Transformer):**
-
-1. **Multiple embeddings per word:**
+**Attempted Solutions (Pre-Transformer):**1. **Multiple embeddings per word:**
    - Train separate embeddings for each sense
    - Requires sense disambiguation (complex)
 
@@ -418,9 +412,7 @@ Despite limitations, static embeddings remain useful when:
 - Interpretability matters (transformers are black boxes)
 - Working with short phrases where context is minimal
 
-**Key Insights:**
-
-1. Vector arithmetic reveals learned semantic structure
+**Key Insights:**1. Vector arithmetic reveals learned semantic structure
 2. Relationships encoded as geometric directions
 3. Static embeddings average all contexts → polysemy problem
 4. Contextualized embeddings solve this with dynamic representations

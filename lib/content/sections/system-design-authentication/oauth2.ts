@@ -179,9 +179,7 @@ Different flows for different scenarios.
      state=random_state_xyz
    \`\`\`
 
-2. **User authenticates and approves**
-
-3. **Authorization Server redirects to Client with code**:
+2. **User authenticates and approves**3. **Authorization Server redirects to Client with code**:
    \`\`\`
    https://myapp.com/callback?code=AUTH_CODE&state=random_state_xyz
    \`\`\`
@@ -209,7 +207,7 @@ Different flows for different scenarios.
    }
    \`\`\`
 
-**Why secure**: 
+**Why secure**:
 - Authorization code is one-time use
 - Access token never passes through browser
 - Client must authenticate with secret to exchange code
@@ -238,21 +236,17 @@ Different flows for different scenarios.
      code_challenge_method=S256
    \`\`\`
 
-4. **Auth server stores \`code_challenge\` with authorization code**
-
-5. **Client exchanges code + \`code_verifier\`**:
+4. **Auth server stores \`code_challenge\` with authorization code**5. **Client exchanges code + \`code_verifier\`**:
    \`\`\`http
    POST /oauth/token HTTP/1.1
-   
+
    grant_type=authorization_code&
    code=AUTH_CODE&
    client_id=abc123&
    code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
    \`\`\`
 
-6. **Auth server verifies \`SHA256(code_verifier) == code_challenge\`**
-
-7. **If match, returns tokens**
+6. **Auth server verifies \`SHA256(code_verifier) == code_challenge\`**7. **If match, returns tokens**
 
 **Why secure**: Even if attacker intercepts authorization code, they don't have \`code_verifier\` (it never leaves client), so they can't exchange code for tokens.
 
@@ -291,7 +285,7 @@ scope=read:data
 
 **Flow**: Returns access token directly in URL fragment (no code exchange)
 
-**Why deprecated**: 
+**Why deprecated**:
 - Access token exposed in browser history
 - No refresh token
 - Less secure than PKCE
@@ -302,7 +296,7 @@ scope=read:data
 
 **Flow**: Client collects username/password directly, sends to auth server
 
-**Why avoid**: 
+**Why avoid**:
 - Client sees user's password (defeats purpose of OAuth!)
 - Only acceptable for highly-trusted first-party apps
 
@@ -335,7 +329,7 @@ scope=read:data
 
 **Purpose**: Prevent CSRF attacks
 
-**How**: 
+**How**:
 1. Client generates random \`state\`: \`state=xyz789\`
 2. Client includes in auth request
 3. Auth server returns same \`state\` in callback

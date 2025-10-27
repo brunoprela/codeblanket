@@ -85,8 +85,7 @@ C_ATM ≈ P_ATM ≈ 0.4 × S₀ × σ × √T
 C_ATM ≈ 0.4 × 100 × 0.30 × 1 = $12
 \`\`\`
 
-**Mental calculation steps:**
-1. Multiply price by volatility: 100 × 0.30 = 30
+**Mental calculation steps:**1. Multiply price by volatility: 100 × 0.30 = 30
 2. Multiply by √T: 30 × 1 = 30
 3. Multiply by 0.4: 30 × 0.4 = 12
 
@@ -259,8 +258,7 @@ Expected: S - K = 100 - 100 = 0
 - Buy put: -$10
 - Net: +$2 for a position worth $0 at expiration → free money!
 
-**Mental calculation:**
-1. Calculate C - P
+**Mental calculation:**1. Calculate C - P
 2. Calculate S - K (adjust for interest if T is long)
 3. If difference > transaction costs, arbitrage exists
 
@@ -469,8 +467,7 @@ Simplified: Γ_ATM ≈ 0.4 / (S₀ × σ × √T)
 
 *"You're short 100 ATM calls on a $50 stock with 30% vol, 1 month to expiry. Stock moves up $2. How much do you need to rehedge?"*
 
-**Mental calculation:**
-1. Initial delta hedge: 100 calls × 0.5 delta = 50 shares
+**Mental calculation:**1. Initial delta hedge: 100 calls × 0.5 delta = 50 shares
 2. Gamma ≈ 0.4 / (50 × 0.30 × √(1/12)) ≈ 0.4 / (50 × 0.30 × 0.29) ≈ 0.4 / 4.35 ≈ 0.09
 3. Delta change from $2 move: Γ × $2 = 0.09 × 2 = 0.18
 4. New delta per call: 0.5 + 0.18 = 0.68
@@ -591,8 +588,7 @@ Theta (Θ) measures time decay. For ATM options:
 
 *"You're long 100 ATM calls with 1 month to expiry. Stock is $50, vol is 40%. How much does your position lose per day from time decay?"*
 
-**Mental calculation:**
-1. T = 1/12 year, √T ≈ 0.29
+**Mental calculation:**1. T = 1/12 year, √T ≈ 0.29
 2. Θ (per year) ≈ -0.5 × 50 × 0.40 / 0.29 ≈ -10 / 0.29 ≈ -$34 per option per year
 3. Θ (per day) ≈ -34 / 365 ≈ -$0.09 per option
 4. For 100 options: 100 × $0.09 = $9 per day
@@ -639,8 +635,7 @@ Rearranging:
 
 *Trader:* "Can you quote me a 3-month call on AAPL? Stock's at $150, strike $150."
 
-**Your mental process (< 5 seconds):**
-1. ATM option
+**Your mental process (< 5 seconds):**1. ATM option
 2. Assume ~30% vol (historical for AAPL)
 3. C ≈ 0.4 × 150 × 0.30 × √0.25
 4. C ≈ 0.4 × 150 × 0.30 × 0.5
@@ -663,8 +658,7 @@ Rearranging:
 
 *Trader:* "I just sold 50 ATM calls on SPY at $400. How do I hedge?"
 
-**Mental process:**
-1. ATM calls have delta ≈ 0.5
+**Mental process:**1. ATM calls have delta ≈ 0.5
 2. Short 50 calls → delta = -25
 3. Hedge: buy 25 shares of SPY
 
@@ -700,8 +694,7 @@ Set a 30-second timer and estimate:
 2. ATM 3-month put, S=$100, σ=25%
 3. 10% OTM 6-month call, S=$75, σ=30%
 
-**Answers:**
-1. C ≈ 0.4 × 50 × 0.40 × 1 = $8
+**Answers:**1. C ≈ 0.4 × 50 × 0.40 × 1 = $8
 2. P ≈ 0.4 × 100 × 0.25 × 0.5 = $5
 3. ATM price ≈ 0.4 × 75 × 0.30 × 0.71 ≈ $6.39, OTM adjustment × 0.4 ≈ $2.56
 
@@ -712,8 +705,7 @@ Check for arbitrage (30 seconds each):
 2. S=$100, K=$95, C=$10, P=$3
 3. S=$80, K=$80, C=$6, P=$5
 
-**Answers:**
-1. C - P = 0, S - K = 0 → No arbitrage
+**Answers:**1. C - P = 0, S - K = 0 → No arbitrage
 2. C - P = 7, S - K = 5 → Call overpriced by $2
 3. C - P = 1, S - K = 0 → Call overpriced by $1
 
@@ -724,8 +716,7 @@ For ATM option with S=$100, σ=20%, T=3months:
 2. Approximate gamma?
 3. Daily theta?
 
-**Answers:**
-1. Δ ≈ 0.5
+**Answers:**1. Δ ≈ 0.5
 2. Γ ≈ 0.4 / (100 × 0.20 × 0.5) = 0.04
 3. Annual theta ≈ -0.5 × 100 × 0.20 / 0.5 = -$20/year = -$0.055/day
 
@@ -746,8 +737,7 @@ Mental math for options is a learnable skill that separates great traders from g
 - Vega: ATM ≈ 0.4 × S × √T (per 1% vol)
 - Theta: ATM ≈ -0.5 × S × σ / √T per year
 
-**Interview success tips:**
-1. **Practice daily:** Do 10-20 mental math problems daily
+**Interview success tips:**1. **Practice daily:** Do 10-20 mental math problems daily
 2. **Know your approximations:** Memorize √0.25 = 0.5, √0.5 ≈ 0.71, etc.
 3. **Communicate clearly:** Talk through your process
 4. **Sanity check:** Does the answer make intuitive sense?

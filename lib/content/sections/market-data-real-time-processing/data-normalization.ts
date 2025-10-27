@@ -247,7 +247,7 @@ adjuster.add_split('AAPL', date(2020, 8, 31), 4.0)
 # Historical price before split
 old_price = Decimal('400.00')  # Aug 1, 2020
 adjusted = adjuster.adjust_price('AAPL', old_price, date(2020, 8, 1))
-print(f"Adjusted price: ${adjusted}")  # $100.00 (400 / 4)
+print(f"Adjusted price: \\${adjusted}")  # $100.00 (400 / 4)
 \`\`\`
 
 ---

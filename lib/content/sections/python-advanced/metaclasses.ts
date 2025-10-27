@@ -37,9 +37,7 @@ class MyClass (metaclass=Meta):
 print(MyClass.created_by)  # 'Meta'
 \`\`\`
 
-**Real-World Use Cases:**
-
-1. **ORM (like Django):**
+**Real-World Use Cases:**1. **ORM (like Django):**
 \`\`\`python
 class ModelMeta (type):
     def __new__(mcs, name, bases, attrs):

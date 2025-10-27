@@ -49,9 +49,7 @@ export const interviewSection = {
 
 **Interview Communication:**
 
-**Example: Number of Islands**
-
-1. **Clarify:**
+**Example: Number of Islands**1. **Clarify:**
    - "Is this a 2D grid of land and water?"
    - "Are diagonals considered connected?" (Usually no)
    - "Can I modify the input grid?"
@@ -96,9 +94,7 @@ Be careful with in-place modifications.
 
 ---
 
-**Practice Plan:**
-
-1. **Basics (Day 1-2):**
+**Practice Plan:**1. **Basics (Day 1-2):**
    - Number of Islands
    - Clone Graph
    - Course Schedule

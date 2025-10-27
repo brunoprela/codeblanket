@@ -283,7 +283,7 @@ class FuturesContract:
         else:  # short
             pnl = -num_ticks * self.tick_value * self.contracts
         
-        logger.info(f"Daily P&L: ${pnl:, .2f
+        logger.info(f"Daily P&L: ${pnl:,.2f}
 }")
         
         # Update futures price for next day

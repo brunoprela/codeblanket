@@ -93,20 +93,17 @@ A: "Use fast and slow pointers - Floyd\'s algorithm"
 
 **Practice Roadmap:**
 
-**Week 1: Master Basics**
-1. Two Sum (sorted array)
+**Week 1: Master Basics**1. Two Sum (sorted array)
 2. Remove duplicates
 3. Valid palindrome
 4. Container with most water
 
-**Week 2: Intermediate**
-5. 3Sum
+**Week 2: Intermediate**5. 3Sum
 6. Trapping rain water
 7. Longest substring without repeating chars
 8. Minimum window substring
 
-**Week 3: Advanced**
-9. 4Sum
+**Week 3: Advanced**9. 4Sum
 10. Linked list cycle detection
 11. Dutch national flag
 12. Merge sorted arrays

@@ -275,17 +275,17 @@ if __name__ == "__main__":
     call_price = black_scholes_price(inputs_call)
     greeks_call = black_scholes_greeks(inputs_call)
     
-    print(f"Stock Price: ${inputs_call.S}")
-    print(f"Strike: ${inputs_call.K}")
+    print(f"Stock Price: \${inputs_call.S}")
+    print(f"Strike: \${inputs_call.K}")
     print(f"Time to Expiration: {inputs_call.T * 365:.0f} days")
     print(f"Volatility: {inputs_call.sigma * 100:.0f}%")
-    print(f"\\nCall Price: ${call_price:.2f}")
+    print(f"\\nCall Price: \${call_price:.2f}")
     print(f"\\nGreeks:")
-    print(f"  Delta: {greeks_call['delta']:.4f} (option moves ${greeks_call['delta']:.2f} per $1 stock move)")
+    print(f"  Delta: {greeks_call['delta']:.4f} (option moves \${greeks_call['delta']:.2f} per $1 stock move)")
     print(f"  Gamma: {greeks_call['gamma']:.4f}")
-    print(f"  Theta: ${greeks_call['theta']:.2f} per day (time decay)")
-    print(f"  Vega: ${greeks_call['vega']:.2f} per 1% vol change")
-    print(f"  Rho: ${greeks_call['rho']:.2f} per 1% rate change")
+    print(f"  Theta: \${greeks_call['theta']:.2f} per day (time decay)")
+    print(f"  Vega: \${greeks_call['vega']:.2f} per 1% vol change")
+    print(f"  Rho: \${greeks_call['rho']:.2f} per 1% rate change")
     
     # Example 2: OTM Put Option
     print("\\n" + "=" * 70)
@@ -303,15 +303,15 @@ if __name__ == "__main__":
     put_price = black_scholes_price(inputs_put)
     greeks_put = black_scholes_greeks(inputs_put)
     
-    print(f"Stock Price: ${inputs_put.S}")
-    print(f"Strike: ${inputs_put.K}")
-    print(f"\\nPut Price: ${put_price:.2f}")
+    print(f"Stock Price: \${inputs_put.S}")
+    print(f"Strike: \${inputs_put.K}")
+    print(f"\\nPut Price: \${put_price:.2f}")
     print(f"\\nGreeks:")
     print(f"  Delta: {greeks_put['delta']:.4f}")
     print(f"  Gamma: {greeks_put['gamma']:.4f}")
-    print(f"  Theta: ${greeks_put['theta']:.2f} per day")
-    print(f"  Vega: ${greeks_put['vega']:.2f} per 1% vol change")
-    print(f"  Rho: ${greeks_put['rho']:.2f} per 1% rate change")
+    print(f"  Theta: \${greeks_put['theta']:.2f} per day")
+    print(f"  Vega: \${greeks_put['vega']:.2f} per 1% vol change")
+    print(f"  Rho: \${greeks_put['rho']:.2f} per 1% rate change")
     
     # Example 3: Put-Call Parity Verification
     print("\\n" + "=" * 70)
@@ -332,12 +332,12 @@ if __name__ == "__main__":
     lhs = C - P
     rhs = S - K * np.exp(-r * T)
     
-    print(f"Call Price: ${C:.2f}")
-    print(f"Put Price: ${P:.2f}")
+    print(f"Call Price: \${C:.2f}")
+    print(f"Put Price: \${P:.2f}")
     print(f"\\nPut-Call Parity Check:")
-    print(f"  C - P = ${lhs:.2f}")
-    print(f"  S - K*e^(-rT) = ${rhs:.2f}")
-    print(f"  Difference: ${abs(lhs - rhs):.6f} (should be ~0)")
+    print(f"  C - P = \${lhs:.2f}")
+    print(f"  S - K*e^(-rT) = \${rhs:.2f}")
+    print(f"  Difference: \${abs(lhs - rhs):.6f} (should be ~0)")
     print(f"  Parity holds: {abs(lhs - rhs) < 0.0001}")
 \`\`\`
 
@@ -467,9 +467,9 @@ price_with_div = black_scholes_with_dividends(
     S=100, K=100, T=0.25, r=0.05, sigma=0.20, q=0.02, option_type='call'  # 2% dividend yield
 )
 
-print(f"Call price without dividends: ${price_no_div:.2f}")
-print(f"Call price with 2% dividend yield: ${price_with_div:.2f}")
-print(f"Difference: ${price_no_div - price_with_div:.2f}")
+print(f"Call price without dividends: \${price_no_div:.2f}")
+print(f"Call price with 2% dividend yield: \${price_with_div:.2f}")
+print(f"Difference: \${price_no_div - price_with_div:.2f}")
 print("\\nDividends reduce call value (stock price drops on ex-div date)")
 \`\`\`
 
@@ -612,7 +612,7 @@ call_prices = black_scholes_vectorized(
 
 print("Vectorized pricing of 41 options:")
 for strike, price in zip(strikes[::5], call_prices[::5]):  # Print every 5th
-    print(f"  Strike ${strike}: ${price:.2f}")
+    print(f"  Strike \${strike}: \${price:.2f}")
 \`\`\`
 
 ### 3. Caching for Real-Time Systems
@@ -652,8 +652,8 @@ price_wrong = black_scholes_price(BlackScholesInputs(100, 100, 0.25, 0.05, daily
 annual_vol = daily_vol * np.sqrt(252)  # Annualize: 0.015 × √252 ≈ 0.238
 price_correct = black_scholes_price(BlackScholesInputs(100, 100, 0.25, 0.05, annual_vol, OptionType.CALL))
 
-print(f"Wrong (daily vol): ${price_wrong:.2f}")
-print(f"Correct (annual vol): ${price_correct:.2f}")
+print(f"Wrong (daily vol): \${price_wrong:.2f}")
+print(f"Correct (annual vol): \${price_correct:.2f}")
 \`\`\`
 
 ### 2. Time Units Mismatch
@@ -721,4 +721,3 @@ price_correct = black_scholes_price(BlackScholesInputs(100, 100, T_years, 0.05, 
 In the next section, we'll dive deep into **the Greeks** - delta, gamma, theta, vega, and rho - and how to use them for risk management and trading strategies.
 `,
 };
-

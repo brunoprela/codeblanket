@@ -72,9 +72,7 @@ print(f"\\nCointegration of DIFFERENCES p-value: {coint_diff_p:.3f}")
 
 ### The Correct Approach
 
-**Step-by-step pairs trading validation:**
-
-1. **Test Order of Integration:**
+**Step-by-step pairs trading validation:**1. **Test Order of Integration:**
    - ADF test on levels (expect p > 0.05)
    - ADF test on first differences (expect p < 0.05)
    - Conclusion: Both are I(1) ✓
@@ -217,8 +215,7 @@ If you differentiate first, you lose the relationship between levels that create
 
 ### Summary
 
-**Don't difference before testing cointegration because:**
-1. Cointegration requires I(1) series by definition
+**Don't difference before testing cointegration because:**1. Cointegration requires I(1) series by definition
 2. Differencing converts I(1) → I(0), making test meaningless
 3. Trading signal comes from level relationship, not changes
 4. False negatives cost millions in missed opportunities
@@ -268,9 +265,7 @@ If you differentiate first, you lose the relationship between levels that create
 
 ### Your Case: ADF Stationary, KPSS Non-Stationary
 
-**Most common causes:**
-
-1. **Structural Break:**
+**Most common causes:**1. **Structural Break:**
    - Series has regime change (mean/variance shift)
    - ADF doesn't detect (assumes single regime)
    - KPSS detects (rejects constant mean)
@@ -503,9 +498,7 @@ class ConflictingTestResolver:
 
 **NO - The risk manager is being too conservative.**
 
-**Why the decision to avoid modeling is WRONG:**
-
-1. **Conflicting tests are COMMON:**
+**Why the decision to avoid modeling is WRONG:**1. **Conflicting tests are COMMON:**
    - Happens frequently with financial returns
    - Not a dealbreaker, just needs investigation
 
@@ -961,19 +954,16 @@ class ProperMLPipeline:
 
 "I appreciate the enthusiasm for deep learning, but let me explain why we can't skip stationarity checks:
 
-**Your R²=0.92 is actually a RED FLAG, not success:**
-1. Random walk achieves R²>0.90 with naive forecast
+**Your R²=0.92 is actually a RED FLAG, not success:**1. Random walk achieves R²>0.90 with naive forecast
 2. High R² comes from trending prices, not predictive power
 3. Out-of-sample will likely collapse (R² < 0.1)
 
-**Problems with raw price data:**
-1. Distribution shift: train prices $50-100, test prices $150-200
+**Problems with raw price data:**1. Distribution shift: train prices $50-100, test prices $150-200
 2. Model learns specific price levels, doesn't generalize
 3. Spurious patterns from autocorrelation
 4. Overfitting to in-sample trend
 
-**Correct approach:**
-1. Transform to RETURNS (stationary)
+**Correct approach:**1. Transform to RETURNS (stationary)
 2. Use stationary features (volatility, RSI, etc.)
 3. Validate with walk-forward (not random split!)
 4. Test economic significance (actual trading profits)

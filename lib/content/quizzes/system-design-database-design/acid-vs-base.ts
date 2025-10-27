@@ -11,8 +11,7 @@ export const acidvsbaseQuiz = [
 
 **Requirements Analysis:**
 
-**Ride-sharing app data types:**
-1. Payments (ride charges)
+**Ride-sharing app data types:**1. Payments (ride charges)
 2. Driver locations (real-time tracking)
 3. User profiles
 4. Ride history

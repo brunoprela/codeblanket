@@ -18,8 +18,7 @@ Both are beginner-friendly, have defined risk profiles, and serve different purp
 
 ### Mechanics
 
-**Setup:**
-1. Own 100 shares of stock (or multiples of 100)
+**Setup:**1. Own 100 shares of stock (or multiples of 100)
 2. Sell 1 call option per 100 shares
 3. Typically sell **30-45 days** to expiration
 4. Strike: **OTM** (above current price) or ATM
@@ -79,8 +78,8 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
 ax1.plot(stock_prices, total_pl, 'b-', linewidth=2, label='Covered Call')
 ax1.plot(stock_prices, stock_pl, 'g--', linewidth=1, label='Stock Only', alpha=0.5)
 ax1.axhline(0, color='black', linestyle='-', alpha=0.3)
-ax1.axvline(purchase_price, color='gray', linestyle=':', alpha=0.5, label=f'Purchase ${purchase_price}')
-ax1.axvline(strike, color='red', linestyle=':', alpha=0.5, label=f'Strike ${strike}')
+ax1.axvline(purchase_price, color='gray', linestyle=':', alpha=0.5, label=f'Purchase \${purchase_price}')
+ax1.axvline(strike, color='red', linestyle=':', alpha=0.5, label=f'Strike \${strike}')
 ax1.set_xlabel('Stock Price at Expiration')
 ax1.set_ylabel('Profit / Loss per Share')
 ax1.set_title('Covered Call Payoff Diagram')
@@ -128,7 +127,7 @@ plt.show()
 print("=" * 70)
 print("COVERED CALL ANALYSIS")
 print("=" * 70)
-print(f"\\nPosition: Long 100 shares at ${purchase_price}, Short ${strike} call for ${premium}")
+print(f"\\nPosition: Long 100 shares at \${purchase_price}, Short \${strike} call for \${premium}")
 print(f"\\nScenario Analysis:")
 for scenario, price in scenarios.items():
     stock_pl = price - purchase_price
@@ -139,28 +138,27 @@ for scenario, price in scenarios.items():
     else:
         call_pl = premium - (price - strike)
         total_pl = strike - purchase_price + premium
-        status = f"Stock called away at ${strike}"
+        status = f"Stock called away at \${strike}"
     
     print(f"\\n{scenario}:")
-    print(f"  Stock P&L: ${stock_pl:.2f}")
-    print(f"  Call P&L: ${call_pl:.2f}")
-    print(f"  Total P&L: ${total_pl:.2f}")
+    print(f"  Stock P&L: \${stock_pl:.2f}")
+    print(f"  Call P&L: \${call_pl:.2f}")
+    print(f"  Total P&L: \${total_pl:.2f}")
     print(f"  Return: {(total_pl / purchase_price * 100):.2f}%")
     print(f"  {status}")
 
 # Calculate metrics
 print(f"\\n{'─' * 70}")
 print("Key Metrics:")
-print(f"  Max Profit: ${strike - purchase_price + premium:.2f} (at ${strike}+)")
+print(f"  Max Profit: \${strike - purchase_price + premium:.2f} (at \${strike}+)")
 print(f"  Max Profit %: {((strike - purchase_price + premium) / purchase_price * 100):.2f}%")
-print(f"  Downside Protection: ${premium:.2f} (breakeven at ${purchase_price - premium:.2f})")
-print(f"  Upside Capped At: ${strike}")
+print(f"  Downside Protection: \${premium:.2f} (breakeven at \${purchase_price - premium:.2f})")
+print(f"  Upside Capped At: \${strike}")
 \`\`\`
 
 ### When to Use Covered Calls
 
-**Ideal Conditions:**
-1. **Neutral to slightly bullish** outlook
+**Ideal Conditions:**1. **Neutral to slightly bullish** outlook
 2. **High IV** (sell rich premium)
 3. **Stock you're willing to sell** at strike
 4. **Income generation** goal
@@ -244,7 +242,7 @@ income_df = monthly_covered_call_income(stock_price, annual_div_yield, monthly_p
 
 print("\\nMONTHLY COVERED CALL INCOME PROJECTION")
 print("=" * 70)
-print(f"Stock: ${stock_price}")
+print(f"Stock: \${stock_price}")
 print(f"Strategy: Sell 1.5% OTM calls monthly")
 print("\\n", income_df.to_string(index=False))
 
@@ -259,8 +257,7 @@ print(f"This is BEFORE any stock appreciation (capped at strike)")
 
 ### Mechanics
 
-**Setup:**
-1. Own 100 shares of stock
+**Setup:**1. Own 100 shares of stock
 2. Buy 1 put option per 100 shares
 3. Strike: Typically 5-10% OTM (below current price)
 4. Expiration: Depends on hedge horizon (30-90 days)
@@ -313,8 +310,8 @@ plt.figure(figsize=(12, 6))
 plt.plot(stock_prices, stock_pl, 'r--', linewidth=2, label='Stock Only', alpha=0.7)
 plt.plot(stock_prices, total_pl, 'g-', linewidth=2, label='Stock + Protective Put')
 plt.axhline(0, color='black', linestyle='-', alpha=0.3)
-plt.axvline(purchase_price, color='gray', linestyle=':', label=f'Purchase ${purchase_price}')
-plt.axvline(put_strike, color='orange', linestyle=':', label=f'Put Strike ${put_strike}')
+plt.axvline(purchase_price, color='gray', linestyle=':', label=f'Purchase \${purchase_price}')
+plt.axvline(put_strike, color='orange', linestyle=':', label=f'Put Strike \${put_strike}')
 
 # Highlight floor
 plt.axhline(put_strike - purchase_price - put_premium, color='green', 
@@ -331,8 +328,8 @@ plt.show()
 print("=" * 70)
 print("PROTECTIVE PUT ANALYSIS")
 print("=" * 70)
-print(f"\\nPosition: Long 100 shares at ${purchase_price}")
-print(f"Protection: Long ${put_strike} put for ${put_premium}")
+print(f"\\nPosition: Long 100 shares at \${purchase_price}")
+print(f"Protection: Long \${put_strike} put for \${put_premium}")
 print(f"\\nScenarios:")
 
 scenarios = {
@@ -349,22 +346,21 @@ for scenario, price in scenarios.items():
     total_pl = stock_pl + put_pl
     
     print(f"\\n{scenario}:")
-    print(f"  Stock P&L: ${stock_pl:.2f}")
-    print(f"  Put P&L: ${put_pl:.2f}")
-    print(f"  Total P&L: ${total_pl:.2f}")
+    print(f"  Stock P&L: \${stock_pl:.2f}")
+    print(f"  Put P&L: \${put_pl:.2f}")
+    print(f"  Total P&L: \${total_pl:.2f}")
     print(f"  Return: {(total_pl / purchase_price * 100):.2f}%")
 
 max_loss = put_strike - purchase_price - put_premium
 print(f"\\n{'─' * 70}")
-print(f"Max Loss: ${max_loss:.2f} per share (no matter how low stock goes!)")
-print(f"Cost of Protection: ${put_premium:.2f}/share for 90 days = {(put_premium/purchase_price*100):.2f}%")
+print(f"Max Loss: \${max_loss:.2f} per share (no matter how low stock goes!)")
+print(f"Cost of Protection: \${put_premium:.2f}/share for 90 days = {(put_premium/purchase_price*100):.2f}%")
 print(f"Annualized Insurance Cost: {(put_premium/purchase_price*4*100):.2f}%")
 \`\`\`
 
 ### When to Use Protective Puts
 
-**Ideal Conditions:**
-1. **Hold concentrated position** (can't diversify)
+**Ideal Conditions:**1. **Hold concentrated position** (can't diversify)
 2. **Earnings/event risk** ahead
 3. **Market uncertainty** (hedge portfolio)
 4. **Lock in gains** (have profits, protect them)
@@ -441,9 +437,9 @@ plt.legend()
 plt.show()
 
 print(f"Collar Analysis:")
-print(f"  Max Profit: ${call_strike - purchase_price} (at ${call_strike}+)")
-print(f"  Max Loss: ${purchase_price - put_strike} (at ${put_strike} or below)")
-print(f"  Net Cost: ${put_premium - call_premium}")
+print(f"  Max Profit: \${call_strike - purchase_price} (at \${call_strike}+)")
+print(f"  Max Loss: \${purchase_price - put_strike} (at \${put_strike} or below)")
+print(f"  Net Cost: \${put_premium - call_premium}")
 \`\`\`
 
 ---
@@ -468,4 +464,3 @@ print(f"  Net Cost: ${put_premium - call_premium}")
 These strategies form the foundation of sophisticated portfolio management and are used by institutions and retail traders alike.
 `,
 };
-

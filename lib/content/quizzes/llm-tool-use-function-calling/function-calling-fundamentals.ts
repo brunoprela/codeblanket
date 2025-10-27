@@ -5,9 +5,7 @@ export const functionCallingFundamentalsQuiz = [
       'Explain the fundamental difference between function calling and traditional prompt-based information extraction. Why is function calling more reliable, and in what scenarios might traditional prompting still be preferable?',
     sampleAnswer: `Function calling provides a structured, schema-enforced way for LLMs to generate outputs, making it fundamentally more reliable than parsing text responses. Here\'s why:
 
-**Key Differences:**
-
-1. **Structure vs. Text**: Function calling uses JSON schemas with defined types, while text parsing relies on pattern matching and hope
+**Key Differences:**1. **Structure vs. Text**: Function calling uses JSON schemas with defined types, while text parsing relies on pattern matching and hope
 2. **Validation**: Function arguments are validated against schemas; text requires custom parsing logic
 3. **Type Safety**: Function calling preserves types (strings, numbers, booleans); text is always strings
 4. **Consistency**: Function calling guarantees format; text parsing deals with variations like "The city is SF" vs "SF" vs "San Francisco, CA"
@@ -43,9 +41,7 @@ Extracting a city name from "Show me weather for SF" - with function calling, yo
       'Design a comprehensive error handling strategy for a production function calling system. Consider network failures, rate limiting, invalid function calls, and timeout scenarios. How would you implement retries, fallbacks, and user feedback?',
     sampleAnswer: `A production function calling system needs multi-layered error handling to ensure reliability and good user experience:
 
-**Error Categories and Strategies:**
-
-1. **Network/API Errors (Transient)**
+**Error Categories and Strategies:**1. **Network/API Errors (Transient)**
    - Implement exponential backoff with jitter
    - Retry 3-5 times with delays: 1s, 2s, 4s, 8s
    - Add jitter (±50%) to prevent thundering herd
@@ -149,9 +145,7 @@ async def execute_with_resilience (func_name, args):
 - Pros: Integrated with Google services
 - Cons: Different message format, less mature
 
-**Key Differences:**
-
-1. **Schema Format:**
+**Key Differences:**1. **Schema Format:**
    - OpenAI: "parameters" with JSON Schema
    - Claude: "input_schema" with JSON Schema
    - Gemini: "parameters" in FunctionDeclaration
@@ -213,8 +207,7 @@ class UniversalFunctionCaller:
                     }
 \`\`\`
 
-**Best Practices:**
-1. Abstract function schemas into universal format
+**Best Practices:**1. Abstract function schemas into universal format
 2. Use adapters for provider-specific conversions
 3. Handle provider-specific features gracefully
 4. Test with multiple providers

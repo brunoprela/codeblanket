@@ -561,9 +561,7 @@ export const graphqlSection = {
     
     ## When to Use GraphQL
     
-    ### **✅ Use GraphQL When:**
-    
-    1. **Mobile Applications**
+    ### **✅ Use GraphQL When:**1. **Mobile Applications**
        - Bandwidth is limited
        - Need to minimize data transfer
        - Multiple resources needed per screen
@@ -588,9 +586,7 @@ export const graphqlSection = {
        - Chat applications
        - Live sports scores
     
-    ### **❌ Avoid GraphQL When:**
-    
-    1. **Simple CRUD APIs**
+    ### **❌ Avoid GraphQL When:**1. **Simple CRUD APIs**
        - REST is simpler and more familiar
        - No complex relationships
        - Standard HTTP caching sufficient

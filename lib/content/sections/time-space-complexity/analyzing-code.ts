@@ -89,9 +89,7 @@ def fibonacci (n):
 
 **Analyzing Recursive Algorithms:**
 
-Use the **Recursion Tree Method:**
-
-1. Draw the recursion tree
+Use the **Recursion Tree Method:**1. Draw the recursion tree
 2. Count nodes (calls) at each level
 3. Sum across all levels
 

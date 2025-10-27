@@ -1,7 +1,7 @@
 export const fixedIncomePortfolioManagement = {
-    title: 'Fixed Income Portfolio Management',
-    id: 'fixed-income-portfolio-management',
-    content: `
+  title: 'Fixed Income Portfolio Management',
+  id: 'fixed-income-portfolio-management',
+  content: `
 # Fixed Income Portfolio Management
 
 ## Introduction

@@ -37,7 +37,7 @@ XML documents containing authentication and authorization statements.
   <saml:Subject>
     <saml:NameID>john.smith@company.com</saml:NameID>
   </saml:Subject>
-  <saml:Conditions NotBefore="2024-01-15T10:00:00Z" 
+  <saml:Conditions NotBefore="2024-01-15T10:00:00Z"
                    NotOnOrAfter="2024-01-15T10:05:00Z"/>
   <saml:AuthnStatement AuthnInstant="2024-01-15T10:00:00Z"/>
   <saml:AttributeStatement>
@@ -119,7 +119,7 @@ Most common flow: User starts at Service Provider.
 
 6. **IdP redirects to SP**: Browser redirected to Salesforce with SAML Response (HTTP POST)
 
-7. **SP validates assertion**: 
+7. **SP validates assertion**:
    - Verify signature using IdP's public key
    - Check NotBefore and NotOnOrAfter times
    - Verify Audience matches SP
@@ -188,7 +188,7 @@ Alternative flow: User starts at Identity Provider.
 3. IdP signs assertion with private key
 4. SP verifies signature with public key
 
-**This proves**: 
+**This proves**:
 - Assertion came from IdP (authenticity)
 - Assertion wasn't modified (integrity)
 
@@ -261,7 +261,7 @@ IdP can pass user attributes to SP in assertions.
 
 **Attribute Mapping**: SP maps SAML attributes to local user fields.
 
-**Example**: 
+**Example**:
 - SAML: \`<Attribute Name="firstName">John</Attribute>\`
 - SP maps to: \`user.first_name = "John"\`
 

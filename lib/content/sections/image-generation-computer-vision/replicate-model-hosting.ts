@@ -657,7 +657,7 @@ class ProductionReplicateClient:
         """Check if within budget."""
         total = self.tracker.get_total_cost()
         if total >= limit:
-            raise Exception (f"Budget limit reached: \${total:.2f} >= \${ limit: .2f } ")
+            raise Exception (f"Budget limit reached: \${total:.2f} >= \${ limit:.2f } ")
 return True
 \`\`\`
 

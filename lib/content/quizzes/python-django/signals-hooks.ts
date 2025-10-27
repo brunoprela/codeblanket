@@ -8,8 +8,7 @@ export const signalsHooksQuiz = [
 
 Signals allow decoupled applications to get notified when actions occur elsewhere in the application. They implement the observer pattern.
 
-**Built-in Signals:**
-1. **pre_save / post_save**: Before/after model save
+**Built-in Signals:**1. **pre_save / post_save**: Before/after model save
 2. **pre_delete / post_delete**: Before/after model delete
 3. **m2m_changed**: When ManyToMany relationships change
 4. **request_started / request_finished**: Request lifecycle
@@ -153,9 +152,7 @@ class ArticleTest(TestCase):
         article = Article.objects.create(...)
 \`\`\`
 
-**Best Practices:**
-
-1. ✅ Use transaction.on_commit() for side effects
+**Best Practices:**1. ✅ Use transaction.on_commit() for side effects
 2. ✅ Keep signal handlers lightweight
 3. ✅ Move expensive operations to background tasks
 4. ✅ Document all signals in your codebase

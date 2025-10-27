@@ -79,14 +79,14 @@ class BiasDetection:
 
 class TextBiasDetector:
     """Detect bias in text outputs"""
-    
+
     def __init__(self):
         # Gender-biased terms
         self.gendered_terms = {
             'masculine': {'he', 'him', 'his', 'man', 'men', 'male', 'gentleman', 'sir', 'boy', 'father', 'husband', 'son'},
             'feminine': {'she', 'her', 'hers', 'woman', 'women', 'female', 'lady', 'madam', 'girl', 'mother', 'wife', 'daughter'}
         }
-        
+
         # Stereotypical associations
         self.stereotypes = {
             'gender': {
@@ -98,45 +98,45 @@ class TextBiasDetector:
                 'old': {'experienced', 'traditional', 'resistant', 'slow'}
             }
         }
-    
+
     def detect_bias (self, text: str) -> List[BiasDetection]:
         """Detect various types of bias in text"""
-        
+
         detections = []
-        
+
         # Gender bias detection
         gender_bias = self._detect_gender_bias (text)
         if gender_bias:
             detections.append (gender_bias)
-        
+
         # Stereotype detection
         stereotype_bias = self._detect_stereotypes (text)
         detections.extend (stereotype_bias)
-        
+
         # Exclusionary language
         exclusion_bias = self._detect_exclusionary_language (text)
         if exclusion_bias:
             detections.append (exclusion_bias)
-        
+
         return detections
-    
+
     def _detect_gender_bias (self, text: str) -> Optional[BiasDetection]:
         """Detect gender bias in text"""
-        
+
         words = text.lower().split()
         word_set = set (words)
-        
+
         # Count gendered terms
         masculine_count = len (word_set.intersection (self.gendered_terms['masculine']))
         feminine_count = len (word_set.intersection (self.gendered_terms['feminine']))
         total_gendered = masculine_count + feminine_count
-        
+
         if total_gendered == 0:
             return None
-        
+
         # Check for significant imbalance
         ratio = max (masculine_count, feminine_count) / total_gendered
-        
+
         if ratio > 0.8 and total_gendered >= 3:
             # Significant bias detected
             dominant = 'masculine' if masculine_count > feminine_count else 'feminine'
@@ -144,28 +144,28 @@ class TextBiasDetector:
                 word for word in words
                 if word in self.gendered_terms[dominant]
             ]
-            
+
             return BiasDetection(
                 bias_type='gender',
                 confidence=min (ratio, 1.0),
                 examples=examples[:5],
                 description=f"Text heavily favors {dominant} terms ({ratio:.0%})"
             )
-        
+
         return None
-    
+
     def _detect_stereotypes (self, text: str) -> List[BiasDetection]:
         """Detect stereotypical associations"""
-        
+
         detections = []
         words = set (text.lower().split())
-        
+
         # Check gender stereotypes
         for gender, traits in self.stereotypes['gender'].items():
             # Check if gender terms co-occur with stereotypical traits
             gender_terms = words.intersection (self.gendered_terms[gender])
             stereotype_terms = words.intersection (traits)
-            
+
             if gender_terms and stereotype_terms:
                 detections.append(BiasDetection(
                     bias_type=f'gender_stereotype_{gender}',
@@ -173,11 +173,11 @@ class TextBiasDetector:
                     examples=list (gender_terms | stereotype_terms)[:5],
                     description=f"Stereotypical association: {gender} with {stereotype_terms}"
                 ))
-        
+
         # Check age stereotypes
         age_keywords = {'young': {'young', 'youth', 'millennial', 'gen z'},
                         'old': {'old', 'elderly', 'senior', 'boomer'}}
-        
+
         for age_group, keywords in age_keywords.items():
             if words.intersection (keywords) and words.intersection (self.stereotypes['age'][age_group]):
                 detections.append(BiasDetection(
@@ -186,24 +186,24 @@ class TextBiasDetector:
                     examples=list (words.intersection (keywords | self.stereotypes['age'][age_group]))[:5],
                     description=f"Stereotypical association: {age_group} with specific traits"
                 ))
-        
+
         return detections
-    
+
     def _detect_exclusionary_language (self, text: str) -> Optional[BiasDetection]:
         """Detect exclusionary language"""
-        
+
         exclusionary_patterns = [
             r'\\bonly\\s+(men|women|males|females)\\b',
             r'\\bguys\\b',  # When referring to mixed group
             r'\\bcolored\\s+people\\b',  # Outdated term
             r'\\bhandicapped\\b',  # Prefer "person with disability"
         ]
-        
+
         matches = []
         for pattern in exclusionary_patterns:
             found = re.findall (pattern, text, re.IGNORECASE)
             matches.extend (found)
-        
+
         if matches:
             return BiasDetection(
                 bias_type='exclusionary_language',
@@ -211,7 +211,7 @@ class TextBiasDetector:
                 examples=matches,
                 description=f"Exclusionary language detected"
             )
-        
+
         return None
 
 # Example usage
@@ -219,7 +219,7 @@ detector = TextBiasDetector()
 
 # Biased text
 biased_text = """
-The CEO is a strong man who makes tough decisions. 
+The CEO is a strong man who makes tough decisions.
 He leads the company with an iron fist.
 The nurse is a caring woman who tends to patients.
 """
@@ -239,14 +239,14 @@ import random
 
 class DemographicParityTester:
     """Test for demographic parity in AI outputs"""
-    
+
     def __init__(self, llm_function):
         """
         Args:
             llm_function: Function that generates text given a prompt
         """
         self.llm_function = llm_function
-    
+
     def test_demographic_parity(
         self,
         base_prompt: str,
@@ -255,54 +255,54 @@ class DemographicParityTester:
     ) -> Dict:
         """
         Test if outputs are similar across demographic groups.
-        
+
         Args:
             base_prompt: Base prompt template with {demographic} placeholder
             demographic_variations: Dict of demographic categories and values
             num_samples: Number of samples per demographic
-        
+
         Returns:
             Analysis of demographic parity
         """
-        
+
         results = defaultdict (list)
-        
+
         # Generate outputs for each demographic
         for category, values in demographic_variations.items():
             for value in values:
                 prompt = base_prompt.format (demographic=value)
-                
+
                 for _ in range (num_samples):
                     output = self.llm_function (prompt)
                     results[f"{category}_{value}"].append (output)
-        
+
         # Analyze parity
         analysis = self._analyze_parity (results)
-        
+
         return analysis
-    
+
     def _analyze_parity (self, results: Dict[str, List[str]]) -> Dict:
         """Analyze demographic parity across results"""
-        
+
         # Calculate metrics for each group
         group_metrics = {}
-        
+
         for group, outputs in results.items():
             group_metrics[group] = {
                 'avg_length': sum (len (o) for o in outputs) / len (outputs),
                 'positive_sentiment': self._estimate_sentiment (outputs),
                 'sample_outputs': outputs[:3]
             }
-        
+
         # Check for significant disparities
         avg_lengths = [m['avg_length'] for m in group_metrics.values()]
         length_disparity = max (avg_lengths) / min (avg_lengths) if min (avg_lengths) > 0 else float('inf')
-        
+
         sentiments = [m['positive_sentiment'] for m in group_metrics.values()]
         sentiment_disparity = max (sentiments) - min (sentiments)
-        
+
         has_disparity = length_disparity > 1.5 or sentiment_disparity > 0.3
-        
+
         return {
             'has_disparity': has_disparity,
             'length_disparity_ratio': length_disparity,
@@ -310,25 +310,25 @@ class DemographicParityTester:
             'group_metrics': group_metrics,
             'recommendation': 'Review outputs for bias' if has_disparity else 'Outputs appear fair'
         }
-    
+
     def _estimate_sentiment (self, texts: List[str]) -> float:
         """Estimate positive sentiment (simplified)"""
-        
+
         positive_words = {'good', 'great', 'excellent', 'successful', 'strong', 'capable'}
         negative_words = {'bad', 'poor', 'weak', 'incapable', 'failing'}
-        
+
         total_positive = 0
         total_negative = 0
-        
+
         for text in texts:
             words = set (text.lower().split())
             total_positive += len (words.intersection (positive_words))
             total_negative += len (words.intersection (negative_words))
-        
+
         total = total_positive + total_negative
         if total == 0:
             return 0.5
-        
+
         return total_positive / total
 
 # Example usage
@@ -366,7 +366,7 @@ for group, metrics in result['group_metrics'].items():
 \`\`\`python
 class FairPromptEngineer:
     """Engineer prompts to reduce bias"""
-    
+
     def __init__(self):
         self.fairness_instructions = """
 IMPORTANT: Provide fair, unbiased responses that:
@@ -378,26 +378,26 @@ IMPORTANT: Provide fair, unbiased responses that:
 
 If a question contains biased assumptions, point this out respectfully.
 """
-    
+
     def make_fair_prompt(
         self,
         user_prompt: str,
         add_examples: bool = True
     ) -> str:
         """Transform prompt to encourage fair outputs"""
-        
+
         prompt = self.fairness_instructions + "\\n\\n"
-        
+
         if add_examples:
             prompt += self._get_fairness_examples() + "\\n\\n"
-        
+
         # Check if user prompt contains potential bias triggers
         prompt += self._add_bias_warnings (user_prompt)
-        
+
         prompt += f"User question: {user_prompt}\\n\\nFair, unbiased response:"
-        
+
         return prompt
-    
+
     def _get_fairness_examples (self) -> str:
         """Provide examples of fair responses"""
         return """
@@ -411,24 +411,24 @@ Q: Who is better at math?
 Fair: "Mathematical ability varies among individuals regardless of demographics. Success in math depends on education, practice, and individual aptitude, not on gender, race, or other characteristics."
 Unfair: "Boys are naturally better at math..."
 """
-    
+
     def _add_bias_warnings (self, user_prompt: str) -> str:
         """Add warnings if prompt may trigger bias"""
-        
+
         bias_triggers = {
             'gender': ['man', 'woman', 'male', 'female', 'boy', 'girl'],
             'race': ['black', 'white', 'asian', 'hispanic', 'race'],
             'age': ['old', 'young', 'elderly', 'senior', 'youth'],
             'profession': ['CEO', 'nurse', 'engineer', 'teacher']
         }
-        
+
         warnings = []
         user_lower = user_prompt.lower()
-        
+
         for category, triggers in bias_triggers.items():
             if any (trigger in user_lower for trigger in triggers):
                 warnings.append (f"Note: Question involves {category}. Ensure fair, non-stereotypical response.")
-        
+
         if warnings:
             return "\\n".join (warnings) + "\\n\\n"
         return ""
@@ -449,10 +449,10 @@ print(fair_prompt)
 \`\`\`python
 class BiasCorrector:
     """Correct bias in generated outputs"""
-    
+
     def __init__(self):
         self.detector = TextBiasDetector()
-        
+
         # Replacement rules
         self.replacements = {
             # Gender-neutral alternatives
@@ -467,13 +467,13 @@ class BiasCorrector:
             'men': 'people',
             'women': 'people',
             'guys': 'everyone',
-            
+
             # More inclusive terms
             'handicapped': 'person with disability',
             'colored people': 'people of color',
             'elderly': 'older adults',
         }
-    
+
     def correct_bias(
         self,
         text: str,
@@ -481,24 +481,24 @@ class BiasCorrector:
     ) -> Tuple[str, List[str]]:
         """
         Correct bias in text.
-        
+
         Args:
             text: Text to correct
             aggressive: If True, apply more replacements
-        
+
         Returns:
             (corrected_text, changes_made)
         """
-        
+
         # Detect bias
         detections = self.detector.detect_bias (text)
-        
+
         if not detections:
             return text, []
-        
+
         corrected = text
         changes = []
-        
+
         # Apply replacements
         for detection in detections:
             if detection.bias_type == 'gender':
@@ -514,7 +514,7 @@ class BiasCorrector:
                                 flags=re.IGNORECASE
                             )
                             changes.append (f"Replaced '{old}' with '{new}'")
-            
+
             elif detection.bias_type == 'exclusionary_language':
                 # Replace exclusionary terms
                 for example in detection.examples:
@@ -522,16 +522,16 @@ class BiasCorrector:
                         replacement = self.replacements[example.lower()]
                         corrected = corrected.replace (example, replacement)
                         changes.append (f"Replaced '{example}' with '{replacement}'")
-        
+
         return corrected, changes
-    
+
     def validate_fairness (self, text: str) -> Dict:
         """Validate that text is fair"""
-        
+
         detections = self.detector.detect_bias (text)
-        
+
         is_fair = len (detections) == 0
-        
+
         return {
             'is_fair': is_fair,
             'bias_count': len (detections),
@@ -579,13 +579,13 @@ class ComprehensiveFairnessSystem:
     3. Bias mitigation
     4. Monitoring
     """
-    
+
     def __init__(self):
         self.bias_detector = TextBiasDetector()
         self.bias_corrector = BiasCorrector()
         self.prompt_engineer = FairPromptEngineer()
         self.fairness_metrics: Dict[str, List[float]] = defaultdict (list)
-    
+
     def ensure_fairness(
         self,
         prompt: str,
@@ -594,19 +594,19 @@ class ComprehensiveFairnessSystem:
     ) -> FairnessResult:
         """
         Comprehensive fairness check and correction.
-        
+
         Args:
             prompt: User prompt
             output: LLM output
             auto_correct: Whether to automatically correct bias
         """
-        
+
         # Detect bias
         detections = self.bias_detector.detect_bias (output)
-        
+
         # Calculate fairness score
         fairness_score = self._calculate_fairness_score (detections)
-        
+
         # Correct if needed
         corrected_output = None
         if detections and auto_correct:
@@ -615,15 +615,15 @@ class ComprehensiveFairnessSystem:
             corrected_detections = self.bias_detector.detect_bias (corrected_output)
             if len (corrected_detections) < len (detections):
                 fairness_score = self._calculate_fairness_score (corrected_detections)
-        
+
         # Generate recommendations
         recommendations = self._generate_recommendations (detections, prompt)
-        
+
         # Track metrics
         self.fairness_metrics['overall'].append (fairness_score)
-        
+
         is_fair = fairness_score >= 0.7
-        
+
         return FairnessResult(
             is_fair=is_fair,
             bias_detections=detections,
@@ -631,33 +631,33 @@ class ComprehensiveFairnessSystem:
             fairness_score=fairness_score,
             recommendations=recommendations
         )
-    
+
     def _calculate_fairness_score (self, detections: List[BiasDetection]) -> float:
         """Calculate overall fairness score (0-1)"""
-        
+
         if not detections:
             return 1.0
-        
+
         # Reduce score based on number and severity of detections
         score = 1.0
         for detection in detections:
             penalty = detection.confidence * 0.2
             score -= penalty
-        
+
         return max(0.0, score)
-    
+
     def _generate_recommendations(
         self,
         detections: List[BiasDetection],
         prompt: str
     ) -> List[str]:
         """Generate recommendations for improvement"""
-        
+
         recommendations = []
-        
+
         if not detections:
             return ["Output appears fair"]
-        
+
         for detection in detections:
             if detection.bias_type == 'gender':
                 recommendations.append("Use gender-neutral language (they/them)")
@@ -665,17 +665,17 @@ class ComprehensiveFairnessSystem:
                 recommendations.append (f"Avoid stereotypical associations for {detection.bias_type}")
             elif detection.bias_type == 'exclusionary_language':
                 recommendations.append("Use inclusive language")
-        
+
         return recommendations
-    
+
     def get_fairness_report (self) -> Dict:
         """Generate fairness monitoring report"""
-        
+
         if not self.fairness_metrics['overall']:
             return {'no_data': True}
-        
+
         scores = self.fairness_metrics['overall']
-        
+
         return {
             'total_outputs': len (scores),
             'avg_fairness_score': sum (scores) / len (scores),

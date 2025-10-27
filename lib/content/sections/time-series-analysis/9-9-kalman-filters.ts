@@ -690,9 +690,7 @@ print("Useful for real-time volatility tracking")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Kalman filter**: Optimal recursive state estimator for linear systems
+**Key Takeaways:**1. **Kalman filter**: Optimal recursive state estimator for linear systems
 2. **Two steps**: Predict (time update) + Update (measurement)
 3. **Dynamic parameters**: Ideal for time-varying betas, hedge ratios
 4. **Pairs trading**: More adaptive than rolling OLS

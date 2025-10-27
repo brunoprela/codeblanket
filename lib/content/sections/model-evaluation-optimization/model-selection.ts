@@ -603,8 +603,7 @@ print("  • Transaction costs: More complex models may overtrade")
 7. **Document Everything**: Track all experiments
 8. **Business Context**: Technical metrics aren't everything
 
-**Practical Workflow:**
-1. Define success criteria (not just accuracy)
+**Practical Workflow:**1. Define success criteria (not just accuracy)
 2. Select 5-7 candidate models
 3. Compare with cross-validation
 4. Statistical significance testing

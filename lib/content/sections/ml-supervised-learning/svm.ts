@@ -109,9 +109,7 @@ print(f"Support vector indices: {svm.support_}")
 
 For non-linearly separable data, SVMs use kernels to map data to higher dimensions where it becomes linearly separable.
 
-**Common Kernels:**
-
-1. **Linear**: \\( K(\\mathbf{x}, \\mathbf{x}') = \\mathbf{x}^T \\mathbf{x}' \\)
+**Common Kernels:**1. **Linear**: \\( K(\\mathbf{x}, \\mathbf{x}') = \\mathbf{x}^T \\mathbf{x}' \\)
 2. **Polynomial**: \\( K(\\mathbf{x}, \\mathbf{x}') = (\\gamma \\mathbf{x}^T \\mathbf{x}' + r)^d \\)
 3. **RBF (Radial Basis Function)**: \\( K(\\mathbf{x}, \\mathbf{x}') = \\exp(-\\gamma ||\\mathbf{x} - \\mathbf{x}'||^2) \\)
 4. **Sigmoid**: \\( K(\\mathbf{x}, \\mathbf{x}') = \\tanh(\\gamma \\mathbf{x}^T \\mathbf{x}' + r) \\)

@@ -202,9 +202,7 @@ if __name__ == "__main__":
     evaluate_multistrategy_fund()
 \`\`\`
 
-**Key Insights:**
-
-1. **Composite Benchmark**: Weight strategy-specific benchmarks by allocation
+**Key Insights:**1. **Composite Benchmark**: Weight strategy-specific benchmarks by allocation
    - Long/Short Equity → HFRI Equity Hedge Index (50%)
    - Trend Following → SG CTA Index (30%)
    - Stat Arb → HFRI Market Neutral Index (20%)
@@ -243,8 +241,7 @@ if __name__ == "__main__":
 - Claims "absolute return strategy"
 - Refuses benchmark comparison: "We're uncorrelated to traditional assets"
 
-**Questions:**
-1. What benchmark manipulation tactics are being used?
+**Questions:**1. What benchmark manipulation tactics are being used?
 2. How would you establish fair benchmarks for each fund?
 3. What policies prevent benchmark gaming?
 
@@ -369,9 +366,7 @@ def evaluate_absolute_return_strategy(
     return evaluation
 \`\`\`
 
-**Policies to Prevent Benchmark Gaming:**
-
-1. **Pre-specified Benchmarks**: Benchmark chosen at fund inception, not in hindsight
+**Policies to Prevent Benchmark Gaming:**1. **Pre-specified Benchmarks**: Benchmark chosen at fund inception, not in hindsight
 2. **Style-Consistent Benchmarks**: Benchmark must match actual portfolio characteristics
 3. **Multiple Benchmarks**: Report against several benchmarks to show robustness
 4. **Peer Group Comparison**: Compare to similar strategies (e.g., Morningstar categories)
@@ -533,9 +528,7 @@ def factor_based_benchmark_for_novel_strategy(
     }
 \`\`\`
 
-**Recommended Approach:**
-
-1. **Primary Benchmark**: Synthetic benchmark from related instruments/strategies
+**Recommended Approach:**1. **Primary Benchmark**: Synthetic benchmark from related instruments/strategies
 2. **Secondary Benchmark**: Risk-free rate + volatility-adjusted hurdle
 3. **Tertiary Comparison**: Peer group (other options/volatility strategies)
 4. **Full Disclosure**: 

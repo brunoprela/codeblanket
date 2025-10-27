@@ -12,7 +12,7 @@ def traverse (head: ListNode) -> None:
     Traverse and process each node.
     """
     curr = head
-    
+
     while curr:
         # Process curr.val
         print(curr.val)
@@ -27,17 +27,17 @@ def two_pointer_pattern (head: ListNode) -> ListNode:
     """
     if not head:
         return None
-    
+
     slow = fast = head
-    
+
     while fast and fast.next:
         slow = slow.next          # Move 1 step
         fast = fast.next.next     # Move 2 steps
-        
+
         # Check condition (e.g., cycle detection)
         if slow == fast:
             return True
-    
+
     return slow  # Middle, or False for cycle
 \`\`\`
 
@@ -49,10 +49,10 @@ def dummy_node_pattern (head: ListNode) -> ListNode:
     """
     dummy = ListNode(0)
     dummy.next = head
-    
+
     prev = dummy
     curr = head
-    
+
     while curr:
         # Perform operations
         if some_condition:
@@ -61,7 +61,7 @@ def dummy_node_pattern (head: ListNode) -> ListNode:
         else:
             prev = curr
         curr = curr.next
-    
+
     return dummy.next  # New head
 \`\`\`
 
@@ -73,13 +73,13 @@ def reverse_list (head: ListNode) -> ListNode:
     """
     prev = None
     curr = head
-    
+
     while curr:
         next_temp = curr.next  # Save next
         curr.next = prev       # Reverse link
         prev = curr            # Move prev
         curr = next_temp       # Move curr
-    
+
     return prev  # New head
 \`\`\`
 
@@ -92,14 +92,14 @@ def reverse_list_recursive (head: ListNode) -> ListNode:
     # Base case
     if not head or not head.next:
         return head
-    
+
     # Recursive case
     new_head = reverse_list_recursive (head.next)
-    
+
     # Reverse the link
     head.next.next = head
     head.next = None
-    
+
     return new_head
 \`\`\`
 
@@ -111,7 +111,7 @@ def merge_two_lists (l1: ListNode, l2: ListNode) -> ListNode:
     """
     dummy = ListNode(0)
     curr = dummy
-    
+
     while l1 and l2:
         if l1.val <= l2.val:
             curr.next = l1
@@ -120,10 +120,10 @@ def merge_two_lists (l1: ListNode, l2: ListNode) -> ListNode:
             curr.next = l2
             l2 = l2.next
         curr = curr.next
-    
+
     # Attach remaining
     curr.next = l1 if l1 else l2
-    
+
     return dummy.next
 \`\`\`
 
@@ -134,18 +134,18 @@ def kth_from_end (head: ListNode, k: int) -> ListNode:
     Find kth node from the end.
     """
     first = second = head
-    
+
     # Move first k steps ahead
     for _ in range (k):
         if not first:
             return None
         first = first.next
-    
+
     # Move both until first reaches end
     while first:
         first = first.next
         second = second.next
-    
+
     return second
 \`\`\``,
 };

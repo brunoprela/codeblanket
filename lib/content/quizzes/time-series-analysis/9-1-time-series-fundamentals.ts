@@ -103,9 +103,7 @@ class BacktestEngine:
 
 ### Proposed Solution for PM
 
-**Use log returns internally for all calculations, but report in simple returns:**
-
-1. **Storage:** Store log returns in database
+**Use log returns internally for all calculations, but report in simple returns:**1. **Storage:** Store log returns in database
 2. **Calculations:** All analytics use log returns (time-additive)
 3. **Reporting:** Convert to simple returns for stakeholder reports
 4. **Approximation for small returns:** Log ≈ Simple when |R| < 5%
@@ -214,9 +212,7 @@ class TickBuffer:
 
 ### Component 2: Bar Construction Engine
 
-**Methods for irregular tick spacing:**
-
-1. **Time-based bars:** Fixed time intervals (1 minute)
+**Methods for irregular tick spacing:**1. **Time-based bars:** Fixed time intervals (1 minute)
 2. **Tick-based bars:** Fixed number of ticks
 3. **Volume-based bars:** Fixed dollar volume
 4. **Hybrid:** Use last tick before boundary
@@ -450,9 +446,7 @@ class BarQualityChecker:
 
 ### Component 5: Preventing Look-Ahead Bias
 
-**Critical for backtesting validity:**
-
-1. **Bar timestamp:** Use bar START time, not end time
+**Critical for backtesting validity:**1. **Bar timestamp:** Use bar START time, not end time
 2. **No future bars:** Can only access bars with timestamp < current time
 3. **Execution delays:** Simulate realistic order-to-fill delays
 
@@ -538,9 +532,7 @@ A genuinely skillful strategy should generate returns that are *independent* of 
 **What It Means:**
 Returns are predictable from past returns. If yesterday's return was positive, today's is likely positive too.
 
-**Why This Challenges "Alpha" Claim:**
-
-1. **May be exploiting slow execution** rather than fundamental insight
+**Why This Challenges "Alpha" Claim:**1. **May be exploiting slow execution** rather than fundamental insight
 2. **Could be momentum in illiquid markets** (price follows order flow)
 3. **Might be delayed reporting** (NAV calculated with stale prices)
 4. **Returns autocorrelation = Risk exposure**, not skill
@@ -569,9 +561,7 @@ print(f"Positive months: {(fake_returns.reshape(12, 21).sum(axis=1) > 0).sum()}/
 # Often shows 9-11 positive months out of 12!
 \`\`\`
 
-**Statistical Tests to Run:**
-
-1. **Ljung-Box Test** for serial correlation:
+**Statistical Tests to Run:**1. **Ljung-Box Test** for serial correlation:
    - H₀: No autocorrelation
    - If rejected → returns are predictable (not true alpha)
 
@@ -605,16 +595,12 @@ def test_autocorrelation(returns: pd.Series) -> dict:
 **What It Means:**
 High volatility days follow high volatility days. This is **NOT** consistent with the PM's claim of "consistent" returns.
 
-**Why This Challenges "Alpha" Claim:**
-
-1. **Indicates time-varying risk exposure** (not constant skill)
+**Why This Challenges "Alpha" Claim:**1. **Indicates time-varying risk exposure** (not constant skill)
 2. **Suggests leverage or options exposure** (hidden risks)
 3. **May be taking tail risk** (selling insurance)
 4. **Volatility clustering ≠ predictable returns**
 
-**Test for Volatility Clustering:**
-
-1. **ARCH LM Test:**
+**Test for Volatility Clustering:**1. **ARCH LM Test:**
    - Tests if squared returns show autocorrelation
    - H₀: Homoscedastic (constant volatility)
    - Rejection → volatility clusters (time-varying risk)
@@ -674,9 +660,7 @@ Extreme returns happen much more often than normal distribution predicts.
 Normal distribution kurtosis = 3
 Strategy kurtosis = 8.4 → **Excess kurtosis = 5.4** (very fat tails!)
 
-**Why This Challenges "Alpha" Claim:**
-
-1. **Taking crash risk** (selling options, volatility, tail risk)
+**Why This Challenges "Alpha" Claim:**1. **Taking crash risk** (selling options, volatility, tail risk)
 2. **Leverage** (amplifies both gains and losses)
 3. **Likely has large drawdown risk** not captured by Sharpe ratio
 4. **"Picking up pennies in front of steamroller"**
@@ -707,9 +691,7 @@ print(f"Positive months: {(short_vol_returns.reshape(12, 21).sum(axis=1) > 0).su
 # Shows 10-11 positive months but large drawdowns!
 \`\`\`
 
-**Statistical Tests:**
-
-1. **Jarque-Bera Test** for normality:
+**Statistical Tests:**1. **Jarque-Bera Test** for normality:
    - Tests if returns are normally distributed
    - Rejection + high kurtosis → fat tails
 

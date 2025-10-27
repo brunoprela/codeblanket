@@ -7,9 +7,7 @@ export const analyticsDataPipelineDiscussionQuiz: QuizQuestion[] = [
       'Your e-commerce company needs to build an analytics pipeline that supports: (1) real-time fraud detection on transactions (latency < 100ms), (2) daily sales reports for executives, (3) ML model training on 6 months of historical data weekly. The system processes 10,000 transactions/sec and stores 2TB of data daily. Should you use Lambda architecture, Kappa architecture, or a hybrid approach? Justify your decision with specific technology choices and discuss the trade-offs.',
     sampleAnswer: `This is a classic scenario requiring careful architecture design to balance real-time, batch, and ML workloads. Let me analyze each approach:
 
-**Requirements Analysis:**
-
-1. **Real-time fraud detection**: <100ms latency, critical path
+**Requirements Analysis:**1. **Real-time fraud detection**: <100ms latency, critical path
 2. **Daily sales reports**: Batch, accuracy critical, T+1 acceptable  
 3. **ML training**: Batch, compute-intensive, weekly cadence
 4. **Scale**: 10k TPS = 864M transactions/day, 2TB/day, 60TB/month
@@ -176,9 +174,7 @@ FlinkJob batch = new FlinkJob (source=kafka.replay (days=180), sink=snowflake);
                     └──────────┘
 \`\`\`
 
-**Why Hybrid:**
-
-1. **Real-time** (Flink + Druid):
+**Why Hybrid:**1. **Real-time** (Flink + Druid):
    - Fraud detection: <100ms ✅
    - Live dashboards
    - 7-day retention in Kafka (manageable: ~14TB)
@@ -321,8 +317,7 @@ def get_transaction_analytics (user_id, start_date, end_date):
 
 **Decision: Hybrid Architecture**
 
-**Why:**
-1. **Performance**: Flink for <100ms fraud detection ✅
+**Why:**1. **Performance**: Flink for <100ms fraud detection ✅
 2. **Cost**: 7-day Kafka retention vs 6-month (save $12k/month)
 3. **Scalability**: Spark better for large batch ML jobs
 4. **Pragmatic**: Use best tool for each job
@@ -400,9 +395,7 @@ def transform_users (raw):
     return df[['user_id', 'email_hash', 'age', 'country', 'lifetime_value']]  # Only needed columns
 \`\`\`
 
-**CTO's Arguments (ETL Pros):**
-
-1. **Data Quality Before Storage:**
+**CTO's Arguments (ETL Pros):**1. **Data Quality Before Storage:**
    - Invalid data rejected upfront
    - Consistent transformations applied
    - No bad data in warehouse
@@ -427,9 +420,7 @@ def transform_users (raw):
    - Well-understood patterns
    - Less risk
 
-**ETL Cons:**
-
-1. **Transformation Rigidity:**
+**ETL Cons:**1. **Transformation Rigidity:**
 \`\`\`python
 # Problem: New analysis needs different transformation
 # Original: Aggregated daily sales per user
@@ -511,9 +502,7 @@ LEFT JOIN {{ ref('stg_orders') }} o ON u.user_id = o.user_id
 GROUP BY u.user_id, u.email_hash, u.country
 \`\`\`
 
-**Data Science Lead\'s Arguments (ELT Pros):**
-
-1. **Flexibility:**
+**Data Science Lead\'s Arguments (ELT Pros):**1. **Flexibility:**
 \`\`\`sql
 -- New analysis? Just write SQL!
 -- Hourly sales per product
@@ -550,9 +539,7 @@ CREATE VIEW mart_user_analytics AS
    - Can trace transformations
    - Debugging easier
 
-**ELT Cons:**
-
-1. **Storage Costs:**
+**ELT Cons:**1. **Storage Costs:**
 \`\`\`
 Raw data: 1TB/day × 365 days = 365TB
 Transformed: 200GB/day × 365 days = 73TB
@@ -634,9 +621,7 @@ FROM mart.user_analytics
 GROUP BY 1, 2;
 \`\`\`
 
-**Benefits of Hybrid:**
-
-1. **Flexibility + Cost Control:**
+**Benefits of Hybrid:**1. **Flexibility + Cost Control:**
    - Raw data for 7-30 days (exploration)
    - Auto-delete old raw data (cost control)
    - Staging/marts retained long-term
@@ -731,8 +716,7 @@ models:
 
 **Final Recommendation: Hybrid EL(T) with Layered Architecture**
 
-**Why:**
-1. Flexibility of ELT (raw data for exploration)
+**Why:**1. Flexibility of ELT (raw data for exploration)
 2. Cost control of ETL (auto-delete old raw data)
 3. Performance of ETL (materialized marts)
 4. PII handling (masked in staging, restricted raw access)

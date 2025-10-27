@@ -8,8 +8,7 @@ export const redisVsRabbitmq = {
 
 Choosing the right message broker is **critical** for your Celery deployment. The broker is the central nervous system of your task queue—it stores tasks, routes them to workers, and ensures reliable delivery.
 
-**Two Most Popular Options:**
-1. **Redis**: Fast, simple, in-memory data store
+**Two Most Popular Options:**1. **Redis**: Fast, simple, in-memory data store
 2. **RabbitMQ**: Robust, feature-rich message queue
 
 **Key Decision Factors:**
@@ -656,8 +655,7 @@ benchmark_broker('amqp://localhost:5672//', 'RabbitMQ')
 - 💰💰 Higher resource usage
 - ✅ Perfect for critical, high-scale applications
 
-**Recommendation:**
-1. **Start with Redis** (simple, fast, good enough)
+**Recommendation:**1. **Start with Redis** (simple, fast, good enough)
 2. **Monitor task loss** (is it happening?)
 3. **Migrate to RabbitMQ** when:
    - Tasks become critical

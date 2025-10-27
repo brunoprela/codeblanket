@@ -21,9 +21,7 @@ export const fullTextSearchFundamentalsDiscussionQuiz: QuizQuestion[] = [
 - Create separate fields for numeric attributes (size, price) with proper data types
 - Index sizes both as keywords ("10") and as numeric values for range queries
 
-**Challenges and trade-offs:**
-
-1. **Query ambiguity**: When a user types "10", do they mean size 10 or $10 or 10-pack? Solution: Multi-match query with different field boosts
+**Challenges and trade-offs:**1. **Query ambiguity**: When a user types "10", do they mean size 10 or $10 or 10-pack? Solution: Multi-match query with different field boosts
 2. **Analysis conflicts**: Aggressive stemming can break product codes ("ABC-123-XL" → "abc 123 xl"). Solution: Index to multiple fields with different analysis
 3. **Performance**: Multiple analyzers and complex queries increase index size and query latency. Solution: Use filters for exact matches (faster, cacheable)
 4. **Relevance tuning**: Natural language and structured matches have different scoring characteristics. Solution: Function score query combining text relevance with business logic (inventory, sales rank)
@@ -82,9 +80,7 @@ For Document B (scattered, many occurrences):
 - Document is longer, which dilutes relevance
 - No phrase matching bonus
 
-**Why Document A should rank higher:**
-
-1. **Phrase matching**: The exact phrase appearing together is much more relevant than individual terms scattered throughout
+**Why Document A should rank higher:**1. **Phrase matching**: The exact phrase appearing together is much more relevant than individual terms scattered throughout
 2. **Document length normalization (BM25)**: Document B is longer, so BM25 will penalize it. The "b" parameter (typically 0.75) adjusts for document length
 3. **Intent matching**: User\'s query is a specific phrase; Document A matches intent better
 4. **Semantic coherence**: Adjacent terms in Document A suggest focused content about the topic
@@ -96,9 +92,7 @@ Basic TF-IDF might actually rank Document B higher because:
 - TF-IDF alone doesn't consider proximity or phrase matching
 - This would be a poor user experience
 
-**Modifications to improve relevance:**
-
-1. **Phrase matching boost (critical)**
+**Modifications to improve relevance:**1. **Phrase matching boost (critical)**
    - Exact phrase match gets significant multiplier (2x-5x)
    - Use positional data from inverted index
    - Slop queries for near-matches: "machine learning engineer"~2 (within 2 positions)
@@ -176,9 +170,7 @@ Modern search engines like Elasticsearch (using BM25 + phrase boosting) would co
       'Your search application is experiencing slow query performance for wildcard queries like "elast*" and especially "e*rch". Users need this functionality for partial word matching. At the same time, you\'re seeing your index size has grown to 3x your original document size due to various optimizations. Discuss the engineering trade-offs between query flexibility, performance, and storage costs. What specific technical solutions would you propose to address both issues, and what would be the implementation considerations?',
     sampleAnswer: `This scenario involves a classic **three-way trade-off** between **query flexibility**, **performance**, and **storage costs**. Let\'s analyze the problem and solutions:
 
-**Problem Analysis:**
-
-1. **Why wildcards are slow:**
+**Problem Analysis:**1. **Why wildcards are slow:**
    - \`elast*\` requires scanning all terms starting with "elast" in the inverted index
    - \`*rch\` or \`e*rch\` requires scanning virtually ALL terms (no usable prefix)
    - No way to jump directly to matches like with exact term lookup
@@ -285,9 +277,7 @@ Address the 3x index size:
    - SKUs/codes: Keyword only (exact match)
    - Rarely searched fields: Don't index
 
-**Implementation Considerations:**
-
-1. **Migration strategy:**
+**Implementation Considerations:**1. **Migration strategy:**
    - Create new index with optimized mappings
    - Reindex with zero downtime using aliases
    - A/B test query performance
@@ -296,9 +286,7 @@ Address the 3x index size:
 2. **Cost-benefit analysis:**
    - Edge n-grams: +100% storage, 10x faster prefix queries → **Worth it for autocomplete**
    - Full n-grams: +300% storage, 10x faster substring queries → **Only if critical**
-   - Positional data: +30% storage, required for phrase queries → **Depends on usage**
-
-3. **Monitoring:**
+   - Positional data: +30% storage, required for phrase queries → **Depends on usage**3. **Monitoring:**
    - Track query latency by query type
    - Monitor index size growth over time
    - Measure storage costs (S3, EBS)

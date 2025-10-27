@@ -185,7 +185,7 @@ def fibonacci (n):
         return [1]
     elif n == 2:
         return [1, 1]
-    
+
     fib = [1, 1]
     for i in range(2, n):
         fib.append (fib[-1] + fib[-2])
@@ -226,11 +226,11 @@ def simple_rnn_sequence (input_sequence, W_hh, W_xh, h0):
     """
     hidden_states = [h0]
     h = h0
-    
+
     for x in input_sequence:
         h = np.tanh(W_hh @ h + W_xh @ x)
         hidden_states.append (h)
-    
+
     return np.array (hidden_states)
 
 # Example
@@ -253,16 +253,16 @@ print("Hidden state sequence:", hidden_seq.flatten())
 def visualize_convergence (sequence, limit, title):
     """Visualize sequence convergence"""
     n = len (sequence)
-    
+
     plt.figure (figsize=(10, 6))
     plt.plot (range(1, n + 1), sequence, 'bo-', markersize=6, linewidth=2, label='Sequence')
     plt.axhline (y=limit, color='r', linestyle='--', linewidth=2, label=f'Limit = {limit}')
-    
+
     # Show epsilon bands
     epsilon = 0.1
     plt.axhline (y=limit + epsilon, color='g', linestyle=':', alpha=0.5, label=f'ε = {epsilon}')
     plt.axhline (y=limit - epsilon, color='g', linestyle=':', alpha=0.5)
-    
+
     plt.xlabel('n')
     plt.ylabel('aₙ')
     plt.title (title)
@@ -294,11 +294,11 @@ def gradient_descent_sequence (f, grad_f, x0, learning_rate, n_iterations):
     """
     x_sequence = [x0]
     x = x0
-    
+
     for _ in range (n_iterations):
         x = x - learning_rate * grad_f (x)
         x_sequence.append (x)
-    
+
     return np.array (x_sequence)
 
 # Example: f (x) = x^2, minimum at x=0
@@ -348,11 +348,11 @@ def arithmetic_series_sum (a1, d, n):
     """Sum of first n terms of arithmetic sequence"""
     # Method 1: Direct formula
     sum_formula = n/2 * (2*a1 + (n-1)*d)
-    
+
     # Method 2: Explicit computation (verification)
     terms = arithmetic_sequence (a1, d, n)
     sum_explicit = np.sum (terms)
-    
+
     return sum_formula, sum_explicit
 
 # Example: Sum of 1 + 2 + 3 + ... + 100
@@ -389,7 +389,7 @@ def total_operations (batch_sizes):
     n = len (batch_sizes)
     a1 = batch_sizes[0]
     d = batch_sizes[1] - batch_sizes[0] if n > 1 else 0
-    
+
     total = n/2 * (2*a1 + (n-1)*d)
     return int (total)
 
@@ -411,14 +411,14 @@ def geometric_series_sum (a1, r, n):
     """Sum of first n terms of geometric sequence"""
     if r == 1:
         return a1 * n
-    
+
     # Finite sum formula
     sum_formula = a1 * (1 - r**n) / (1 - r)
-    
+
     # Explicit computation (verification)
     terms = geometric_sequence (a1, r, n)
     sum_explicit = np.sum (terms)
-    
+
     return sum_formula, sum_explicit
 
 # Example: 1 + 1/2 + 1/4 + 1/8 + ...
@@ -494,10 +494,10 @@ def ratio_test (sequence, n_terms=100):
     Returns limit of |aₙ₊₁/aₙ|
     """
     ratios = np.abs (sequence[1:] / sequence[:-1])
-    
+
     # Take last several ratios (should stabilize)
     limit = np.mean (ratios[-10:])
-    
+
     print(f"Ratio test: lim |aₙ₊₁/aₙ| ≈ {limit:.6f}")
     if limit < 1:
         print("Series converges (ratio < 1)")
@@ -505,7 +505,7 @@ def ratio_test (sequence, n_terms=100):
         print("Series diverges (ratio > 1)")
     else:
         print("Test inconclusive (ratio = 1)")
-    
+
     return limit
 
 # Example 1: Σ 1/n² (converges)
@@ -757,10 +757,10 @@ def exponential_moving_average (prices, span):
     """
     alpha = 2 / (span + 1)
     ema = [prices[0]]
-    
+
     for price in prices[1:]:
         ema.append (alpha * price + (1 - alpha) * ema[-1])
-    
+
     return np.array (ema)
 
 # Example stock prices

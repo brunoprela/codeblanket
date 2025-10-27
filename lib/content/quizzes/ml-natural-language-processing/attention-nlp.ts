@@ -12,8 +12,7 @@ export const attentionNlpQuiz: QuizQuestion[] = [
 - **Key (K)**: "What do I offer?"
 - **Value (V)**: "My actual content"
 
-**Mechanism:**
-1. Compare Query with all Keys (similarity scores)
+**Mechanism:**1. Compare Query with all Keys (similarity scores)
 2. Apply softmax to get attention weights
 3. Weight the Values by attention scores
 4. Sum to get context-aware output
@@ -116,9 +115,7 @@ Studies show removing any single head decreases performance, but removing all he
       'Compare attention mechanisms with traditional seq2seq with LSTMs. What fundamental limitations of LSTMs does attention solve?',
     sampleAnswer: `Attention solves critical limitations of LSTM-based seq2seq models:
 
-**LSTM Seq2Seq Limitations:**
-
-1. **Fixed-size bottleneck:**
+**LSTM Seq2Seq Limitations:**1. **Fixed-size bottleneck:**
    - Entire source sentence compressed into single hidden state vector
    - Long sentences lose information
    - Fixed size regardless of source length

@@ -7,8 +7,7 @@ export const bellmanfordSection = {
   title: 'Bellman-Ford Algorithm',
   content: `**Bellman-Ford** finds shortest paths even with **negative edge weights**, and detects **negative cycles**.
 
-**Algorithm:**
-1. Initialize distances: source = 0, others = ∞
+**Algorithm:**1. Initialize distances: source = 0, others = ∞
 2. Relax all edges V-1 times
 3. Check for negative cycles (one more relaxation)
 

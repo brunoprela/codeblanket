@@ -72,8 +72,7 @@ create_recurring_event (title, start_time, pattern, end_date)
 create_virtual_event (title, start_time, meeting_link)
 \`\`\`
 
-**Best Practices:**
-1. Document dependencies in description clearly
+**Best Practices:**1. Document dependencies in description clearly
 2. Use nested objects for tightly coupled parameters
 3. Provide examples of valid combinations
 4. Consider splitting into multiple simpler functions
@@ -119,29 +118,25 @@ def create_event(**kwargs):
       'Analyze the trade-offs between auto-generating function schemas from Python type hints versus hand-crafting schemas. In what scenarios would you choose each approach, and how would you handle edge cases like union types, optional parameters, and complex nested structures?',
     sampleAnswer: `Both approaches have distinct advantages and use cases:
 
-**Auto-Generation Pros:**
-1. **DRY Principle**: Single source of truth (Python function)
+**Auto-Generation Pros:**1. **DRY Principle**: Single source of truth (Python function)
 2. **Maintainability**: Schema updates automatically with code changes
 3. **Speed**: Faster development for simple cases
 4. **Consistency**: Reduces human error in schema writing
 5. **Type Safety**: Leverages Python\'s type system
 
-**Auto-Generation Cons:**
-1. **Limited Control**: Hard to add LLM-specific guidance
+**Auto-Generation Cons:**1. **Limited Control**: Hard to add LLM-specific guidance
 2. **Description Quality**: Type hints don't capture semantic meaning
 3. **Complex Types**: Union types, Literal, Optional need special handling
 4. **Examples**: Can't easily add example values
 5. **LLM Optimization**: Can't tailor for LLM understanding
 
-**Hand-Crafting Pros:**
-1. **Full Control**: Optimize descriptions for LLM comprehension
+**Hand-Crafting Pros:**1. **Full Control**: Optimize descriptions for LLM comprehension
 2. **Rich Documentation**: Add examples, constraints, use cases
 3. **LLM-Friendly**: Structure for LLM understanding, not just type correctness
 4. **Edge Cases**: Handle complex scenarios explicitly
 5. **Evolution**: Can improve based on LLM usage patterns
 
-**Hand-Crafting Cons:**
-1. **Maintenance Burden**: Two sources of truth to keep in sync
+**Hand-Crafting Cons:**1. **Maintenance Burden**: Two sources of truth to keep in sync
 2. **Verbose**: More code to write and maintain
 3. **Error-Prone**: Manual schema can drift from implementation
 4. **Slower**: Takes longer to create each function
@@ -187,9 +182,7 @@ def generate_enhanced_schema (model: BaseModel) -> dict:
     return schema
 \`\`\`
 
-**Handling Edge Cases:**
-
-1. **Union Types:**
+**Handling Edge Cases:**1. **Union Types:**
 \`\`\`python
 # Auto-generated:
 location: Union[str, Tuple[float, float]]
@@ -470,8 +463,7 @@ class SchemaMonitor:
         }
 \`\`\`
 
-**Continuous Improvement:**
-1. Collect real user queries that fail
+**Continuous Improvement:**1. Collect real user queries that fail
 2. Add them to test suite
 3. Improve schema based on failures
 4. A/B test schema changes

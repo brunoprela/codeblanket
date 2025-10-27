@@ -13,8 +13,7 @@ export const merge_intervalsProblem: Problem = {
   description: `Given an array of \`intervals\` where \`intervals[i] = [starti, endi]\`, merge all overlapping intervals and return an array of the non-overlapping intervals.
 
 
-**Approach:**
-1. Sort intervals by start time
+**Approach:**1. Sort intervals by start time
 2. Iterate through sorted intervals
 3. If current overlaps with last merged, extend the last
 4. Otherwise, add current as new interval

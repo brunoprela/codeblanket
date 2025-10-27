@@ -55,8 +55,7 @@ result = hedge.calculate_duration_hedge(
 # Short $85M notional of futures to hedge $100M portfolio
 \`\`\`
 
-**Complete Hedging Strategy:**
-1. **Duration hedge:** Short Treasury futures to offset rate risk
+**Complete Hedging Strategy:**1. **Duration hedge:** Short Treasury futures to offset rate risk
 2. **Convexity:** Buy/sell options for non-linear moves
 3. **Spread risk:** Can't hedge with Treasuries (need credit derivatives)
 4. **Rebalance:** Duration changes as time passes (need dynamic hedging)`,
@@ -133,9 +132,7 @@ class YieldCurveTrading:
         }
 \`\`\`
 
-**Why Signal Sometimes Fails:**
-
-1. **Fed intervention:** QE flattens curve artificially
+**Why Signal Sometimes Fails:**1. **Fed intervention:** QE flattens curve artificially
 2. **Foreign demand:** Foreign central banks buy long Treasuries (pushes yields down)
 3. **Technical factors:** Market structure (not economic)
 4. **Timing:** Inversion → recession lag = 12-24 months (hard to time)
@@ -362,9 +359,7 @@ if anomaly:
     print(f"  {anomaly['interpretation']}")
 \`\`\`
 
-**System Components:**
-
-1. **Pricing Engine:** Z-spread calculation
+**System Components:**1. **Pricing Engine:** Z-spread calculation
 2. **Risk Analytics:** Duration, convexity
 3. **Monitoring:** Real-time spread tracking
 4. **Alerting:** Statistical anomaly detection

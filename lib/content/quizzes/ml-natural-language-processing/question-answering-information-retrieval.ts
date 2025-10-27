@@ -14,8 +14,7 @@ Finds answer spans within provided context:
 - Output: Start and end positions in context
 - Example: "When was the Eiffel Tower built?" → "from 1887 to 1889" (extracted from text)
 
-**How it works:**
-1. Model reads question and context
+**How it works:**1. Model reads question and context
 2. Predicts start token position
 3. Predicts end token position
 4. Extracts span between positions
@@ -40,8 +39,7 @@ Generates free-form answers:
 - Output: Generated text answer
 - Example: "Why was the Eiffel Tower built?" → "The Eiffel Tower was built as the entrance arch for the 1889 World\'s Fair to celebrate the centennial of the French Revolution." (synthesized)
 
-**How it works:**
-1. Encoder processes question and context
+**How it works:**1. Encoder processes question and context
 2. Decoder generates answer token-by-token
 3. Can combine information from multiple sources
 4. Can rephrase and summarize
@@ -143,8 +141,7 @@ where:
 - Fast: inverted index lookups
 - Interpretable: can see which terms matched
 
-**Strengths:**
-1. **Exact matching**: Perfect for specific terms, acronyms, IDs
+**Strengths:**1. **Exact matching**: Perfect for specific terms, acronyms, IDs
    - Query: "COVID-19" → Must match exactly
 2. **Rare terms**: Heavily weights unique terms
 3. **No training**: Works out of the box
@@ -152,8 +149,7 @@ where:
 5. **Fast**: Efficient inverted index
 6. **Works with any language**
 
-**Weaknesses:**
-1. **Vocabulary mismatch**: "car" doesn't match "automobile"
+**Weaknesses:**1. **Vocabulary mismatch**: "car" doesn't match "automobile"
 2. **No semantic understanding**: "hot" (temperature) vs "hot" (popular)
 3. **Synonyms missed**: "ML" vs "machine learning"
 4. **Poor for conceptual queries**: "How to be happy?" has no clear terms
@@ -175,16 +171,14 @@ similarities = cosine_similarity (query_embedding, doc_embeddings)
 - Requires training
 - Black box
 
-**Strengths:**
-1. **Semantic matching**: Understands meaning
+**Strengths:**1. **Semantic matching**: Understands meaning
    - "car" and "automobile" have similar embeddings
 2. **Handles synonyms**: Automatically learned from data
 3. **Context-aware**: "Apple" (company) vs "apple" (fruit) distinguished
 4. **Cross-lingual**: Can match across languages (multilingual models)
 5. **Conceptual queries**: "vacation destinations" matches "beach paradise"
 
-**Weaknesses:**
-1. **Exact match failures**: May miss specific IDs, codes, acronyms
+**Weaknesses:**1. **Exact match failures**: May miss specific IDs, codes, acronyms
 2. **Computationally expensive**: Vector search over all documents
 3. **Requires training**: Needs labeled data or good pre-training
 4. **Less interpretable**: Can't easily explain why documents matched

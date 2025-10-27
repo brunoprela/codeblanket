@@ -659,9 +659,7 @@ Action: Check retry configuration
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **Exponential Backoff**: Double delay each retry
+### **Key Concepts**1. **Exponential Backoff**: Double delay each retry
 2. **Jitter**: Add randomness to prevent thundering herd
 3. **Idempotency**: Safe to retry
 4. **Retry Budget**: Limit total retries

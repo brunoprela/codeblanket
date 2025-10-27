@@ -353,10 +353,7 @@ print(f"\\nNPV at 10%: \${project_npv:.2f}")
 
 ### When Do They Disagree?
 
-**Two common situations:**
-
-1. **Mutually exclusive projects with different scales**
-2. **Non-conventional cash flows** (multiple sign changes)
+**Two common situations:**1. **Mutually exclusive projects with different scales**2. **Non-conventional cash flows** (multiple sign changes)
 
 ### Example: Scale Differences
 
@@ -740,7 +737,7 @@ cfs = [30, 40, 50]
 
 payback = payback_period (initial_inv, cfs)
 
-print(f"Initial investment: \${initial_inv}")
+print(f"Initial investment: \\${initial_inv}")
 print(f"Cash flows: {cfs}")
 print(f"Payback period: {payback:.2f} years")
 
@@ -1349,10 +1346,7 @@ print(sensitivity.head(10).to_string (index=False))
 
 ### When Metrics Conflict: NPV Wins
 
-**Why NPV is superior:**
-1. **Direct dollar value created**
-2. **Works for all cash flow patterns**
-3. **Additive** (can sum NPVs)
+**Why NPV is superior:**1. **Direct dollar value created**2. **Works for all cash flow patterns**3. **Additive** (can sum NPVs)
 4. **Consistent with shareholder wealth maximization**
 
 ### Common Mistakes

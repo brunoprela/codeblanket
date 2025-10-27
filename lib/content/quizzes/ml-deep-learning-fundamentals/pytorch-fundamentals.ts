@@ -15,9 +15,7 @@ A directed acyclic graph (DAG) that records all operations performed on tensors:
 - Built dynamically during forward pass
 - Used for backward pass to compute gradients
 
-**How Autograd Tracks Operations:**
-
-1. **Requires Grad Flag:**
+**How Autograd Tracks Operations:**1. **Requires Grad Flag:**
 \`\`\`python
 x = torch.tensor([2.0], requires_grad=True)  # Track this tensor
 \`\`\`
@@ -296,9 +294,7 @@ target = target.to (device)
 - GPU dramatically speeds up training (10-100x)
 - Larger batches benefit more from GPU
 
-**Common Mistakes:**
-
-1. Forgetting eval() during validation
+**Common Mistakes:**1. Forgetting eval() during validation
 2. Not using no_grad() for inference
 3. Mixing CPU and GPU tensors
 4. Not zeroing gradients

@@ -23,9 +23,7 @@ def my_function():
     pass
 \`\`\`
 
-**Common Decorator Use Cases:**
-
-1. **Timing/Profiling:**
+**Common Decorator Use Cases:**1. **Timing/Profiling:**
 \`\`\`python
 import time
 def timer (func):

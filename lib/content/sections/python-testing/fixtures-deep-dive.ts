@@ -17,13 +17,13 @@ def test_create_user():
     # Duplicate setup code
     db = create_database_connection()
     db.begin_transaction()
-    
+
     user = User (name="Alice")
     db.add (user)
     db.commit()
-    
+
     assert user.id is not None
-    
+
     # Duplicate cleanup
     db.rollback()
     db.close()
@@ -32,14 +32,14 @@ def test_update_user():
     # Same duplicate setup!
     db = create_database_connection()
     db.begin_transaction()
-    
+
     user = User (name="Bob")
     db.add (user)
     user.name = "Robert"
     db.commit()
-    
+
     assert user.name == "Robert"
-    
+
     # Same duplicate cleanup!
     db.rollback()
     db.close()
@@ -122,10 +122,10 @@ def database_connection():
     print("Connecting to database...")
     db = DatabaseConnection()
     db.connect()
-    
+
     # Provide resource to test
     yield db
-    
+
     # Teardown: runs after test (even if test fails)
     print("Disconnecting from database...")
     db.disconnect()
@@ -215,7 +215,7 @@ class TestUserAPI:
         print("Test 1")
         response = api_client.post("/users", {"name": "Alice"})
         assert response.status_code == 201
-    
+
     def test_get_user (self, api_client):
         print("Test 2")
         response = api_client.get("/users/1")
@@ -477,7 +477,7 @@ def user_factory (db_session):
         db_session.add (user)
         db_session.commit()
         return user
-    
+
     return make_user
 
 def test_multiple_users (user_factory):
@@ -485,7 +485,7 @@ def test_multiple_users (user_factory):
     alice = user_factory (name="Alice")
     bob = user_factory (name="Bob")
     charlie = user_factory (name="Charlie")
-    
+
     assert alice.email == "Alice@example.com"
     assert bob.email == "Bob@example.com"
     assert charlie.email == "Charlie@example.com"
@@ -503,16 +503,16 @@ def test_multiple_users (user_factory):
 def payment_factory (db_session):
     """Factory with cleanup tracking"""
     created_payments = []
-    
+
     def make_payment (amount, currency="USD", status="pending"):
         payment = Payment (amount=amount, currency=currency, status=status)
         db_session.add (payment)
         db_session.commit()
         created_payments.append (payment)
         return payment
-    
+
     yield make_payment
-    
+
     # Cleanup: delete all created payments
     for payment in created_payments:
         db_session.delete (payment)
@@ -523,7 +523,7 @@ def test_payment_processing (payment_factory):
     payment1 = payment_factory (amount=100.0)
     payment2 = payment_factory (amount=200.0)
     payment3 = payment_factory (amount=50.0, currency="EUR")
-    
+
     assert len([payment1, payment2, payment3]) == 3
     # All payments deleted automatically after test
 \`\`\`
@@ -539,14 +539,14 @@ Create multiple versions of same fixture with different parameters:
 def database (request):
     """Fixture parametrized by database type"""
     db_type = request.param
-    
+
     if db_type == "sqlite":
         db = SQLiteDatabase(":memory:")
     elif db_type == "postgresql":
         db = PostgreSQLDatabase("localhost", "testdb")
     elif db_type == "mysql":
         db = MySQLDatabase("localhost", "testdb")
-    
+
     db.connect()
     yield db
     db.disconnect()
@@ -604,11 +604,11 @@ def test_file_operations (tmp_path):
     # Create test file
     test_file = tmp_path / "data.txt"
     test_file.write_text("Hello, World!")
-    
+
     # Read file
     content = test_file.read_text()
     assert content == "Hello, World!"
-    
+
     # Directory automatically cleaned up after test
     # No need to manually delete files
 \`\`\`
@@ -620,7 +620,7 @@ def test_print_output (capsys):
     """capsys captures print statements"""
     print("Hello, World!")
     print("Testing output", file=sys.stderr)
-    
+
     captured = capsys.readouterr()
     assert "Hello, World!" in captured.out
     assert "Testing output" in captured.err
@@ -632,7 +632,7 @@ def test_print_output (capsys):
 def test_environment_variable (monkeypatch):
     """monkeypatch temporarily modifies environment"""
     monkeypatch.setenv("API_KEY", "test_key_123")
-    
+
     assert os.environ["API_KEY"] == "test_key_123"
     # Automatically restored after test
 \`\`\`
@@ -646,12 +646,12 @@ def database (request):
     # Get test function that requested this fixture
     test_name = request.node.name
     print(f"Setting up database for {test_name}")
-    
+
     db = Database()
-    
+
     # Add finalizer (alternative to yield)
     request.addfinalizer (db.close)
-    
+
     return db
 \`\`\`
 
@@ -678,12 +678,12 @@ from myapp.services import PaymentService
 def db_engine():
     """Session-scoped database engine"""
     engine = create_engine("postgresql://test:test@localhost/testdb")
-    
+
     # Create all tables once
     Base.metadata.create_all (engine)
-    
+
     yield engine
-    
+
     # Drop all tables at end
     Base.metadata.drop_all (engine)
     engine.dispose()
@@ -694,12 +694,12 @@ def db_session (db_engine):
     """Function-scoped clean database session"""
     connection = db_engine.connect()
     transaction = connection.begin()
-    
+
     Session = sessionmaker (bind=connection)
     session = Session()
-    
+
     yield session
-    
+
     # Rollback transaction (clean state for next test)
     session.close()
     transaction.rollback()
@@ -714,12 +714,12 @@ def user_factory (db_session):
     def make_user (name="Test User", email=None, balance=Decimal("1000.00")):
         if email is None:
             email = f"{name.replace(' ', '')}@example.com"
-        
+
         user = User (name=name, email=email, balance=balance)
         db_session.add (user)
         db_session.commit()
         return user
-    
+
     return make_user
 
 
@@ -736,7 +736,7 @@ def payment_factory (db_session):
         db_session.add (payment)
         db_session.commit()
         return payment
-    
+
     return make_payment
 
 
@@ -766,14 +766,14 @@ def bob (user_factory):
 
 class TestUserCreation:
     """Tests for user creation"""
-    
+
     def test_create_user_with_defaults (self, user_factory):
         """Should create user with default values"""
         user = user_factory()
         assert user.id is not None
         assert user.name == "Test User"
         assert user.balance == Decimal("1000.00")
-    
+
     def test_create_user_with_custom_values (self, user_factory):
         """Should create user with custom values"""
         user = user_factory (name="Charlie", balance=Decimal("250.00"))
@@ -783,27 +783,27 @@ class TestUserCreation:
 
 class TestPaymentProcessing:
     """Tests for payment processing"""
-    
+
     def test_process_payment_success (self, payment_service, alice, payment_factory):
         """Should process valid payment successfully"""
         payment = payment_factory (user=alice, amount=Decimal("100.00"))
-        
+
         result = payment_service.process_payment (payment)
-        
+
         assert result is True
         assert payment.status == "completed"
         assert alice.balance == Decimal("400.00")  # 500 - 100
-    
+
     def test_process_payment_insufficient_funds (self, payment_service, alice, payment_factory):
         """Should fail when insufficient funds"""
         payment = payment_factory (user=alice, amount=Decimal("600.00"))
-        
+
         result = payment_service.process_payment (payment)
-        
+
         assert result is False
         assert payment.status == "failed"
         assert alice.balance == Decimal("500.00")  # Unchanged
-    
+
     def test_transfer_between_users (self, payment_service, alice, bob):
         """Should transfer money between users"""
         result = payment_service.transfer(
@@ -811,7 +811,7 @@ class TestPaymentProcessing:
             to_user=alice,
             amount=Decimal("200.00")
         )
-        
+
         assert result is True
         assert bob.balance == Decimal("800.00")  # 1000 - 200
         assert alice.balance == Decimal("700.00")  # 500 + 200
@@ -819,22 +819,22 @@ class TestPaymentProcessing:
 
 class TestPaymentRefunds:
     """Tests for payment refunds"""
-    
+
     def test_refund_completed_payment (self, payment_service, alice, payment_factory):
         """Should refund completed payment"""
         payment = payment_factory (user=alice, amount=Decimal("100.00"))
         payment_service.process_payment (payment)
-        
+
         result = payment_service.refund_payment (payment)
-        
+
         assert result is True
         assert payment.status == "refunded"
         assert alice.balance == Decimal("500.00")  # Back to original
-    
+
     def test_cannot_refund_pending_payment (self, payment_service, alice, payment_factory):
         """Should not refund pending payment"""
         payment = payment_factory (user=alice, amount=Decimal("100.00"))
-        
+
         with pytest.raises(ValueError, match="only refund completed"):
             payment_service.refund_payment (payment)
 \`\`\`
@@ -942,11 +942,11 @@ Add docstrings explaining what fixture provides:
 def db_session():
     """
     Provides clean database session for each test.
-    
+
     - Session-level transaction (rolled back after test)
     - All tables available
     - Automatically cleaned up
-    
+
     Yields:
         Session: SQLAlchemy session
     """

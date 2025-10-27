@@ -20,8 +20,7 @@ EUR/USD = 1.1000/1.1005
 - Spread = 1.1005 - 1.1000 = 0.0005 = 5 pips
 - In dollars: $1,100,500 - $1,100,000 = $500 on €1M
 
-**Why Spread Exists:**
-1. **Inventory risk:** Market maker holds inventory (might move against them)
+**Why Spread Exists:**1. **Inventory risk:** Market maker holds inventory (might move against them)
 2. **Adverse selection:** Informed traders (banks, HFTs) might know something
 3. **Operating costs:** Technology, personnel, capital
 4. **Profit margin:** Compensation for providing liquidity
@@ -88,8 +87,7 @@ print(f"\\nIf €100M daily volume: \${daily_profit:,.0f}/day")
 print(f"Annual: \${daily_profit * 250:,.0f}")
 \`\`\`
 
-**HFT Edge:**
-1. **Speed:** Quote faster than competitors, capture more flow
+**HFT Edge:**1. **Speed:** Quote faster than competitors, capture more flow
 2. **Smart routing:** Send orders to multiple venues simultaneously
 3. **Inventory management:** Flatten positions quickly to minimize risk
 4. **Adverse selection mitigation:** Detect informed flow, widen spreads
@@ -202,9 +200,7 @@ print(f"2008 crisis: {result['breakdown']}")
 **Risk: Currency Depreciation:**
 You're LONG the high-yield currency (AUD). If it weakens, losses can dwarf interest earned.
 
-**2008 Crisis Unwind:**
-
-1. **Build-up:** Years of carry trades → massive long AUD, short JPY positions globally
+**2008 Crisis Unwind:**1. **Build-up:** Years of carry trades → massive long AUD, short JPY positions globally
 2. **Trigger:** Lehman bankruptcy → risk-off → everyone exits at once
 3. **Cascade:** AUD crashes, JPY surges (safe haven) → huge losses on carry
 4. **Forced liquidation:** Leveraged traders hit margin calls → sell more AUD → vicious cycle
@@ -502,8 +498,7 @@ for hedge in hedges:
     print(f"Hedge: {hedge['recommendation']}")
 \`\`\`
 
-**System Components:**
-1. Real-time price aggregation from multiple providers
+**System Components:**1. Real-time price aggregation from multiple providers
 2. Best bid/ask detection
 3. Smart order routing (best execution)
 4. Position tracking

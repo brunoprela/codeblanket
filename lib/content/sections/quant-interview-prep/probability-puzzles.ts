@@ -463,8 +463,7 @@ for n in [3, 10, 100, 1000]:
     print(f"  Switch: {switch_rate:.4%} (theoretical: {theoretical_switch:.4%})")
 \`\`\`
 
-**Interview Tips:**
-1. Start by acknowledging this is the classic Monty Hall problem
+**Interview Tips:**1. Start by acknowledging this is the classic Monty Hall problem
 2. Explain the key insight about information
 3. Offer to show multiple solution methods
 4. Discuss the psychological appeal of the wrong answer (status quo bias)
@@ -748,8 +747,7 @@ n ≈ √(2d ln(2)) ≈ 1.18√d
 
 For d=365: n ≈ 1.18√365 ≈ 22.5 ✓
 
-**Interview Tips:**
-1. State the complement approach immediately
+**Interview Tips:**1. State the complement approach immediately
 2. Explain the quadratic growth of pairs
 3. Show you understand the counterintuitive nature
 4. Be ready to generalize (different number of days, three-way matches, etc.)

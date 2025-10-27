@@ -9,9 +9,7 @@ export const microservicesvsmonolithQuiz = [
       'You\'re the tech lead at a 50-person engineering company. The CTO wants to migrate from your monolith to microservices "because that\'s what Netflix does." How do you respond? What factors would you consider, and what would be your recommendation?',
     sampleAnswer: `I would caution against blindly copying Netflix\'s architecture and instead focus on our specific needs and constraints.
 
-**Key Considerations:**
-
-1. **Organizational Maturity**: Do we have the DevOps culture and tooling (CI/CD, monitoring, distributed tracing, on-call rotations) to support microservices? With 50 engineers, we might be at the threshold, but we need to honestly assess our operational readiness.
+**Key Considerations:**1. **Organizational Maturity**: Do we have the DevOps culture and tooling (CI/CD, monitoring, distributed tracing, on-call rotations) to support microservices? With 50 engineers, we might be at the threshold, but we need to honestly assess our operational readiness.
 
 2. **Current Pain Points**: What problems are we trying to solve? If teams are blocked waiting for deployments, or we have vastly different scaling needs per component, microservices might help. But if the main issue is code quality or technical debt, microservices will just distribute the mess.
 
@@ -278,8 +276,7 @@ Before extracting services, build:
 
 **What happens**: Team migrates service, hopes it works the same, finds subtle bugs in production.
 
-**Solution: Shadowing/Dark Launch**
-1. Deploy new service
+**Solution: Shadowing/Dark Launch**1. Deploy new service
 2. Route traffic to BOTH old monolith and new service
 3. Return monolith response to user
 4. Compare responses in background
@@ -302,9 +299,7 @@ Before extracting services, build:
 - Start simple, evolve as you grow
 - Be honest about operational maturity
 
-**How I'd Lead a Migration:**
-
-1. **Assess Readiness** (2 weeks)
+**How I'd Lead a Migration:**1. **Assess Readiness** (2 weeks)
    - Team size, DevOps maturity, pain points
 
 2. **Build Platform** (2-3 months)

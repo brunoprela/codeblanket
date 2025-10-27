@@ -16,9 +16,7 @@ When all weights are initialized to zero, all neurons in a given layer compute i
 - Weight updates are identical: Δw = -η·gradient (same gradient for all)
 - After the update, all weights remain identical (just non-zero now)
 
-**Why This Prevents Learning:**
-
-1. **No Differentiation**: All neurons remain functionally identical throughout training. If neuron 1 and neuron 2 always have the same weights, they'll always produce the same output.
+**Why This Prevents Learning:**1. **No Differentiation**: All neurons remain functionally identical throughout training. If neuron 1 and neuron 2 always have the same weights, they'll always produce the same output.
 
 2. **Wasted Capacity**: A layer with 512 neurons effectively acts like a single neuron, completely wasting the network's representational capacity.
 
@@ -168,8 +166,7 @@ Instead of learning H(x), learn residual F(x) = H(x) - x
 output = F(x) + x  # Skip connection adds input directly to output
 \`\`\`
 
-**Why they help:**
-1. **Gradient Highway**: Gradients can flow directly through skip connections
+**Why they help:**1. **Gradient Highway**: Gradients can flow directly through skip connections
    - Without skip: gradient must flow through all layers → exponential decay
    - With skip: gradient has direct path → linear accumulation
 
@@ -190,8 +187,7 @@ x_normalized = (x - μ_batch) / √(σ²_batch + ε)
 output = γ · x_normalized + β  # Learnable scale and shift
 \`\`\`
 
-**Why it helps:**
-1. **Stabilizes Distributions**: Keeps activations in healthy range regardless of depth
+**Why it helps:**1. **Stabilizes Distributions**: Keeps activations in healthy range regardless of depth
 2. **Reduces Internal Covariate Shift**: Layer inputs stay consistent as parameters update
 3. **Higher Learning Rates**: Stability allows 10-100x larger learning rates
 4. **Gradient Flow**: Normalization prevents gradients from vanishing/exploding
@@ -207,8 +203,7 @@ Normalize across features (not batch) for each sample independently:
 x_normalized = (x - μ_features) / √(σ²_features + ε)
 \`\`\`
 
-**Why it helps:**
-1. **Batch-Independent**: Each sample normalized independently
+**Why it helps:**1. **Batch-Independent**: Each sample normalized independently
 2. **Sequence-Friendly**: Works with variable-length sequences (RNNs)
 3. **Small Batch Compatible**: No batch statistics dependency
 4. **Transformer Standard**: Used in all modern Transformers (GPT, BERT)

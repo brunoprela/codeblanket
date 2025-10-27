@@ -12,8 +12,7 @@ export const intermediate_generator_pipelineProblem: Problem = {
   difficulty: 'Medium',
   description: `Create a memory-efficient data processing pipeline using generators.
 
-**Pipeline Steps:**
-1. Read lines from file (generator)
+**Pipeline Steps:**1. Read lines from file (generator)
 2. Filter lines matching pattern (generator)
 3. Transform lines (generator)
 4. Aggregate results

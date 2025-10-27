@@ -26,8 +26,7 @@ Given data **X** (n samples × d features), find **k** orthogonal directions tha
 **Mathematically**:
 1. Center the data: **X** = **X** - mean(**X**)
 2. Find covariance matrix: **C** = **XᵀX** / n
-3. Compute eigenvectors and eigenvalues of **C**
-4. Principal components = eigenvectors sorted by eigenvalue (descending)
+3. Compute eigenvectors and eigenvalues of **C**4. Principal components = eigenvectors sorted by eigenvalue (descending)
 
 **Result**: Project data onto top k principal components, reducing dimensions from d to k.
 

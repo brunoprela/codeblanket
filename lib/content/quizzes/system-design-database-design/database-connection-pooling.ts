@@ -433,8 +433,7 @@ This architecture provides high performance, reliability, and automatic failover
 
 The issue is **connection pool exhaustion** - not database capacity problems.
 
-**Root Causes:**
-1. **Pool too small** for peak traffic
+**Root Causes:**1. **Pool too small** for peak traffic
 2. **Long-running queries** holding connections
 3. **Connection leaks** (connections not returned to pool)
 4. **Thundering herd** during traffic spikes

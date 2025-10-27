@@ -11,9 +11,7 @@ export const kafkastreamsSection = {
 
 **Kafka Streams** = Lightweight stream processing library + Built on Kafka consumer/producer + No separate cluster required
 
-### **Key Characteristics:**
-
-1. **Library, not framework**: Just add dependency to your application
+### **Key Characteristics:**1. **Library, not framework**: Just add dependency to your application
 2. **No external dependencies**: Only Kafka needed (no YARN, Mesos, Kubernetes)
 3. **Exactly-once semantics**: Transactional processing
 4. **Stateful processing**: Local state stores with fault tolerance

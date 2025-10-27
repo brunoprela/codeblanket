@@ -7,9 +7,7 @@ export const optimizationAlgorithmsQuiz: QuizQuestion[] = [
       'Explain why Adam optimizer is so widely used in deep learning. What problems does it solve compared to vanilla SGD, and when might you choose SGD with momentum instead?',
     sampleAnswer: `Adam (Adaptive Moment Estimation) has become the default optimizer in deep learning because it combines the best features of momentum and adaptive learning rates while being robust to hyperparameter choices. Here\'s why it's so effective and when alternatives might be better:
 
-**Why Adam is Popular:**
-
-1. **Adaptive Learning Rates Per Parameter:**
+**Why Adam is Popular:**1. **Adaptive Learning Rates Per Parameter:**
    - Automatically adjusts learning rate for each parameter based on gradient history
    - Parameters with consistently large gradients get smaller effective learning rates
    - Parameters with small gradients get larger effective learning rates
@@ -146,9 +144,7 @@ Issue: Adam\'s adaptive learning rates scale the L2 term differently for differe
 
 By decoupling weight decay from the gradient, every parameter gets the same proportional decay regardless of its gradient history. This provides consistent, predictable regularization.
 
-**When to Use AdamW:**
-
-1. **Fine-tuning Large Models:** Pre-trained models benefit from consistent regularization
+**When to Use AdamW:**1. **Fine-tuning Large Models:** Pre-trained models benefit from consistent regularization
 2. **High-Capacity Networks:** Deep networks with many parameters need strong regularization
 3. **Trading Models:** Financial data is noisy - AdamW prevents overfitting to noise
 4. **When L2 Matters:** If regularization is critical to your task

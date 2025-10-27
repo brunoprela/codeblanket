@@ -253,9 +253,7 @@ Content-Type: application/scim+json
 
 **Scenario**: John leaves company
 
-1. **HR marks John as terminated in HRIS**
-2. **HRIS syncs to IdP**
-3. **IdP pushes deactivation** via SCIM:
+1. **HR marks John as terminated in HRIS**2. **HRIS syncs to IdP**3. **IdP pushes deactivation** via SCIM:
    - PATCH /scim/v2/Users/{john_id} \`active: false\` to all apps
 4. **John loses access** to all apps instantly
 
@@ -338,9 +336,9 @@ def handle_saml_login (assertion):
     # Validate assertion (signature, timestamps, etc.)
     attributes = extract_attributes (assertion)
     email = attributes['email']
-    
+
     user = User.find_by_email (email)
-    
+
     if not user:
         # JIT: Create user on first login
         user = User.create(
@@ -357,7 +355,7 @@ def handle_saml_login (assertion):
             last_name=attributes['lastName'],
             role=attributes['role']
         )
-    
+
     # Create session
     session['user_id'] = user.id
     return redirect('/dashboard')

@@ -21,9 +21,7 @@ For n parameters:
 **Backpropagation Approach:**
 Single backward pass computes ALL gradients simultaneously.
 
-**Why It\'s Efficient:**
-
-1. **Shared Computations:**
+**Why It\'s Efficient:**1. **Shared Computations:**
    
    Consider network: x → f₁ → f₂ → f₃ → L
    
@@ -68,9 +66,7 @@ Single backward pass computes ALL gradients simultaneously.
    - Total: O(N)
    - For N = 10⁶: ~10⁶ operations
    
-   **Speedup:** O(N) → **Million times faster!**
-
-5. **Why This Works - Automatic Differentiation:**
+   **Speedup:** O(N) → **Million times faster!**5. **Why This Works - Automatic Differentiation:**
 
    Backpropagation is reverse-mode automatic differentiation:
    

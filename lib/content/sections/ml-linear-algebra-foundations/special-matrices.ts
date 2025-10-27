@@ -260,8 +260,7 @@ print(f"Product of diagonal = {det_U_diag:.4f}")
 
 ### Applications in ML
 
-1. **LU decomposition**: Factor **A** = **LU**
-2. **Cholesky decomposition**: **A** = **LL**ᵀ for positive definite matrices
+1. **LU decomposition**: Factor **A** = **LU**2. **Cholesky decomposition**: **A** = **LL**ᵀ for positive definite matrices
 3. **Solving linear systems**: Much faster than generic methods
 
 \`\`\`python

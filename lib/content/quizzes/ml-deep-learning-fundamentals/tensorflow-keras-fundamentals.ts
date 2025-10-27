@@ -48,9 +48,7 @@ model = keras.Model (inputs=inputs, outputs=outputs)
 - Layer sharing
 - Access intermediate layers
 
-**When Functional API is Required:**
-
-1. **Skip Connections (ResNets):**
+**When Functional API is Required:**1. **Skip Connections (ResNets):**
 \`\`\`python
 x = layers.Dense(64)(inputs)
 shortcut = x

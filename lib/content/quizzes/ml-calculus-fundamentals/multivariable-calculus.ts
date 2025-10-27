@@ -407,8 +407,7 @@ Momentum variant that handles saddles provably well.
 **Current View:**
 "Saddle points are prevalent but efficiently escapable. Not the bottleneck."
 
-**Real challenges:**
-1. Poor conditioning (flat directions)
+**Real challenges:**1. Poor conditioning (flat directions)
 2. High variance gradients (noisy estimates)
 3. Computational cost (large models/datasets)
 
@@ -417,9 +416,7 @@ Getting stuck at saddles.
 
 **13. Summary:**
 
-**Why saddles aren't a problem:**
-
-1. **Unstable:** Any perturbation causes escape
+**Why saddles aren't a problem:**1. **Unstable:** Any perturbation causes escape
 2. **Negative curvature:** Provides escape direction
 3. **SGD noise:** Natural perturbations from mini-batches
 4. **Probability 0:** Random init almost never lands exactly on saddle
@@ -722,8 +719,7 @@ Use Conjugate Gradient to solve Hx = -g without forming H.
 
 **Surprising fact:** Despite being "suboptimal," SGD works amazingly well!
 
-**Reasons:**
-1. **Overparameterization**: Many paths to good solutions
+**Reasons:**1. **Overparameterization**: Many paths to good solutions
 2. **Implicit regularization**: SGD noise acts as regularizer
 3. **Flat minima**: SGD finds generalizing solutions
 4. **Computational efficiency**: More steps >> fewer better steps

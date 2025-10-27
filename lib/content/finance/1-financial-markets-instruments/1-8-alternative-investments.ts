@@ -353,8 +353,7 @@ print(f"  MOIC: {lbo['moic']:.2f}x")
 print(f"  IRR: {lbo['irr']:.1f}%")
 \`\`\`
 
-**Value Creation in PE:**
-1. **Multiple expansion**: Buy at 10x, sell at 12x
+**Value Creation in PE:**1. **Multiple expansion**: Buy at 10x, sell at 12x
 2. **Operational improvements**: Grow revenue, improve margins
 3. **Debt paydown**: Reduces debt, increases equity value
 4. **Financial engineering**: Leverage amplifies returns
@@ -613,9 +612,7 @@ for item in dd['Red Flags']:
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Hedge Funds**: Absolute return strategies, 2-and-20 fees, higher risk
+**Key Takeaways:**1. **Hedge Funds**: Absolute return strategies, 2-and-20 fees, higher risk
 2. **Private Equity**: LBOs, operational improvements, 5-7 year lockups
 3. **Real Estate**: Income + appreciation, REITs for liquidity
 4. **Illiquidity Premium**: Need 2-4% extra return per year of lockup

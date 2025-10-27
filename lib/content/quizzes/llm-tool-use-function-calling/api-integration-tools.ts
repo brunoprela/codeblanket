@@ -91,8 +91,7 @@ class OAuth2Tool:
         return token_data
 \`\`\`
 
-**Security Measures:**
-1. Store tokens encrypted at rest
+**Security Measures:**1. Store tokens encrypted at rest
 2. Use HTTPS only
 3. Implement token rotation
 4. Limit token scope

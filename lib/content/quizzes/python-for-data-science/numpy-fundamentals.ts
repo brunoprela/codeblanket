@@ -7,9 +7,7 @@ export const numpyFundamentalsQuiz: QuizQuestion[] = [
       'Explain why NumPy arrays require all elements to be the same data type (homogeneous), and discuss the trade-offs of this design decision compared to Python lists.',
     sampleAnswer: `NumPy\'s requirement for homogeneous data types is a fundamental design choice that enables its exceptional performance:
 
-**Why Homogeneous Types:**
-
-1. **Memory Layout**: With all elements the same type, NumPy can store them contiguously in memory with predictable spacing. This enables fast element access via pointer arithmetic: element_address = base_address + (index * element_size).
+**Why Homogeneous Types:**1. **Memory Layout**: With all elements the same type, NumPy can store them contiguously in memory with predictable spacing. This enables fast element access via pointer arithmetic: element_address = base_address + (index * element_size).
 
 2. **Vectorization**: Modern CPUs have SIMD (Single Instruction, Multiple Data) instructions that operate on multiple values simultaneously. These only work when all values are the same type and aligned in memory.
 
@@ -65,16 +63,12 @@ batch = augmented_images[[0, 1, 2, 3]]  # Yet another copy
 # Total: ~450 GB! Might crash the system
 \`\`\`
 
-**Why This Happens:**
-
-1. Arithmetic operations (/, *, +) create new arrays
+**Why This Happens:**1. Arithmetic operations (/, *, +) create new arrays
 2. Advanced indexing with lists creates copies
 3. Boolean indexing creates copies
 4. Some array operations trigger copies to ensure C-contiguous memory
 
-**Memory-Efficient Strategies:**
-
-1. **In-Place Operations:**
+**Memory-Efficient Strategies:**1. **In-Place Operations:**
 \`\`\`python
 images = images.astype (np.float32)  # Convert type first
 images /= 255.0  # In-place division (uses /=)
@@ -210,9 +204,7 @@ X, Y = np.meshgrid (x, y)
 temperatures = np.linspace(273, 373, 101)  # 0°C to 100°C, 1° steps
 \`\`\`
 
-**Additional Considerations:**
-
-1. **Performance**: arange() is slightly faster for integers, but negligible difference in practice
+**Additional Considerations:**1. **Performance**: arange() is slightly faster for integers, but negligible difference in practice
 
 2. **Logarithmic Spacing**: Use np.logspace() for logarithmic scales
 \`\`\`python

@@ -8,9 +8,7 @@ export const tradingGamesSimulations = {
 
 Trading games and simulations are a critical component of quantitative trading interviews. Unlike theoretical probability problems, these games test your ability to make real-time decisions under uncertainty, manage risk dynamically, and adapt strategies based on feedback. They simulate the actual pressure and decision-making environment of trading desks.
 
-**Why Firms Use Trading Games:**
-
-1. **Real-world skills** - Games mirror actual trading decisions
+**Why Firms Use Trading Games:**1. **Real-world skills** - Games mirror actual trading decisions
 2. **Pressure testing** - See how you perform under time constraints
 3. **Risk management** - Do you size positions appropriately?
 4. **Adaptability** - Can you learn from outcomes and adjust?
@@ -27,9 +25,7 @@ Trading games and simulations are a critical component of quantitative trading i
 - **Composure**: Staying calm when losing
 - **Confidence**: Making decisions without perfect information
 
-**Common Game Categories:**
-
-1. Market making games (bid-ask quoting)
+**Common Game Categories:**1. Market making games (bid-ask quoting)
 2. Prediction markets (betting on outcomes)
 3. Auction games (bidding strategies)
 4. Sequential betting games (Kelly criterion)
@@ -66,9 +62,7 @@ We'll play 10 rounds. Your goal is to maximize P&L."
 - If they lift your offer: P&L = A - V per share (you sell at A, worth V)
 - If they pass: P&L = 0
 
-**Key Insights:**
-
-1. **Adverse Selection**: If interviewer always hits your bid, your offer is probably too high. If they always lift your offer, your bid is probably too low.
+**Key Insights:**1. **Adverse Selection**: If interviewer always hits your bid, your offer is probably too high. If they always lift your offer, your bid is probably too low.
 
 2. **Inventory Risk**: As you accumulate long position, you have downside risk. As you go short, you have upside risk.
 
@@ -863,9 +857,7 @@ Trading games test skills that pure math problems cannot:
 - **Strategic thinking** and adaptation
 - **Composure** under pressure
 
-**Key Takeaways:**
-
-1. **Start conservative** - Gather information before taking big risks
+**Key Takeaways:**1. **Start conservative** - Gather information before taking big risks
 2. **Use Kelly Criterion** - Don't over-bet your edge
 3. **Manage inventory** - In market making, position risk dominates
 4. **Adapt quickly** - Update beliefs based on outcomes

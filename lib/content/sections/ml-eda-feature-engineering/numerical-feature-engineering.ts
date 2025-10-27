@@ -427,16 +427,7 @@ df_with_ratios = create_ratio_features (df)
 
 ## Key Takeaways
 
-1. **Scaling is crucial for distance-based and linear models**
-2. **StandardScaler most common; RobustScaler for outliers**
-3. **Tree-based models don't require scaling**
-4. **Log transformation effective for right-skewed data**
-5. **Box-Cox automatically finds optimal transformation**
-6. **Binning converts continuous to categorical (useful for linear models)**
-7. **Polynomial features capture non-linear relationships**
-8. **Ratio features often highly interpretable and predictive**
-9. **Derived features encode domain knowledge**
-10. **Always maintain train/test consistency in transformations**
+1. **Scaling is crucial for distance-based and linear models**2. **StandardScaler most common; RobustScaler for outliers**3. **Tree-based models don't require scaling**4. **Log transformation effective for right-skewed data**5. **Box-Cox automatically finds optimal transformation**6. **Binning converts continuous to categorical (useful for linear models)**7. **Polynomial features capture non-linear relationships**8. **Ratio features often highly interpretable and predictive**9. **Derived features encode domain knowledge**10. **Always maintain train/test consistency in transformations**
 
 ## Connection to Machine Learning
 

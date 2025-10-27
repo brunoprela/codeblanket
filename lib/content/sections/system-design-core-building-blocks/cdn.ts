@@ -31,9 +31,7 @@ export const cdnSection = {
 
 ## How CDN Works
 
-### **Basic Flow**
-
-1. User requests image: example.com/logo.png
+### **Basic Flow**1. User requests image: example.com/logo.png
 2. DNS resolves to nearest CDN edge server (not origin)
 3. Edge server checks cache: Does it have logo.png?
 4. If cached (HIT): Return image immediately (fast)
@@ -61,8 +59,7 @@ export const cdnSection = {
 
 **How it works**: Edge server pulls content from origin on first request (lazy loading).
 
-**Flow:**
-1. User requests file
+**Flow:**1. User requests file
 2. Edge server: Cache miss
 3. Edge server pulls from origin
 4. Edge server caches and returns to user
@@ -85,8 +82,7 @@ export const cdnSection = {
 
 **How it works**: You proactively push content to edge servers before users request it.
 
-**Flow:**
-1. You upload files to CDN (via API or dashboard)
+**Flow:**1. You upload files to CDN (via API or dashboard)
 2. CDN distributes to all edge servers
 3. User requests file
 4. Edge server: Cache hit immediately (already there)

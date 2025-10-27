@@ -47,8 +47,7 @@ Show greedy is always "ahead" of any other solution.
 
 Show optimal solution has greedy structure.
 
-**Steps:**
-1. **Base case**: Greedy optimal for smallest input
+**Steps:**1. **Base case**: Greedy optimal for smallest input
 2. **Induction**: If greedy optimal for size n, prove for n+1
 3. Show adding greedy choice maintains optimality
 

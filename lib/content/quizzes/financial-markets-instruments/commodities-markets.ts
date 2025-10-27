@@ -9,9 +9,7 @@ Forward curve slopes upward: near-term contracts cheaper than distant contracts.
 - 12-month: $90/barrel
 - Difference: $10 = 12.5% annualized
 
-**Why Contango Occurs:**
-
-1. **Storage costs:** Holding physical oil costs money (tanks, insurance)
+**Why Contango Occurs:**1. **Storage costs:** Holding physical oil costs money (tanks, insurance)
 2. **Financing costs:** Money tied up in inventory
 3. **Insurance:** Protect against fire, theft, spills
 4. **Total cost of carry:** $10/barrel over 12 months
@@ -103,8 +101,7 @@ Month 3: Roll again at $84 (2.4% loss)
 After 12 months: Oil still at $80, but USO down ~12% from roll costs
 \`\`\`
 
-**Alternatives to Avoid Roll Costs:**
-1. **Physical ETFs:** Hold oil in tanks (BCOM, but has storage costs)
+**Alternatives to Avoid Roll Costs:**1. **Physical ETFs:** Hold oil in tanks (BCOM, but has storage costs)
 2. **Equity proxies:** Oil company stocks (XLE)
 3. **Longer-dated futures:** Less frequent rolls, but less liquid
 4. **Spot proxy instruments:** Synthetic products tracking spot
@@ -597,8 +594,7 @@ for signal in signals:
 print(f"    {signal['rationale']}")
 \`\`\`
 
-**System Components:**
-1. Term structure analyzer (contango/backwardation detection)
+**System Components:**1. Term structure analyzer (contango/backwardation detection)
 2. Roll cost calculator
 3. Arbitrage detector (cash-and-carry, calendar spreads)
 4. Signal generator (trading recommendations)

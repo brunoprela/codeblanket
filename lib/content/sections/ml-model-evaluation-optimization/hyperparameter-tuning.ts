@@ -392,8 +392,7 @@ print(f"  Improvement:  {(grid_fine.best_score_ - baseline_score)*100:.1f}%")
 7. **Budget time**: Diminishing returns after a point
 8. **Parallelize**: Use all available cores (n_jobs=-1)
 
-**Recommended Strategy:**
-1. Establish baseline with defaults
+**Recommended Strategy:**1. Establish baseline with defaults
 2. Random search for exploration (50-100 iterations)
 3. Grid search for exploitation (around best random search result)
 4. Final evaluation on held-out test set

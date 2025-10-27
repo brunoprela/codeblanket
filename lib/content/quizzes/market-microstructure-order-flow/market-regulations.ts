@@ -91,8 +91,7 @@ class SpoofingDetector:
 
 Layering: Placing multiple orders at different price levels to manipulate, then canceling.
 
-**Pattern:**
-1. Place large order on one side (e.g., sell 10K @ $100.00)
+**Pattern:**1. Place large order on one side (e.g., sell 10K @ $100.00)
 2. Place many smaller orders on opposite side (buy 500 @ $99.95, $99.94, ... $99.80)
 3. Cancel the "layers" once main order executes or price moves
 4. Repeat pattern
@@ -143,8 +142,7 @@ class LayeringDetector:
 
 Wash trading: Trading with yourself (or coordinated parties) to create false volume.
 
-**Detection Methods:**
-1. **Account Matching**: Same trader on both sides
+**Detection Methods:**1. **Account Matching**: Same trader on both sides
 2. **Entity Matching**: Different accounts, same parent entity
 3. **Pattern Matching**: Suspiciously simultaneous opposite orders
 4. **Timing Analysis**: Orders placed within milliseconds, filled immediately
@@ -431,9 +429,7 @@ class RegulatoryReporter:
 
 **6. False Positive Mitigation**
 
-**Strategies to Reduce False Positives:**
-
-1. **Contextual Filtering:**
+**Strategies to Reduce False Positives:**1. **Contextual Filtering:**
    - Exclude market making registered firms (higher order-to-trade ratios expected)
    - Adjust thresholds during high volatility (more cancels are normal)
    - Consider asset class (options have higher cancel rates than equities)
@@ -723,7 +719,7 @@ class OrderValidator:
                     reason = "Execution at or better than NBBO ask"
                 else:
                     approved = False
-                    reason = f"TRADE-THROUGH: Buy @ ${execution_price:.2f} > NBBO ask ${nbbo['ask']:.2f}"
+                    reason = f"TRADE-THROUGH: Buy @ \${execution_price:.2f} > NBBO ask \${nbbo['ask']:.2f}"
                     self.violations_prevented += 1
             
             else:  # SELL
@@ -736,7 +732,7 @@ class OrderValidator:
                     reason = "Execution at or better than NBBO bid"
                 else:
                     approved = False
-                    reason = f"TRADE-THROUGH: Sell @ ${execution_price:.2f} < NBBO bid ${nbbo['bid']:.2f}"
+                    reason = f"TRADE-THROUGH: Sell @ \${execution_price:.2f} < NBBO bid \${nbbo['bid']:.2f}"
                     self.violations_prevented += 1
         
         elif order_type == 'ISO':  # Intermarket Sweep Order

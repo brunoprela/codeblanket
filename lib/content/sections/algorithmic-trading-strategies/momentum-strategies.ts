@@ -36,8 +36,7 @@ Momentum - the tendency of assets that have performed well (poorly) to continue 
 
 Buy top performers, short bottom performers within a universe.
 
-**Classic Approach:**
-1. Universe: S&P 500
+**Classic Approach:**1. Universe: S&P 500
 2. Ranking period: 12 months (exclude last month)
 3. Holding period: 1 month
 4. Rebalance monthly
@@ -294,8 +293,7 @@ print("Long if up over 12 months, short if down")
 
 Combine momentum with other factors for enhanced performance.
 
-**Common Factors:**
-1. Value (book-to-market)
+**Common Factors:**1. Value (book-to-market)
 2. Size (market cap)
 3. Momentum (12-month return)
 4. Quality (ROE, margins)

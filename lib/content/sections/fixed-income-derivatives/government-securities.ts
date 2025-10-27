@@ -1,7 +1,7 @@
 export const governmentSecurities = {
-    title: 'Government Securities',
-    id: 'government-securities',
-    content: `
+  title: 'Government Securities',
+  id: 'government-securities',
+  content: `
 # Government Securities
 
 ## Introduction

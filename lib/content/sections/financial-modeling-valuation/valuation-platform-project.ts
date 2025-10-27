@@ -15,8 +15,7 @@ export const valuationPlatformProject = {
 - Generates professional PDF reports
 - Stores results in database
 
-**What You'll Build:**
-1. Data pipeline (fetch from APIs)
+**What You'll Build:**1. Data pipeline (fetch from APIs)
 2. Valuation engine (DCF, comps, multiples)
 3. Risk analysis (sensitivity, Monte Carlo)
 4. Report generator (PDF output)
@@ -125,61 +124,61 @@ from typing import Dict
 
 class DataPipeline:
     """Fetch and validate company data"""
-    
+
     def __init__(self, ticker: str):
         self.ticker = ticker
         self.stock = yf.Ticker(ticker)
-    
+
     def fetch_all_data(self) -> Dict:
         """Fetch comprehensive company data"""
-        
+
         try:
             info = self.stock.info
             financials = self.stock.financials
             balance = self.stock.balance_sheet
             cashflow = self.stock.cashflow
-            
+
             data = {
                 'ticker': self.ticker,
                 'name': info.get('longName'),
                 'sector': info.get('sector'),
                 'industry': info.get('industry'),
-                
+
                 # Market data
                 'market_cap': info.get('marketCap'),
                 'current_price': info.get('currentPrice'),
                 'beta': info.get('beta', 1.0),
-                
+
                 # Financials
                 'revenue': info.get('totalRevenue'),
                 'ebitda': info.get('ebitda'),
                 'net_income': info.get('netIncome'),
-                
+
                 # Balance sheet
                 'total_debt': info.get('totalDebt'),
                 'cash': info.get('totalCash'),
                 'shares_outstanding': info.get('sharesOutstanding'),
-                
+
                 # Valuation
                 'pe_ratio': info.get('trailingPE'),
                 'forward_pe': info.get('forwardPE'),
                 'peg_ratio': info.get('pegRatio')
             }
-            
+
             return self.validate_data(data)
-        
+
         except Exception as e:
             raise ValueError(f"Failed to fetch data for {self.ticker}: {str(e)}")
-    
+
     def validate_data(self, data: Dict) -> Dict:
         """Validate data quality"""
-        
+
         required_fields = ['revenue', 'ebitda', 'market_cap']
-        
+
         for field in required_fields:
             if data.get(field) is None or data.get(field) <= 0:
                 raise ValueError(f"Invalid {field} for {self.ticker}")
-        
+
         return data
 
 # Example usage

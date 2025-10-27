@@ -119,9 +119,9 @@ print("Customer Segments:", clusters)
 print("Cluster Centers:", kmeans.cluster_centers_)
 
 # Visualize segments
-plt.scatter(X_customers[:, 0], X_customers[:, 1], 
+plt.scatter(X_customers[:, 0], X_customers[:, 1],
             c=clusters, cmap='viridis', s=100, alpha=0.6)
-plt.scatter (kmeans.cluster_centers_[:, 0], 
+plt.scatter (kmeans.cluster_centers_[:, 0],
             kmeans.cluster_centers_[:, 1],
             c='red', marker='X', s=200, label='Centroids')
 plt.xlabel('Annual Income (k$)')
@@ -166,7 +166,7 @@ print(f"Variance explained: {pca.explained_variance_ratio_.sum():.2%}")
 
 # Visualize reduced data
 plt.figure (figsize=(10, 8))
-scatter = plt.scatter(X_reduced[:, 0], X_reduced[:, 1], 
+scatter = plt.scatter(X_reduced[:, 0], X_reduced[:, 1],
                      c=digits.target, cmap='tab10', alpha=0.6)
 plt.colorbar (scatter, label='Digit')
 plt.xlabel('First Principal Component')
@@ -206,10 +206,10 @@ predictions = iso_forest.fit_predict(X_mixed)
 
 # Visualize
 plt.figure (figsize=(10, 6))
-plt.scatter(X_mixed[predictions == 1, 0], 
+plt.scatter(X_mixed[predictions == 1, 0],
             X_mixed[predictions == 1, 1],
             c='blue', label='Normal', alpha=0.6)
-plt.scatter(X_mixed[predictions == -1, 0], 
+plt.scatter(X_mixed[predictions == -1, 0],
             X_mixed[predictions == -1, 1],
             c='red', label='Anomaly', alpha=0.8, marker='x', s=100)
 plt.xlabel('Feature 1')
@@ -253,7 +253,7 @@ confidence_milk_bread = len (milk_and_bread) / len (milk_transactions)
 
 print(f"Support (milk): {support_milk:.2%}")
 print(f"Confidence (milk → bread): {confidence_milk_bread:.2%}")
-print("If customer buys milk, they buy bread " + 
+print("If customer buys milk, they buy bread " +
       f"{confidence_milk_bread:.0%} of the time")
 \`\`\`
 
@@ -435,13 +435,13 @@ print(f"After PCA: {scores_pca.mean():.3f}")
 import pandas as pd
 
 comparison = pd.DataFrame({
-    'Aspect': ['Training Data', 'Goal', 'Output', 'Accuracy', 
+    'Aspect': ['Training Data', 'Goal', 'Output', 'Accuracy',
                'Complexity', 'Use Cases'],
-    'Supervised': ['Labeled (X, y)', 'Predict y from X', 
-                   'Specific predictions', 'Measurable', 
+    'Supervised': ['Labeled (X, y)', 'Predict y from X',
+                   'Specific predictions', 'Measurable',
                    'Simpler', 'Classification, Regression'],
-    'Unsupervised': ['Unlabeled (X only)', 'Find structure in X', 
-                     'Patterns, groups', 'Harder to measure', 
+    'Unsupervised': ['Unlabeled (X only)', 'Find structure in X',
+                     'Patterns, groups', 'Harder to measure',
                      'More complex', 'Clustering, Dimensionality reduction']
 })
 

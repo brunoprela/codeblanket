@@ -56,9 +56,7 @@ Final:   None ← [1] ← [2] ← [3]
 
 ---
 
-**Interview Communication:**
-
-1. **Clarify:**
+**Interview Communication:**1. **Clarify:**
    - "Is this a singly or doubly linked list?"
    - "Can I modify the list in place?"
 
@@ -100,9 +98,7 @@ Final:   None ← [1] ← [2] ← [3]
 
 ---
 
-**Practice Plan:**
-
-1. **Basics (Day 1-2):**
+**Practice Plan:**1. **Basics (Day 1-2):**
    - Reverse Linked List (iterative & recursive)
    - Find Middle
    - Delete Node

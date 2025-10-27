@@ -51,9 +51,7 @@ Two assets, equal weighted (50/50):
 
 **Perfect hedging!** Portfolio has zero volatility. This is the theoretical maximum diversification benefit.
 
-**Why Correlation Matters:**
-
-1. **Perfect Positive (+1.0):** Assets move in lockstep. When one zigs, the other zigs. The covariance term 2w₁w₂σ₁σ₂ρ adds fully to portfolio variance.
+**Why Correlation Matters:**1. **Perfect Positive (+1.0):** Assets move in lockstep. When one zigs, the other zigs. The covariance term 2w₁w₂σ₁σ₂ρ adds fully to portfolio variance.
 
 2. **Zero (0.0):** Assets move independently. The covariance term disappears (multiplied by 0), leaving only individual variances. This reduces total portfolio variance.
 
@@ -215,9 +213,7 @@ New weights: 40% A, 45% B, 15% C
 New E(R) = 0.40(10%) + 0.45(12%) + 0.15(8%) = 10.6% (vs 10.2%)
 New risk: ~13.2% (slightly higher, but better risk-adjusted return)
 
-**Economic Intuition:**
-
-1. **Underweighting low-return assets:** Asset C contributes 25% of portfolio but only 8% expected return. This drags down overall returns.
+**Economic Intuition:**1. **Underweighting low-return assets:** Asset C contributes 25% of portfolio but only 8% expected return. This drags down overall returns.
 
 2. **Moderate correlation structure:** The correlations (0.3-0.6) suggest decent diversification benefits, but not enough to justify overweighting the lowest-return asset.
 

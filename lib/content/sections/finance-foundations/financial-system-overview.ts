@@ -658,7 +658,7 @@ def plot_stock_performance (ticker: str, period: str = '1y'):
     
     # Statistics
     total_return = df['Cumulative_Return'].iloc[-1]
-    volatility = df['Daily_Return'].std() * (252 ** 0.5)  # Annualized
+    volatility = df['Daily_Return'].std() * (252 **0.5)  # Annualized
     sharpe = (total_return / (len (df) / 252) - 0.04) / volatility  # Approx annual Sharpe
     
     print(f"\\n{ticker} Performance Summary:")
@@ -704,7 +704,7 @@ plt.show()
 print("\\n1-Year Performance Comparison:")
 for ticker in tickers:
     total_return = comparison[ticker].iloc[-1]
-volatility = comparison[ticker].pct_change().std() * (252 ** 0.5)
+volatility = comparison[ticker].pct_change().std() * (252 **0.5)
 print(f"  {ticker}: {total_return:.2%} return, {volatility:.2%} volatility")
 \`\`\`
 

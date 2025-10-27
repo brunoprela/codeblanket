@@ -471,7 +471,7 @@ def process_collections(
     """Lists, dicts, tuples are serializable"""
     total = sum (items)
     keys = list (mapping.keys())
-    distance = (coordinates[0] ** 2 + coordinates[1] ** 2) ** 0.5
+    distance = (coordinates[0] ** 2 + coordinates[1] ** 2) **0.5
     
     return {
         'total': total,
@@ -1129,8 +1129,7 @@ print(f"Task queued: {result.id}")
 - Use serializable types for arguments (int, str, list, dict)
 - Name tasks for organization (\`emails.send\`, \`users.create\`)
 
-**Best Practices:**
-1. Make tasks idempotent
+**Best Practices:**1. Make tasks idempotent
 2. Keep tasks small and focused
 3. Handle failures gracefully
 4. Add comprehensive logging

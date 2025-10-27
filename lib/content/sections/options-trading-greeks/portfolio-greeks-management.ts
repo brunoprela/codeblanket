@@ -1,7 +1,7 @@
 export const portfolioGreeksManagement = {
-    title: 'Options Greeks Portfolio Management',
-    id: 'portfolio-greeks-management',
-    content: `
+  title: 'Options Greeks Portfolio Management',
+  id: 'portfolio-greeks-management',
+  content: `
 # Options Greeks Portfolio Management
 
 ## Introduction
@@ -93,12 +93,12 @@ class OptionsPortfolio:
         print(f"  (Equivalent to {abs(greeks['delta']):,.0f} shares {'long' if greeks['delta'] > 0 else 'short'})")
         print(f"\\nNet Gamma: {greeks['gamma']:,.2f}")
         print(f"  (Portfolio delta changes by {greeks['gamma']:,.2f} for $1 stock move)")
-        print(f"\\nNet Theta: ${greeks['theta']:, .2f
+        print(f"\\nNet Theta: \${greeks['theta']:,.2f}
 } per day")
-print(f"  (Portfolio {'gains' if greeks['theta'] > 0 else 'loses'} ${abs(greeks['theta']):,.2f} daily from time decay)")
-print(f"\\nNet Vega: ${greeks['vega']:,.2f} per 1% IV")
-print(f"  (Portfolio {'gains' if greeks['vega'] > 0 else 'loses'} ${abs(greeks['vega']):,.2f} per 1% IV move)")
-print(f"\\nNet Rho: ${greeks['rho']:,.2f} per 1% rate change")
+print(f"  (Portfolio {'gains' if greeks['theta'] > 0 else 'loses'} \${abs(greeks['theta']):,.2f} daily from time decay)")
+print(f"\\nNet Vega: \${greeks['vega']:,.2f} per 1% IV")
+print(f"  (Portfolio {'gains' if greeks['vega'] > 0 else 'loses'} \${abs(greeks['vega']):,.2f} per 1% IV move)")
+print(f"\\nNet Rho: \${greeks['rho']:,.2f} per 1% rate change")
         
         # Risk assessment
 print(f"\\n{'─' * 70}")
@@ -117,10 +117,10 @@ print(f"     Delta will change rapidly with stock moves")
 print(f"  ✓  Gamma manageable: {greeks['gamma']:,.0f}")
 
 if abs(greeks['theta']) > 5000:
-    print(f"  ⚠️  HIGH THETA: ${greeks['theta']:,.0f}/day")
+    print(f"  ⚠️  HIGH THETA: \${greeks['theta']:,.0f}/day")
 print(f"     Significant daily P&L from time decay")
         else:
-print(f"  ✓  Theta acceptable: ${greeks['theta']:,.0f}/day")
+print(f"  ✓  Theta acceptable: \${greeks['theta']:,.0f}/day")
 
 
 # Example Portfolio
@@ -175,7 +175,7 @@ hedge_shares = portfolio.get_delta_hedge_required(target_delta = 0)
 print(f"\\n{'─' * 70}")
 print(f"DELTA HEDGING:")
 print(f"  To achieve delta-neutral, need to {'buy' if hedge_shares > 0 else 'sell'} {abs(hedge_shares):,.0f} SPY shares")
-print(f"  At $450/share, requires ${abs(hedge_shares * spy_price):,.0f} in capital")
+print(f"  At $450/share, requires \${abs(hedge_shares * spy_price):,.0f} in capital")
 \`\`\`
 
 ---
@@ -256,10 +256,10 @@ def simulate_gamma_scalping_pnl(initial_stock, days, gamma, daily_vol):
     print(f"Days: {days}")
     print(f"Daily Volatility: {daily_vol*100:.1f}%")
     print(f"\\nResults:")
-    print(f"  Starting Stock: ${initial_stock: .2f}")
-print(f"  Ending Stock: ${stock:.2f}")
-print(f"  Total Gamma P&L: ${cumulative_pnl:,.2f}")
-print(f"  Average Daily P&L: ${cumulative_pnl/days:.2f}")
+    print(f"  Starting Stock: \${initial_stock:.2f}")
+print(f"  Ending Stock: \${stock:.2f}")
+print(f"  Total Gamma P&L: \${cumulative_pnl:,.2f}")
+print(f"  Average Daily P&L: \${cumulative_pnl/days:.2f}")
 
 return df
 
@@ -323,21 +323,21 @@ def project_theta_pnl(portfolio_theta, days):
     print("=" * 70)
     print("THETA DECAY PROJECTION")
     print("=" * 70)
-    print(f"\\nPortfolio Theta: ${portfolio_theta:, .2f}/day")
+    print(f"\\nPortfolio Theta: \${portfolio_theta:,.2f}/day")
 print(f"Days Projected: {days}")
 print(f"\\nProjected P&L:")
 for milestone in [7, 14, 21, 30]:
     if milestone <= days:
         pnl = df[df['day'] == milestone]['cumulative'].values[0]
-print(f"  {milestone} days: ${pnl:,.2f}")
+print(f"  {milestone} days: \${pnl:,.2f}")
 
 total_pnl = df['cumulative'].iloc[-1]
-print(f"\\nTotal Theta P&L: ${total_pnl:,.2f}")
+print(f"\\nTotal Theta P&L: \${total_pnl:,.2f}")
 
 if portfolio_theta > 0:
-    print(f"\\n✓ Positive theta: Portfolio gains ${abs(total_pnl):,.0f} from time decay")
+    print(f"\\n✓ Positive theta: Portfolio gains \${abs(total_pnl):,.0f} from time decay")
 else:
-print(f"\\n⚠️  Negative theta: Portfolio loses ${abs(total_pnl):,.0f} to time decay")
+print(f"\\n⚠️  Negative theta: Portfolio loses \${abs(total_pnl):,.0f} to time decay")
 
 return df
 
@@ -376,8 +376,8 @@ def analyze_vega_scenarios(portfolio_vega, current_pnl=0):
     print("=" * 70)
     print("VEGA SCENARIO ANALYSIS")
     print("=" * 70)
-    print(f"\\nPortfolio Vega: ${portfolio_vega:, .2f} per 1 % IV")
-print(f"Current P&L: ${current_pnl:,.2f}")
+    print(f"\\nPortfolio Vega: \${portfolio_vega:,.2f} per 1 % IV")
+print(f"Current P&L: \${current_pnl:,.2f}")
 print(f"\\nIV Scenarios:")
 print(f"  {'Scenario':<25} {'IV Change':>12} {'P&L Impact':>15} {'New P&L':>15}")
 print("  " + "─" * 70)
@@ -394,7 +394,7 @@ results.append({
 })
 
 color = '🟢' if pnl_impact > 0 else '🔴' if pnl_impact < 0 else '⚪'
-print(f"  {scenario:<25} {iv_change:>+11}% {color} ${pnl_impact:>13,.0f} ${new_pnl:>14,.0f}")
+print(f"  {scenario:<25} {iv_change:>+11}% {color} \${pnl_impact:>13,.0f} \${new_pnl:>14,.0f}")
 
 df = pd.DataFrame(results)
     
@@ -415,12 +415,12 @@ plt.show()
 print(f"\\n{'─' * 70}")
 if portfolio_vega > 0:
     print(f"✓ LONG VEGA: Portfolio benefits from IV increases")
-print(f"  Best case (+20% IV): ${df['pnl_impact'].max():,.0f}")
-print(f"  Worst case (-10% IV): ${df['pnl_impact'].min():,.0f}")
+print(f"  Best case (+20% IV): \${df['pnl_impact'].max():,.0f}")
+print(f"  Worst case (-10% IV): \${df['pnl_impact'].min():,.0f}")
     else:
 print(f"⚠️  SHORT VEGA: Portfolio hurt by IV increases")
-print(f"  Best case (-10% IV): ${df['pnl_impact'].min():,.0f}")
-print(f"  Worst case (+20% IV): ${df['pnl_impact'].max():,.0f}")
+print(f"  Best case (-10% IV): \${df['pnl_impact'].min():,.0f}")
+print(f"  Worst case (+20% IV): \${df['pnl_impact'].max():,.0f}")
 
 return df
 
@@ -465,8 +465,8 @@ def stress_test_portfolio(portfolio_greeks, current_price, current_pnl=0):
     print(f"\\nCurrent Portfolio Greeks:")
     print(f"  Delta: {portfolio_greeks['delta']:,.0f}")
     print(f"  Gamma: {portfolio_greeks['gamma']:,.2f}")
-    print(f"  Theta: ${portfolio_greeks['theta']:, .2f}")
-print(f"  Vega: ${portfolio_greeks['vega']:,.2f}")
+    print(f"  Theta: \${portfolio_greeks['theta']:,.2f}")
+print(f"  Vega: \${portfolio_greeks['vega']:,.2f}")
 print(f"\\nStress Scenarios:")
 
 for scenario in scenarios:
@@ -512,8 +512,8 @@ print("─" * 80)
 
 for _, row in df.iterrows():
     print(f"{row['scenario']:<15} {row['stock_pct']:>+7}% {row['iv_change']:>+5} "
-              f"${row['delta_pnl']:>9,.0f} ${row['gamma_pnl']:>9,.0f} "
-              f"${row['vega_pnl']:>9,.0f} ${row['total_pnl']:>11,.0f}")
+              f"\${row['delta_pnl']:>9,.0f} \${row['gamma_pnl']:>9,.0f} "
+              f"\${row['vega_pnl']:>9,.0f} \${row['total_pnl']:>11,.0f}")
     
     # Plot
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize = (16, 6))
@@ -549,9 +549,9 @@ max_gain = df['total_pnl'].max()
 
 print(f"\\n{'─' * 80}")
 print("RISK SUMMARY:")
-print(f"  Best Case: ${max_gain:,.0f} ({df.loc[df['total_pnl'].idxmax(), 'scenario']})")
-print(f"  Worst Case: ${max_loss:,.0f} ({df.loc[df['total_pnl'].idxmin(), 'scenario']})")
-print(f"  Range: ${max_gain - max_loss:,.0f}")
+print(f"  Best Case: \${max_gain:,.0f} ({df.loc[df['total_pnl'].idxmax(), 'scenario']})")
+print(f"  Worst Case: \${max_loss:,.0f} ({df.loc[df['total_pnl'].idxmin(), 'scenario']})")
+print(f"  Range: \${max_gain - max_loss:,.0f}")
 
 if max_loss < -50000:
     print(f"\\n⚠️  CRITICAL: Worst case loss > $50K")
@@ -591,4 +591,3 @@ df_stress = stress_test_portfolio(portfolio_greeks, current_price = 450, current
 This is the foundation of institutional-level options trading.
 `,
 };
-

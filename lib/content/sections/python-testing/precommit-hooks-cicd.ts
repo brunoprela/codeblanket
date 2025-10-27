@@ -103,7 +103,7 @@ repos:
         entry: python scripts/check_migrations.py
         language: system
         pass_filenames: false
-      
+
       # Run tests on commit
       - id: pytest-fast
         name: Fast tests
@@ -111,7 +111,7 @@ repos:
         language: system
         pass_filenames: false
         stages: [commit]
-  
+
   # Black formatting
   - repo: https://github.com/psf/black
     rev: 23.11.0
@@ -119,14 +119,14 @@ repos:
       - id: black
         args: [--line-length=100]
         exclude: ^(migrations/|generated/)
-  
+
   # Ruff linting
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.6
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
-  
+
   # Type checking
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.7.1
@@ -137,7 +137,7 @@ repos:
           - types-requests
           - types-redis
           - sqlalchemy[mypy]
-  
+
   # Security scanning
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.5
@@ -145,7 +145,7 @@ repos:
       - id: bandit
         args: [-c, pyproject.toml]
         additional_dependencies: ['bandit[toml]']
-  
+
   # Commit message formatting
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.12.0
@@ -186,7 +186,7 @@ repos:
     hooks:
       - id: black
         stages: [commit]  # Run on commit (fast)
-  
+
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.7.1
     hooks:
@@ -215,57 +215,57 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
           cache: 'pip'
-      
+
       - name: Install dependencies
         run: |
           pip install black ruff mypy
-      
+
       - name: Black (formatting)
         run: black --check myapp/ tests/
-      
+
       - name: Ruff (linting)
         run: ruff check myapp/ tests/
-      
+
       - name: mypy (type checking)
         run: mypy myapp/
-  
+
   # Job 2: Security Scan
   security:
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
+
       - name: Install bandit
         run: pip install bandit[toml]
-      
+
       - name: Bandit scan
         run: bandit -r myapp/ -c pyproject.toml
-  
+
   # Job 3: Tests (slower, runs in parallel)
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    
+
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
-    
+
     services:
       postgres:
         image: postgres:15
@@ -280,7 +280,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      
+
       redis:
         image: redis:7-alpine
         ports:
@@ -290,21 +290,21 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python \${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: \${{ matrix.python-version }}
           cache: 'pip'
-      
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install pytest pytest-cov pytest-xdist
-      
+
       - name: Run tests with coverage
         env:
           DATABASE_URL: postgresql://test_user:test_pass@localhost:5432/test_db
@@ -316,40 +316,40 @@ jobs:
             --cov-report=xml \\
             --cov-report=term-missing \\
             --cov-fail-under=80
-      
+
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.11'
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml
           fail_ci_if_error: true
-  
+
   # Job 4: Integration Tests (even slower)
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [quality, security, test]  # Only run if others pass
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
           cache: 'pip'
-      
+
       - name: Start services with Docker Compose
         run: docker-compose -f docker-compose.test.yml up -d
-      
+
       - name: Wait for services
         run: |
           timeout 60 bash -c 'until docker-compose -f docker-compose.test.yml exec -T app pg_isready; do sleep 1; done'
-      
+
       - name: Run integration tests
         run: |
           pytest tests/integration/ -m integration --maxfail=3
-      
+
       - name: Cleanup
         if: always()
         run: docker-compose -f docker-compose.test.yml down -v
@@ -510,40 +510,40 @@ jobs:
   # Runs all quality/test jobs first
   quality:
     # ... (same as CI)
-  
+
   test:
     # ... (same as CI)
-  
+
   # Deploy only after all tests pass
   deploy-staging:
     needs: [quality, test]
     runs-on: ubuntu-latest
     environment: staging
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Deploy to staging
         run: |
           ./scripts/deploy_staging.sh
-      
+
       - name: Run smoke tests
         run: |
           pytest tests/smoke/ --env=staging
-  
+
   deploy-production:
     needs: [deploy-staging]
     runs-on: ubuntu-latest
     environment: production
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Deploy to production
         run: |
           ./scripts/deploy_production.sh
-      
+
       - name: Run smoke tests
         run: |
           pytest tests/smoke/ --env=production
@@ -587,7 +587,7 @@ import os
 def update_status (state, description):
     """Update GitHub commit status"""
     url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/statuses/{os.environ['GITHUB_SHA']}"
-    
+
     requests.post(
         url,
         json={

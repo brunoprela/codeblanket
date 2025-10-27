@@ -95,14 +95,12 @@ class RebalancingExploitation:
         "HFT firms claim they improve markets (tighter spreads, more liquidity) but critics argue they're predatory (latency arbitrage, quote stuffing). Evaluate both sides. As a quantitative engineer, how would you design regulations to keep HFT benefits while preventing predatory behavior?",
       answer: `**HFT Benefits vs Harm:**
 
-**Benefits (Pro-HFT):**
-1. **Tighter spreads**: Penny-wide spreads vs nickel-wide (pre-HFT)
+**Benefits (Pro-HFT):**1. **Tighter spreads**: Penny-wide spreads vs nickel-wide (pre-HFT)
 2. **Deep liquidity**: Can trade large size with minimal impact
 3. **Price efficiency**: Arbitrage keeps ETF = NAV, futures = spot
 4. **Lower costs**: Retail pays less than ever
 
-**Harms (Anti-HFT):**
-1. **Latency arbitrage**: Fast traders exploit slow traders' stale quotes
+**Harms (Anti-HFT):**1. **Latency arbitrage**: Fast traders exploit slow traders' stale quotes
 2. **Adverse selection**: When you trade, HFT is counterparty (you lose)
 3. **Flash crashes**: 2010 Dow -1000pts in minutes (HFT withdrew liquidity)
 4. **Complexity**: Opaque strategies, hard to regulate
@@ -356,8 +354,7 @@ for key, value in strategy.items():
     print(f"  {key}: {value}")
 \`\`\`
 
-**Key Insights:**
-1. **Monitor social media** for coordination signals
+**Key Insights:**1. **Monitor social media** for coordination signals
 2. **Track options flow** for retail call buying
 3. **Calculate dealer gamma** to assess squeeze risk
 4. **Trade directionally** if high conviction, else stay out

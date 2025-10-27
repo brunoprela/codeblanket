@@ -239,8 +239,7 @@ def factorial_stack (n):
 - Performance-critical code
 - Sequential processing
 
-**Sometimes do both:**
-1. Prototype with recursion (clearer thinking)
+**Sometimes do both:**1. Prototype with recursion (clearer thinking)
 2. Optimize to iteration if needed (better performance)
 
 **Remember:** The best solution often isn't recursion OR iteration - it's understanding the problem deeply enough to choose the right tool!`,

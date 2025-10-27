@@ -226,10 +226,10 @@ async def increment_async():
 async def main():
     global counter
     counter = 0
-    
+
     # Run 10 concurrent tasks
     await asyncio.gather(*[increment_async() for _ in range(10)])
-    
+
     print(f"Counter: {counter}")  # Always 1,000,000
 
 asyncio.run (main())
@@ -290,7 +290,7 @@ async def coordinator (event):
 
 async def main():
     event = asyncio.Event()
-    
+
     await asyncio.gather(
         worker (event, "Worker-1"),
         worker (event, "Worker-2"),
@@ -458,7 +458,7 @@ async def consumer (q, name):
 
 async def main():
     q = asyncio.Queue()
-    
+
     await asyncio.gather(
         producer (q),
         consumer (q, "Consumer-1"),
@@ -485,17 +485,17 @@ class ThreadSafeCounter:
     def __init__(self):
         self._value = 0
         self._lock = threading.Lock()
-    
+
     def increment (self, amount=1):
         """Increment counter"""
         with self._lock:
             self._value += amount
-    
+
     def decrement (self, amount=1):
         """Decrement counter"""
         with self._lock:
             self._value -= amount
-    
+
     @property
     def value (self):
         """Get current value"""
@@ -533,14 +533,14 @@ class ResourcePool:
         self.resources = [f"Resource-{i}" for i in range (size)]
         self.available = set (self.resources)
         self.lock = asyncio.Lock()
-    
+
     async def acquire (self):
         """Acquire resource from pool"""
         await self.semaphore.acquire()
         async with self.lock:
             resource = self.available.pop()
         return resource
-    
+
     async def release (self, resource):
         """Release resource back to pool"""
         async with self.lock:
@@ -558,7 +558,7 @@ async def use_resource (pool):
 
 async def main():
     pool = ResourcePool (size=3)
-    
+
     # 10 tasks, but only 3 resources available
     await asyncio.gather(*[use_resource (pool) for _ in range(10)])
 

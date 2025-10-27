@@ -515,14 +515,10 @@ calculated_ytm = BondPricer.calculate_ytm (t_note, market_price)
 print(f"\\nIf bond trades at \${market_price}, YTM = {calculated_ytm*100:.3f}%")
 \`\`\`
 
-**Critical Relationships:**
-
-1. **Coupon Rate vs YTM**:
+**Critical Relationships:**1. **Coupon Rate vs YTM**:
    - If YTM > Coupon Rate → Bond trades at **Discount** (< par)
    - If YTM < Coupon Rate → Bond trades at **Premium** (> par)
-   - If YTM = Coupon Rate → Bond trades at **Par**
-
-2. **Price and Yield move INVERSELY**
+   - If YTM = Coupon Rate → Bond trades at **Par**2. **Price and Yield move INVERSELY**
    - Yields rise → Prices fall
    - Yields fall → Prices rise
 
@@ -645,9 +641,7 @@ print(f"\\nInverted Curve Shape: {inverted_curve.get_curve_shape()}")
 print("⚠️  This often predicts recession within 12-18 months!")
 \`\`\`
 
-**Yield Curve Shapes and Their Meaning:**
-
-1. **Normal (Upward Sloping)**: Healthy economy, higher rates for longer maturities
+**Yield Curve Shapes and Their Meaning:**1. **Normal (Upward Sloping)**: Healthy economy, higher rates for longer maturities
 2. **Inverted**: Recession predictor! Short rates > long rates
 3. **Flat**: Economic uncertainty, transition period
 4. **Humped**: Short and long rates low, medium rates high
@@ -898,9 +892,7 @@ print(f"\\nFound {len (results)} bonds matching criteria")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Bonds are loans** - You lend money, receive coupons, get principal back
+**Key Takeaways:**1. **Bonds are loans** - You lend money, receive coupons, get principal back
 2. **Government bonds** - Risk-free (Treasuries), benchmark for all rates
 3. **Corporate bonds** - Credit risk, rated by agencies, higher yield
 4. **Municipal bonds** - Tax-advantaged for high-income investors

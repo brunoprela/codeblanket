@@ -390,7 +390,7 @@ customers = pd.DataFrame({
     'customer_id': [1, 2, 3, 4, 5],
     'name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
     'city': ['NYC', 'LA', 'Chicago', 'NYC', 'Boston'],
-    'signup_date': pd.to_datetime(['2024-01-15', '2024-01-20', '2024-02-01', 
+    'signup_date': pd.to_datetime(['2024-01-15', '2024-01-20', '2024-02-01',
                                      '2024-02-10', '2024-03-05'])
 })
 
@@ -522,16 +522,16 @@ def validate_merge (left, right, result, merge_keys):
     print(f"Left DataFrame: {len (left)} rows")
     print(f"Right DataFrame: {len (right)} rows")
     print(f"Merged DataFrame: {len (result)} rows")
-    
+
     # Check for unexpected duplicates
     if len (result) > len (left) and len (result) > len (right):
         print("⚠️  Warning: Result has more rows than both inputs (possible many-to-many)")
-    
+
     # Check for missing values in merge keys
     for key in merge_keys:
         if result[key].isnull().any():
             print(f"⚠️  Warning: Missing values in merge key '{key}'")
-    
+
     # Check merge quality
     if '_merge' in result.columns:
         merge_counts = result['_merge'].value_counts()

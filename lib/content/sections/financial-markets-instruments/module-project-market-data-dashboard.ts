@@ -24,8 +24,7 @@ Build a comprehensive market data dashboard that brings together everything you'
 - Python backend (Fast API)
 - PostgreSQL/TimescaleDB for historical data
 
-**What you'll build:**
-1. Backend: FastAPI market data server
+**What you'll build:**1. Backend: FastAPI market data server
 2. Frontend: React dashboard with real-time updates
 3. Database: TimescaleDB for time-series storage
 4. Analytics: Market impact, liquidity metrics
@@ -710,8 +709,7 @@ async def test_websocket_connection():
 - ✅ Trade feed monitoring
 - ✅ Test coverage
 
-**Production Enhancements:**
-1. **Add authentication** (JWT tokens)
+**Production Enhancements:**1. **Add authentication** (JWT tokens)
 2. **Rate limiting** (Redis)
 3. **Historical data** (TimescaleDB)
 4. **Advanced charts** (TradingView library)

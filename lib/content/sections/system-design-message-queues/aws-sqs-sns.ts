@@ -11,9 +11,7 @@ export const awssqssnsSection = {
 
 **SQS** = Fully Managed Message Queue + Serverless + Pay-per-use + Auto-scaling
 
-### **Key Characteristics:**
-
-1. **Fully managed**: No servers to provision or manage
+### **Key Characteristics:**1. **Fully managed**: No servers to provision or manage
 2. **Serverless**: Automatic scaling, no capacity planning
 3. **Highly available**: Redundant across multiple AZs
 4. **Pay-per-use**: Charge per request, no idle costs
@@ -294,9 +292,7 @@ dlq_messages = sqs.receive_message(QueueUrl=dlq_url, MaxNumberOfMessages=10)
 
 **SNS** = Fully Managed Pub/Sub + Fan-out + Multiple protocols
 
-### **Key Characteristics:**
-
-1. **Pub/Sub model**: One message → Many subscribers
+### **Key Characteristics:**1. **Pub/Sub model**: One message → Many subscribers
 2. **Fan-out**: Deliver to multiple endpoints
 3. **Multiple protocols**: SQS, HTTP, Lambda, Email, SMS
 4. **Message filtering**: Subscribers receive subset based on attributes

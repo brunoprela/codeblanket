@@ -196,7 +196,7 @@ class Bond:
         
         price = pv_coupons + pv_principal
         
-        logger.debug(f"Price calculation: YTM={ytm*100:.2f}%, Price=${price: .2f
+        logger.debug(f"Price calculation: YTM={ytm*100:.2f}%, Price=${price:.2f}
 }")
 
 return price
@@ -534,7 +534,7 @@ clean_price = 1020.00  # Quoted price
 accrued = bond.accrued_interest(settlement, last_coupon, next_coupon)
 dirty = bond.dirty_price(clean_price, settlement, last_coupon, next_coupon)
 
-print(f"Clean Price: ${clean_price: .2f}")
+print(f"Clean Price: ${clean_price:.2f}")
 print(f"Accrued Interest: ${accrued:.2f}")
 print(f"Dirty Price (settlement): ${dirty:.2f}")
 print(f"\\nBuyer pays: ${dirty:.2f}")
@@ -575,7 +575,7 @@ def price_treasury_note():
     print(f"Coupon: {treasury.coupon_rate*100:.3f}%")
     print(f"Maturity: {treasury.years_to_maturity:.2f} years")
     print(f"Market YTM: {market_ytm*100:.2f}%")
-    print(f"\\nTheoretical Price: ${theoretical_price: .4f}")
+    print(f"\\nTheoretical Price: ${theoretical_price:.4f}")
 print(f"Price as % of Par: {theoretical_price/10:.2f}")
     
     # Analysis

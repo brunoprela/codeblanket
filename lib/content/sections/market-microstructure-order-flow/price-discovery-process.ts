@@ -1,7 +1,7 @@
 export const priceDiscoveryProcess = {
-    title: 'Price Discovery Process',
-    id: 'price-discovery-process',
-    content: `
+  title: 'Price Discovery Process',
+  id: 'price-discovery-process',
+  content: `
 # Price Discovery Process
 
 ## Introduction

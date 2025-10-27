@@ -93,11 +93,11 @@ for label in set (labels):
     if label == -1:
         # Noise points in black
         mask = labels == label
-        plt.scatter(X_moons[mask, 0], X_moons[mask, 1], 
+        plt.scatter(X_moons[mask, 0], X_moons[mask, 1],
                    c='black', marker='x', s=50, label='Noise', alpha=0.6)
     else:
         mask = labels == label
-        plt.scatter(X_moons[mask, 0], X_moons[mask, 1], 
+        plt.scatter(X_moons[mask, 0], X_moons[mask, 1],
                    s=50, alpha=0.6, label=f'Cluster {label}')
 
 plt.title (f'DBSCAN Results ({n_clusters} clusters, {n_noise} noise)')
@@ -124,19 +124,19 @@ axes = axes.ravel()
 for idx, eps in enumerate (eps_values):
     dbscan = DBSCAN(eps=eps, min_samples=5)
     labels = dbscan.fit_predict(X_moons)
-    
+
     n_clusters = len (set (labels)) - (1 if -1 in labels else 0)
     n_noise = list (labels).count(-1)
-    
+
     # Plot
     for label in set (labels):
         mask = labels == label
         if label == -1:
-            axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1], 
+            axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1],
                             c='black', marker='x', s=30, alpha=0.6)
         else:
             axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1], s=30, alpha=0.6)
-    
+
     axes[idx].set_title (f'eps={eps}\\nClusters: {n_clusters}, Noise: {n_noise}')
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
@@ -162,19 +162,19 @@ axes = axes.ravel()
 for idx, min_samples in enumerate (min_samples_values):
     dbscan = DBSCAN(eps=0.3, min_samples=min_samples)
     labels = dbscan.fit_predict(X_moons)
-    
+
     n_clusters = len (set (labels)) - (1 if -1 in labels else 0)
     n_noise = list (labels).count(-1)
-    
+
     # Plot
     for label in set (labels):
         mask = labels == label
         if label == -1:
-            axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1], 
+            axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1],
                             c='black', marker='x', s=30, alpha=0.6)
         else:
             axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1], s=30, alpha=0.6)
-    
+
     axes[idx].set_title (f'min_samples={min_samples}\\nClusters: {n_clusters}, Noise: {n_noise}')
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
@@ -190,12 +190,12 @@ plt.show()
 
 ### Rule of Thumb for MinPts
 
-**General Guideline**: 
+**General Guideline**:
 - MinPts ≥ dimensions + 1
 - For 2D data: MinPts ≥ 3
 - Common values: 4, 5, 10
 
-**Practical**: 
+**Practical**:
 - Start with MinPts = 5
 - Increase for noisy data
 - Decrease for sparse data
@@ -226,7 +226,7 @@ plt.title (f'K-Distance Graph (k={min_samples})', fontsize=14)
 plt.grid(True, alpha=0.3)
 
 # Look for the "elbow" - suggests good epsilon
-plt.axhline (y=0.25, color='r', linestyle='--', linewidth=2, 
+plt.axhline (y=0.25, color='r', linestyle='--', linewidth=2,
            label='Suggested eps ≈ 0.25 (elbow point)')
 plt.legend()
 plt.tight_layout()
@@ -252,17 +252,17 @@ for eps in eps_range:
     for min_samples in min_samples_range:
         dbscan = DBSCAN(eps=eps, min_samples=min_samples)
         labels = dbscan.fit_predict(X_moons)
-        
+
         # Skip if only one cluster or all noise
         n_clusters = len (set (labels)) - (1 if -1 in labels else 0)
         if n_clusters < 2:
             continue
-        
+
         # Calculate silhouette score (only for non-noise points)
         mask = labels != -1
         if sum (mask) > min_samples:
             score = silhouette_score(X_moons[mask], labels[mask])
-            
+
             if score > best_score:
                 best_score = score
                 best_params = {'eps': eps, 'min_samples': min_samples}
@@ -278,7 +278,7 @@ plt.figure (figsize=(10, 6))
 for label in set (labels_best):
     mask = labels_best == label
     if label == -1:
-        plt.scatter(X_moons[mask, 0], X_moons[mask, 1], 
+        plt.scatter(X_moons[mask, 0], X_moons[mask, 1],
                    c='black', marker='x', s=50, label='Noise')
     else:
         plt.scatter(X_moons[mask, 0], X_moons[mask, 1], s=50, label=f'Cluster {label}')
@@ -308,30 +308,30 @@ fig, axes = plt.subplots(2, 3, figsize=(16, 10))
 for row, (X, name) in enumerate (zip (datasets, dataset_names)):
     # Standardize
     X_scaled = StandardScaler().fit_transform(X)
-    
+
     # Original data
     axes[row, 0].scatter(X_scaled[:, 0], X_scaled[:, 1], alpha=0.6, s=30)
     axes[row, 0].set_title (f'{name}\\n(Original Data)')
-    
+
     # K-Means
     kmeans = KMeans (n_clusters=2 if row == 0 else 3, random_state=42)
     labels_km = kmeans.fit_predict(X_scaled)
     axes[row, 1].scatter(X_scaled[:, 0], X_scaled[:, 1], c=labels_km, cmap='viridis', alpha=0.6, s=30)
-    axes[row, 1].scatter (kmeans.cluster_centers_[:, 0], 
+    axes[row, 1].scatter (kmeans.cluster_centers_[:, 0],
                         kmeans.cluster_centers_[:, 1],
                         c='red', marker='X', s=200, edgecolors='black', linewidths=2)
     axes[row, 1].set_title('K-Means Clustering')
-    
+
     # DBSCAN
     dbscan = DBSCAN(eps=0.3, min_samples=5)
     labels_db = dbscan.fit_predict(X_scaled)
     for label in set (labels_db):
         mask = labels_db == label
         if label == -1:
-            axes[row, 2].scatter(X_scaled[mask, 0], X_scaled[mask, 1], 
+            axes[row, 2].scatter(X_scaled[mask, 0], X_scaled[mask, 1],
                                c='black', marker='x', s=30, alpha=0.6)
         else:
-            axes[row, 2].scatter(X_scaled[mask, 0], X_scaled[mask, 1], 
+            axes[row, 2].scatter(X_scaled[mask, 0], X_scaled[mask, 1],
                                cmap='viridis', alpha=0.6, s=30)
     axes[row, 2].set_title('DBSCAN Clustering')
 
@@ -346,18 +346,18 @@ print("- DBSCAN identifies noise, K-Means assigns everything to a cluster")
 
 ## Advantages of DBSCAN
 
-✅ **Arbitrary Shapes**: Not limited to spherical clusters  
-✅ **No K Required**: Number of clusters determined automatically  
-✅ **Noise Detection**: Identifies outliers as noise  
-✅ **Flexible Density**: Works with varying density (to some extent)  
-✅ **Single Pass**: Doesn't require multiple iterations  
+✅ **Arbitrary Shapes**: Not limited to spherical clusters
+✅ **No K Required**: Number of clusters determined automatically
+✅ **Noise Detection**: Identifies outliers as noise
+✅ **Flexible Density**: Works with varying density (to some extent)
+✅ **Single Pass**: Doesn't require multiple iterations
 
 ## Limitations and Disadvantages
 
-❌ **Parameter Sensitivity**: Results highly dependent on ε and MinPts  
-❌ **Varying Density**: Struggles with clusters of very different densities  
-❌ **High Dimensions**: "Curse of dimensionality" - distances become less meaningful  
-❌ **Border Points**: Assignment can be ambiguous  
+❌ **Parameter Sensitivity**: Results highly dependent on ε and MinPts
+❌ **Varying Density**: Struggles with clusters of very different densities
+❌ **High Dimensions**: "Curse of dimensionality" - distances become less meaningful
+❌ **Border Points**: Assignment can be ambiguous
 
 ### Problem: Varying Density Clusters
 
@@ -382,10 +382,10 @@ plt.subplot(1, 2, 2)
 for label in set (labels):
     mask = labels == label
     if label == -1:
-        plt.scatter(X_varying[mask, 0], X_varying[mask, 1], 
+        plt.scatter(X_varying[mask, 0], X_varying[mask, 1],
                    c='black', marker='x', s=30, alpha=0.6, label='Noise')
     else:
-        plt.scatter(X_varying[mask, 0], X_varying[mask, 1], 
+        plt.scatter(X_varying[mask, 0], X_varying[mask, 1],
                    s=30, alpha=0.6, label=f'Cluster {label}')
 
 plt.title('DBSCAN Struggles with Varying Density')
@@ -428,10 +428,10 @@ plt.figure (figsize=(10, 8))
 for label in set (labels):
     mask = labels == label
     if label == -1:
-        plt.scatter(X_geo[mask, 1], X_geo[mask, 0], 
+        plt.scatter(X_geo[mask, 1], X_geo[mask, 0],
                    c='gray', marker='.', s=30, alpha=0.3, label='Isolated')
     else:
-        plt.scatter(X_geo[mask, 1], X_geo[mask, 0], 
+        plt.scatter(X_geo[mask, 1], X_geo[mask, 0],
                    s=50, alpha=0.7, label=f'Hotspot {label+1}')
 
 plt.xlabel('Longitude')
@@ -473,11 +473,11 @@ plt.figure (figsize=(12, 6))
 for label in set (labels):
     mask = labels == label
     if label == -1:
-        plt.scatter(X_traffic[mask, 0], X_traffic[mask, 1], 
+        plt.scatter(X_traffic[mask, 0], X_traffic[mask, 1],
                    c='red', marker='x', s=100, linewidths=2,
                    label=f'Anomalies ({n_anomalies})', alpha=0.8)
     else:
-        plt.scatter(X_traffic[mask, 0], X_traffic[mask, 1], 
+        plt.scatter(X_traffic[mask, 0], X_traffic[mask, 1],
                    c='blue', s=30, alpha=0.5, label=f'Normal Traffic')
 
 plt.xlabel('Packets per second')
@@ -545,38 +545,38 @@ An improved version that handles varying density better.
 # Note: Requires hdbscan library (pip install hdbscan)
 try:
     import hdbscan
-    
+
     # HDBSCAN on varying density data
     hdb = hdbscan.HDBSCAN(min_cluster_size=5, min_samples=3)
     labels_hdb = hdb.fit_predict(X_varying)
-    
+
     plt.figure (figsize=(12, 5))
-    
+
     plt.subplot(1, 2, 1)
     # DBSCAN result
     for label in set (labels):
         mask = labels == label
         if label == -1:
-            plt.scatter(X_varying[mask, 0], X_varying[mask, 1], 
+            plt.scatter(X_varying[mask, 0], X_varying[mask, 1],
                        c='black', marker='x', s=30)
         else:
             plt.scatter(X_varying[mask, 0], X_varying[mask, 1], s=30)
     plt.title('DBSCAN (struggles with varying density)')
-    
+
     plt.subplot(1, 2, 2)
     # HDBSCAN result
     for label in set (labels_hdb):
         mask = labels_hdb == label
         if label == -1:
-            plt.scatter(X_varying[mask, 0], X_varying[mask, 1], 
+            plt.scatter(X_varying[mask, 0], X_varying[mask, 1],
                        c='black', marker='x', s=30)
         else:
             plt.scatter(X_varying[mask, 0], X_varying[mask, 1], s=30)
     plt.title('HDBSCAN (handles varying density better)')
-    
+
     plt.tight_layout()
     plt.show()
-    
+
 except ImportError:
     print("HDBSCAN not installed. Install with: pip install hdbscan")
 \`\`\`

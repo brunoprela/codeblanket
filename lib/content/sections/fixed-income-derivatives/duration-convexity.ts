@@ -380,7 +380,7 @@ class PortfolioDuration:
             'metrics': metrics,
         })
         
-        logger.info(f"Added position: MV=${market_value:, .0f
+        logger.info(f"Added position: MV=${market_value:,.0f}
 }, Duration = { metrics['modified_duration']: .2f }")
     
     def aggregate_metrics(self) -> Dict[str, float]:

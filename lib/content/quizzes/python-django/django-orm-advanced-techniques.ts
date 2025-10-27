@@ -8,8 +8,7 @@ export const djangoOrmAdvancedTechniquesQuiz = [
 
 F() expressions reference model field values directly in the database, avoiding race conditions and improving performance.
 
-**Use Cases:**
-1. **Atomic Updates** (avoid race conditions):
+**Use Cases:**1. **Atomic Updates** (avoid race conditions):
 \`\`\`python
 from django.db.models import F
 
@@ -46,8 +45,7 @@ Product.objects.annotate(
 
 Q() objects enable complex query logic with AND, OR, NOT operations.
 
-**Use Cases:**
-1. **OR Queries**:
+**Use Cases:**1. **OR Queries**:
 \`\`\`python
 from django.db.models import Q
 
@@ -87,8 +85,7 @@ def build_filter (filters):
 
 Annotations add computed fields to QuerySets using aggregation functions.
 
-**Use Cases:**
-1. **Count Relationships**:
+**Use Cases:**1. **Count Relationships**:
 \`\`\`python
 from django.db.models import Count
 
@@ -192,8 +189,7 @@ DATABASES = {
 - When most views modify data
 - When you want automatic transaction management
 
-**Pitfalls:**
-1. **Performance**: Long-running views keep transactions open, blocking database
+**Pitfalls:**1. **Performance**: Long-running views keep transactions open, blocking database
 2. **External APIs**: API calls inside transaction waste connection time
 3. **Granularity**: All-or-nothing per view (can't have partial commits)
 
@@ -333,9 +329,7 @@ def transfer_money (from_id, to_id, amount):
         to_account.save()
 \`\`\`
 
-**Best Practices:**
-
-1. ✅ Keep transactions short
+**Best Practices:**1. ✅ Keep transactions short
 2. ✅ Don't call external APIs inside transactions
 3. ✅ Use atomic() for multi-step operations
 4. ✅ Use savepoints for partial rollbacks
@@ -559,9 +553,7 @@ with transaction.atomic (using='default'):
     Tag.objects.create(...)
 \`\`\`
 
-**Data Consistency Considerations:**
-
-1. **Replication Lag:**
+**Data Consistency Considerations:**1. **Replication Lag:**
 \`\`\`python
 # Problem: Read-after-write inconsistency
 def create_and_display (request):
@@ -618,9 +610,7 @@ def check_database_health():
     return results
 \`\`\`
 
-**Best Practices:**
-
-1. ✅ Use primary for reads immediately after writes (sticky writes)
+**Best Practices:**1. ✅ Use primary for reads immediately after writes (sticky writes)
 2. ✅ Monitor replication lag
 3. ✅ Use connection pooling (pgbouncer)
 4. ✅ Keep related objects in same database

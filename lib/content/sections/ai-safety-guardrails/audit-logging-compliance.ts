@@ -110,7 +110,7 @@ class AuditEvent:
     details: Dict[str, Any]
     success: bool
     error_message: Optional[str]
-    
+
     def to_dict (self) -> Dict:
         """Convert to dictionary for storage"""
         data = asdict (self)
@@ -118,14 +118,14 @@ class AuditEvent:
         data['event_type'] = self.event_type.value
         data['severity'] = self.severity.value
         return data
-    
+
     def to_json (self) -> str:
         """Convert to JSON string"""
         return json.dumps (self.to_dict())
 
 class AuditLogger:
     """Comprehensive audit logging system"""
-    
+
     def __init__(self, storage_backend=None):
         """
         Args:
@@ -134,7 +134,7 @@ class AuditLogger:
         """
         self.storage = storage_backend or InMemoryStorage()
         self.pii_redactor = PIIRedactor()  # From earlier section
-    
+
     def log_event(
         self,
         event_type: EventType,
@@ -149,13 +149,13 @@ class AuditLogger:
         severity: Severity = Severity.INFO
     ) -> AuditEvent:
         """Log an audit event"""
-        
+
         # Generate unique event ID
         event_id = self._generate_event_id()
-        
+
         # Redact PII from details
         safe_details = self._redact_pii_from_dict (details or {})
-        
+
         # Create event
         event = AuditEvent(
             event_id=event_id,
@@ -171,16 +171,16 @@ class AuditLogger:
             success=success,
             error_message=error_message
         )
-        
+
         # Store event
         self.storage.store (event)
-        
+
         # Alert on critical events
         if severity == Severity.CRITICAL:
             self._send_alert (event)
-        
+
         return event
-    
+
     def log_user_request(
         self,
         user_id: str,
@@ -190,10 +190,10 @@ class AuditLogger:
         metadata: Optional[Dict] = None
     ):
         """Log a user request"""
-        
+
         # Redact PII from content before logging
         safe_content, _ = self.pii_redactor.redact (request_content)
-        
+
         self.log_event(
             event_type=EventType.USER_REQUEST,
             action="submit_prompt",
@@ -208,7 +208,7 @@ class AuditLogger:
             },
             success=True
         )
-    
+
     def log_llm_response(
         self,
         user_id: str,
@@ -221,10 +221,10 @@ class AuditLogger:
         session_id: Optional[str] = None
     ):
         """Log an LLM response"""
-        
+
         # Redact PII
         safe_response, _ = self.pii_redactor.redact (response_content)
-        
+
         self.log_event(
             event_type=EventType.LLM_RESPONSE,
             action="generate_response",
@@ -242,7 +242,7 @@ class AuditLogger:
             },
             success=True
         )
-    
+
     def log_safety_violation(
         self,
         user_id: str,
@@ -252,7 +252,7 @@ class AuditLogger:
         details: Dict
     ):
         """Log a safety violation"""
-        
+
         self.log_event(
             event_type=EventType.SAFETY_VIOLATION,
             action=f"blocked_{violation_type}",
@@ -266,7 +266,7 @@ class AuditLogger:
             success=True,
             severity=severity
         )
-    
+
     def log_data_access(
         self,
         user_id: str,
@@ -276,7 +276,7 @@ class AuditLogger:
         ip_address: Optional[str] = None
     ):
         """Log data access (for GDPR/HIPAA compliance)"""
-        
+
         self.log_event(
             event_type=EventType.DATA_ACCESS,
             action=f"access_{data_type}",
@@ -291,7 +291,7 @@ class AuditLogger:
             success=True,
             severity=Severity.WARNING  # Data access should be monitored
         )
-    
+
     def log_consent(
         self,
         user_id: str,
@@ -300,7 +300,7 @@ class AuditLogger:
         details: Optional[Dict] = None
     ):
         """Log user consent (GDPR requirement)"""
-        
+
         self.log_event(
             event_type=EventType.CONSENT_GIVEN if granted else EventType.CONSENT_REVOKED,
             action=f"consent_{consent_type}",
@@ -312,16 +312,16 @@ class AuditLogger:
             },
             success=True
         )
-    
+
     def _generate_event_id (self) -> str:
         """Generate unique event ID"""
         import uuid
         return str (uuid.uuid4())
-    
+
     def _hash_content (self, content: str) -> str:
         """Hash content for reference without storing sensitive data"""
         return hashlib.sha256(content.encode()).hexdigest()
-    
+
     def _redact_pii_from_dict (self, data: Dict) -> Dict:
         """Redact PII from dictionary"""
         # Simple implementation - in production, recursively redact
@@ -333,7 +333,7 @@ class AuditLogger:
             else:
                 safe_data[key] = value
         return safe_data
-    
+
     def _send_alert (self, event: AuditEvent):
         """Send alert for critical events"""
         # In production: send to PagerDuty, Slack, email, etc.
@@ -342,14 +342,14 @@ class AuditLogger:
 
 class InMemoryStorage:
     """In-memory storage for development (use database in production)"""
-    
+
     def __init__(self):
         self.events: List[AuditEvent] = []
-    
+
     def store (self, event: AuditEvent):
         """Store event"""
         self.events.append (event)
-    
+
     def query(
         self,
         user_id: Optional[str] = None,
@@ -359,19 +359,19 @@ class InMemoryStorage:
     ) -> List[AuditEvent]:
         """Query events"""
         results = self.events
-        
+
         if user_id:
             results = [e for e in results if e.user_id == user_id]
-        
+
         if event_type:
             results = [e for e in results if e.event_type == event_type]
-        
+
         if start_time:
             results = [e for e in results if e.timestamp >= start_time]
-        
+
         if end_time:
             results = [e for e in results if e.timestamp <= end_time]
-        
+
         return results
 
 # Example usage
@@ -414,11 +414,11 @@ print(f"\\nLogged {len (logger.storage.events)} events")
 \`\`\`python
 class GDPRCompliance System:
     """GDPR compliance features"""
-    
+
     def __init__(self, audit_logger: AuditLogger):
         self.audit_logger = audit_logger
         self.data_registry: Dict[str, Dict] = {}  # User data inventory
-    
+
     def register_data_processing(
         self,
         user_id: str,
@@ -429,7 +429,7 @@ class GDPRCompliance System:
     ):
         """
         Register data processing activity (GDPR Article 30).
-        
+
         Args:
             user_id: User whose data is processed
             data_type: Type of data (e.g., 'prompt', 'response', 'pii')
@@ -437,7 +437,7 @@ class GDPRCompliance System:
             legal_basis: Legal basis (consent, contract, legitimate interest, etc.)
             retention_days: How long data will be retained
         """
-        
+
         if user_id not in self.data_registry:
             self.data_registry[user_id] = {
                 'user_id': user_id,
@@ -445,7 +445,7 @@ class GDPRCompliance System:
                 'consents': {},
                 'created_at': datetime.now().isoformat()
             }
-        
+
         activity = {
             'data_type': data_type,
             'purpose': purpose,
@@ -454,9 +454,9 @@ class GDPRCompliance System:
             'retention_until': (datetime.now() + timedelta (days=retention_days)).isoformat(),
             'registered_at': datetime.now().isoformat()
         }
-        
+
         self.data_registry[user_id]['processing_activities'].append (activity)
-        
+
         # Log registration
         self.audit_logger.log_event(
             event_type=EventType.DATA_ACCESS,
@@ -465,14 +465,14 @@ class GDPRCompliance System:
             details=activity,
             success=True
         )
-    
+
     def export_user_data (self, user_id: str) -> Dict:
         """
         Export all user data (GDPR Article 20 - Right to Data Portability).
-        
+
         Returns structured, machine-readable format of all user data.
         """
-        
+
         # Log access
         self.audit_logger.log_data_access(
             user_id="system",
@@ -480,7 +480,7 @@ class GDPRCompliance System:
             data_type="all",
             reason="user_data_export_request"
         )
-        
+
         # Collect all data
         user_data = {
             'user_id': user_id,
@@ -490,21 +490,21 @@ class GDPRCompliance System:
             'format': 'JSON',
             'regulation': 'GDPR Article 20'
         }
-        
+
         return user_data
-    
+
     def delete_user_data (self, user_id: str, reason: str) -> Dict:
         """
         Delete all user data (GDPR Article 17 - Right to Erasure).
-        
+
         Args:
             user_id: User whose data to delete
             reason: Reason for deletion
-        
+
         Returns:
             Deletion confirmation
         """
-        
+
         # Log deletion request
         self.audit_logger.log_event(
             event_type=EventType.DATA_DELETION,
@@ -514,16 +514,16 @@ class GDPRCompliance System:
             success=True,
             severity=Severity.WARNING
         )
-        
+
         # Delete from registry
         deleted_data = self.data_registry.pop (user_id, None)
-        
+
         # In production: Delete from all systems
         # - Database records
         # - Log files
         # - Backups (mark for deletion)
         # - Third-party systems
-        
+
         return {
             'deleted': True,
             'user_id': user_id,
@@ -532,15 +532,15 @@ class GDPRCompliance System:
             'reason': reason,
             'records_deleted': len (deleted_data['processing_activities']) if deleted_data else 0
         }
-    
+
     def check_consent (self, user_id: str, purpose: str) -> bool:
         """Check if user has given consent for purpose"""
-        
+
         user_data = self.data_registry.get (user_id, {})
         consents = user_data.get('consents', {})
-        
+
         return consents.get (purpose, False)
-    
+
     def record_consent(
         self,
         user_id: str,
@@ -549,7 +549,7 @@ class GDPRCompliance System:
         consent_method: str
     ):
         """Record user consent"""
-        
+
         if user_id not in self.data_registry:
             self.data_registry[user_id] = {
                 'user_id': user_id,
@@ -557,13 +557,13 @@ class GDPRCompliance System:
                 'consents': {},
                 'created_at': datetime.now().isoformat()
             }
-        
+
         self.data_registry[user_id]['consents'][purpose] = {
             'granted': granted,
             'method': consent_method,
             'timestamp': datetime.now().isoformat()
         }
-        
+
         # Log consent
         self.audit_logger.log_consent(
             user_id=user_id,
@@ -571,22 +571,22 @@ class GDPRCompliance System:
             granted=granted,
             details={'method': consent_method}
         )
-    
+
     def _get_user_audit_log (self, user_id: str) -> List[Dict]:
         """Get all audit log events for user"""
-        
+
         events = self.audit_logger.storage.query (user_id=user_id)
         return [event.to_dict() for event in events]
-    
+
     def generate_compliance_report (self) -> Dict:
         """Generate GDPR compliance report"""
-        
+
         total_users = len (self.data_registry)
         users_with_consent = sum(
             1 for user in self.data_registry.values()
             if any (c['granted'] for c in user.get('consents', {}).values())
         )
-        
+
         return {
             'report_date': datetime.now().isoformat(),
             'total_users': total_users,
@@ -638,7 +638,7 @@ from functools import wraps
 
 class AuditAccessControl:
     """Access control for audit logs"""
-    
+
     def __init__(self):
         self.role_permissions = {
             'admin': {'read', 'write', 'delete', 'export'},
@@ -647,7 +647,7 @@ class AuditAccessControl:
             'developer': {'read'},
             'user': set()  # Users can only access their own data
         }
-    
+
     def require_permission (self, permission: str):
         """Decorator to require permission for function"""
         def decorator (func):
@@ -660,7 +660,7 @@ class AuditAccessControl:
                 return func (self, user_role, *args, **kwargs)
             return wrapper
         return decorator
-    
+
     @require_permission('export')
     def export_audit_logs(
         self,
@@ -671,7 +671,7 @@ class AuditAccessControl:
         """Export audit logs (requires export permission)"""
         # Implementation here
         pass
-    
+
     @require_permission('delete')
     def delete_audit_logs(
         self,

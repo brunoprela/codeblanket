@@ -769,14 +769,9 @@ updates = import_mgr.update_imports_for_new_file(
 8. **Maintain consistency** across files
 
 ### ❌ DON'T:
-1. **Generate files in isolation**
-2. **Ignore dependencies** between files
-3. **Apply changes without backups**
-4. **Forget to update imports**
-5. **Skip validation** after changes
-6. **Make changes without a plan**
-7. **Ignore circular dependencies**
-8. **Break existing functionality**
+1. **Generate files in isolation**2. **Ignore dependencies** between files
+3. **Apply changes without backups**4. **Forget to update imports**5. **Skip validation** after changes
+6. **Make changes without a plan**7. **Ignore circular dependencies**8. **Break existing functionality**
 
 ## Next Steps
 

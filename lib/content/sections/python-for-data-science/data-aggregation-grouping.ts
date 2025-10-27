@@ -15,9 +15,8 @@ export const dataAggregationGrouping = {
 
 Data aggregation and grouping are fundamental operations in data analysis, allowing you to summarize data by categories, compute statistics within groups, and transform data based on group membership. Pandas' GroupBy functionality is one of its most powerful features, implementing the split-apply-combine pattern efficiently.
 
-**Split-Apply-Combine Pattern:**
-1. **Split**: Divide data into groups based on criteria
-2. **Apply**: Compute some function within each group  
+**Split-Apply-Combine Pattern:**1. **Split**: Divide data into groups based on criteria
+2. **Apply**: Compute some function within each group
 3. **Combine**: Merge results back together
 
 \`\`\`python
@@ -114,7 +113,7 @@ print(df.groupby('Department')['Salary'].quantile(0.75))
 result = df.groupby('Department')['Salary'].agg(['mean', 'median', 'std', 'min', 'max'])
 print(result)
 #               mean  median          std    min    max
-# Department                                           
+# Department
 # HR          53500.0  53500.0  2121.320344  52000  55000
 # IT          70000.0  70000.0  7071.067812  65000  75000
 # Sales       55000.0  55000.0  7071.067812  50000  60000
@@ -133,9 +132,9 @@ result = df.groupby('Department').agg({
     'Experience': ['mean', 'max']
 })
 print(result)
-#               Salary                     Experience      
+#               Salary                     Experience
 #                 mean  median          std       mean  max
-# Department                                              
+# Department
 # HR          53500.0  53500.0  2121.320344       4.5    6
 # IT          70000.0  70000.0  7071.067812       6.0    8
 # Sales       55000.0  55000.0  7071.067812       3.5    5
@@ -258,7 +257,7 @@ pivot = df.pivot_table(
 )
 print(pivot)
 # Product    A    B
-# Region           
+# Region
 # East     ...  ...
 # West     ...  ...
 
@@ -309,7 +308,7 @@ print(pivot)
 crosstab = pd.crosstab (df['Region'], df['Product'])
 print(crosstab)
 # Product  A  B
-# Region       
+# Region
 # East     3  3
 # West     3  3
 
@@ -360,7 +359,7 @@ print(grouped.loc['East', 'A'])
 unstacked = grouped.unstack()
 print(unstacked)
 # Product    A    B
-# Region           
+# Region
 # East     ...  ...
 # West     ...  ...
 
@@ -387,9 +386,9 @@ result = df.groupby(['Region', 'Product']).agg({
     'Quantity': ['mean', 'sum']
 })
 print(result)
-#                Sales                Quantity      
+#                Sales                Quantity
 #                 mean   sum count     mean  sum
-# Region Product                                  
+# Region Product
 # East   A         ...   ...   ...      ...  ...
 #        B         ...   ...   ...      ...  ...
 # West   A         ...   ...   ...      ...  ...

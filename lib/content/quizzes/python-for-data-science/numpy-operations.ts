@@ -7,9 +7,7 @@ export const numpyoperationsQuiz: QuizQuestion[] = [
       'Explain the concept of "vectorization" in NumPy and why it provides such significant performance improvements over Python loops. Provide a concrete example demonstrating the performance difference.',
     sampleAnswer: `Vectorization is the process of applying operations to entire arrays at once, rather than using explicit Python loops. This is NumPy\'s superpower and the foundation of efficient numerical computing in Python.
 
-**Why Vectorization is Fast:**
-
-1. **Compiled C Code**: NumPy operations are implemented in highly optimized C/Fortran, not interpreted Python
+**Why Vectorization is Fast:**1. **Compiled C Code**: NumPy operations are implemented in highly optimized C/Fortran, not interpreted Python
 2. **Avoid Python Overhead**: Each Python loop iteration has significant overhead (type checking, reference counting, etc.)
 3. **SIMD Instructions**: Modern CPUs can perform the same operation on multiple data points simultaneously
 4. **Cache Efficiency**: Contiguous memory access patterns maximize CPU cache hits
@@ -69,9 +67,7 @@ Consider a neural network forward pass with 1 million parameters:
 - Vectorized NumPy: ~50 milliseconds per batch
 - **100x speedup** = train model in 1 hour instead of 4 days
 
-**Best Practices:**
-
-1. **Always vectorize**: If you write a Python loop over array elements, you're likely doing it wrong
+**Best Practices:**1. **Always vectorize**: If you write a Python loop over array elements, you're likely doing it wrong
 2. **Use NumPy operations**: +, -, *, /, @, np.sum(), np.mean(), etc.
 3. **Broadcasting**: Leverage NumPy\'s ability to work with arrays of different shapes
 4. **Built-in functions**: np.where(), np.clip(), np.maximum() instead of if-else loops
@@ -159,9 +155,7 @@ grayscale = image_batch.mean (axis=3)  # Convert to grayscale
 mean_color_per_image = image_batch.mean (axis=(1, 2))  # Mean RGB per image
 \`\`\`
 
-**Practical Applications:**
-
-1. **Feature-wise statistics** (axis=0):
+**Practical Applications:**1. **Feature-wise statistics** (axis=0):
 \`\`\`python
 X = np.random.randn(1000, 20)  # 1000 samples, 20 features
 feature_means = X.mean (axis=0)  # (20,) - mean of each feature
@@ -254,9 +248,7 @@ indices = np.where (arr > 5)  # Returns tuple of indices
 
 **When to Use Each:**
 
-**Use Boolean Indexing when:**
-
-1. **Filtering data:**
+**Use Boolean Indexing when:**1. **Filtering data:**
 \`\`\`python
 # Remove outliers
 clean_data = data[np.abs (data - data.mean()) < 2 * data.std()]
@@ -283,9 +275,7 @@ mask = (age > 18) & (income > 50000) & (credit_score > 700)
 approved_applicants = applicants[mask]
 \`\`\`
 
-**Use np.where() when:**
-
-1. **Maintaining array shape:**
+**Use np.where() when:**1. **Maintaining array shape:**
 \`\`\`python
 # Replace negatives with zero, keep positives
 arr = np.where (arr < 0, 0, arr)  # Same size as input
@@ -349,9 +339,7 @@ print(f"In-place: {time3:.4f}s, size: {arr_copy.shape}")
 - np.where: ~0.25s, size: (10000000,) - maintains size
 - In-place: ~0.10s, size: (10000000,) - fastest
 
-**Performance Insights:**
-
-1. **Boolean indexing** is fast but creates a copy of selected elements
+**Performance Insights:**1. **Boolean indexing** is fast but creates a copy of selected elements
 2. **np.where()** is slightly slower due to evaluating both branches
 3. **In-place modification** is fastest (no new array allocation)
 
@@ -371,9 +359,7 @@ result = np.maximum (arr, 0)  # Element-wise max with 0
 result = np.minimum (arr, 100)  # Element-wise min with 100
 \`\`\`
 
-**Best Practices:**
-
-1. **Boolean indexing**: When you need to filter/select a subset
+**Best Practices:**1. **Boolean indexing**: When you need to filter/select a subset
 2. **np.where()**: When you need to keep array shape
 3. **In-place**: When you can modify the original array
 4. **Check shape**: Always verify output shape matches expectations

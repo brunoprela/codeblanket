@@ -20,8 +20,7 @@ Stochastic calculus extends calculus to random processes. In machine learning:
 
 **Brownian motion** (Wiener process) W_t is a continuous-time random process:
 
-**Properties:**
-1. W_0 = 0
+**Properties:**1. W_0 = 0
 2. Independent increments
 3. W_t - W_s ~ N(0, t-s) for t > s
 4. Continuous paths

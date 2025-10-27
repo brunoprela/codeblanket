@@ -1,8 +1,8 @@
 export const highFrequencyTimeSeries = {
-    title: 'High-Frequency Time Series',
-    slug: 'high-frequency-time-series',
-    description: 'Analysis and modeling of tick-by-tick financial data',
-    content: `
+  title: 'High-Frequency Time Series',
+  slug: 'high-frequency-time-series',
+  description: 'Analysis and modeling of tick-by-tick financial data',
+  content: `
 # High-Frequency Time Series
 
 ## Introduction: The Microstructure World
@@ -309,7 +309,7 @@ class RealizedVolatility:
         
         # Auto bandwidth (rule of thumb)
         if bandwidth is None:
-            bandwidth = int(n ** 0.5)
+            bandwidth = int(n **0.5)
         
         # Realized kernel with Parzen kernel
         rk = np.sum(returns ** 2)  # h=0
@@ -712,9 +712,7 @@ print(f"  {impact['recommendation']}")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **HF data**: Irregular, noisy, requires special handling
+**Key Takeaways:**1. **HF data**: Irregular, noisy, requires special handling
 2. **Microstructure noise**: Bid-ask bounce creates negative autocorrelation
 3. **Realized volatility**: Better estimates using intraday data
 4. **Noise-robust**: TSRV, realized kernel handle microstructure noise

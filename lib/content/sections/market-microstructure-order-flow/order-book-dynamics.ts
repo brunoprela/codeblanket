@@ -197,8 +197,7 @@ mid = self.get_mid_price()
 
 print(f"\\n{'-'*60}")
 if mid:
-    print(f"Mid: ${float(mid): .4f
-}")
+    print(f"Mid: ${float(mid):.4f}")
 if spread:
     print(f"Spread: ${float(spread):.4f} ({spread_bps:.2f} bps)")
 print(f"{'='*60}\\n")
@@ -601,7 +600,7 @@ book.add_bid(Decimal('149.99'), 500)
 book.add_ask(Decimal('150.01'), 200)   # Small ask
 book.add_ask(Decimal('150.02'), 300)
 
-print(f"Simple mid: ${float(book.get_mid_price()): .4f}")
+print(f"Simple mid: ${float(book.get_mid_price()):.4f}")
 # Output: $150.005
 
 microprice = calculate_microprice(book)
@@ -925,7 +924,7 @@ def plot_depth_chart(book: OrderBook, depth: int = 20):
     # Mid price line
     mid = book.get_mid_price()
     if mid:
-        ax.axvline(float(mid), color='blue', linestyle='--', linewidth=1, label=f'Mid: ${float(mid): .2f}')
+        ax.axvline(float(mid), color='blue', linestyle='--', linewidth=1, label=f'Mid: ${float(mid):.2f}')
 
 ax.set_xlabel('Price ($)')
 ax.set_ylabel('Cumulative Volume')

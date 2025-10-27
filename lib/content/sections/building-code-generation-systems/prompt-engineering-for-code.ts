@@ -901,12 +901,8 @@ for variant, score in results.items():
 ### ❌ DON'T:
 1. **Send entire project** as context
 2. **Be vague** in instructions
-3. **Forget language-specific conventions**
-4. **Skip format specifications**
-5. **Ignore token limits**
-6. **Use high temperature** for code
-7. **Assume one prompt fits all**
-8. **Skip testing prompts**
+3. **Forget language-specific conventions**4. **Skip format specifications**5. **Ignore token limits**6. **Use high temperature** for code
+7. **Assume one prompt fits all**8. **Skip testing prompts**
 
 ## Next Steps
 

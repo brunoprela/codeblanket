@@ -724,8 +724,7 @@ print("  • Simpler strategies often more robust in live trading")
 
 ## Key Takeaways
 
-1. **Total Error = Bias² + Variance + Irreducible Error**
-2. **Bias**: Error from wrong assumptions (underfitting)
+1. **Total Error = Bias² + Variance + Irreducible Error**2. **Bias**: Error from wrong assumptions (underfitting)
 3. **Variance**: Error from sensitivity to training data (overfitting)
 4. **Tradeoff**: Reducing one often increases the other
 5. **Optimal Model**: Minimizes total error, not individual components

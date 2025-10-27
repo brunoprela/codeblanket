@@ -51,8 +51,7 @@ Route requests to appropriate backend services based on URL path.
 
 Verify user identity and permissions before forwarding requests.
 
-**Flow:**
-1. Client sends request with JWT token
+**Flow:**1. Client sends request with JWT token
 2. Gateway validates token
 3. If valid: Extract user info, forward to backend
 4. If invalid: Return 401 Unauthorized

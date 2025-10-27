@@ -29,7 +29,7 @@ export const introductionSection = {
 **4. Advanced Traversals**
 - Strongly Connected Components (Kosaraju, Tarjan)
 - Articulation Points and Bridges
-  
+
 **When to Use:**
 - GPS navigation → Dijkstra's
 - Network routing → Bellman-Ford

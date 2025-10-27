@@ -539,9 +539,7 @@ Week 4: Full production
 - What went wrong?
 - Action items
 
-### **Common Scenarios**
-
-1. **Database Failure**: Primary DB down
+### **Common Scenarios**1. **Database Failure**: Primary DB down
 2. **Region Outage**: Entire AWS region unavailable
 3. **DDoS Attack**: 10x normal traffic
 4. **Deployment Failure**: Bad code pushed to production
@@ -599,9 +597,7 @@ Week 4: Full production
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **Chaos Engineering**: Deliberately inject failures to test resilience
+### **Key Concepts**1. **Chaos Engineering**: Deliberately inject failures to test resilience
 2. **Hypothesis**: Define expected behavior before experiment
 3. **Blast Radius**: Start small, expand gradually
 4. **Steady State**: Measurable normal system behavior

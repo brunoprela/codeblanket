@@ -192,8 +192,7 @@ Difference: -2% is the volatility decay
 
 ### Implementation Details
 
-**Daily Operations:**
-1. **Morning**: Calculate overnight index return
+**Daily Operations:**1. **Morning**: Calculate overnight index return
 2. **Calculate P&L**: Futures position × index move
 3. **Update NAV**: NAV + P&L
 4. **Rebalance**: Buy/sell futures to restore leverage ratio
@@ -259,9 +258,7 @@ class ProductionLeveragedETF:
 
 ### Ethical Considerations
 
-**Arguments AGAINST offering to retail:**
-
-1. **Complexity**: 95% of retail investors don't understand daily rebalancing
+**Arguments AGAINST offering to retail:**1. **Complexity**: 95% of retail investors don't understand daily rebalancing
 2. **Long-term losses**: Holding >1 week almost always underperforms due to decay
 3. **Misleading marketing**: "2x returns" sounds like 2x gains, but it's 2x DAILY
 4. **Gamification**: Encourages speculation over investing
@@ -305,9 +302,7 @@ def analyze_real_leveraged_etf_performance():
 analyze_real_leveraged_etf_performance()
 \`\`\`
 
-**Arguments FOR offering (with disclosures):**
-
-1. **Informed traders**: Day traders who understand mechanics
+**Arguments FOR offering (with disclosures):**1. **Informed traders**: Day traders who understand mechanics
 2. **Short-term hedging**: 1-3 day positions can work
 3. **Personal responsibility**: Adults can make own decisions
 4. **Alternatives worse**: Better than margin trading (no margin calls)
@@ -339,9 +334,7 @@ lose 10-20% due to volatility decay.
 
 ### My Recommendation
 
-**As an engineer building this:**
-
-1. **Don't offer to unsophisticated retail** - requires active trader verification
+**As an engineer building this:**1. **Don't offer to unsophisticated retail** - requires active trader verification
 2. **Implement warnings**: Show projected decay under different volatility scenarios
 3. **Holding period restrictions**: Warn users holding >5 days
 4. **Educational content**: Force users to complete quiz before trading

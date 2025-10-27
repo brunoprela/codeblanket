@@ -68,7 +68,7 @@ class ScaledDotProductAttention (nn.Module):
         V: (batch, num_heads, seq_len, d_v)
         """
         # Compute attention scores
-        scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k ** 0.5)
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k **0.5)
         # Shape: (batch, num_heads, seq_len, seq_len)
         
         # Apply mask (if provided, for padding)
@@ -125,7 +125,7 @@ class SelfAttention (nn.Module):
         V = self.W_v (x)  # (batch, seq_len, d_k)
         
         # Compute attention scores
-        scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k ** 0.5)
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k **0.5)
         attention_weights = F.softmax (scores, dim=-1)
         
         # Apply attention
@@ -182,7 +182,7 @@ class MultiHeadAttention (nn.Module):
         V = self.W_v(V).view (batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
         
         # Apply attention
-        scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k ** 0.5)
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k **0.5)
         
         if mask is not None:
             scores = scores.masked_fill (mask == 0, -1e9)

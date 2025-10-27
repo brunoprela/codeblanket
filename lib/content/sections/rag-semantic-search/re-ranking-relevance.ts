@@ -842,8 +842,7 @@ Re-ranking dramatically improves RAG quality:
 
 **Key Takeaway:** Re-ranking is essential for production RAG systems. It's the difference between "good enough" and "excellent" search results.
 
-**Production Pattern:**
-1. Initial retrieval: 50-100 candidates (fast)
+**Production Pattern:**1. Initial retrieval: 50-100 candidates (fast)
 2. Re-ranking: Top 20-30 candidates (accurate)
 3. Final selection: Top 5-10 for LLM context (optimal)
 `,

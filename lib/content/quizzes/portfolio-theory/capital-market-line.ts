@@ -71,9 +71,7 @@ E(R_p) = 3\\% + 0.444 \\cdot \\sigma_p
 Slope = \\frac{R_M - R_f}{\\sigma_M} = \\frac{11\\% - 3\\%}{18\\%} = \\frac{8\\%}{18\\%} = 0.444
 \\]
 
-**Interpretation of Slope (0.444):**
-
-1. **Marginal return per unit of risk:** For each 1% increase in portfolio risk, expected return increases by 0.444%
+**Interpretation of Slope (0.444):**1. **Marginal return per unit of risk:** For each 1% increase in portfolio risk, expected return increases by 0.444%
 
 2. **Market Sharpe ratio:** The slope IS the Sharpe ratio of the market portfolio - the reward-to-risk ratio
 
@@ -131,9 +129,7 @@ Same as market Sharpe! (As expected on CML)
 - Risk: 27% (+50% higher)
 - Excess return: 12% (+50% higher)
 
-**Key Insights:**
-
-1. **Linear scaling:** Both return and risk scale proportionally with leverage (1.5x)
+**Key Insights:**1. **Linear scaling:** Both return and risk scale proportionally with leverage (1.5x)
 
 2. **Cost of leverage:** Borrowing at 3% costs 1.5% (50% × 3%), reducing gross return from 16.5% to 15%
 
@@ -220,9 +216,7 @@ Sharpe = \\frac{7.94\\% - 3\\%}{11.1\\%} = \\frac{4.94\\%}{11.1\\%} = 0.445
 
 (Slight rounding difference from 0.444)
 
-**Interpretation:**
-
-1. **Moderate risk tolerance:** A=4 is moderate risk aversion → ~62% in risky assets is reasonable
+**Interpretation:**1. **Moderate risk tolerance:** A=4 is moderate risk aversion → ~62% in risky assets is reasonable
 
 2. **Below full market exposure:** Conservative allocation (38% cash) because investor is risk-averse
 
@@ -285,7 +279,7 @@ The efficient frontier is concave (hyperbola), while CML is linear. The line con
 
 **Graphical Proof:**
 
-```
+\`\`\`
 Return
   ^
   | CML(linear, steeper)
@@ -320,9 +314,7 @@ The CML lies **above** the efficient frontier everywhere except at the market po
 
 **CML beats EF by 0.83% at same risk!**
 
-**Why CML Dominates:**
-
-1. **Two-fund separation:** Combining risk-free asset with market portfolio is more efficient than any single diversified portfolio
+**Why CML Dominates:**1. **Two-fund separation:** Combining risk-free asset with market portfolio is more efficient than any single diversified portfolio
 
 2. **Linearity advantage:** Linear combinations of Rf and market beat curved efficient frontier
 
@@ -379,9 +371,7 @@ All agree market is optimal risky portfolio (CML dominance), differ only in risk
 
 **All on CML, all optimal for their risk preferences!**
 
-**When CML Doesn't Dominate:**
-
-1. **Market inefficiency:** If you can identify mispriced assets
+**When CML Doesn't Dominate:**1. **Market inefficiency:** If you can identify mispriced assets
 2. **Constraints:** Transaction costs, taxes, restrictions prevent accessing market portfolio
 3. **Leverage costs:** Borrowing rate much higher than Rf
 4. **Short selling prohibited:** Can't create negative cash position
@@ -466,7 +456,7 @@ E(R_i) = R_f + \\beta_i[E(R_M) - R_f]
 
 **Visual Comparison:**
 
-```
+\`\`\`
 CML(plots σ): SML(plots β):
 
 Return                      Return
@@ -1013,9 +1003,7 @@ Profit = \\$1,000,000 \\times 14\\% = \\$140,000
 | Dollar Profit | $150,000 | $140,000 | -$10,000 |
 | Sharpe Ratio | 0.444 | 0.407 | -8.3% |
 
-**Key Insights:**
-
-1. **Each 1% increase in borrowing rate reduces net return by 0.5%** (because borrowing is 50% of equity)
+**Key Insights:**1. **Each 1% increase in borrowing rate reduces net return by 0.5%** (because borrowing is 50% of equity)
 
 2. **Formula:**
 \\[

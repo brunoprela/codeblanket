@@ -833,8 +833,7 @@ This final project integrates everything you've learned:
 - Production deployment
 - Monitoring and evaluation
 
-**Next steps:**
-1. Implement backtesting framework
+**Next steps:**1. Implement backtesting framework
 2. Add more sophisticated models (LSTM, Transformer)
 3. Deploy to cloud (AWS/GCP)
 4. Implement automated retraining

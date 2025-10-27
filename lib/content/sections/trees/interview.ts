@@ -54,9 +54,7 @@ export const interviewSection = {
 
 **Interview Communication:**
 
-**Example: Maximum Depth**
-
-1. **Clarify:**
+**Example: Maximum Depth**1. **Clarify:**
    - "Is this a binary tree or N-ary?"
    - "Can the tree be empty?"
 
@@ -110,9 +108,7 @@ export const interviewSection = {
 
 ---
 
-**Practice Plan:**
-
-1. **Basics (Day 1-2):**
+**Practice Plan:**1. **Basics (Day 1-2):**
    - All traversals (pre/in/post/level)
    - Max Depth, Min Depth
    - Same Tree, Symmetric Tree

@@ -208,16 +208,7 @@ pca_model, X_pca = perform_pca_analysis (df.select_dtypes (include=[np.number]))
 
 ## Key Takeaways
 
-1. **Correlation matrices reveal pairwise relationships at a glance**
-2. **Heatmaps make correlation patterns visually obvious**
-3. **Multicollinearity (high feature correlation) can hurt linear models**
-4. **Pair plots visualize all pairwise relationships simultaneously**
-5. **PCA reduces dimensionality while preserving variance**
-6. **First few PCs typically capture 80-90% of variance**
-7. **PCA useful for visualization of high-dimensional data in 2D/3D**
-8. **Feature loadings show which original features contribute to each PC**
-9. **Always standardize features before PCA**
-10. **Multivariate patterns inform feature engineering and selection**
+1. **Correlation matrices reveal pairwise relationships at a glance**2. **Heatmaps make correlation patterns visually obvious**3. **Multicollinearity (high feature correlation) can hurt linear models**4. **Pair plots visualize all pairwise relationships simultaneously**5. **PCA reduces dimensionality while preserving variance**6. **First few PCs typically capture 80-90% of variance**7. **PCA useful for visualization of high-dimensional data in 2D/3D**8. **Feature loadings show which original features contribute to each PC**9. **Always standardize features before PCA**10. **Multivariate patterns inform feature engineering and selection**
 
 ## Connection to Machine Learning
 

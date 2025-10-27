@@ -113,7 +113,7 @@ sorted_salary_desc = df.sort_values('Salary', ascending=False)
 print(sorted_salary_desc)
 
 # Sort by multiple columns
-sorted_multi = df.sort_values(['Department', 'Salary'], 
+sorted_multi = df.sort_values(['Department', 'Salary'],
                                ascending=[True, False])
 print(sorted_multi)
 
@@ -269,7 +269,7 @@ df['Adjusted_Salary'] = df['Salary'].apply (adjust_salary, factor=1.15)
 
 # Apply to multiple columns
 df['Full_Info'] = df.apply(
-    lambda row: f"{row['Name']} ({row['Age']}): \${row['Salary']:,}", 
+    lambda row: f"{row['Name']} ({row['Age']}): \${row['Salary']:,}",
     axis=1
 )
 print(df['Full_Info'])
@@ -498,8 +498,8 @@ employees['tenure_days'] = (pd.Timestamp.now() - employees['hire_date']).dt.days
 employees['tenure_years'] = employees['tenure_days'] / 365.25
 
 # Classify employees
-employees['level'] = pd.cut (employees['tenure_years'], 
-                             bins=[0, 1, 3, 10], 
+employees['level'] = pd.cut (employees['tenure_years'],
+                             bins=[0, 1, 3, 10],
                              labels=['Junior', 'Mid', 'Senior'])
 
 # Department averages
@@ -537,7 +537,7 @@ sales['day_of_week'] = sales['date'].dt.day_name()
 sales['is_weekend'] = sales['date'].dt.dayofweek >= 5
 
 # Classify by revenue
-sales['revenue_category'] = pd.cut (sales['revenue'], 
+sales['revenue_category'] = pd.cut (sales['revenue'],
                                     bins=[0, 100, 500, float('inf')],
                                     labels=['Low', 'Medium', 'High'])
 

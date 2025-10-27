@@ -788,10 +788,8 @@ else:
 2. **Make search blocks too short** (ambiguous matching)
 3. **Skip validation** after applying edits
 4. **Ignore whitespace** in search blocks
-5. **Apply edits without backups**
-6. **Use large edit blocks** (split into smaller ones)
-7. **Forget to handle conflicts**
-8. **Skip fuzzy matching** entirely
+5. **Apply edits without backups**6. **Use large edit blocks** (split into smaller ones)
+7. **Forget to handle conflicts**8. **Skip fuzzy matching** entirely
 
 ## Next Steps
 

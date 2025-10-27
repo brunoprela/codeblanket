@@ -203,16 +203,16 @@ market_price = 3.50  # Observed call price
 iv, iterations, success = implied_volatility_newton(market_price, S, K, T, r, 'call')
 
 if success:
-    print(f"\\nMarket Price: ${market_price}")
+    print(f"\\nMarket Price: \${market_price}")
     print(f"Implied Volatility: {iv*100:.2f}%")
     print(f"Converged in {iterations} iterations")
     
     # Verify
     bs_price = black_scholes_price(S, K, T, r, iv, 'call')
     print(f"\\nVerification:")
-    print(f"  Market price: ${market_price:.4f}")
-    print(f"  BS price at IV: ${bs_price:.4f}")
-    print(f"  Difference: ${abs(bs_price - market_price):.6f}")
+    print(f"  Market price: \${market_price:.4f}")
+    print(f"  BS price at IV: \${bs_price:.4f}")
+    print(f"  Difference: \${abs(bs_price - market_price):.6f}")
 else:
     print("Failed to calculate IV")
 \`\`\`
@@ -331,7 +331,7 @@ def analyze_volatility_smile(option_chain: dict, S: float, T: float, r: float):
     
     # By strike
     ax1.plot(strikes, ivs, 'b-o', linewidth=2)
-    ax1.axvline(S, color='r', linestyle='--', label=f'Stock Price ${S}')
+    ax1.axvline(S, color='r', linestyle='--', label=f'Stock Price \${S}')
     ax1.set_xlabel('Strike Price')
     ax1.set_ylabel('Implied Volatility (%)')
     ax1.set_title('Volatility Smile by Strike')
@@ -370,7 +370,7 @@ strikes, ivs = analyze_volatility_smile(spy_option_chain, S=100, T=30/365, r=0.0
 
 print("\\nVolatility Smile:")
 for strike, iv in zip(strikes, ivs):
-    print(f"  Strike ${strike}: IV = {iv:.2f}%")
+    print(f"  Strike \${strike}: IV = {iv:.2f}%")
 \`\`\`
 
 ### Volatility Skew in Equities
@@ -380,8 +380,7 @@ for strike, iv in zip(strikes, ivs):
 - ATM options: Medium IV
 - OTM calls: Lower IV
 
-**Why?**
-1. **Leverage effect**: Stock down → leverage up → volatility up
+**Why?**1. **Leverage effect**: Stock down → leverage up → volatility up
 2. **Demand**: Portfolio managers buy OTM puts for insurance
 3. **Supply/demand**: More put buyers than sellers
 
@@ -639,4 +638,3 @@ Expecting IV to increase (before earnings, events):
 In the next section, we'll explore **options trading strategies** and how to select the right strategy based on market outlook and IV regime.
 `,
 };
-

@@ -130,8 +130,7 @@ L(w) = ||σ(Wx) - y||²
 
 **For Convex Problems (Linear/Logistic Regression):**
 
-**Advantages:**
-1. **Global optimum guaranteed**: Any optimization method finds global minimum
+**Advantages:**1. **Global optimum guaranteed**: Any optimization method finds global minimum
 2. **Convergence guarantees**: Gradient descent converges with appropriate step size
 3. **No initialization sensitivity**: Start anywhere, reach same solution
 4. **Theoretical analysis**: Strong convergence rates, sample complexity bounds
@@ -147,8 +146,7 @@ for any w_init:
 
 **For Non-Convex Problems (Deep Learning):**
 
-**Challenges:**
-1. **Local minima**: May get stuck in suboptimal solutions
+**Challenges:**1. **Local minima**: May get stuck in suboptimal solutions
 2. **Saddle points**: Prevalent in high dimensions (though escapable)
 3. **Initialization matters**: Different starts → different solutions
 4. **No convergence guarantees**: May not reach global optimum
@@ -355,8 +353,7 @@ subject to 0 ≤ αᵢ ≤ C, ∀i
            Σᵢαᵢyᵢ = 0
 \`\`\`
 
-**Advantages of dual:**
-1. **Kernel trick**: Can replace xᵢ^Txⱼ with K(xᵢ,xⱼ)
+**Advantages of dual:**1. **Kernel trick**: Can replace xᵢ^Txⱼ with K(xᵢ,xⱼ)
 2. **Sparsity**: Many αᵢ = 0 (only support vectors matter)
 3. **Convex quadratic program**: Efficiently solvable
 
@@ -409,13 +406,11 @@ print(f"Bias b: {svm.intercept_[0]:.4f}")
 
 **7. Why KKT Matters for SVM:**
 
-**Theoretical:**
-1. **Optimality**: KKT conditions prove solution is optimal
+**Theoretical:**1. **Optimality**: KKT conditions prove solution is optimal
 2. **Uniqueness**: For strictly convex problem, unique solution
 3. **Duality gap**: Zero for convex problems (strong duality)
 
-**Practical:**
-1. **Sparsity**: Only support vectors (αᵢ > 0) matter
+**Practical:**1. **Sparsity**: Only support vectors (αᵢ > 0) matter
    - Efficient prediction: O(# support vectors) not O(n)
    - Memory: Store only support vectors
 
@@ -698,9 +693,7 @@ plt.plot (alphas, losses)
 
 **10. Summary:**
 
-**Why SGD works for non-convex deep learning:**
-
-1. **Overparameterization:**
+**Why SGD works for non-convex deep learning:**1. **Overparameterization:**
    - More parameters than constraints
    - Many paths to good solutions
    - Local minima have similar quality

@@ -389,8 +389,7 @@ Duration measures interest rate sensitivity. A 5-year duration means:
 - If rates rise 1%, portfolio loses ~5%
 - If rates fall 1%, portfolio gains ~5%
 
-**Why It Changes:**
-1. **Time decay**: A 10-year bond becomes a 9-year bond after 1 year (duration decreases naturally)
+**Why It Changes:**1. **Time decay**: A 10-year bond becomes a 9-year bond after 1 year (duration decreases naturally)
 2. **Yield changes**: When yields change, duration changes non-linearly
 3. **Cash flows**: Coupon payments reduce duration
 
@@ -650,9 +649,7 @@ if trades['trades']:
 
 ### Transaction Cost Considerations
 
-**Sources of Transaction Costs:**
-
-1. **Bid-Ask Spread**: 2-10 bps depending on liquidity
+**Sources of Transaction Costs:**1. **Bid-Ask Spread**: 2-10 bps depending on liquidity
 2. **Market Impact**: Larger trades move prices (5-20 bps)
 3. **Commission/Fees**: Usually minimal (< 1 bp)
 4. **Opportunity Cost**: Miss gains while rebalancing
@@ -773,16 +770,12 @@ print("• Static portfolio's duration decays → less rate sensitivity over tim
 
 ### Would This Product Be Valuable?
 
-**Pros:**
-
-1. **Predictable Risk**: Duration stays constant → interest rate sensitivity doesn't drift
+**Pros:**1. **Predictable Risk**: Duration stays constant → interest rate sensitivity doesn't drift
 2. **Professional Management**: Investors don't need to rebalance manually
 3. **Duration Ladder Alternative**: Easier than managing bond ladder
 4. **Target Date Funds**: Could use for glide path management
 
-**Cons:**
-
-1. **Transaction Costs**: Annual drag of 0.10-0.30% from rebalancing
+**Cons:**1. **Transaction Costs**: Annual drag of 0.10-0.30% from rebalancing
 2. **Tax Inefficiency**: Frequent trading generates capital gains
 3. **Complexity**: Hard to explain to retail investors
 4. **Alternatives Exist**: Total bond market funds work for most people

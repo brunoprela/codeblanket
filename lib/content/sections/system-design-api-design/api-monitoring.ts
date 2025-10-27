@@ -9,9 +9,7 @@ export const apimonitoringSection = {
 
 ## Why Monitor APIs?
 
-### **Benefits**
-
-1. **Detect issues early**: Before users complain
+### **Benefits**1. **Detect issues early**: Before users complain
 2. **Performance tracking**: Identify slow endpoints
 3. **Usage analytics**: Understand how APIs are used
 4. **Capacity planning**: Predict resource needs

@@ -42,20 +42,20 @@ from unittest.mock import Mock, patch
 def test_send_welcome_email_mocked():
     """Test with mocked email service"""
     user = User (name="Alice", email="alice@example.com")
-    
+
     with patch('email_service.EmailService') as MockEmailService:
         # Control the mock's behavior
         mock_service = MockEmailService.return_value
         mock_service.send.return_value = True
-        
+
         # Test the function
         result = send_welcome_email (user)
-        
+
         # Verify behavior
         assert result is True
         mock_service.connect.assert_called_once_with("smtp.gmail.com", 587)
         mock_service.send.assert_called_once()
-    
+
     # Benefits:
     # - Fast (no actual email sent)
     # - No external dependencies
@@ -162,10 +162,10 @@ def test_process_payment():
         # Configure mock
         mock_gateway = MockGateway.return_value
         mock_gateway.charge.return_value = {"status": "success"}
-        
+
         # Test
         result = process_payment(100.0)
-        
+
         # Verify
         assert result["status"] == "success"
         mock_gateway.charge.assert_called_once_with(100.0)
@@ -179,9 +179,9 @@ def test_process_payment(MockGateway):
     """Mock passed as function argument"""
     mock_gateway = MockGateway.return_value
     mock_gateway.charge.return_value = {"status": "success"}
-    
+
     result = process_payment(100.0)
-    
+
     assert result["status"] == "success"
 \`\`\`
 
@@ -198,7 +198,7 @@ def test_multiple_patches (mock_first, mock_second, mock_third):
     mock_first.return_value = "first"
     mock_second.return_value = "second"
     mock_third.return_value = "third"
-    
+
     # Test code that uses all three dependencies
     ...
 \`\`\`
@@ -216,7 +216,7 @@ class Database:
 def test_with_patch_object():
     """Patch specific method"""
     db = Database()
-    
+
     with patch.object (db, 'query', return_value=[{"id": 1, "name": "Alice"}]):
         result = db.query("SELECT * FROM users")
         assert len (result) == 1
@@ -315,11 +315,11 @@ print(list (magic_mock))  # [1, 2, 3]
 class UserService:
     def __init__(self, db):
         self.db = db
-    
+
     def get_user (self, user_id):
         result = self.db.query (f"SELECT * FROM users WHERE id={user_id}")
         return result[0] if result else None
-    
+
     def create_user (self, name, email):
         self.db.execute (f"INSERT INTO users (name, email) VALUES ('{name}', '{email}')")
         return True
@@ -332,11 +332,11 @@ def test_get_user():
     # Create mock database
     mock_db = Mock()
     mock_db.query.return_value = [{"id": 1, "name": "Alice", "email": "alice@example.com"}]
-    
+
     # Test
     service = UserService (mock_db)
     user = service.get_user(1)
-    
+
     # Verify
     assert user["name"] == "Alice"
     mock_db.query.assert_called_once()
@@ -345,19 +345,19 @@ def test_get_user_not_found():
     """Test user not found"""
     mock_db = Mock()
     mock_db.query.return_value = []  # No results
-    
+
     service = UserService (mock_db)
     user = service.get_user(999)
-    
+
     assert user is None
 
 def test_create_user():
     """Test creating user"""
     mock_db = Mock()
-    
+
     service = UserService (mock_db)
     result = service.create_user("Bob", "bob@example.com")
-    
+
     assert result is True
     mock_db.execute.assert_called_once()
 \`\`\`
@@ -389,10 +389,10 @@ def test_get_weather_success (mock_get):
     }
     mock_response.raise_for_status.return_value = None
     mock_get.return_value = mock_response
-    
+
     # Test
     weather = get_weather("New York")
-    
+
     # Verify
     assert weather["temperature"] == 72
     assert weather["condition"] == "sunny"
@@ -405,7 +405,7 @@ def test_get_weather_api_error (mock_get):
     mock_response = Mock()
     mock_response.raise_for_status.side_effect = requests.HTTPError("404 Not Found")
     mock_get.return_value = mock_response
-    
+
     # Test
     with pytest.raises (requests.HTTPError):
         get_weather("InvalidCity")
@@ -427,10 +427,10 @@ from unittest.mock import mock_open, patch
 def test_load_config():
     """Test loading config with mocked file"""
     config_data = '{"debug": true, "api_key": "secret"}'
-    
+
     with patch('builtins.open', mock_open (read_data=config_data)):
         config = load_config('config.json')
-        
+
         assert config["debug"] is True
         assert config["api_key"] == "secret"
 
@@ -463,12 +463,12 @@ from datetime import datetime
 def test_create_order():
     """Test order creation with fixed timestamp"""
     fixed_time = datetime(2024, 1, 1, 12, 0, 0)
-    
+
     with patch('order_service.datetime') as mock_datetime:
         mock_datetime.now.return_value = fixed_time
-        
+
         order = create_order(123, 5)
-        
+
         assert order["created_at"] == fixed_time
         assert order["product_id"] == 123
 \`\`\`
@@ -487,10 +487,10 @@ def test_with_mocker (mocker):
     # Patch with mocker (cleaner than unittest.mock)
     mock_service = mocker.patch('module.Service')
     mock_service.return_value.method.return_value = "result"
-    
+
     # Test
     result = function_that_uses_service()
-    
+
     # Verify
     assert result == "result"
     mock_service.assert_called_once()

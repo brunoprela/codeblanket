@@ -14,9 +14,7 @@ Django follows the MVT (Model-View-Template) pattern, which is conceptually simi
 
 **Key Difference**: In Django, the "View" is actually the controller (business logic), and "Template" is the view (presentation). Django\'s framework itself acts as the controller that routes requests.
 
-**Request/Response Lifecycle:**
-
-1. **Client Request**: Browser sends HTTP request to server
+**Request/Response Lifecycle:**1. **Client Request**: Browser sends HTTP request to server
 2. **WSGI Handler**: Request enters Django via WSGI server (Gunicorn/uWSGI)
 3. **Middleware (Request Phase)**: Request passes through middleware stack (authentication, session, CSRF, etc.)
 4. **URL Resolver**: Django matches URL pattern to view function/class
@@ -85,9 +83,7 @@ ecommerce_project/
     └── utils.py       # Common utilities
 \`\`\`
 
-**Maintaining Loose Coupling:**
-
-1. **Use Signals for Cross-App Communication:**
+**Maintaining Loose Coupling:**1. **Use Signals for Cross-App Communication:**
 \`\`\`python
 # orders/signals.py
 from django.db.models.signals import post_save
@@ -267,8 +263,7 @@ articles = Article.objects.select_related('author').prefetch_related(
 )
 \`\`\`
 
-**Query Optimization Checklist:**
-1. Use select_related() for FK and O2O
+**Query Optimization Checklist:**1. Use select_related() for FK and O2O
 2. Use prefetch_related() for M2M and reverse FK
 3. Chain them for complex relationships
 4. Use only() and defer() to limit fields

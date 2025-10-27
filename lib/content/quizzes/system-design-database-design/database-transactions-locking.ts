@@ -9,8 +9,7 @@ export const databasetransactionslockingQuiz = [
       'Design a transaction strategy for a bank transfer system that needs to transfer money between accounts, maintain audit logs, check daily transfer limits, and handle potential failures. Discuss isolation level, locking strategy, error handling, and how to prevent common issues like deadlocks and lost updates.',
     sampleAnswer: `Comprehensive transaction strategy for bank transfer system:
 
-**Requirements:**
-1. Transfer funds atomically (all or nothing)
+**Requirements:**1. Transfer funds atomically (all or nothing)
 2. Maintain audit trail
 3. Enforce daily transfer limits
 4. Handle concurrent transfers
@@ -705,8 +704,7 @@ class DocumentEditor {
 
 **Recommended Solution: Hybrid Approach**
 
-**For Document Editing:**
-1. **Use OT/CRDT for real-time character-level editing**
+**For Document Editing:**1. **Use OT/CRDT for real-time character-level editing**
    - Libraries: ShareDB, Yjs, Automerge
    - WebSocket for real-time sync
    
@@ -761,8 +759,7 @@ For a **Google Docs-like system**: Use **Operational Transformation (OT)** or **
       'A ticket booking system allows users to search for events, hold seats temporarily during checkout, and complete purchases. Design the transaction and locking strategy to prevent double-booking, handle abandoned carts (held seats that are never purchased), and support high concurrent traffic. Discuss isolation levels, timeouts, and how to balance user experience with system consistency.',
     sampleAnswer: `Comprehensive ticket booking system with transactions and locking:
 
-**Requirements:**
-1. Prevent double-booking (critical)
+**Requirements:**1. Prevent double-booking (critical)
 2. Allow temporary holds during checkout
 3. Release abandoned holds automatically
 4. Support high concurrent traffic

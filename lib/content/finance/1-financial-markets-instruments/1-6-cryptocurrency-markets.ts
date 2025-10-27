@@ -465,8 +465,7 @@ print(f"  Difference: {yield_calc['difference']:.2f}%")
 print(f"  {yield_calc['interpretation']}")
 \`\`\`
 
-**DeFi Risks:**
-1. **Smart contract bugs** - Code vulnerabilities (lost $12B+ to hacks)
+**DeFi Risks:**1. **Smart contract bugs** - Code vulnerabilities (lost $12B+ to hacks)
 2. **Impermanent loss** - Liquidity providers can lose vs holding
 3. **Rug pulls** - Developers abandon project with funds
 4. **Regulatory risk** - Many DeFi protocols may be securities
@@ -728,9 +727,7 @@ print("...")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **24/7 Markets**: Crypto never sleeps - high stress, no breaks
+**Key Takeaways:**1. **24/7 Markets**: Crypto never sleeps - high stress, no breaks
 2. **Extreme Volatility**: 80%+ annual vol, can drop 50%+ in weeks
 3. **No Safety Net**: No FDIC, no circuit breakers, no reversals
 4. **Custody Risk**: Exchanges can be hacked or commit fraud

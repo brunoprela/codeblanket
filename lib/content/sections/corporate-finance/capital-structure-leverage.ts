@@ -299,9 +299,7 @@ print(f"WACC at D/E=0: {mm_tax['wacc'][0]:.1%}")
 print(f"WACC at D/E=2: {mm_tax['wacc'][-1]:.1%}")
 \`\`\`
 
-**MM Conclusions:**
-
-1. **Without taxes**: Capital structure irrelevant
+**MM Conclusions:**1. **Without taxes**: Capital structure irrelevant
 2. **With taxes**: 100% debt is optimal (maximize tax shield)
 3. **Reality**: Companies don't use 100% debt! Why?
 
@@ -541,9 +539,7 @@ print("             Tech (volatile, intangible, growth) has low leverage")
 
 ### The Theory
 
-**Companies prefer financing in this order:**
-
-1. **Internal funds** (retained earnings) ← First choice
+**Companies prefer financing in this order:**1. **Internal funds** (retained earnings) ← First choice
 2. **Debt** ← Second choice
 3. **Equity** ← Last resort
 

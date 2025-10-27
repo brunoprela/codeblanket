@@ -583,9 +583,7 @@ def get_cached_data_safe (key, fallback_fn, timeout=300):
 
 ## Summary
 
-**Key Caching Strategies:**
-
-1. **Per-View Caching**: Cache entire views with @cache_page
+**Key Caching Strategies:**1. **Per-View Caching**: Cache entire views with @cache_page
 2. **Template Fragment Caching**: Cache expensive template sections
 3. **Low-Level API**: Fine-grained control with cache.get/set
 4. **Cache-Aside**: Check cache, query DB on miss, update cache

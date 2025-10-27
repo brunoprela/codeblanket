@@ -1264,9 +1264,7 @@ Our Approach: Slightly higher early (investing in infrastructure)
               Scales efficiently (costs grow slower than AUM)
 \`\`\`
 
-**Key Success Factors:**
-
-1. **Start Lean**: Don't over-subscribe to expensive platforms early
+**Key Success Factors:**1. **Start Lean**: Don't over-subscribe to expensive platforms early
 2. **Build vs Buy**: Invest in Python infrastructure, not premium tools
 3. **Scale Thoughtfully**: Add expensive platforms only when clearly needed
 4. **Maintain Flexibility**: Don't lock into single vendor

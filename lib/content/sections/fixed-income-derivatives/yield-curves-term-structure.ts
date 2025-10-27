@@ -535,8 +535,7 @@ Example: Borrow $1M in 1 year for 1 year at 5.01% (forward rate), regardless of 
 
 ## Key Takeaways
 
-1. **Yield curve = relationship between maturity and yield**
-2. **Bootstrapping**: Extract spot rates from bond prices iteratively
+1. **Yield curve = relationship between maturity and yield**2. **Bootstrapping**: Extract spot rates from bond prices iteratively
 3. **Forward rates**: Implied future rates from spot curve
 4. **Inverted curve**: Powerful recession predictor (6-24 month lead time)
 5. **Three theories**: Expectations, liquidity preference, market segmentation

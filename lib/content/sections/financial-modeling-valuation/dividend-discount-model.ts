@@ -202,7 +202,7 @@ for key, value in result.items():
     if '%' in key:
         print(f"  {key:.<35} {value:.1%}")
     else:
-        print(f"  {key:.<35} ${value: .2f
+        print(f"  {key:.<35} ${value:.2f}
 }")
 \`\`\`
 
@@ -263,9 +263,7 @@ print(f"\\nCost of Equity (CAPM): {coe:.2%}")
 
 ### Best Practices
 
-1. **Use for mature, dividend-paying stocks only**
-2. **Cross-check with P/E and DCF**
-3. **Conservative growth assumptions** (cap at GDP + inflation)
+1. **Use for mature, dividend-paying stocks only**2. **Cross-check with P/E and DCF**3. **Conservative growth assumptions** (cap at GDP + inflation)
 4. **Sensitivity analysis** on growth rate
 5. **Consider total shareholder yield** (dividends + buybacks)
 

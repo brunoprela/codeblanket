@@ -59,8 +59,7 @@ class TrieNode:
 
 ### Operations:
 
-**input(c):**
-1. If c == '#':
+**input(c):**1. If c == '#':
    - End of sentence, save it with freq+1
    - Reset current input
    - Return []

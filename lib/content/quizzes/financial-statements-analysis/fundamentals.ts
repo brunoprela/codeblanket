@@ -417,9 +417,7 @@ class TradingEngine:
             await self.place_order (ticker, 'SELL', size, 'MARKET')
 \`\`\`
 
-**Bottlenecks and Optimizations**
-
-1. **Network I/O (biggest bottleneck)**
+**Bottlenecks and Optimizations**1. **Network I/O (biggest bottleneck)**
    - Use async I/O (aiohttp)
    - Multiple connections to SEC
    - Consider AWS instance in us-east-1 (near SEC servers)
@@ -762,9 +760,7 @@ Parallel    Schema       Currency       Cache     Indexed
 Processing  Checks       Convert        Results   Queries
 \`\`\`
 
-**Practical Approach**
-
-1. **Tier 1 Normalization** (Always do):
+**Practical Approach**1. **Tier 1 Normalization** (Always do):
    - Currency conversion
    - Fiscal year alignment
    - Share count adjustments

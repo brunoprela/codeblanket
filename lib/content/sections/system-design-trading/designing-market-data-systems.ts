@@ -760,7 +760,7 @@ class DataQualityMonitor:
             
             if len (history) >= 10:
                 avg_price = sum (history[-10:]) / 10
-                std_price = (sum((p - avg_price)**2 for p in history[-10:]) / 10) ** 0.5
+                std_price = (sum((p - avg_price)**2 for p in history[-10:]) / 10) **0.5
                 
                 if abs (tick.trade_price - avg_price) > 5 * std_price:
                     warnings.append (f"Price spike: {tick.trade_price} vs avg {avg_price:.2f}")

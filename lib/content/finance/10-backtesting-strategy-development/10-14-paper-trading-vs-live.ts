@@ -237,7 +237,7 @@ class PaperTradingBroker(BrokerConnection):
         base_slippage = spread_bps / 2
         
         # Add market impact (sqrt of volume %)
-        market_impact = 5 * (volume_pct ** 0.5) * 10000  # 5bps per 1% of volume
+        market_impact = 5 * (volume_pct **0.5) * 10000  # 5bps per 1% of volume
         
         total_slippage = base_slippage + market_impact
         

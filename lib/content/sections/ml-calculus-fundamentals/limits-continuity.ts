@@ -457,18 +457,11 @@ print(f"lim_(x→0) (√(x+1) - 1)/x = {limit4}")
 ## Best Practices & Common Pitfalls
 
 ### Best Practices:
-1. **Always check if direct substitution works first**
-2. **Verify limits numerically before symbolic computation**
-3. **Check both one-sided limits for piecewise functions**
-4. **Use graphical visualization to understand behavior**
-5. **Be aware of floating-point precision issues**
+1. **Always check if direct substitution works first**2. **Verify limits numerically before symbolic computation**3. **Check both one-sided limits for piecewise functions**4. **Use graphical visualization to understand behavior**5. **Be aware of floating-point precision issues**
 
 ### Common Pitfalls:
 1. **Assuming f (a) = lim_{x→a} f (x)** (not always true!)
-2. **Ignoring undefined points**
-3. **Confusing limit with function value**
-4. **Not checking continuity before applying theorems**
-5. **Numerical errors for limits at infinity**
+2. **Ignoring undefined points**3. **Confusing limit with function value**4. **Not checking continuity before applying theorems**5. **Numerical errors for limits at infinity**
 
 \`\`\`python
 # Pitfall example: Floating-point precision

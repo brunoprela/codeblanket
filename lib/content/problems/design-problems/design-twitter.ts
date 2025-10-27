@@ -39,8 +39,7 @@ Twitter features:
 
 ## Approach: HashMap + Heap for Merging
 
-**Data Structures:**
-1. \`tweets\`: userId -> list of (timestamp, tweetId)
+**Data Structures:**1. \`tweets\`: userId -> list of (timestamp, tweetId)
 2. \`following\`: userId -> set of followeeIds
 3. \`timestamp\`: Global counter for ordering
 

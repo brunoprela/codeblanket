@@ -742,9 +742,7 @@ print("\\n(Macro-finance VAR would be fitted with real data)")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **VAR**: Multivariate time series framework treating all variables symmetrically
+**Key Takeaways:**1. **VAR**: Multivariate time series framework treating all variables symmetrically
 2. **Granger causality**: Tests predictive relationships (not true causality!)
 3. **IRF**: Traces dynamic effects of shocks through the system
 4. **FEVD**: Decomposes forecast uncertainty by source

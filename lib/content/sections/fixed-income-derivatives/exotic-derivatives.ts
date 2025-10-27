@@ -1,7 +1,7 @@
 export const exoticDerivatives = {
-    title: 'Exotic Derivatives',
-    id: 'exotic-derivatives',
-    content: `
+  title: 'Exotic Derivatives',
+  id: 'exotic-derivatives',
+  content: `
 # Exotic Derivatives
 
 ## Introduction

@@ -81,8 +81,7 @@ print(f"PA = LU: {np.allclose(PA, LU_prod)}")
 **Ax** = **b** becomes **LUx** = **b**
 
 **Two steps**:
-1. **Forward substitution**: Solve **Ly** = **b** for **y**
-2. **Back substitution**: Solve **Ux** = **y** for **x**
+1. **Forward substitution**: Solve **Ly** = **b** for **y**2. **Back substitution**: Solve **Ux** = **y** for **x**
 
 \`\`\`python
 print("\\n=== Solving Ax = b with LU ===")

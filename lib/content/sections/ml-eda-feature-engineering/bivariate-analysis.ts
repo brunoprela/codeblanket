@@ -358,16 +358,7 @@ analyze_categorical_vs_categorical (df, 'IncomeBracket', 'HouseAgeGroup')
 
 ## Key Takeaways
 
-1. **Pearson correlation measures linear relationships between continuous variables**
-2. **Spearman/Kendall correlations capture monotonic (non-linear) relationships**
-3. **Correlation ≠ causation (always remember this!)**
-4. **Box plots visualize distribution differences across categories**
-5. **ANOVA tests if groups have different means (parametric)**
-6. **Kruskal-Wallis is the non-parametric alternative to ANOVA**
-7. **Chi-square test examines independence of categorical variables**
-8. **Effect sizes (Eta-squared, Cramér's V) quantify strength of relationships**
-9. **Statistical significance (p-value) tells if effect is real, not size**
-10. **Always visualize before testing - see the relationship!**
+1. **Pearson correlation measures linear relationships between continuous variables**2. **Spearman/Kendall correlations capture monotonic (non-linear) relationships**3. **Correlation ≠ causation (always remember this!)**4. **Box plots visualize distribution differences across categories**5. **ANOVA tests if groups have different means (parametric)**6. **Kruskal-Wallis is the non-parametric alternative to ANOVA**7. **Chi-square test examines independence of categorical variables**8. **Effect sizes (Eta-squared, Cramér's V) quantify strength of relationships**9. **Statistical significance (p-value) tells if effect is real, not size**10. **Always visualize before testing - see the relationship!**
 
 ## Connection to Machine Learning
 

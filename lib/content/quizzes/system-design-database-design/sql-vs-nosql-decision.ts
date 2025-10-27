@@ -9,9 +9,7 @@ export const sqlvsnosqldecisionQuiz = [
       'You are designing a social media platform like Twitter. Some engineers argue for using PostgreSQL for everything to keep it simple, while others want MongoDB for flexible tweet data and Cassandra for the timeline. What approach would you take and why? Discuss the trade-offs.',
     sampleAnswer: `I would use a **polyglot persistence** approach with multiple databases, each serving a specific purpose optimized for different requirements.
 
-**My Architecture:**
-
-1. **PostgreSQL for Users, Relationships, and Core Data**
+**My Architecture:**1. **PostgreSQL for Users, Relationships, and Core Data**
    - User profiles (id, username, email, password_hash)
    - Follow relationships (follower_id, followee_id)
    - Account settings and authentication
@@ -65,9 +63,7 @@ At Twitter's scale (500M tweets/day, 300M users), a single PostgreSQL instance c
       'A startup wants to build their entire application on NoSQL (MongoDB) because they heard "NoSQL scales better" and they want to avoid SQL migrations as their schema evolves. Is this a good decision? What advice would you give them?',
     sampleAnswer: `This is generally a **poor decision** based on hype rather than actual requirements. I would advise the startup to **start with PostgreSQL** unless they have specific, justified reasons for NoSQL.
 
-**Why Starting with PostgreSQL is Better:**
-
-1. **ACID Transactions**
+**Why Starting with PostgreSQL is Better:**1. **ACID Transactions**
    Most applications need transactions at some point (payments, reservations, inventory). Adding transactional guarantees to NoSQL architecture later is extremely difficult. PostgreSQL gives you this from day one.
 
 2. **Flexible Queries**
@@ -98,9 +94,7 @@ At Twitter's scale (500M tweets/day, 300M users), a single PostgreSQL instance c
 - **Reality**: Schema changes in PostgreSQL are straightforward with migration tools. NoSQL doesn't eliminate the problem - you still need to handle different document versions in your code.
 - **Modern tools**: Tools like Prisma, TypeORM make SQL migrations painless.
 
-**My Recommendation:**
-
-1. **Start with PostgreSQL** for the core application
+**My Recommendation:**1. **Start with PostgreSQL** for the core application
 2. **Use PostgreSQL's JSONB** for truly flexible fields if needed
 3. **Add Redis** for caching and session storage (simple, proven win)
 4. **Add specialized databases** only when you have measured performance problems that justify the operational complexity

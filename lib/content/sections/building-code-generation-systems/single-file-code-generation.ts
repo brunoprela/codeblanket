@@ -816,13 +816,8 @@ if code:
 
 ### ❌ DON'T:
 1. **Generate very large files** (>500 lines)
-2. **Skip validation**
-3. **Ignore language conventions**
-4. **Accept first generation** without testing
-5. **Generate without specifications**
-6. **Use high temperature**
-7. **Forget error handling**
-8. **Skip type hints/annotations**
+2. **Skip validation**3. **Ignore language conventions**4. **Accept first generation** without testing
+5. **Generate without specifications**6. **Use high temperature**7. **Forget error handling**8. **Skip type hints/annotations**
 
 ## Next Steps
 

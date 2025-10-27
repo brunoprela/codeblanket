@@ -13,9 +13,7 @@ Recursion is a common interview topic. Here\'s how to approach it confidently.
 
 ## Recognizing Recursive Problems
 
-**🚨 Recursion Red Flags:**
-
-1. **"Find all..."** or **"Generate all..."**
+**🚨 Recursion Red Flags:**1. **"Find all..."** or **"Generate all..."**
    - All permutations, combinations, subsets
    - Usually requires backtracking
 
@@ -234,9 +232,7 @@ def max_depth (root):
 
 ## Communication Tips
 
-**During the interview, say:**
-
-1. **Identify recursion:**
+**During the interview, say:**1. **Identify recursion:**
    > "This looks like a recursive problem because..."
 
 2. **Define base case:**
@@ -285,16 +281,14 @@ def factorial (n):  # Space: O(n) for call stack
 
 ## Common Interview Questions
 
-**Easy:**
-1. Calculate factorial
+**Easy:**1. Calculate factorial
 2. Fibonacci number
 3. Sum of array
 4. Reverse string
 5. Power function
 6. Count down from N
 
-**Medium:**
-7. Binary search (recursive)
+**Medium:**7. Binary search (recursive)
 8. Merge sort
 9. Quick sort
 10. Tree traversals (preorder, inorder, postorder)
@@ -304,8 +298,7 @@ def factorial (n):  # Space: O(n) for call stack
 14. Permutations
 15. Combinations
 
-**Hard:**
-16. N-Queens
+**Hard:**16. N-Queens
 17. Word Search
 18. Serialize/Deserialize Tree
 19. Longest Common Subsequence

@@ -631,9 +631,7 @@ logger.info(LogMarkers.USER_LOGIN,
 
 ## Interview Tips
 
-### **When Discussing Logging**
-
-1. **Mention Structured Logging**
+### **When Discussing Logging**1. **Mention Structured Logging**
    - Shows modern practices
    - JSON format
 

@@ -632,9 +632,7 @@ print(f"  Savings: \${scenario['savings']/1e6:.0f}M")
 print(f"\\n✓ Hedging saved \${scenario['savings']/1e6:.0f}M when fuel spiked!")
 \`\`\`
 
-**Real-World Examples:**
-
-1. **Southwest Airlines** - Famously hedged fuel in 2000s, saved billions
+**Real-World Examples:**1. **Southwest Airlines** - Famously hedged fuel in 2000s, saved billions
 2. **Cargill** - Major grain trader, hedges constantly
 3. **Barrick Gold** - Gold miner, hedges production
 
@@ -919,9 +917,7 @@ print(f"  Return: {pnl['pnl_percent']:+.1f}%")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Physical Goods**: Commodities are real, must be stored, can spoil
+**Key Takeaways:**1. **Physical Goods**: Commodities are real, must be stored, can spoil
 2. **Futures Dominant**: Most commodity trading is futures, not spot
 3. **Contango vs Backwardation**: Critical for understanding commodity returns
 4. **Storage Matters**: Storage costs affect futures pricing

@@ -1,17 +1,18 @@
 import { MultipleChoiceQuestion } from '@/lib/types';
 
 export const latencyColocationMultipleChoice: MultipleChoiceQuestion[] = [
-    {
-        id: 'latency-colocation-mc-1',
-        question: 'A trading firm measures end-to-end latency from market data arrival to order acknowledgment as 250 microseconds. Network latency (exchange to server) is 50μs, processing latency (parsing, strategy, risk checks) is 150μs, and order submission latency is 50μs. Which component offers the highest potential for optimization?',
-        options: [
-            'Network latency - upgrade to faster cross-connect',
-            'Processing latency - optimize code and use kernel bypass',
-            'Order submission latency - use FIX protocol instead of REST',
-            'All components equally - holistic optimization required'
-        ],
-        correctAnswer: 1,
-        explanation: `**Processing latency (150μs) is correct** because it represents 60% of total latency and offers the most optimization potential.
+  {
+    id: 'latency-colocation-mc-1',
+    question:
+      'A trading firm measures end-to-end latency from market data arrival to order acknowledgment as 250 microseconds. Network latency (exchange to server) is 50μs, processing latency (parsing, strategy, risk checks) is 150μs, and order submission latency is 50μs. Which component offers the highest potential for optimization?',
+    options: [
+      'Network latency - upgrade to faster cross-connect',
+      'Processing latency - optimize code and use kernel bypass',
+      'Order submission latency - use FIX protocol instead of REST',
+      'All components equally - holistic optimization required',
+    ],
+    correctAnswer: 1,
+    explanation: `**Processing latency (150μs) is correct** because it represents 60% of total latency and offers the most optimization potential.
 
 **Why Processing Latency Offers Most Opportunity:**
 
@@ -72,25 +73,24 @@ def process_market_data_optimized(quote):
 | Network | 50μs | 30μs | 20μs | $120K/year | ⭐⭐ |
 | Order Submit | 50μs | 40μs | 10μs | $20K (new FIX engine) | ⭐⭐ |
 
-**Optimization Priority:**
-
-1. **First**: Optimize processing latency (90μs savings, low cost)
+**Optimization Priority:**1. **First**: Optimize processing latency (90μs savings, low cost)
 2. **Second**: Network latency if competing with other HFTs
 3. **Third**: Order submission refinements
 
-For a 250μs system, reducing processing latency to 60μs brings total latency to 160μs (36% improvement) with minimal investment, making it the clear priority.`
-    },
-    {
-        id: 'latency-colocation-mc-2',
-        question: 'A trading firm co-locates at the NYSE datacenter. The round-trip latency from their servers to the NYSE matching engine is measured at 85 microseconds. Which of the following is the PRIMARY benefit of this co-location compared to trading from an external datacenter 20 miles away with 2 millisecond latency?',
-        options: [
-            'Priority access to order book data before other market participants',
-            'Ability to cancel stale quotes before they are picked off by informed traders',
-            'Guaranteed execution of market orders before limit orders',
-            'Lower transaction fees from the exchange'
-        ],
-        correctAnswer: 1,
-        explanation: `**Ability to cancel stale quotes (Option 1)** is the primary benefit because speed advantage directly translates to reduced adverse selection and improved profitability.
+For a 250μs system, reducing processing latency to 60μs brings total latency to 160μs (36% improvement) with minimal investment, making it the clear priority.`,
+  },
+  {
+    id: 'latency-colocation-mc-2',
+    question:
+      'A trading firm co-locates at the NYSE datacenter. The round-trip latency from their servers to the NYSE matching engine is measured at 85 microseconds. Which of the following is the PRIMARY benefit of this co-location compared to trading from an external datacenter 20 miles away with 2 millisecond latency?',
+    options: [
+      'Priority access to order book data before other market participants',
+      'Ability to cancel stale quotes before they are picked off by informed traders',
+      'Guaranteed execution of market orders before limit orders',
+      'Lower transaction fees from the exchange',
+    ],
+    correctAnswer: 1,
+    explanation: `**Ability to cancel stale quotes (Option 1)** is the primary benefit because speed advantage directly translates to reduced adverse selection and improved profitability.
 
 **Why Quote Cancellation Speed is Critical:**
 
@@ -181,10 +181,10 @@ class AdverseSelectionCalculator:
 calc = AdverseSelectionCalculator(daily_volume=1_000_000, spread=0.01)
 results = calc.compare_colocation_benefit()
 
-print(f"Daily adverse selection cost without co-location: ${results['cost_without_colocation']:, .2f}")
-print(f"Daily adverse selection cost with co-location: ${results['cost_with_colocation']:,.2f}")
-print(f"Daily savings: ${results['daily_savings']:,.2f}")
-print(f"Annual savings: ${results['annual_savings']:,.2f}")
+print(f"Daily adverse selection cost without co-location: \${results['cost_without_colocation']:,.2f}")
+print(f"Daily adverse selection cost with co-location: \${results['cost_with_colocation']:,.2f}")
+print(f"Daily savings: \${results['daily_savings']:,.2f}")
+print(f"Annual savings: \${results['annual_savings']:,.2f}")
 print(f"Reduction: {results['reduction_percent']:.1f}%")
 
 # Output:
@@ -226,19 +226,20 @@ Studies show co-located market makers have:
 
 **Conclusion:**
 
-The primary benefit of 85μs vs 2ms latency is the ability to cancel stale quotes ~1.8ms faster, reducing adverse selection by 95%+. This directly protects profitability and enables tighter spreads, making co-location essential for competitive market making.`
-    },
-{
+The primary benefit of 85μs vs 2ms latency is the ability to cancel stale quotes ~1.8ms faster, reducing adverse selection by 95%+. This directly protects profitability and enables tighter spreads, making co-location essential for competitive market making.`,
+  },
+  {
     id: 'latency-colocation-mc-3',
-        question: 'A high-frequency trading system uses Precision Time Protocol (PTP) to synchronize clocks across multiple servers. The system reports a clock offset of 800 nanoseconds between the market data server and the order gateway server. Which statement about this offset is most accurate?',
-            options: [
-                'This offset is unacceptable and will cause significant errors in latency measurement',
-                'This offset is acceptable for HFT systems and enables accurate microsecond-level latency tracking',
-                'This offset indicates PTP failure and GPS synchronization should be used instead',
-                'This offset is only relevant for regulatory reporting, not for trading decisions'
-            ],
-                correctAnswer: 1,
-                    explanation: `**This offset is acceptable for HFT (Option 1)** because 800ns precision is sufficient for accurate microsecond-level latency measurement in production trading systems.
+    question:
+      'A high-frequency trading system uses Precision Time Protocol (PTP) to synchronize clocks across multiple servers. The system reports a clock offset of 800 nanoseconds between the market data server and the order gateway server. Which statement about this offset is most accurate?',
+    options: [
+      'This offset is unacceptable and will cause significant errors in latency measurement',
+      'This offset is acceptable for HFT systems and enables accurate microsecond-level latency tracking',
+      'This offset indicates PTP failure and GPS synchronization should be used instead',
+      'This offset is only relevant for regulatory reporting, not for trading decisions',
+    ],
+    correctAnswer: 1,
+    explanation: `**This offset is acceptable for HFT (Option 1)** because 800ns precision is sufficient for accurate microsecond-level latency measurement in production trading systems.
 
 **Why 800ns Offset is Acceptable:**
 
@@ -382,19 +383,20 @@ For these cases, upgrade to GPS-disciplined oscillators (~50-100ns accuracy).
 
 **Conclusion:**
 
-800ns clock offset via PTP is **excellent** for HFT systems. It enables accurate measurement of microsecond-level latencies (0.8-5.3% error) and supports all standard HFT trading strategies. Only the most extreme ultra-low-latency applications would require tighter synchronization.`
-},
-{
+800ns clock offset via PTP is **excellent** for HFT systems. It enables accurate measurement of microsecond-level latencies (0.8-5.3% error) and supports all standard HFT trading strategies. Only the most extreme ultra-low-latency applications would require tighter synchronization.`,
+  },
+  {
     id: 'latency-colocation-mc-4',
-        question: 'A quantitative trading firm wants to minimize latency for its market making strategy. They are deciding between three network optimization approaches: (A) Upgrading from 10 Gbps to 100 Gbps network cards, (B) Implementing kernel bypass using DPDK (Data Plane Development Kit), (C) Reducing the number of network hops from their servers to the exchange gateway. Which approach typically provides the LARGEST latency reduction?',
-            options: [
-                'Approach A: 100 Gbps network cards provide 10x faster packet transmission',
-                'Approach B: Kernel bypass eliminates 20-50 microseconds of OS overhead',
-                'Approach C: Reducing network hops saves propagation and switching delay',
-                'All three approaches provide equivalent latency benefits'
-            ],
-                correctAnswer: 1,
-                    explanation: `**Kernel bypass (Option 1)** typically provides the largest latency reduction because it eliminates 20-50μs of operating system overhead, which is a significant portion of total latency in modern low-latency systems.
+    question:
+      'A quantitative trading firm wants to minimize latency for its market making strategy. They are deciding between three network optimization approaches: (A) Upgrading from 10 Gbps to 100 Gbps network cards, (B) Implementing kernel bypass using DPDK (Data Plane Development Kit), (C) Reducing the number of network hops from their servers to the exchange gateway. Which approach typically provides the LARGEST latency reduction?',
+    options: [
+      'Approach A: 100 Gbps network cards provide 10x faster packet transmission',
+      'Approach B: Kernel bypass eliminates 20-50 microseconds of OS overhead',
+      'Approach C: Reducing network hops saves propagation and switching delay',
+      'All three approaches provide equivalent latency benefits',
+    ],
+    correctAnswer: 1,
+    explanation: `**Kernel bypass (Option 1)** typically provides the largest latency reduction because it eliminates 20-50μs of operating system overhead, which is a significant portion of total latency in modern low-latency systems.
 
 **Why Kernel Bypass Provides Largest Reduction:**
 
@@ -598,9 +600,7 @@ Industry data shows:
 | FPGA implementation | 50-200 μs | Very High | Very High |
 | Co-location | 500-1900 μs | Medium | High |
 
-**DPDK Additional Benefits:**
-
-1. **Deterministic latency**: Poll mode eliminates interrupt jitter
+**DPDK Additional Benefits:**1. **Deterministic latency**: Poll mode eliminates interrupt jitter
 2. **CPU efficiency**: Fewer context switches frees CPU for strategy logic
 3. **Scalability**: Handle more packets/second without kernel bottleneck
 4. **Zero-copy**: Direct NIC→Application memory access
@@ -609,24 +609,24 @@ Industry data shows:
 
 Kernel bypass via DPDK provides the largest latency reduction (20-50μs, ~65% improvement) at the lowest cost (software-only). This makes it the clear winner for HFT latency optimization. 100G NICs provide minimal benefit for latency (<1%), and reducing hops is good (10μs) but secondary to kernel bypass.
 
-**Recommended Priority:**
-1. **First**: Implement DPDK kernel bypass (biggest win, low cost)
+**Recommended Priority:**1. **First**: Implement DPDK kernel bypass (biggest win, low cost)
 2. **Second**: Optimize network topology (reduce hops)
 3. **Third**: Upgrade to 100G NICs (only if bandwidth is a bottleneck)
 
-For latency-sensitive HFT, kernel bypass is non-negotiable.`
-},
-{
+For latency-sensitive HFT, kernel bypass is non-negotiable.`,
+  },
+  {
     id: 'latency-colocation-mc-5',
-        question: 'The "Spread Networks" fiber optic line between Chicago and New York cost $300 million to build and reduced round-trip latency from 14.5 milliseconds to 13.1 milliseconds (a 1.4ms improvement). Which trading strategy would benefit MOST from this latency advantage?',
-            options: [
-                'Long-term value investing based on fundamental analysis',
-                'Cross-exchange arbitrage between CME (Chicago) and NYSE (New York)',
-                'Daily momentum trading using technical indicators',
-                'Market making on a single exchange using penny spread capture'
-            ],
-                correctAnswer: 1,
-                    explanation: `**Cross-exchange arbitrage (Option 1)** benefits MOST from the Spread Networks latency advantage because it exploits price discrepancies between Chicago and New York that exist for only milliseconds.
+    question:
+      'The "Spread Networks" fiber optic line between Chicago and New York cost $300 million to build and reduced round-trip latency from 14.5 milliseconds to 13.1 milliseconds (a 1.4ms improvement). Which trading strategy would benefit MOST from this latency advantage?',
+    options: [
+      'Long-term value investing based on fundamental analysis',
+      'Cross-exchange arbitrage between CME (Chicago) and NYSE (New York)',
+      'Daily momentum trading using technical indicators',
+      'Market making on a single exchange using penny spread capture',
+    ],
+    correctAnswer: 1,
+    explanation: `**Cross-exchange arbitrage (Option 1)** benefits MOST from the Spread Networks latency advantage because it exploits price discrepancies between Chicago and New York that exist for only milliseconds.
 
 **Why Cross-Exchange Arbitrage Needs Minimal Latency:**
 
@@ -684,9 +684,9 @@ class CrossExchangeArbitrage:
         
         print("\\nResults:")
         print("=" * 80)
-        print(f"Your profit: ${your_profit_per_share: .2f
+        print(f"Your profit: \${your_profit_per_share:.2f}
 }/share (captured arbitrage)")
-print(f"Competitor profit: ${competitor_profit_per_share:.2f}/share (missed opportunity)")
+print(f"Competitor profit: \${competitor_profit_per_share:.2f}/share (missed opportunity)")
         
         # Window of opportunity
 opportunity_window_ms = competitor_latency_ms - self.latency_ms
@@ -719,17 +719,17 @@ print(f"\\nAnnual Value of 1.4ms Latency Advantage:")
 print("=" * 80)
 print(f"Arbitrage opportunities per day: {opportunities_per_day}")
 print(f"Additional capture rate: {capture_rate_improvement*100:.0f}%")
-print(f"Avg profit per arbitrage: ${avg_profit_per_arb}/share")
+print(f"Avg profit per arbitrage: \${avg_profit_per_arb}/share")
 print(f"Shares per trade: {shares_per_trade:,}")
-print(f"\\nAdditional daily profit: ${additional_daily_profit:,.2f}")
-print(f"Additional annual profit: ${annual_profit:,.2f}")
+print(f"\\nAdditional daily profit: \${additional_daily_profit:,.2f}")
+print(f"Additional annual profit: \${annual_profit:,.2f}")
         
         # ROI on $300M investment
 spread_networks_cost = 300_000_000
 years_to_payback = spread_networks_cost / annual_profit
 
 print(f"\\nROI Analysis:")
-print(f"Spread Networks cost: ${spread_networks_cost:,.0f}")
+print(f"Spread Networks cost: \${spread_networks_cost:,.0f}")
 print(f"Payback period: {years_to_payback:.1f} years")
 
 if years_to_payback < 10:
@@ -846,7 +846,6 @@ Each improvement gave temporary arbitrage advantage until competitors caught up.
 
 **Conclusion:**
 
-Cross-exchange arbitrage is the ONLY strategy from the options that fundamentally requires minimal latency between geographic locations. The 1.4ms Spread Networks advantage created an exclusive 0.7-1.4ms window to capture arbitrage profits before competitors, making it worth paying millions per year for access. Other strategies (value investing, momentum trading, single-exchange market making) don't significantly benefit from Chicago-NYC latency reduction.`
-    }
+Cross-exchange arbitrage is the ONLY strategy from the options that fundamentally requires minimal latency between geographic locations. The 1.4ms Spread Networks advantage created an exclusive 0.7-1.4ms window to capture arbitrage profits before competitors, making it worth paying millions per year for access. Other strategies (value investing, momentum trading, single-exchange market making) don't significantly benefit from Chicago-NYC latency reduction.`,
+  },
 ];
-

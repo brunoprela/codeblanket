@@ -62,7 +62,7 @@ Pension funding ratio = Assets / Liabilities = $500M / $450M = 111%
 | Commodities | 5.5% | 20% | 3.0% |
 
 **Correlation Matrix:**
-```
+\`\`\`
              Eq    FI    RE   Comm
 Equities    1.00  0.20  0.60  0.40
 Fixed Inc   0.20  1.00  0.25  0.10
@@ -389,8 +389,7 @@ EV = 0.65 \\times 0.06\\% + 0.35 \\times (-0.06\\%) = 0.039\\% - 0.021\\% = 0.01
 
 **Step 5: Implementation**
 
-**Execution:**
-1. **Week 1:** Reduce equities by 1.5% (sell $7.5M)
+**Execution:**1. **Week 1:** Reduce equities by 1.5% (sell $7.5M)
    - Buy $5M bonds
    - Buy $2.5M cash/money market
 

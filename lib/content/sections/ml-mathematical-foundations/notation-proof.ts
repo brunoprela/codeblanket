@@ -237,11 +237,11 @@ def gradient_descent_convex (f, grad_f, x0, lr, n_iterations):
     """
     x = x0
     trajectory = [x]
-    
+
     for _ in range (n_iterations):
         x = x - lr * grad_f (x)
         trajectory.append (x)
-    
+
     return np.array (trajectory)
 
 # Convex function: f (x) = x²
@@ -345,7 +345,7 @@ def is_lipschitz_smooth (f, grad_f, L, x_samples):
             x, y = x_samples[i], x_samples[j]
             grad_diff = abs (grad_f (x) - grad_f (y))
             x_diff = abs (x - y)
-            
+
             if grad_diff > L * x_diff + 1e-6:  # Small tolerance
                 return False
     return True

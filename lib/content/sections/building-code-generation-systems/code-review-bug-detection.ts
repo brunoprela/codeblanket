@@ -778,21 +778,12 @@ print(fix)
 1. **Run comprehensive checks** - bugs, security, performance, style
 2. **Prioritize by severity** - fix critical issues first
 3. **Provide clear descriptions** for each issue
-4. **Suggest concrete fixes**
-5. **Generate reports** for documentation
+4. **Suggest concrete fixes**5. **Generate reports** for documentation
 6. **Automate reviews** in CI/CD
-7. **Check security vulnerabilities**
-8. **Analyze performance**
+7. **Check security vulnerabilities**8. **Analyze performance**
 
 ### ❌ DON'T:
-1. **Skip security scanning**
-2. **Ignore performance issues**
-3. **Give vague feedback**
-4. **Miss edge cases**
-5. **Forget to check all categories**
-6. **Skip fix suggestions**
-7. **Ignore code smells**
-8. **Only focus on bugs**
+1. **Skip security scanning**2. **Ignore performance issues**3. **Give vague feedback**4. **Miss edge cases**5. **Forget to check all categories**6. **Skip fix suggestions**7. **Ignore code smells**8. **Only focus on bugs**
 
 ## Next Steps
 

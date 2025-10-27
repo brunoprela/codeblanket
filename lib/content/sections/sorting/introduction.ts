@@ -41,8 +41,7 @@ Sorting algorithms can be categorized by:
    - Adaptive: Faster on nearly-sorted data - Insertion
    - Non-adaptive: Same speed regardless - Selection
 
-**Key Questions to Ask:**
-1. How large is the dataset? (Small → Insertion, Large → Quick/Merge)
+**Key Questions to Ask:**1. How large is the dataset? (Small → Insertion, Large → Quick/Merge)
 2. Is it already partially sorted? (Yes → Insertion, Timsort)
 3. Do I have extra memory? (Yes → Merge, No → Quick/Heap)
 4. Must equal elements stay in order? (Yes → Stable sorts only)

@@ -108,8 +108,7 @@ cᵢⱼ = Σₖ aᵢₖ bₖⱼ = aᵢ₁b₁ⱼ + aᵢ₂b₂ⱼ + ... + aᵢ�
 
 1. **NOT commutative**: **AB** ≠ **BA** (in general)
 2. **Associative**: (**AB**)**C** = **A**(**BC**)
-3. **Distributive**: **A**(**B** + **C**) = **AB** + **AC**
-4. **Identity**: **AI** = **IA** = **A**
+3. **Distributive**: **A**(**B** + **C**) = **AB** + **AC**4. **Identity**: **AI** = **IA** = **A**
 
 ### Why Matrix Multiplication Works This Way
 

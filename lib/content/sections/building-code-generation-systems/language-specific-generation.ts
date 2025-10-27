@@ -587,13 +587,7 @@ print(f"Detected language: {language}")  # typescript
 
 ### ❌ DON'T:
 1. **Use generic patterns** for all languages
-2. **Ignore language conventions**
-3. **Skip type information**
-4. **Use wrong naming styles**
-5. **Forget language-specific features**
-6. **Generate non-idiomatic code**
-7. **Skip documentation**
-8. **Mix language patterns**
+2. **Ignore language conventions**3. **Skip type information**4. **Use wrong naming styles**5. **Forget language-specific features**6. **Generate non-idiomatic code**7. **Skip documentation**8. **Mix language patterns**
 
 ## Next Steps
 

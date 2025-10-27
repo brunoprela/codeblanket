@@ -283,8 +283,7 @@ def calculate_static_hedge_ratio(price_A, price_B):
     return hedge_ratio
 \`\`\`
 
-**Issues:**
-1. Assumes relationship is constant (rarely true)
+**Issues:**1. Assumes relationship is constant (rarely true)
 2. If relationship drifts, spread calculation wrong
 3. Enters/exits at wrong times
 4. Generates false signals
@@ -476,9 +475,7 @@ class ComparisonStudy:
 | Spread Volatility | High | Lower | Better |
 | Half-Life | 40 days | 25 days | Faster |
 
-**Why Kalman Filter Performs Better:**
-
-1. **Adapts to Regime Changes**
+**Why Kalman Filter Performs Better:**1. **Adapts to Regime Changes**
    - Market conditions evolve
    - Sector rotations change relationships
    - Kalman adapts, OLS stuck with old ratio
@@ -500,15 +497,13 @@ class ComparisonStudy:
 
 **When Is Kalman Filter Worth It?**
 
-**Use Kalman When:**
-1. **Relationship Evolves**: Sector rotations, regime changes
+**Use Kalman When:**1. **Relationship Evolves**: Sector rotations, regime changes
 2. **Long Time Period**: Multi-year backtests (relationships drift)
 3. **Volatile Markets**: 2020-2024 (structural changes)
 4. **Multiple Pairs**: Automate hedge ratio updates
 5. **High Frequency**: Intraday (relationships change hourly)
 
-**Stick with OLS When:**
-1. **Stable Relationships**: Utilities, staples (boring but stable)
+**Stick with OLS When:**1. **Stable Relationships**: Utilities, staples (boring but stable)
 2. **Short Backtests**: 6-12 months (less drift)
 3. **Low Volatility**: 2010-2019 (relationships stable)
 4. **Simplicity Preferred**: Easier to explain, audit
@@ -912,8 +907,7 @@ print(f"Exit Threshold: Z-score ±0.5")
 - Max Drawdown: -10%
 - Factor Exposure: Minimal (factor-hedged)
 
-**Disadvantages of PCA:**
-1. **Complexity**: Much more complex to implement
+**Disadvantages of PCA:**1. **Complexity**: Much more complex to implement
 2. **Overfitting**: Can overfit to noise
 3. **Factor Drift**: Factors change over time
 4. **Execution**: 10 positions vs 2 (more slippage)

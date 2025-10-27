@@ -280,7 +280,7 @@ ytm = 0.04  # 4% market yield
 
 price = bond_price (face_value, coupon_rate, years, ytm)
 print(f"\\nBond Characteristics:")
-print(f"  Face Value: \${face_value}")
+print(f"  Face Value: \\\${face_value}")
 print(f"  Coupon Rate: {coupon_rate:.1%}")
 print(f"  Years to Maturity: {years}")
 print(f"  Yield to Maturity: {ytm:.1%}")

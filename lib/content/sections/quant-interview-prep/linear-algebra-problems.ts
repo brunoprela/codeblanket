@@ -18,8 +18,7 @@ Linear algebra is absolutely fundamental to quantitative finance and is tested e
 - **High-frequency trading** - Matrix operations for signal processing
 - **Credit risk** - Correlation matrices, copulas
 
-**What Interviewers Test:**
-1. **Mental math with matrices** - 2×2 and 3×3 operations without calculator
+**What Interviewers Test:**1. **Mental math with matrices** - 2×2 and 3×3 operations without calculator
 2. **Systems of equations** - Quick solving methods
 3. **Eigenvalue intuition** - What they mean, how to compute them
 4. **Matrix properties** - Positive definite, symmetric, orthogonal, rank
@@ -321,7 +320,7 @@ Therefore: w₂ = 0.625 = 62.5%
 
 **Answer:** Allocate 37.5% to high-return asset, 62.5% to low-return asset.
 
-**Verification:** 0.12(0.375) + 0.08(0.625) = 0.045 + 0.05 = 0.095 ✓
+**Verification:**0.12(0.375) + 0.08(0.625) = 0.045 + 0.05 = 0.095 ✓
 
 ### 2.2 Three Equations, Three Unknowns
 
@@ -665,8 +664,7 @@ PC1-5: 56/61.01 = 91.8% ✓
 x^T A x > 0  for all x ≠ 0
 \`\`\`
 
-**Equivalent conditions:**
-1. All eigenvalues > 0
+**Equivalent conditions:**1. All eigenvalues > 0
 2. All principal minors > 0
 3. Cholesky decomposition exists: A = LL^T
 
@@ -734,8 +732,7 @@ Eigenvalues:
 
 ### 5.2 Symmetric Matrices
 
-**Properties:**
-1. A^T = A
+**Properties:**1. A^T = A
 2. All eigenvalues are real
 3. Eigenvectors from different eigenvalues are orthogonal
 4. Can be diagonalized: A = QΛQ^T where Q is orthogonal
@@ -764,8 +761,7 @@ Since v^* v > 0 (it's ||v||²), we have λ = λ^*, so λ is real. ∎
 
 **Definition:** Q is orthogonal if Q^T Q = I (equivalently, Q^{-1} = Q^T)
 
-**Properties:**
-1. Preserves lengths: ||Qx|| = ||x||
+**Properties:**1. Preserves lengths: ||Qx|| = ||x||
 2. Preserves angles and inner products
 3. det(Q) = ±1
 4. All eigenvalues have absolute value 1
@@ -1351,16 +1347,14 @@ if __name__ == "__main__":
 
 ### What to Memorize
 
-**Essential formulas:**
-1. 2×2 determinant: ad - bc
+**Essential formulas:**1. 2×2 determinant: ad - bc
 2. 2×2 inverse: swap diagonal, negate off-diagonal, divide by det
 3. Eigenvalue equation: det(A - λI) = 0
 4. Portfolio variance: w^T Σ w
 5. Trace = sum of eigenvalues
 6. Determinant = product of eigenvalues
 
-**Mental math tricks:**
-1. For symmetric 2×2, eigenvalues satisfy: λ₁ + λ₂ = tr(A), λ₁λ₂ = det(A)
+**Mental math tricks:**1. For symmetric 2×2, eigenvalues satisfy: λ₁ + λ₂ = tr(A), λ₁λ₂ = det(A)
 2. Diagonal matrices: eigenvalues ARE the diagonal elements
 3. Identity matrix: all eigenvalues = 1
 4. Positive definite (2×2): a > 0 and det > 0

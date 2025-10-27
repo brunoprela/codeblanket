@@ -266,7 +266,7 @@ class CalendarRebalancer:
                 last_rebalance = date
                 rebalance_dates.append(date)
                 
-                print(f"Rebalanced on {date.strftime('%Y-%m-%d')}: Turnover=${turnover:, .0f
+                print(f"Rebalanced on {date.strftime('%Y-%m-%d')}: Turnover=\${turnover:,.0f}
 }, Cost = ${ trade_cost:.2f }")
         
         # Create results DataFrame
@@ -334,7 +334,7 @@ for metric, value in metrics.items():
     elif '%' in metric or 'Return' in metric or 'Drawdown' in metric or 'Volatility' in metric:
 print(f"{metric}: {value:.2%}")
     elif 'Costs' in metric:
-print(f"{metric}: ${value:.2f}")
+print(f"{metric}: \${value:.2f}")
     else:
 print(f"{metric}: {value}")
 \`\`\`
@@ -496,7 +496,7 @@ class ThresholdRebalancer:
                     shares = new_shares
                     rebalance_dates.append(date)
                     
-                    print(f"Rebalanced on {date.strftime('%Y-%m-%d')}: Max drift={max_drift:.2%}, Turnover=${turnover:, .0f}")
+                    print(f"Rebalanced on {date.strftime('%Y-%m-%d')}: Max drift={max_drift:.2%}, Turnover=\${turnover:,.0f}")
         
         # Create results
 results = pd.DataFrame({
@@ -553,7 +553,7 @@ for metric, value in metrics_threshold.items():
     elif '%' in metric or 'Return' in metric or 'Drawdown' in metric or 'Volatility' in metric or 'Drift' in metric:
 print(f"{metric}: {value:.2%}")
     elif 'Costs' in metric:
-print(f"{metric}: ${value:.2f}")
+print(f"{metric}: \${value:.2f}")
     else:
 print(f"{metric}: {value}")
 \`\`\`

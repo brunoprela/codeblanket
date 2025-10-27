@@ -157,8 +157,7 @@ print("   Built-in: How features were used in training")
 print("   Permutation: How features impact actual predictions")
 \`\`\`
 
-**How It Works:**
-1. Measure baseline performance
+**How It Works:**1. Measure baseline performance
 2. Shuffle one feature's values (breaks relationship with target)
 3. Measure new performance
 4. Importance = baseline_score - shuffled_score
@@ -423,8 +422,7 @@ for method, details in methods_guide.items():
 6. **Communication**: Visualizations help stakeholders understand model decisions
 7. **Interpretability vs Accuracy**: Sometimes you must trade accuracy for interpretability
 
-**Recommended Workflow:**
-1. Start with built-in importance (if available) for quick overview
+**Recommended Workflow:**1. Start with built-in importance (if available) for quick overview
 2. Validate with permutation importance
 3. Use SHAP for detailed analysis and individual explanations
 4. Create visualizations for stakeholder communication

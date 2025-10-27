@@ -11,9 +11,7 @@ export const sqlvsnosqldecisionSection = {
 
 **Definition**: SQL (Structured Query Language) databases are relational databases that store data in tables with predefined schemas, supporting ACID transactions and complex queries with JOINs.
 
-### **Popular SQL Databases**
-
-1. **PostgreSQL**: Advanced open-source RDBMS with strong ACID compliance
+### **Popular SQL Databases**1. **PostgreSQL**: Advanced open-source RDBMS with strong ACID compliance
 2. **MySQL**: World\'s most popular open-source database
 3. **Oracle Database**: Enterprise-grade commercial database
 4. **Microsoft SQL Server**: Windows-centric enterprise database
@@ -69,7 +67,7 @@ Example: Banking system transferring money
 
 #### **2. Complex Queries with JOINs**
 \`\`\`sql
-SELECT 
+SELECT
   users.name,
         orders.total,
         products.name
@@ -371,8 +369,7 @@ redis.get("session:abc123")
 - Data modeling changes
 - Operational learning curve
 
-**Strategy:**
-1. **Start with read replicas**: NoSQL for reads, SQL for writes
+**Strategy:**1. **Start with read replicas**: NoSQL for reads, SQL for writes
 2. **Gradual migration**: Move features one at a time
 3. **Dual-write pattern**: Write to both during transition
 4. **Event sourcing**: Use events to sync databases

@@ -18,9 +18,7 @@ export const introductionSection = {
 - Distinguish senior from junior candidates
 - Directly applicable to real-world engineering
 
-**Common Design Problem Types:**
-
-1. **Caching Systems** (LRU Cache, LFU Cache)
+**Common Design Problem Types:**1. **Caching Systems** (LRU Cache, LFU Cache)
    - Eviction policies
    - Fast lookup + order tracking
    - Most frequently asked

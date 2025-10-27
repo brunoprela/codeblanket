@@ -974,6 +974,7 @@ def forward_test(strategy, new_data) -> Dict:
 \`\`\`
 
 **Test 3: Stress Test Historical Crises**
+
 ```python
 def crisis_test(strategy) -> Dict:
         """How did it perform in 2008, 2020, etc?"""

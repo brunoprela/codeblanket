@@ -234,8 +234,7 @@ C - P should equal S - K×e^(-rT)
 Parity violated! Call is overpriced by $2.
 \`\`\`
 
-**Arbitrage trade:**
-1. Sell call: +$8
+**Arbitrage trade:**1. Sell call: +$8
 2. Buy put: -$6
 3. Net: +$2 for position worth $0 at expiration
 
@@ -266,7 +265,7 @@ CAGR = (Ending/Beginning)^(1/n) - 1
 CAGR ≈ 12.5%
 \`\`\`
 
-**Exact:** 12.47%
+**Exact:**12.47%
 
 ### Problem 9: Rule of 72
 

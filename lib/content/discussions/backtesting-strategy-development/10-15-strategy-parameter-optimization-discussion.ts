@@ -16,8 +16,7 @@ const strategyParameterOptimizationDiscussion: Content = {
 
 However, your senior quant raises concerns: "The more thoroughly we optimize, the more likely we are to overfit. But if we don't optimize, we're leaving performance on the table. How do we find the right balance?"
 
-**Questions:**
-1. How do you determine if your optimization process has gone too far?
+**Questions:**1. How do you determine if your optimization process has gone too far?
 2. What safeguards prevent overfitting during optimization?
 3. How do you balance optimization depth with generalization?
 
@@ -224,9 +223,7 @@ if __name__ == "__main__":
     optimization_best_practices()
 \`\`\`
 
-**Recommended Approach:**
-
-1. **Phase 1: Coarse Search (Grid/Random)**
+**Recommended Approach:**1. **Phase 1: Coarse Search (Grid/Random)**
    - Wide parameter ranges
    - Identify promising regions
    - Fast, prevents local minima
@@ -429,9 +426,7 @@ class AdaptiveParameterManager:
 # - Maintain parameter history for analysis
 \`\`\`
 
-**Recommended Strategy: Conditional Adaptive**
-
-1. **Continuous Monitoring**: Track performance daily
+**Recommended Strategy: Conditional Adaptive**1. **Continuous Monitoring**: Track performance daily
 2. **Trigger Thresholds**: Only reoptimize if:
    - Performance < 70% of baseline for 3+ months
    - Regime change detected

@@ -67,16 +67,12 @@ Warren Buffett rarely uses comps (prefers intrinsic value), but nearly every Wal
 
 ### Selection Criteria
 
-**Primary Criteria (Must Have):**
-
-1. **Same Industry** - Pharma comp for pharma, SaaS for SaaS
+**Primary Criteria (Must Have):**1. **Same Industry** - Pharma comp for pharma, SaaS for SaaS
 2. **Similar Business Model** - Asset-light vs asset-heavy very different
 3. **Comparable Size** - $5B company shouldn't comp to $500M company
 4. **Publicly Traded** - Need market pricing data
 
-**Secondary Criteria (Nice to Have):**
-
-5. **Geographic Region** - U.S. vs emerging markets trade differently
+**Secondary Criteria (Nice to Have):**5. **Geographic Region** - U.S. vs emerging markets trade differently
 6. **Growth Profile** - High-growth vs mature
 7. **Profitability** - Profitable vs unprofitable have different multiples
 8. **End Markets** - B2B vs B2C, enterprise vs SMB
@@ -750,7 +746,7 @@ def create_football_field(
         ax.add_patch(rect)
         
         # Add value labels
-        ax.text(low, y_pos, f'${low: .1f
+        ax.text(low, y_pos, f'${low:.1f}
 }B', 
 va = 'center', ha = 'right', fontsize = 10, fontweight = 'bold')
 ax.text(high, y_pos, f'${high:.1f}B',

@@ -11,15 +11,14 @@ export const databaseconnectionpoolingSection = {
 
 ### Creating a New Connection is Expensive
 
-**What happens when you open a database connection:**
-1. **TCP handshake:** Client establishes TCP connection to database server (3-way handshake)
+**What happens when you open a database connection:**1. **TCP handshake:** Client establishes TCP connection to database server (3-way handshake)
 2. **Authentication:** Username/password verification
 3. **Session initialization:** Database allocates memory, creates session context
 4. **SSL/TLS negotiation:** If encryption is enabled (most production systems)
 
 **Time cost:**
 - Local connection: 5-10ms
-- Same datacenter: 10-20ms  
+- Same datacenter: 10-20ms
 - Cross-region: 50-100ms+
 
 **Resource cost:**
@@ -39,14 +38,14 @@ def handle_request():
         user="user",
         password="password"
     )  # 10-20ms overhead
-    
+
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
     result = cursor.fetchone()  # Actual query: 1-2ms
-    
+
     cursor.close()
     conn.close()  # Cleanup
-    
+
     return result
 
 # For 1000 requests/sec:
@@ -74,8 +73,7 @@ Application Request → Connection Pool → Database
                    Reuse connection
 \`\`\`
 
-**Lifecycle:**
-1. **Initialization:** Create pool with min connections (e.g., 10)
+**Lifecycle:**1. **Initialization:** Create pool with min connections (e.g., 10)
 2. **Request arrives:** Checkout idle connection from pool
 3. **Execute query:** Use connection
 4. **Return to pool:** Release connection back to pool (don't close)
@@ -97,7 +95,7 @@ pool = psycopg2.pool.SimpleConnectionPool(
 def handle_request():
     # Get connection from pool (instant)
     conn = pool.getconn()
-    
+
     try:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
@@ -242,12 +240,12 @@ def execute_query (query, params):
     try:
         # Get connection from pool
         conn = db_pool.getconn()
-        
+
         cursor = conn.cursor()
         cursor.execute (query, params)
         result = cursor.fetchall()
         conn.commit()
-        
+
         return result
     except Exception as e:
         if conn:
@@ -357,7 +355,7 @@ import (
     _ "github.com/lib/pq"
 )
 
-db, err := sql.Open("postgres", 
+db, err := sql.Open("postgres",
     "host=localhost dbname=mydb user=user password=password")
 if err != nil {
     log.Fatal (err)
@@ -377,7 +375,7 @@ func executeQuery (query string, args ...interface{}) error {
         return err
     }
     defer rows.Close()
-    
+
     // Process rows...
     return nil
 }
@@ -512,16 +510,16 @@ import sys
 
 def shutdown_handler (signum, frame):
     print("Shutting down gracefully...")
-    
+
     # Stop accepting new requests
     server.stop_accepting()
-    
+
     # Wait for active connections to finish
     pool.wait_for_active_connections (timeout=30)
-    
+
     # Close all connections
     pool.close_all()
-    
+
     sys.exit(0)
 
 signal.signal (signal.SIGTERM, shutdown_handler)
@@ -568,17 +566,17 @@ class PriorityConnectionPool:
         self.pool = ConnectionPool (minconn=10, maxconn=50)
         self.high_priority_queue = queue.PriorityQueue()
         self.normal_queue = queue.Queue()
-    
+
     def get_connection (self, priority='normal'):
         if self.pool.available > 0:
             return self.pool.getconn()
-        
+
         # No available connection, queue the request
         if priority == 'high':
             self.high_priority_queue.put (get_connection_waiter())
         else:
             self.normal_queue.put (get_connection_waiter())
-        
+
         # Wait for connection
         return wait_for_connection()
 \`\`\`
@@ -593,17 +591,17 @@ class DynamicConnectionPool:
         self.min_size = 10
         self.max_size = 100
         self.current_size = self.min_size
-        
+
     def adjust_pool_size (self):
         # Monitor metrics
         wait_time = self.get_avg_wait_time()
         utilization = self.active_connections / self.current_size
-        
+
         # Scale up if high utilization
         if utilization > 0.8 and wait_time > 0.1:
             self.current_size = min (self.current_size + 10, self.max_size)
             self.add_connections(10)
-        
+
         # Scale down if low utilization
         elif utilization < 0.2 and self.current_size > self.min_size:
             self.current_size = max (self.current_size - 10, self.min_size)
@@ -685,8 +683,7 @@ except TimeoutError:
 
 ### Symptom: Requests Timing Out
 
-**Possible causes:**
-1. Pool size too small
+**Possible causes:**1. Pool size too small
 2. Slow queries holding connections
 3. Connection leaks
 
@@ -696,23 +693,22 @@ except TimeoutError:
 print(f"Total: {pool.size}, Available: {pool.available}, Active: {pool.size - pool.available}")
 
 # Identify slow queries
-SELECT pid, now() - query_start as duration, query 
-FROM pg_stat_activity 
-WHERE state = 'active' 
+SELECT pid, now() - query_start as duration, query
+FROM pg_stat_activity
+WHERE state = 'active'
 ORDER BY duration DESC;
 
 # Find connection leaks (long-running idle connections)
-SELECT pid, usename, application_name, client_addr, 
+SELECT pid, usename, application_name, client_addr,
        now() - state_change as idle_time, query
-FROM pg_stat_activity 
+FROM pg_stat_activity
 WHERE state = 'idle in transaction'
 ORDER BY idle_time DESC;
 \`\`\`
 
 ### Symptom: Database Running Out of Connections
 
-**Possible causes:**
-1. Too many application instances
+**Possible causes:**1. Too many application instances
 2. Pool sizes too large
 3. Zombie connections
 
@@ -752,8 +748,7 @@ SHOW VARIABLES WHERE variable_name = 'max_connections';
 - **Pool exhaustion:** Pool size too small for load
 - **Resource contention:** Pool size too large causes context switching
 
-**Q: "Describe connection pool lifecycle"**
-1. Initialization: Create min connections at startup
+**Q: "Describe connection pool lifecycle"**1. Initialization: Create min connections at startup
 2. Checkout: Request gets idle connection from pool
 3. Use: Execute queries
 4. Return: Connection returned to pool (not closed)
@@ -763,13 +758,7 @@ SHOW VARIABLES WHERE variable_name = 'max_connections';
 ## Key Takeaways
 
 1. **Connection pooling eliminates expensive setup overhead** (10-20ms per connection)
-2. **Pool size formula: core_count × 2 per instance**
-3. **Total connections across all instances must not exceed database max**
-4. **Always return connections to pool (use finally blocks or context managers)**
-5. **Monitor pool metrics: active, idle, wait time, errors**
-6. **Validate connections before use (pre-ping, test queries)**
-7. **Set appropriate timeouts: idle timeout, max lifetime, checkout timeout**
-8. **Connection leaks are the most common issue** (always use try/finally)
+2. **Pool size formula: core_count × 2 per instance**3. **Total connections across all instances must not exceed database max**4. **Always return connections to pool (use finally blocks or context managers)**5. **Monitor pool metrics: active, idle, wait time, errors**6. **Validate connections before use (pre-ping, test queries)**7. **Set appropriate timeouts: idle timeout, max lifetime, checkout timeout**8. **Connection leaks are the most common issue** (always use try/finally)
 9. **More connections ≠ better performance** (causes contention beyond optimal size)
 10. **Different pools for different purposes** (read vs write, high vs low priority)
 

@@ -759,7 +759,7 @@ class CostAnalyzer:
 SUMMARY:
   Total Cost: \${total['total_cost']:.2f}
   Total Requests: { total['call_count']:, }
-  Avg Cost / Request: \${ total['total_cost'] / total['call_count']: .4f }
+  Avg Cost / Request: \${ total['total_cost'] / total['call_count']:.4f }
   Total Tokens: { total['total_input_tokens'] + total['total_output_tokens']:, }
 
 BY FEATURE:
@@ -885,7 +885,7 @@ for opp in opportunities:
   print(f"\n💡 Optimization Opportunity:")
 print(f"   Type: {opp['type']}")
 print(f"   Description: {opp['description']}")
-print(f"   Potential Savings: \${opp.get('potential_savings', 'TBD')}")
+print(f"   Potential Savings: \\\${opp.get('potential_savings', 'TBD')}")
 print(f"   Recommendation: {opp['recommendation']}")
 \`\`\`
 

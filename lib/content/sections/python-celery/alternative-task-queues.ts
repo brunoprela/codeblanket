@@ -146,8 +146,7 @@ def backup():
 - Need better monitoring (Flower)
 - Require RabbitMQ reliability
 
-**Migration Strategy:**
-1. Install Celery
+**Migration Strategy:**1. Install Celery
 2. Dual-run (old + new)
 3. Migrate gradually
 4. Deprecate old queue

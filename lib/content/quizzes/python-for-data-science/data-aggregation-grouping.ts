@@ -290,9 +290,7 @@ Need to operate on groups?
    └─ But try to use .agg()/.transform() if possible!
 \`\`\`
 
-**Best Practices:**
-
-1. **Start with .agg() or .transform()**
+**Best Practices:**1. **Start with .agg() or .transform()**
    - Faster and clearer intent
 
 2. **Use built-in functions** when possible
@@ -724,9 +722,7 @@ pivot = high_value.pivot_table(
 | Multiple metrics | ✅ | ✅ |
 | Subtotals/margins | ❌ | ✅ |
 
-**Best Practices:**
-
-1. **Start with GroupBy**, unstack if needed for presentation
+**Best Practices:**1. **Start with GroupBy**, unstack if needed for presentation
 2. **Use Pivot for reports**, GroupBy for analysis
 3. **Know unstack/stack** for format conversion
 4. **Add margins** to pivot tables for totals
@@ -1047,9 +1043,7 @@ grouped = df.groupby(['Region', 'Product',])['Sales',].sum()
 
 **When to Use MultiIndex:**
 
-**Use MultiIndex when:**
-
-1. **Hierarchical data structure**
+**Use MultiIndex when:**1. **Hierarchical data structure**
 \`\`\`python
 # Organizational hierarchy
 company_data = df.groupby(['Division', 'Department', 'Team',])
@@ -1073,16 +1067,12 @@ demographics = df.groupby(['Age_Group', 'Gender', 'Income_Bracket',])
 cross_tab = df.groupby(['Category1', 'Category2', 'Category3',])
 \`\`\`
 
-**Avoid MultiIndex when:**
-
-1. **Simple one-level grouping** (use Series index)
+**Avoid MultiIndex when:**1. **Simple one-level grouping** (use Series index)
 2. **Need frequent filtering** (flat structure is easier)
 3. **Working with inexperienced users** (confusing)
 4. **Exporting to CSV** (loses structure, flatten first)
 
-**Best Practices:**
-
-1. **Sort MultiIndex** for slicing
+**Best Practices:**1. **Sort MultiIndex** for slicing
 \`\`\`python
 grouped = grouped.sort_index()
 \`\`\`

@@ -331,7 +331,7 @@ callable_price = callable.price(ytm, volatility = 0.15)
 
 call_option_value = straight_price - callable_price
 
-print(f"Straight Bond Price: ${straight_price: .2f
+print(f"Straight Bond Price: ${straight_price:.2f}
 }")
 print(f"Callable Bond Price: ${callable_price:.2f}")
 print(f"Call Option Value: ${call_option_value:.2f}")
@@ -447,7 +447,7 @@ class ConvertibleBond:
         ...     stock_volatility=0.30
         ... )
         >>> value = convert.value(risk_free_rate=0.04, credit_spread=0.02)
-        >>> print(f"Convertible value: ${value: .2f}")
+        >>> print(f"Convertible value: ${value:.2f}")
 """
 face_value: float
 coupon_rate: float

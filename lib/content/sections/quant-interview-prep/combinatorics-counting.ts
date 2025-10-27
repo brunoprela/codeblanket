@@ -258,8 +258,7 @@ C(100,5) = 100!/(5!×95!)
          = 75,287,520
 \`\`\`
 
-**Mental math approach:**
-1. Numerator: 100×99×98×97×96 ≈ 100^5 / (some factor) ≈ 9 × 10^9
+**Mental math approach:**1. Numerator: 100×99×98×97×96 ≈ 100^5 / (some factor) ≈ 9 × 10^9
 2. Denominator: 120
 3. Result: 9 × 10^9 / 120 ≈ 7.5 × 10^7
 
@@ -671,9 +670,7 @@ Using Burnside\'s lemma, the count involves summing over symmetries. This is adv
 2. Butterfly spreads (buy 1 low strike, sell 2 middle, buy 1 high strike)?
 3. Iron condors (put spread + call spread with 4 different strikes)?
 
-**Solutions:**
-
-1. **Vertical spreads:** Choose 2 strikes from 10, order matters (which to buy vs sell)
+**Solutions:**1. **Vertical spreads:** Choose 2 strikes from 10, order matters (which to buy vs sell)
    - C(10,2) = 45
 
 2. **Butterfly spreads:** Choose 3 strikes where middle is to be sold (2 contracts)
@@ -769,9 +766,7 @@ for spread_type, count in spreads.items():
 
 ## Interview Strategy
 
-**When to use each technique:**
-
-1. **Product rule:** Independent choices at each step
+**When to use each technique:**1. **Product rule:** Independent choices at each step
 2. **Permutations:** Order matters
 3. **Combinations:** Order doesn't matter
 4. **Stars and bars:** Identical objects, distinguishable bins

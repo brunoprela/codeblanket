@@ -70,7 +70,7 @@ class TokenBucket:
     tokens: float
     fill_rate: float  # tokens per second
     last_update: float
-    
+
     def consume (self, tokens: int = 1) -> bool:
         """
         Attempt to consume tokens.
@@ -84,7 +84,7 @@ class TokenBucket:
             self.tokens + time_passed * self.fill_rate
         )
         self.last_update = now
-        
+
         # Try to consume
         if self.tokens >= tokens:
             self.tokens -= tokens
@@ -93,7 +93,7 @@ class TokenBucket:
 
 class BasicRateLimiter:
     """Basic rate limiter using token bucket algorithm"""
-    
+
     def __init__(
         self,
         capacity: int = 10,
@@ -102,15 +102,15 @@ class BasicRateLimiter:
         self.capacity = capacity
         self.fill_rate = fill_rate
         self.buckets: Dict[str, TokenBucket] = {}
-    
+
     def check_rate_limit (self, user_id: str, cost: int = 1) -> Dict:
         """
         Check if request is allowed for user.
-        
+
         Args:
             user_id: User identifier
             cost: Token cost of this request (default 1)
-        
+
         Returns:
             {allowed: bool, remaining: int, retry_after: float}
         """
@@ -122,12 +122,12 @@ class BasicRateLimiter:
                 fill_rate=self.fill_rate,
                 last_update=time.time()
             )
-        
+
         bucket = self.buckets[user_id]
-        
+
         # Try to consume tokens
         allowed = bucket.consume (cost)
-        
+
         if allowed:
             return {
                 'allowed': True,
@@ -138,7 +138,7 @@ class BasicRateLimiter:
             # Calculate retry_after
             tokens_needed = cost - bucket.tokens
             retry_after = tokens_needed / self.fill_rate
-            
+
             return {
                 'allowed': False,
                 'remaining': 0,
@@ -165,28 +165,28 @@ import time
 
 class SlidingWindowRateLimiter:
     """Rate limiter using sliding window algorithm"""
-    
+
     def __init__(self, max_requests: int, window_seconds: int):
         self.max_requests = max_requests
         self.window_seconds = window_seconds
         self.user_requests: Dict[str, Deque[float]] = {}
-    
+
     def check_rate_limit (self, user_id: str) -> Dict:
         """Check if request is allowed using sliding window"""
-        
+
         now = time.time()
         window_start = now - self.window_seconds
-        
+
         # Get or create request history
         if user_id not in self.user_requests:
             self.user_requests[user_id] = deque()
-        
+
         requests = self.user_requests[user_id]
-        
+
         # Remove old requests outside window
         while requests and requests[0] < window_start:
             requests.popleft()
-        
+
         # Check if under limit
         if len (requests) < self.max_requests:
             requests.append (now)
@@ -199,7 +199,7 @@ class SlidingWindowRateLimiter:
             # Calculate when oldest request will expire
             oldest_request = requests[0]
             retry_after = oldest_request + self.window_seconds - now
-            
+
             return {
                 'allowed': False,
                 'remaining': 0,
@@ -239,12 +239,12 @@ class SuspiciousActivity:
 
 class AbuseDetector:
     """Detect suspicious patterns indicating abuse"""
-    
+
     def __init__(self):
         self.user_activity: Dict[str, List[Dict]] = {}
         self.flagged_users: Set[str] = set()
         self.blocked_users: Set[str] = set()
-    
+
     def track_request(
         self,
         user_id: str,
@@ -253,28 +253,28 @@ class AbuseDetector:
         metadata: Dict = None
     ):
         """Track user request for pattern analysis"""
-        
+
         if user_id not in self.user_activity:
             self.user_activity[user_id] = []
-        
+
         self.user_activity[user_id].append({
             'timestamp': datetime.now(),
             'type': request_type,
             'content': content,
             'metadata': metadata or {}
         })
-        
+
         # Keep only recent history (last hour)
         cutoff = datetime.now() - timedelta (hours=1)
         self.user_activity[user_id] = [
             req for req in self.user_activity[user_id]
             if req['timestamp'] > cutoff
         ]
-    
+
     def detect_abuse (self, user_id: str) -> List[SuspiciousActivity]:
         """
         Detect abuse patterns for a user.
-        
+
         Patterns checked:
         1. High request frequency
         2. Repeated injection attempts
@@ -282,20 +282,20 @@ class AbuseDetector:
         4. Account enumeration
         5. Unusual input patterns
         """
-        
+
         if user_id not in self.user_activity:
             return []
-        
+
         suspicious_activities = []
         recent_requests = self.user_activity[user_id]
-        
+
         # Pattern 1: High frequency (more than 60 requests in 1 minute)
         last_minute = datetime.now() - timedelta (minutes=1)
         recent_count = sum(
             1 for req in recent_requests
             if req['timestamp'] > last_minute
         )
-        
+
         if recent_count > 60:
             suspicious_activities.append(SuspiciousActivity(
                 user_id=user_id,
@@ -305,7 +305,7 @@ class AbuseDetector:
                 timestamp=datetime.now(),
                 metadata={'request_count': recent_count}
             ))
-        
+
         # Pattern 2: Repeated injection attempts
         injection_patterns = [
             r'ignore.*instructions?',
@@ -313,13 +313,13 @@ class AbuseDetector:
             r'reveal.*prompt',
             r'you are now',
         ]
-        
+
         injection_attempts = 0
         for req in recent_requests:
             content = req['content'].lower()
             if any (re.search (pattern, content) for pattern in injection_patterns):
                 injection_attempts += 1
-        
+
         if injection_attempts > 5:
             suspicious_activities.append(SuspiciousActivity(
                 user_id=user_id,
@@ -329,7 +329,7 @@ class AbuseDetector:
                 timestamp=datetime.now(),
                 metadata={'attempt_count': injection_attempts}
             ))
-        
+
         # Pattern 3: Scraping pattern (sequential IDs, pagination)
         contents = [req['content'] for req in recent_requests]
         if self._is_scraping_pattern (contents):
@@ -340,7 +340,7 @@ class AbuseDetector:
                 description="Sequential scraping pattern detected",
                 timestamp=datetime.now()
             ))
-        
+
         # Pattern 4: Enumeration attacks
         if self._is_enumeration_pattern (contents):
             suspicious_activities.append(SuspiciousActivity(
@@ -350,7 +350,7 @@ class AbuseDetector:
                 description="Account/data enumeration detected",
                 timestamp=datetime.now()
             ))
-        
+
         # Pattern 5: Unusual input length (potential DoS)
         avg_length = sum (len (req['content']) for req in recent_requests) / max (len (recent_requests), 1)
         if avg_length > 50000:
@@ -362,40 +362,40 @@ class AbuseDetector:
                 timestamp=datetime.now(),
                 metadata={'avg_length': avg_length}
             ))
-        
+
         return suspicious_activities
-    
+
     def _is_scraping_pattern (self, contents: List[str]) -> bool:
         """Detect scraping patterns"""
-        
+
         # Check for sequential numbers
         numbers = []
         for content in contents:
             matches = re.findall (r'\\b(\\d+)\\b', content)
             if matches:
                 numbers.extend([int (m) for m in matches])
-        
+
         if len (numbers) < 5:
             return False
-        
+
         # Check if mostly sequential
         sorted_numbers = sorted (set (numbers))
         sequential_count = sum(
             1 for i in range (len (sorted_numbers) - 1)
             if sorted_numbers[i+1] - sorted_numbers[i] == 1
         )
-        
+
         return sequential_count / max (len (sorted_numbers) - 1, 1) > 0.7
-    
+
     def _is_enumeration_pattern (self, contents: List[str]) -> bool:
         """Detect enumeration patterns"""
-        
+
         # Check for repeated queries with slight variations
         # (e.g., "user john", "user jane", "user bob")
-        
+
         if len (contents) < 5:
             return False
-        
+
         # Extract patterns (words before names/emails)
         patterns = []
         for content in contents:
@@ -404,38 +404,38 @@ class AbuseDetector:
                 if '@' in word or word in ['user', 'account', 'email']:
                     if i > 0:
                         patterns.append (words[i-1])
-        
+
         # If same pattern repeated many times, likely enumeration
         from collections import Counter
         pattern_counts = Counter (patterns)
         most_common = pattern_counts.most_common(1)
-        
+
         if most_common and most_common[0][1] > 5:
             return True
-        
+
         return False
-    
+
     def should_block_user (self, user_id: str) -> bool:
         """Determine if user should be blocked"""
-        
+
         if user_id in self.blocked_users:
             return True
-        
+
         suspicious_activities = self.detect_abuse (user_id)
-        
+
         # Block if critical severity or multiple high-severity issues
         critical_count = sum(1 for act in suspicious_activities if act.severity == 'critical')
         high_count = sum(1 for act in suspicious_activities if act.severity == 'high')
-        
+
         if critical_count > 0 or high_count >= 3:
             self.blocked_users.add (user_id)
             return True
-        
+
         # Flag if medium severity
         medium_count = sum(1 for act in suspicious_activities if act.severity == 'medium')
         if medium_count >= 2:
             self.flagged_users.add (user_id)
-        
+
         return False
 
 # Example usage
@@ -473,7 +473,7 @@ class AdaptiveRateLimiter:
     3. Time of day
     4. User tier/subscription
     """
-    
+
     def __init__(self):
         self.abuse_detector = AbuseDetector()
         self.base_limits = {
@@ -483,17 +483,17 @@ class AdaptiveRateLimiter:
         }
         self.user_tiers: Dict[str, str] = {}
         self.user_reputation: Dict[str, float] = {}  # 0.0 to 1.0
-    
+
     def get_limits_for_user (self, user_id: str) -> Dict:
         """Get adaptive rate limits for user"""
-        
+
         # Get base limits from tier
         tier = self.user_tiers.get (user_id, 'free')
         limits = self.base_limits[tier].copy()
-        
+
         # Adjust based on reputation
         reputation = self.user_reputation.get (user_id, 0.8)  # Default to good
-        
+
         if reputation > 0.9:
             # Trusted user: increase limits
             limits['capacity'] = int (limits['capacity'] * 1.5)
@@ -506,7 +506,7 @@ class AdaptiveRateLimiter:
             # Very suspicious: severe limits
             limits['capacity'] = int (limits['capacity'] * 0.2)
             limits['fill_rate'] *= 0.2
-        
+
         # Check for active abuse
         suspicious_activities = self.abuse_detector.detect_abuse (user_id)
         if suspicious_activities:
@@ -515,21 +515,21 @@ class AdaptiveRateLimiter:
             if critical > 0:
                 limits['capacity'] = 1  # Nearly block
                 limits['fill_rate'] = 0.1
-        
+
         return limits
-    
+
     def update_reputation(
         self,
         user_id: str,
         behavior: str  # 'good', 'suspicious', 'abusive'
     ):
         """Update user reputation based on behavior"""
-        
+
         if user_id not in self.user_reputation:
             self.user_reputation[user_id] = 0.8
-        
+
         current = self.user_reputation[user_id]
-        
+
         if behavior == 'good':
             # Slowly increase reputation
             self.user_reputation[user_id] = min(1.0, current + 0.05)
@@ -600,13 +600,13 @@ class ProductionSafetyRateLimiter:
     4. CAPTCHA challenges
     5. Monitoring
     """
-    
+
     def __init__(self):
         self.abuse_detector = AbuseDetector()
         self.adaptive_limiter = AdaptiveRateLimiter()
         self.rate_limiters: Dict[str, BasicRateLimiter] = {}
         self.captcha_required: Set[str] = set()
-    
+
     def check_request(
         self,
         user_id: str,
@@ -615,17 +615,17 @@ class ProductionSafetyRateLimiter:
     ) -> RateLimitResult:
         """
         Comprehensive safety rate limit check.
-        
+
         Process:
         1. Check if user is blocked
         2. Detect abuse patterns
         3. Apply adaptive rate limiting
         4. Determine action (allow/throttle/block/captcha)
         """
-        
+
         # Track request for pattern analysis
         self.abuse_detector.track_request (user_id, request_type, request_content)
-        
+
         # Check if user should be blocked
         if self.abuse_detector.should_block_user (user_id):
             return RateLimitResult(
@@ -636,13 +636,13 @@ class ProductionSafetyRateLimiter:
                 remaining_quota=0,
                 user_reputation=0.0
             )
-        
+
         # Detect suspicious activities
         suspicious_activities = self.abuse_detector.detect_abuse (user_id)
-        
+
         # Get adaptive limits
         limits = self.adaptive_limiter.get_limits_for_user (user_id)
-        
+
         # Get or create rate limiter
         if user_id not in self.rate_limiters:
             self.rate_limiters[user_id] = BasicRateLimiter(
@@ -654,10 +654,10 @@ class ProductionSafetyRateLimiter:
             limiter = self.rate_limiters[user_id]
             limiter.capacity = limits['capacity']
             limiter.fill_rate = limits['fill_rate']
-        
+
         # Check rate limit
         rate_limit_result = self.rate_limiters[user_id].check_rate_limit (user_id)
-        
+
         # Determine action
         if suspicious_activities:
             critical = any (a.severity == 'critical' for a in suspicious_activities)
@@ -681,7 +681,7 @@ class ProductionSafetyRateLimiter:
                     remaining_quota=rate_limit_result['remaining'],
                     user_reputation=0.5
                 )
-        
+
         if not rate_limit_result['allowed']:
             return RateLimitResult(
                 action=RateLimitAction.THROTTLE,
@@ -691,11 +691,11 @@ class ProductionSafetyRateLimiter:
                 remaining_quota=0,
                 user_reputation=self.adaptive_limiter.user_reputation.get (user_id, 0.8)
             )
-        
+
         # Update reputation for good behavior
         if not suspicious_activities:
             self.adaptive_limiter.update_reputation (user_id, 'good')
-        
+
         return RateLimitResult(
             action=RateLimitAction.ALLOW,
             allowed=True,

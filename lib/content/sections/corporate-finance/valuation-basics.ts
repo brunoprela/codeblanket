@@ -467,9 +467,7 @@ WACC
    - Trading multiples from public companies
    - Transaction multiples from recent M&A
 
-3. **Apply Multiples to Subject Company**
-
-4. **Triangulate Valuation Range**
+3. **Apply Multiples to Subject Company**4. **Triangulate Valuation Range**
 
 ### Python Implementation
 

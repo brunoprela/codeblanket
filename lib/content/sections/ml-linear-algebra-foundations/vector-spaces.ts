@@ -17,19 +17,14 @@ A **vector space** is a mathematical structure formed by a collection of vectors
 A set **V** is a **vector space** over a field **F** (usually ℝ) if it satisfies these axioms for all **u**, **v**, **w** ∈ **V** and scalars a, b ∈ **F**:
 
 ### Closure Axioms
-1. **Closure under addition**: **u** + **v** ∈ **V**
-2. **Closure under scalar multiplication**: a**v** ∈ **V**
+1. **Closure under addition**: **u** + **v** ∈ **V**2. **Closure under scalar multiplication**: a**v** ∈ **V**
 
 ### Addition Axioms
-3. **Commutative**: **u** + **v** = **v** + **u**
-4. **Associative**: (**u** + **v**) + **w** = **u** + (**v** + **w**)
-5. **Identity**: ∃ **0** ∈ **V** such that **v** + **0** = **v**
-6. **Inverse**: ∃ -**v** ∈ **V** such that **v** + (-**v**) = **0**
+3. **Commutative**: **u** + **v** = **v** + **u**4. **Associative**: (**u** + **v**) + **w** = **u** + (**v** + **w**)
+5. **Identity**: ∃ **0** ∈ **V** such that **v** + **0** = **v**6. **Inverse**: ∃ -**v** ∈ **V** such that **v** + (-**v**) = **0**
 
 ### Scalar Multiplication Axioms
-7. **Distributive** (vector): a(**u** + **v**) = a**u** + a**v**
-8. **Distributive** (scalar): (a + b)**v** = a**v** + b**v**
-9. **Associative**: (ab)**v** = a (b**v**)
+7. **Distributive** (vector): a(**u** + **v**) = a**u** + a**v**8. **Distributive** (scalar): (a + b)**v** = a**v** + b**v**9. **Associative**: (ab)**v** = a (b**v**)
 10. **Identity**: 1**v** = **v**
 
 \`\`\`python
@@ -77,8 +72,7 @@ A **subspace** is a subset of a vector space that is itself a vector space.
 
 **Requirements** for **W** ⊆ **V** to be a subspace:
 1. **0** ∈ **W** (contains zero vector)
-2. Closed under addition: **u**, **v** ∈ **W** ⇒ **u** + **v** ∈ **W**
-3. Closed under scalar multiplication: **v** ∈ **W**, a ∈ ℝ ⇒ a**v** ∈ **W**
+2. Closed under addition: **u**, **v** ∈ **W** ⇒ **u** + **v** ∈ **W**3. Closed under scalar multiplication: **v** ∈ **W**, a ∈ ℝ ⇒ a**v** ∈ **W**
 
 \`\`\`python
 print("\\n=== Subspaces ===")

@@ -806,12 +806,12 @@ print("=" * 60)
 
 print(f"""
 The linear regression model explains { test_r2: .1 %} of the variance in house prices.
-On average, predictions are off by \${ mean_absolute_error (y_test, y_test_pred):, .0f }(MAE).
+On average, predictions are off by \${ mean_absolute_error (y_test, y_test_pred):,.0f }(MAE).
 
 Key drivers of house price (by coefficient magnitude):
-    1. { coef_df.iloc[0]['Feature'] }: \${ coef_df.iloc[0]['Coefficient']:, .2f }
-2. { coef_df.iloc[1]['Feature'] }: \${ coef_df.iloc[1]['Coefficient']:, .2f }
-3. { coef_df.iloc[2]['Feature'] }: \${ coef_df.iloc[2]['Coefficient']:, .2f }
+    1. { coef_df.iloc[0]['Feature'] }: \${ coef_df.iloc[0]['Coefficient']:,.2f }
+2. { coef_df.iloc[1]['Feature'] }: \${ coef_df.iloc[1]['Coefficient']:,.2f }
+3. { coef_df.iloc[2]['Feature'] }: \${ coef_df.iloc[2]['Coefficient']:,.2f }
 
 Model performance is suitable for deployment as a baseline predictor.
 Consider polynomial features or interaction terms for potential improvement.

@@ -377,8 +377,7 @@ Performance Comparison:
   → Vectorization is 1020x faster!
 \`\`\`
 
-**Why Such a Huge Difference?**
-1. **NumPy uses optimized C/Fortran code** for matrix operations
+**Why Such a Huge Difference?**1. **NumPy uses optimized C/Fortran code** for matrix operations
 2. **BLAS/LAPACK libraries** provide hardware-optimized linear algebra
 3. **CPU cache efficiency** from contiguous memory access
 4. **Parallel execution** on modern CPUs

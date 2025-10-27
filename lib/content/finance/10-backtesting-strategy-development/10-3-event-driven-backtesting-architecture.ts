@@ -838,7 +838,7 @@ results = self.portfolio.get_performance_metrics()
         
         # Print summary
 print(f"\\nPerformance Summary:")
-print(f"  Final Value: ${results['final_value']:, .2f
+print(f"  Final Value: ${results['final_value']:,.2f}
 }")
 print(f"  Total Return: {results['total_return']:.2f}%")
 print(f"  Sharpe Ratio: {results['sharpe_ratio']:.2f}")
@@ -876,9 +876,7 @@ results = engine.run()
 
 ## Summary
 
-**Key Takeaways:**
-
-1. Event-driven architecture processes data point-by-point
+**Key Takeaways:**1. Event-driven architecture processes data point-by-point
 2. Four main event types: Market, Signal, Order, Fill
 3. Components are modular and reusable
 4. Code closely matches live trading systems

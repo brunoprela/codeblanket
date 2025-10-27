@@ -173,8 +173,7 @@ Show data flow with numbered sequence
 
 **Task:** Draw architecture for Instagram photo upload
 
-**Components needed:**
-1. Mobile client
+**Components needed:**1. Mobile client
 2. Load balancer
 3. Upload service
 4. Image processing service
@@ -183,8 +182,7 @@ Show data flow with numbered sequence
 7. CDN
 8. Cache
 
-**Flow:**
-1. User uploads photo from mobile app
+**Flow:**1. User uploads photo from mobile app
 2. Goes through load balancer
 3. Upload service receives image
 4. Stores original in S3

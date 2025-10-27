@@ -1603,8 +1603,7 @@ print(f"Total Adjustment: {adjusted_bv['adjustment_pct']:.1%}")
 
 **Key Insights**:
 
-1. **DTAs are only valuable if company becomes profitable**
-2. **Valuation allowance** is company's own assessment of realizability
+1. **DTAs are only valuable if company becomes profitable**2. **Valuation allowance** is company's own assessment of realizability
 3. **Historical losses** make DTAs highly questionable
 4. **Section 382** limits DTAs after ownership changes
 5. **Bankruptcy** typically wipes out DTAs entirely

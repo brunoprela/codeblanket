@@ -575,9 +575,7 @@ Stream WAL to recovering node.
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is hinted handoff**: Temporary storage of writes for unavailable replica
+### **Key Concepts to Explain**1. **What is hinted handoff**: Temporary storage of writes for unavailable replica
 2. **Why needed**: Improve write availability during failures, faster recovery
 3. **How it works**: Store hints on other nodes, replay when target recovers
 4. **Not a replica**: Hints don't count toward quorum reads

@@ -1,7 +1,7 @@
 export const pnlCalculation = {
-    title: 'P&L Calculation (Real-time and EOD)',
-    id: 'pnl-calculation',
-    content: `
+  title: 'P&L Calculation (Real-time and EOD)',
+  id: 'pnl-calculation',
+  content: `
 # P&L Calculation (Real-time and EOD)
 
 ## Introduction
@@ -12,8 +12,7 @@ export const pnlCalculation = {
 - **Regulatory compliance**: SEC requires accurate P&L reporting
 - **Trader compensation**: Bonuses tied to P&L performance
 
-**Types of P&L:**
-1. **Realized P&L**: Profit from closed positions (actually earned)
+**Types of P&L:**1. **Realized P&L**: Profit from closed positions (actually earned)
 2. **Unrealized P&L**: Profit from open positions (mark-to-market)
 3. **Total P&L**: Realized + Unrealized
 
@@ -200,10 +199,9 @@ class RealTimePnLCalculator:
         self.last_update = datetime.utcnow()
         
         print(f"[PnLCalculator] {symbol} {side} {quantity} @ {price}")
-        print(f"  Realized P&L: ${snapshot.realized_pnl: .2f
-}")
-print(f"  Unrealized P&L: ${snapshot.unrealized_pnl:.2f}")
-print(f"  Total P&L: ${snapshot.total_pnl():.2f}")
+        print(f"  Realized P&L: \${snapshot.realized_pnl:.2f})"
+print(f"  Unrealized P&L: \${snapshot.unrealized_pnl:.2f}")
+print(f"  Total P&L: \${snapshot.total_pnl():.2f}")
     
     def _update_unrealized_pnl(self, snapshot: PnLSnapshot, current_price: Decimal):
 """Calculate unrealized P&L"""
@@ -286,19 +284,19 @@ for snapshot in sorted(self.pnl_snapshots.values(), key = lambda s: s.symbol):
                 f"{snapshot.account:<15} "
                 f"{snapshot.strategy:<15} "
                 f"{float(snapshot.quantity):>10.2f} "
-                f"${float(snapshot.realized_pnl):>14.2f} "
-                f"${float(snapshot.unrealized_pnl):>14.2f} "
-                f"${float(snapshot.total_pnl()):>14.2f} "
+                f"\${float(snapshot.realized_pnl):>14.2f} "
+                f"\${float(snapshot.unrealized_pnl):>14.2f} "
+                f"\${float(snapshot.total_pnl()):>14.2f} "
                 f"{float(snapshot.pnl_percentage()):>9.2f}%"
     )
 
 print("-" * 120)
-print(f"Total Realized: ${float(self.get_realized_pnl()):.2f}")
-print(f"Total Unrealized: ${float(self.get_unrealized_pnl()):.2f}")
-print(f"Total P&L: ${float(self.get_total_pnl()):.2f}")
-print(f"Intraday High: ${float(self.intraday_high):.2f}")
-print(f"Intraday Low: ${float(self.intraday_low):.2f}")
-print(f"Current Drawdown: ${float(self.calculate_drawdown()):.2f}")
+print(f"Total Realized: \${float(self.get_realized_pnl()):.2f}")
+print(f"Total Unrealized: \${float(self.get_unrealized_pnl()):.2f}")
+print(f"Total P&L: \${float(self.get_total_pnl()):.2f}")
+print(f"Intraday High: \${float(self.intraday_high):.2f}")
+print(f"Intraday Low: \${float(self.intraday_low):.2f}")
+print(f"Current Drawdown: \${float(self.calculate_drawdown()):.2f}")
 
 
 # Example usage
@@ -343,7 +341,7 @@ calc.print_pnl_report()
     # P & L by strategy
 print("\\n\\nP&L by Strategy:")
 for strategy, pnl in calc.get_pnl_by_strategy().items():
-    print(f"  {strategy}: ${float(pnl):.2f}")
+    print(f"  {strategy}: \${float(pnl):.2f}")
 
 # asyncio.run(pnl_calculation_example())
 \`\`\`
@@ -441,24 +439,24 @@ class EODPnLCalculator:
         print("=" * 80)
         
         print(f"\\nP&L Summary:")
-        print(f"  Realized P&L:   ${float(report.realized_pnl):> 12, .2f}")
-print(f"  Unrealized P&L: ${float(report.unrealized_pnl):>12,.2f}")
-print(f"  Total P&L:      ${float(report.total_pnl):>12,.2f}")
+        print(f"  Realized P&L:   \${float(report.realized_pnl):> 12, .2f}")
+print(f"  Unrealized P&L: \${float(report.unrealized_pnl):>12,.2f}")
+print(f"  Total P&L:      \${float(report.total_pnl):>12,.2f}")
 
 print(f"\\nTrading Metrics:")
 print(f"  Trades:         {report.num_trades:>12,}")
-print(f"  Total Fees:     ${float(report.total_fees):>12,.2f}")
+print(f"  Total Fees:     \${float(report.total_fees):>12,.2f}")
 print(f"  Win Rate:       {float(report.win_rate):>11.2%}")
-print(f"  Max Drawdown:   ${float(report.max_drawdown):>12,.2f}")
+print(f"  Max Drawdown:   \${float(report.max_drawdown):>12,.2f}")
 
 print(f"\\nP&L by Strategy:")
 for strategy, pnl in sorted(report.pnl_by_strategy.items(), key = lambda x: x[1], reverse = True):
-    print(f"  {strategy:<20} ${float(pnl):>12,.2f}")
+    print(f"  {strategy:<20} \${float(pnl):>12,.2f}")
 
 print(f"\\nTop P&L by Symbol:")
 sorted_symbols = sorted(report.pnl_by_symbol.items(), key = lambda x: abs(x[1]), reverse = True)[: 10]
 for symbol, pnl in sorted_symbols:
-    print(f"  {symbol:<10} ${float(pnl):>12,.2f}")
+    print(f"  {symbol:<10} \${float(pnl):>12,.2f}")
 
 
 # Example EOD calculation
@@ -490,8 +488,7 @@ eod_calc.print_eod_report(report)
 
 ## Summary
 
-**P&L Calculation Essentials:**
-1. **Real-time**: Update P&L on every fill and price change
+**P&L Calculation Essentials:**1. **Real-time**: Update P&L on every fill and price change
 2. **Realized vs Unrealized**: Separate closed vs open position P&L
 3. **Attribution**: Track P&L by strategy, symbol, trader
 4. **Intraday tracking**: Monitor high-water mark and drawdown
@@ -507,4 +504,3 @@ eod_calc.print_eod_report(report)
 **Next Section**: Module 14.8 - Trade Reconciliation
 `,
 };
-

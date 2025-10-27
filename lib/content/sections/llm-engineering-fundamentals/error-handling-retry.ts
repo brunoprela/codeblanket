@@ -118,13 +118,13 @@ def call_llm_with_basic_handling (prompt: str) -> str:
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
         )
-        
+
         return response.choices[0].message.content
-    
+
     except OpenAIError as e:
         print(f"OpenAI API error: {e}")
         return None
-    
+
     except Exception as e:
         print(f"Unexpected error: {e}")
         return None
@@ -161,34 +161,34 @@ def call_with_specific_handling (prompt: str) -> str:
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
         )
-        
+
         return response.choices[0].message.content
-    
+
     except RateLimitError as e:
         print(f"Rate limit exceeded: {e}")
         print("Wait and retry...")
         return None
-    
+
     except APITimeoutError as e:
         print(f"Request timed out: {e}")
         print("Retry immediately...")
         return None
-    
+
     except AuthenticationError as e:
         print(f"Authentication failed: {e}")
         print("Check your API key!")
         return None
-    
+
     except BadRequestError as e:
         print(f"Bad request: {e}")
         print("Fix your request parameters")
         return None
-    
+
     except APIError as e:
         print(f"API error: {e}")
         print("Server issue - retry with backoff")
         return None
-    
+
     except Exception as e:
         print(f"Unexpected error: {e}")
         return None
@@ -216,26 +216,26 @@ def call_with_retry(
     """
     Retry failed requests up to max_retries times.
     """
-    
+
     for attempt in range (max_retries):
         try:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}]
             )
-            
+
             return response.choices[0].message.content
-        
+
         except OpenAIError as e:
             print(f"Attempt {attempt + 1} failed: {e}")
-            
+
             if attempt < max_retries - 1:
                 print(f"Retrying...")
                 time.sleep(1)  # Wait 1 second
             else:
                 print("Max retries exceeded")
                 raise
-    
+
     return None
 
 # Usage
@@ -263,19 +263,19 @@ def call_with_exponential_backoff(
 ) -> str:
     """
     Retry with exponential backoff: wait 1s, 2s, 4s, 8s, 16s...
-    
+
     This prevents hammering the API and respects rate limits.
     """
-    
+
     for attempt in range (max_retries):
         try:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}]
             )
-            
+
             return response.choices[0].message.content
-        
+
         except RateLimitError as e:
             if attempt < max_retries - 1:
                 # Calculate wait time: 1s, 2s, 4s, 8s, 16s
@@ -285,7 +285,7 @@ def call_with_exponential_backoff(
             else:
                 print("Max retries exceeded")
                 raise
-        
+
         except OpenAIError as e:
             if attempt < max_retries - 1:
                 wait_time = base_delay * (2 ** attempt)
@@ -293,7 +293,7 @@ def call_with_exponential_backoff(
                 time.sleep (wait_time)
             else:
                 raise
-    
+
     return None
 
 # Usage
@@ -320,38 +320,38 @@ def call_with_backoff_and_jitter(
 ) -> str:
     """
     Exponential backoff with jitter.
-    
+
     Jitter prevents many clients from retrying simultaneously.
     """
-    
+
     for attempt in range (max_retries):
         try:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}]
             )
-            
+
             return response.choices[0].message.content
-        
+
         except OpenAIError as e:
             if attempt < max_retries - 1:
                 # Exponential: 1, 2, 4, 8, 16, ...
                 exponential_delay = base_delay * (2 ** attempt)
-                
+
                 # Cap at max_delay
                 exponential_delay = min (exponential_delay, max_delay)
-                
+
                 # Add jitter: random value between 0 and exponential_delay
                 jitter = random.uniform(0, exponential_delay)
                 wait_time = exponential_delay + jitter
-                
+
                 print(f"Error on attempt {attempt + 1}: {type (e).__name__}")
                 print(f"Waiting {wait_time:.2f}s before retry...")
                 time.sleep (wait_time)
             else:
                 print(f"Failed after {max_retries} attempts")
                 raise
-    
+
     return None
 
 # Usage
@@ -391,7 +391,7 @@ client = OpenAI()
 def call_with_tenacity (prompt: str) -> str:
     """
     Automatically retry with tenacity decorator.
-    
+
     Configuration:
     - Stop after 5 attempts
     - Exponential backoff: 1s, 2s, 4s, 8s, 16s (max 60s)
@@ -402,7 +402,7 @@ def call_with_tenacity (prompt: str) -> str:
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}]
     )
-    
+
     return response.choices[0].message.content
 
 # Usage
@@ -433,21 +433,21 @@ logger = logging.getLogger(__name__)
 @retry(
     # Stop conditions
     stop=stop_after_attempt(5),
-    
+
     # Wait strategy with jitter
     wait=wait_exponential_jitter (initial=1, max=60),
-    
+
     # Only retry specific errors
     retry=retry_if_exception_type((
         RateLimitError,
         APITimeoutError,
         APIError
     )),
-    
+
     # Logging
     before_sleep=before_sleep_log (logger, logging.WARNING),
     after=after_log (logger, logging.INFO),
-    
+
     # Reraise final exception
     reraise=True
 )
@@ -459,7 +459,7 @@ def call_with_advanced_retry (prompt: str) -> str:
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}]
     )
-    
+
     return response.choices[0].message.content
 
 # Usage
@@ -487,7 +487,7 @@ class CircuitState(Enum):
 class CircuitBreaker:
     """
     Circuit breaker for LLM API calls.
-    
+
     When too many failures occur:
     1. CLOSED → OPEN (stop making requests)
     2. Wait for timeout period
@@ -495,7 +495,7 @@ class CircuitBreaker:
     4. If success: HALF_OPEN → CLOSED
     5. If fail: HALF_OPEN → OPEN
     """
-    
+
     def __init__(
         self,
         failure_threshold: int = 5,
@@ -505,11 +505,11 @@ class CircuitBreaker:
         self.failure_threshold = failure_threshold
         self.timeout = timeout
         self.expected_exception = expected_exception
-        
+
         self.failure_count = 0
         self.last_failure_time = None
         self.state = CircuitState.CLOSED
-    
+
     def call (self, func: Callable, *args, **kwargs) -> Any:
         """
         Call function through circuit breaker.
@@ -521,28 +521,28 @@ class CircuitBreaker:
                 self.state = CircuitState.HALF_OPEN
             else:
                 raise Exception (f"Circuit breaker is OPEN. Blocked for {self.timeout}s after failures.")
-        
+
         try:
             result = func(*args, **kwargs)
-            
+
             # Success!
             if self.state == CircuitState.HALF_OPEN:
                 print("Circuit breaker: Recovered! (CLOSED)")
                 self.state = CircuitState.CLOSED
                 self.failure_count = 0
-            
+
             return result
-        
+
         except self.expected_exception as e:
             self.failure_count += 1
             self.last_failure_time = time.time()
-            
+
             print(f"Circuit breaker: Failure {self.failure_count}/{self.failure_threshold}")
-            
+
             if self.failure_count >= self.failure_threshold:
                 self.state = CircuitState.OPEN
                 print(f"Circuit breaker: OPEN! Blocking requests for {self.timeout}s")
-            
+
             raise
 
 # Usage
@@ -570,7 +570,7 @@ for i in range(10):
         print(f"Request {i+1}: Success")
     except Exception as e:
         print(f"Request {i+1}: {e}")
-    
+
     time.sleep(1)
 \`\`\`
 
@@ -611,7 +611,7 @@ class ProductionLLMClient:
     """
     Production-ready LLM client with comprehensive error handling.
     """
-    
+
     def __init__(
         self,
         model: str = "gpt-3.5-turbo",
@@ -620,12 +620,12 @@ class ProductionLLMClient:
         self.client = OpenAI()
         self.model = model
         self.retry_config = retry_config or RetryConfig()
-        
+
         # Metrics
         self.total_requests = 0
         self.failed_requests = 0
         self.retried_requests = 0
-    
+
     def chat(
         self,
         messages: List[Dict[str, str]],
@@ -635,7 +635,7 @@ class ProductionLLMClient:
         Make chat completion with full error handling.
         """
         self.total_requests += 1
-        
+
         for attempt in range (self.retry_config.max_retries):
             try:
                 response = self.client.chat.completions.create(
@@ -643,21 +643,21 @@ class ProductionLLMClient:
                     messages=messages,
                     **kwargs
                 )
-                
+
                 return response.choices[0].message.content
-            
+
             except AuthenticationError as e:
                 # Don't retry auth errors
                 logger.error (f"Authentication error: {e}")
                 self.failed_requests += 1
                 raise
-            
+
             except BadRequestError as e:
                 # Don't retry bad requests
                 logger.error (f"Bad request: {e}")
                 self.failed_requests += 1
                 raise
-            
+
             except RateLimitError as e:
                 # Retry with backoff
                 if attempt < self.retry_config.max_retries - 1:
@@ -669,7 +669,7 @@ class ProductionLLMClient:
                     logger.error("Max retries exceeded for rate limit")
                     self.failed_requests += 1
                     raise
-            
+
             except APITimeoutError as e:
                 # Retry immediately
                 if attempt < self.retry_config.max_retries - 1:
@@ -680,7 +680,7 @@ class ProductionLLMClient:
                     logger.error("Max retries exceeded for timeout")
                     self.failed_requests += 1
                     raise
-            
+
             except APIError as e:
                 # Server error - retry with backoff
                 if attempt < self.retry_config.max_retries - 1:
@@ -692,21 +692,21 @@ class ProductionLLMClient:
                     logger.error("Max retries exceeded for API error")
                     self.failed_requests += 1
                     raise
-            
+
             except OpenAIError as e:
                 # Generic OpenAI error
                 logger.error (f"OpenAI error: {e}")
                 self.failed_requests += 1
                 raise
-            
+
             except Exception as e:
                 # Unexpected error
                 logger.error (f"Unexpected error: {e}")
                 self.failed_requests += 1
                 raise
-        
+
         return None
-    
+
     def _calculate_wait_time (self, attempt: int) -> float:
         """
         Calculate wait time with exponential backoff and jitter.
@@ -715,17 +715,17 @@ class ProductionLLMClient:
         exponential = self.retry_config.base_delay * (
             self.retry_config.exponential_base ** attempt
         )
-        
+
         # Cap at max
         exponential = min (exponential, self.retry_config.max_delay)
-        
+
         # Add jitter if enabled
         if self.retry_config.jitter:
             jitter = random.uniform(0, exponential * 0.1)  # 10% jitter
             return exponential + jitter
-        
+
         return exponential
-    
+
     def get_metrics (self) -> Dict:
         """Get client metrics."""
         success_rate = (
@@ -733,7 +733,7 @@ class ProductionLLMClient:
             if self.total_requests > 0
             else 0
         )
-        
+
         return {
             'total_requests': self.total_requests,
             'failed_requests': self.failed_requests,

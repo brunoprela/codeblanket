@@ -1102,8 +1102,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
 Django is a **full-featured web framework** that follows the MTV pattern:
 
-**Key Architecture Components:**
-1. **Models**: Data layer (ORM)
+**Key Architecture Components:**1. **Models**: Data layer (ORM)
 2. **Templates**: Presentation layer (HTML rendering)
 3. **Views**: Business logic (request handling)
 4. **URLs**: Routing layer (pattern matching)

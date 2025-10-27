@@ -309,8 +309,7 @@ FROM ticks
 GROUP BY bucket, symbol;
 \`\`\`
 
-**Key Features:**
-1. **Real-time ingestion** from multiple websocket sources
+**Key Features:**1. **Real-time ingestion** from multiple websocket sources
 2. **TimescaleDB** for efficient time-series storage (100K+ ticks/second)
 3. **Continuous aggregates** for pre-computed VWAP, spreads
 4. **FastAPI** websocket streaming to frontend

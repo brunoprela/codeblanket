@@ -438,9 +438,7 @@ function chat (call) {
 
 ## When to Use RPC
 
-### **✅ Use RPC When:**
-
-1. **Internal Microservices Communication**
+### **✅ Use RPC When:**1. **Internal Microservices Communication**
    - Services within same organization
    - Strong typing and performance critical
    - Example: Order Service → Inventory Service
@@ -465,9 +463,7 @@ function chat (call) {
    - Procedure-oriented APIs
    - Example: processOrder(), runAnalysis()
 
-### **❌ Avoid RPC When:**
-
-1. **Public APIs**
+### **❌ Avoid RPC When:**1. **Public APIs**
    - External developers need access
    - REST more familiar/accessible
    - Caching important

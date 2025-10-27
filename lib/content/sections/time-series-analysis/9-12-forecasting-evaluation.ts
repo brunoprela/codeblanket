@@ -661,9 +661,7 @@ print(f"Recommendation: {status['recommendation']}")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Out-of-sample testing**: Critical for model validation
+**Key Takeaways:**1. **Out-of-sample testing**: Critical for model validation
 2. **Walk-forward**: Most realistic evaluation methodology
 3. **Multiple metrics**: RMSE, MAE, direction accuracy, economic value
 4. **Model comparison**: Use Diebold-Mariano test for statistical significance

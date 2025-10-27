@@ -1,12 +1,12 @@
 export const meanVarianceOptimizationQuiz = {
-    id: 'mean-variance-optimization',
-    title: 'Mean-Variance Optimization',
-    questions: [
-        {
-            id: 'mvo-estimation-error',
-            text: `Estimation error is the Achilles heel of mean-variance optimization. Consider a portfolio optimizer using 5 years of monthly return data (60 observations) for 50 stocks. (1) Calculate the standard error of the mean return estimate for a stock with 20% annualized volatility and explain why expected returns are so noisy. (2) Demonstrate how a 1% error in expected return estimate for one stock can cause the optimal portfolio weights to swing by 20-30%. (3) Explain why MVO is called an "error maximization machine" and how it amplifies small estimation errors. (4) Discuss three practical solutions: Black-Litterman model, shrinkage estimators, and robust optimization - when to use each approach.`,
-            type: 'discussion' as const,
-            sampleAnswer: `**1. Standard Error of Mean Return Estimate**
+  id: 'mean-variance-optimization',
+  title: 'Mean-Variance Optimization',
+  questions: [
+    {
+      id: 'mvo-estimation-error',
+      text: `Estimation error is the Achilles heel of mean-variance optimization. Consider a portfolio optimizer using 5 years of monthly return data (60 observations) for 50 stocks. (1) Calculate the standard error of the mean return estimate for a stock with 20% annualized volatility and explain why expected returns are so noisy. (2) Demonstrate how a 1% error in expected return estimate for one stock can cause the optimal portfolio weights to swing by 20-30%. (3) Explain why MVO is called an "error maximization machine" and how it amplifies small estimation errors. (4) Discuss three practical solutions: Black-Litterman model, shrinkage estimators, and robust optimization - when to use each approach.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**1. Standard Error of Mean Return Estimate**
 
 **Given:**
 - Sample period: 5 years × 12 months = 60 observations
@@ -59,9 +59,7 @@ SNR_{volatility} = \\frac{20\\%}{1.83\\%} = 10.9
 
 **Volatility is 3x more precisely estimated than returns!**
 
-**Key Problems:**
-
-1. **Low signal:** Expected returns (5-15%) are small relative to noise (volatility 15-30%)
+**Key Problems:**1. **Low signal:** Expected returns (5-15%) are small relative to noise (volatility 15-30%)
 
 2. **Sample size requirements:** To halve standard error, need 4x more data
    - For 1% annual SE: Need (2.58/1)² = 6.7x more data = 33 years!
@@ -133,9 +131,7 @@ When μ₁ increases by 1%:
 
 So 1% error → 20-30% weight change!
 
-**Intuitive Explanation:**
-
-1. **Marginal thinking:** Optimizer thinks "Stock #1 offers 11% vs 10% for others"
+**Intuitive Explanation:**1. **Marginal thinking:** Optimizer thinks "Stock #1 offers 11% vs 10% for others"
    - "That's 1% free money!"
    - Loads up until risk constraints bind
 
@@ -152,15 +148,15 @@ So 1% error → 20-30% weight change!
 **Numerical Example:**
 
 **Before (no error):**
-```
+\`\`\`
 Portfolio: 2 % each of 50 stocks
 Expected return: 10 %
                 Risk: 15%
                     Sharpe: 0.40
-```
+\`\`\`
 
 **After (1% error on Stock 1):**
-```
+\`\`\`
 Stock 1: 22 %
                 Others: 1.6% each
 Expected return(optimizer thinks): 10.2%
@@ -171,7 +167,7 @@ Reality(Stock 1 only 10 %):
         Expected return: 10 %
             Risk: 15.3%
                 Sharpe: 0.39(WORSE!)
-```
+\`\`\`
 
 **The optimizer made the portfolio worse by chasing noise!**
 
@@ -465,7 +461,7 @@ Estimation error is **the** practical challenge in portfolio optimization. Sophi
 - Maintaining robustness (avoid extreme positions)
 
 Modern portfolio management is less about perfect optimization and more about **robust imperfect optimization**.`,
-    keyPoints: [
+      keyPoints: [
         'Standard error of mean return ≈ 2.6% annually with 5 years data; means are 3x noisier than volatility estimates',
         'MVO amplifies noise: 1% estimation error can cause 20-30pp weight swings due to quadratic optimization',
         'MVO called "error maximization machine" because it treats noise as signal and exploits estimation errors maximally',
@@ -473,41 +469,40 @@ Modern portfolio management is less about perfect optimization and more about **
         'Black-Litterman blends market equilibrium with investor views; best for active management with high-conviction views',
         'Shrinkage estimators (Ledoit-Wolf) pull extreme estimates toward mean; effective with 50+ assets and limited data',
         'Robust optimization assumes input uncertainty and finds portfolios that work across scenarios; best for high uncertainty',
-        'Practical solution: hierarchical approach combining Black-Litterman + shrinkage + robust constraints achieves Sharpe 0.58'
-    ]
+        'Practical solution: hierarchical approach combining Black-Litterman + shrinkage + robust constraints achieves Sharpe 0.58',
+      ],
     },
-{
-    id: 'mvo-covariance-estimation',
-        text: `Covariance matrix estimation is critical for portfolio optimization but often underestimated. For a 100-stock portfolio: (1) calculate how many unique parameters must be estimated in the covariance matrix and explain why this creates dimensionality problems, (2) demonstrate why sample covariance matrices are poorly conditioned (nearly singular) with limited data and what this means for optimization, (3) explain three approaches to improve covariance estimates: shrinkage toward diagonal/constant correlation, factor models (reducing 5,050 parameters to ~300), and exponentially weighted moving average (EWMA) for time-varying covariances, and (4) discuss the stability-accuracy tradeoff: why more sophisticated models don't always perform better out-of-sample.`,
-            type: 'discussion' as const,
-                sampleAnswer: `**[Full 8000+ word comprehensive answer on covariance estimation, dimensionality curse, factor models, EWMA, and practical implementation with real-world examples from institutional portfolio management]**`,
-                    keyPoints: [
-                        'Covariance matrix for N assets has N(N+1)/2 unique parameters; 100 stocks = 5,050 parameters to estimate',
-                        'Sample covariance poorly conditioned when N is large relative to T observations; creates unstable inverses',
-                        'Shrinkage toward constant correlation reduces parameters from 5,050 to ~102 (N variances + 1 correlation)',
-                        'Factor models (Fama-French) reduce from 5,050 to ~305 parameters (5 factors × 100 stocks + factor covariances)',
-                        'EWMA gives more weight to recent data; adapts to time-varying volatility and correlation',
-                        'More parameters ≠ better out-of-sample performance due to estimation error and overfitting',
-                        'Optimal approach depends on N/T ratio: N>T requires aggressive shrinkage or factor models',
-                        'Institutional best practice: combine factor model structure with shrinkage and EWMA weighting'
-                    ]
-},
-{
-    id: 'mvo-practical-implementation',
-        text: `You're implementing mean-variance optimization for a $500M institutional portfolio with 200 stocks. Discuss the complete implementation workflow: (1) data requirements (sample periods, frequency, adjustments for corporate actions), (2) outlier handling and data cleaning (how to deal with stocks that returned +500% or -90% in one month), (3) constraint specification (position limits, turnover, sector neutrality, factor exposures), (4) validation approaches (walk-forward testing, cross-validation, stability analysis), and (5) production considerations (rebalancing frequency, transaction cost modeling, tax optimization, how often to re-estimate parameters).`,
-            type: 'discussion' as const,
-                sampleAnswer: `**[Full detailed implementation guide covering data pipeline, cleaning procedures, constraint engineering, validation frameworks, and production deployment with specific code examples and institutional best practices]**`,
-                    keyPoints: [
-                        'Minimum 5-10 years monthly data for 200 stocks; adjust for splits, dividends, survivorship bias',
-                        'Winsorize returns at 1st/99th percentile; treat ±50%+ monthly returns as potential errors requiring investigation',
-                        'Constraint hierarchy: regulatory > risk management > client mandate > operational; typical max 5% per stock',
-                        'Walk-forward validation with rolling 5-year estimation, 1-year test; must show consistent out-of-sample Sharpe',
-                        'Rebalance quarterly for most institutional portfolios; monthly adds cost without much benefit',
-                        'Model transaction costs explicitly: 5-10 bps per trade for liquid stocks, 20-50 bps for illiquid',
-                        'Re-estimate covariance monthly with EWMA, expected returns quarterly with shrinkage',
-                        'Production systems need data validation, audit trails, compliance checks, risk monitoring, error handling'
-                    ]
-}
-  ]
+    {
+      id: 'mvo-covariance-estimation',
+      text: `Covariance matrix estimation is critical for portfolio optimization but often underestimated. For a 100-stock portfolio: (1) calculate how many unique parameters must be estimated in the covariance matrix and explain why this creates dimensionality problems, (2) demonstrate why sample covariance matrices are poorly conditioned (nearly singular) with limited data and what this means for optimization, (3) explain three approaches to improve covariance estimates: shrinkage toward diagonal/constant correlation, factor models (reducing 5,050 parameters to ~300), and exponentially weighted moving average (EWMA) for time-varying covariances, and (4) discuss the stability-accuracy tradeoff: why more sophisticated models don't always perform better out-of-sample.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**[Full 8000+ word comprehensive answer on covariance estimation, dimensionality curse, factor models, EWMA, and practical implementation with real-world examples from institutional portfolio management]**`,
+      keyPoints: [
+        'Covariance matrix for N assets has N(N+1)/2 unique parameters; 100 stocks = 5,050 parameters to estimate',
+        'Sample covariance poorly conditioned when N is large relative to T observations; creates unstable inverses',
+        'Shrinkage toward constant correlation reduces parameters from 5,050 to ~102 (N variances + 1 correlation)',
+        'Factor models (Fama-French) reduce from 5,050 to ~305 parameters (5 factors × 100 stocks + factor covariances)',
+        'EWMA gives more weight to recent data; adapts to time-varying volatility and correlation',
+        'More parameters ≠ better out-of-sample performance due to estimation error and overfitting',
+        'Optimal approach depends on N/T ratio: N>T requires aggressive shrinkage or factor models',
+        'Institutional best practice: combine factor model structure with shrinkage and EWMA weighting',
+      ],
+    },
+    {
+      id: 'mvo-practical-implementation',
+      text: `You're implementing mean-variance optimization for a $500M institutional portfolio with 200 stocks. Discuss the complete implementation workflow: (1) data requirements (sample periods, frequency, adjustments for corporate actions), (2) outlier handling and data cleaning (how to deal with stocks that returned +500% or -90% in one month), (3) constraint specification (position limits, turnover, sector neutrality, factor exposures), (4) validation approaches (walk-forward testing, cross-validation, stability analysis), and (5) production considerations (rebalancing frequency, transaction cost modeling, tax optimization, how often to re-estimate parameters).`,
+      type: 'discussion' as const,
+      sampleAnswer: `**[Full detailed implementation guide covering data pipeline, cleaning procedures, constraint engineering, validation frameworks, and production deployment with specific code examples and institutional best practices]**`,
+      keyPoints: [
+        'Minimum 5-10 years monthly data for 200 stocks; adjust for splits, dividends, survivorship bias',
+        'Winsorize returns at 1st/99th percentile; treat ±50%+ monthly returns as potential errors requiring investigation',
+        'Constraint hierarchy: regulatory > risk management > client mandate > operational; typical max 5% per stock',
+        'Walk-forward validation with rolling 5-year estimation, 1-year test; must show consistent out-of-sample Sharpe',
+        'Rebalance quarterly for most institutional portfolios; monthly adds cost without much benefit',
+        'Model transaction costs explicitly: 5-10 bps per trade for liquid stocks, 20-50 bps for illiquid',
+        'Re-estimate covariance monthly with EWMA, expected returns quarterly with shrinkage',
+        'Production systems need data validation, audit trails, compliance checks, risk monitoring, error handling',
+      ],
+    },
+  ],
 };
-

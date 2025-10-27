@@ -554,9 +554,7 @@ Alert 3 (Slow burn, low urgency):
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **SLI**: What you measure (latency, availability)
+### **Key Concepts**1. **SLI**: What you measure (latency, availability)
 2. **SLO**: Target for SLI (99.9% uptime)
 3. **SLA**: Contract with consequences
 4. **Error Budget**: Allowed unreliability (100% - SLO)

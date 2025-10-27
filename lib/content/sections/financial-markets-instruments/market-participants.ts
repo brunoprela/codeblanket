@@ -522,9 +522,7 @@ print(f"Expected Return: {strategy['additions']['expected_return']}")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Institutions**: Predictable rebalancing, large size, exploitable
+**Key Takeaways:**1. **Institutions**: Predictable rebalancing, large size, exploitable
 2. **HFT/Market Makers**: Dominate volume, profit from speed
 3. **Retail**: Increasingly active, meme stocks are real
 4. **Calendar Effects**: Month-end, quarter-end, index rebalancing

@@ -746,9 +746,7 @@ print(f"Curvature (medium-term): {true_curve[-1]:.2f}%")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **State space**: Unified framework for all linear time series models
+**Key Takeaways:**1. **State space**: Unified framework for all linear time series models
 2. **Kalman filter**: Optimal recursive estimation of hidden states
 3. **Structural models**: Interpretable decomposition into trend, season, cycle
 4. **Dynamic factors**: Extract common components from multiple series

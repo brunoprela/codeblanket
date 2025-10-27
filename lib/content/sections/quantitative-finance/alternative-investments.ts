@@ -333,7 +333,7 @@ After 5 years:
 - **Value-add**: 12% annual return
 - **Opportunistic**: 15% annual return
 
-**Correlation with equities:** 0.4-0.6 (moderate diversification benefit).
+**Correlation with equities:**0.4-0.6 (moderate diversification benefit).
 
 **Inflation hedging:** Real estate rents increase with inflation → real returns preserved.
 
@@ -398,13 +398,13 @@ After 5 years:
 
 **Indirect exposure:** Mining companies (GLD, FCX), energy stocks (XOM, CVX).
 
-**Correlation:** 0.6-0.8 with equities (equity risk dominates commodity exposure).
+**Correlation:**0.6-0.8 with equities (equity risk dominates commodity exposure).
 
 **Dividend yield:** 3-5% (vs 0% for futures).
 
 ### Commodities as Inflation Hedge
 
-**Inflation correlation:** 0.3-0.5 (moderate).
+**Inflation correlation:**0.3-0.5 (moderate).
 
 **Example:** 1970s stagflation.
 - Inflation: 7% annually (1970-1980)
@@ -560,7 +560,7 @@ After 5 years:
 
 **Total alternatives: 76.4%** (extreme illiquidity acceptable for endowment with infinite horizon).
 
-**Performance:** 12.4% annually (1985-2020) vs 9.0% for 60/40 portfolio.
+**Performance:**12.4% annually (1985-2020) vs 9.0% for 60/40 portfolio.
 
 **Key insight:** Illiquidity premium + manager selection → 3% annual outperformance.
 

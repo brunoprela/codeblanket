@@ -23,7 +23,7 @@ def test_user_creation_implementation():
     user._set_username("alice")  # Testing private method
     user._validate()
     user._save_to_db()
-    
+
     assert user._username == "alice"
     assert user._validated is True
 \`\`\`
@@ -32,7 +32,7 @@ def test_user_creation_implementation():
 \`\`\`python
 def test_user_creation_behavior():
     user = User.create (username="alice")
-    
+
     assert user.username == "alice"
     assert User.exists (username="alice")
 \`\`\`
@@ -51,10 +51,10 @@ def test_user_cannot_withdraw_more_than_balance():
     And their balance remains $100
     """
     account = Account (balance=100)
-    
+
     with pytest.raises(InsufficientFundsError):
         account.withdraw(150)
-    
+
     assert account.balance == 100
 \`\`\`
 
@@ -72,12 +72,12 @@ def test_shopping_cart_total():
     cart = ShoppingCart()
     item1 = Product (name="Widget", price=29.99)
     item2 = Product (name="Gadget", price=49.99)
-    
+
     # Act: Perform action
     cart.add (item1)
     cart.add (item2)
     total = cart.calculate_total()
-    
+
     # Assert: Verify result
     assert total == 79.98
 \`\`\`
@@ -88,10 +88,10 @@ def test_shopping_cart_total():
 def test_user_login_with_invalid_password():
     # Given: User exists with password
     user = UserFactory.create (password="correct_password")
-    
+
     # When: User attempts login with wrong password
     result = auth.login (username=user.username, password="wrong_password")
-    
+
     # Then: Login fails
     assert result.success is False
     assert result.error == "Invalid password"
@@ -102,30 +102,30 @@ def test_user_login_with_invalid_password():
 \`\`\`python
 class TestUserAuthentication:
     """Group related tests"""
-    
+
     @pytest.fixture
     def user (self):
         return UserFactory.create (password="secret123")
-    
+
     def test_login_with_correct_password (self, user):
         result = auth.login (user.username, "secret123")
         assert result.success is True
-    
+
     def test_login_with_wrong_password (self, user):
         result = auth.login (user.username, "wrong")
         assert result.success is False
-    
+
     def test_login_with_nonexistent_user (self):
         result = auth.login("nonexistent", "password")
         assert result.success is False
 
 class TestUserRegistration:
     """Separate class for different feature"""
-    
+
     def test_register_new_user (self):
         result = auth.register (username="alice", password="secret")
         assert result.success is True
-    
+
     def test_register_duplicate_username (self):
         UserFactory.create (username="alice")
         result = auth.register (username="alice", password="secret")
@@ -227,7 +227,7 @@ def test_user_and_posts_and_comments():
     user = User.create (username="alice")
     post = Post.create (author=user, title="Hello")
     comment = Comment.create (post=post, author=user, text="Great!")
-    
+
     assert user.username == "alice"
     assert post.title == "Hello"
     assert comment.text == "Great!"
@@ -260,11 +260,11 @@ def test_comment_creation():
 \`\`\`python
 class TestUserFlow:
     user = None  # Shared state (BAD)
-    
+
     def test_1_create_user (self):
         self.user = User.create (username="alice")
         assert self.user.id is not None
-    
+
     def test_2_update_user (self):
         self.user.username = "bob"  # Depends on test_1
         self.user.save()
@@ -277,11 +277,11 @@ class TestUser:
     @pytest.fixture
     def user (self):
         return UserFactory.create (username="alice")
-    
+
     def test_create_user (self):
         user = User.create (username="alice")
         assert user.id is not None
-    
+
     def test_update_user (self, user):
         user.username = "bob"
         user.save()
@@ -298,10 +298,10 @@ def test_user_service_create_user (mocker):
     mock_email = mocker.Mock()
     mock_logger = mocker.Mock()
     mock_cache = mocker.Mock()
-    
+
     service = UserService (mock_db, mock_validator, mock_email, mock_logger, mock_cache)
     service.create_user("alice", "alice@example.com")
-    
+
     mock_db.save.assert_called_once()
     # Testing nothing meaningful—just mocks
 \`\`\`
@@ -310,10 +310,10 @@ def test_user_service_create_user (mocker):
 \`\`\`python
 def test_user_service_sends_welcome_email (db_session, mocker):
     mock_email = mocker.patch("myapp.email.send_email")
-    
+
     service = UserService (db_session)
     user = service.create_user("alice", "alice@example.com")
-    
+
     assert user.username == "alice"  # Real database
     mock_email.assert_called_once_with(  # Mocked email
         to="alice@example.com",
@@ -404,7 +404,7 @@ assert len (items) > 0
 \`\`\`python
 def test_user_creation():
     user = User.create (username="alice", email="alice@example.com")
-    
+
     # Related assertions about same object
     assert user.id is not None
     assert user.username == "alice"
@@ -442,7 +442,7 @@ def test_invalid_age():
 def test_authentication_error():
     with pytest.raises(AuthenticationError) as exc_info:
         auth.login("nonexistent", "password")
-    
+
     assert exc_info.value.code == "USER_NOT_FOUND"
     assert "nonexistent" in str (exc_info.value)
 \`\`\`
@@ -453,16 +453,16 @@ def test_authentication_error():
 def test_api_client_retries_on_failure (mocker):
     """Test retry logic"""
     mock_request = mocker.patch("requests.get")
-    
+
     # First 2 calls fail, 3rd succeeds
     mock_request.side_effect = [
         requests.Timeout(),
         requests.ConnectionError(),
         mocker.Mock (status_code=200, json=lambda: {"data": "success"})
     ]
-    
+
     result = api_client.fetch_with_retry (max_attempts=3)
-    
+
     assert result["data"] == "success"
     assert mock_request.call_count == 3
 \`\`\`
@@ -514,16 +514,16 @@ def test_username_validation():
 def test_search_performance (benchmark):
     """Ensure search completes in <100ms"""
     items = [Product (name=f"Item {i}") for i in range(1000)]
-    
+
     result = benchmark (search_products, items, query="Item 500")
-    
+
     assert result is not None
     # benchmark automatically fails if >100ms (configurable)
 
 def test_no_n_plus_1_queries (db_session, django_assert_num_queries):
     """Ensure queries are optimized"""
     users = UserFactory.create_batch(10)
-    
+
     # Should be 1 query (with prefetch_related), not 11 (N+1)
     with django_assert_num_queries(1):
         users = User.objects.prefetch_related("posts").all()
@@ -541,7 +541,7 @@ def test_no_n_plus_1_queries (db_session, django_assert_num_queries):
 def test_api_client_usage_example():
     """
     Example of using APIClient:
-    
+
     1. Create client
     2. Authenticate
     3. Make requests
@@ -549,9 +549,9 @@ def test_api_client_usage_example():
     """
     client = APIClient (base_url="https://api.example.com")
     client.authenticate (api_key="your_key")
-    
+
     response = client.get("/users/123")
-    
+
     assert response.status_code == 200
     assert "username" in response.json()
 \`\`\`

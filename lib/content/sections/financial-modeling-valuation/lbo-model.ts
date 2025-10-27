@@ -200,9 +200,7 @@ for item, value in sources_uses['Metrics'].items():
 
 ### Debt Schedule
 
-**Debt structure in LBO:**
-
-1. **Senior Debt** (lowest cost, highest priority)
+**Debt structure in LBO:**1. **Senior Debt** (lowest cost, highest priority)
    - Term Loan A: 5-7 year, amortizing, ~L+300 bps
    - Term Loan B: 7-8 year, minimal amortization, ~L+400 bps
    - Revolver: Undrawn facility for working capital

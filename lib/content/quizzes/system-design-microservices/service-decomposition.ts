@@ -410,8 +410,7 @@ Patient Registration Service (master):
 
 **How Bounded Contexts Help Decomposition:**
 
-**Process:**
-1. **Identify Domains**: What business capabilities exist? (Scheduling, Clinical, Billing, Emergency)
+**Process:**1. **Identify Domains**: What business capabilities exist? (Scheduling, Clinical, Billing, Emergency)
 
 2. **Find Ubiquitous Language**: What terms does business use? (Patient, Appointment, Diagnosis, Invoice)
 
@@ -431,9 +430,7 @@ When asked to design a complex system:
 4. "Each bounded context becomes a microservice with its own data model"
 5. "Services communicate via events or API calls, with eventual consistency"
 
-**Key Takeaways:**
-
-1. Bounded contexts define where domain models are consistent
+**Key Takeaways:**1. Bounded contexts define where domain models are consistent
 2. Same term (Patient, Customer, Product) can mean different things in different contexts
 3. Each bounded context → microservice boundary
 4. Prevents "God object" models (100-column Patient table)
@@ -580,9 +577,7 @@ TOTAL: 6/35
 ✅ **Learning Opportunity**: Safe place to learn microservices patterns
 ✅ **Quick Win**: Can extract in 2-4 weeks
 
-**Phase 1: Preparation (Week 1)**
-
-1. **Build platform infrastructure:**
+**Phase 1: Preparation (Week 1)**1. **Build platform infrastructure:**
    - Set up service discovery (Consul/Eureka)
    - Message queue (RabbitMQ/SQS)
    - Monitoring (Prometheus + Grafana)
@@ -615,9 +610,7 @@ Event Subscriptions:
    - Database (notification history)
    - Monitoring dashboards
 
-**Phase 2: Parallel Run (Weeks 2-3)**
-
-1. **Implement Notification Service:**
+**Phase 2: Parallel Run (Weeks 2-3)**1. **Implement Notification Service:**
    - Build service
    - Integrate with SendGrid/Twilio
    - Store notification history
@@ -648,9 +641,7 @@ Notification Service:
    - Fix discrepancies
    - Monitor errors
 
-**Phase 3: Cutover (Week 4)**
-
-1. **Feature flag to route % of traffic:**
+**Phase 3: Cutover (Week 4)**1. **Feature flag to route % of traffic:**
    - 10% → Notification Service
    - Monitor for errors
    - 50% → Notification Service
@@ -688,8 +679,7 @@ If Notification Service doesn't exist or isn't a bottleneck, Search would be my 
 - Can fail without breaking orders
 - Independent scaling needs
 
-**Approach:**
-1. Set up Elasticsearch
+**Approach:**1. Set up Elasticsearch
 2. Index product data
 3. Keep SQL search as fallback
 4. Route 10% of searches to Elasticsearch
@@ -698,16 +688,14 @@ If Notification Service doesn't exist or isn't a bottleneck, Search would be my 
 
 **Decision Framework Summary:**
 
-**Extract First When Service Has:**
-1. ✅ Low coupling (few dependencies)
+**Extract First When Service Has:**1. ✅ Low coupling (few dependencies)
 2. ✅ Clear boundary (well-defined interface)
 3. ✅ Low risk (failure doesn't break core business)
 4. ✅ Async friendly (or read-only)
 5. ✅ Quick extraction (2-4 weeks)
 6. ✅ Learning value (teaches patterns for next services)
 
-**Don't Extract First When Service:**
-1. ❌ Highly coupled (touches everything)
+**Don't Extract First When Service:**1. ❌ Highly coupled (touches everything)
 2. ❌ Core business logic (high risk)
 3. ❌ Requires distributed transactions
 4. ❌ Complex data relationships

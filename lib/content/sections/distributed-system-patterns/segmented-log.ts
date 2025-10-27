@@ -617,9 +617,7 @@ If segments 0, 1, 3 exist but 2 is missing:
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **Why Segment**: Easier deletion, compaction, recovery, archival
+### **Key Concepts**1. **Why Segment**: Easier deletion, compaction, recovery, archival
 2. **How it works**: Multiple fixed-size files, active vs closed segments
 3. **Rotation**: Size, time, or record-count triggers
 4. **Compaction**: Merge segments, remove duplicates/deletions

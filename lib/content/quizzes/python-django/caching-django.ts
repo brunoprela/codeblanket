@@ -238,9 +238,7 @@ class ArticleViewSet (viewsets.ModelViewSet):
         return Response (serializer.data)
 \`\`\`
 
-**When to Use Each:**
-
-1. **Per-View Caching:**
+**When to Use Each:**1. **Per-View Caching:**
    - Static/semi-static pages
    - Public content
    - Entire response can be cached

@@ -253,9 +253,7 @@ class TokenRefreshSerializer (serializers.Serializer):
         return data
 \`\`\`
 
-**Security Considerations:**
-
-1. **Token Storage:**
+**Security Considerations:**1. **Token Storage:**
    - Store refresh tokens securely (httpOnly cookies)
    - Never store in localStorage for XSS protection
 

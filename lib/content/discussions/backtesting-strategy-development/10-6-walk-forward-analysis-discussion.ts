@@ -1417,9 +1417,7 @@ if __name__ == "__main__":
     print(results)
 \`\`\`
 
-#### Key Differences from Traditional Walk-Forward
-
-1. **Time Scales**: Hours instead of months
+**#### Key Differences from Traditional Walk-Forward**1. **Time Scales**: Hours instead of months
 2. **Data Handling**: Tick data requires specialized processing
 3. **Optimization Speed**: Must complete in minutes
 4. **Regime Awareness**: Adapt to microstructure changes

@@ -15,8 +15,7 @@ export const binary_searchProblem: Problem = {
 
 Given a sorted array and a target value, return the index where target is found, or -1 if not found.
 
-**Binary Search Algorithm:**
-1. Compare target with middle element
+**Binary Search Algorithm:**1. Compare target with middle element
 2. If equal, return middle index
 3. If target is less, search left half
 4. If target is greater, search right half

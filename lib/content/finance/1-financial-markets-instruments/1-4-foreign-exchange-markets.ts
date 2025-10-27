@@ -539,8 +539,7 @@ print(f"   Capital Account: +\${bop['capital_account']}B (inflows)")
 print(f"   Effect: {bop['effect']}")
 \`\`\`
 
-**Real-World Factors:**
-1. **Central Bank Policy**: Fed rate hikes strengthen USD
+**Real-World Factors:**1. **Central Bank Policy**: Fed rate hikes strengthen USD
 2. **Economic Growth**: Stronger growth → stronger currency
 3. **Political Stability**: Uncertainty weakens currency (Brexit → GBP crashed)
 4. **Trade Balance**: Exports > Imports → currency appreciates
@@ -1045,9 +1044,7 @@ print(f"  New Balance: \${close_result['new_balance']:,.0f}")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Largest Market**: $7.5T daily, 24/7 trading, decentralized
+**Key Takeaways:**1. **Largest Market**: $7.5T daily, 24/7 trading, decentralized
 2. **Currency Pairs**: Always quoted BASE/QUOTE (EUR/USD, GBP/USD, etc.)
 3. **Majors vs Exotics**: Stick to majors for tight spreads and liquidity
 4. **Spot vs Forward**: Spot = immediate (T+2), Forward = future delivery

@@ -1,7 +1,7 @@
 export const backtestingPortfolios = {
-    title: 'Backtesting Portfolios',
-    id: 'backtesting-portfolios',
-    content: `
+  title: 'Backtesting Portfolios',
+  id: 'backtesting-portfolios',
+  content: `
 # Backtesting Portfolios
 
 ## Introduction
@@ -12,9 +12,7 @@ export const backtestingPortfolios = {
 
 Simulating a portfolio strategy on historical data to see how it would have performed. It answers: "If I had followed this strategy over the past 10 years, what would my returns have been?"
 
-**Why Backtest?**
-
-1. **Validate Ideas**: Does value investing actually work?
+**Why Backtest?**1. **Validate Ideas**: Does value investing actually work?
 2. **Parameter Tuning**: Is 3% rebalancing threshold better than 5%?
 3. **Risk Assessment**: What was the max drawdown?
 4. **Cost Analysis**: Are transaction costs too high?
@@ -568,7 +566,7 @@ class BacktestEngine:
             
             # Progress
             if i % 252 == 0:
-                print(f"  Year {i//252}: Portfolio value = ${portfolio_value:, .0f
+                print(f"  Year {i//252}: Portfolio value = \${portfolio_value:,.0f}
 }, Leverage = { leverage: .2f }x")
 
 print(f"✓ Backtest complete: {len(self.trades)} trades executed\\n")
@@ -703,7 +701,7 @@ for metric, value in metrics.items():
     elif any(x in metric for x in ['Return', 'Volatility', 'Drawdown', 'Rate', '%']):
     print(f"{metric:30s}: {value:.2%}")
     elif 'Costs' in metric:
-print(f"{metric:30s}: ${value:.2f}")
+print(f"{metric:30s}: \${value:.2f}")
     elif 'Leverage' in metric:
 print(f"{metric:30s}: {value:.2f}x")
     else:
@@ -938,4 +936,3 @@ Backtest on full dataset → overfit to that specific history.
 In the final section of this module, we'll build a **Module Project: Portfolio Optimization Platform**: an end-to-end system combining everything we've learned into a production-ready portfolio optimization and backtesting platform.
 `,
 };
-

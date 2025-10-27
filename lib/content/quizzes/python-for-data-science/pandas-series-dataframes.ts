@@ -7,9 +7,7 @@ export const pandasseriesdataframesQuiz: QuizQuestion[] = [
       'Explain the relationship between Pandas and NumPy. Why does Pandas build on NumPy, and when would you use each library?',
     sampleAnswer: `Pandas and NumPy have a symbiotic relationship—Pandas is built on top of NumPy, extending its capabilities for practical data analysis while maintaining performance.
 
-**Technical Relationship:**
-
-1. **Under the Hood**: Every Pandas Series and DataFrame column is backed by a NumPy array
+**Technical Relationship:**1. **Under the Hood**: Every Pandas Series and DataFrame column is backed by a NumPy array
 \`\`\`python
 import pandas as pd
 import numpy as np
@@ -64,9 +62,7 @@ df = pd.DataFrame({
 value = df.loc[0, 'Salary',]  # Self-documenting
 \`\`\`
 
-**When to Use NumPy:**
-
-1. **Numerical computing**: Pure numerical operations, linear algebra
+**When to Use NumPy:**1. **Numerical computing**: Pure numerical operations, linear algebra
 \`\`\`python
 # Matrix multiplication, eigenvalues, etc.
 A = np.random.randn(1000, 1000)
@@ -93,9 +89,7 @@ X = np.random.randn(32, 10)  # Batch of 32, 10 features
 X_torch = torch.from_numpy(X)
 \`\`\`
 
-**When to Use Pandas:**
-
-1. **Tabular data**: Datasets with rows and columns
+**When to Use Pandas:**1. **Tabular data**: Datasets with rows and columns
 \`\`\`python
 # Employee data with mixed types
 df = pd.DataFrame({
@@ -137,9 +131,7 @@ df = pd.read_csv('data.csv')
 df.to_excel('output.xlsx')
 \`\`\`
 
-**Typical Data Science Workflow:**
-
-1. **Load data**: Pandas (read_csv, read_sql)
+**Typical Data Science Workflow:**1. **Load data**: Pandas (read_csv, read_sql)
 2. **Clean data**: Pandas (dropna, fillna, replace)
 3. **Feature engineering**: Pandas (groupby, merge, transform)
 4. **Convert to NumPy**: For ML model input
@@ -345,9 +337,7 @@ subset = df[df['Age',] > 30].copy()
 - Iterating through DataFrame
 - Working with numerical positions
 
-**Best Practices:**
-
-1. **Prefer .loc for clarity**
+**Best Practices:**1. **Prefer .loc for clarity**
 \`\`\`python
 # Instead of: value = df[df['Age',] > 30]['Salary',].iloc[0]
 # Write: value = df.loc[df['Age',] > 30, 'Salary',].iloc[0]
@@ -566,9 +556,7 @@ def optimize_dtypes (df):
 df_opt = optimize_dtypes (df)
 \`\`\`
 
-**Performance Implications:**
-
-1. **Smaller dtypes = faster operations**
+**Performance Implications:**1. **Smaller dtypes = faster operations**
 \`\`\`python
 # int8 vs int64: 8x less data to move through CPU cache
 arr_int8 = np.random.randint(0, 100, 10_000_000, dtype=np.int8)
@@ -650,9 +638,7 @@ print(f"Optimized memory: {df_opt.memory_usage (deep=True).sum() / 1e6:.0f} MB")
 # Difference between fitting in RAM or not
 \`\`\`
 
-**Best Practices:**
-
-1. **Check memory usage regularly**
+**Best Practices:**1. **Check memory usage regularly**
 \`\`\`python
 df.memory_usage (deep=True)
 df.info (memory_usage='deep')

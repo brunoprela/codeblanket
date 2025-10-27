@@ -56,9 +56,7 @@ For "bank": weighted combination of layers
 Context-specific embedding
 \`\`\`
 
-**Key Benefits:**
-
-1. **Automatic Disambiguation:**
+**Key Benefits:**1. **Automatic Disambiguation:**
    - No manual sense annotation needed
    - Model learns from surrounding words
    - Different contexts → different vectors automatically
@@ -243,9 +241,7 @@ Final embedding for "bank":
   = context from both directions
 \`\`\`
 
-**Why Both Directions Matter:**
-
-1. **Syntactic Structure:**
+**Why Both Directions Matter:**1. **Syntactic Structure:**
    - Forward: Subject-verb patterns
    - Backward: Object-verb patterns
    - Both: Complete parse understanding
@@ -299,9 +295,7 @@ Natural language meaning is not purely left-to-right. Humans read entire sentenc
       'ELMo marked a transition point in NLP before the transformer revolution. Compare ELMo to modern transformer-based models (BERT). What advantages did ELMo demonstrate, and what limitations led to transformers becoming dominant?',
     sampleAnswer: `ELMo was a crucial stepping stone that proved contextualized embeddings work, but transformers (BERT) overcame its architectural limitations.
 
-**ELMo\'s Groundbreaking Contributions:**
-
-1. **Proved Contextualized Embeddings Work:**
+**ELMo\'s Groundbreaking Contributions:**1. **Proved Contextualized Embeddings Work:**
    - First widely-adopted contextualized embedding
    - Showed dramatic improvements over static embeddings
    - +4-6% across many NLP tasks
@@ -321,9 +315,7 @@ Natural language meaning is not purely left-to-right. Humans read entire sentenc
    - Character CNN handled OOV words
    - Robust to typos and morphological variation
 
-**ELMo's Architectural Limitations:**
-
-1. **Sequential Processing (LSTMs):**
+**ELMo's Architectural Limitations:**1. **Sequential Processing (LSTMs):**
 
 \`\`\`
 LSTM processes words one-by-one:
@@ -374,9 +366,7 @@ Not jointly optimized on bidirectional objective
 - Each LSTM step depends on previous step
 - No attention mechanism (all context funneled through hidden state)
 
-**How BERT (Transformers) Improved:**
-
-1. **Parallel Processing:**
+**How BERT (Transformers) Improved:**1. **Parallel Processing:**
 
 \`\`\`
 Transformer (BERT):
@@ -448,9 +438,7 @@ Benchmark results (relative improvements):
 
 ELMo was major improvement, BERT was even larger improvement.
 
-**Why Transformers Won:**
-
-1. **Speed:** 10-100x faster training due to parallelization
+**Why Transformers Won:**1. **Speed:** 10-100x faster training due to parallelization
 2. **Quality:** Better performance on virtually all tasks
 3. **Scalability:** Can train much larger models effectively
 4. **Flexibility:** Same architecture for many tasks

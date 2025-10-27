@@ -25,9 +25,7 @@ This is one of the most asked tree problems at FAANG companies because it tests:
 - Edge case handling (null nodes, single nodes, etc.)
 - Design skills (choosing the right format)
 
-**Key Concepts:**
-
-1. **Serialization Strategy:** Convert tree to string representation
+**Key Concepts:**1. **Serialization Strategy:** Convert tree to string representation
    - Can use pre-order, level-order, or post-order traversal
    - Must encode null nodes to preserve structure
    

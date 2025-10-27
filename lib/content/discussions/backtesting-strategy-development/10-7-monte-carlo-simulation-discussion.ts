@@ -1,13 +1,13 @@
 import { Content } from '@/lib/types';
 
 const monteCarloSimulationDiscussion: Content = {
-    title: 'Monte Carlo Simulation - Discussion Questions',
-    description:
-        'Deep-dive discussion questions on Monte Carlo methods, bootstrap resampling, stress testing, and confidence interval analysis for trading strategies',
-    sections: [
-        {
-            title: 'Discussion Questions',
-            content: `
+  title: 'Monte Carlo Simulation - Discussion Questions',
+  description:
+    'Deep-dive discussion questions on Monte Carlo methods, bootstrap resampling, stress testing, and confidence interval analysis for trading strategies',
+  sections: [
+    {
+      title: 'Discussion Questions',
+      content: `
 # Discussion Questions: Monte Carlo Simulation for Trading
 
 ## Question 1: Designing a Monte Carlo Framework for Strategy Validation
@@ -1248,8 +1248,8 @@ The key differences from equity Monte Carlo:
 
 This enables proper validation of complex options strategies before live deployment.
 `,
-        },
-    ],
+    },
+  ],
 };
 
 export default monteCarloSimulationDiscussion;

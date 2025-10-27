@@ -65,9 +65,7 @@ This pipeline involves several key components:
 
 Most modern video generation systems (including Sora) are based on **diffusion models**:
 
-**How Diffusion Works for Video:**
-
-1. **Forward Process (Training)**:
+**How Diffusion Works for Video:**1. **Forward Process (Training)**:
    - Start with real video frames
    - Gradually add noise over many steps
    - Train model to predict and remove noise

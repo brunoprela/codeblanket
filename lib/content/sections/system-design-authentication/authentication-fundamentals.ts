@@ -19,7 +19,7 @@ export const authenticationfundamentalsSection = {
 - Roles, access control lists (ACLs)
 - Answers: "Does this person have permission to do X?"
 
-**Example**: 
+**Example**:
 - Authentication: You log into Salesforce with your email/password → Proven you're John Smith
 - Authorization: Salesforce checks if John Smith can view customer records → Permission granted
 
@@ -90,7 +90,7 @@ The **authentication authority** that knows who users are.
 - Issue authentication assertions/tokens
 - Maintain session state
 
-**Examples**: 
+**Examples**:
 - **Enterprise**: Okta, Auth0, Microsoft Entra ID (Azure AD), Ping Identity
 - **Social**: Google, Facebook, GitHub (for "Sign in with Google")
 - **On-premise**: Active Directory + ADFS
@@ -114,7 +114,7 @@ The **application** users want to access.
 \`\`\`
 Before SSO:
 User → App A (password 1)
-User → App B (password 2)  
+User → App B (password 2)
 User → App C (password 3)
 → 3 passwords to remember, 3 places to hack
 
@@ -202,7 +202,7 @@ There are three main protocols for implementing SSO:
 2. **Master key problem**: IdP compromise = all apps compromised
 3. **Session management**: Long-lived SSO sessions can be risky
 
-**Mitigation**: 
+**Mitigation**:
 - High availability for IdP (multi-region)
 - Strong IdP security (MFA, monitoring, zero-trust)
 - Adaptive authentication (re-auth for sensitive operations)

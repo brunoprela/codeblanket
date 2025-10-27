@@ -20,8 +20,7 @@ Scenario: 1 item left in stock
 - Result: Sold 2 items when we only had 1 (oversold)
 \`\`\`
 
-**Business Impact of Overselling:**
-1. **Customer dissatisfaction**: Canceling orders after payment
+**Business Impact of Overselling:**1. **Customer dissatisfaction**: Canceling orders after payment
 2. **Reputation damage**: "Retailer oversells products"
 3. **Legal issues**: Advertising products you can't deliver
 4. **Lost trust**: Customers won't trust future purchases
@@ -120,8 +119,7 @@ Cassandra (AP):
 
 **Recommendation:**
 
-**Keep CP, improve availability:**
-1. **Implement HA setup** (primary + 3 replicas, auto-failover) → Reduces downtime from 5 minutes to <30 seconds
+**Keep CP, improve availability:**1. **Implement HA setup** (primary + 3 replicas, auto-failover) → Reduces downtime from 5 minutes to <30 seconds
 2. **Add fallback UX** (cached product pages in read-only mode) → Degraded but functional
 3. **Use AP for non-critical data** (product catalog, reviews) → Offload PostgreSQL
 

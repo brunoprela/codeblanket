@@ -23,9 +23,7 @@ Therefore:
 - Maximum rate of increase: Direction of ∇f, magnitude ||∇f||
 - Maximum rate of decrease: Direction of -∇f, magnitude ||∇f||
 
-**Why This Matters for Optimization:**
-
-1. **Gradient Descent Foundation**: Moving in direction -∇f gives steepest decrease, explaining why gradient descent works.
+**Why This Matters for Optimization:**1. **Gradient Descent Foundation**: Moving in direction -∇f gives steepest decrease, explaining why gradient descent works.
 
 2. **Convergence Speed**: Larger ||∇f|| means faster decrease is possible. When ||∇f|| → 0, we're near a critical point.
 
@@ -69,9 +67,7 @@ where:
 - β ∈ [0, 1) is momentum coefficient (typically 0.9)
 - α is learning rate
 
-**How It Works:**
-
-1. **Direction Accumulation**: Velocity is exponential moving average of gradients:
+**How It Works:**1. **Direction Accumulation**: Velocity is exponential moving average of gradients:
    v_t = -α(∇L_t + β∇L_{t-1} + β²∇L_{t-2} + ...)
    
    Past gradients contribute with exponentially decaying weights.
@@ -171,8 +167,7 @@ This makes momentum especially valuable for:
     hint: 'Consider optimizing on manifolds like the unit sphere, and applications like orthogonal weights or probability simplexes.',
     sampleAnswer: `**Projected Gradient Descent (PGD):**
 
-**Algorithm:**
-1. Compute gradient: g = ∇f (x_t)
+**Algorithm:**1. Compute gradient: g = ∇f (x_t)
 2. Take gradient step: y = x_t - αg
 3. Project onto constraint set: x_{t+1} = Proj_C(y)
 
@@ -303,9 +298,7 @@ For convex f and convex constraint set C:
 | Lagrange | Exact (at optimum) | Dual variables | Complex |
 | Projected GD | Always exact | None | Moderate |
 
-**Best Practices:**
-
-1. **Use projection when:**
+**Best Practices:**1. **Use projection when:**
    - Hard constraints required
    - Efficient projection available
    - Constraints are convex

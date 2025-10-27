@@ -1,10 +1,11 @@
 import { DiscussionQuestion } from '@/lib/types';
 
 export const orderBookSimulatorQuiz: DiscussionQuestion[] = [
-    {
-        id: 'order-book-simulator-dq-1',
-        question: 'Optimize the order book matching engine to handle 100,000+ orders per second with sub-microsecond median latency. Analyze the current implementation and propose specific optimizations: (1) Data structure improvements (priority queues vs balanced trees vs hash maps), (2) Memory management strategies (object pooling, pre-allocation, cache-friendly layouts), (3) Lock-free concurrency techniques for multi-threaded matching, (4) CPU optimization (SIMD, cache locality, branch prediction), and (5) Profiling methodology to identify bottlenecks. Include code examples demonstrating 10x performance improvement and explain trade-offs between throughput and latency.',
-        sampleAnswer: `Achieving 100K+ orders/second with sub-microsecond latency requires aggressive optimization across data structures, memory management, and CPU utilization. Here's a systematic approach to 10x performance improvement:
+  {
+    id: 'order-book-simulator-dq-1',
+    question:
+      'Optimize the order book matching engine to handle 100,000+ orders per second with sub-microsecond median latency. Analyze the current implementation and propose specific optimizations: (1) Data structure improvements (priority queues vs balanced trees vs hash maps), (2) Memory management strategies (object pooling, pre-allocation, cache-friendly layouts), (3) Lock-free concurrency techniques for multi-threaded matching, (4) CPU optimization (SIMD, cache locality, branch prediction), and (5) Profiling methodology to identify bottlenecks. Include code examples demonstrating 10x performance improvement and explain trade-offs between throughput and latency.',
+    sampleAnswer: `Achieving 100K+ orders/second with sub-microsecond latency requires aggressive optimization across data structures, memory management, and CPU utilization. Here's a systematic approach to 10x performance improvement:
 
 **1. Data Structure Analysis and Optimization**
 
@@ -455,14 +456,15 @@ public:
 **Recommendation:** Single-order for HFT market making, batching for exchange infrastructure.
 
 This systematic optimization achieves 10-15x performance improvement through data structure redesign, memory pooling, cache optimization, and elimination of synchronization overhead.`,
-        sampleAnswer: `Achieving 100K+ orders/second with sub-microsecond latency requires aggressive optimization across data structures, memory management, and CPU utilization. Here's a systematic approach to 10x performance improvement:
+    sampleAnswer: `Achieving 100K+ orders/second with sub-microsecond latency requires aggressive optimization across data structures, memory management, and CPU utilization. Here's a systematic approach to 10x performance improvement:
 
-(Full expanded answer above - continuing with next question...)`
-    },
-    {
-        id: 'order-book-simulator-dq-2',
-        question: 'Design a comprehensive market data distribution system for your order book simulator that supports: (1) Level 1/2/3 data feeds with different subscription tiers, (2) Multicast UDP for lowest-latency distribution, (3) Guaranteed reliable TCP fallback for dropped packets, (4) Conflation strategies to reduce bandwidth during high volatility, and (5) Historical tick data replay for backtesting. Explain the trade-offs between UDP (fast, unreliable) and TCP (reliable, slower), how to implement sequence numbers for gap detection, and architecture for supporting 10,000+ simultaneous subscribers without impacting matching engine performance.',
-        sampleAnswer: `Market data distribution must balance ultra-low latency with reliability and scalability. Here's a production-grade architecture:
+(Full expanded answer above - continuing with next question...)`,
+  },
+  {
+    id: 'order-book-simulator-dq-2',
+    question:
+      'Design a comprehensive market data distribution system for your order book simulator that supports: (1) Level 1/2/3 data feeds with different subscription tiers, (2) Multicast UDP for lowest-latency distribution, (3) Guaranteed reliable TCP fallback for dropped packets, (4) Conflation strategies to reduce bandwidth during high volatility, and (5) Historical tick data replay for backtesting. Explain the trade-offs between UDP (fast, unreliable) and TCP (reliable, slower), how to implement sequence numbers for gap detection, and architecture for supporting 10,000+ simultaneous subscribers without impacting matching engine performance.',
+    sampleAnswer: `Market data distribution must balance ultra-low latency with reliability and scalability. Here's a production-grade architecture:
 
 **1. System Architecture**
 
@@ -866,8 +868,7 @@ class ScalableMarketDataSystem:
                 # Generate market data messages for each level
                 self.generate_and_send_messages(event)
 
-**Key Scalability Techniques:**
-1. **Matching engine isolation:** Zero subscriber impact (separate process/cores)
+**Key Scalability Techniques:**1. **Matching engine isolation:** Zero subscriber impact (separate process/cores)
 2. **UDP multicast:** Network handles fan-out, not publisher
 3. **CPU pinning:** Publisher on dedicated cores (no context switches)
 4. **Zero-copy:** Shared memory avoids serialization overhead
@@ -916,12 +917,13 @@ class HistoricalDataReplayer:
 - Training machine learning models
 - Debugging market data issues
 
-This architecture achieves <200μs UDP latency, supports 10,000+ subscribers via multicast, provides TCP fallback for reliability, and scales independently of matching engine performance.`
-    },
-    {
-        id: 'order-book-simulator-dq-3',
-        question: 'Implement comprehensive pre-trade and post-trade risk management for the order book simulator. Your system must: (1) Enforce position limits and prevent traders from exceeding maximum exposure, (2) Implement dynamic margin requirements that adjust during volatility, (3) Detect wash trading and self-matching (same participant on both sides), (4) Monitor for layering/spoofing patterns in real-time, and (5) Provide circuit breakers that halt trading when price moves exceed thresholds. Describe the architecture for real-time risk checks that add <10 microseconds to execution latency, how to integrate with the matching engine without blocking, and regulatory reporting requirements (CAT, MiFID II).',
-        sampleAnswer: `Production risk management must protect market integrity without sacrificing performance. Here's a comprehensive implementation:
+This architecture achieves <200μs UDP latency, supports 10,000+ subscribers via multicast, provides TCP fallback for reliability, and scales independently of matching engine performance.`,
+  },
+  {
+    id: 'order-book-simulator-dq-3',
+    question:
+      'Implement comprehensive pre-trade and post-trade risk management for the order book simulator. Your system must: (1) Enforce position limits and prevent traders from exceeding maximum exposure, (2) Implement dynamic margin requirements that adjust during volatility, (3) Detect wash trading and self-matching (same participant on both sides), (4) Monitor for layering/spoofing patterns in real-time, and (5) Provide circuit breakers that halt trading when price moves exceed thresholds. Describe the architecture for real-time risk checks that add <10 microseconds to execution latency, how to integrate with the matching engine without blocking, and regulatory reporting requirements (CAT, MiFID II).',
+    sampleAnswer: `Production risk management must protect market integrity without sacrificing performance. Here's a comprehensive implementation:
 
 **1. Real-Time Risk Check Architecture (<10μs Latency)**
 
@@ -1287,7 +1289,7 @@ class CircuitBreakerSystem:
                                 ref_price: float, change_pct: float):
         """Trigger circuit breaker (halt trading)"""
         print(f"[CIRCUIT BREAKER] {symbol}: {change_pct*100:.1f}% move")
-        print(f"  Reference: ${ref_price:.2f}, Current: ${price:.2f}")
+        print(f"  Reference: \${ref_price:.2f}, Current: \${price:.2f}")
         
         # Halt trading
         self.trading_halted.add(symbol)
@@ -1358,6 +1360,6 @@ def generate_mifid_report(self, trade: Trade):
         'tradingCapacity': 'PRIN'  # Principal
     }
 
-This comprehensive risk management system maintains <10μs latency for pre-trade checks while providing robust protection against wash trading, spoofing, and excessive risk-taking, with full regulatory compliance.`
-    }
+This comprehensive risk management system maintains <10μs latency for pre-trade checks while providing robust protection against wash trading, spoofing, and excessive risk-taking, with full regulatory compliance.`,
+  },
 ];

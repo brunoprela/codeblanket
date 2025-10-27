@@ -1,7 +1,7 @@
 export const bidAskSpreadDecomposition = {
-    title: 'Bid-Ask Spread Decomposition',
-    id: 'bid-ask-spread-decomposition',
-    content: `
+  title: 'Bid-Ask Spread Decomposition',
+  id: 'bid-ask-spread-decomposition',
+  content: `
 # Bid-Ask Spread Decomposition
 
 ## Introduction
@@ -195,7 +195,7 @@ trades = [
 result = glosten_harris_decomposition(trades)
 print(f"Adverse Selection: {result['adverse_selection_pct']:.1%}")
 print(f"Order Processing: {result['order_processing_pct']:.1%}")
-print(f"Effective Spread: \${result['effective_spread']: .4f}")
+print(f"Effective Spread: \${result['effective_spread']:.4f}")
 \`\`\`
 
 ---
@@ -911,8 +911,7 @@ compare_asset_classes()
 
 ## Key Takeaways
 
-1. **Spread = Order Processing + Inventory + Adverse Selection**
-2. **Roll model**: Simple but underestimates (ignores information)
+1. **Spread = Order Processing + Inventory + Adverse Selection**2. **Roll model**: Simple but underestimates (ignores information)
 3. **Glosten-Harris**: Decomposes permanent (adverse selection) vs transitory (processing)
 4. **Kyle lambda**: Measures price impact per unit volume (adverse selection intensity)
 5. **High adverse selection**: Market makers widen spreads (protect from informed traders)

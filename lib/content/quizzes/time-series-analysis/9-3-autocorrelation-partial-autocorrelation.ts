@@ -15,9 +15,7 @@ export const autocorrelationPartialAutocorrelationQuiz = [
 - Momentum ETF may have unique properties (rebalancing creates autocorrelation)
 - Cross-asset contagion creates predictability
 
-**B. Spurious Patterns (NOT Exploitable):**
-
-1. **Non-synchronous trading:**
+**B. Spurious Patterns (NOT Exploitable):**1. **Non-synchronous trading:**
    - ETF holds stocks that trade at different times
    - Stale prices create artificial autocorrelation
    - Formula: \\(ACF_{spurious} \\approx (1-p)^2 / [1+p^2-2p]\\) where p = % of stale prices
@@ -559,8 +557,7 @@ print("High volatility today → High volatility tomorrow")
 
 ### Part 3: Why Simple ARIMA Fails
 
-**ARIMA assumptions:**
-1. ✓ Linear dependence in conditional mean
+**ARIMA assumptions:**1. ✓ Linear dependence in conditional mean
 2. ✗ **Constant conditional variance** (homoskedasticity)
 3. ✗ **Independent residuals**
 
@@ -580,8 +577,7 @@ Reality:
   where ε_t ~ N(0, σ_t²)  ← TIME-VARYING variance!
 \`\`\`
 
-**Consequences of using ARIMA:**
-1. **Inefficient forecasts** - not using variance information
+**Consequences of using ARIMA:**1. **Inefficient forecasts** - not using variance information
 2. **Wrong confidence intervals** - assume constant vol
 3. **Underestimate risk** - miss volatility spikes
 4. **Missed trading opportunities** - volatility is tradeable!
@@ -745,9 +741,7 @@ def validate_ar_garch(model_results, returns: pd.Series) -> dict:
     return validation
 \`\`\`
 
-**Additional Considerations:**
-
-1. **If Student-t distribution fits better:**
+**Additional Considerations:**1. **If Student-t distribution fits better:**
    - Fat tails beyond GARCH
    - Use `dist='t'` in arch_model
 
@@ -760,11 +754,8 @@ def validate_ar_garch(model_results, returns: pd.Series) -> dict:
 
 ### Summary
 
-**Your situation:**
-1. ✗ AR(1) residuals correlated → Model incomplete
-2. ✗ Squared residuals correlated → **Volatility clustering**
-3. ✓ Use **AR(1)-GARCH(1,1)**
-4. ✓ Validate: Check standardized residuals are white noise
+**Your situation:**1. ✗ AR(1) residuals correlated → Model incomplete
+2. ✗ Squared residuals correlated → **Volatility clustering**3. ✓ Use **AR(1)-GARCH(1,1)**4. ✓ Validate: Check standardized residuals are white noise
 
 **Why GARCH matters:**
 - Better volatility forecasts → Better risk management
@@ -882,8 +873,7 @@ print(analysis_05['interpretation'])
 - Decay to 10% takes **44 periods**
 - Decay to 1% takes **90 periods**
 
-**Why this is DANGEROUS for trading:**
-1. **Long holding periods** → More risk exposure
+**Why this is DANGEROUS for trading:**1. **Long holding periods** → More risk exposure
 2. **Slow convergence** → Spread can widen before reverting
 3. **Higher drawdowns** → Can go 3-4 std devs before reverting
 4. **Opportunity cost** → Capital tied up for months
@@ -1147,9 +1137,7 @@ print(realistic['summary'])
 
 ### Summary
 
-**Your colleague is WRONG:**
-
-1. **ACF(1)=0.95 = SLOW mean reversion, NOT fast**
+**Your colleague is WRONG:**1. **ACF(1)=0.95 = SLOW mean reversion, NOT fast**
    - Half-life: 13.5 periods
    - Takes 90 periods to decay to 1%
 

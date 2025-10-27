@@ -14,8 +14,7 @@ export const prime_numbersProblem: Problem = {
 
 **Prime Number:** A natural number greater than 1 that has no positive divisors other than 1 and itself.
 
-**Sieve of Eratosthenes:**
-1. Create a list of consecutive integers from 2 to n
+**Sieve of Eratosthenes:**1. Create a list of consecutive integers from 2 to n
 2. Start with the first number (2)
 3. Mark all multiples of that number (except the number itself) as composite
 4. Move to the next unmarked number and repeat

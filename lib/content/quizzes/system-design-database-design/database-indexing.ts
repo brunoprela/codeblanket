@@ -24,9 +24,7 @@ CREATE TABLE products (
 );
 \`\`\`
 
-**Index Strategy:**
-
-1. **Category Browsing:**
+**Index Strategy:**1. **Category Browsing:**
 \`\`\`sql
 CREATE INDEX idx_category_popularity ON products (category, popularity_score DESC)
 WHERE stock_quantity > 0;
@@ -75,9 +73,7 @@ WHERE created_at > NOW() - INTERVAL '30 days';
 - Search: 5000ms → 50ms (100x faster)
 - Price filter: 2000ms → 20ms (100x faster)
 
-**Optimization Strategies:**
-
-1. **Partition by Category:** Split hot categories into separate partitions with independent indexes
+**Optimization Strategies:**1. **Partition by Category:** Split hot categories into separate partitions with independent indexes
 2. **Materialized Views:** Pre-compute popular queries (e.g., "trending products")
 3. **Cache Layer:** Redis for top 1% of products (99% of traffic)
 4. **Index Maintenance:** Weekly REINDEX during low-traffic windows
@@ -219,9 +215,7 @@ On cache miss:
 | Fan-out | 20ms | 100ms | 3x | High |
 | Covering + Cache | 50ms | 10ms | 1.5x | Medium |
 
-**Recommended Architecture:**
-
-1. **Hot Data (Last 7 days):** Redis cache + time-partitioned DB
+**Recommended Architecture:**1. **Hot Data (Last 7 days):** Redis cache + time-partitioned DB
 2. **Warm Data (7-30 days):** Time-partitioned DB with covering indexes
 3. **Cold Data (30+ days):** Archived to compressed storage
 4. **Celebrities:** Separate fan-out strategy (on-read mixing)
@@ -438,9 +432,7 @@ CREATE INDEX idx_active ON orders (user_id, created_at)
 WHERE status IN ('pending', 'processing');
 \`\`\`
 
-**Tools and Utilities:**
-
-1. **pg_stat_statements:** Query performance tracking
+**Tools and Utilities:**1. **pg_stat_statements:** Query performance tracking
 2. **EXPLAIN ANALYZE:** Query plan analysis
 3. **pgBadger:** Log analysis and visualization
 4. **pg_hero:** Index suggestions and bloat detection

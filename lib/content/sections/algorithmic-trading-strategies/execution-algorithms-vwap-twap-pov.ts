@@ -1,8 +1,9 @@
 export const executionAlgorithms = {
-    title: 'Execution Algorithms (VWAP, TWAP, POV)',
-    slug: 'execution-algorithms-vwap-twap-pov',
-    description: 'Master execution algorithms for minimizing market impact: VWAP, TWAP, POV, and implementation shortfall',
-    content: `
+  title: 'Execution Algorithms (VWAP, TWAP, POV)',
+  slug: 'execution-algorithms-vwap-twap-pov',
+  description:
+    'Master execution algorithms for minimizing market impact: VWAP, TWAP, POV, and implementation shortfall',
+  content: `
 # Execution Algorithms
 
 ## Introduction: The Art of Large Order Execution
@@ -42,8 +43,7 @@ Scenario: Need to buy 1,000,000 shares of XYZ stock
 - Average daily volume: 10,000,000 shares
 - Order size: 10% of daily volume
 
-**Naive Approach (Market Order):**
-1. Submit market order for 1M shares
+**Naive Approach (Market Order):**1. Submit market order for 1M shares
 2. Sweep through order book levels:
    - 10K shares @ $50.00
    - 20K shares @ $50.05
@@ -53,13 +53,11 @@ Scenario: Need to buy 1,000,000 shares of XYZ stock
 3. Average fill: $50.25 (25 bps above initial price)
 4. **Cost: $250,000 in market impact**
 
-**Smart Approach (Execution Algorithm):**
-1. Split order into 100 slices over 6 hours
+**Smart Approach (Execution Algorithm):**1. Split order into 100 slices over 6 hours
 2. Execute 10,000 shares every 3.6 minutes
 3. Follow market volume patterns
 4. Average fill: $50.05 (5 bps above initial)
-5. **Cost: $50,000 in market impact**
-6. **Savings: $200,000**
+5. **Cost: $50,000 in market impact**6. **Savings: $200,000**
 
 \`\`\`python
 from dataclasses import dataclass
@@ -284,8 +282,7 @@ if __name__ == "__main__":
 - Predictable execution pattern
 - Easy to explain to clients
 
-**How It Works:**
-1. Obtain historical intraday volume profile
+**How It Works:**1. Obtain historical intraday volume profile
 2. Allocate order proportionally to expected volume
 3. Execute slices throughout the day
 4. Adjust in real-time based on actual volume
@@ -451,7 +448,7 @@ class VWAPAlgorithm:
         self.execution_slices.append(slice_result)
         
         self.logger.info(
-            f"{timestamp}: Executed {actual_shares}/{target_shares} shares @ ${current_price: .2f
+            f"{timestamp}: Executed {actual_shares}/{target_shares} shares @ \${current_price:.2f}
 } "
             f"(Total: {self.executed_shares}/{self.total_shares})"
         )
@@ -742,8 +739,7 @@ class TWAPAlgorithm:
 - Want to be "invisible" in market flow
 - Market volume patterns uncertain
 
-**How It Works:**
-1. Set target participation rate (e.g., 10%)
+**How It Works:**1. Set target participation rate (e.g., 10%)
 2. Monitor real-time market volume
 3. Execute 10% of whatever the market trades
 4. Adapt dynamically to volume changes
@@ -858,8 +854,7 @@ class POVAlgorithm:
 
 **Goal**: Minimize total cost (not just benchmark)
 
-**Components of Implementation Shortfall:**
-1. **Timing Cost**: Price moves while waiting
+**Components of Implementation Shortfall:**1. **Timing Cost**: Price moves while waiting
 2. **Market Impact**: Price moves from our trading
 3. **Opportunity Cost**: Unfilled shares
 

@@ -186,15 +186,15 @@ def compare_multistep_forecasts():
     forecast_price_from_returns = last_price * np.exp(np.cumsum(forecast_return))
     
     print("\\n=== Multi-Step Forecast Comparison ===\\n")
-    print(f"Current price: ${last_price:.2f}\\n")
+    print(f"Current price: \${last_price:.2f}\\n")
     
     print("20-step forecast:")
     print(f"{'Step':<6} {'Direct Price':<15} {'From Returns':<15} {'Difference':<10}")
     print("-" * 50)
     for i in range(0, horizon, 5):
         diff = forecast_price.iloc[i] - forecast_price_from_returns.iloc[i]
-        print(f"{i+1:<6} ${forecast_price.iloc[i]:<14.2f} "
-              f"${forecast_price_from_returns.iloc[i]:<14.2f} ${diff:<9.2f}")
+        print(f"{i+1:<6} \${forecast_price.iloc[i]:<14.2f} "
+              f"\${forecast_price_from_returns.iloc[i]:<14.2f} \${diff:<9.2f}")
     
     print(f"\\nObservation: Differences grow with horizon!")
     print(f"  Reason: ARIMA on prices assumes constant drift in levels")
@@ -216,9 +216,7 @@ During market crashes (-20% days):
 
 **Recommendation: ARMA on Log Returns**
 
-**Reasons:**
-
-1. **Stationarity:** Returns are stationary, prices are not
+**Reasons:**1. **Stationarity:** Returns are stationary, prices are not
 2. **Numerical stability:** Returns bounded, prices unbounded
 3. **Additivity:** Log returns add across time (h-step forecast = sum)
 4. **Volatility modeling:** GARCH models require stationary returns
@@ -338,10 +336,10 @@ print(f"\\nForecasts:")
 print(f"{'Step':<6} {'Price':<12} {'Return %':<12} {'CI'}")
 print("-" * 50)
 for i in range(5):
-    print(f"{i+1:<6} ${price_forecast['price_forecast'].iloc[i]:<11.2f} "
+    print(f"{i+1:<6} \${price_forecast['price_forecast'].iloc[i]:<11.2f} "
           f"{return_forecast.iloc[i]*100:<11.2f}% "
-          f"[${price_forecast['price_lower'].iloc[i]:.2f}, "
-          f"${price_forecast['price_upper'].iloc[i]:.2f}]")
+          f"[\${price_forecast['price_lower'].iloc[i]:.2f}, "
+          f"\${price_forecast['price_upper'].iloc[i]:.2f}]")
 \`\`\`
 
 ### Empirical Test Design: 10-Year S&P 500 Backtest
@@ -537,8 +535,7 @@ Lower AIC in-sample ≠ better forecasts out-of-sample. AIC penalizes complexity
 - Test parameter stability over time
 - Compare to naive benchmark (random walk)
 
-**Diagnostic Checklist:**
-1. ✓ Test stationarity (ADF) before selecting d
+**Diagnostic Checklist:**1. ✓ Test stationarity (ADF) before selecting d
 2. ✓ Start simple (low p, q), only increase if diagnostics fail
 3. ✓ Use out-of-sample validation
 4. ✓ Check residuals are white noise (Ljung-Box)

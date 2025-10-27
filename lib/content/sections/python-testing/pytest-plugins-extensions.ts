@@ -124,11 +124,11 @@ def global_resource (tmp_path_factory, worker_id):
     if worker_id == "master":
         # Not running with xdist
         return setup_resource()
-    
+
     # Get temp directory shared across workers
     root_tmp_dir = tmp_path_factory.getbasetemp().parent
     lock_file = root_tmp_dir / "resource.lock"
-    
+
     with FileLock (str (lock_file) + ".lock"):
         resource_file = root_tmp_dir / "resource.json"
         if resource_file.is_file():
@@ -305,10 +305,10 @@ def test_function_with_setup (benchmark):
     """Benchmark with setup phase (not timed)"""
     def setup():
         return [1, 2, 3, 4, 5] * 200
-    
+
     def process_data (data):
         return [x * 2 for x in data]
-    
+
     result = benchmark.pedantic(
         process_data,
         setup=setup,
@@ -426,9 +426,9 @@ def test_two():
 \`\`\`python
 def test_spy_on_function (mocker):
     spy = mocker.spy (math, "sqrt")
-    
+
     result = calculate_distance(3, 4)  # Uses math.sqrt internally
-    
+
     assert result == 5
     spy.assert_called_once_with(25)  # Verify sqrt(25) was called
 \`\`\`
@@ -440,16 +440,16 @@ def test_stub_example (mocker):
     """Stub: Returns predefined values"""
     stub = mocker.stub (name="database_connection")
     stub.return_value = {"user": "alice"}
-    
+
     result = stub()
     assert result["user"] == "alice"
 
 def test_mock_example (mocker):
     """Mock: Records interactions for verification"""
     mock = mocker.MagicMock()
-    
+
     process_data (mock)
-    
+
     mock.save.assert_called_once()
     mock.validate.assert_called_with (strict=True)
 \`\`\`

@@ -17,8 +17,7 @@ You have a car with an unlimited gas tank and it costs \`cost[i]\` of gas to tra
 Given two integer arrays \`gas\` and \`cost\`, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return \`-1\`. If there exists a solution, it is **guaranteed** to be **unique**.
 
 
-**Greedy Approach:**
-1. If total gas < total cost, impossible
+**Greedy Approach:**1. If total gas < total cost, impossible
 2. Track current gas tank. If it goes negative, start from next station
 3. Key insight: If we cannot reach station j from station i, we also cannot reach j from any station between i and j
 

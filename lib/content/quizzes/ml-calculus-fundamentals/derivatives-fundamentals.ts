@@ -145,9 +145,7 @@ Example: Neural network with 1M parameters
 - Backprop: ~2x forward pass cost
 - Gradient check: ~2M function evaluations (≈1M× slower)
 
-**Practical Guidelines:**
-
-1. **When to use:**
+**Practical Guidelines:**1. **When to use:**
    - Implementing new layer types
    - Debugging strange training behavior
    - After major architecture changes

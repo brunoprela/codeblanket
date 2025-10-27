@@ -565,9 +565,7 @@ export const servicediscoverySection = {
     
     ## When to Use Service Discovery
     
-    ### **✅ Use Service Discovery When:**
-    
-    1. **Microservices Architecture**
+    ### **✅ Use Service Discovery When:**1. **Microservices Architecture**
        - Many services communicating
        - Services scale independently
        - Dynamic environments (containers, cloud)
@@ -585,9 +583,7 @@ export const servicediscoverySection = {
        - Blue-green deployments
        - Canary releases
     
-    ### **❌ Avoid Service Discovery When:**
-    
-    1. **Monolithic Application**
+    ### **❌ Avoid Service Discovery When:**1. **Monolithic Application**
        - Single application
        - Static deployment
     

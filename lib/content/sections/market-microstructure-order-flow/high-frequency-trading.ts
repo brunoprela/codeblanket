@@ -1,7 +1,7 @@
 export const highFrequencyTrading = {
-    title: 'High-Frequency Trading',
-    id: 'high-frequency-trading',
-    content: `
+  title: 'High-Frequency Trading',
+  id: 'high-frequency-trading',
+  content: `
 # High-Frequency Trading (HFT)
 
 ## Introduction
@@ -435,8 +435,7 @@ plt.show()
 
 **Task:** Measure and analyze latency in a simulated order execution pipeline.
 
-**Components:**
-1. **Market data feed:** Receives price updates.
+**Components:**1. **Market data feed:** Receives price updates.
 2. **Signal generation:** Calculates trading signals.
 3. **Order submission:** Sends orders to exchange.
 4. **Exchange matching:** Processes orders.

@@ -85,9 +85,7 @@ send_email_task.apply_async(
 )
 \`\`\`
 
-**Production Best Practices:**
-
-1. **Task Routing:**
+**Production Best Practices:**1. **Task Routing:**
 \`\`\`python
 CELERY_TASK_ROUTES = {
     'myapp.tasks.send_email_task': {'queue': 'emails'},

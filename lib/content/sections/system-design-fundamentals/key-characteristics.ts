@@ -70,8 +70,7 @@ System tolerates failures without going down.
 | 99.99% (four nines) | 52 minutes | 4.3 minutes | Critical services |
 | 99.999% (five nines) | 5.26 minutes | 26 seconds | Payment systems |
 
-### **Achieving High Availability:**
-1. **Redundancy**: No single point of failure
+### **Achieving High Availability:**1. **Redundancy**: No single point of failure
 2. **Load Balancers**: Distribute traffic, detect failures
 3. **Health Checks**: Monitor service health
 4. **Geographic Distribution**: Multi-region deployment
@@ -109,8 +108,7 @@ Number of operations per unit time.
 - Instagram: 50B photo views/day = 580K views/sec
 - Visa: 65,000 transactions/second peak
 
-### **Improving Efficiency:**
-1. **Caching**: Reduce redundant work
+### **Improving Efficiency:**1. **Caching**: Reduce redundant work
 2. **CDN**: Serve content from edge locations
 3. **Compression**: Reduce data transfer
 4. **Database Indexing**: Faster queries
@@ -161,8 +159,7 @@ Can you diagnose and fix problems quickly?
 
 **Definition**: System continues operating despite component failures.
 
-### **Types of Failures:**
-1. **Hardware**: Server crash, disk failure, network outage
+### **Types of Failures:**1. **Hardware**: Server crash, disk failure, network outage
 2. **Software**: Bugs, memory leaks, deadlocks
 3. **Human**: Misconfigurations, accidental deletions
 4. **Network**: Partitions, latency spikes, packet loss

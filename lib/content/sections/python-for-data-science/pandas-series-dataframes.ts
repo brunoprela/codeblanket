@@ -53,7 +53,7 @@ print(f"Values: {s.values}")  # NumPy array
 print(f"Index: {s.index}")    # RangeIndex (start=0, stop=5, step=1)
 
 # With custom index
-s = pd.Series([10, 20, 30, 40, 50], 
+s = pd.Series([10, 20, 30, 40, 50],
               index=['a', 'b', 'c', 'd', 'e'])
 print(s)
 # a    10
@@ -104,7 +104,7 @@ print(s)
 ### Series Operations
 
 \`\`\`python
-prices = pd.Series([100, 105, 102, 108, 110], 
+prices = pd.Series([100, 105, 102, 108, 110],
                    index=['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
 
 # Arithmetic operations
@@ -178,7 +178,7 @@ print(df)
 \`\`\`python
 # Random data
 data = np.random.randn(4, 3)
-df = pd.DataFrame (data, 
+df = pd.DataFrame (data,
                   columns=['A', 'B', 'C'],
                   index=['row1', 'row2', 'row3', 'row4'])
 print(df)
@@ -285,11 +285,11 @@ df.info()
 # <class 'pandas.core.frame.DataFrame'>
 # RangeIndex: 5 entries, 0 to 4
 # Data columns (total 4 columns):
-#  #   Column      Non-Null Count  Dtype 
-# ---  ------      --------------  ----- 
+#  #   Column      Non-Null Count  Dtype
+# ---  ------      --------------  -----
 #  0   Name        5 non-null      object
-#  1   Age         5 non-null      int64 
-#  2   Salary      5 non-null      int64 
+#  1   Age         5 non-null      int64
+#  2   Salary      5 non-null      int64
 #  3   Department  5 non-null      object
 # dtypes: int64(2), object(2)
 # memory usage: 288.0+ bytes
@@ -380,7 +380,7 @@ print(f"Value: {value}")  # 25
 df_indexed = df.set_index('Name')
 print(df_indexed)
 #          Age  Salary Department
-# Name                            
+# Name
 # Alice     25   50000         IT
 # Bob       30   60000         HR
 # Charlie   35   75000         IT
@@ -399,7 +399,7 @@ print(subset)
 subset = df_indexed.loc['Alice':'Charlie', 'Age':'Salary']
 print(subset)
 #          Age  Salary
-# Name                
+# Name
 # Alice     25   50000
 # Bob       30   60000
 # Charlie   35   75000
@@ -487,7 +487,7 @@ df['Department'] = df['Department'].astype('category')
 # 3. Faster groupby operations
 
 # Ordered categories
-df['Size'] = pd.Categorical(['S', 'M', 'L', 'XL', 'M'], 
+df['Size'] = pd.Categorical(['S', 'M', 'L', 'XL', 'M'],
                              categories=['S', 'M', 'L', 'XL'],
                              ordered=True)
 print(df['Size'])

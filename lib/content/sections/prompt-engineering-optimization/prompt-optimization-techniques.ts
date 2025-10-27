@@ -356,7 +356,7 @@ class PromptMetrics:
         
         # Standard deviation of lengths (normalized)
         variance = sum((l - avg_length) ** 2 for l in lengths) / len (lengths)
-        std_dev = variance ** 0.5
+        std_dev = variance **0.5
         
         # Consistency score: lower std dev = higher consistency
         consistency = max(0, 1 - (std_dev / (avg_length + 1)))

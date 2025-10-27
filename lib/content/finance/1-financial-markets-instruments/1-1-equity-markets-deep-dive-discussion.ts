@@ -304,8 +304,7 @@ def detect_regime_changes (returns: pd.Series) -> dict:
 - High risk of curve-fitting/overfitting
 - Requires significant capital to be worth the effort
 
-**My Recommendation:**
-1. Start with paper trading (simulated)
+**My Recommendation:**1. Start with paper trading (simulated)
 2. Run rigorous backtests with walk-forward analysis
 3. If Sharpe ratio > 1.5 out-of-sample, consider small real-money test
 4. Scale up ONLY if live results match backtest for 6+ months
@@ -927,8 +926,7 @@ This architecture provides:
 - ✅ **Cost-effective**: ~$200-300/month
 - ✅ **Maintainable**: Clear separation of concerns, good observability
 
-**Next Steps:**
-1. Build MVP with 100 stocks
+**Next Steps:**1. Build MVP with 100 stocks
 2. Test throughput and timing
 3. Gradually scale to 5,000 stocks
 4. Add monitoring and alerting

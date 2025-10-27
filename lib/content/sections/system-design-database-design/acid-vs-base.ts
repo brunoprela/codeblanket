@@ -74,7 +74,7 @@ CREATE TABLE orders (
 );
 
 -- This transaction will FAIL and ROLLBACK:
-INSERT INTO orders (id, user_id, total) 
+INSERT INTO orders (id, user_id, total)
 VALUES (1, 999, -50);
 -- Reason 1: user_id 999 doesn't exist (foreign key violation)
 -- Reason 2: total is negative (check constraint violation)
@@ -149,11 +149,11 @@ Transaction A: ROLLBACK;
 \`\`\`
 Transaction A:
   SELECT balance FROM accounts WHERE id = 'Alice';  -- Returns $100
-  
+
   -- Meanwhile, Transaction B commits:
   UPDATE accounts SET balance = 200 WHERE id = 'Alice';
   COMMIT;
-  
+
   SELECT balance FROM accounts WHERE id = 'Alice';  -- Returns $200
   -- Same query, different result within same transaction!
 \`\`\`
@@ -169,11 +169,11 @@ Transaction A:
 \`\`\`
 Transaction A:
   SELECT COUNT(*) FROM orders WHERE amount > 100;  -- Returns 5
-  
+
   -- Meanwhile, Transaction B commits new order:
   INSERT INTO orders VALUES (..., amount = 150);
   COMMIT;
-  
+
   SELECT COUNT(*) FROM orders WHERE amount > 100;  -- Returns 6
   -- New rows appeared (phantom read)
 \`\`\`
@@ -364,16 +364,16 @@ BEGIN TRANSACTION;
   -- Check inventory
   SELECT quantity FROM products WHERE id = 'P123' FOR UPDATE;
   -- quantity = 5
-  
+
   -- Deduct inventory
   UPDATE products SET quantity = quantity - 1 WHERE id = 'P123';
-  
+
   -- Create order
   INSERT INTO orders (user_id, product_id, amount) VALUES (1, 'P123', 29.99);
-  
+
   -- Charge payment
   INSERT INTO payments (order_id, amount, status) VALUES (LAST_INSERT_ID(), 29.99, 'charged');
-  
+
   -- If any step fails, ROLLBACK all
 COMMIT;
 \`\`\`

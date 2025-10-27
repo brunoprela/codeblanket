@@ -38,8 +38,7 @@ export const cachingSection = {
 
     Request data exists in cache → return immediately from cache.
 
-** Example:**
-    1. User requests profile for user ID 123
+** Example:**1. User requests profile for user ID 123
 2. Check cache: Found! → Return from cache(2ms)
 3. No database query needed
 
@@ -49,8 +48,7 @@ export const cachingSection = {
 
     Request data NOT in cache → fetch from database, store in cache, return to user.
 
-** Example:**
-    1. User requests profile for user ID 456
+** Example:**1. User requests profile for user ID 456
 2. Check cache: Not found (miss)
 3. Query database(50ms)
 4. Store result in cache
@@ -80,7 +78,7 @@ export const cachingSection = {
 
 ## Where to Place Cache
 
-### ** 1. Client - Side Cache(Browser) **
+### **1. Client - Side Cache(Browser) **
 
 ** Location **: User\'s browser
 
@@ -102,7 +100,7 @@ export const cachingSection = {
 
 ---
 
-### ** 2. CDN Cache(Edge) **
+### **2. CDN Cache(Edge) **
 
 ** Location **: Geographically distributed edge servers(CloudFront, Akamai)
 
@@ -125,7 +123,7 @@ export const cachingSection = {
 
 ---
 
-### ** 3. Application Cache(In - Memory) **
+### **3. Application Cache(In - Memory) **
 
 ** Location **: Application server's memory
 
@@ -146,7 +144,7 @@ export const cachingSection = {
 
 ---
 
-### ** 4. Distributed Cache(Redis, Memcached) **
+### **4. Distributed Cache(Redis, Memcached) **
 
 ** Location **: Dedicated cache cluster, separate from app servers
 
@@ -169,7 +167,7 @@ export const cachingSection = {
 
                                                     ---
 
-### ** 5. Database Cache(Query Result Cache) **
+### **5. Database Cache(Query Result Cache) **
 
 ** Location **: Inside database(MySQL query cache, PostgreSQL shared buffers)
 
@@ -192,12 +190,11 @@ export const cachingSection = {
 
 ## Cache Reading Patterns
 
-### ** 1. Cache - Aside(Lazy Loading) **
+### **1. Cache - Aside(Lazy Loading) **
 
 ** Most common pattern.**
 
-** Flow:**
-    1. Application checks cache for data
+** Flow:**1. Application checks cache for data
 2. If ** cache hit **: Return data from cache
 3. If ** cache miss **:
 - Query database
@@ -237,8 +234,7 @@ def get_user (user_id):
 
 ### **2. Read-Through Cache**
 
-**Flow:**
-1. Application requests data from cache
+**Flow:**1. Application requests data from cache
 2. Cache library handles database query if miss
 3. Cache automatically loads and returns data
 
@@ -273,8 +269,7 @@ def get_user (user_id):
 
 ### **1. Write-Through Cache**
 
-**Flow:**
-1. Application writes data to cache
+**Flow:**1. Application writes data to cache
 2. Cache **synchronously** writes to database
 3. Return success only after database write succeeds
 
@@ -302,8 +297,7 @@ def update_user (user_id, new_data):
 
 ### **2. Write-Back (Write-Behind) Cache**
 
-**Flow:**
-1. Application writes data to cache
+**Flow:**1. Application writes data to cache
 2. Return success immediately
 3. Cache **asynchronously** writes to database later (batched)
 
@@ -332,8 +326,7 @@ def update_user (user_id, new_data):
 
 ### **3. Write-Around Cache**
 
-**Flow:**
-1. Application writes directly to database
+**Flow:**1. Application writes directly to database
 2. Cache is bypassed on write
 3. Data loaded into cache only when read (cache-aside pattern)
 
@@ -534,8 +527,7 @@ Update cache and database together (discussed above).
 
 Publish events when data changes; cache listeners invalidate.
 
-**Example:**
-1. User service updates user → publishes event: \`user.updated: 123\`
+**Example:**1. User service updates user → publishes event: \`user.updated: 123\`
 2. Cache service subscribes to events → invalidates \`user: 123\`
 
 **Pros:**
@@ -554,8 +546,7 @@ Publish events when data changes; cache listeners invalidate.
 
 **Problem**: Cache expires, many requests simultaneously hit database (thundering herd).
 
-**Scenario:**
-1. Cache for popular item expires
+**Scenario:**1. Cache for popular item expires
 2. 10,000 concurrent requests arrive
 3. All 10,000 requests miss cache
 4. All 10,000 query database simultaneously

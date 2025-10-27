@@ -788,8 +788,7 @@ print(f"Diversification reduces beta by: {single_industry_beta - beta_bottomup:.
 1. **Investors are rational** and risk-averse
 2. **Perfect capital markets**: No taxes, transaction costs, or restrictions
 3. **Investors can borrow/lend** at risk-free rate
-4. **Single-period horizon**
-5. **All investors have same information** (homogeneous expectations)
+4. **Single-period horizon**5. **All investors have same information** (homogeneous expectations)
 6. **Investors hold market portfolio** of all risky assets
 7. **Returns are normally distributed**
 

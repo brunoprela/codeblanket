@@ -392,9 +392,7 @@ if __name__ == "__main__":
     example_enterprise_workflow()
 \`\`\`
 
-**Key Infrastructure Components:**
-
-1. **Compute Layer**: ECS/Fargate for elastic, containerized execution
+**Key Infrastructure Components:**1. **Compute Layer**: ECS/Fargate for elastic, containerized execution
 2. **Data Lake**: S3 with versioned snapshots for reproducibility
 3. **Job Queue**: Redis sorted set for priority-based scheduling
 4. **Results Store**: S3 + RDS for persistent storage and querying
@@ -656,9 +654,7 @@ if __name__ == '__main__':
     unittest.main()
 \`\`\`
 
-**Testing Strategy:**
-
-1. **Unit Tests**: Individual components (execution, portfolio, metrics)
+**Testing Strategy:**1. **Unit Tests**: Individual components (execution, portfolio, metrics)
 2. **Integration Tests**: Full backtest workflows
 3. **Validation Tests**: Against known benchmarks (buy-hold SPY)
 4. **Property Tests**: Mathematical invariants must hold
@@ -731,8 +727,7 @@ def get_indicators(symbol: str, start: str, end: str):
 # 1000 backtests: 83 hours → 1.4 hours
 \`\`\`
 
-**Optimization Priority:**
-1. Algorithm improvements (biggest impact)
+**Optimization Priority:**1. Algorithm improvements (biggest impact)
 2. Vectorization (10-100x speedup)
 3. Parallel execution (Nx speedup)
 4. JIT compilation (2-10x speedup)

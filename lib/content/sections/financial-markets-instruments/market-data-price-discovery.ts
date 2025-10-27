@@ -664,9 +664,7 @@ print(f"\\nVWAP: \${vwap:.2f}")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Data Levels**: Level 1 (top of book), Level 2 (depth), Level 3 (full detail)
+**Key Takeaways:**1. **Data Levels**: Level 1 (top of book), Level 2 (depth), Level 3 (full detail)
 2. **Feeds**: SIP (slow, cheap), Direct (fast, expensive), Vendors (global, very expensive)
 3. **Latency**: 10ms SIP vs 0.5ms direct = $100+ edge per $1M traded
 4. **Price Discovery**: Continuous trading, auctions, dealer markets

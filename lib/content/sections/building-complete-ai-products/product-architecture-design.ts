@@ -325,9 +325,7 @@ print(f"Selected model: {model}")
 
 ### Database Selection
 
-**Options:**
-
-1. **PostgreSQL**: Best for structured data, ACID compliance, complex queries
+**Options:**1. **PostgreSQL**: Best for structured data, ACID compliance, complex queries
 2. **MongoDB**: Flexible schemas, JSON documents, horizontal scaling
 3. **Redis**: Caching, session storage, real-time data
 4. **Vector DB** (Pinecone, Weaviate): Embeddings, semantic search
@@ -360,9 +358,7 @@ Object Storage (S3):
 
 ### Web Framework Selection
 
-**Python Options:**
-
-1. **FastAPI**: Modern, async, automatic OpenAPI docs, type hints
+**Python Options:**1. **FastAPI**: Modern, async, automatic OpenAPI docs, type hints
 2. **Flask**: Lightweight, flexible, large ecosystem
 3. **Django**: Full-featured, ORM included, admin panel
 
@@ -733,9 +729,7 @@ spec:
 
 ### Understanding AI Product Costs
 
-**Major Cost Categories:**
-
-1. **LLM API Costs** (Usually 60-80% of total)
+**Major Cost Categories:**1. **LLM API Costs** (Usually 60-80% of total)
    - Input tokens
    - Output tokens
    - Model selection (GPT-4 vs GPT-3.5)

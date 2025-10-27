@@ -476,8 +476,7 @@ real_estate_model()
 ## Key Takeaways
 
 1. **Multiple regression**: Y = β₀ + β₁X₁ + ... + βₚXₚ + ε
-2. **Coefficient interpretation**: Effect of Xᵢ **holding others constant**
-3. **R²**: Proportion of variance explained
+2. **Coefficient interpretation**: Effect of Xᵢ **holding others constant**3. **R²**: Proportion of variance explained
 4. **Adjusted R²**: Penalizes complexity, use for model comparison
 5. **Multicollinearity**: High VIF (>10) indicates correlated predictors
 6. **F-test**: Tests if any predictor is useful

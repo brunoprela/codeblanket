@@ -172,9 +172,7 @@ dL_db = np.sum (dL_dz, axis=0, keepdims=True) / m
 dL_dX = dL_dz @ W.T
 \`\`\`
 
-**Why Caching is Essential:**
-
-1. **Activation Derivatives Need Forward Values:**
+**Why Caching is Essential:**1. **Activation Derivatives Need Forward Values:**
    - Sigmoid: σ'(z) = σ(z)(1 - σ(z)) needs a = σ(z)
    - Tanh: tanh'(z) = 1 - tanh²(z) needs a = tanh (z)
    - ReLU: requires z to check if z > 0
@@ -206,9 +204,7 @@ For very deep networks, caching all activations can exhaust memory. Solutions:
    - Reduces memory per batch
    - Slightly slower but fits in memory
 
-**Common Mistakes:**
-
-1. **Forgetting to cache:**
+**Common Mistakes:**1. **Forgetting to cache:**
 \`\`\`python
 # Wrong
 def forward(X):
@@ -367,9 +363,7 @@ For 1M parameters:
 
 **Why Backpropagation is O(1) Forward Passes:**
 
-Key insight: **All gradients computed simultaneously in one backward sweep**
-
-1. **Chain Rule Efficiency:**
+Key insight: **All gradients computed simultaneously in one backward sweep**1. **Chain Rule Efficiency:**
    - Gradient of parameter in layer l depends on:
      - Gradient from layer l+1 (already computed)
      - Local gradient (cheap to compute)
@@ -712,15 +706,13 @@ relative_diff = 0.15  # Completely wrong
 
 **When to Use Gradient Checking:**
 
-**DO use when:**
-1. **Implementing new architectures** - verify backprop is correct
+**DO use when:**1. **Implementing new architectures** - verify backprop is correct
 2. **Custom layers** - test new operations
 3. **Debugging** - track down gradient bugs
 4. **Learning** - understand how backprop works
 5. **Critical applications** - verify correctness before deployment
 
-**DON'T use when:**
-1. **Regular training** - way too slow (O(n) forward passes)
+**DON'T use when:**1. **Regular training** - way too slow (O(n) forward passes)
 2. **Large networks** - infeasible for millions of parameters
 3. **Production** - only needed during development
 4. **Every epoch** - once verified, trust your implementation

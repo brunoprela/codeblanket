@@ -291,9 +291,7 @@ Update: When user likes photo → Increment counter (eventual consistency)
 
 **Comments**:
 
-Similar to likes but with additional content:
-
-\`\`\`
+Similar to likes but with additional content: `\`\`
 Table: comments
 Partition Key: photo_id
 Clustering Key: timestamp DESC

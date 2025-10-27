@@ -150,16 +150,12 @@ For "deep historical" (30 days):
 - Accept slower response (5-10 seconds)
 - Consider async search for very large queries
 
-**Why Searches Were Slow (Original Problem):**
-
-1. **All data in one index**: Every query scanned entire 1.5TB
+**Why Searches Were Slow (Original Problem):**1. **All data in one index**: Every query scanned entire 1.5TB
 2. **Large shards**: If using few shards, each shard too large
 3. **Wrong node types**: Historical data on same nodes as hot data
 4. **No optimization**: Old data not force-merged
 
-**Trade-offs:**
-
-1. **Complexity vs Performance**: Time-based indices + ILM adds operational complexity but dramatically improves performance
+**Trade-offs:**1. **Complexity vs Performance**: Time-based indices + ILM adds operational complexity but dramatically improves performance
    - Decision: Worth it for 30-day retention at scale
 
 2. **Storage Redundancy vs Cost**: Hot data needs replicas, cold data could use snapshots only
@@ -480,8 +476,7 @@ Current Setup:
 - 100GB data
 - Slow queries during peak
 
-**Problems:**
-1. Individual shards will grow to 200GB each (way above 50GB recommended max)
+**Problems:**1. Individual shards will grow to 200GB each (way above 50GB recommended max)
 2. Query latency suggests resource contention or undersized cluster
 3. Need to scale for 10x growth
 

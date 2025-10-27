@@ -33,9 +33,7 @@ export const textClassificationQuiz: QuizQuestion[] = [
       'Your sentiment classifier has 95% accuracy but performs poorly in production. What could be wrong?',
     sampleAnswer: `High accuracy on test set doesn't guarantee production performance.
 
-**Possible Issues:**
-
-1. **Class Imbalance**: 95% positive reviews, model predicts all positive
+**Possible Issues:**1. **Class Imbalance**: 95% positive reviews, model predicts all positive
    - Accuracy: 95% but useless
    - Solution: Use F1, precision, recall metrics
 

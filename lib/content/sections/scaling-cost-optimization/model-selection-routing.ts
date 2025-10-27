@@ -378,7 +378,7 @@ class CascadeRouter:
                 # Estimate cost (assume 1000 input, 500 output tokens)
                 estimated_cost = estimate_cost (model, 1000, 500)
                 if total_cost + estimated_cost > max_cost:
-                    print(f"⚠️  Would exceed max cost (\${max_cost}), skipping")
+                    print(f"⚠️  Would exceed max cost (\\\${max_cost}), skipping")
                     continue
             
             try:

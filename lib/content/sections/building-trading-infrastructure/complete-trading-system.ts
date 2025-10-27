@@ -8,8 +8,7 @@ export const completeTradingSystem = {
 
 Build an **end-to-end production-grade trading system** integrating all concepts from Module 14. This capstone project demonstrates mastery of trading infrastructure.
 
-**System Components:**
-1. Order Management System (OMS)
+**System Components:**1. Order Management System (OMS)
 2. Execution Management System (EMS)
 3. FIX Protocol connectivity
 4. Smart Order Routing (SOR)

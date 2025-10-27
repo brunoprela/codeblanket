@@ -215,7 +215,7 @@ def continuous_compound (principal, rate, years):
 P, r, t = 1000, 0.05, 10
 
 # Different compounding frequencies
-print(f"Initial investment: \${P}")
+print(f"Initial investment: \\\${P}")
 print(f"Annual rate: {r*100}%")
 print(f"Time: {t} years\\n")
 
@@ -394,9 +394,9 @@ y_pred_bad = np.array([[0.6, 0.4],    # Predict 0, true is 1 ✗
                        [0.7, 0.3],    # Predict 0, true is 1 ✗
                        [0.3, 0.7]])   # Predict 1, true is 0 ✗
 
-loss_good = sum (cross_entropy (y_true_onehot[i], y_pred_good[i]) 
+loss_good = sum (cross_entropy (y_true_onehot[i], y_pred_good[i])
                 for i in range (len (y_true))) / len (y_true)
-loss_bad = sum (cross_entropy (y_true_onehot[i], y_pred_bad[i]) 
+loss_bad = sum (cross_entropy (y_true_onehot[i], y_pred_bad[i])
                for i in range (len (y_true))) / len (y_true)
 
 print(f"Cross-entropy (good predictions): {loss_good:.4f}")
@@ -416,7 +416,7 @@ def binary_search (arr, target):
     """Binary search in sorted array"""
     left, right = 0, len (arr) - 1
     comparisons = 0
-    
+
     while left <= right:
         comparisons += 1
         mid = (left + right) // 2
@@ -426,7 +426,7 @@ def binary_search (arr, target):
             left = mid + 1
         else:
             right = mid - 1
-    
+
     return -1, comparisons
 
 # Linear search: O(n)
@@ -448,11 +448,11 @@ print("-" * 50)
 for n in sizes:
     arr = list (range (n))
     target = n - 1  # Last element
-    
+
     _, linear_comps = linear_search (arr, target)
     _, binary_comps = binary_search (arr, target)
     log2_n = np.log2(n)
-    
+
     print(f"{n:>10} {linear_comps:>12} {binary_comps:>12} {log2_n:>12.2f}")
 
 print("\\nBinary search comparisons ≈ log₂(n)")

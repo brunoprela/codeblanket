@@ -15,9 +15,7 @@ export const multiClassMultiLabelMetrics = {
 
 So far we've focused on binary classification (two classes). But real-world problems often involve multiple classes (image classification: cat/dog/bird) or multiple labels per sample (movie genres: action+comedy+romance). These scenarios require different evaluation approaches and metrics.
 
-**Two Distinct Scenarios:**
-
-1. **Multi-class Classification**: Each sample belongs to exactly ONE class
+**Two Distinct Scenarios:**1. **Multi-class Classification**: Each sample belongs to exactly ONE class
    - Example: Digit recognition (0-9), one digit per image
    - Example: Customer segment (bronze/silver/gold), one segment per customer
 

@@ -111,9 +111,7 @@ Result:
 - During partition, different regions see different data temporarily
 - Rare edge case: Rider sees driver location, but driver already moved
 
-**Why Trade-offs Are Acceptable:**
-
-1. **Staleness is fine**: Driver locations naturally become stale (drivers are moving). 2 seconds is negligible.
+**Why Trade-offs Are Acceptable:**1. **Staleness is fine**: Driver locations naturally become stale (drivers are moving). 2 seconds is negligible.
 
 2. **Availability is critical**: Riders need to see drivers to request rides. No drivers visible = no business.
 
@@ -241,9 +239,7 @@ Why Spanner would be WORSE:
 
 **Decision Framework:**
 
-**Use Spanner (PC/EC) when:**
-
-1. **Strong consistency required**: Financial transactions, billing, inventory
+**Use Spanner (PC/EC) when:**1. **Strong consistency required**: Financial transactions, billing, inventory
 2. **Global coordination needed**: Distributed locks, leader election
 3. **Correctness > Speed**: Better to be slow and right than fast and wrong
 4. **Not user-facing**: Background jobs, batch processing
@@ -254,9 +250,7 @@ Why Spanner would be WORSE:
 - Inventory management
 - Financial trading
 
-**Use DynamoDB (PA/EL) when:**
-
-1. **Low latency critical**: User-facing reads, API responses
+**Use DynamoDB (PA/EL) when:**1. **Low latency critical**: User-facing reads, API responses
 2. **High availability required**: Must always work
 3. **Eventual consistency acceptable**: Slight staleness okay
 4. **High throughput needed**: Millions of requests/sec

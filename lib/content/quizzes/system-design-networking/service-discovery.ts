@@ -944,8 +944,7 @@ export const servicediscoveryQuiz = [
     5. **ACLs with deny-default** prevent unauthorized access
     6. **Autopilot** for automatic dead server cleanup
     7. **Automated snapshots** every 6 hours to S3
-    8. **Monitor Raft peers, leader, and latency**
-    9. **Split-brain prevented** by quorum requirements
+    8. **Monitor Raft peers, leader, and latency**9. **Split-brain prevented** by quorum requirements
     10. **Graceful operations**: leave before removing, transfer leadership before restart`,
     keyPoints: [
       'HA Consul cluster: 5 servers (tolerates 2 failures) across 3 datacenters',

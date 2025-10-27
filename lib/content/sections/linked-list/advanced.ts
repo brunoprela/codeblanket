@@ -17,23 +17,23 @@ def detect_cycle_start (head: ListNode) -> ListNode:
     # Phase 1: Detect cycle
     slow = fast = head
     has_cycle = False
-    
+
     while fast and fast.next:
         slow = slow.next
         fast = fast.next.next
         if slow == fast:
             has_cycle = True
             break
-    
+
     if not has_cycle:
         return None
-    
+
     # Phase 2: Find cycle start
     slow = head
     while slow != fast:
         slow = slow.next
         fast = fast.next
-    
+
     return slow  # Cycle start
 \`\`\`
 
@@ -59,10 +59,10 @@ def reverse_k_group (head: ListNode, k: int) -> ListNode:
     while curr and count < k:
         curr = curr.next
         count += 1
-    
+
     if count < k:
         return head  # Not enough nodes
-    
+
     # Reverse first k nodes
     prev = None
     curr = head
@@ -71,10 +71,10 @@ def reverse_k_group (head: ListNode, k: int) -> ListNode:
         curr.next = prev
         prev = curr
         curr = next_temp
-    
+
     # Recursively reverse remaining
     head.next = reverse_k_group (curr, k)
-    
+
     return prev
 \`\`\`
 
@@ -95,7 +95,7 @@ def is_palindrome (head: ListNode) -> bool:
     while fast and fast.next:
         slow = slow.next
         fast = fast.next.next
-    
+
     # Reverse second half
     prev = None
     while slow:
@@ -103,7 +103,7 @@ def is_palindrome (head: ListNode) -> bool:
         slow.next = prev
         prev = slow
         slow = next_temp
-    
+
     # Compare both halves
     left, right = head, prev
     while right:  # right is shorter or equal
@@ -111,12 +111,11 @@ def is_palindrome (head: ListNode) -> bool:
             return False
         left = left.next
         right = right.next
-    
+
     return True
 \`\`\`
 
-**Steps:**
-1. Find middle (fast & slow)
+**Steps:**1. Find middle (fast & slow)
 2. Reverse second half
 3. Compare both halves
 4. (Optional) Restore list
@@ -141,7 +140,7 @@ def copy_random_list (head: Node) -> Node:
     """
     if not head:
         return None
-    
+
     # Step 1: Create copy nodes interleaved
     curr = head
     while curr:
@@ -149,25 +148,25 @@ def copy_random_list (head: Node) -> Node:
         copy.next = curr.next
         curr.next = copy
         curr = copy.next
-    
+
     # Step 2: Set random pointers
     curr = head
     while curr:
         if curr.random:
             curr.next.random = curr.random.next
         curr = curr.next.next
-    
+
     # Step 3: Separate lists
     dummy = Node(0)
     copy_curr = dummy
     curr = head
-    
+
     while curr:
         copy_curr.next = curr.next
         curr.next = curr.next.next
         copy_curr = copy_curr.next
         curr = curr.next
-    
+
     return dummy.next
 \`\`\``,
 };

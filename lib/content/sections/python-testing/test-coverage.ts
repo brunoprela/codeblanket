@@ -66,7 +66,7 @@ def withdraw (account, amount):
         account.balance -= amount
         return True
     # Missing else—what if balance < amount?
-    
+
 # Test with sufficient balance
 def test_withdraw_success():
     account = Account (balance=100)
@@ -225,22 +225,22 @@ parallel = True
 exclude_lines =
     # Standard pragma
     pragma: no cover
-    
+
     # Don't complain about missing debug code
     def __repr__
     def __str__
-    
+
     # Don't complain if tests don't hit defensive assertion code
     raise AssertionError
     raise NotImplementedError
-    
+
     # Don't complain about script entry points
     if __name__ == .__main__.:
-    
+
     # Don't complain about type checking code
     if TYPE_CHECKING:
     if typing.TYPE_CHECKING:
-    
+
     # Don't complain about abstract methods
     @abstractmethod
     @abc.abstractmethod
@@ -271,7 +271,7 @@ output = coverage.xml
 \`\`\`ini
 [pytest]
 # Run coverage by default
-addopts = 
+addopts =
     --cov=myapp
     --cov-report=term-missing
     --cov-report=html
@@ -318,24 +318,24 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install pytest pytest-cov
-      
+
       - name: Run tests with coverage
         run: |
           pytest --cov=myapp --cov-report=xml --cov-fail-under=80
-      
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
@@ -407,7 +407,7 @@ def test_withdraw_weak():
 def test_withdraw_proper():
     account = Account (balance=100)
     result = withdraw (account, 50)
-    
+
     assert result is True
     assert account.balance == 50  # Verify side effect
 \`\`\`
@@ -447,7 +447,7 @@ def divide (a, b):
 class User:
     def __repr__(self):
         return f"User({self.username})"
-    
+
     def __str__(self):
         return self.username
 
@@ -545,19 +545,19 @@ exclude_lines =
     # Exclude abstract methods
     @abstractmethod
     @abc.abstractmethod
-    
+
     # Exclude type checking code
     if TYPE_CHECKING:
     if typing.TYPE_CHECKING:
-    
+
     # Exclude debug/development code
     if DEBUG:
     if settings.DEBUG:
-    
+
     # Exclude unreachable code
     raise NotImplementedError
     raise AssertionError
-    
+
     # Exclude __main__ blocks
     if __name__ == .__main__.:
 \`\`\`
@@ -644,30 +644,30 @@ on: [push, pull_request]
 jobs:
   coverage:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install pytest pytest-cov
-      
+
       - name: Run tests with coverage
         run: |
           pytest --cov=myapp --cov-report=xml --cov-report=html --cov-fail-under=80
-      
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml
           fail_ci_if_error: true
-      
+
       - name: Upload HTML report as artifact
         uses: actions/upload-artifact@v3
         with:

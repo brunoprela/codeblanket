@@ -71,8 +71,7 @@ In practice, limit analysis transforms abstract mathematical concepts into pract
 - Continuous everywhere, not differentiable at x = 0
 - Solves dying ReLU problem (limit exists but is unbounded on both sides)
 
-**Properties of "Good" Activation Functions (from limits perspective):**
-1. **No upper bound:** Allows gradient flow even for large inputs
+**Properties of "Good" Activation Functions (from limits perspective):**1. **No upper bound:** Allows gradient flow even for large inputs
 2. **Non-zero gradient regions:** Enables learning throughout the domain
 3. **Continuous:** Ensures stable optimization (no jumps)
 4. **Appropriate behavior at limits:** Not both limits at 0 (information loss)
@@ -131,8 +130,7 @@ Gradient descent relies implicitly on IVT-like reasoning:
 - Continuity ensures we don't "jump over" better solutions
 - The existence of a better point in the direction is guaranteed by IVT when gradient is non-zero
 
-**Practical Implications:**
-1. Choosing continuous activation functions (sigmoid, ReLU, tanh) ensures IVT applies
+**Practical Implications:**1. Choosing continuous activation functions (sigmoid, ReLU, tanh) ensures IVT applies
 2. Batch normalization maintains continuity despite adding noise
 3. Adversarial training can create near-discontinuities that break IVT assumptions
 4. Discrete optimization (integer constraints) requires different techniques since IVT doesn't apply

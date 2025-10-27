@@ -609,9 +609,7 @@ def add (x, y):
 
 ## Celery Architecture Summary
 
-**4 Core Components:**
-
-1. **Client (Producer)**
+**4 Core Components:**1. **Client (Producer)**
    - Your application code
    - Queues tasks with \`.delay()\` or \`.apply_async()\`
 
@@ -628,8 +626,7 @@ def add (x, y):
    - Redis, database, or RPC
    - Stores task results and states
 
-**Data Flow:**
-1. Client creates task → Sends to broker
+**Data Flow:**1. Client creates task → Sends to broker
 2. Broker stores task in queue
 3. Worker pulls task from broker
 4. Worker executes task

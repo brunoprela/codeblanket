@@ -856,8 +856,7 @@ print("\\n=== Diff ===")
 print(engine.get_diff())
 \`\`\`
 
-**Exercise Tasks:**
-1. Add validation to ensure refactoring doesn't break code
+**Exercise Tasks:**1. Add validation to ensure refactoring doesn't break code
 2. Implement undo/redo functionality
 3. Add preview mode showing changes before applying
 4. Preserve comments and docstrings

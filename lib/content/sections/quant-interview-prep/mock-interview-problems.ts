@@ -15,8 +15,7 @@ This section contains **complete mock interview problems** that combine multiple
 - Test both technical ability and communication
 - Realistic time constraints (30-45 minutes)
 
-**How to Use This Section:**
-1. **Time yourself** - Treat each as a real interview
+**How to Use This Section:**1. **Time yourself** - Treat each as a real interview
 2. **Think out loud** - Practice explaining your reasoning
 3. **Handle follow-ups** - Don't stop at the first answer
 4. **Show multiple approaches** - Demonstrates depth
@@ -158,8 +157,7 @@ Expected: $100 - $100 = $0
 Difference: $2 > $0 → ARBITRAGE EXISTS!
 \`\`\`
 
-**Arbitrage Strategy:**
-1. **Sell the call:** Receive $5
+**Arbitrage Strategy:**1. **Sell the call:** Receive $5
 2. **Buy the put:** Pay $3
 3. **Buy the stock:** Pay $100
 4. **Net outflow:** -$100 + $5 - $3 = -$98

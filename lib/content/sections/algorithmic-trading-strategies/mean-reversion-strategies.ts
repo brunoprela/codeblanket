@@ -35,14 +35,12 @@ While trend followers ride momentum, mean reversion traders profit from the mark
 
 ### When Do Markets Mean Revert?
 
-**Markets Mean Revert When:**
-1. **Range-bound / Sideways**: No clear trend, oscillating around mean
+**Markets Mean Revert When:**1. **Range-bound / Sideways**: No clear trend, oscillating around mean
 2. **High Frequency**: Intraday movements often revert
 3. **Overreactions**: News causes temporary price dislocation
 4. **Pairs/Spreads**: Correlated assets diverge temporarily
 
-**Markets DON'T Mean Revert When:**
-1. **Strong Trends**: Momentum > mean reversion force
+**Markets DON'T Mean Revert When:**1. **Strong Trends**: Momentum > mean reversion force
 2. **Structural Changes**: Fundamentals permanently shifted
 3. **Regime Changes**: Market transitions from mean-reverting to trending
 4. **Black Swans**: Extreme events break historical relationships
@@ -906,8 +904,7 @@ class MeanReversionRiskManagement:
 - Primarily **short-term mean reversion** (hold < 1 day)
 - Uses statistical arbitrage across thousands of instruments
 
-**Why It Works for Renaissance:**
-1. **High Frequency**: Trades revert faster (hours, not days)
+**Why It Works for Renaissance:**1. **High Frequency**: Trades revert faster (hours, not days)
 2. **Massive Diversification**: 1000s of instruments = law of large numbers
 3. **Sophisticated Models**: Machine learning, not simple Bollinger Bands
 4. **Capacity Limited**: Only works at $10B scale (crowded beyond that)
@@ -934,8 +931,7 @@ class MeanReversionRiskManagement:
 - Black swan events (COVID, 2008)
 - Fighting momentum without stop losses
 
-**Best Practices:**
-1. **Test for Mean Reversion**: Hurst exponent, ADF test, half-life
+**Best Practices:**1. **Test for Mean Reversion**: Hurst exponent, ADF test, half-life
 2. **Use Trend Filters**: Only revert when ADX < 25
 3. **Strict Stops**: 2-3% max loss per trade
 4. **Diversify**: Multiple uncorrelated instruments

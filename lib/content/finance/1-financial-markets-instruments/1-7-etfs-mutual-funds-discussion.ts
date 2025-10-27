@@ -195,9 +195,7 @@ if not evaluation['passes_all_criteria']:
     print(f"Failed criteria: {', '.join (evaluation['failures'])}")
 \`\`\`
 
-**Key Metrics for Identifying Skill:**
-
-1. **Long track record**: 10+ years (short-term is luck)
+**Key Metrics for Identifying Skill:**1. **Long track record**: 10+ years (short-term is luck)
 2. **Statistical significance**: p < 0.05 (95% confidence alpha is real)
 3. **Consistency**: Outperform in 65%+ of rolling 3-year periods
 4. **Style stability**: Don't change strategy based on what's working
@@ -220,19 +218,16 @@ if not evaluation['passes_all_criteria']:
 
 **How It Works:**
 
-**Creation Process (ETF trading at premium):**
-1. **Authorized Participant (AP)** notices ETF trading above NAV (e.g., SPY at $500.20 vs NAV of $500.00)
+**Creation Process (ETF trading at premium):**1. **Authorized Participant (AP)** notices ETF trading above NAV (e.g., SPY at $500.20 vs NAV of $500.00)
 2. **AP buys underlying stocks** (all 500 S&P 500 stocks in correct weights)
 3. **AP delivers stocks to ETF issuer** (in-kind transfer)
 4. **ETF issues new shares** to AP (e.g., 50,000 share "creation unit")
 5. **AP sells ETF shares** on market at premium ($500.20)
 6. **Profit**: $500.20 - $500.00 = $0.20 per share × 50,000 = $10,000
 
-**Redemption Process (ETF trading at discount):**
-1. **AP notices ETF trading below NAV** (e.g., SPY at $499.80 vs NAV of $500.00)
+**Redemption Process (ETF trading at discount):**1. **AP notices ETF trading below NAV** (e.g., SPY at $499.80 vs NAV of $500.00)
 2. **AP buys ETF shares** on market at discount
-3. **AP delivers ETF shares to issuer**
-4. **ETF redeems for underlying stocks** (in-kind transfer)
+3. **AP delivers ETF shares to issuer**4. **ETF redeems for underlying stocks** (in-kind transfer)
 5. **AP sells stocks** for full value ($500.00)
 6. **Profit**: $500.00 - $499.80 = $0.20 per share
 
@@ -448,8 +443,7 @@ if spy_arb['arbitrage_opportunity']:
 
 **March 2020 COVID Crash:**
 
-**What Happened:**
-1. **Extreme volatility**: S&P 500 dropped 34% in 23 days
+**What Happened:**1. **Extreme volatility**: S&P 500 dropped 34% in 23 days
 2. **Liquidity crisis**: Everyone selling at once
 3. **Bond ETFs hit -10% discounts**: LQD (corporate bond ETF) traded 5-10% below NAV
 4. **Arbitrage couldn't keep up**: Too much selling pressure
@@ -509,9 +503,7 @@ for reason, details in reasons.items():
     print(f"  Impact: {details['impact']}\\n")
 \`\`\`
 
-**Key Lessons:**
-
-1. **ETFs are not perfect**: Can trade at significant discounts in crises
+**Key Lessons:**1. **ETFs are not perfect**: Can trade at significant discounts in crises
 2. **Bond ETFs more vulnerable**: Less liquid than stock ETFs
 3. **Liquidity is not constant**: Works in normal times, fails in stress
 4. **NAV can be misleading**: Based on stale prices during illiquidity

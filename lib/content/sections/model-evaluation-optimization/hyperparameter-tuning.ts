@@ -825,8 +825,7 @@ print("  • Use walk-forward optimization")
 9. **Document everything**: Track all experiments
 10. **Test set is sacred**: Never tune on test set
 
-**Practical Workflow:**
-1. Start with default parameters
+**Practical Workflow:**1. Start with default parameters
 2. Identify most important parameters
 3. Coarse search with random/Bayesian
 4. Fine-tune around best values

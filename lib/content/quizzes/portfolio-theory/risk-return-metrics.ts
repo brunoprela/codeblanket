@@ -29,9 +29,7 @@ Sortino = (Rₚ - Rf) / σdownside
 
 **Key Difference: Sortino (1.00) is 50% higher than Sharpe (0.667)**
 
-**Why They Differ:**
-
-1. **Different Risk Measures:**
+**Why They Differ:**1. **Different Risk Measures:**
    - Sharpe uses total volatility (18%) - penalizes both upside and downside volatility
    - Sortino uses downside deviation (12%) - only penalizes downside volatility
 
@@ -137,9 +135,7 @@ The 50% difference between Sharpe and Sortino reveals:
 - Increase protection in volatile markets, reduce in calm markets
 - Sortino captures effectiveness of dynamic downside management
 
-**When Sharpe Is Still Appropriate:**
-
-1. **Long-only equity strategies** without asymmetric features
+**When Sharpe Is Still Appropriate:**1. **Long-only equity strategies** without asymmetric features
 2. **Balanced funds** (60/40) with symmetric return distributions
 3. **Index funds** tracking broad markets
 4. **Market-neutral strategies** with symmetric bets
@@ -769,20 +765,16 @@ For more data, would average: (-12% + -8%) / 2 = **-10%**
 | Recovery Time | 1 year | - | Very fast |
 | VaR (95%) | -12% | - | Low downside risk |
 
-**Strengths:**
-
-1. **Consistent outperformance:** Beat benchmark 9 out of 10 years on risk-adjusted basis
+**Strengths:**1. **Consistent outperformance:** Beat benchmark 9 out of 10 years on risk-adjusted basis
 2. **Excellent risk management:** Max DD only -12.3%, recovered quickly
-3. **Positive alpha:** 1.89% annual alpha suggests skill (though not yet statistically significant over 10 years)
+3. **Positive alpha:**1.89% annual alpha suggests skill (though not yet statistically significant over 10 years)
 4. **Defensive positioning:** Beta 0.79 provides downside protection
 5. **Low tail risk:** VaR and CVaR indicate controlled extreme risk
 
-**Weaknesses:**
-
-1. **Higher volatility:** 12.26% vs 9.06% benchmark (35% higher)
-2. **Lower Sharpe ratio:** 0.41 vs 0.49 (due to higher volatility)
-3. **Modest outperformance:** 0.63% annualized may not justify fees
-4. **Information ratio:** 0.29 is borderline, not exceptional
+**Weaknesses:**1. **Higher volatility:**12.26% vs 9.06% benchmark (35% higher)
+2. **Lower Sharpe ratio:**0.41 vs 0.49 (due to higher volatility)
+3. **Modest outperformance:**0.63% annualized may not justify fees
+4. **Information ratio:**0.29 is borderline, not exceptional
 
 **Does It Justify 1% Annual Fee?**
 
@@ -797,9 +789,7 @@ Benchmark: **7.42%**
 
 **NO, does not justify 1% fee** based purely on returns.
 
-**However, consider:**
-
-1. **Risk-adjusted basis:** 
+**However, consider:**1. **Risk-adjusted basis:** 
    - Portfolio has -12.3% max DD vs -14.4% benchmark
    - VaR better, recovery times better
    - For risk-averse investors, the improved risk profile might justify 0.5-0.7% fee

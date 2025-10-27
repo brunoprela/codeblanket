@@ -538,9 +538,7 @@ Retry 3: Fail (customer_id null)
 
 ## Message Queue in System Design Interviews
 
-### **How to Discuss:**
-
-1. **Identify async opportunities:**
+### **How to Discuss:**1. **Identify async opportunities:**
    - "User doesn't need to wait for email sending"
    - "Processing can happen in background"
 

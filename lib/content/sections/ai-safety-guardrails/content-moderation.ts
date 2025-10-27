@@ -51,7 +51,7 @@ class ModerationResult:
 def moderate_content (text: str) -> ModerationResult:
     """
     Use OpenAI's moderation API to check content safety.
-    
+
     Categories checked:
     - hate: Hate speech
     - hate/threatening: Hateful with violence
@@ -65,11 +65,11 @@ def moderate_content (text: str) -> ModerationResult:
     - violence: Violence
     - violence/graphic: Graphic violence
     """
-    
+
     try:
         response = openai.Moderation.create (input=text)
         result = response["results"][0]
-        
+
         # Determine explanation
         if result["flagged"]:
             flagged_categories = [
@@ -79,14 +79,14 @@ def moderate_content (text: str) -> ModerationResult:
             explanation = f"Content flagged for: {', '.join (flagged_categories)}"
         else:
             explanation = "Content passed all moderation checks"
-        
+
         return ModerationResult(
             flagged=result["flagged"],
             categories=result["categories"],
             category_scores=result["category_scores"],
             explanation=explanation
         )
-    
+
     except Exception as e:
         # On error, fail safely by flagging content
         return ModerationResult(
@@ -116,7 +116,7 @@ from typing import Dict, Tuple
 
 class CustomModerationEngine:
     """Content moderation with custom thresholds"""
-    
+
     def __init__(self):
         # Custom thresholds per category (0.0 to 1.0)
         self.thresholds = {
@@ -132,23 +132,23 @@ class CustomModerationEngine:
             'violence': 0.3,
             'violence/graphic': 0.2,
         }
-    
+
     def moderate (self, text: str) -> Tuple[bool, Dict]:
         """
         Moderate content with custom thresholds.
-        
+
         Returns:
             (is_safe, details)
         """
         response = openai.Moderation.create (input=text)
         result = response["results"][0]
-        
+
         violations = []
         scores_exceeded = {}
-        
+
         for category, score in result["category_scores"].items():
             threshold = self.thresholds.get (category, 0.5)
-            
+
             if score > threshold:
                 violations.append (category)
                 scores_exceeded[category] = {
@@ -156,9 +156,9 @@ class CustomModerationEngine:
                     'threshold': threshold,
                     'exceeded_by': score - threshold
                 }
-        
+
         is_safe = len (violations) == 0
-        
+
         details = {
             'safe': is_safe,
             'violations': violations,
@@ -167,7 +167,7 @@ class CustomModerationEngine:
             'flagged_by_api': result["flagged"],
             'action': 'allow' if is_safe else 'block'
         }
-        
+
         return is_safe, details
 
 # Example usage
@@ -199,7 +199,7 @@ class ContentContext(Enum):
 
 class ContextAwareModerator:
     """Moderation with context-specific thresholds"""
-    
+
     def __init__(self):
         # Define threshold sets for each context
         self.context_thresholds = {
@@ -233,25 +233,25 @@ class ContextAwareModerator:
                 'violence': 0.5,   # Historical context
             }
         }
-    
+
     def moderate(
         self,
         text: str,
         context: ContentContext
     ) -> Dict:
         """Moderate with context-aware thresholds"""
-        
+
         response = openai.Moderation.create (input=text)
         result = response["results"][0]
-        
+
         thresholds = self.context_thresholds[context]
         violations = []
-        
+
         for category, score in result["category_scores"].items():
             # Get base category (remove sub-categories)
             base_category = category.split('/')[0]
             threshold = thresholds.get (base_category, 0.5)
-            
+
             if score > threshold:
                 violations.append({
                     'category': category,
@@ -259,7 +259,7 @@ class ContextAwareModerator:
                     'threshold': threshold,
                     'context': context.value
                 })
-        
+
         return {
             'safe': len (violations) == 0,
             'context': context.value,
@@ -292,47 +292,47 @@ from typing import List, Set, Dict
 
 class KeywordFilter:
     """Keyword-based content filtering"""
-    
+
     def __init__(self):
         # Exact match blocklist
         self.blocked_words: Set[str] = set()
-        
+
         # Pattern-based blocklist (regex)
         self.blocked_patterns: List[re.Pattern] = []
-        
+
         # Contextual blocklist (requires surrounding words)
         self.contextual_blocks: Dict[str, List[str]] = {}
-        
+
         self.load_blocklists()
-    
+
     def load_blocklists (self):
         """Load blocklists from configuration"""
-        
+
         # Exact matches (case-insensitive)
         self.blocked_words = {
             # Add your blocklist here
             # Note: Real blocklists are much more comprehensive
         }
-        
+
         # Pattern-based blocks
         self.blocked_patterns = [
             re.compile (r'\\b(?:spam|scam)\\b', re.IGNORECASE),
             re.compile (r'\\b(?:hack|crack)\\s+(?:password|account)\\b', re.IGNORECASE),
             # Add more patterns
         ]
-        
+
         # Contextual blocks (word + context)
         self.contextual_blocks = {
             'kill': ['yourself', 'himself', 'herself'],  # Block "kill yourself" but not "kill the process"
             # Add more contextual rules
         }
-    
+
     def check (self, text: str) -> Dict:
         """Check text against keyword filters"""
-        
+
         text_lower = text.lower()
         violations = []
-        
+
         # Check exact matches
         words = set (re.findall (r'\\b\\w+\\b', text_lower))
         blocked_found = words.intersection (self.blocked_words)
@@ -341,7 +341,7 @@ class KeywordFilter:
                 {'type': 'blocked_word', 'word': word}
                 for word in blocked_found
             ])
-        
+
         # Check patterns
         for pattern in self.blocked_patterns:
             matches = pattern.findall (text)
@@ -350,7 +350,7 @@ class KeywordFilter:
                     {'type': 'blocked_pattern', 'match': match}
                     for match in matches
                 ])
-        
+
         # Check contextual blocks
         for trigger, contexts in self.contextual_blocks.items():
             if trigger in text_lower:
@@ -361,7 +361,7 @@ class KeywordFilter:
                             'trigger': trigger,
                             'context': context
                         })
-        
+
         return {
             'safe': len (violations) == 0,
             'violations': violations,
@@ -377,7 +377,7 @@ from typing import Dict, List
 
 class MLContentFilter:
     """ML-based content filtering using Hugging Face models"""
-    
+
     def __init__(self):
         # Toxicity detection model
         self.toxicity_classifier = pipeline(
@@ -385,28 +385,28 @@ class MLContentFilter:
             model="unitary/toxic-bert",
             device=-1  # CPU, use 0 for GPU
         )
-        
+
         # Hate speech detection
         self.hate_classifier = pipeline(
             "text-classification",
             model="facebook/roberta-hate-speech-dynabench-r4-target",
             device=-1
         )
-        
+
         self.thresholds = {
             'toxicity': 0.7,
             'hate_speech': 0.6,
         }
-    
+
     def check_toxicity (self, text: str) -> Dict:
         """Check for toxic content"""
-        
+
         try:
             result = self.toxicity_classifier (text)[0]
             score = result['score'] if result['label'] == 'toxic' else 1 - result['score']
-            
+
             is_toxic = score > self.thresholds['toxicity']
-            
+
             return {
                 'is_toxic': is_toxic,
                 'score': score,
@@ -421,18 +421,18 @@ class MLContentFilter:
                 'label': 'error',
                 'error': str (e)
             }
-    
+
     def check_hate_speech (self, text: str) -> Dict:
         """Check for hate speech"""
-        
+
         try:
             result = self.hate_classifier (text)[0]
-            
+
             is_hate = (
                 result['label'] == 'hate'
                 and result['score'] > self.thresholds['hate_speech']
             )
-            
+
             return {
                 'is_hate_speech': is_hate,
                 'label': result['label'],
@@ -446,26 +446,26 @@ class MLContentFilter:
                 'score': 1.0,
                 'error': str (e)
             }
-    
+
     def moderate (self, text: str) -> Dict:
         """Comprehensive ML-based moderation"""
-        
+
         toxicity = self.check_toxicity (text)
         hate = self.check_hate_speech (text)
-        
+
         violations = []
         if toxicity['is_toxic']:
             violations.append({
                 'type': 'toxicity',
                 'score': toxicity['score']
             })
-        
+
         if hate['is_hate_speech']:
             violations.append({
                 'type': 'hate_speech',
                 'score': hate['score']
             })
-        
+
         return {
             'safe': len (violations) == 0,
             'violations': violations,
@@ -517,12 +517,12 @@ class MultiLevelModerator:
     3. ML-based toxicity detection
     4. Pattern matching
     """
-    
+
     def __init__(self):
         self.openai_moderator = CustomModerationEngine()
         self.keyword_filter = KeywordFilter()
         self.ml_filter = MLContentFilter()
-    
+
     def moderate(
         self,
         text: str,
@@ -530,27 +530,27 @@ class MultiLevelModerator:
     ) -> ModerationDecision:
         """
         Perform multi-level moderation.
-        
+
         Decision logic:
         - BLOCK: Any critical violation
         - REVIEW: Medium confidence violations
         - FLAG: Low confidence violations
         - ALLOW: No violations detected
         """
-        
+
         reasons = []
         all_scores = {}
         details = {}
-        
+
         # Level 1: OpenAI Moderation (fastest, most reliable)
         openai_safe, openai_details = self.openai_moderator.moderate (text)
         details['openai'] = openai_details
         all_scores.update (openai_details['scores'])
-        
+
         if not openai_safe:
             reasons.append (f"OpenAI flagged: {', '.join (openai_details['violations'])}")
             # Critical violations = immediate block
-            if any (v.startswith('self-harm') or v == 'sexual/minors' 
+            if any (v.startswith('self-harm') or v == 'sexual/minors'
                    for v in openai_details['violations']):
                 return ModerationDecision(
                     level=ModerationLevel.BLOCK,
@@ -561,11 +561,11 @@ class MultiLevelModerator:
                     should_flag=False,
                     should_review=False
                 )
-        
+
         # Level 2: Keyword filter (fast, rule-based)
         keyword_result = self.keyword_filter.check (text)
         details['keywords'] = keyword_result
-        
+
         if not keyword_result['safe']:
             reasons.append (f"Blocked keywords: {len (keyword_result['violations'])}")
             return ModerationDecision(
@@ -577,11 +577,11 @@ class MultiLevelModerator:
                 should_flag=False,
                 should_review=False
             )
-        
+
         # Level 3: ML-based detection (slower, more nuanced)
         ml_result = self.ml_filter.moderate (text)
         details['ml'] = ml_result
-        
+
         if not ml_result['safe']:
             for violation in ml_result['violations']:
                 if violation['score'] > 0.9:
@@ -611,7 +611,7 @@ class MultiLevelModerator:
                 else:
                     # Low confidence = flag
                     reasons.append (f"Low {violation['type']}: {violation['score']:.2f}")
-        
+
         # Level 4: Final decision
         if reasons:
             return ModerationDecision(
@@ -623,7 +623,7 @@ class MultiLevelModerator:
                 should_flag=True,
                 should_review=False
             )
-        
+
         # All checks passed
         return ModerationDecision(
             level=ModerationLevel.ALLOW,
@@ -645,12 +645,12 @@ import time
 
 class ProductionModerationPipeline:
     """Production-ready moderation with caching, rate limiting, and monitoring"""
-    
+
     def __init__(self):
         self.moderator = MultiLevelModerator()
         self.cache = {}  # Use Redis in production
         self.metrics = ModerationMetrics()
-    
+
     async def moderate_async(
         self,
         text: str,
@@ -658,36 +658,36 @@ class ProductionModerationPipeline:
         context: Optional[ContentContext] = None
     ) -> ModerationDecision:
         """Asynchronous moderation with full production features"""
-        
+
         start_time = time.time()
-        
+
         # Check cache
         cache_key = self.get_cache_key (text, context)
         cached_result = self.cache.get (cache_key)
         if cached_result:
             self.metrics.record_cache_hit()
             return cached_result
-        
+
         # Perform moderation
         try:
             decision = self.moderator.moderate (text, context)
-            
+
             # Cache result (cache for 1 hour)
             self.cache[cache_key] = decision
-            
+
             # Record metrics
             self.metrics.record_moderation(
                 decision=decision,
                 duration=time.time() - start_time,
                 user_id=user_id
             )
-            
+
             # Log if flagged or blocked
             if decision.should_block or decision.should_flag:
                 await self.log_violation (user_id, text, decision)
-            
+
             return decision
-            
+
         except Exception as e:
             # On error, fail safely by blocking
             self.metrics.record_error (str (e))
@@ -700,13 +700,13 @@ class ProductionModerationPipeline:
                 should_flag=False,
                 should_review=False
             )
-    
+
     def get_cache_key (self, text: str, context: Optional[ContentContext]) -> str:
         """Generate cache key"""
         import hashlib
         context_str = context.value if context else 'default'
         return hashlib.sha256(f"{text}:{context_str}".encode()).hexdigest()
-    
+
     async def log_violation(
         self,
         user_id: str,
@@ -721,7 +721,7 @@ class ProductionModerationPipeline:
 
 class ModerationMetrics:
     """Track moderation metrics"""
-    
+
     def __init__(self):
         self.total_requests = 0
         self.cache_hits = 0
@@ -730,7 +730,7 @@ class ModerationMetrics:
         self.reviews = 0
         self.errors = 0
         self.total_duration = 0.0
-    
+
     def record_moderation(
         self,
         decision: ModerationDecision,
@@ -740,24 +740,24 @@ class ModerationMetrics:
         """Record moderation metrics"""
         self.total_requests += 1
         self.total_duration += duration
-        
+
         if decision.should_block:
             self.blocks += 1
         elif decision.should_flag:
             self.flags += 1
         elif decision.should_review:
             self.reviews += 1
-    
+
     def record_cache_hit (self):
         """Record cache hit"""
         self.total_requests += 1
         self.cache_hits += 1
-    
+
     def record_error (self, error: str):
         """Record error"""
         self.errors += 1
         print(f"❌ Moderation error: {error}")
-    
+
     def get_stats (self) -> Dict:
         """Get moderation statistics"""
         return {
@@ -776,11 +776,11 @@ class ModerationMetrics:
 \`\`\`python
 class FalsePositiveHandler:
     """Handle and learn from false positives"""
-    
+
     def __init__(self):
         self.allowlist = set()
         self.false_positive_log = []
-    
+
     def report_false_positive(
         self,
         text: str,
@@ -789,7 +789,7 @@ class FalsePositiveHandler:
         reviewer_notes: str
     ):
         """Report a false positive for learning"""
-        
+
         self.false_positive_log.append({
             'text': text,
             'original_decision': original_decision,
@@ -797,33 +797,33 @@ class FalsePositiveHandler:
             'reviewer_notes': reviewer_notes,
             'timestamp': time.time()
         })
-        
+
         # Add to allowlist if appropriate
         if self._should_allowlist (text, reviewer_notes):
             self.allowlist.add (text.lower())
-    
+
     def _should_allowlist (self, text: str, notes: str) -> bool:
         """Determine if text should be allowlisted"""
         # Add logic to decide if this specific text should be allowed
         # E.g., if reviewer says "medical terminology" or "educational context"
         allowlist_keywords = ['medical', 'educational', 'technical', 'historical']
         return any (kw in notes.lower() for kw in allowlist_keywords)
-    
+
     def check_allowlist (self, text: str) -> bool:
         """Check if text is in allowlist"""
         return text.lower() in self.allowlist
-    
+
     def analyze_false_positives (self) -> Dict:
         """Analyze false positive patterns"""
         if not self.false_positive_log:
             return {'total': 0}
-        
+
         # Group by violation type
         by_type = {}
         for fp in self.false_positive_log:
             for reason in fp['original_decision'].reasons:
                 by_type[reason] = by_type.get (reason, 0) + 1
-        
+
         return {
             'total': len (self.false_positive_log),
             'by_type': by_type,

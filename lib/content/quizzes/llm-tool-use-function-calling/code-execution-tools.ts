@@ -5,9 +5,7 @@ export const codeExecutionToolsQuiz = [
       'Design a secure code execution environment similar to ChatGPT Code Interpreter. What sandboxing strategies would you use, and how would you balance security, performance, and user experience?',
     sampleAnswer: `Secure code execution requires multiple layers of isolation:
 
-**Sandboxing Approaches:**
-
-1. **Docker Containers (Recommended):**
+**Sandboxing Approaches:**1. **Docker Containers (Recommended):**
 - Full OS-level isolation
 - Resource limits (CPU, memory, disk)
 - Network isolation
@@ -139,9 +137,7 @@ def detect_generated_files (output_dir: str) -> List[File]:
       'Discuss the security risks of allowing LLMs to generate and execute code. What validation and monitoring strategies would you implement to prevent malicious use?',
     sampleAnswer: `LLM-generated code execution poses significant security risks:
 
-**Risk Categories:**
-
-1. **Resource Exhaustion:**
+**Risk Categories:**1. **Resource Exhaustion:**
 - Infinite loops
 - Memory bombs
 - Fork bombs

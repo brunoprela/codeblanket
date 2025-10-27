@@ -819,9 +819,7 @@ class ArticleAdmin (admin.ModelAdmin):
 
 ## Summary
 
-**Key Admin Customizations:**
-
-1. **List Display**: Custom columns, formatting, links
+**Key Admin Customizations:**1. **List Display**: Custom columns, formatting, links
 2. **Filters**: Custom filters for better searching
 3. **Actions**: Bulk operations for efficiency
 4. **Inlines**: Edit related objects on same page

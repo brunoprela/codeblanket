@@ -37,9 +37,7 @@ Where θ is the angle between the vectors.
 
 ### Properties
 
-1. **Commutative**: **u** · **v** = **v** · **u**
-2. **Distributive**: **u** · (**v** + **w**) = **u** · **v** + **u** · **w**
-3. **Associative with scalars**: (c**u**) · **v** = c(**u** · **v**)
+1. **Commutative**: **u** · **v** = **v** · **u**2. **Distributive**: **u** · (**v** + **w**) = **u** · **v** + **u** · **w**3. **Associative with scalars**: (c**u**) · **v** = c(**u** · **v**)
 4. **Positive definite**: **v** · **v** ≥ 0, equals 0 only if **v** = **0**
 
 ### Applications in ML

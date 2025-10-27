@@ -236,7 +236,7 @@ class ABTest:
             (sum((x - mean_a)**2 for x in scores_a) + 
              sum((x - mean_b)**2 for x in scores_b)) /
             (len (scores_a) + len (scores_b) - 2)
-        ) ** 0.5
+        ) **0.5
         
         cohens_d = (mean_b - mean_a) / pooled_std if pooled_std > 0 else 0
         

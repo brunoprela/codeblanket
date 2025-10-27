@@ -570,9 +570,7 @@ Partition 2: Follower 2 (minority)
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is HWM**: Last committed offset that is safe to read
+### **Key Concepts to Explain**1. **What is HWM**: Last committed offset that is safe to read
 2. **Why it matters**: Consistency, prevents phantom reads, coordinates replication
 3. **How it works**: Calculated as min(LEO) of in-sync replicas
 4. **Kafka example**: Explain producer acks, consumer reads, ISR

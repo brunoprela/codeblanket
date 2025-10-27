@@ -79,8 +79,7 @@ Without division:
 - Can train larger models or batches
 - Minimal accuracy loss
 
-**Challenges:**
-1. **Smaller Range:** FP16 range: ~6e-8 to 6e4 (vs FP32: ~1e-38 to 1e38)
+**Challenges:**1. **Smaller Range:** FP16 range: ~6e-8 to 6e4 (vs FP32: ~1e-38 to 1e38)
 2. **Underflow:** Small gradients vanish to zero
 3. **Overflow:** Large values become infinity
 
@@ -101,8 +100,7 @@ scaler.step (optimizer)  # Scale down and update
 scaler.update()  # Adjust scale factor
 \`\`\`
 
-**How Loss Scaling Works:**
-1. Multiply loss by scale factor (e.g., 1024)
+**How Loss Scaling Works:**1. Multiply loss by scale factor (e.g., 1024)
 2. Gradients also multiplied by 1024
 3. Prevents underflow (small grads don't vanish)
 4. Scale gradients back down before weight update

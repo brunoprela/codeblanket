@@ -285,9 +285,7 @@ print(f"Unmatched records: {result['value',].isna().sum()}")
 # Investigate why these records don't match
 \`\`\`
 
-**Best Practices:**
-
-1. **Always specify how parameter explicitly**
+**Best Practices:**1. **Always specify how parameter explicitly**
    \`\`\`python
    # Good: Clear intent
    result = pd.merge (df1, df2, on='key', how='left')
@@ -696,9 +694,7 @@ print(f"merge_asof: {time_fast:.3f}s, {len (result_fast)} rows")
 # 14x faster + correct semantics!
 \`\`\`
 
-**Key Takeaways:**
-
-1. **Index before joining** when possible (2-5x speedup)
+**Key Takeaways:**1. **Index before joining** when possible (2-5x speedup)
 2. **Use join() for index-based** merges (faster than merge())
 3. **Use concat() for simple stacking** (no key lookup needed)
 4. **Use merge_asof() for time series** (10-100x faster than regular merge)
@@ -1137,9 +1133,7 @@ df2['key',].fillna('UNKNOWN', inplace=True)
 result = pd.merge (df1, df2, on='key')
 \`\`\`
 
-**Best Practices:**
-
-1. **Always validate before merging** on production data
+**Best Practices:**1. **Always validate before merging** on production data
 2. **Use indicator=True** for outer joins
 3. **Use validate parameter** to catch cardinality issues
 4. **Check result size** - unexpected growth indicates problems

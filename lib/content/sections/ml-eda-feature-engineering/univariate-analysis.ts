@@ -522,16 +522,7 @@ low_var = identify_low_variance_features (df)
 
 ## Key Takeaways
 
-1. **Understand each feature individually before analyzing relationships**
-2. **Distribution shape informs necessary transformations**
-3. **Skewness indicates direction of outliers (left vs right)**
-4. **Multiple outlier detection methods provide different perspectives**
-5. **Normality tests guide transformation and model selection**
-6. **Log transformation effective for right-skewed data**
-7. **Box-Cox and Yeo-Johnson automatically find optimal transformations**
-8. **Low-variance features provide little predictive value**
-9. **Central tendency (mean vs median) reveals distribution symmetry**
-10. **Always visualize distributions - numbers alone can mislead**
+1. **Understand each feature individually before analyzing relationships**2. **Distribution shape informs necessary transformations**3. **Skewness indicates direction of outliers (left vs right)**4. **Multiple outlier detection methods provide different perspectives**5. **Normality tests guide transformation and model selection**6. **Log transformation effective for right-skewed data**7. **Box-Cox and Yeo-Johnson automatically find optimal transformations**8. **Low-variance features provide little predictive value**9. **Central tendency (mean vs median) reveals distribution symmetry**10. **Always visualize distributions - numbers alone can mislead**
 
 ## Connection to Machine Learning
 

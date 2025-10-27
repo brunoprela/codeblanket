@@ -61,8 +61,7 @@ Dijkstra: mark as visited after popping.
 
 *Interviewer: Find shortest path in weighted graph.*
 
-**You:**
-1. "Are all weights non-negative?" → Use Dijkstra
+**You:**1. "Are all weights non-negative?" → Use Dijkstra
 2. "Can weights be negative?" → Use Bellman-Ford
 3. "Need all pairs?" → Consider Floyd-Warshall
 

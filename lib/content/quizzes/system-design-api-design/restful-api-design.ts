@@ -9,9 +9,7 @@ export const restfulapidesignQuiz = [
       'You\'re designing an API for a large e-commerce platform. A senior developer suggests making all operations use POST to "simplify the API." How would you respond, and what are the trade-offs of using proper HTTP methods vs. using only POST?',
     sampleAnswer: `I would respectfully disagree with using only POST, here's why:
 
-**Problems with POST-only APIs:**
-
-1. **Loss of Idempotency**: GET, PUT, and DELETE are idempotent, making retries safe. With POST-only, you need custom logic to prevent duplicate operations (like charging a customer twice).
+**Problems with POST-only APIs:**1. **Loss of Idempotency**: GET, PUT, and DELETE are idempotent, making retries safe. With POST-only, you need custom logic to prevent duplicate operations (like charging a customer twice).
 
 2. **No HTTP Caching**: Browsers and CDNs automatically cache GET requests. POST requests are never cached, leading to unnecessary server load and slower responses for read operations.
 
@@ -75,8 +73,7 @@ PATCH /api/users/123
 // Server updates only email, preserves other fields
 \`\`\`
 
-**Best Practice:**
-1. Use PATCH for most update operations (safer, more flexible)
+**Best Practice:**1. Use PATCH for most update operations (safer, more flexible)
 2. Document whether PUT requires full object or accepts partial
 3. Server validation: reject PUT requests missing required fields
 4. Consider using PATCH exclusively to avoid confusion

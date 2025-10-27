@@ -275,8 +275,7 @@ self.rebalance_count += 1
 
 logger.debug(
     f"Rebalance #{self.rebalance_count}: "
-            f"Traded {shares_to_trade:.2f} shares at ${self.spot: .2f
-}"
+            f"Traded {shares_to_trade:.2f} shares at ${self.spot:.2f}"
 )
 
 return shares_to_trade, cost

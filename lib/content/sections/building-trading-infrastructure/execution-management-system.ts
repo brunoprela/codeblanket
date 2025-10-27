@@ -472,7 +472,7 @@ class SmartOrderRouter:
                     venue=venue.venue,
                     quantity=route_qty,
                     expected_price=venue.ask_price,
-                    reason=f"Best ask price ${venue.ask_price}"
+                    reason=f"Best ask price \${venue.ask_price}"
                 ))
                 
                 remaining_qty -= route_qty
@@ -494,7 +494,7 @@ class SmartOrderRouter:
                     venue=venue.venue,
                     quantity=route_qty,
                     expected_price=venue.bid_price,
-                    reason=f"Best bid price ${venue.bid_price}"
+                    reason=f"Best bid price \${venue.bid_price}"
                 ))
                 
                 remaining_qty -= route_qty
@@ -617,7 +617,7 @@ class ExecutionManagementSystem:
             )
             
             print(f"  Slice {next_order['time_slice']+1}/{next_order['total_slices']}: "
-                  f"{next_order['quantity']} @ ${execution_price}")
+                  f"{next_order['quantity']} @ \${execution_price}")
         
         # Get performance
         performance = algo.get_performance()
@@ -654,7 +654,7 @@ class ExecutionManagementSystem:
             
             print(f"[EMS] Market order routing for {order_id}:")
             for decision in routing_decisions:
-                print(f"  {decision.venue.value}: {decision.quantity} @ ${decision.expected_price}")
+                print(f"  {decision.venue.value}: {decision.quantity} @ \${decision.expected_price}")
                 print(f"    Reason: {decision.reason}")
             
         elif order_type == "LIMIT":
@@ -666,7 +666,7 @@ class ExecutionManagementSystem:
             )
             
             print(f"[EMS] Limit order routing for {order_id}:")
-            print(f"  {routing_decision.venue.value}: {routing_decision.quantity} @ ${routing_decision.expected_price}")
+            print(f"  {routing_decision.venue.value}: {routing_decision.quantity} @ \${routing_decision.expected_price}")
             print(f"    Reason: {routing_decision.reason}")
         
         return routing_decisions if order_type == "MARKET" else routing_decision
@@ -711,8 +711,7 @@ async def ems_example():
 
 ## Summary
 
-**EMS Core Functions:**
-1. **Execution Algorithms**: VWAP, TWAP, POV for optimal execution
+**EMS Core Functions:**1. **Execution Algorithms**: VWAP, TWAP, POV for optimal execution
 2. **Smart Routing**: Route to best venues based on price, liquidity, fees
 3. **Broker Connectivity**: FIX protocol integration (covered in next section)
 4. **Fill Reporting**: Aggregate fills from multiple venues

@@ -227,8 +227,7 @@ class DataMigrationPipeline:
 
 ### Data Quality Assurance Process
 
-**Phase 1: Sampling (Week 1)**
-1. Select 50 representative tickers (large-cap, mid-cap, small-cap)
+**Phase 1: Sampling (Week 1)**1. Select 50 representative tickers (large-cap, mid-cap, small-cap)
 2. Compare 10 years of data for each
 3. Identify patterns in discrepancies
 
@@ -256,13 +255,11 @@ pass
 return patterns
     \`\`\`
 
-**Phase 3: Validation (Week 3)**
-1. Cross-check with third authoritative source (Bloomberg, exchange data)
+**Phase 3: Validation (Week 3)**1. Cross-check with third authoritative source (Bloomberg, exchange data)
 2. Test backtests on both datasets
 3. Compare results
 
-**Phase 4: Migration (Week 4)**
-1. Migrate data for validated tickers
+**Phase 4: Migration (Week 4)**1. Migrate data for validated tickers
 2. Set up dual-source validation for first month
 3. Monitor for issues
 
@@ -356,7 +353,8 @@ class DataQualityMonitor:
 pass
     ```
 
-            ** 3. Fallback Plan**
+
+**3. Fallback Plan**
     - Keep old vendor data archived
     - Document all discrepancies
     - Have process to roll back if needed
@@ -368,8 +366,7 @@ pass
             - 4 % have minor differences(<1%) due to rounding
                 - 1 % have significant differences requiring investigation
 
-                    ** Common root causes:**
-                        1. Different split adjustment methodologies(most common)
+                    ** Common root causes:**1. Different split adjustment methodologies(most common)
 2. Different dividend adjustment approaches
 3. Time zone handling for international stocks
 4. Data source differences(some vendors use last trade, others use mid - price)
@@ -712,6 +709,7 @@ class PointInTimeIndex:
 ### Handling Edge Cases
 
 **1. Same-Day Addition and Removal**
+
 ```sql
 --Stock added and removed same day(rare but possible)
 --Use start_date <= date AND end_date > date(not >=)
@@ -719,6 +717,7 @@ class PointInTimeIndex:
     ```
 
 **2. Sector Reclassifications**
+
 ```sql
 --Google moved from Technology to Communication Services on Sept 24, 2018
 INSERT INTO sector_classifications(ticker, effective_date, sector, changed_from)
@@ -728,6 +727,7 @@ VALUES('GOOGL', '2018-09-24', 'Communication Services', 'Technology');
     ```
 
 **3. Corporate Actions (Mergers)**
+
 ```sql
 --When Stock A acquires Stock B
 --Stock B is removed from index
@@ -741,9 +741,8 @@ WHERE ticker = 'STOCKB';
 
 ### Performance Optimization
 
-**For large backtests:**
+**For large backtests:**1. **Pre-materialize membership flags**
 
-1. **Pre-materialize membership flags**
 ```sql
 --Run nightly job to update in_sp500 flag in daily_prices
 UPDATE daily_prices dp
@@ -759,6 +758,7 @@ SET in_sp500 = EXISTS(
     ```
 
 2. **Partition tables by year**
+
 ```sql
 --For TimescaleDB or native PostgreSQL partitioning
 CREATE TABLE daily_prices_2020 PARTITION OF daily_prices
@@ -767,8 +767,7 @@ FOR VALUES FROM('2020-01-01') TO('2021-01-01');
 
 ### Data Sources
 
-**Where to get constituent history:**
-1. **Bloomberg Terminal**: Most accurate, $24K/year
+**Where to get constituent history:**1. **Bloomberg Terminal**: Most accurate, $24K/year
 2. **S&P Dow Jones Indices**: Official source, expensive
 3. **Norgate Data**: ~$500/year, includes delisted stocks
 4. **Wikipedia + Manual**: Free but requires maintenance
@@ -1230,9 +1229,7 @@ class MetricsCollector:
 
 ### Monitoring Dashboard
 
-**Key Metrics to Track:**
-
-1. **Data Quality Score** (0-100)
+**Key Metrics to Track:**1. **Data Quality Score** (0-100)
    - % of quotes passing validation
    - % of successful consolidations
    - Source agreement rate
@@ -1254,6 +1251,7 @@ class MetricsCollector:
 ### Handling Specific Scenarios
 
 **1. Data Gap Detection and Fill**
+
 ```python
     class DataGapHandler:
     """
@@ -1285,6 +1283,11 @@ class MetricsCollector:
         ```
 
 **2. Corporate Action Delayed Reporting**
+
+
+
+
+
 ```python
     class CorporateActionBuffer:
     """

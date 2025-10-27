@@ -16,8 +16,7 @@ export const kafkaconsumersQuiz: QuizQuestion[] = [
 
 A consumer group is a set of consumers that cooperate to consume a topic, with each partition consumed by exactly one consumer in the group at any time.
 
-**Key Rules:**
-1. Each partition assigned to exactly ONE consumer in a group
+**Key Rules:**1. Each partition assigned to exactly ONE consumer in a group
 2. Each consumer can handle MULTIPLE partitions
 3. Max parallelism = Number of partitions
 4. Multiple consumer groups can read the same topic independently
@@ -157,8 +156,7 @@ Use: CooperativeStickyAssignor (Kafka 2.4+)
 
 **Rebalancing Process:**
 
-**When Rebalancing Triggers:**
-1. Consumer joins group (scale up)
+**When Rebalancing Triggers:**1. Consumer joins group (scale up)
 2. Consumer leaves group (shutdown/crash)
 3. Consumer session timeout (heartbeat failure)
 4. Partitions added to topic
@@ -386,9 +384,7 @@ Dashboard:
 - Processing rate per consumer
 \`\`\`
 
-**Key Takeaways:**
-
-1. **Max parallelism = Number of partitions** (24 partitions = max 24 useful consumers)
+**Key Takeaways:**1. **Max parallelism = Number of partitions** (24 partitions = max 24 useful consumers)
 2. **CooperativeStickyAssignor minimizes rebalancing disruption** (incremental, not stop-the-world)
 3. **Consumer crash causes rebalancing** (session timeout + reassignment = 10-15 sec downtime)
 4. **Idempotent processing handles duplicate messages** (reprocessing after crash)
@@ -853,9 +849,7 @@ try {
 }
 \`\`\`
 
-**Key Takeaways:**
-
-1. **commitSync guarantees commit before continuing** (safest, slight overhead)
+**Key Takeaways:**1. **commitSync guarantees commit before continuing** (safest, slight overhead)
 2. **commitAsync improves throughput** (non-blocking, but no guarantee)
 3. **For payments: commitSync + idempotency** (no duplicates, reliable)
 4. **Idempotency has three layers** (Redis cache, database, payment gateway)
@@ -1361,9 +1355,7 @@ reprocessor.reprocessDLQ("date>=2023-06-01");
     - Improve error handling
 \`\`\`
 
-**Key Takeaways:**
-
-1. **DLQ prevents poison messages from blocking queue** (isolate failures)
+**Key Takeaways:**1. **DLQ prevents poison messages from blocking queue** (isolate failures)
 2. **Distinguish retriable vs non-retriable errors** (retry transient, DLQ permanent)
 3. **Exponential backoff for retries** (1s, 2s, 4s, 8s, max 5 retries)
 4. **Rich metadata in DLQ messages** (error details, context, timestamps)

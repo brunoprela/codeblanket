@@ -73,9 +73,7 @@ Gradient w.r.t. pre-activation z:
         = ŷ - y  (simple!)
 \`\`\`
 
-**Benefits:**
-
-1. **No Vanishing Gradient**: Gradient = ŷ - y (independent of σ'(z))
+**Benefits:**1. **No Vanishing Gradient**: Gradient = ŷ - y (independent of σ'(z))
    - Large error → Large gradient
    - Works even when prediction is very wrong
 
@@ -436,16 +434,12 @@ for config in weight_configs:
         best_config = config
 \`\`\`
 
-**Challenges:**
-
-1. **Multiple Objectives**: Hard to balance direction, profit, risk
+**Challenges:**1. **Multiple Objectives**: Hard to balance direction, profit, risk
 2. **Non-Stationarity**: Optimal weights change with market regime
 3. **Overfitting**: Easy to overfit to training period
 4. **Computational**: Complex loss slows training
 
-**Best Practices:**
-
-1. **Start Simple**: Begin with Sharpe ratio loss
+**Best Practices:**1. **Start Simple**: Begin with Sharpe ratio loss
 2. **Add Complexity**: Add transaction costs next, then other components
 3. **Validate Out-of-Sample**: Always test on unseen data
 4. **Walk-Forward**: Retrain regularly with recent data

@@ -21,14 +21,12 @@ export const finetuningTransformersQuiz: QuizQuestion[] = [
 - Faster training
 - Can serve multiple tasks from one base model
 
-**When to Use Full Fine-tuning:**
-1. Large dataset (>100K examples)
+**When to Use Full Fine-tuning:**1. Large dataset (>100K examples)
 2. Domain shift from pre-training
 3. Critical accuracy requirements
 4. Sufficient compute resources
 
-**When to Use LoRA:**
-1. Limited compute/memory
+**When to Use LoRA:**1. Limited compute/memory
 2. Multiple tasks to serve
 3. Rapid iteration needed
 4. Small datasets (<10K examples)
@@ -55,8 +53,7 @@ export const finetuningTransformersQuiz: QuizQuestion[] = [
 - **Middle layers**: Semantic relationships, context
 - **Higher layers**: Task-specific patterns
 
-**Gradual Unfreezing:**
-1. Start: Train only classifier head
+**Gradual Unfreezing:**1. Start: Train only classifier head
 2. Then: Unfreeze top encoder layer
 3. Finally: Unfreeze all layers
 
@@ -140,8 +137,7 @@ EarlyStoppingCallback (early_stopping_patience=2)
 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
 \`\`\`
 
-**Implementation Priority:**
-1. Early stopping (immediate, no downside)
+**Implementation Priority:**1. Early stopping (immediate, no downside)
 2. Dropout + weight decay (easy, effective)
 3. Data augmentation (if possible)
 4. Reduce model size (if accuracy allows)

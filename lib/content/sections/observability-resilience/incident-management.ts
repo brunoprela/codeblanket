@@ -591,9 +591,7 @@ Target: > 90%
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **Incident**: Unplanned user-impacting event
+### **Key Concepts**1. **Incident**: Unplanned user-impacting event
 2. **Severity**: SEV-1 (critical) to SEV-4 (low)
 3. **Incident Commander**: Coordinates response
 4. **MTTR**: Mean Time To Recovery

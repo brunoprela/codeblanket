@@ -1,7 +1,7 @@
 export const orderBookSimulator = {
-    title: 'Project: Order Book Simulator',
-    id: 'order-book-simulator',
-    content: `# Project: Order Book Simulator
+  title: 'Project: Order Book Simulator',
+  id: 'order-book-simulator',
+  content: `# Project: Order Book Simulator
 
 ## Introduction
 

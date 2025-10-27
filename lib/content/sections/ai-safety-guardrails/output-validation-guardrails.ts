@@ -47,7 +47,7 @@ class ValidationResult:
 
 class JSONSchemaValidator:
     """Validate LLM outputs against JSON schemas"""
-    
+
     def __init__(self):
         # Define schemas for different output types
         self.schemas = {
@@ -86,7 +86,7 @@ class JSONSchemaValidator:
                 'required': ['language', 'code']
             }
         }
-    
+
     def validate_output(
         self,
         output: str,
@@ -94,15 +94,15 @@ class JSONSchemaValidator:
     ) -> ValidationResult:
         """
         Validate LLM JSON output against schema.
-        
+
         Args:
             output: LLM output string (should be JSON)
             schema_name: Name of schema to validate against
         """
-        
+
         errors = []
         warnings = []
-        
+
         # Get schema
         schema = self.schemas.get (schema_name)
         if not schema:
@@ -112,7 +112,7 @@ class JSONSchemaValidator:
                 errors=[f"Schema '{schema_name}' not found"],
                 warnings=[]
             )
-        
+
         # Parse JSON
         try:
             data = json.loads (output)
@@ -123,7 +123,7 @@ class JSONSchemaValidator:
                 errors=[f"Invalid JSON: {str (e)}"],
                 warnings=[]
             )
-        
+
         # Validate against schema
         try:
             validate (instance=data, schema=schema)
@@ -195,41 +195,41 @@ class CodeSnippet(BaseModel):
     code: str = Field(..., min_length=10, max_length=10000)
     explanation: str = Field(..., min_length=10)
     test_cases: List[TestCase] = Field (default_factory=list)
-    
+
     @validator('code')
     def validate_code (cls, v, values):
         """Custom validation for code"""
         language = values.get('language')
-        
+
         # Language-specific validation
         if language == ProgrammingLanguage.PYTHON:
             # Check for basic Python syntax
             if 'def ' not in v and 'class ' not in v:
                 raise ValueError("Python code should contain function or class definition")
-        
+
         # Check for potentially dangerous code
         dangerous_patterns = ['eval(', 'exec(', '__import__']
         if any (pattern in v for pattern in dangerous_patterns):
             raise ValueError("Code contains potentially dangerous patterns")
-        
+
         return v
 
 class Pydantic Validator:
     """Validate LLM outputs using Pydantic models"""
-    
+
     def __init__(self):
         self.models = {
             'code_snippet': CodeSnippet,
             # Add more models as needed
         }
-    
+
     def validate_output(
         self,
         output: str,
         model_name: str
     ) -> ValidationResult:
         """Validate output using Pydantic model"""
-        
+
         # Get model
         model_class = self.models.get (model_name)
         if not model_class:
@@ -239,7 +239,7 @@ class Pydantic Validator:
                 errors=[f"Model '{model_name}' not found"],
                 warnings=[]
             )
-        
+
         # Parse JSON
         try:
             data = json.loads (output)
@@ -250,7 +250,7 @@ class Pydantic Validator:
                 errors=[f"Invalid JSON: {str (e)}"],
                 warnings=[]
             )
-        
+
         # Validate using Pydantic
         try:
             validated_data = model_class(**data)
@@ -312,14 +312,14 @@ guard = gd.Guard.from_rail_string("""
 
 class GuardrailsValidator:
     """Validate using Guardrails AI library"""
-    
+
     def __init__(self):
         self.guards = {}
         self._setup_guards()
-    
+
     def _setup_guards (self):
         """Setup predefined guards"""
-        
+
         # Guard for code output
         self.guards['code'] = gd.Guard.from_rail_string("""
 <rail version="0.1">
@@ -332,7 +332,7 @@ class GuardrailsValidator:
 </output>
 </rail>
 """)
-        
+
         # Guard for summaries
         self.guards['summary'] = gd.Guard.from_rail_string("""
 <rail version="0.1">
@@ -341,21 +341,21 @@ class GuardrailsValidator:
 </output>
 </rail>
 """)
-    
+
     def validate_with_guard(
         self,
         output: str,
         guard_name: str
     ) -> Dict:
         """Validate output using named guard"""
-        
+
         guard = self.guards.get (guard_name)
         if not guard:
             return {
                 'valid': False,
                 'error': f"Guard '{guard_name}' not found"
             }
-        
+
         try:
             validated_output = guard.parse (output)
             return {
@@ -369,7 +369,7 @@ class GuardrailsValidator:
                 'error': str (e),
                 'original_output': output
             }
-    
+
     def validate_and_fix(
         self,
         llm_function,
@@ -378,31 +378,31 @@ class GuardrailsValidator:
     ) -> Dict:
         """
         Validate LLM output and automatically retry/fix if invalid.
-        
+
         Args:
             llm_function: Function that calls LLM
             guard_name: Name of guard to use
             max_retries: Maximum retry attempts
         """
-        
+
         guard = self.guards.get (guard_name)
         if not guard:
             return {'valid': False, 'error': 'Guard not found'}
-        
+
         for attempt in range (max_retries):
             try:
                 # Call LLM
                 output = llm_function()
-                
+
                 # Validate
                 validated = guard.parse (output)
-                
+
                 return {
                     'valid': True,
                     'validated_output': validated,
                     'attempts': attempt + 1
                 }
-            
+
             except Exception as e:
                 if attempt == max_retries - 1:
                     return {
@@ -411,7 +411,7 @@ class GuardrailsValidator:
                         'attempts': attempt + 1
                     }
                 continue
-        
+
         return {'valid': False, 'error': 'Max retries exceeded'}
 
 # Example usage
@@ -434,11 +434,11 @@ print(f"Valid: {result['valid']}")
 \`\`\`python
 class QualityValidator:
     """Validate output quality"""
-    
+
     def __init__(self):
         self.min_length = 50
         self.max_length = 5000
-    
+
     def validate_quality(
         self,
         output: str,
@@ -446,38 +446,38 @@ class QualityValidator:
     ) -> Dict:
         """
         Validate output quality.
-        
+
         Checks:
         1. Length (not too short or long)
         2. Relevance to prompt
         3. Completeness
         4. Coherence
         """
-        
+
         issues = []
         warnings = []
-        
+
         # Check 1: Length
         if len (output) < self.min_length:
             issues.append (f"Output too short: {len (output)} chars (min: {self.min_length})")
         elif len (output) > self.max_length:
             warnings.append (f"Output very long: {len (output)} chars (max: {self.max_length})")
-        
+
         # Check 2: Completeness
         if output.endswith('...') or 'continued' in output.lower():
             issues.append("Output appears incomplete")
-        
+
         # Check 3: Relevance (simple keyword matching)
         relevance_score = self._check_relevance (prompt, output)
         if relevance_score < 0.3:
             issues.append (f"Low relevance score: {relevance_score:.2f}")
-        
+
         # Check 4: Coherence (simple checks)
         coherence_issues = self._check_coherence (output)
         issues.extend (coherence_issues)
-        
+
         is_valid = len (issues) == 0
-        
+
         return {
             'is_valid': is_valid,
             'quality_score': self._calculate_quality_score (issues, warnings),
@@ -485,30 +485,30 @@ class QualityValidator:
             'warnings': warnings,
             'relevance_score': relevance_score
         }
-    
+
     def _check_relevance (self, prompt: str, output: str) -> float:
         """Check if output is relevant to prompt"""
-        
+
         # Extract keywords from prompt
         prompt_words = set (prompt.lower().split())
         output_words = set (output.lower().split())
-        
+
         # Calculate overlap
         overlap = len (prompt_words.intersection (output_words))
         relevance = overlap / max (len (prompt_words), 1)
-        
+
         return relevance
-    
+
     def _check_coherence (self, output: str) -> List[str]:
         """Check output coherence"""
-        
+
         issues = []
-        
+
         # Check for repeated phrases
         sentences = output.split('.')
         if len (sentences) > len (set (sentences)):
             issues.append("Contains repeated sentences")
-        
+
         # Check for gibberish (very high ratio of non-words)
         words = output.split()
         if words:
@@ -516,20 +516,20 @@ class QualityValidator:
             alphabetic_ratio = sum(1 for w in words if w.isalpha()) / len (words)
             if alphabetic_ratio < 0.7:
                 issues.append("High ratio of non-standard characters")
-        
+
         return issues
-    
+
     def _calculate_quality_score(
         self,
         issues: List[str],
         warnings: List[str]
     ) -> float:
         """Calculate overall quality score"""
-        
+
         score = 1.0
         score -= len (issues) * 0.2
         score -= len (warnings) * 0.1
-        
+
         return max(0.0, min(1.0, score))
 
 # Example usage
@@ -580,12 +580,12 @@ class ComprehensiveValidator:
     3. Safety checks
     4. Business logic validation
     """
-    
+
     def __init__(self):
         self.schema_validator = JSONSchemaValidator()
         self.quality_validator = QualityValidator()
         self.pii_detector = RegexPIIDetector()  # From previous section
-    
+
     def validate(
         self,
         output: str,
@@ -595,16 +595,16 @@ class ComprehensiveValidator:
     ) -> ComprehensiveValidationResult:
         """
         Comprehensive validation of LLM output.
-        
+
         Args:
             output: LLM output to validate
             prompt: Original prompt
             schema_name: Optional schema to validate against
             custom_validators: Optional custom validation functions
         """
-        
+
         issues = []
-        
+
         # Step 1: Schema validation (if schema provided)
         validated_data = None
         if schema_name:
@@ -617,7 +617,7 @@ class ComprehensiveValidator:
                         validator='schema'
                     ))
             validated_data = schema_result.data
-        
+
         # Step 2: Quality validation
         quality_result = self.quality_validator.validate_quality (output, prompt)
         for issue in quality_result['issues']:
@@ -632,7 +632,7 @@ class ComprehensiveValidator:
                 message=warning,
                 validator='quality'
             ))
-        
+
         # Step 3: Safety checks (PII detection)
         pii_matches = self.pii_detector.detect (output)
         if pii_matches:
@@ -641,7 +641,7 @@ class ComprehensiveValidator:
                 message=f"PII detected: {len (pii_matches)} instances",
                 validator='safety'
             ))
-        
+
         # Step 4: Custom validators
         if custom_validators:
             for validator_func in custom_validators:
@@ -659,15 +659,15 @@ class ComprehensiveValidator:
                         message=f"Custom validator error: {str (e)}",
                         validator='custom'
                     ))
-        
+
         # Make final decision
         errors = [i for i in issues if i.severity == ValidationSeverity.ERROR]
         is_valid = len (errors) == 0
-        
+
         # Determine action
         should_retry = len (errors) > 0 and quality_result['quality_score'] > 0.3
         should_use_fallback = len (errors) > 0 and not should_retry
-        
+
         return ComprehensiveValidationResult(
             is_valid=is_valid,
             validated_data=validated_data,

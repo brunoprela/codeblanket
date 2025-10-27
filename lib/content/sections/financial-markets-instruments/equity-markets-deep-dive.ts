@@ -670,9 +670,7 @@ for ticker, weight in sorted (weights.items(), key=lambda x: x[1], reverse=True)
     print(f"{ticker}: {weight*100:.2f}%")
 \`\`\`
 
-**Major Indices Explained:**
-
-1. **Dow Jones Industrial Average (DJIA)**
+**Major Indices Explained:**1. **Dow Jones Industrial Average (DJIA)**
    - 30 large U.S. companies
    - Price-weighted (higher price = more influence)
    - Oldest index (since 1896)
@@ -1462,8 +1460,7 @@ for stock in ranked:
           f"Div Yield={stock.get('dividend_yield', 0)*100:.1f}%")
 \`\`\`
 
-**Exercise Extensions:**
-1. Add technical indicators (momentum, trend following)
+**Exercise Extensions:**1. Add technical indicators (momentum, trend following)
 2. Implement multi-factor scoring model
 3. Backtest the screener (do picked stocks outperform?)
 4. Add sector/industry classification
@@ -1473,9 +1470,7 @@ for stock in ranked:
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Equity markets** are where companies raise capital and investors build wealth
+**Key Takeaways:**1. **Equity markets** are where companies raise capital and investors build wealth
 2. **Primary markets** (IPOs) vs **Secondary markets** (daily trading)
 3. **Stock prices** are determined by supply/demand in order books
 4. **Market cap** matters more than share price

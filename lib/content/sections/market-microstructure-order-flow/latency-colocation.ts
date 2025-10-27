@@ -56,9 +56,7 @@ This section explores the sources of latency, techniques for minimization, co-lo
 - **Variable:** 0 μs (no congestion) to milliseconds (heavy congestion)
 - **Critical:** Most unpredictable component, causes "jitter" (variance in latency)
 
-**Optimization Strategies:**
-
-1. **Direct Fiber Connections (Cross-Connects):**
+**Optimization Strategies:**1. **Direct Fiber Connections (Cross-Connects):**
    - Bypass public internet, direct fiber from trader's rack to exchange
    - Eliminates routing hops (reduces switching delay)
    - Typical: 1-5 microseconds one-way within same data center
@@ -135,8 +133,7 @@ This section explores the sources of latency, techniques for minimization, co-lo
 - **Accuracy:** Sub-microsecond (0.1-1 μs)
 - **Method:** Hardware-assisted synchronization (special network cards)
 - **Used by:** Exchanges, HFT firms, co-located servers
-- **Mechanism:**
-  1. Master clock broadcasts time
+- **Mechanism:**1. Master clock broadcasts time
   2. Slaves request time, measure round-trip
   3. Hardware timestamps packets at NIC (eliminates OS jitter)
 
@@ -436,8 +433,7 @@ for scenario, latencies in scenarios.items():
 
 **Task:** Profile a simulated trading pipeline to identify latency bottlenecks.
 
-**Requirements:**
-1. Implement a multi-stage pipeline (market data → parsing → signal → order)
+**Requirements:**1. Implement a multi-stage pipeline (market data → parsing → signal → order)
 2. Measure latency at each stage using nanosecond-precision timestamps
 3. Identify the slowest stage (bottleneck)
 4. Propose optimization (faster algorithm, kernel bypass, FPGA, etc.)

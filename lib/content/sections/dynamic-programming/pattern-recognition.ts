@@ -325,8 +325,7 @@ Path problems: sum of ways to reach current from previous cells
 - Sometimes reverse order (check recurrence!)
 
 ### Step 6: Implement and Optimize
-**Progression:**
-1. Recursive with memoization (top-down)
+**Progression:**1. Recursive with memoization (top-down)
 2. Iterative with table (bottom-up)
 3. Space optimization (rolling array, variables)
 

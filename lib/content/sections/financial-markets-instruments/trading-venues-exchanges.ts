@@ -659,9 +659,7 @@ print(f"  Status: {execution['status']}")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Fragmentation**: 16 US exchanges + 40+ dark pools = need SOR
+**Key Takeaways:**1. **Fragmentation**: 16 US exchanges + 40+ dark pools = need SOR
 2. **Fee Models**: Maker-taker (most), taker-maker (IEX), zero-fee
 3. **Dark Pools**: 40% of volume, price improvement but less transparent
 4. **Reg NMS**: Order protection, best execution, sub-penny rule

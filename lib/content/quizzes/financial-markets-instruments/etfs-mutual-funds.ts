@@ -193,9 +193,7 @@ if not evaluation['passes_all_criteria']:
     print(f"Failed criteria: {', '.join (evaluation['failures'])}")
 \`\`\`
 
-**Key Metrics for Identifying Skill:**
-
-1. **Long track record**: 10+ years (short-term is luck)
+**Key Metrics for Identifying Skill:**1. **Long track record**: 10+ years (short-term is luck)
 2. **Statistical significance**: p < 0.05 (95% confidence alpha is real)
 3. **Consistency**: Outperform in 65%+ of rolling 3-year periods
 4. **Style stability**: Don't change strategy based on what's working

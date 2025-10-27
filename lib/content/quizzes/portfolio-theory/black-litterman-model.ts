@@ -93,9 +93,7 @@ Matrix multiplication:
 - **International Stocks: 8.14%**
 - **Bonds: 0.57%**
 
-**Interpretation:**
-
-1. **International stocks have highest return (8.14%)** because:
+**Interpretation:**1. **International stocks have highest return (8.14%)** because:
    - Higher volatility (22% vs 18%)
    - Smaller weight in market (30% vs 60%)
    - Market "reveals" that investors demand higher return to hold relatively less of a riskier asset
@@ -141,8 +139,7 @@ Using 10 years of historical data (120 months):
 - Intl: 2.7% to 15.5% (very wide!)
 - Bonds: 2.4% to 6.0%
 
-**Problems:**
-1. **High uncertainty:** Ranges are enormous
+**Problems:**1. **High uncertainty:** Ranges are enormous
 2. **Sample dependent:** Different 10-year periods give wildly different estimates
 3. **Non-stationarity:** True returns change over time (regime shifts)
 4. **Noise dominates signal:** Random fluctuations overwhelm true differences
@@ -241,9 +238,7 @@ Or rearranging:
 - Emerging Markets: 9.5%
 - Bonds: 2.5%
 
-**Interpretation:**
-
-1. **EM highest return (9.5%)** despite smallest weight (5%)
+**Interpretation:**1. **EM highest return (9.5%)** despite smallest weight (5%)
    - Much higher volatility (~25%)
    - Higher country risk
    - Liquidity premium
@@ -379,12 +374,7 @@ Less susceptible to price bubbles.
 - 2022: -75% decline
 - **Young asset class, insufficient history for BL**
 
-**Best Practice for Bubble-Prone Markets:**
-
-1. **Don't blindly follow market weights**
-2. **Use smoothed/historical averages**
-3. **Express contrarian views when valuations extreme**
-4. **Combine multiple equilibrium approaches:**
+**Best Practice for Bubble-Prone Markets:**1. **Don't blindly follow market weights**2. **Use smoothed/historical averages**3. **Express contrarian views when valuations extreme**4. **Combine multiple equilibrium approaches:**
    - Market cap equilibrium
    - GDP-weighted equilibrium
    - Fundamental equilibrium

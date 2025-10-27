@@ -694,9 +694,7 @@ Both try to take over same resource. ❌
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is heartbeat**: Periodic signal indicating liveness
+### **Key Concepts to Explain**1. **What is heartbeat**: Periodic signal indicating liveness
 2. **Why needed**: Failure detection, leader election, health monitoring
 3. **How it works**: Send periodically, check for timeouts
 4. **Timing**: Heartbeat interval vs timeout threshold (3-10× interval)

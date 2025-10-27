@@ -1,8 +1,9 @@
 export const newsBasedTrading = {
-    title: 'News-Based Trading',
-    slug: 'news-based-trading',
-    description: 'Trade on news events: earnings, economic releases, and real-time news processing with NLP',
-    content: `
+  title: 'News-Based Trading',
+  slug: 'news-based-trading',
+  description:
+    'Trade on news events: earnings, economic releases, and real-time news processing with NLP',
+  content: `
 # News-Based Trading
 
 ## Introduction: Information as Alpha
@@ -675,8 +676,7 @@ if __name__ == "__main__":
     
     print(f"   Latency Advantage: 10ms")
     print(f"   Has Edge: {has_edge}")
-    print(f"   Expected Profit: ${expected_profit: .2f
-}")
+    print(f"   Expected Profit: \${expected_profit:.2f})"
 \`\`\`
 
 ---
@@ -687,8 +687,7 @@ if __name__ == "__main__":
 
 **Research Finding**: Stocks that beat earnings expectations drift up over the next 30-60 days. Stocks that miss drift down.
 
-**Why It Exists:**
-1. **Under-reaction**: Investors slow to fully incorporate news
+**Why It Exists:**1. **Under-reaction**: Investors slow to fully incorporate news
 2. **Anchoring**: Previous price expectations stick
 3. **Herding**: Others follow initial movers
 4. **Institutional buying**: Takes time to accumulate positions
@@ -749,8 +748,7 @@ if __name__ == "__main__":
 - False signals (fake news)
 - Market already moved
 
-**Critical Success Factors:**
-1. **Speed**: Sub-second processing for earnings
+**Critical Success Factors:**1. **Speed**: Sub-second processing for earnings
 2. **Quality**: Filter noise, focus on material news
 3. **NLP**: Accurate sentiment analysis
 4. **Execution**: Fast order routing

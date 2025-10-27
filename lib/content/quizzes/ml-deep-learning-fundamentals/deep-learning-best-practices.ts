@@ -34,9 +34,7 @@ X_train_norm = (X_train - X_train.mean()) / X_train.std()
 X_test_norm = (X_test - X_test.mean()) / X_test.std()  # LEAKAGE!
 \`\`\`
 
-**Why Independent Normalization Is Wrong:**
-
-1. **Data Leakage**: Test statistics influence preprocessing
+**Why Independent Normalization Is Wrong:**1. **Data Leakage**: Test statistics influence preprocessing
 2. **Overoptimistic Performance**: Test set appears easier than reality
 3. **Production Failure**: Real data uses different statistics
 4. **Violates ML Principles**: Test set should be unseen
@@ -63,9 +61,7 @@ X_test_norm = (X_test - X_test.mean()) / X_test.std()  # LEAKAGE!
       'Describe the learning rate finder technique. How does it work, how do you interpret the results, and why is it more reliable than manually guessing learning rates?',
     sampleAnswer: `The Learning Rate Finder is a systematic approach to finding optimal learning rates, avoiding hours of trial-and-error:
 
-**How It Works:**
-
-1. Start with very small LR (e.g., 1e-7)
+**How It Works:**1. Start with very small LR (e.g., 1e-7)
 2. Train for a few iterations
 3. Exponentially increase LR after each iteration
 4. Record loss at each LR

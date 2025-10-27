@@ -35,8 +35,7 @@ Step 2:
 Sum = 3 + 11 = 14 == 14 → FOUND!
 \`\`\`
 
-**Why This Works:**
-1. Array is sorted, so:
+**Why This Works:**1. Array is sorted, so:
    - Moving left pointer RIGHT increases the sum
    - Moving right pointer LEFT decreases the sum
 2. We systematically explore valid possibilities

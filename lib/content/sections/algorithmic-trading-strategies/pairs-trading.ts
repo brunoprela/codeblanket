@@ -34,8 +34,7 @@ Pairs trading, pioneered by Morgan Stanley in the 1980s, is the foundation of st
 
 ### Step 1: Universe Definition
 
-**Criteria for tradeable universe:**
-1. Liquid (>$1M daily volume)
+**Criteria for tradeable universe:**1. Liquid (>$1M daily volume)
 2. Shortable (borrow available)
 3. Related (same sector/industry)
 4. Stationary spreads (cointegrated)
@@ -398,8 +397,7 @@ class PairsTradingExecutor:
 
 ### Position Sizing
 
-**Key principles:**
-1. Dollar-neutral (equal long and short)
+**Key principles:**1. Dollar-neutral (equal long and short)
 2. Risk per trade: 1-2% of capital
 3. Portfolio allocation: 5-10% per pair
 4. Max pairs: 10-20 (diversification)

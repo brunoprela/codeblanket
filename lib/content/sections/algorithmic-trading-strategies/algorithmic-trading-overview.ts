@@ -1,9 +1,9 @@
 export const algorithmicTradingOverview = {
-    title: 'Algorithmic Trading Overview',
-    slug: 'algorithmic-trading-overview',
-    description:
-        'Master the fundamentals of algorithmic trading, from strategy types to infrastructure requirements and regulatory considerations',
-    content: `
+  title: 'Algorithmic Trading Overview',
+  slug: 'algorithmic-trading-overview',
+  description:
+    'Master the fundamentals of algorithmic trading, from strategy types to infrastructure requirements and regulatory considerations',
+  content: `
 # Algorithmic Trading Overview
 
 ## Introduction: The Evolution of Trading
@@ -31,8 +31,7 @@ Algorithmic trading has fundamentally transformed financial markets. What once r
 
 **Algorithmic Trading** is the use of computer programs to automatically execute trading decisions based on predefined rules, mathematical models, or machine learning algorithms. Unlike discretionary trading (human decision-making), algo trading removes emotion and executes at speeds impossible for humans.
 
-**Key Characteristics:**
-1. **Systematic**: Rules-based, repeatable process
+**Key Characteristics:**1. **Systematic**: Rules-based, repeatable process
 2. **Automated**: Minimal human intervention during execution
 3. **Fast**: Milliseconds to microseconds execution
 4. **Data-Driven**: Relies on quantitative analysis
@@ -358,8 +357,7 @@ if __name__ == "__main__":
     signals = strategy.generate_signals(market_data)
     print(f"Generated {len(signals)} signals")
     for signal in signals:
-        print(f"{signal.timestamp}: {signal.signal_type.value} {signal.symbol} at \\${signal.price: .2f
-}")
+        print(f"{signal.timestamp}: {signal.signal_type.value} {signal.symbol} at \${signal.price:.2f})"
 \`\`\`
 
 ---
@@ -634,19 +632,19 @@ class TradingInfrastructure:
         """
         # Check 1: Daily loss limit
         if self.daily_loss >= self.max_daily_loss * self.capital:
-            self.logger.warning(f"Daily loss limit reached: \\${self.daily_loss: .2f}")
+            self.logger.warning(f"Daily loss limit reached: \${self.daily_loss:.2f}")
 return False
         
         # Check 2: Position size limit
 position_value = order.quantity * current_price
 if position_value > self.max_position_size * self.capital:
-    self.logger.warning(f"Position size too large: ${position_value:.2f}")
+    self.logger.warning(f"Position size too large: \${position_value:.2f}")
 return False
         
         # Check 3: Sufficient capital
 account_balance = await self.broker.get_account_balance()
 if position_value > account_balance * 0.95:  # Leave 5 % cushion
-self.logger.warning(f"Insufficient capital: ${account_balance:.2f}")
+self.logger.warning(f"Insufficient capital: \${account_balance:.2f}")
 return False
         
         # Check 4: Duplicate order prevention
@@ -710,8 +708,8 @@ pnl = (current_price - position['avg_price']) * position['quantity']
 
 self.logger.info(
     f"Position {symbol}: {position['quantity']} @ "
-                        f"${position['avg_price']:.2f}, Current: ${current_price:.2f}, "
-                        f"P&L: ${pnl:.2f}"
+                        f"\${position['avg_price']:.2f}, Current: \${current_price:.2f}, "
+                        f"P&L: \${pnl:.2f}"
 )
 
 await asyncio.sleep(1)  # Update every second
@@ -822,7 +820,7 @@ class RegulatoryCompliance:
         # Check 2: Excessive value
         order_value = order.quantity * market_price
         if order_value > self.max_order_value:
-            return False, f"Order value ${order_value:, .2f} exceeds limit ${ self.max_order_value:, .2f } "
+            return False, f"Order value \${order_value:,.2f} exceeds limit \${ self.max_order_value:,.2f } "
         
         # Check 3: Price reasonability(within 10 % of market)
 if order.order_type == OrderType.LIMIT and order.price:
@@ -1116,8 +1114,7 @@ if __name__ == "__main__":
 **Performance**: 66% annualized return (before fees) since 1988  
 **AUM**: Limited to $10B (capacity constraints)
 
-**Key Success Factors:**
-1. PhD-heavy team (mathematicians, physicists, computer scientists)
+**Key Success Factors:**1. PhD-heavy team (mathematicians, physicists, computer scientists)
 2. Proprietary data sources and models
 3. Ultra-low latency infrastructure
 4. Strict secrecy (black box approach)
@@ -1128,8 +1125,7 @@ if __name__ == "__main__":
 **AUM**: $60B+  
 **Technology**: Heavy use of machine learning and alternative data
 
-**Key Success Factors:**
-1. Technology-first culture (engineers = portfolio managers)
+**Key Success Factors:**1. Technology-first culture (engineers = portfolio managers)
 2. Alternative data (satellite imagery, credit card data)
 3. Cloud-based infrastructure for massive compute
 4. Continuous research and iteration
@@ -1140,8 +1136,7 @@ if __name__ == "__main__":
 **Strategy**: Market making + HFT arbitrage  
 **Technology**: Sub-millisecond latency
 
-**Key Success Factors:**
-1. Massive scale (billions of shares daily)
+**Key Success Factors:**1. Massive scale (billions of shares daily)
 2. Co-location at all major exchanges
 3. Advanced risk management systems
 4. Proprietary pricing models
@@ -1228,4 +1223,3 @@ You now understand the fundamentals of algorithmic trading:
 - Interactive Brokers for real execution (when ready)
 `,
 };
-

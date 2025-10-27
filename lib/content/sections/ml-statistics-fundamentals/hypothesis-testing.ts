@@ -25,9 +25,7 @@ The fundamental question: **"Is what we observe likely due to chance, or does it
 
 1. **State the hypotheses** (H₀ and H₁)
 2. **Choose a significance level** (α, typically 0.05)
-3. **Calculate the test statistic**
-4. **Determine the p-value**
-5. **Make a decision** (reject or fail to reject H₀)
+3. **Calculate the test statistic**4. **Determine the p-value**5. **Make a decision** (reject or fail to reject H₀)
 
 ### Null and Alternative Hypotheses
 

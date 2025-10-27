@@ -215,8 +215,7 @@ class MarketMaker:
 
 **Flash Crash Scenario:**
 
-**What Happened (May 6, 2010):**
-1. Large sell order (\$4.1B E-mini futures)
+**What Happened (May 6, 2010):**1. Large sell order (\$4.1B E-mini futures)
 2. HFT market makers bought, then tried to sell
 3. No buyers → HFTs sold to each other in hot potato
 4. Prices cascaded down

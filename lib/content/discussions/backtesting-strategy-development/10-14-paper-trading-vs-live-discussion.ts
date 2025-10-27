@@ -1,13 +1,13 @@
 import { Content } from '@/lib/types';
 
 const paperTradingVsLiveDiscussion: Content = {
-    title: 'Paper Trading vs Live Trading - Discussion Questions',
-    description:
-        'Deep-dive discussion questions on transition strategies, risk management, and production deployment',
-    sections: [
-        {
-            title: 'Discussion Questions',
-            content: `
+  title: 'Paper Trading vs Live Trading - Discussion Questions',
+  description:
+    'Deep-dive discussion questions on transition strategies, risk management, and production deployment',
+  sections: [
+    {
+      title: 'Discussion Questions',
+      content: `
 # Discussion Questions: Paper Trading vs Live Trading
 
 ## Question 1: Paper Trading Performance Divergence Analysis
@@ -28,8 +28,7 @@ const paperTradingVsLiveDiscussion: Content = {
 - Slippage averaging 15 bps (backtest assumed 5 bps)
 - Several limit orders went unfilled (backtest assumed all fills)
 
-**Questions:**
-1. What factors explain the performance degradation?
+**Questions:**1. What factors explain the performance degradation?
 2. Should you proceed to live trading, modify the strategy, or abandon it?
 3. How do you adjust backtest assumptions for future strategies?
 
@@ -243,10 +242,7 @@ print(report)
 
 Given the 57% Sharpe degradation and significantly higher slippage, the recommendation would be **CONDITIONAL** or **REJECT**.
 
-**Specific Actions:**
-
-1. **Don't proceed to live immediately**
-2. **Modify strategy**:
+**Specific Actions:**1. **Don't proceed to live immediately**2. **Modify strategy**:
    - Widen profit targets to compensate for slippage
    - Use market orders for smaller positions, limit orders for larger
    - Increase minimum expected return per trade
@@ -527,9 +523,7 @@ if __name__ == "__main__":
     example_progressive_allocation()
 \`\`\`
 
-**Key Principles:**
-
-1. **Start Small (10%)**: Test with real money but limit downside
+**Key Principles:**1. **Start Small (10%)**: Test with real money but limit downside
 2. **Time Gates**: Minimum duration at each stage to observe various conditions
 3. **Clear Criteria**: Objective metrics for advancement
 4. **Reversibility**: Can scale back if performance degrades
@@ -660,8 +654,7 @@ class EmergencyShutdownSystem:
         self.incident_log.append(incident)
 \`\`\`
 
-**Incident Response Checklist:**
-1. [ ] Emergency shutdown triggered
+**Incident Response Checklist:**1. [ ] Emergency shutdown triggered
 2. [ ] Team notified (phone, email, Slack)
 3. [ ] Positions assessed
 4. [ ] Root cause investigation started
@@ -672,8 +665,8 @@ class EmergencyShutdownSystem:
 
 **Prevention > Response**: Better to have false alarms than miss a real emergency.
 `,
-        },
-    ],
+    },
+  ],
 };
 
 export default paperTradingVsLiveDiscussion;

@@ -25,12 +25,12 @@ async def fetch_data (n):
 
 async def without_tasks():
     start = time.time()
-    
+
     # Waiting for each one sequentially
     result1 = await fetch_data(1)  # Wait 1s
     result2 = await fetch_data(2)  # Wait another 1s
     result3 = await fetch_data(3)  # Wait another 1s
-    
+
     print(f"Time: {time.time() - start:.2f}s")  # ~3.0s
     return [result1, result2, result3]
 
@@ -39,16 +39,16 @@ With Tasks: Concurrent Execution
 """
 async def with_tasks():
     start = time.time()
-    
+
     # Create tasks (starts execution immediately!)
     task1 = asyncio.create_task (fetch_data(1))
     task2 = asyncio.create_task (fetch_data(2))
     task3 = asyncio.create_task (fetch_data(3))
-    
+
     # All three are running now
     # Wait for completion
     results = await asyncio.gather (task1, task2, task3)
-    
+
     print(f"Time: {time.time() - start:.2f}s")  # ~1.0s
     return results
 
@@ -88,11 +88,11 @@ async def my_coroutine (n):
 async def main():
     # Create a task (starts running immediately!)
     task = asyncio.create_task (my_coroutine(5))
-    
+
     print("Task created, doing other work...")
     await asyncio.sleep(0.5)
     print("Other work done")
-    
+
     # Now wait for the task to complete
     result = await task
     print(f"Result: {result}")
@@ -125,19 +125,19 @@ async def fetch_user (user_id):
 
 async def main():
     start = time.time()
-    
+
     # Create multiple tasks
     tasks = [
         asyncio.create_task (fetch_user (i))
         for i in range(10)
     ]
-    
+
     # All 10 tasks are now running concurrently!
     print(f"Created {len (tasks)} tasks")
-    
+
     # Wait for all to complete
     users = await asyncio.gather(*tasks)
-    
+
     elapsed = time.time() - start
     print(f"Fetched {len (users)} users in {elapsed:.2f}s")
 
@@ -166,13 +166,13 @@ async def main():
         background_task(),
         name="background-worker-1"
     )
-    
+
     # Get task name
     print(f"Task name: {task.get_name()}")
-    
+
     # Change task name
     task.set_name("worker-1-renamed")
-    
+
     await asyncio.sleep(3)
     task.cancel()
 
@@ -200,20 +200,20 @@ async def slow_operation():
 async def main():
     # Create task
     task = asyncio.create_task (slow_operation())
-    
+
     # Check if done
     print(f"Done: {task.done()}")  # False (just started)
-    
+
     # Check if cancelled
     print(f"Cancelled: {task.cancelled()}")  # False
-    
+
     # Wait a bit
     await asyncio.sleep(0.1)
     print(f"Done after 0.1s: {task.done()}")  # Still False
-    
+
     # Wait for completion
     result = await task
-    
+
     print(f"Done after await: {task.done()}")  # True
     print(f"Result: {task.result()}")  # "Done"
     print(f"Exception: {task.exception()}")  # None (no error)
@@ -235,17 +235,17 @@ async def compute (n):
 
 async def main():
     task = asyncio.create_task (compute(5))
-    
+
     # Method 1: Await the task
     result = await task
     print(f"Method 1: {result}")  # 25
-    
+
     # Method 2: Get result after task is done
     task2 = asyncio.create_task (compute(10))
     await task2  # Wait for completion
     result = task2.result()  # Get result without awaiting again
     print(f"Method 2: {result}")  # 100
-    
+
     # ❌ Don't do this: Get result before task is done
     task3 = asyncio.create_task (compute(15))
     try:
@@ -270,15 +270,15 @@ async def failing_task():
 
 async def main():
     task = asyncio.create_task (failing_task())
-    
+
     try:
         await task
     except ValueError as e:
         print(f"Caught exception: {e}")
-    
+
     # After catching, can check exception on task object
     print(f"Task exception: {task.exception()}")
-    
+
     # Task is done but with exception
     print(f"Task done: {task.done()}")  # True
     print(f"Task cancelled: {task.cancelled()}")  # False
@@ -316,13 +316,13 @@ async def long_running_task():
 
 async def main():
     task = asyncio.create_task (long_running_task())
-    
+
     # Let it run for 1 second
     await asyncio.sleep(1)
-    
+
     # Cancel the task
     task.cancel()
-    
+
     try:
         await task
     except asyncio.CancelledError:
@@ -347,7 +347,7 @@ import asyncio
 class DatabaseConnection:
     def __init__(self):
         self.closed = False
-    
+
     async def close (self):
         print("Closing database connection...")
         await asyncio.sleep(0.1)
@@ -367,15 +367,15 @@ async def database_task (conn):
 async def main():
     conn = DatabaseConnection()
     task = asyncio.create_task (database_task (conn))
-    
+
     await asyncio.sleep(0.5)
     task.cancel()
-    
+
     try:
         await task
     except asyncio.CancelledError:
         print("Task fully cancelled and cleaned up")
-    
+
     print(f"Connection closed: {conn.closed}")
 
 asyncio.run (main())
@@ -412,18 +412,18 @@ async def main():
         asyncio.create_task (worker (i))
         for i in range(5)
     ]
-    
+
     # Let them work for 3 seconds
     await asyncio.sleep(3)
-    
+
     # Cancel all tasks
     print("Cancelling all workers...")
     for task in tasks:
         task.cancel()
-    
+
     # Wait for all to finish cancelling
     await asyncio.gather(*tasks, return_exceptions=True)
-    
+
     print("All workers cancelled")
 
 asyncio.run (main())
@@ -504,21 +504,21 @@ async def main():
         asyncio.create_task (fetch_with_delay(2, 1.5)),
         asyncio.create_task (fetch_with_delay(3, 2.5)),
     ]
-    
+
     # Wait up to 2 seconds
     done, pending = await asyncio.wait(
         tasks,
         timeout=2.0
     )
-    
+
     # Get results from completed tasks
     results = [task.result() for task in done]
     print(f"Completed: {results}")
-    
+
     # Cancel pending tasks
     for task in pending:
         task.cancel()
-    
+
     print(f"Cancelled: {len (pending)} tasks")
 
 asyncio.run (main())
@@ -553,23 +553,23 @@ async def main():
         fetch_data(2),
         fetch_data(3),
     )
-    
+
     print(f"Results: {results}")
     # Results: ['Data from 1', 'Data from 2', 'Data from 3']
-    
+
     # With error handling
     async def might_fail (n):
         if n == 2:
             raise ValueError("Failed!")
         return n * 10
-    
+
     results = await asyncio.gather(
         might_fail(1),
         might_fail(2),
         might_fail(3),
         return_exceptions=True  # Don't stop on first error
     )
-    
+
     for i, result in enumerate (results):
         if isinstance (result, Exception):
             print(f"Task {i} failed: {result}")
@@ -603,27 +603,27 @@ async def main():
         asyncio.create_task (worker(2)),
         asyncio.create_task (worker(3)),
     ]
-    
+
     # Wait for all to complete
     done, pending = await asyncio.wait (tasks)
-    
+
     results = [task.result() for task in done]
     print(f"All done: {sorted (results)}")
-    
+
     # Wait for first to complete
     tasks = [
         asyncio.create_task (worker(1)),
         asyncio.create_task (worker(2)),
         asyncio.create_task (worker(3)),
     ]
-    
+
     done, pending = await asyncio.wait(
         tasks,
         return_when=asyncio.FIRST_COMPLETED
     )
-    
+
     print(f"First done: {list (done)[0].result()}")
-    
+
     # Cancel remaining
     for task in pending:
         task.cancel()
@@ -650,7 +650,7 @@ async def main():
         fetch_with_delay(2, 0.5),
         fetch_with_delay(3, 1.0),
     ]
-    
+
     # Process results in completion order (not submission order!)
     for coro in asyncio.as_completed (tasks):
         result = await coro
@@ -688,7 +688,7 @@ async def main():
         task1 = tg.create_task (worker(1))
         task2 = tg.create_task (worker(2))
         task3 = tg.create_task (worker(3))
-    
+
     # When exiting, all tasks automatically awaited
     print(f"Results: {task1.result()}, {task2.result()}, {task3.result()}")
 
@@ -718,7 +718,7 @@ async def main():
             task3 = tg.create_task (worker(3))
     except* ValueError as eg:  # Exception group
         print(f"Caught errors: {eg.exceptions}")
-    
+
     # When task2 fails, task1 and task3 are automatically cancelled
     # This is "structured concurrency"
 
@@ -741,16 +741,16 @@ import asyncio
 
 async def main():
     loop = asyncio.get_running_loop()
-    
+
     # Create a future
     future = loop.create_future()
-    
+
     # Schedule result to be set later
     def set_result():
         future.set_result("Hello from the future!")
-    
+
     loop.call_later(2.0, set_result)
-    
+
     print("Waiting for future...")
     result = await future
     print(f"Got: {result}")
@@ -777,10 +777,10 @@ async def fetch_data_async (api):
     """Wrap callback API for async use"""
     loop = asyncio.get_running_loop()
     future = loop.create_future()
-    
+
     def callback (data):
         future.set_result (data)
-    
+
     api.fetch_data (callback)
     return await future
 
@@ -804,9 +804,9 @@ async def main():
     # Create all tasks immediately (they start running)
     task1 = asyncio.create_task (operation1())
     task2 = asyncio.create_task (operation2())
-    
+
     # Do other work...
-    
+
     # Then wait for results
     result1, result2 = await asyncio.gather (task1, task2)
 \`\`\`
@@ -818,7 +818,7 @@ async def main():
 async def main():
     result1 = await operation1()  # Wait here
     result2 = await operation2()  # Then wait here
-    
+
     # Operations run sequentially, not concurrently!
 \`\`\`
 

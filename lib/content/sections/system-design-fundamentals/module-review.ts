@@ -57,9 +57,7 @@ export const modulereviewSection = {
 
 ## Self-Assessment
 
-### **Rate Your Understanding (1-5):**
-
-1. **Requirements gathering**: Can you ask clarifying questions effectively?
+### **Rate Your Understanding (1-5):**1. **Requirements gathering**: Can you ask clarifying questions effectively?
 2. **Back-of-envelope calculations**: Can you estimate storage, QPS, bandwidth?
 3. **CAP theorem**: Do you understand consistency/availability trade-offs?
 4. **Framework application**: Can you follow the 4-step process?
@@ -133,8 +131,7 @@ Topics include:
 - Database scaling patterns
 - Indexing strategies
 
-### **Preparation for Next Modules:**
-1. Review this module's key takeaways
+### **Preparation for Next Modules:**1. Review this module's key takeaways
 2. Practice the 4-step framework on 2-3 problems
 3. Get comfortable with back-of-envelope calculations
 4. Practice drawing diagrams

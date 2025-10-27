@@ -54,7 +54,7 @@ from scipy.spatial.distance import pdist, squareform
 
 # Generate sample data
 np.random.seed(42)
-X, y_true = make_blobs (n_samples=100, centers=4, 
+X, y_true = make_blobs (n_samples=100, centers=4,
                        cluster_std=0.8, random_state=42)
 
 print(f"Data shape: {X.shape}")
@@ -279,7 +279,7 @@ titles = ['Single Linkage', 'Complete Linkage', 'Average Linkage', 'Ward Linkage
 for idx, (method, title) in enumerate (zip (methods, titles)):
     hc = AgglomerativeClustering (n_clusters=4, linkage=method)
     labels = hc.fit_predict(X)
-    
+
     axes[idx].scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', s=50, alpha=0.6)
     axes[idx].set_title (title, fontsize=14)
     axes[idx].set_xlabel('Feature 1')
@@ -306,7 +306,7 @@ plt.ylabel('Distance')
 
 # Add horizontal lines at different cutting heights
 for height, color in [(10, 'r'), (15, 'g'), (20, 'b')]:
-    plt.axhline (y=height, color=color, linestyle='--', 
+    plt.axhline (y=height, color=color, linestyle='--',
                 label=f'Cut at height={height}')
 
 plt.legend()
@@ -410,9 +410,9 @@ for idx, metric in enumerate (metrics):
     else:
         linkage_mat = linkage(X, method='ward', metric=metric)
         hc = AgglomerativeClustering (n_clusters=4, linkage='ward', metric=metric)
-    
+
     labels = hc.fit_predict(X)
-    
+
     axes[idx].scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', s=50, alpha=0.6)
     axes[idx].set_title (f'{metric.capitalize()} Distance', fontsize=14)
     axes[idx].set_xlabel('Feature 1')
@@ -435,7 +435,7 @@ kmeans = KMeans (n_clusters=4, random_state=42, n_init=10)
 labels_kmeans = kmeans.fit_predict(X)
 
 axes[0].scatter(X[:, 0], X[:, 1], c=labels_kmeans, cmap='viridis', s=50, alpha=0.6)
-axes[0].scatter (kmeans.cluster_centers_[:, 0], 
+axes[0].scatter (kmeans.cluster_centers_[:, 0],
                kmeans.cluster_centers_[:, 1],
                c='red', marker='X', s=200, edgecolors='black', linewidths=2)
 axes[0].set_title('K-Means Clustering')
@@ -561,7 +561,7 @@ ax2 = fig.add_axes([0.25, 0.1, 0.6, 0.8])
 idx = dend['leaves']
 gene_expression_ordered = gene_expression_scaled[idx, :]
 
-im = ax2.imshow (gene_expression_ordered, aspect='auto', cmap='RdBu_r', 
+im = ax2.imshow (gene_expression_ordered, aspect='auto', cmap='RdBu_r',
                 vmin=-3, vmax=3)
 ax2.set_xticks (range (n_conditions))
 ax2.set_xticklabels (condition_names, rotation=45)
@@ -628,20 +628,20 @@ for segment in range(1, 4):
 
 ## Advantages of Hierarchical Clustering
 
-✅ **No need to specify K upfront**: Explore at multiple granularities  
-✅ **Deterministic**: Same data always gives same result  
-✅ **Dendrogram provides insights**: Visual hierarchy of relationships  
-✅ **Any distance metric**: Euclidean, Manhattan, cosine, custom  
-✅ **Flexible cluster shapes**: Not limited to spherical clusters  
-✅ **Nested clusters**: Naturally handles hierarchical structure  
+✅ **No need to specify K upfront**: Explore at multiple granularities
+✅ **Deterministic**: Same data always gives same result
+✅ **Dendrogram provides insights**: Visual hierarchy of relationships
+✅ **Any distance metric**: Euclidean, Manhattan, cosine, custom
+✅ **Flexible cluster shapes**: Not limited to spherical clusters
+✅ **Nested clusters**: Naturally handles hierarchical structure
 
 ## Limitations and Disadvantages
 
-❌ **Computational complexity**: O(n²log n) - slow for large datasets  
-❌ **Memory intensive**: Requires storing distance matrix  
-❌ **Cannot undo merges**: Greedy algorithm, no backtracking  
-❌ **Sensitive to noise/outliers**: Early bad merges propagate  
-❌ **No global objective**: Unlike K-Means (minimizing WCSS)  
+❌ **Computational complexity**: O(n²log n) - slow for large datasets
+❌ **Memory intensive**: Requires storing distance matrix
+❌ **Cannot undo merges**: Greedy algorithm, no backtracking
+❌ **Sensitive to noise/outliers**: Early bad merges propagate
+❌ **No global objective**: Unlike K-Means (minimizing WCSS)
 
 ## Practical Considerations
 

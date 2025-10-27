@@ -32,8 +32,7 @@ LSTM cell state provides a "highway" for gradients:
 - Gates control information flow, not transformation
 - Gradient doesn't need to backprop through many tanh operations
 
-**Gates:**
-1. Forget gate (f): What to keep from previous cell state
+**Gates:**1. Forget gate (f): What to keep from previous cell state
 2. Input gate (i): What new information to add
 3. Output gate (o): What to output from cell
 
@@ -122,9 +121,7 @@ Sentiment analysis: "The movie started slow but ended great"
       'LSTMs were state-of-the-art for NLP but have largely been replaced by transformers. What limitations of LSTMs led to this shift, and when might LSTMs still be preferred today?',
     sampleAnswer: `LSTMs have fundamental limitations that transformers overcome, though LSTMs remain useful in specific scenarios.
 
-**LSTM Limitations:**
-
-1. **Sequential Processing:**
+**LSTM Limitations:**1. **Sequential Processing:**
    - Must process tokens one-by-one
    - Cannot parallelize across sequence
    - Token t depends on hidden state from token t-1
@@ -140,9 +137,7 @@ Sentiment analysis: "The movie started slow but ended great"
    - Distant words connected through many intermediate steps
    - Harder to learn direct relationships
 
-**How Transformers Improved:**
-
-1. **Parallelization:**
+**How Transformers Improved:**1. **Parallelization:**
    - Self-attention processes all tokens simultaneously
    - Fully utilizes GPU parallelism
    - 10-100x faster training
@@ -157,9 +152,7 @@ Sentiment analysis: "The movie started slow but ended great"
    - Explicit attention weights show relationships
    - Better interpretability
 
-**When LSTMs Still Preferred:**
-
-1. **Resource-Constrained Environments:**
+**When LSTMs Still Preferred:**1. **Resource-Constrained Environments:**
    - Smaller model size
    - Lower memory requirements
    - Edge devices, mobile

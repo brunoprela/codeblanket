@@ -392,16 +392,7 @@ mistakes = common_mistakes()
 
 ## Key Takeaways
 
-1. **Feature engineering often provides more improvement than algorithm choice**
-2. **Good features make complex relationships linear and separable**
-3. **Domain knowledge is essential for effective feature engineering**
-4. **Always maintain train/test consistency in transformations**
-5. **Watch for data leakage - only use information available at prediction time**
-6. **Document feature logic clearly for reproducibility**
-7. **Use cross-validation to evaluate feature utility**
-8. **Polynomial and interaction features capture non-linear relationships**
-9. **Mathematical transformations (log, sqrt) handle skewness**
-10. **Iterate: create features → test → analyze errors → create more features**
+1. **Feature engineering often provides more improvement than algorithm choice**2. **Good features make complex relationships linear and separable**3. **Domain knowledge is essential for effective feature engineering**4. **Always maintain train/test consistency in transformations**5. **Watch for data leakage - only use information available at prediction time**6. **Document feature logic clearly for reproducibility**7. **Use cross-validation to evaluate feature utility**8. **Polynomial and interaction features capture non-linear relationships**9. **Mathematical transformations (log, sqrt) handle skewness**10. **Iterate: create features → test → analyze errors → create more features**
 
 ## Connection to Machine Learning
 

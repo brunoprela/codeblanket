@@ -198,9 +198,7 @@ Enables efficient distributed training.
 
 **8. Summary:**
 
-**Why SGD preferred for deep learning:**
-
-1. **Computational efficiency**: ~100-1000× faster per epoch
+**Why SGD preferred for deep learning:**1. **Computational efficiency**: ~100-1000× faster per epoch
 2. **Generalization**: Noise finds flat minima
 3. **Scalability**: Constant memory per iteration
 4. **Practical success**: Empirically works extremely well
@@ -455,9 +453,7 @@ optimizer = AdamW(lr=0.001, weight_decay=0.01)
 
 **10. Summary:**
 
-**Why Adam is default:**
-
-1. **Fast convergence**: Momentum + adaptive LR
+**Why Adam is default:**1. **Fast convergence**: Momentum + adaptive LR
 2. **Robust**: Works with default hyperparameters
 3. **Adaptive**: Per-parameter learning rates
 4. **Handles sparsity**: Great for NLP, recommendations
@@ -775,9 +771,7 @@ GD requires 4 MB → feasible!
 
 **12. Summary:**
 
-**Why first-order dominates deep learning:**
-
-1. **Scalability**: O(d) vs O(d³) - critical for millions/billions of parameters
+**Why first-order dominates deep learning:**1. **Scalability**: O(d) vs O(d³) - critical for millions/billions of parameters
 2. **Memory**: O(d) vs O(d²) - Hessian doesn't fit in memory
 3. **Stochasticity**: Compatible with mini-batch SGD
 4. **GPU-friendly**: Highly parallelizable operations

@@ -95,7 +95,7 @@ def calculate_distance(p1, p2):
     
     dx = p2.x - p1.x
     dy = p2.y - p1.y
-    return (dx ** 2 + dy ** 2) ** 0.5`,
+    return (dx ** 2 + dy ** 2) **0.5`,
   timeComplexity: 'O(1)',
   spaceComplexity: 'O(1)',
   order: 25,

@@ -270,8 +270,7 @@ print(f"  $10K grows to: \${comparison['active_final']:,.0f}")
 print(f"\\nDifference: \${comparison['difference']:,.0f} (passive wins!)")
 \`\`\`
 
-**Why Passive Wins:**
-1. **Fees**: 0.03% vs 0.75%+ (0.72% difference × 10 years = 7.5%!)
+**Why Passive Wins:**1. **Fees**: 0.03% vs 0.75%+ (0.72% difference × 10 years = 7.5%!)
 2. **Trading costs**: Index funds trade rarely, active funds trade constantly
 3. **Tax efficiency**: Low turnover = lower taxes
 4. **Skill is rare**: Few managers beat the market consistently
@@ -570,8 +569,7 @@ if arb['arbitrage']:
     print(f"Profit per Unit: \${arb['profit_per_unit']:,.0f}")
 \`\`\`
 
-**Why This Matters:**
-1. **Keeps price close to NAV**: Arbitrageurs eliminate premiums/discounts
+**Why This Matters:**1. **Keeps price close to NAV**: Arbitrageurs eliminate premiums/discounts
 2. **Tax efficiency**: In-kind redemptions don't trigger capital gains
 3. **Liquidity**: Even illiquid ETFs can be created/redeemed
 
@@ -680,9 +678,7 @@ for etf, amount in portfolio['satellite'].items():
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **ETFs vs Mutual Funds**: ETFs trade intraday, more tax-efficient, lower minimums
+**Key Takeaways:**1. **ETFs vs Mutual Funds**: ETFs trade intraday, more tax-efficient, lower minimums
 2. **Passive Beats Active**: 90%+ of active managers underperform over 10+ years
 3. **Fees Matter**: 0.70% fee difference = 7.5%+ lost over 10 years
 4. **Factor Investing**: Target value, momentum, quality for potential outperformance

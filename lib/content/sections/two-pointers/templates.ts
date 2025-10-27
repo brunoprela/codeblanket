@@ -99,8 +99,7 @@ def partition (nums: List[int], pivot: int) -> int:
     return left  # Pivot position
 \`\`\`
 
-**Choosing the Right Template:**
-1. Sorted array + pair/triplet? → Opposite direction
+**Choosing the Right Template:**1. Sorted array + pair/triplet? → Opposite direction
 2. Remove/partition in-place? → Same direction
 3. Subarray/substring problems? → Sliding window
 4. Need to reorder elements? → Partition template`,

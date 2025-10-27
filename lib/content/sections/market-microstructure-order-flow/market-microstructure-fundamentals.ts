@@ -542,7 +542,7 @@ class OrderBook:
 if i < len(ask_prices):
     price = ask_prices[i]
 qty = self.asks[price].total_quantity
-ask_str = f"${price: .2f
+ask_str = f"${price:.2f}
 } x { qty }"
             else:
 ask_str = ""

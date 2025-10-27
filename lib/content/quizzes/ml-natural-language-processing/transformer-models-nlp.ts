@@ -141,9 +141,7 @@ With positional encoding:
       'Transformers achieve state-of-the-art results but are computationally expensive. Discuss the computational trade-offs and describe strategies to make transformers more efficient for production use.',
     sampleAnswer: `Transformers have high computational costs but offer strategies for efficiency:
 
-**Computational Costs:**
-
-1. **Self-attention complexity: O(n²d)**
+**Computational Costs:**1. **Self-attention complexity: O(n²d)**
    - n = sequence length
    - d = model dimension
    - Quadratic in sequence length!

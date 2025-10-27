@@ -164,14 +164,12 @@ export const functionalvsnonfunctionalSection = {
 
 ## Template for Clarifying Requirements
 
-### **Functional Questions:**
-1. What are the core features? (MVP)
+### **Functional Questions:**1. What are the core features? (MVP)
 2. What features can we skip? (nice-to-have)
 3. Who are the users? (internal/external, tech-savvy?)
 4. What platforms? (web, mobile, API)
 
-### **Non-functional Questions:**
-1. **Scale**: How many users? How much data? Growth rate?
+### **Non-functional Questions:**1. **Scale**: How many users? How much data? Growth rate?
 2. **Performance**: What's acceptable latency? Required throughput?
 3. **Availability**: Tolerate downtime? What SLA?
 4. **Consistency**: Strong or eventual? Why?

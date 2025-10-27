@@ -16,8 +16,7 @@ Explore **level by level**, like ripples in water.
 - **Level-order** traversal
 - Finding **connected components**
 
-**Algorithm:**
-1. Start at source node
+**Algorithm:**1. Start at source node
 2. Visit all neighbors (1 edge away)
 3. Then visit their neighbors (2 edges away)
 4. Continue until all reachable nodes visited
@@ -68,8 +67,7 @@ Explore **as far as possible** before backtracking.
 - **Finding paths**
 - **Connected components**
 
-**Algorithm:**
-1. Start at source node
+**Algorithm:**1. Start at source node
 2. Go as deep as possible on one path
 3. Backtrack when stuck
 4. Try other paths

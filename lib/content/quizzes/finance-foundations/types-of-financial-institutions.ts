@@ -488,9 +488,7 @@ Monitoring dashboard (real-time):
 - System health (latency, uptime, data freshness)
 - Risk metrics (VaR, portfolio delta, sector exposure)
 
-**Common Pitfalls to Avoid**
-
-1. **Lookahead Bias**: Using future information
+**Common Pitfalls to Avoid**1. **Lookahead Bias**: Using future information
    - Bad: Use today's close to generate signal, execute at today's close
    - Good: Use yesterday's close to generate signal, execute tomorrow's open
 

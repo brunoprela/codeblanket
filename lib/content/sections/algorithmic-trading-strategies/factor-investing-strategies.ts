@@ -1,8 +1,9 @@
 export const factorInvestingStrategies = {
-    title: 'Factor Investing Strategies',
-    slug: 'factor-investing-strategies',
-    description: 'Systematic factor-based strategies: value, momentum, quality, size, and low volatility',
-    content: `
+  title: 'Factor Investing Strategies',
+  slug: 'factor-investing-strategies',
+  description:
+    'Systematic factor-based strategies: value, momentum, quality, size, and low volatility',
+  content: `
 # Factor Investing Strategies
 
 ## Introduction: The Science of Systematic Investing
@@ -779,7 +780,7 @@ if __name__ == "__main__":
         print(f"     P/E: {stock.pe_ratio:.1f}")
         print(f"     P/B: {stock.pb_ratio:.1f}")
         print(f"     ROE: {stock.roe:.1%}")
-        print(f"     Market Cap: ${stock.market_cap / 1e9: .1f
+        print(f"     Market Cap: \${stock.market_cap / 1e9:.1f
 }B")
 
 scores = calculator.calculate_all_factors(stock)
@@ -947,8 +948,7 @@ for factor, weight in weights.items():
 - Single factor concentration
 - Chasing recent winners
 
-**Critical Success Factors:**
-1. **Multiple Factors**: Don't rely on one
+**Critical Success Factors:**1. **Multiple Factors**: Don't rely on one
 2. **Long Horizon**: Factors work over years, not months
 3. **Low Costs**: Turnover erodes returns
 4. **Discipline**: Stay the course in drawdowns

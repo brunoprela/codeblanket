@@ -223,9 +223,7 @@ df[['blood_pressure', 'cholesterol',]] = imputer.fit_transform(
 df['outcome',].fillna (df['outcome',].mode()[0], inplace=True)
 \`\`\`
 
-**Best Practices:**
-
-1. **Understand why data is missing** before choosing strategy
+**Best Practices:**1. **Understand why data is missing** before choosing strategy
 2. **Document your approach** for reproducibility
 3. **Compare multiple strategies** on a validation set
 4. **Create a missing indicator** if missingness is informative
@@ -357,9 +355,7 @@ IQR = Q3 - Q1  # ~22
 
 **When to Use Each Method:**
 
-**Use Z-Score When:**
-
-1. **Data is approximately normal**
+**Use Z-Score When:**1. **Data is approximately normal**
 \`\`\`python
 # Check normality
 from scipy import stats
@@ -381,9 +377,7 @@ if p_value > 0.05:  # Not rejecting normality
 - Test scores (typically normal)
 - Measurement errors in calibrated instruments
 
-**Use IQR When:**
-
-1. **Distribution is unknown or non-normal**
+**Use IQR When:**1. **Distribution is unknown or non-normal**
 \`\`\`python
 # Skewed distribution
 data_skewed = np.random.exponential(50, 1000)
@@ -525,9 +519,7 @@ def iterative_iqr (data, max_iter=3):
     return data
 \`\`\`
 
-**Key Takeaways:**
-
-1. **IQR is safer default**: Works without distribution assumptions
+**Key Takeaways:**1. **IQR is safer default**: Works without distribution assumptions
 2. **Z-score for normal data**: More conservative, fewer false positives
 3. **Visualize first**: Check distribution shape before choosing
 4. **Consider context**: Statistical outliers ≠ data errors
@@ -853,9 +845,7 @@ print(f"Mean: {scores.mean():.3f} (+/- {scores.std():.3f})")
 # Model generalizes well to production
 \`\`\`
 
-**Best Practices for Production:**
-
-1. **Use sklearn Pipeline**
+**Best Practices for Production:**1. **Use sklearn Pipeline**
 \`\`\`python
 # Encapsulates all preprocessing
 # Guarantees correct train/test handling

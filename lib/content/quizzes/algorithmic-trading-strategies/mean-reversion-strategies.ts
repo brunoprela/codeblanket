@@ -289,14 +289,12 @@ def detect_regime_change(self, data: pd.DataFrame,
 
 **Why Averaging Into Losers is Dangerous (But Sometimes Acceptable):**
 
-**Dangerous Because:**
-1. **Trend Emergence**: What looks "oversold" gets more oversold in a trend
+**Dangerous Because:**1. **Trend Emergence**: What looks "oversold" gets more oversold in a trend
 2. **Doubling Down**: Each add increases risk exposure
 3. **Catastrophic Losses**: 3x position at entry, 2× ATR stop = 6% loss (vs 2% planned)
 4. **Psychological**: Hard to admit you're wrong and take loss
 
-**Acceptable When:**
-1. **Statistical Edge**: Proven mean reversion (Hurst < 0.5, half-life < 30 days)
+**Acceptable When:**1. **Statistical Edge**: Proven mean reversion (Hurst < 0.5, half-life < 30 days)
 2. **Strict Limits**: Max 3 adds, then hard stop
 3. **Small Sizes**: Each add is small (1/3 position)
 4. **Filters Active**: Only in range-bound regime (ADX < 25)
@@ -649,8 +647,7 @@ print(f"\\nReasoning: {recommendation['reasoning']}")
 
 **Recommendation: TREND FOLLOWING (with caveat)**
 
-**Why:**
-1. **Hurst 0.52 > 0.5**: Slight trending bias (momentum exists)
+**Why:**1. **Hurst 0.52 > 0.5**: Slight trending bias (momentum exists)
 2. **Half-Life 45 days**: Too slow for short-term mean reversion
    - Mean reversion works best when HL < 20 days
    - 45 days means holding 20-30 days for reversion (too long)
@@ -822,9 +819,7 @@ def analyze_strategy_crowding():
 
 **C. Volatility Explosion (2020-2024 Specific)**
 
-**Specific Events Breaking Mean Reversion:**
-
-1. **March 2020: COVID Crash**
+**Specific Events Breaking Mean Reversion:**1. **March 2020: COVID Crash**
    - S&P 500: -35% in 23 days
    - Mean reversion traders destroyed (kept buying dips)
    - VIX hit 82 (extreme)

@@ -7,9 +7,7 @@ export const searchOptimizationDiscussionQuiz: QuizQuestion[] = [
       'Your e-commerce search application is experiencing performance issues. Users report that searches for "laptop" return in 50ms, but searches for "smartphone case" take 2-3 seconds. After investigation, you discover that multi-word queries are significantly slower. The "title" field uses standard analysis, and you have 10 million products across 20 shards. Diagnose the likely causes and propose a comprehensive optimization strategy that addresses relevance, performance, and maintainability.',
     sampleAnswer: `This is a classic phrase query performance problem. Let me analyze the root causes and provide a systematic solution:
 
-**Root Cause Analysis:**
-
-1. **Phrase Matching Overhead**: "smartphone case" likely uses phrase matching, which requires:
+**Root Cause Analysis:**1. **Phrase Matching Overhead**: "smartphone case" likely uses phrase matching, which requires:
    - Finding all documents with "smartphone"
    - Finding all documents with "case"
    - Checking positional data to verify adjacency
@@ -319,9 +317,7 @@ Auto-generates shingles and edge n-grams for instant search.
 - Click-through rate: >40%
 \`\`\`
 
-**Trade-offs Analysis:**
-
-1. **Shingles: Performance vs Index Size**
+**Trade-offs Analysis:**1. **Shingles: Performance vs Index Size**
    - Pros: 10-15x faster phrase queries
    - Cons: 30-50% larger index
    - Decision: Worth it for user experience
@@ -751,9 +747,7 @@ async function autocomplete (prefix) {
 }
 \`\`\`
 
-**Benefits of Hybrid:**
-
-1. **Fast common queries**: Completion suggester handles 80% of queries in 2-5ms
+**Benefits of Hybrid:**1. **Fast common queries**: Completion suggester handles 80% of queries in 2-5ms
 2. **Flexible rare queries**: Edge n-grams handle edge cases
 3. **Fuzzy matching**: Can implement typo tolerance with n-grams
 4. **Reasonable index size**: Only +50-70% total (completion + partial n-grams)
@@ -763,7 +757,7 @@ async function autocomplete (prefix) {
 For 5M products at 100KB avg per product = 500GB base
 
 **Completion only:** 625GB (+25%), <5ms queries, limited flexibility
-**Edge n-grams only:** 1.75TB (+250%), <30ms queries, full flexibility
+**Edge n-grams only:**1.75TB (+250%), <30ms queries, full flexibility
 **Hybrid:** 850GB (+70%), <10ms for 80% queries, best of both
 **Prefix query:** 500GB (baseline), >100ms queries, poor UX
 
@@ -778,9 +772,7 @@ For pure autocomplete use case:
 - Purpose-built for autocomplete
 - Weighted suggestions handle popularity
 
-**Implementation Plan:**
-
-1. **Generate input variants intelligently:**
+**Implementation Plan:**1. **Generate input variants intelligently:**
 \`\`\`javascript
 function generateInputs (title, brand, category) {
   return [

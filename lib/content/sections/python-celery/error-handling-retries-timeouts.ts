@@ -703,20 +703,17 @@ failure_counter = Counter('celery_task_failures_total', 'Task failures', ['task_
 
 ## Summary
 
-**Error Handling Strategies:**
-1. **Automatic Retries**: Use \`autoretry_for\` for simple cases
+**Error Handling Strategies:**1. **Automatic Retries**: Use \`autoretry_for\` for simple cases
 2. **Manual Retries**: Use \`self.retry()\` for complex retry logic
 3. **Exponential Backoff**: Prevent overwhelming failing services
 4. **Respect Rate Limits**: Use Retry-After headers
 5. **Don't Retry Permanent Errors**: 404, validation errors
 
-**Time Limits:**
-1. **Soft Limit**: Raises exception (graceful shutdown)
+**Time Limits:**1. **Soft Limit**: Raises exception (graceful shutdown)
 2. **Hard Limit**: SIGKILL (forced termination)
 3. **Grace Period**: Soft < Hard (30-60s for cleanup)
 
-**Best Practices:**
-1. ✅ Implement dead letter queues
+**Best Practices:**1. ✅ Implement dead letter queues
 2. ✅ Make tasks idempotent
 3. ✅ Chunk large tasks
 4. ✅ Monitor failures and retries

@@ -99,8 +99,7 @@ for i in range (m):
 - Need to trace back solution path
 - Premature optimization
 
-**General Rule:**
-1. First solve correctly with clear DP table
+**General Rule:**1. First solve correctly with clear DP table
 2. Then optimize space if needed
 3. Test thoroughly after optimization`,
 };

@@ -351,12 +351,12 @@ class TwitterSentimentCollector:
         for symbol in symbols:
             # In production: Use Twitter API v2
             # Search for $SYMBOL cashtag
-            query = f"${symbol}"
+            query = f"\${symbol}"
             
             # Placeholder tweets
             example_tweets = [
                 {
-                    'text': f'${symbol} to the moon! 🚀 Calls printing',
+                    'text': f'\${symbol} to the moon! 🚀 Calls printing',
                     'user': 'trader123',
                     'likes': 50,
                     'retweets': 10,
@@ -364,7 +364,7 @@ class TwitterSentimentCollector:
                     'timestamp': datetime.now()
                 },
                 {
-                    'text': f'${symbol} looking weak, might grab puts',
+                    'text': f'\${symbol} looking weak, might grab puts',
                     'user': 'bearish_bob',
                     'likes': 20,
                     'retweets': 5,
@@ -960,8 +960,7 @@ if __name__ == "__main__":
 - Fake/manipulated sentiment
 - Wrong strategy (momentum vs. contrarian)
 
-**Critical Success Factors:**
-1. **Data Quality**: Filter bots and spam
+**Critical Success Factors:**1. **Data Quality**: Filter bots and spam
 2. **Speed**: Real-time processing
 3. **Multiple Sources**: Don't rely on one
 4. **Context**: Understand why sentiment shifted

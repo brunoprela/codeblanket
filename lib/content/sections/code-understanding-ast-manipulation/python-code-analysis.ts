@@ -26,9 +26,7 @@ All of this is possible through systematic AST analysis, which we'll master in t
 
 Python\'s \`ast\` module provides a complete toolkit for working with Python ASTs:
 
-**Core Components:**
-
-1. **\`ast.parse()\`**: Converts source code string to AST
+**Core Components:**1. **\`ast.parse()\`**: Converts source code string to AST
 2. **\`ast.NodeVisitor\`**: Base class for traversing ASTs (read-only)
 3. **\`ast.NodeTransformer\`**: Base class for modifying ASTs
 4. **\`ast.walk()\`**: Generator for traversing all nodes

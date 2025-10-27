@@ -49,10 +49,7 @@ export const lowestcommonancestorSection = {
 
 **For BST only:** Use the ordering property.
 
-**Algorithm:**
-1. If both nodes are **less than** root → LCA is in **left subtree**
-2. If both nodes are **greater than** root → LCA is in **right subtree**  
-3. Otherwise → **root is the LCA** (split point)
+**Algorithm:**1. If both nodes are **less than** root → LCA is in **left subtree**2. If both nodes are **greater than** root → LCA is in **right subtree**3. Otherwise → **root is the LCA** (split point)
 
 **Implementation:**
 \`\`\`python
@@ -82,8 +79,7 @@ def lca_bst (root, p, q):
 
 **For any binary tree:** Cannot use ordering, must explore both subtrees.
 
-**Recursive Algorithm:**
-1. **Base case:** If root is None or equals p or q, return root
+**Recursive Algorithm:**1. **Base case:** If root is None or equals p or q, return root
 2. **Recurse:** Search for p and q in left and right subtrees
 3. **Combine:**
    - If **both** left and right return non-null → root is LCA (split point)
@@ -148,8 +144,7 @@ left=2, right=null → return 2
 
 **If nodes have parent pointers:** Treat it like finding intersection of two linked lists.
 
-**Algorithm:**
-1. Get paths from both nodes to root
+**Algorithm:**1. Get paths from both nodes to root
 2. Find first common node in paths
 
 **Implementation:**
@@ -240,8 +235,7 @@ Preprocess tree for O(1) LCA queries (using binary lifting).
 - "Find node that is ancestor of both"
 - Sometimes disguised: "find merge point", "common node"
 
-**Clarifying Questions:**
-1. Is it a BST or general binary tree?
+**Clarifying Questions:**1. Is it a BST or general binary tree?
 2. Can nodes be null?
 3. Are both nodes guaranteed to exist in tree?
 4. Can a node be its own ancestor?

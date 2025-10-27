@@ -49,9 +49,7 @@ Touching:
 
 ---
 
-**Common Use Cases:**
-
-1. **Calendar/Scheduling**
+**Common Use Cases:**1. **Calendar/Scheduling**
    - Meeting room allocation
    - Event scheduling
    - Resource booking

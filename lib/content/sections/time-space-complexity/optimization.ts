@@ -116,16 +116,12 @@ def two_sum_sorted (arr, target):  # O(n)
 - Optimized but complex
 - **Rule:** Optimize only when needed!
 
-**When to Optimize:**
-
-1. **Measure first** - profile your code
+**When to Optimize:**1. **Measure first** - profile your code
 2. **Identify bottlenecks** - don't optimize everywhere
 3. **Consider trade-offs** - is the improvement worth the complexity?
 4. **Keep it readable** - optimize only hot paths
 
-**The Optimization Process:**
-
-1. **Analyze current complexity** - identify the bottleneck
+**The Optimization Process:**1. **Analyze current complexity** - identify the bottleneck
 2. **Look for patterns** - nested loops? redundant work?
 3. **Consider better data structures** - hash map? heap? tree?
 4. **Apply techniques** - memoization? two pointers? binary search?
@@ -140,9 +136,7 @@ def two_sum_sorted (arr, target):  # O(n)
 - Sorting inside loop → Sort once outside
 - Recursive without memoization → Add caching
 
-**Interview Strategy:**
-
-1. Start with brute force - explain it clearly
+**Interview Strategy:**1. Start with brute force - explain it clearly
 2. Analyze its complexity
 3. Identify what makes it slow
 4. Propose optimization

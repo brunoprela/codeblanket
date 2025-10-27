@@ -29,8 +29,7 @@ A hybrid of merge sort and insertion sort, designed for real-world data.
 
 Hybrid of quicksort, heapsort, and insertion sort.
 
-**Algorithm:**
-1. Start with quicksort (fastest average case)
+**Algorithm:**1. Start with quicksort (fastest average case)
 2. If recursion depth exceeds log n, switch to heapsort (prevents O(n²))
 3. For small subarrays (< 16), use insertion sort
 
@@ -124,8 +123,7 @@ if all(0 <= x <= 100 for x in grades):
 
 **Interview Tips:**
 
-**When asked to sort:**
-1. **Clarify requirements:**
+**When asked to sort:**1. **Clarify requirements:**
    - Input size? (Small → insertion, Large → quick/merge)
    - Already partially sorted? (Adaptive sorts)
    - Stability required?

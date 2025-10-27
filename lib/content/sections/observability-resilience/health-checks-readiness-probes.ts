@@ -759,9 +759,7 @@ Action: Check for transient issues
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **Liveness**: Is app running? Restart if fails.
+### **Key Concepts**1. **Liveness**: Is app running? Restart if fails.
 2. **Readiness**: Ready for traffic? Remove from LB if fails.
 3. **Startup**: Finished starting? Long timeout for slow apps.
 4. **Shallow vs Deep**: Quick check vs dependency checks.

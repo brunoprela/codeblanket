@@ -457,9 +457,7 @@ def searchMatrix (matrix, target):
 
 ## 🎓 Interview Strategy
 
-**When interviewer says "optimize this":**
-
-1. **Check if two pointers applies:**
+**When interviewer says "optimize this":**1. **Check if two pointers applies:**
    - Is it sorted? ✅
    - Do I need original order? ❌
    - Is it a pair/window problem? ✅

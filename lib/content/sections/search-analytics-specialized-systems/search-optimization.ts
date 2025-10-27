@@ -89,9 +89,7 @@ Search optimization is an iterative process involving:
 }
 \`\`\`
 
-**Key Optimizations:**
-
-1. **Multi-fields for different use cases**:
+**Key Optimizations:**1. **Multi-fields for different use cases**:
    - \`title\`: Full-text search
    - \`title.keyword\`: Exact match, sorting
    - \`title.suggest\`: Autocomplete

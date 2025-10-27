@@ -546,9 +546,7 @@ print(f"Update status: {result['status']}")
 
 ## Deduplication
 
-Prevent duplicate content:
-
-\`\`\`python
+Prevent duplicate content: `\`\`python
 from typing import Set
 import numpy as np
 
@@ -982,8 +980,7 @@ Building a production knowledge base requires:
 
 **Key Takeaway:** A well-built knowledge base is the foundation of effective RAG.
 
-**Production Pattern:**
-1. Start with simple ingestion
+**Production Pattern:**1. Start with simple ingestion
 2. Add metadata extraction
 3. Implement deduplication
 4. Add version control

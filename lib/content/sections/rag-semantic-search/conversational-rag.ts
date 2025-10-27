@@ -857,8 +857,7 @@ Conversational RAG enables natural multi-turn interactions:
 
 **Key Takeaway:** Conversational RAG requires careful state management and context tracking to maintain natural dialogue flow.
 
-**Production Pattern:**
-1. Rewrite follow-up queries with context
+**Production Pattern:**1. Rewrite follow-up queries with context
 2. Manage token limits with truncation/summarization
 3. Persist conversations for continuity
 4. Cache summaries for performance

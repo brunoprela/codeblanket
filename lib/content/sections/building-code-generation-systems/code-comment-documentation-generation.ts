@@ -236,7 +236,7 @@ def calculate_statistics (data: List[float], trim_outliers: bool = False) -> Dic
     
     mean = sum (data) / len (data)
     variance = sum((x - mean) ** 2 for x in data) / len (data)
-    std_dev = variance ** 0.5
+    std_dev = variance **0.5
     
     return {
         "mean": mean,
@@ -737,19 +737,11 @@ print(typed_code)
 3. **Add examples** to docstrings
 4. **Document all parameters** and return values
 5. **Include type hints** in documentation
-6. **Keep comments up-to-date**
-7. **Document exceptions** that can be raised
+6. **Keep comments up-to-date**7. **Document exceptions** that can be raised
 8. **Generate README** for all projects
 
 ### ❌ DON'T:
-1. **Over-comment obvious code**
-2. **Write vague descriptions**
-3. **Skip parameter documentation**
-4. **Forget return value documentation**
-5. **Use inconsistent styles**
-6. **Generate outdated information**
-7. **Skip usage examples**
-8. **Forget to document exceptions**
+1. **Over-comment obvious code**2. **Write vague descriptions**3. **Skip parameter documentation**4. **Forget return value documentation**5. **Use inconsistent styles**6. **Generate outdated information**7. **Skip usage examples**8. **Forget to document exceptions**
 
 ## Next Steps
 

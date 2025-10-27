@@ -158,9 +158,7 @@ In trading, this matters enormously:
 - Real-time prediction: <1ms vs 1 second (miss the trade)
 - Training iterations: Minutes vs days
 
-**Best Practices:**
-
-1. Always use vectorized NumPy operations
+**Best Practices:**1. Always use vectorized NumPy operations
 2. Avoid Python loops over large arrays
 3. Profile code to find bottlenecks
 4. Use batch processing (process 100s of samples at once)
@@ -355,9 +353,7 @@ batch_size = 64
 learning_rate = 0.001 * (batch_size / 32)  # Linear scaling rule
 \`\`\`
 
-**Special Considerations for Trading:**
-
-1. **Time-Series Dependency:**
+**Special Considerations for Trading:**1. **Time-Series Dependency:**
 \`\`\`python
 # Don't randomly shuffle time series!
 # Use sequential batches
@@ -726,9 +722,7 @@ print(f"  dy/dw = {grad_w:.4f}")
 print(f"  dy/db = {grad_b:.4f}")
 \`\`\`
 
-**Benefits of Autodiff via Computational Graphs:**
-
-1. **Correctness**: No manual derivative errors
+**Benefits of Autodiff via Computational Graphs:**1. **Correctness**: No manual derivative errors
 2. **Flexibility**: Any differentiable operation works
 3. **Efficiency**: Only compute needed gradients
 4. **Modularity**: Compose complex functions from simple operations
@@ -756,14 +750,7 @@ loss.backward()  # All gradients computed automatically
 optimizer.step()  # Update model parameters
 \`\`\`
 
-**Key Insights:**
-
-1. **Computational graphs represent all operations as nodes**
-2. **Forward pass builds graph and caches intermediate values**
-3. **Backward pass traverses graph in reverse, applying chain rule**
-4. **Each operation provides local gradient (∂output/∂input)**
-5. **Gradients accumulate automatically when paths merge**
-6. **Modern frameworks (PyTorch/TensorFlow) handle this automatically**
+**Key Insights:**1. **Computational graphs represent all operations as nodes**2. **Forward pass builds graph and caches intermediate values**3. **Backward pass traverses graph in reverse, applying chain rule**4. **Each operation provides local gradient (∂output/∂input)**5. **Gradients accumulate automatically when paths merge**6. **Modern frameworks (PyTorch/TensorFlow) handle this automatically**
 
 **Conclusion:**
 

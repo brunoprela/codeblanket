@@ -557,9 +557,7 @@ if __name__ == "__main__":
     asyncio.run(example_enterprise_usage())
 \`\`\`
 
-**Key System Features:**
-
-1. **Enforced Standards**: Default configurations by asset class/timeframe prevent ad-hoc choices
+**Key System Features:**1. **Enforced Standards**: Default configurations by asset class/timeframe prevent ad-hoc choices
 2. **Validation**: Automatic detection of shuffled data or temporal violations
 3. **Distributed Execution**: Parallel fold execution using ProcessPoolExecutor
 4. **Caching**: Redis caching prevents redundant computation
@@ -751,9 +749,7 @@ if __name__ == "__main__":
     validate_multiasset_strategy()
 \`\`\`
 
-**Key Principles for Multi-Asset CV:**
-
-1. **Synchronized Splits**: All assets use identical date splits
+**Key Principles for Multi-Asset CV:**1. **Synchronized Splits**: All assets use identical date splits
 2. **Cross-Asset Features**: Calculate correlations, betas within each fold
 3. **Regime Awareness**: Ensure test set includes diverse regimes
 4. **No Data Snooping**: Don't use test period correlations for allocation

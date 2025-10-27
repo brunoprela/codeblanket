@@ -30,8 +30,7 @@ The functions \`get\` and \`put\` must each run in **O(1)** average time complex
   approach: `## Intuition
 
 LRU Cache needs:
-1. **O(1) access** to any element by key → **HashMap**
-2. **O(1) update** of access order → **Doubly Linked List**
+1. **O(1) access** to any element by key → **HashMap**2. **O(1) update** of access order → **Doubly Linked List**
 
 Neither structure alone suffices. **Combined**, they give O(1) for both operations.
 

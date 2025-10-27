@@ -32,9 +32,7 @@ GROUP BY region;
 -- I/O: 5TB (entire dataset)
 \`\`\`
 
-**Why PostgreSQL is Slow:**
-
-1. **Full table scan**: Must read all columns
+**Why PostgreSQL is Slow:**1. **Full table scan**: Must read all columns
 2. **Row-by-row processing**: Can't use SIMD
 3. **Limited compression**: 2-3x vs 10-50x columnar
 4. **No column pruning**: Reads unnecessary columns
@@ -171,9 +169,7 @@ GROUP BY region;
 -- Query time: 8-12 seconds (100x faster!)
 \`\`\`
 
-**Why ClickHouse is Faster:**
-
-1. **Column pruning**: Read 3/30 columns = 90% less I/O
+**Why ClickHouse is Faster:**1. **Column pruning**: Read 3/30 columns = 90% less I/O
 2. **Compression**: 50x vs 2-3x = 16x less disk I/O
 3. **Vectorization**: SIMD processing = 8x CPU efficiency
 4. **Partition pruning**: Skip irrelevant months
@@ -291,9 +287,7 @@ Team validates query results
 
 **My Recommendation: Migrate to ClickHouse**
 
-**Why:**
-
-1. **Performance**: 100x improvement (5-10 sec vs 10-15 min) transforms user experience
+**Why:**1. **Performance**: 100x improvement (5-10 sec vs 10-15 min) transforms user experience
 2. **Cost**: Save $2,500/month ($30k/year, $90k over 3 years)
 3. **Scalability**: As data grows 5TB → 50TB, PostgreSQL becomes unusable, ClickHouse scales linearly
 4. **Industry Standard**: ClickHouse is proven for analytics at scale (Uber, CloudFlare, Spotify)
@@ -335,9 +329,7 @@ Payback period: 8 months
 
 **What About the Risks?**
 
-**Mitigation:**
-
-1. **"Too complex"**: Managed ClickHouse Cloud available (ClickHouse.com, Altinity.cloud)
+**Mitigation:**1. **"Too complex"**: Managed ClickHouse Cloud available (ClickHouse.com, Altinity.cloud)
 2. **"Team doesn't know it"**: SQL interface, 1-month learning curve, consultant available
 3. **"What if it fails?"**: Run parallel for 2 months, validate before switching
 4. **"Data consistency?"**: CDC ensures eventual consistency (acceptable for analytics)
@@ -588,9 +580,7 @@ Latency: 100-500ms (eventual consistency)
 
 **My Recommendation: PostgreSQL + ClickHouse with CDC**
 
-**Why:**
-
-1. **ACID Requirements**: "ACID guarantees" in requirements is non-negotiable
+**Why:**1. **ACID Requirements**: "ACID guarantees" in requirements is non-negotiable
    - Financial transactions need atomicity
    - Inventory management needs isolation
    - Can't use eventual consistency for these
@@ -1064,9 +1054,7 @@ S3 → ClickHouse (500GB, last 3 months)
   Fast queries (5-15s) on recent data
 \`\`\`
 
-**Why Hybrid:**
-
-1. **90% of ML queries are on recent data** (last 3-6 months)
+**Why Hybrid:**1. **90% of ML queries are on recent data** (last 3-6 months)
    - ClickHouse: 500GB compressed (10x smaller)
    - Cost: $200/month (vs $754 for full 10TB)
 

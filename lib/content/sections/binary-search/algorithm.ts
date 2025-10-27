@@ -5,9 +5,7 @@
 export const algorithmSection = {
   id: 'algorithm',
   title: 'The Algorithm Step-by-Step',
-  content: `**Algorithm Overview:**
-
-1. **Initialize Pointers:**
+  content: `**Algorithm Overview:**1. **Initialize Pointers:**
    - Set \`left = 0\` (start of array)
    - Set \`right = n - 1\` (end of array)
 

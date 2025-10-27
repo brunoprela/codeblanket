@@ -310,7 +310,7 @@ df = pd.DataFrame (np.random.randn(100, 5), columns=['A', 'B', 'C', 'D', 'E'])
 corr = df.corr()
 
 plt.figure (figsize=(10, 8))
-sns.heatmap (corr, annot=True, cmap='coolwarm', center=0, 
+sns.heatmap (corr, annot=True, cmap='coolwarm', center=0,
             square=True, linewidths=1, cbar_kws={"shrink": 0.8})
 plt.title('Correlation Heatmap')
 plt.show()
@@ -372,7 +372,7 @@ plt.ylabel('Amount ($)')
 plt.show()
 
 # Scatter plot
-df.plot (kind='scatter', x='Sales', y='Profit', 
+df.plot (kind='scatter', x='Sales', y='Profit',
         c='Costs', cmap='viridis', s=50, figsize=(10, 6))
 plt.title('Sales vs Profit (colored by Costs)')
 plt.show()
@@ -423,7 +423,7 @@ ax2.grid(True, alpha=0.3)
 # Returns distribution
 ax3 = plt.subplot(3, 1, 3)
 ax3.hist (df['Returns'].dropna(), bins=50, edgecolor='black', alpha=0.7)
-ax3.axvline (df['Returns'].mean(), color='red', linestyle='--', 
+ax3.axvline (df['Returns'].mean(), color='red', linestyle='--',
             label=f'Mean: {df["Returns"].mean():.4f}')
 ax3.set_xlabel('Daily Returns')
 ax3.set_ylabel('Frequency')
@@ -515,7 +515,7 @@ df = pd.DataFrame({
 df['Feature2'] = df['Feature1'] * 0.8 + df['Feature2'] * 0.4
 df['Feature3'] = df['Feature1'] * -0.6 + df['Feature3'] * 0.5
 df['Feature4'] = df['Feature2'] * 0.5 + df['Feature4'] * 0.7
-df['Target'] = (df['Feature1'] * 2 + df['Feature2'] * 1.5 - 
+df['Target'] = (df['Feature1'] * 2 + df['Feature2'] * 1.5 -
                 df['Feature3'] * 0.8 + np.random.randn (n) * 0.5)
 
 # Correlation matrix

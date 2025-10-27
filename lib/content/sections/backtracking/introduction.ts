@@ -7,8 +7,7 @@ export const introductionSection = {
   title: 'Introduction to Backtracking',
   content: `**Backtracking** is an algorithmic technique for solving problems **recursively** by building candidates for solutions incrementally and **abandoning** (backtracking from) candidates as soon as it determines they cannot lead to a valid solution.
 
-**Core Concept:**
-1. **Make a choice** (add to current solution)
+**Core Concept:**1. **Make a choice** (add to current solution)
 2. **Explore** consequences recursively
 3. **Undo the choice** (backtrack) if it doesn't work
 4. **Try next choice**
@@ -61,8 +60,7 @@ def backtrack (path, choices):
         path.pop()
 \`\`\`
 
-**Common Problem Types:**
-1. **Combination/Subset** problems
+**Common Problem Types:**1. **Combination/Subset** problems
 2. **Permutation** problems
 3. **Constraint satisfaction** (N-Queens, Sudoku)
 4. **Path finding** (mazes, word search)

@@ -232,9 +232,7 @@ User ID Range → Shard
 
 **Partition key** determines how data is distributed across shards.
 
-### **Good Partition Key Characteristics:**
-
-1. **High cardinality**: Many unique values (good: user ID, order ID; bad: country, gender)
+### **Good Partition Key Characteristics:**1. **High cardinality**: Many unique values (good: user ID, order ID; bad: country, gender)
 2. **Uniform distribution**: Values evenly spread (good: hash of email; bad: sequential IDs)
 3. **Predictable access patterns**: Key used in most queries (good: user_id for user queries)
 

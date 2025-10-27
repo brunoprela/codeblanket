@@ -456,8 +456,7 @@ simple_ret = calc.simple_returns(prices)
 log_ret = calc.log_returns(prices)
 
 print("Price Series:")
-print(f"Start: ${prices.iloc[0]: .2f
-}")
+print(f"Start: ${prices.iloc[0]:.2f}")
 print(f"End: ${prices.iloc[-1]:.2f}")
 print(f"Total Change: {(prices.iloc[-1]/prices.iloc[0] - 1)*100:.2f}%\\n")
 

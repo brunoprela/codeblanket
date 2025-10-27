@@ -200,7 +200,7 @@ print("\\nOptimized memory usage:")
 print(df_optimized.memory_usage (deep=True))
 print(f"Total: {df_optimized.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
-reduction = (1 - df_optimized.memory_usage (deep=True).sum() / 
+reduction = (1 - df_optimized.memory_usage (deep=True).sum() /
              df.memory_usage (deep=True).sum()) * 100
 print(f"\\nMemory reduction: {reduction:.1f}%")
 \`\`\`
@@ -249,7 +249,7 @@ print(f"Object dtype: {df_object.memory_usage (deep=True).sum() / 1024**2:.2f} M
 df_categorical = pd.DataFrame({'product': pd.Categorical (products)})
 print(f"Categorical: {df_categorical.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
-reduction = (1 - df_categorical.memory_usage (deep=True).sum() / 
+reduction = (1 - df_categorical.memory_usage (deep=True).sum() /
              df_object.memory_usage (deep=True).sum()) * 100
 print(f"Memory reduction: {reduction:.1f}%")
 
@@ -551,25 +551,25 @@ print(f"Original size: {df.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 # Optimization pipeline
 def optimize_dataframe (df):
     df_opt = df.copy()
-    
+
     # 1. Optimize numeric types
     df_opt['user_id'] = pd.to_numeric (df_opt['user_id'], downcast='integer')
     df_opt['product_id'] = pd.to_numeric (df_opt['product_id'], downcast='integer')
     df_opt['price'] = pd.to_numeric (df_opt['price'], downcast='float')
     df_opt['quantity'] = pd.to_numeric (df_opt['quantity'], downcast='integer')
-    
+
     # 2. Convert to categorical
     df_opt['category'] = df_opt['category'].astype('category')
-    
+
     # 3. No need to store full timestamp if only date matters
     # (But keeping for demonstration)
-    
+
     return df_opt
 
 df_optimized = optimize_dataframe (df)
 print(f"Optimized size: {df_optimized.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
-reduction = (1 - df_optimized.memory_usage (deep=True).sum() / 
+reduction = (1 - df_optimized.memory_usage (deep=True).sum() /
              df.memory_usage (deep=True).sum()) * 100
 print(f"Memory reduction: {reduction:.1f}%")
 
@@ -707,8 +707,7 @@ stats.print_stats(10)  # Top 10 functions by time
 7. **Views vs Copies**: Understand to avoid unnecessary copying
 8. **Profile First**: Measure before optimizing
 
-**Performance Hierarchy (Slowest to Fastest):**
-1. ❌ iterrows() - Very slow
+**Performance Hierarchy (Slowest to Fastest):**1. ❌ iterrows() - Very slow
 2. ❌ apply() with Python function - Slow
 3. ✅ apply() with NumPy function - Better
 4. ✅ Vectorized operations - Fast

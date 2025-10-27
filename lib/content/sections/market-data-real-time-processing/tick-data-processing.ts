@@ -134,7 +134,7 @@ trade = TradeTick(
     conditions=['@']  # Regular sale
 )
 
-print(f"Dollar volume: ${trade.dollar_volume}")  # $15026.00
+print(f"Dollar volume: \\${trade.dollar_volume}")  # $15026.00
 print(f"Odd lot: {trade.is_odd_lot}")  # False
 \`\`\`
 

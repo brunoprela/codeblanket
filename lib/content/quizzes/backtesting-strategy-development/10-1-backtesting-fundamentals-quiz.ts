@@ -43,7 +43,7 @@ export const backtestingFundamentalsQuiz = [
     ],
     correctAnswer: 3,
     explanation:
-      "Let's calculate the actual costs:\n\n**Costs per round-trip trade (buy + sell):**\n- Bid-ask spread: 0.05% × 2 = 0.10% per round trip\n- Commissions: $1 × 2 = $2 per round trip\n- On $10,000: $2/$10,000 = 0.02%\n- **Total cost: 0.10% + 0.02% = 0.12% per trade**\n\n**Net return:** 0.5% - 0.12% = **0.38%** per trade\n\nHowever, we haven't included slippage (execution at worse prices than expected), which typically adds another 0.05-0.10%. Adding 0.08% slippage: 0.38% - 0.08% = **0.30%** net.\n\nBut with 200 trades/year, costs compound. A strategy showing 0.5% per trade (100% annual) might actually deliver 60-70% after costs, or the strategy might be close to breakeven. Option D is most realistic. **Key lesson:** High-frequency strategies are destroyed by transaction costs.",
+      "Let's calculate the actual costs:\n\n**Costs per round-trip trade (buy + sell):**\n- Bid-ask spread: 0.05% × 2 = 0.10% per round trip\n- Commissions: $1 × 2 = $2 per round trip\n- On $10,000: $2/$10,000 = 0.02%\n- **Total cost: 0.10% + 0.02% = 0.12% per trade**\n\n**Net return:**0.5% - 0.12% = **0.38%** per trade\n\nHowever, we haven't included slippage (execution at worse prices than expected), which typically adds another 0.05-0.10%. Adding 0.08% slippage: 0.38% - 0.08% = **0.30%** net.\n\nBut with 200 trades/year, costs compound. A strategy showing 0.5% per trade (100% annual) might actually deliver 60-70% after costs, or the strategy might be close to breakeven. Option D is most realistic. **Key lesson:** High-frequency strategies are destroyed by transaction costs.",
     difficulty: 'advanced',
   },
   {

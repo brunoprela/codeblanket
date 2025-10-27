@@ -1,7 +1,7 @@
 export const orderManagementSystem = {
-    title: 'Order Management System (OMS)',
-    id: 'order-management-system',
-    content: `
+  title: 'Order Management System (OMS)',
+  id: 'order-management-system',
+  content: `
 # Order Management System (OMS)
 
 ## Introduction
@@ -647,7 +647,7 @@ class PreTradeRiskCheck:
         # Check order value
         notional = order.quantity * current_price
         if notional > self.max_order_value:
-            return False, f"Order value ${notional} exceeds limit ${self.max_order_value}"
+            return False, f"Order value \${notional} exceeds limit \${self.max_order_value}"
         
         # Check position limit
         current_pos = self.positions.get(order.symbol, Decimal('0'))
@@ -659,7 +659,7 @@ class PreTradeRiskCheck:
         
         # Check daily loss limit
         if self.daily_pnl < -self.max_daily_loss:
-            return False, f"Daily loss ${abs(self.daily_pnl)} exceeds limit ${self.max_daily_loss}"
+            return False, f"Daily loss \${abs(self.daily_pnl)} exceeds limit \${self.max_daily_loss}"
         
         return True, "PASS"
 \`\`\`
@@ -768,8 +768,7 @@ async def oms_example():
     print(f"  Side: {order.side.value}")
     print(f"  Quantity: {order.quantity}")
     print(f"  Filled: {order.filled_quantity} ({order.get_fill_percentage():.1f}%)")
-    print(f"  Avg Price: ${order.avg_fill_price: .2f
-}")
+    print(f"  Avg Price: \${order.avg_fill_price:.2f})"
 print(f"  State: {order.state.value}")
 print(f"\\n  Events:")
 for event in order.events:
@@ -782,8 +781,7 @@ for event in order.events:
 
 ## Summary
 
-**OMS Core Functions:**
-1. **Order Creation**: Validate and store orders
+**OMS Core Functions:**1. **Order Creation**: Validate and store orders
 2. **State Management**: Track lifecycle (NEW → FILLED)
 3. **Fill Processing**: Aggregate fills, calculate avg price
 4. **Order Amendments**: Cancel/modify orders
@@ -804,4 +802,3 @@ for event in order.events:
 **Next Section**: Module 14.3 - Execution Management System (EMS) will cover order routing, execution algorithms, and broker integration.
 `,
 };
-

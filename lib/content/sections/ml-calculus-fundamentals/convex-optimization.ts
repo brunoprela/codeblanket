@@ -467,8 +467,7 @@ svm_convex()
 
 For convex optimization with constraints, the **Karush-Kuhn-Tucker (KKT) conditions** are necessary and sufficient for optimality.
 
-**KKT Conditions:**
-1. **Stationarity**: ∇f (x*) + Σλᵢ∇gᵢ(x*) + Σνⱼ∇hⱼ(x*) = 0
+**KKT Conditions:**1. **Stationarity**: ∇f (x*) + Σλᵢ∇gᵢ(x*) + Σνⱼ∇hⱼ(x*) = 0
 2. **Primal feasibility**: gᵢ(x*) ≤ 0, hⱼ(x*) = 0
 3. **Dual feasibility**: λᵢ ≥ 0
 4. **Complementary slackness**: λᵢgᵢ(x*) = 0

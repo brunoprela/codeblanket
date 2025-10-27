@@ -14,8 +14,7 @@ Diffusion models (DALL-E 2, Stable Diffusion, Imagen) are currently state-of-the
 
 **1. Core Idea:**
 
-**Two processes:**
-1. **Forward (diffusion):** Gradually add noise to data until pure noise
+**Two processes:**1. **Forward (diffusion):** Gradually add noise to data until pure noise
 2. **Reverse (denoising):** Learn to remove noise, generate samples
 
 **Analogy:** 
@@ -104,8 +103,7 @@ Predict the noise added!
 
 **6. Generation Process:**
 
-**Sampling:**
-1. Start with x_T ~ N(0, I) (random noise)
+**Sampling:**1. Start with x_T ~ N(0, I) (random noise)
 2. For t = T, T-1, ..., 1:
    - Predict ε_θ(x_t, t)
    - Compute x_{t-1} using reverse process
@@ -249,8 +247,7 @@ class DiffusionModel:
 
 **13. Summary:**
 
-**Diffusion models work by:**
-1. Forward: Gradually noise data → pure noise (tractable SDE)
+**Diffusion models work by:**1. Forward: Gradually noise data → pure noise (tractable SDE)
 2. Learn: Neural network predicts noise at each step
 3. Reverse: Run learned denoising process (reverse SDE)
 4. Generate: Start from noise, denoise to create samples
@@ -573,9 +570,7 @@ This is the Fokker-Planck equation!
 - Quadratic variation: Non-zero
 - Higher moments: Negligible
 
-**Significance for ML:**
-
-1. **Diffusion models:** Forward/reverse processes require Itô
+**Significance for ML:**1. **Diffusion models:** Forward/reverse processes require Itô
 2. **SGLD:** Stationary distribution analysis uses Itô
 3. **Score matching:** Training objective derived via Itô
 4. **Option pricing:** Log-returns need Itô correction
@@ -701,8 +696,7 @@ Substitute p = exp(-E):
 where ∇̂E computed on mini-batch
 \`\`\`
 
-**Double noise:**
-1. Injected noise: √(2α) ξ_k  (Langevin)
+**Double noise:**1. Injected noise: √(2α) ξ_k  (Langevin)
 2. Gradient noise: From mini-batch sampling
 
 **Effect:** Mini-batch noise acts as additional exploration!
@@ -925,9 +919,7 @@ print(f"Prediction: {y_mean.item():.2f} ± {y_std.item():.2f}")
 
 **12. Summary:**
 
-**How SGLD enables Bayesian inference:**
-
-1. **Gradient term:** Guides toward high-probability regions
+**How SGLD enables Bayesian inference:**1. **Gradient term:** Guides toward high-probability regions
 2. **Noise term:** Enables exploration of full posterior
 3. **Stationary distribution:** Converges to p(θ) ∝ exp(-E(θ))
 4. **Mini-batches:** Double noise (injected + gradient) aids exploration

@@ -1162,9 +1162,7 @@ app.use('/api/v1/*', (req, res) => {
 });
 \`\`\`
 
-### **Month 11-12: Cleanup**
-
-1. **Monitor for zero traffic**:
+### **Month 11-12: Cleanup**1. **Monitor for zero traffic**:
    \`\`\`typescript
    const v1Traffic = await redis.get(\`traffic:v1:\${getToday()}\`);
    if (v1Traffic === '0') {
@@ -1173,8 +1171,7 @@ app.use('/api/v1/*', (req, res) => {
    \`\`\`
 
 2. **Remove v1 code** after 30 days of zero traffic
-3. **Update documentation**
-4. **Archive migration resources**
+3. **Update documentation**4. **Archive migration resources**
 
 ---
 

@@ -39,8 +39,7 @@ export const databasereplicationSection = {
 - **Primary (Master)**: Accepts writes, source of truth
 - **Replicas (Slaves)**: Receive data from primary, handle reads
 
-**Data flow:**
-1. Application writes to Primary
+**Data flow:**1. Application writes to Primary
 2. Primary logs changes
 3. Changes replicated to Replicas
 4. Application reads from Replicas
@@ -60,8 +59,7 @@ export const databasereplicationSection = {
 
 **How it works**: Write confirmed only after data written to BOTH primary and replica (s).
 
-**Flow:**
-1. App writes to Primary
+**Flow:**1. App writes to Primary
 2. Primary writes to disk
 3. Primary sends data to Replica
 4. Replica writes to disk
@@ -86,8 +84,7 @@ export const databasereplicationSection = {
 
 **How it works**: Write confirmed after data written to primary, replica updated later.
 
-**Flow:**
-1. App writes to Primary
+**Flow:**1. App writes to Primary
 2. Primary writes to disk
 3. Primary confirms write to App immediately
 4. Primary asynchronously sends data to Replica (in background)
@@ -117,8 +114,7 @@ export const databasereplicationSection = {
 
 **How it works**: Write confirmed after at least ONE replica acknowledges, others updated asynchronously.
 
-**Flow:**
-1. App writes to Primary
+**Flow:**1. App writes to Primary
 2. Primary writes to disk
 3. Primary sends to all replicas
 4. Wait for ONE replica to acknowledge
@@ -249,8 +245,7 @@ App → Load Balancer → Replica 1, 2, 3, ...
 
 ### **Automatic Failover**
 
-**Process:**
-1. **Detection**: Monitor detects primary is down (heartbeat timeout)
+**Process:**1. **Detection**: Monitor detects primary is down (heartbeat timeout)
 2. **Election**: Choose which replica to promote (typically most up-to-date)
 3. **Promotion**: Promote replica to new primary
 4. **Reconfiguration**: Update application to write to new primary
@@ -278,8 +273,7 @@ App → Load Balancer → Replica 1, 2, 3, ...
 
 ### **Manual Failover**
 
-**Process:**
-1. Administrator manually promotes replica
+**Process:**1. Administrator manually promotes replica
 2. Update DNS or load balancer configuration
 3. Restart application with new primary connection
 

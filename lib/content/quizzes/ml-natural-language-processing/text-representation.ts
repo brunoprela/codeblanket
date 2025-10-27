@@ -535,9 +535,7 @@ for max_feat in [1000, 5000, 10000, 50000, 100000]:
 | 10k-100k docs | <200k features | max_features=50k, min_df=5, feature selection |
 | >100k docs | >500k features | max_features=100k, min_df=10, SVD reduction |
 
-**Production Best Practices:**
-
-1. **Start conservative**: Begin with max_features=10000
+**Production Best Practices:**1. **Start conservative**: Begin with max_features=10000
 2. **Measure impact**: Increase gradually, measure accuracy gains
 3. **Monitor memory**: Track RAM usage in production
 4. **Use sparse**: Keep data in sparse format until necessary

@@ -502,9 +502,7 @@ print((bs_projections[['Year', 'Total Assets', 'Total Liabilities', 'Total Equit
 
 ### Cash Flow Categories
 
-**Three sections:**
-
-1. **Operating Activities**: Cash from business operations
+**Three sections:**1. **Operating Activities**: Cash from business operations
    - Start with Net Income
    - Add back non-cash expenses (D&A)
    - Subtract increase in working capital (uses cash)
@@ -747,7 +745,7 @@ class ThreeStatementModel:
             if abs(diff) > tolerance:
                 results['cash_flow_ties'] = False
                 results['errors'].append(
-                    f"Year {year + 1}: Cash flow doesn't tie (diff: ${diff:, .0f
+                    f"Year {year + 1}: Cash flow doesn't tie (diff: ${diff:,.0f}
 })"
                 )
 
@@ -842,9 +840,7 @@ print((summary[['Year', 'Revenue', 'EBIT', 'Free Cash Flow', 'Total Assets']] / 
 
 **Problem**: Cash balance affects interest income, which affects net income, which affects cash. Creates circular dependency.
 
-**Solutions:**
-
-1. **Iterative Calculation** (Excel): Enable iterative calculation
+**Solutions:**1. **Iterative Calculation** (Excel): Enable iterative calculation
 2. **Cash as Plug** (Modeling): Make cash the balancing item
 3. **Iterative Solver** (Python): Solve numerically until convergence
 
@@ -909,7 +905,7 @@ result = solve_circular_model(
 print("\\nCircular Model Solution:")
 for key, value in result.items():
     if key != 'iterations':
-        print(f"{key.replace('_', ' ').title()}: ${value:, .0f}")
+        print(f"{key.replace('_', ' ').title()}: ${value:,.0f}")
     else:
 print(f"{key.title()}: {value}")
 \`\`\`

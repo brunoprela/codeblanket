@@ -757,9 +757,7 @@ Individual ACF values can be significant by chance. Use Ljung-Box test for joint
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **ACF** measures total correlation at each lag
+**Key Takeaways:**1. **ACF** measures total correlation at each lag
 2. **PACF** measures direct correlation, removing intermediate effects
 3. **Model identification patterns:**
    - AR: PACF cuts off

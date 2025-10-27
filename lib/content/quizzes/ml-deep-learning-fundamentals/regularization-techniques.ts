@@ -19,9 +19,7 @@ L1 (Lasso) Regularization:
 - Gradient: ∂L/∂w = ∂L_data/∂w + λ·sign (w)
 - Penalty grows linearly with weight magnitude
 
-**Key Differences:**
-
-1. **Effect on Weights:**
+**Key Differences:**1. **Effect on Weights:**
    - L2: Shrinks all weights proportionally, smoothly toward zero
    - L1: Drives weights exactly to zero, creating sparse models
 
@@ -190,9 +188,7 @@ Inference:
 
 Consistent expectations enable effective learning.
 
-**Why Dropout Is So Effective:**
-
-1. **Prevents overfitting** through forced independence
+**Why Dropout Is So Effective:**1. **Prevents overfitting** through forced independence
 2. **Reduces co-adaptation** between neurons
 3. **Creates ensembles** of exponentially many models
 4. **Adds noise** during training (implicit regularization)
@@ -242,9 +238,7 @@ output = gamma * x_normalized + beta  # Learnable scale/shift
 - Acts as regularizer (batch statistics add noise)
 - Enables training of very deep networks (50-200 layers)
 
-**Problems with BatchNorm:**
-
-1. **Batch Coupling:**
+**Problems with BatchNorm:**1. **Batch Coupling:**
    - Each sample's normalization depends on other samples in batch
    - Breaks independence assumption
    - Sample\'s gradient affected by other samples
@@ -285,9 +279,7 @@ output = gamma * x_normalized + beta
 - BatchNorm: normalize across batch (same feature, all samples)
 - LayerNorm: normalize across features (same sample, all features)
 
-**Advantages of LayerNorm:**
-
-1. **Sample Independence:**
+**Advantages of LayerNorm:**1. **Sample Independence:**
    - Each sample normalized independently
    - No coupling between samples
    - Batch size doesn't matter

@@ -7,8 +7,7 @@ export const shortestpathSection = {
   title: 'BFS for Shortest Path',
   content: `**BFS guarantees shortest path** in unweighted graphs because it explores nodes in order of increasing distance.
 
-**Why BFS Finds Shortest Path:**
-1. Explores all nodes at distance k before distance k+1
+**Why BFS Finds Shortest Path:**1. Explores all nodes at distance k before distance k+1
 2. First time you reach a node = shortest path to that node
 3. Works only for **unweighted** graphs (all edges cost 1)
 

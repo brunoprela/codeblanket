@@ -154,14 +154,5 @@ export default function () {
 
 ## Best Practices
 
-1. **Test happy path and edge cases**
-2. **Mock external dependencies**
-3. **Use factories for test data**
-4. **Test authentication and authorization**
-5. **Validate response schemas**
-6. **Test rate limiting**
-7. **Test error handling**
-8. **Load test before production**
-9. **CI/CD integration**
-10. **Monitor test coverage (aim for 80%+)**`,
+1. **Test happy path and edge cases**2. **Mock external dependencies**3. **Use factories for test data**4. **Test authentication and authorization**5. **Validate response schemas**6. **Test rate limiting**7. **Test error handling**8. **Load test before production**9. **CI/CD integration**10. **Monitor test coverage (aim for 80%+)**`,
 };

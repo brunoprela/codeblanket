@@ -547,9 +547,7 @@ Use both:
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is read repair**: Fix inconsistencies during reads by comparing replicas
+### **Key Concepts to Explain**1. **What is read repair**: Fix inconsistencies during reads by comparing replicas
 2. **Why needed**: Fast inconsistency resolution, self-healing for hot data
 3. **How it works**: Read from multiple replicas, compare, update stale ones
 4. **Synchronous vs async**: Trade-off latency vs consistency

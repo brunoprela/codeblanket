@@ -518,8 +518,7 @@ CMD ["python", "main.py"]
 - [ ] Automated monitoring
 - [ ] Alerting on errors
 
-**Deliverables:**
-1. Complete source code (GitHub repo)
+**Deliverables:**1. Complete source code (GitHub repo)
 2. Docker Compose deployment
 3. Grafana dashboards
 4. Load test results

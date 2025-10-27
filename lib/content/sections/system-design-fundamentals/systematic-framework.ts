@@ -95,8 +95,7 @@ What you WON'T cover:
 
 ### **B. Define Core Components**
 
-**Draw boxes for:**
-1. **Client** (web/mobile apps)
+**Draw boxes for:**1. **Client** (web/mobile apps)
 2. **Load Balancer** (distribute traffic)
 3. **API Servers** (business logic)
 4. **Database** (persistent storage)
@@ -153,16 +152,14 @@ What you WON'T cover:
 
 ### **F. Explain the Flow**
 
-**Write flow:**
-1. User posts tweet via mobile app
+**Write flow:**1. User posts tweet via mobile app
 2. Load balancer routes to API server
 3. API server validates and writes to database
 4. Publish event to message queue
 5. Background workers update followers' timelines (fanout)
 6. Return success to user
 
-**Read flow:**
-1. User requests timeline
+**Read flow:**1. User requests timeline
 2. API server checks cache
 3. If cache hit: return immediately
 4. If cache miss: query database, populate cache
@@ -218,8 +215,7 @@ What you WON'T cover:
 - **Celebrities:** Pull model (query at read time)
 - Threshold: 1M followers
 
-**Timeline request:**
-1. Fetch pre-computed timeline (push model)
+**Timeline request:**1. Fetch pre-computed timeline (push model)
 2. Fetch tweets from celebrities user follows (pull model)
 3. Merge and sort
 4. Cache result
@@ -362,8 +358,7 @@ If we had more time:
         - created_at
             \`\`\`
 
-**Flow:**
-1. POST /shorten → Generate short code → Store in DB → Return
+**Flow:**1. POST /shorten → Generate short code → Store in DB → Return
 2. GET /:code → Check cache → If miss, query DB → Redirect
 
 ### **Step 3: Deep Dive (20 min)**
@@ -411,8 +406,7 @@ If we had more time:
 
 ## Key Principles
 
-1. **Always follow the 4-step structure**
-2. **Spend time proportionally**: Deep dive is most important
+1. **Always follow the 4-step structure**2. **Spend time proportionally**: Deep dive is most important
 3. **Think out loud**: Explain your reasoning
 4. **Draw diagrams**: Visual communication
 5. **Calculate numbers**: Validate your decisions

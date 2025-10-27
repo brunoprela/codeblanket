@@ -158,11 +158,8 @@ print(f"\\n✓ WACC: {wacc:.2%}")
 
 ### Methods to Calculate
 
-**Three primary approaches:**
-
-1. **Capital Asset Pricing Model (CAPM)** ← Most common
-2. **Dividend Discount Model (DDM)**
-3. **Bond Yield Plus Risk Premium**
+**Three primary approaches:**1. **Capital Asset Pricing Model (CAPM)** ← Most common
+2. **Dividend Discount Model (DDM)**3. **Bond Yield Plus Risk Premium**
 
 ### Method 1: CAPM (Most Common)
 

@@ -29,7 +29,7 @@ Consider this real scenario: A payment processing service deployed without compr
        /------------\\ Test component interactions
       /    Unit      \\ Many (60-75%)
      /----------------\\ Fast, reliable, cheap
-    
+
     Speed:  Fast → Slow
     Cost:   Cheap → Expensive
     Count:  Many → Few
@@ -77,11 +77,11 @@ import unittest
 class TestCalculator (unittest.TestCase):
     def setUp (self):
         self.calc = Calculator()
-    
+
     def test_addition (self):
         result = self.calc.add(2, 3)
         self.assertEqual (result, 5)
-    
+
     def tearDown (self):
         self.calc = None
 
@@ -162,7 +162,7 @@ testpaths = tests
 minversion = 3.10
 
 # Additional options
-addopts = 
+addopts =
     -v                          # Verbose output
     --strict-markers            # Require marker definitions
     --tb=short                  # Shorter tracebacks
@@ -192,25 +192,25 @@ markers =
 
 class Calculator:
     """Simple calculator for demonstration"""
-    
+
     def add (self, a: float, b: float) -> float:
         """Add two numbers"""
         return a + b
-    
+
     def subtract (self, a: float, b: float) -> float:
         """Subtract b from a"""
         return a - b
-    
+
     def multiply (self, a: float, b: float) -> float:
         """Multiply two numbers"""
         return a * b
-    
+
     def divide (self, a: float, b: float) -> float:
         """Divide a by b"""
         if b == 0:
             raise ValueError("Cannot divide by zero")
         return a / b
-    
+
     def power (self, base: float, exponent: float) -> float:
         """Raise base to exponent"""
         return base ** exponent
@@ -321,29 +321,29 @@ def test_assertions():
     # Equality
     assert 2 + 2 == 4
     assert "hello" == "hello"
-    
+
     # Inequality
     assert 5 != 3
-    
+
     # Comparison
     assert 10 > 5
     assert 3 < 7
     assert 5 >= 5
     assert 4 <= 10
-    
+
     # Boolean
     assert True
     assert not False
-    
+
     # Identity
     x = [1, 2, 3]
     y = x
     assert x is y
-    
+
     # Membership
     assert 3 in [1, 2, 3]
     assert "hello" in "hello world"
-    
+
     # Type checking
     assert isinstance(42, int)
     assert isinstance("hello", str)
@@ -360,19 +360,19 @@ def test_advanced_assertions():
     result = 0.1 + 0.2
     assert result == pytest.approx(0.3)
     assert result == pytest.approx(0.3, abs=0.001)
-    
+
     # Multiple items
     results = [1, 2, 3, 4]
     assert 2 in results
     assert all (x > 0 for x in results)
     assert any (x == 3 for x in results)
-    
+
     # String matching
     message = "Error: File not found"
     assert "Error" in message
     assert message.startswith("Error")
     assert message.endswith("found")
-    
+
     # Dict assertions
     user = {"name": "Alice", "age": 30}
     assert "name" in user
@@ -385,10 +385,10 @@ def test_collection_equality():
     # Lists (order matters)
     assert [1, 2, 3] == [1, 2, 3]
     assert [1, 2, 3] != [3, 2, 1]
-    
+
     # Sets (order doesn't matter)
     assert {1, 2, 3} == {3, 2, 1}
-    
+
     # Dicts
     assert {"a": 1, "b": 2} == {"b": 2, "a": 1}
 
@@ -398,15 +398,15 @@ def test_exception_assertions():
     # Simple exception check
     with pytest.raises(ValueError):
         int("not a number")
-    
+
     # Exception with message matching
     with pytest.raises(ValueError, match="invalid literal"):
         int("not a number")
-    
+
     # Capture exception for inspection
     with pytest.raises(ValueError) as exc_info:
         raise ValueError("Custom error message")
-    
+
     assert str (exc_info.value) == "Custom error message"
     assert exc_info.type is ValueError
 \`\`\`
@@ -417,10 +417,10 @@ def test_exception_assertions():
 def test_with_custom_messages():
     """Add custom error messages to assertions"""
     user_age = 15
-    
+
     # Basic message
     assert user_age >= 18, f"User must be 18+, got {user_age}"
-    
+
     # Detailed message
     balance = 50
     cost = 100
@@ -507,12 +507,12 @@ from calculator import Calculator
 
 class TestCalculatorBasicOps:
     """Group related calculator tests"""
-    
+
     def test_add (self):
         """Test addition"""
         calc = Calculator()
         assert calc.add(2, 3) == 5
-    
+
     def test_subtract (self):
         """Test subtraction"""
         calc = Calculator()
@@ -521,12 +521,12 @@ class TestCalculatorBasicOps:
 
 class TestCalculatorAdvancedOps:
     """Advanced operations"""
-    
+
     def test_power (self):
         """Test exponentiation"""
         calc = Calculator()
         assert calc.power(2, 8) == 256
-    
+
     def test_divide_by_zero (self):
         """Test error handling"""
         calc = Calculator()
@@ -571,7 +571,7 @@ class Payment:
     currency: str
     status: PaymentStatus = PaymentStatus.PENDING
     description: Optional[str] = None
-    
+
     def __post_init__(self):
         """Validate payment"""
         if self.amount <= 0:
@@ -582,24 +582,24 @@ class Payment:
 
 class PaymentProcessor:
     """Process payments"""
-    
+
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.processed_payments: list[Payment] = []
-    
+
     def process_payment (self, payment: Payment) -> bool:
         """
         Process a payment
-        
+
         Returns:
             True if successful, False otherwise
         """
         if not self.api_key:
             raise ValueError("API key required")
-        
+
         if payment.status != PaymentStatus.PENDING:
             raise ValueError("Payment already processed")
-        
+
         # Simulate processing
         try:
             # In real implementation, call payment gateway API
@@ -609,15 +609,15 @@ class PaymentProcessor:
         except Exception:
             payment.status = PaymentStatus.FAILED
             return False
-    
+
     def refund_payment (self, payment: Payment) -> bool:
         """Refund a payment"""
         if payment.status != PaymentStatus.COMPLETED:
             raise ValueError("Can only refund completed payments")
-        
+
         payment.status = PaymentStatus.REFUNDED
         return True
-    
+
     def get_total_processed (self) -> Decimal:
         """Get total amount processed"""
         return sum(
@@ -637,7 +637,7 @@ from payment import Payment, PaymentProcessor, PaymentStatus
 
 class TestPayment:
     """Test Payment model"""
-    
+
     def test_create_payment (self):
         """Test creating valid payment"""
         payment = Payment(
@@ -648,17 +648,17 @@ class TestPayment:
         assert payment.amount == Decimal("99.99")
         assert payment.currency == "USD"
         assert payment.status == PaymentStatus.PENDING
-    
+
     def test_payment_negative_amount (self):
         """Test payment with negative amount fails"""
         with pytest.raises(ValueError, match="Amount must be positive"):
             Payment (amount=Decimal("-10.00"), currency="USD")
-    
+
     def test_payment_zero_amount (self):
         """Test payment with zero amount fails"""
         with pytest.raises(ValueError, match="Amount must be positive"):
             Payment (amount=Decimal("0.00"), currency="USD")
-    
+
     def test_payment_invalid_currency (self):
         """Test payment with invalid currency fails"""
         with pytest.raises(ValueError, match="Unsupported currency"):
@@ -667,64 +667,64 @@ class TestPayment:
 
 class TestPaymentProcessor:
     """Test PaymentProcessor"""
-    
+
     def test_process_payment_success (self):
         """Test successful payment processing"""
         processor = PaymentProcessor (api_key="test_key")
         payment = Payment (amount=Decimal("50.00"), currency="USD")
-        
+
         result = processor.process_payment (payment)
-        
+
         assert result is True
         assert payment.status == PaymentStatus.COMPLETED
         assert len (processor.processed_payments) == 1
-    
+
     def test_process_payment_no_api_key (self):
         """Test processing fails without API key"""
         processor = PaymentProcessor (api_key="")
         payment = Payment (amount=Decimal("50.00"), currency="USD")
-        
+
         with pytest.raises(ValueError, match="API key required"):
             processor.process_payment (payment)
-    
+
     def test_process_payment_already_processed (self):
         """Test cannot process payment twice"""
         processor = PaymentProcessor (api_key="test_key")
         payment = Payment (amount=Decimal("50.00"), currency="USD")
         payment.status = PaymentStatus.COMPLETED
-        
+
         with pytest.raises(ValueError, match="already processed"):
             processor.process_payment (payment)
-    
+
     def test_refund_payment_success (self):
         """Test successful refund"""
         processor = PaymentProcessor (api_key="test_key")
         payment = Payment (amount=Decimal("50.00"), currency="USD")
         processor.process_payment (payment)
-        
+
         result = processor.refund_payment (payment)
-        
+
         assert result is True
         assert payment.status == PaymentStatus.REFUNDED
-    
+
     def test_refund_pending_payment (self):
         """Test cannot refund pending payment"""
         processor = PaymentProcessor (api_key="test_key")
         payment = Payment (amount=Decimal("50.00"), currency="USD")
-        
+
         with pytest.raises(ValueError, match="only refund completed"):
             processor.refund_payment (payment)
-    
+
     def test_get_total_processed (self):
         """Test calculating total processed amount"""
         processor = PaymentProcessor (api_key="test_key")
-        
+
         payment1 = Payment (amount=Decimal("50.00"), currency="USD")
         payment2 = Payment (amount=Decimal("75.50"), currency="USD")
-        
+
         processor.process_payment (payment1)
         processor.process_payment (payment2)
-        
+
         total = processor.get_total_processed()
         assert total == Decimal("125.50")
 \`\`\`
@@ -792,10 +792,10 @@ def test_payment_processing():
     # Arrange: Set up test data
     processor = PaymentProcessor (api_key="test")
     payment = Payment (amount=Decimal("100.00"), currency="USD")
-    
+
     # Act: Execute the code being tested
     result = processor.process_payment (payment)
-    
+
     # Assert: Verify the results
     assert result is True
     assert payment.status == PaymentStatus.COMPLETED

@@ -104,21 +104,19 @@ def divide (self, a, b):
 
 1. **Write smallest possible test** first
 2. **Write only enough code** to pass
-3. **Refactor only when tests pass**
-4. **One test at a time**
-5. **Run tests frequently** (after each change)
+3. **Refactor only when tests pass**4. **One test at a time**5. **Run tests frequently** (after each change)
 
 ---
 
 ## Common Mistakes
 
-❌ **Writing multiple tests before code**  
+❌ **Writing multiple tests before code**
 ✅ Write one test, make it pass, repeat
 
-❌ **Over-engineering in first pass**  
+❌ **Over-engineering in first pass**
 ✅ Simplest code to pass test
 
-❌ **Skipping refactor step**  
+❌ **Skipping refactor step**
 ✅ Always improve code after green
 
 ---

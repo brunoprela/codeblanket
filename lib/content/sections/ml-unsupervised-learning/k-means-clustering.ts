@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 
 # Generate sample data
-X, y_true = make_blobs (n_samples=300, centers=4, 
+X, y_true = make_blobs (n_samples=300, centers=4,
                        cluster_std=0.60, random_state=42)
 
 # Visualize data
@@ -65,47 +65,47 @@ class KMeansFromScratch:
         self.random_state = random_state
         self.centroids = None
         self.labels_ = None
-        
+
     def fit (self, X):
         """Fit K-Means to data"""
         np.random.seed (self.random_state)
         n_samples, n_features = X.shape
-        
+
         # Initialize centroids randomly from data points
         idx = np.random.choice (n_samples, self.n_clusters, replace=False)
         self.centroids = X[idx]
-        
+
         for iteration in range (self.max_iters):
             # Assignment step: assign points to nearest centroid
             distances = self._compute_distances(X)
             new_labels = np.argmin (distances, axis=1)
-            
+
             # Check for convergence
             if iteration > 0 and np.array_equal (new_labels, self.labels_):
                 print(f"Converged after {iteration} iterations")
                 break
-                
+
             self.labels_ = new_labels
-            
+
             # Update step: recalculate centroids
             for k in range (self.n_clusters):
                 if np.sum (self.labels_ == k) > 0:  # Avoid empty clusters
                     self.centroids[k] = X[self.labels_ == k].mean (axis=0)
-        
+
         return self
-    
+
     def _compute_distances (self, X):
         """Compute distances from all points to all centroids"""
         distances = np.zeros((X.shape[0], self.n_clusters))
         for k in range (self.n_clusters):
             distances[:, k] = np.linalg.norm(X - self.centroids[k], axis=1)
         return distances
-    
+
     def predict (self, X):
         """Assign new points to nearest centroid"""
         distances = self._compute_distances(X)
         return np.argmin (distances, axis=1)
-    
+
     def fit_predict (self, X):
         """Fit and return cluster labels"""
         self.fit(X)
@@ -117,9 +117,9 @@ labels = kmeans_scratch.fit_predict(X)
 
 # Visualize results
 plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', alpha=0.6)
-plt.scatter (kmeans_scratch.centroids[:, 0], 
+plt.scatter (kmeans_scratch.centroids[:, 0],
             kmeans_scratch.centroids[:, 1],
-            c='red', marker='X', s=200, linewidths=2, 
+            c='red', marker='X', s=200, linewidths=2,
             edgecolors='black', label='Centroids')
 plt.title('K-Means Clustering (From Scratch)')
 plt.xlabel('Feature 1')
@@ -147,9 +147,9 @@ plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', alpha=0.6)
-plt.scatter (kmeans.cluster_centers_[:, 0], 
+plt.scatter (kmeans.cluster_centers_[:, 0],
             kmeans.cluster_centers_[:, 1],
-            c='red', marker='X', s=200, linewidths=2, 
+            c='red', marker='X', s=200, linewidths=2,
             edgecolors='black')
 plt.title('K-Means Clustering Results')
 plt.xlabel('Feature 1')
@@ -240,43 +240,43 @@ Visualize silhouette coefficients for each sample.
 def plot_silhouette(X, n_clusters):
     """Create silhouette plot for given number of clusters"""
     fig, ax = plt.subplots (figsize=(10, 7))
-    
+
     # Fit K-Means
     kmeans = KMeans (n_clusters=n_clusters, random_state=42, n_init=10)
     labels = kmeans.fit_predict(X)
-    
+
     # Calculate silhouette scores
     silhouette_avg = silhouette_score(X, labels)
     sample_silhouette_values = silhouette_samples(X, labels)
-    
+
     y_lower = 10
     for i in range (n_clusters):
         # Get silhouette scores for cluster i
         cluster_silhouette_values = sample_silhouette_values[labels == i]
         cluster_silhouette_values.sort()
-        
+
         size_cluster_i = cluster_silhouette_values.shape[0]
         y_upper = y_lower + size_cluster_i
-        
+
         color = cm.nipy_spectral (float (i) / n_clusters)
         ax.fill_betweenx (np.arange (y_lower, y_upper),
                          0, cluster_silhouette_values,
                          facecolor=color, edgecolor=color, alpha=0.7)
-        
+
         # Label clusters
         ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str (i))
         y_lower = y_upper + 10
-    
+
     ax.set_xlabel("Silhouette Coefficient", fontsize=12)
     ax.set_ylabel("Cluster Label", fontsize=12)
-    ax.set_title (f"Silhouette Plot for K={n_clusters}\\n" + 
+    ax.set_title (f"Silhouette Plot for K={n_clusters}\\n" +
                  f"Average Silhouette Score: {silhouette_avg:.3f}", fontsize=14)
-    
+
     # Vertical line for average score
-    ax.axvline (x=silhouette_avg, color="red", linestyle="--", 
+    ax.axvline (x=silhouette_avg, color="red", linestyle="--",
                label=f'Average: {silhouette_avg:.3f}')
     ax.legend()
-    
+
     plt.tight_layout()
     plt.show()
 
@@ -298,13 +298,13 @@ axes = axes.ravel()
 for i in range(6):
     kmeans = KMeans (n_clusters=4, random_state=i, n_init=1, max_iter=10)
     labels = kmeans.fit_predict(X)
-    
+
     axes[i].scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', alpha=0.6)
-    axes[i].scatter (kmeans.cluster_centers_[:, 0], 
+    axes[i].scatter (kmeans.cluster_centers_[:, 0],
                    kmeans.cluster_centers_[:, 1],
                    c='red', marker='X', s=100)
     axes[i].set_title (f'Random State = {i}\\nInertia: {kmeans.inertia_:.0f}')
-    
+
 plt.tight_layout()
 plt.show()
 
@@ -324,10 +324,10 @@ kmeans_random = KMeans (n_clusters=4, init='random', n_init=1, random_state=42)
 labels_random = kmeans_random.fit_predict(X)
 
 axes[0].scatter(X[:, 0], X[:, 1], c=labels_random, cmap='viridis', alpha=0.6)
-axes[0].scatter (kmeans_random.cluster_centers_[:, 0], 
+axes[0].scatter (kmeans_random.cluster_centers_[:, 0],
                kmeans_random.cluster_centers_[:, 1],
                c='red', marker='X', s=200)
-axes[0].set_title (f'Random Init\\nInertia: {kmeans_random.inertia_:.0f}\\n' + 
+axes[0].set_title (f'Random Init\\nInertia: {kmeans_random.inertia_:.0f}\\n' +
                   f'Iterations: {kmeans_random.n_iter_}')
 
 # K-Means++ initialization (default in sklearn)
@@ -335,10 +335,10 @@ kmeans_pp = KMeans (n_clusters=4, init='k-means++', n_init=1, random_state=42)
 labels_pp = kmeans_pp.fit_predict(X)
 
 axes[1].scatter(X[:, 0], X[:, 1], c=labels_pp, cmap='viridis', alpha=0.6)
-axes[1].scatter (kmeans_pp.cluster_centers_[:, 0], 
+axes[1].scatter (kmeans_pp.cluster_centers_[:, 0],
                kmeans_pp.cluster_centers_[:, 1],
                c='red', marker='X', s=200)
-axes[1].set_title (f'K-Means++ Init\\nInertia: {kmeans_pp.inertia_:.0f}\\n' + 
+axes[1].set_title (f'K-Means++ Init\\nInertia: {kmeans_pp.inertia_:.0f}\\n' +
                   f'Iterations: {kmeans_pp.n_iter_}')
 
 plt.tight_layout()
@@ -354,7 +354,7 @@ plt.show()
 \`\`\`python
 # E-commerce customer segmentation
 customers = pd.DataFrame({
-    'Annual_Income': [15, 16, 17, 18, 19, 20, 25, 30, 35, 40, 
+    'Annual_Income': [15, 16, 17, 18, 19, 20, 25, 30, 35, 40,
                       45, 50, 55, 60, 65, 70, 75, 80, 85, 90],
     'Spending_Score': [39, 81, 6, 77, 40, 76, 94, 3, 72, 14,
                        99, 15, 77, 13, 79, 35, 66, 29, 80, 87]
@@ -378,9 +378,9 @@ customers['Segment'] = kmeans.fit_predict(X_scaled)
 
 # Visualize segments
 plt.figure (figsize=(10, 6))
-scatter = plt.scatter (customers['Annual_Income'], 
+scatter = plt.scatter (customers['Annual_Income'],
                      customers['Spending_Score'],
-                     c=customers['Segment'], 
+                     c=customers['Segment'],
                      cmap='viridis', s=100, alpha=0.6)
 plt.xlabel('Annual Income (k$)')
 plt.ylabel('Spending Score (1-100)')
@@ -462,9 +462,9 @@ X_with_outliers = np.vstack([X, [[10, 10], [10, -10], [-10, 10]]])
 kmeans = KMeans (n_clusters=4, random_state=42)
 labels = kmeans.fit_predict(X_with_outliers)
 
-plt.scatter(X_with_outliers[:, 0], X_with_outliers[:, 1], 
+plt.scatter(X_with_outliers[:, 0], X_with_outliers[:, 1],
            c=labels, cmap='viridis', alpha=0.6)
-plt.scatter (kmeans.cluster_centers_[:, 0], 
+plt.scatter (kmeans.cluster_centers_[:, 0],
            kmeans.cluster_centers_[:, 1],
            c='red', marker='X', s=200)
 plt.title('K-Means with Outliers (Centroids Shifted)')

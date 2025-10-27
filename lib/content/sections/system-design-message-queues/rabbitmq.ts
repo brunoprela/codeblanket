@@ -11,9 +11,7 @@ export const rabbitmqSection = {
 
 **RabbitMQ** = Message Broker + AMQP Protocol + Flexible Routing + Multi-Protocol Support
 
-### **Key Characteristics:**
-
-1. **Message broker**: Routes messages between producers and consumers
+### **Key Characteristics:**1. **Message broker**: Routes messages between producers and consumers
 2. **AMQP protocol**: Standard wire protocol for messaging
 3. **Flexible routing**: Complex routing via exchanges and bindings
 4. **Reliability**: Message persistence, acknowledgments, clustering

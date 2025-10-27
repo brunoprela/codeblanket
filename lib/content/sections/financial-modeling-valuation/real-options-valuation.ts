@@ -12,8 +12,7 @@ export const realOptionsValuation = {
 
 **Real Options Solution**: Value the option to adapt strategy as uncertainty resolves.
 
-**Types of Real Options:**
-1. **Option to Expand**: Invest more if market grows
+**Types of Real Options:**1. **Option to Expand**: Invest more if market grows
 2. **Option to Abandon**: Exit if market declines
 3. **Option to Delay**: Wait for more information
 4. **Option to Switch**: Change inputs/outputs

@@ -28,19 +28,19 @@ def kruskal_mst (edges, n):
     """
     # Sort edges by weight
     edges.sort()
-    
+
     uf = UnionFind (n)
     mst = []
     total_weight = 0
-    
+
     for weight, u, v in edges:
         if uf.union (u, v):  # No cycle
             mst.append((u, v, weight))
             total_weight += weight
-            
+
             if len (mst) == n - 1:  # Found MST
                 break
-    
+
     return mst, total_weight
 \`\`\`
 
@@ -62,28 +62,28 @@ def prim_mst (graph, n):
     visited = set()
     mst = []
     total_weight = 0
-    
+
     # Start from vertex 0
     visited.add(0)
     heap = graph[0][:]  # edges from start
     heapq.heapify (heap)
-    
+
     while heap and len (visited) < n:
         weight, u, v = heapq.heappop (heap)
-        
+
         if v in visited:
             continue
-        
+
         # Add edge to MST
         visited.add (v)
         mst.append((u, v, weight))
         total_weight += weight
-        
+
         # Add edges from newly added vertex
         for w, neighbor in graph[v]:
             if neighbor not in visited:
                 heapq.heappush (heap, (w, v, neighbor))
-    
+
     return mst, total_weight
 \`\`\`
 

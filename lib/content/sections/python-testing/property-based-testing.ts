@@ -116,13 +116,13 @@ def test_sort_is_sorted (lst):
 @given (st.lists (st.integers()))
 def test_sort_properties (lst):
     sorted_lst = my_sort (lst)
-    
+
     # Property 1: Same length
     assert len (sorted_lst) == len (lst)
-    
+
     # Property 2: Same elements
     assert sorted (sorted_lst) == sorted (lst)
-    
+
     # Property 3: Is sorted
     for i in range (len (sorted_lst) - 1):
         assert sorted_lst[i] <= sorted_lst[i + 1]

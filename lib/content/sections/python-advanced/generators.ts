@@ -30,8 +30,7 @@ squares_list = [x**2 for x in range(1000000)]
 squares_gen = (x**2 for x in range(1000000))
 \`\`\`
 
-**Why Generators Matter:**
-1. **Memory Efficiency:** Don't store all values in memory
+**Why Generators Matter:**1. **Memory Efficiency:** Don't store all values in memory
 2. **Lazy Evaluation:** Compute values only when needed
 3. **Infinite Sequences:** Can represent unbounded sequences
 4. **Pipeline Processing:** Chain operations efficiently

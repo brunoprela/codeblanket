@@ -538,8 +538,7 @@ User Service → (calls) → Order Service → (calls) → Inventory Service
 2. **Microservices = distributed systems complexity**: Only worth it if benefits outweigh costs
 3. **Start simple**: Monolith → extract services as needed
 4. **Team size matters**: Microservices require organizational maturity
-5. **Well-designed monolith > poorly designed microservices**
-6. **Migration > rewrite**: Use Strangler Fig pattern
+5. **Well-designed monolith > poorly designed microservices**6. **Migration > rewrite**: Use Strangler Fig pattern
 7. **Avoid distributed monolith**: Worst of both worlds
 
 The question isn't "*Should we use microservices?*" but "*Do the benefits outweigh the complexity for our specific context?*"`,

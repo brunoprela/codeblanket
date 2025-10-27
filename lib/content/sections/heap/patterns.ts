@@ -67,8 +67,7 @@ Track median of running stream using two heaps.
 - **Min heap**: stores larger half
 - Median is always at the top of one heap
 
-**Invariants:**
-1. Max heap size ≥ Min heap size
+**Invariants:**1. Max heap size ≥ Min heap size
 2. Max heap size ≤ Min heap size + 1
 3. All elements in max heap ≤ all in min heap
 

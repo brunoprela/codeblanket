@@ -200,9 +200,7 @@ class ErrorHandlingMiddleware:
             }, status=500)
 \`\`\`
 
-**Middleware Hooks:**
-
-1. **__init__(get_response)**: One-time configuration
+**Middleware Hooks:**1. **__init__(get_response)**: One-time configuration
 2. **__call__(request)**: Process request and response
 3. **process_view (request, view_func, view_args, view_kwargs)**: Before view is called
 4. **process_exception (request, exception)**: When view raises exception
@@ -259,8 +257,7 @@ MIDDLEWARE = [
 ]
 \`\`\`
 
-**Best Practices:**
-1. ✅ Keep middleware lightweight
+**Best Practices:**1. ✅ Keep middleware lightweight
 2. ✅ Order matters - consider dependencies
 3. ✅ Use process_exception for error handling
 4. ✅ Add custom headers in __call__

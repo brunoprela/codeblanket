@@ -44,7 +44,7 @@ class Point:
     y: int
     
     def distance_from_origin(self) -> float:
-        return (self.x ** 2 + self.y ** 2) ** 0.5
+        return (self.x ** 2 + self.y ** 2) **0.5
 
 
 def test_frozen():
@@ -79,7 +79,7 @@ class Point:
     y: int
     
     def distance_from_origin(self) -> float:
-        return (self.x ** 2 + self.y ** 2) ** 0.5
+        return (self.x ** 2 + self.y ** 2) **0.5
 
 
 def test_frozen():

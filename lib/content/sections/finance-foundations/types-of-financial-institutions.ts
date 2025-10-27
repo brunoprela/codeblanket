@@ -24,8 +24,7 @@ This section provides a comprehensive tour of financial institutions, focusing o
 
 **Investment banks** advise corporations, governments, and institutions on complex financial transactions:
 
-#### **Core Services**
-1. **Mergers & Acquisitions (M&A)**: Advise on buying/selling companies
+#### **Core Services**1. **Mergers & Acquisitions (M&A)**: Advise on buying/selling companies
 2. **Capital Markets**: Help companies raise money (IPOs, bond issuances)
 3. **Trading & Sales**: Trade securities for clients and proprietary accounts
 4. **Research**: Provide investment recommendations
@@ -172,8 +171,7 @@ Protocols:
 
 **Hedge funds** are investment partnerships that use sophisticated strategies to generate returns:
 
-#### **Core Strategies**
-1. **Long/Short Equity**: Buy undervalued, short overvalued stocks
+#### **Core Strategies**1. **Long/Short Equity**: Buy undervalued, short overvalued stocks
 2. **Quantitative**: Algorithm-driven trading (stat arb, HFT)
 3. **Global Macro**: Big bets on currencies, commodities, rates
 4. **Event-Driven**: M&A arbitrage, distressed debt
@@ -360,8 +358,7 @@ Infrastructure:
 
 **Asset managers** invest money on behalf of clients (individuals, institutions, pension funds):
 
-#### **Product Types**
-1. **Mutual Funds**: Actively managed portfolios (higher fees)
+#### **Product Types**1. **Mutual Funds**: Actively managed portfolios (higher fees)
 2. **ETFs**: Passive index tracking (lower fees)
 3. **Index Funds**: Vanguard S&P 500 fund
 4. **Target-Date Funds**: Automatic age-based allocation
@@ -515,8 +512,7 @@ Front End:
 
 **Exchanges** provide venues for buying/selling securities:
 
-#### **Types**
-1. **Stock Exchanges**: NYSE, NASDAQ, London Stock Exchange
+#### **Types**1. **Stock Exchanges**: NYSE, NASDAQ, London Stock Exchange
 2. **Derivatives Exchanges**: CME (futures), CBOE (options)
 3. **Crypto Exchanges**: Binance, Coinbase, Kraken
 4. **OTC Markets**: Bond trading, FX (not centralized exchange)
@@ -664,8 +660,7 @@ Surveillance:
 
 **Fintech** companies use technology to improve financial services:
 
-#### **Categories**
-1. **Payments**: Stripe, Square, PayPal, Adyen
+#### **Categories**1. **Payments**: Stripe, Square, PayPal, Adyen
 2. **Banking**: Chime, N26, Revolut, Nubank
 3. **Investing**: Robinhood, Betterment, Wealthfront
 4. **Lending**: SoFi, Affirm, LendingClub

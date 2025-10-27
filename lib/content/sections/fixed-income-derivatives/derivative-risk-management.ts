@@ -225,7 +225,7 @@ self.horizon_days = horizon_days
 self.portfolio_value = sum(p.market_value for p in positions)
 
     logger.info(
-        f"Initialized VaR: ${self.portfolio_value / 1e6: .1f
+        f"Initialized VaR: ${self.portfolio_value / 1e6:.1f
 }M portfolio, "
             f"{confidence*100:.0f}% confidence, {horizon_days}day horizon"
     )

@@ -1,7 +1,7 @@
 export const marketImpactSlippageModels = {
-    title: 'Market Impact and Slippage Models',
-    id: 'market-impact-slippage-models',
-    content: `
+  title: 'Market Impact and Slippage Models',
+  id: 'market-impact-slippage-models',
+  content: `
 # Market Impact and Slippage Models
 
 ## Introduction
@@ -136,8 +136,7 @@ Where:
 Implementation Shortfall = (Decision Price - Execution Price) × Shares Traded
 \`\`\`
 
-**Components:**
-1. **Delay Cost (Timing Cost):**
+**Components:**1. **Delay Cost (Timing Cost):**
    - Price movement between the decision time (when you decide to trade) and when the order is submitted.
    - Example: Decide to buy at $100, but by the time the order is placed, the price is $100.05.
    - Delay Cost = ($100.05 - $100.00) × 10,000 shares = $500.
@@ -505,8 +504,7 @@ BlackRock, the world's largest asset manager, executes billions of dollars in tr
 
 **Scenario:** A portfolio manager decides to buy $50 million of Apple stock (AAPL).
 
-**Execution Strategy:**
-1. **Pre-Trade Analysis:**
+**Execution Strategy:**1. **Pre-Trade Analysis:**
    - Estimate market impact using square-root law: ~15-20 bps for a $50M order.
    - Decide on execution horizon: 2 hours (balance impact vs. price risk).
    - Choose algorithm: Almgren-Chriss optimal execution (adaptive).
@@ -543,8 +541,7 @@ BlackRock, the world's largest asset manager, executes billions of dollars in tr
 
 **Task:** Implement a simple Volume-Weighted Average Price (VWAP) execution algorithm.
 
-**Requirements:**
-1. Accept total order size and execution time horizon.
+**Requirements:**1. Accept total order size and execution time horizon.
 2. Use historical volume profile to schedule child orders.
 3. Aim to match the volume profile (trade more when market is more active).
 4. Calculate expected market impact using square-root law.

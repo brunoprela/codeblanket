@@ -128,12 +128,12 @@ SELECT * FROM sessions WHERE session_id > 'abc123';
 **Example (PostgreSQL):**
 \`\`\`sql
 -- Create full-text index
-CREATE INDEX idx_articles_fulltext 
+CREATE INDEX idx_articles_fulltext
 ON articles USING GIN(to_tsvector('english', title || ' ' || content));
 
 -- Full-text search queries
-SELECT * FROM articles 
-WHERE to_tsvector('english', title || ' ' || content) 
+SELECT * FROM articles
+WHERE to_tsvector('english', title || ' ' || content)
 @@ to_tsquery('english', 'database & indexing');
 
 -- With ranking
@@ -172,9 +172,9 @@ ORDER BY rank DESC;
 CREATE INDEX idx_locations_geom ON locations USING GIST(geom);
 
 -- Find nearby locations
-SELECT * FROM locations 
+SELECT * FROM locations
 WHERE ST_DWithin(
-    geom, 
+    geom,
     ST_MakePoint(-122.4194, 37.7749)::geography,
     1000  -- 1km radius
 );
@@ -237,8 +237,7 @@ WHERE city = 'SF' AND zip_code = '94102'       -- ❌ Can't use index
 - Think of it like a phone book: sorted by last name, then first name
 - You can find "Smith, John" but not just "John"
 
-**Best Practices:**
-1. **Order by Selectivity:** Most selective columns first
+**Best Practices:**1. **Order by Selectivity:** Most selective columns first
 2. **Order by Query Patterns:** Match common WHERE clauses
 3. **Consider Equality vs Range:** Equality filters first, range filters last
 
@@ -258,7 +257,7 @@ WHERE user_id = 123
 
 \`\`\`sql
 -- PostgreSQL
-CREATE INDEX idx_users_email_covering 
+CREATE INDEX idx_users_email_covering
 ON users (email) INCLUDE (first_name, last_name);
 
 -- This query can be satisfied entirely from the index
@@ -300,7 +299,7 @@ SELECT * FROM users WHERE email = 'john@example.com' AND status = 'active';
 
 \`\`\`sql
 -- E-commerce example
-CREATE INDEX idx_pending_orders ON orders (user_id, created_at) 
+CREATE INDEX idx_pending_orders ON orders (user_id, created_at)
 WHERE status = 'pending';
 
 -- Much smaller than indexing all orders
@@ -320,7 +319,7 @@ ALTER TABLE users ADD CONSTRAINT users_email_unique UNIQUE(email);
 **Composite Unique Indexes:**
 \`\`\`sql
 -- Unique combination of user_id and product_id
-CREATE UNIQUE INDEX idx_cart_items_unique 
+CREATE UNIQUE INDEX idx_cart_items_unique
 ON cart_items (user_id, product_id);
 
 -- Allows: user_id=1, product_id=100 and user_id=2, product_id=100
@@ -509,26 +508,26 @@ CREATE TABLE products (
 CREATE INDEX idx_products_category ON products (category, price);
 CREATE INDEX idx_products_price ON products (price) WHERE stock_quantity > 0;
 CREATE INDEX idx_products_search ON products USING GIN(search_vector);
-CREATE INDEX idx_products_recent ON products (created_at DESC) 
+CREATE INDEX idx_products_recent ON products (created_at DESC)
     WHERE created_at > NOW() - INTERVAL '30 days';
 
 -- Query patterns these support:
 -- 1. Browse by category sorted by price
-SELECT * FROM products 
-WHERE category = 'electronics' 
+SELECT * FROM products
+WHERE category = 'electronics'
 ORDER BY price;
 
 -- 2. Filter available products by price range
-SELECT * FROM products 
-WHERE price BETWEEN 100 AND 500 
+SELECT * FROM products
+WHERE price BETWEEN 100 AND 500
 AND stock_quantity > 0;
 
 -- 3. Full-text search
-SELECT * FROM products 
+SELECT * FROM products
 WHERE search_vector @@ to_tsquery('laptop');
 
 -- 4. Recently added products
-SELECT * FROM products 
+SELECT * FROM products
 WHERE created_at > NOW() - INTERVAL '7 days'
 ORDER BY created_at DESC;
 \`\`\`
@@ -546,21 +545,21 @@ CREATE TABLE posts (
 );
 
 -- Composite index for user's feed
-CREATE INDEX idx_posts_user_timeline 
-ON posts (user_id, created_at DESC) 
+CREATE INDEX idx_posts_user_timeline
+ON posts (user_id, created_at DESC)
 WHERE visibility = 'public';
 
 -- Covering index for timeline queries
-CREATE INDEX idx_posts_feed_covering 
-ON posts (user_id, created_at DESC) 
+CREATE INDEX idx_posts_feed_covering
+ON posts (user_id, created_at DESC)
 INCLUDE (content, visibility);
 
 -- Efficient feed query
-SELECT content, created_at 
-FROM posts 
+SELECT content, created_at
+FROM posts
 WHERE user_id IN (1, 2, 3, 4, 5)  -- Following list
 AND created_at > NOW() - INTERVAL '7 days'
-ORDER BY created_at DESC 
+ORDER BY created_at DESC
 LIMIT 50;
 \`\`\`
 
@@ -586,9 +585,9 @@ CREATE INDEX idx_events_user ON events_2024_01(user_id, created_at);
 CREATE INDEX idx_events_metadata ON events_2024_01 USING GIN(metadata);
 
 -- Fast aggregation queries
-SELECT event_type, COUNT(*) 
-FROM events 
-WHERE created_at >= '2024-01-01' 
+SELECT event_type, COUNT(*)
+FROM events
+WHERE created_at >= '2024-01-01'
 AND created_at < '2024-02-01'
 GROUP BY event_type;
 \`\`\`
@@ -639,8 +638,7 @@ db.users.createIndex(
 
 ### Common Questions
 
-**Q: "How would you optimize this slow query?"**
-1. Check if there's a WHERE clause → index those columns
+**Q: "How would you optimize this slow query?"**1. Check if there's a WHERE clause → index those columns
 2. Check for JOIN → index foreign keys
 3. Check ORDER BY/GROUP BY → consider composite index
 4. Use EXPLAIN to verify
@@ -658,8 +656,7 @@ db.users.createIndex(
 - Maintenance overhead (fragmentation, statistics)
 - Diminishing returns (too many indexes)
 
-**Q: "How do you decide which indexes to create?"**
-1. Analyze query patterns (WHERE, JOIN, ORDER BY)
+**Q: "How do you decide which indexes to create?"**1. Analyze query patterns (WHERE, JOIN, ORDER BY)
 2. Identify slow queries (query logs, APM tools)
 3. Use EXPLAIN to verify query plans
 4. Monitor index usage (remove unused indexes)
@@ -676,31 +673,22 @@ CREATE INDEX idx_orders_user_date ON orders (user_id, created_at DESC);
 **Pattern 2: Covering Index for Performance**
 \`\`\`sql
 -- Query needs: user_id, status, total
-CREATE INDEX idx_orders_covering 
-ON orders (user_id, created_at) 
+CREATE INDEX idx_orders_covering
+ON orders (user_id, created_at)
 INCLUDE (status, total);
 \`\`\`
 
 **Pattern 3: Partial Index for Selective Data**
 \`\`\`sql
 -- Only index pending/processing orders (5% of data)
-CREATE INDEX idx_active_orders 
-ON orders (user_id, created_at) 
+CREATE INDEX idx_active_orders
+ON orders (user_id, created_at)
 WHERE status IN ('pending', 'processing');
 \`\`\`
 
 ## Key Takeaways
 
-1. **Indexes trade storage and write performance for read performance**
-2. **B-tree indexes are the default and work for most use cases**
-3. **Composite index column order matters (left-prefix rule)**
-4. **Create indexes on WHERE, JOIN, ORDER BY, and GROUP BY columns**
-5. **Don't over-index: each index slows down writes**
-6. **Use EXPLAIN to verify query plans and index usage**
-7. **Monitor and maintain indexes (rebuild fragmented, drop unused)**
-8. **Consider partial indexes for frequently queried subsets**
-9. **Covering indexes eliminate table lookups but increase size**
-10. **Index selectivity matters: high selectivity = better performance**
+1. **Indexes trade storage and write performance for read performance**2. **B-tree indexes are the default and work for most use cases**3. **Composite index column order matters (left-prefix rule)**4. **Create indexes on WHERE, JOIN, ORDER BY, and GROUP BY columns**5. **Don't over-index: each index slows down writes**6. **Use EXPLAIN to verify query plans and index usage**7. **Monitor and maintain indexes (rebuild fragmented, drop unused)**8. **Consider partial indexes for frequently queried subsets**9. **Covering indexes eliminate table lookups but increase size**10. **Index selectivity matters: high selectivity = better performance**
 
 ## Summary
 

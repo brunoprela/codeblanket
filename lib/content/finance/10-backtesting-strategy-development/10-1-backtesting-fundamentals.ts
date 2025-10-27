@@ -1,9 +1,9 @@
 export const backtestingFundamentals = {
-    title: 'Backtesting Fundamentals',
-    slug: 'backtesting-fundamentals',
-    description:
-        'Master the foundations of backtesting trading strategies and understand why proper backtesting is critical for successful algorithmic trading',
-    content: `
+  title: 'Backtesting Fundamentals',
+  slug: 'backtesting-fundamentals',
+  description:
+    'Master the foundations of backtesting trading strategies and understand why proper backtesting is critical for successful algorithmic trading',
+  content: `
 # Backtesting Fundamentals
 
 ## Introduction: Why Backtesting Matters for Engineers
@@ -953,9 +953,7 @@ Before deploying a strategy to live trading:
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Backtesting is critical** but most backtests are flawed
+**Key Takeaways:**1. **Backtesting is critical** but most backtests are flawed
 2. **Common biases** (look-ahead, survivorship, overfitting) destroy reliability
 3. **Three stages**: Backtest → Paper Trading → Live (with small capital)
 4. **Event-driven backtesting** is more realistic than vectorized
@@ -980,18 +978,18 @@ Before deploying a strategy to live trading:
 
 You now understand why proper backtesting is complex and critical. Ready to build production-grade infrastructure!
 `,
-    exercises: [
-        {
-            prompt:
-                'Implement a backtest comparison tool that runs the same strategy with and without look-ahead bias, survivorship bias, and realistic transaction costs. Show how each bias affects the results.',
-            solution:
-                '// Implementation would include: 1) Base strategy implementation, 2) Version with look-ahead bias (peek at future data), 3) Version with survivorship bias (only current stocks), 4) Version with no transaction costs, 5) Clean version with all biases removed, 6) Side-by-side comparison showing degradation at each step, 7) Visualization of equity curves for each version',
-        },
-        {
-            prompt:
-                'Build an event-driven backtesting framework that processes market data, generates signals, creates orders, and tracks fills. Include realistic order execution simulation with slippage and partial fills.',
-            solution:
-                '// Implementation would include: 1) Event class hierarchy (MarketEvent, SignalEvent, OrderEvent, FillEvent), 2) Event queue system, 3) Strategy interface, 4) Portfolio manager tracking positions, 5) Execution handler simulating realistic fills, 6) Performance calculator, 7) Order book simulation for partial fills',
-        },
-    ],
+  exercises: [
+    {
+      prompt:
+        'Implement a backtest comparison tool that runs the same strategy with and without look-ahead bias, survivorship bias, and realistic transaction costs. Show how each bias affects the results.',
+      solution:
+        '// Implementation would include: 1) Base strategy implementation, 2) Version with look-ahead bias (peek at future data), 3) Version with survivorship bias (only current stocks), 4) Version with no transaction costs, 5) Clean version with all biases removed, 6) Side-by-side comparison showing degradation at each step, 7) Visualization of equity curves for each version',
+    },
+    {
+      prompt:
+        'Build an event-driven backtesting framework that processes market data, generates signals, creates orders, and tracks fills. Include realistic order execution simulation with slippage and partial fills.',
+      solution:
+        '// Implementation would include: 1) Event class hierarchy (MarketEvent, SignalEvent, OrderEvent, FillEvent), 2) Event queue system, 3) Strategy interface, 4) Portfolio manager tracking positions, 5) Execution handler simulating realistic fills, 6) Performance calculator, 7) Order book simulation for partial fills',
+    },
+  ],
 };

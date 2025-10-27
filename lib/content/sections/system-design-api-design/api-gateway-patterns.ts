@@ -11,9 +11,7 @@ export const apigatewaypatternsSection = {
 
 **API Gateway** acts as a reverse proxy that routes requests to appropriate microservices.
 
-### **Core Responsibilities**
-
-1. **Routing**: Direct requests to backend services
+### **Core Responsibilities**1. **Routing**: Direct requests to backend services
 2. **Authentication & Authorization**: Centralized security
 3. **Rate Limiting**: Prevent abuse
 4. **Load Balancing**: Distribute traffic

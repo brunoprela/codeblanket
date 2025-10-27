@@ -736,9 +736,7 @@ print(f"  Avg leverage (high vol): {performance['avg_leverage_high_vol']:.2f}x")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Structural breaks**: Financial relationships change over time
+**Key Takeaways:**1. **Structural breaks**: Financial relationships change over time
 2. **Detection**: Chow test (known), CUSUM (unknown), Bai-Perron (multiple)
 3. **Markov-switching**: Models regime transitions as Markov chain
 4. **Regime probabilities**: Filtered (real-time) vs smoothed (hindsight)

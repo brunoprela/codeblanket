@@ -398,8 +398,7 @@ for mistake, explanation in mistakes.items():
 7. **A/B test when possible**: Real-world performance beats offline metrics
 8. **Document decisions**: Record why you chose a particular model
 
-**Decision Framework:**
-1. Define minimum requirements (performance, latency, interpretability)
+**Decision Framework:**1. Define minimum requirements (performance, latency, interpretability)
 2. Filter models that don't meet requirements
 3. Compare remaining models with cross-validation
 4. Use statistical testing if performance is close

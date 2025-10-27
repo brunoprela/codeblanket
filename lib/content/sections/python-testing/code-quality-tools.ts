@@ -300,10 +300,10 @@ T = TypeVar('T')
 class Stack(Generic[T]):
     def __init__(self) -> None:
         self.items: list[T] = []
-    
+
     def push (self, item: T) -> None:
         self.items.append (item)
-    
+
     def pop (self) -> T:
         return self.items.pop()
 
@@ -639,38 +639,38 @@ on: [push, pull_request]
 jobs:
   quality:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
+
       - name: Install dependencies
         run: |
           pip install black ruff mypy pylint bandit pytest pytest-cov
-      
+
       - name: Black (format check)
         run: black --check myapp/ tests/
-      
+
       - name: Ruff (linting)
         run: ruff check myapp/ tests/
-      
+
       - name: mypy (type check)
         run: mypy myapp/
-      
+
       - name: pylint
         run: pylint myapp/ --fail-under=8.0
-      
+
       - name: bandit (security)
         run: bandit -r myapp/
-      
+
       - name: Tests with coverage
         run: |
           pytest --cov=myapp --cov-report=xml --cov-fail-under=80
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:

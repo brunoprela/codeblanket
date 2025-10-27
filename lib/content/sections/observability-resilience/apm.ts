@@ -671,10 +671,7 @@ Possible: DDoS attack or viral content
 
 ## Interview Tips
 
-### **Key Points**
-
-1. **APM = Observability + Intelligence**
-2. **Components**: Transaction monitoring, error tracking, RUM, profiling
+### **Key Points**1. **APM = Observability + Intelligence**2. **Components**: Transaction monitoring, error tracking, RUM, profiling
 3. **Tools**: Datadog, New Relic, Dynatrace, Elastic APM
 4. **Use Cases**: Performance optimization, error debugging, user experience
 5. **Best Practice**: Auto-instrument + custom business metrics

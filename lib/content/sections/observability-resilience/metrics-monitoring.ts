@@ -426,9 +426,7 @@ count (up == 1)  # Number of healthy instances
 quantile(0.95, http_request_duration_seconds)
 \`\`\`
 
-### **Aggregation Best Practices**
-
-1. **Aggregate Early**: At query time, not collection
+### **Aggregation Best Practices**1. **Aggregate Early**: At query time, not collection
 2. **Preserve Labels**: Use \`by (label)\` to keep useful dimensions
 3. **Without vs By**: \`without (label)\` removes specific labels, \`by (label)\` keeps only specified
 
@@ -482,9 +480,7 @@ quantile(0.95, http_request_duration_seconds)
 [Latency Percentiles - Last 24h]
 \`\`\`
 
-### **Essential Dashboards**
-
-1. **Service Dashboard**
+### **Essential Dashboards**1. **Service Dashboard**
    - RED metrics
    - Request rate
    - Error rate
@@ -624,9 +620,7 @@ end();
 
 ## Interview Tips
 
-### **Key Points to Mention**
-
-1. **Metrics Types**: Counter, gauge, histogram, summary
+### **Key Points to Mention**1. **Metrics Types**: Counter, gauge, histogram, summary
 2. **RED Method**: Rate, errors, duration
 3. **Cardinality**: Avoid high-cardinality labels
 4. **Prometheus**: Industry standard, pull model

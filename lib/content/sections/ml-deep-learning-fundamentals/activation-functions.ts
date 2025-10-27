@@ -441,8 +441,7 @@ plt.show()
 
 ### The Dying ReLU Problem
 
-**What happens:**
-1. During training, a large gradient update causes weights to become very negative
+**What happens:**1. During training, a large gradient update causes weights to become very negative
 2. For all inputs, z = wx + b < 0
 3. ReLU always outputs 0
 4. Gradient is always 0

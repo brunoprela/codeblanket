@@ -254,9 +254,7 @@ Backend (Jaeger, Prometheus, Datadog, etc.)
 
 ## Observability-Driven Development
 
-### **Principles**
-
-1. **Instrument from Day 1**
+### **Principles**1. **Instrument from Day 1**
    - Don't wait for production issues
    - Observability is not "nice to have"
 
@@ -431,9 +429,7 @@ OpenTelemetry defines conventions:
 
 ## Interview Tips
 
-### **When Discussing Observability**
-
-1. **Start with the Three Pillars**
+### **When Discussing Observability**1. **Start with the Three Pillars**
    - Show you understand fundamentals
    - Explain when to use each
 

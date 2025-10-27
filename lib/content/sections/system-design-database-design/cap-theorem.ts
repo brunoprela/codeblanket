@@ -404,7 +404,7 @@ Better than:
 **Reality**: Unavailable only during network partitions (rare). 99.9% of the time, they're available.
 
 ### **❌ Misconception 4: "NoSQL = AP, SQL = CP"**
-**Reality**: 
+**Reality**:
 - **MySQL with async replication** = AP (might read from stale replica)
 - **MongoDB with majority write** = CP (requires quorum)
 - **Cassandra with QUORUM read/write** = CP (during partition)

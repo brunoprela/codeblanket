@@ -545,9 +545,7 @@ class ArticleFilter (django_filters.FilterSet):
 
 ## Summary
 
-**Key Concepts:**
-
-1. **Filtering**: django-filter for complex field filtering
+**Key Concepts:**1. **Filtering**: django-filter for complex field filtering
 2. **Search**: SearchFilter for text search across fields
 3. **Ordering**: OrderingFilter for sorting results
 4. **Pagination**: Page number, limit/offset, or cursor pagination

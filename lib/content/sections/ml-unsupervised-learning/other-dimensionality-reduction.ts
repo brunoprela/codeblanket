@@ -142,11 +142,11 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 axes = axes.ravel()
 
 for idx, perp in enumerate (perplexity_values):
-    tsne_temp = TSNE(n_components=2, random_state=42, 
+    tsne_temp = TSNE(n_components=2, random_state=42,
                      perplexity=perp, n_iter=1000)
     X_tsne_temp = tsne_temp.fit_transform(X_scaled[:500])  # Use subset for speed
-    
-    axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1], 
+
+    axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1],
                      c=y[:500], cmap='tab10', s=30, alpha=0.7)
     axes[idx].set_title (f'Perplexity = {perp}')
     axes[idx].grid(True, alpha=0.3)
@@ -172,11 +172,11 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 axes = axes.ravel()
 
 for idx, n_iter in enumerate (n_iter_values):
-    tsne_temp = TSNE(n_components=2, random_state=42, 
+    tsne_temp = TSNE(n_components=2, random_state=42,
                      perplexity=30, n_iter=n_iter)
     X_tsne_temp = tsne_temp.fit_transform(X_scaled[:500])
-    
-    axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1], 
+
+    axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1],
                      c=y[:500], cmap='tab10', s=30, alpha=0.7)
     axes[idx].set_title (f'Iterations = {n_iter}')
     axes[idx].grid(True, alpha=0.3)
@@ -208,8 +208,8 @@ axes = axes.ravel()
 for idx, seed in enumerate([42, 123, 456, 789]):
     tsne_temp = TSNE(n_components=2, random_state=seed, perplexity=30)
     X_tsne_temp = tsne_temp.fit_transform(X_scaled[:500])
-    
-    axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1], 
+
+    axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1],
                      c=y[:500], cmap='tab10', s=30, alpha=0.7)
     axes[idx].set_title (f'Random Seed = {seed}')
     axes[idx].grid(True, alpha=0.3)
@@ -269,11 +269,11 @@ plt.show()
 
 UMAP is a modern alternative to t-SNE that addresses many of its limitations:
 
-✅ **Faster**: Can handle millions of samples  
-✅ **Preserves global structure**: Better than t-SNE  
-✅ **Can transform new data**: Has .transform() method  
-✅ **More stable**: Less sensitive to parameters  
-✅ **General purpose**: Works for visualization AND downstream tasks  
+✅ **Faster**: Can handle millions of samples
+✅ **Preserves global structure**: Better than t-SNE
+✅ **Can transform new data**: Has .transform() method
+✅ **More stable**: Less sensitive to parameters
+✅ **General purpose**: Works for visualization AND downstream tasks
 
 \`\`\`python
 # Note: Requires umap-learn library
@@ -281,36 +281,36 @@ UMAP is a modern alternative to t-SNE that addresses many of its limitations:
 
 try:
     import umap
-    
+
     # Apply UMAP
     start_time = time.time()
     umap_model = umap.UMAP(n_components=2, random_state=42, n_neighbors=15)
     X_umap = umap_model.fit_transform(X_scaled)
     umap_time = time.time() - start_time
-    
+
     # Compare t-SNE vs UMAP
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
-    
+
     # t-SNE
     axes[0].scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap='tab10', s=20, alpha=0.7)
     axes[0].set_title (f't-SNE (time: {tsne_time:.2f}s)')
     axes[0].set_xlabel('t-SNE 1')
     axes[0].set_ylabel('t-SNE 2')
     axes[0].grid(True, alpha=0.3)
-    
+
     # UMAP
     scatter = axes[1].scatter(X_umap[:, 0], X_umap[:, 1], c=y, cmap='tab10', s=20, alpha=0.7)
     axes[1].set_title (f'UMAP (time: {umap_time:.2f}s)\\nFaster & preserves global structure!')
     axes[1].set_xlabel('UMAP 1')
     axes[1].set_ylabel('UMAP 2')
     axes[1].grid(True, alpha=0.3)
-    
+
     fig.colorbar (scatter, ax=axes, ticks=range(10), label='Digit')
     plt.tight_layout()
     plt.show()
-    
+
     print(f"UMAP is {tsne_time/umap_time:.1f}x faster than t-SNE on this dataset")
-    
+
 except ImportError:
     print("UMAP not installed. Install with: pip install umap-learn")
     print("For now, we'll continue with other techniques...")
@@ -322,29 +322,29 @@ except ImportError:
 try:
     # n_neighbors: controls local vs global structure
     n_neighbors_values = [5, 15, 50, 100]
-    
+
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
     axes = axes.ravel()
-    
+
     for idx, n_neighbors in enumerate (n_neighbors_values):
-        umap_temp = umap.UMAP(n_components=2, random_state=42, 
+        umap_temp = umap.UMAP(n_components=2, random_state=42,
                              n_neighbors=n_neighbors)
         X_umap_temp = umap_temp.fit_transform(X_scaled[:500])
-        
-        axes[idx].scatter(X_umap_temp[:, 0], X_umap_temp[:, 1], 
+
+        axes[idx].scatter(X_umap_temp[:, 0], X_umap_temp[:, 1],
                          c=y[:500], cmap='tab10', s=30, alpha=0.7)
         axes[idx].set_title (f'n_neighbors = {n_neighbors}')
         axes[idx].grid(True, alpha=0.3)
-    
+
     plt.suptitle('Effect of n_neighbors on UMAP', fontsize=14)
     plt.tight_layout()
     plt.show()
-    
+
     print("n_neighbors guidelines:")
     print("- Small (5-15): Focus on local structure")
     print("- Medium (15-50): Balanced, DEFAULT")
     print("- Large (50+): Focus on global structure")
-    
+
 except NameError:
     print("UMAP not available")
 \`\`\`
@@ -356,27 +356,27 @@ Unlike t-SNE, UMAP can project new points into existing embedding:
 \`\`\`python
 try:
     from sklearn.model_selection import train_test_split
-    
+
     # Split data
     X_train, X_test, y_train, y_test = train_test_split(
         X_scaled, y, test_size=0.3, random_state=42
     )
-    
+
     # Fit UMAP on training data
     umap_model = umap.UMAP(n_components=2, random_state=42)
     X_train_umap = umap_model.fit_transform(X_train)
-    
+
     # Transform test data (no re-fitting!)
     X_test_umap = umap_model.transform(X_test)
-    
+
     plt.figure (figsize=(12, 6))
-    
-    plt.scatter(X_train_umap[:, 0], X_train_umap[:, 1], 
+
+    plt.scatter(X_train_umap[:, 0], X_train_umap[:, 1],
                c=y_train, cmap='tab10', s=30, alpha=0.5, label='Train')
-    plt.scatter(X_test_umap[:, 0], X_test_umap[:, 1], 
-               c=y_test, cmap='tab10', s=80, alpha=0.8, 
+    plt.scatter(X_test_umap[:, 0], X_test_umap[:, 1],
+               c=y_test, cmap='tab10', s=80, alpha=0.8,
                marker='*', edgecolors='black', linewidths=1, label='Test')
-    
+
     plt.title('UMAP: Train Data + Transformed Test Data')
     plt.xlabel('UMAP 1')
     plt.ylabel('UMAP 2')
@@ -384,10 +384,10 @@ try:
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.show()
-    
+
     print("UMAP can transform new data - useful for production!")
     print("t-SNE cannot do this")
-    
+
 except NameError:
     print("UMAP not available")
 \`\`\`
@@ -503,8 +503,8 @@ for idx, (name, method) in enumerate (methods.items()):
     start_time = time.time()
     X_transformed = method.fit_transform(X_iris_scaled)
     elapsed_time = time.time() - start_time
-    
-    axes[idx].scatter(X_transformed[:, 0], X_transformed[:, 1], 
+
+    axes[idx].scatter(X_transformed[:, 0], X_transformed[:, 1],
                      c=y_iris, cmap='viridis', s=50, alpha=0.7)
     axes[idx].set_title (f'{name}\\nTime: {elapsed_time:.3f}s')
     axes[idx].set_xlabel('Component 1')
@@ -580,7 +580,7 @@ tsne_cells = TSNE(n_components=2, random_state=42, perplexity=30)
 X_cells_tsne = tsne_cells.fit_transform(X_cells_pca)
 
 plt.figure (figsize=(12, 8))
-scatter = plt.scatter(X_cells_tsne[:, 0], X_cells_tsne[:, 1], 
+scatter = plt.scatter(X_cells_tsne[:, 0], X_cells_tsne[:, 1],
                      c=y_cells, cmap='viridis', s=30, alpha=0.7)
 plt.title('Single-Cell RNA-seq: Cell Type Discovery\\n2000 genes → 50D (PCA) → 2D (t-SNE)')
 plt.xlabel('t-SNE 1')
@@ -617,7 +617,7 @@ plt.figure (figsize=(12, 8))
 colors_map = ['red', 'green', 'blue', 'orange']
 for i, (category, color) in enumerate (zip (categories, colors_map)):
     mask = y_words == i
-    plt.scatter(X_words_tsne[mask, 0], X_words_tsne[mask, 1], 
+    plt.scatter(X_words_tsne[mask, 0], X_words_tsne[mask, 1],
                c=color, label=category, s=100, alpha=0.7, edgecolors='black')
 
 plt.title('Word Embeddings Visualization (100D → 2D)')

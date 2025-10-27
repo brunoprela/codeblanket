@@ -422,8 +422,7 @@ Free Cash Flow = EBIT(1-T) + D&A - CapEx - Δ NWC
 
 ## Key Takeaways
 
-1. **Working Capital = Current Assets - Current Liabilities**
-2. **Cash Conversion Cycle (CCC) = DIO + DSO - DPO** (lower is better)
+1. **Working Capital = Current Assets - Current Liabilities**2. **Cash Conversion Cycle (CCC) = DIO + DSO - DPO** (lower is better)
 3. **Negative CCC = Holy grail** (collect before paying suppliers)
 4. **Optimization**: Accelerate receivables, reduce inventory, extend payables (balance relationships)
 5. **Early payment discount (2/10 net 30) ≈ 37% annualized** (almost always take it!)

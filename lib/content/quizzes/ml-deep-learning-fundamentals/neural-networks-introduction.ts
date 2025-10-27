@@ -62,9 +62,7 @@ The XOR problem teaches us that representation matters. Given the right represen
       'The Universal Approximation Theorem states that a single hidden layer network can approximate any continuous function. If this is true, why do we need deep networks with many layers? Discuss the practical trade-offs between shallow wide networks and deep narrow networks.',
     sampleAnswer: `While the Universal Approximation Theorem guarantees that shallow networks CAN approximate any function, it doesn't address how EFFICIENTLY they do so. Deep networks offer practical advantages that make them superior in real-world applications:
 
-**Why Depth Matters Despite Universal Approximation:**
-
-1. **Exponential Efficiency**: Deep networks require exponentially fewer parameters than shallow networks for the same representational power.
+**Why Depth Matters Despite Universal Approximation:**1. **Exponential Efficiency**: Deep networks require exponentially fewer parameters than shallow networks for the same representational power.
    - Example: Approximating a function with n variables
    - Shallow network: Might need O(2^n) neurons
    - Deep network: Might need only O(n²) neurons
@@ -147,9 +145,7 @@ The Universal Approximation Theorem is a theoretical guarantee, not a practical 
       'In quantitative trading, neural networks can be used for price prediction. Discuss the challenges unique to applying neural networks to financial time series data, and what precautions should be taken to avoid common pitfalls like overfitting to noise.',
     sampleAnswer: `Applying neural networks to financial prediction presents unique challenges that differ significantly from standard ML tasks like image classification. Financial markets are non-stationary, noisy, and adversarial:
 
-**Unique Challenges in Financial Time Series:**
-
-1. **Non-Stationarity**: Financial data distributions change over time
+**Unique Challenges in Financial Time Series:**1. **Non-Stationarity**: Financial data distributions change over time
    - Market regimes shift (bull/bear markets, crises)
    - Relationships between features break down
    - Past patterns don't guarantee future performance

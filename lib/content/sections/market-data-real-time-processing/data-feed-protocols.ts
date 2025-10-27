@@ -631,7 +631,7 @@ print(f"Type: {message.message_type}")
 print(f"Stock: {message.data['stock']}")
 print(f"Side: {message.data['side']}")
 print(f"Shares: {message.data['shares']}")
-print(f"Price: ${message.data['price']: .2f}")
+print(f"Price: ${message.data['price']:.2f}")
 # Type: A
 # Stock: AAPL
 # Side: BUY

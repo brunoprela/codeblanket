@@ -8,8 +8,7 @@ export const operationsSection = {
   content: `**1. Range Query**
 Find value for range [L, R].
 
-**Three Cases:**
-1. **No overlap**: Range completely outside [L, R]
+**Three Cases:**1. **No overlap**: Range completely outside [L, R]
 2. **Complete overlap**: Range completely inside [L, R]
 3. **Partial overlap**: Range partially overlaps [L, R]
 

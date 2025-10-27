@@ -43,9 +43,7 @@ Need to track:
 
 ## Approach: HashMap + Frequency Buckets
 
-**Data Structures:**
-
-1. \`key_to_val\`: key -> value
+**Data Structures:**1. \`key_to_val\`: key -> value
 2. \`key_to_freq\`: key -> frequency
 3. \`freq_to_keys\`: frequency -> OrderedDict of keys (LRU order)
 4. \`min_freq\`: Track minimum frequency for O(1) eviction
@@ -75,15 +73,13 @@ put(3, 3): Cache full, evict key 2 (freq=1, LRU)
 
 ### Operations:
 
-**get(key):**
-1. If not exists → return -1
+**get(key):**1. If not exists → return -1
 2. Increment frequency
 3. Move key from freq to freq+1
 4. Update min_freq if needed
 5. Return value
 
-**put(key, val):**
-1. If capacity is 0 → do nothing
+**put(key, val):**1. If capacity is 0 → do nothing
 2. If key exists:
    - Update value
    - Increment frequency (same as get)

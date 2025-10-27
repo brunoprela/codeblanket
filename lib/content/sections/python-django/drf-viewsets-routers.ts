@@ -726,8 +726,7 @@ class ArticleViewSet (viewsets.ModelViewSet):
 - ✅ **Flexibility**: Easy to customize with actions and hooks
 - ✅ **Maintainability**: Single place for related logic
 
-**Key Concepts:**
-1. **ModelViewSet**: Full CRUD operations
+**Key Concepts:**1. **ModelViewSet**: Full CRUD operations
 2. **ReadOnlyModelViewSet**: List and retrieve only
 3. **@action**: Custom endpoints
 4. **Routers**: Automatic URL generation

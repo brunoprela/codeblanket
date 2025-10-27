@@ -783,8 +783,7 @@ Constraints:
 
 ### Monthly Attribution Report
 
-**Components:**
-1. **Return Summary**: Strategy vs. benchmark
+**Components:**1. **Return Summary**: Strategy vs. benchmark
 2. **Alpha/Beta**: Skill vs. market exposure
 3. **Factor Attribution**: Which factors contributed
 4. **Sector/Stock Attribution**: Which holdings contributed
@@ -840,8 +839,7 @@ Constraints:
 - Demonstrating skill to investors
 - Regulatory reporting
 
-**Key Metrics to Track:**
-1. **Alpha**: Skill-based return
+**Key Metrics to Track:**1. **Alpha**: Skill-based return
 2. **Beta**: Market exposure
 3. **Sharpe/Sortino**: Risk-adjusted return
 4. **Information Ratio**: Risk-adjusted alpha

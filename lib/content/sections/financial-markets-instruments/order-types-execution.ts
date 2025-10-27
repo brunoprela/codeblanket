@@ -263,9 +263,9 @@ class ImplementationShortfall:
             
             # Adjust for risk: front-load if low vol, back-load if high vol
             if self.volatility < 0.02:  # Low vol: trade faster
-                remaining_pct = (1 - pct_complete) ** 1.5
+                remaining_pct = (1 - pct_complete) **1.5
             else:  # High vol: trade slower
-                remaining_pct = (1 - pct_complete) ** 0.5
+                remaining_pct = (1 - pct_complete) **0.5
             
             remaining_qty = int (self.total_quantity * remaining_pct)
             
@@ -401,9 +401,7 @@ print(f"Fill Rate: {analysis['fill_rate']:.1f}%")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Order Types**: Market (fast), Limit (price control), Stop (conditional)
+**Key Takeaways:**1. **Order Types**: Market (fast), Limit (price control), Stop (conditional)
 2. **Time-in-Force**: Day, GTC, IOC, FOK
 3. **Algorithms**: TWAP (simple), VWAP (volume-aware), IS (optimal)
 4. **TCA**: Measure execution quality (slippage, market impact)

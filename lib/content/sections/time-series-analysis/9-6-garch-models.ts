@@ -621,9 +621,7 @@ print("\\nBest model (lowest RMSE): ",
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Volatility clustering**: Financial returns have time-varying volatility
+**Key Takeaways:**1. **Volatility clustering**: Financial returns have time-varying volatility
 2. **GARCH(1,1)**: Workhorse model (α + β < 1 for stationarity)
 3. **Leverage effect**: Negative returns → higher volatility (EGARCH, GJR)
 4. **Forecasting**: Volatility is highly predictable (unlike returns!)

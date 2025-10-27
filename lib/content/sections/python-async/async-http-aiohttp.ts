@@ -83,19 +83,19 @@ async def fetch_example():
     async with aiohttp.ClientSession() as session:
         async with session.get('https://api.example.com/users/1') as response:
             user1 = await response.json()
-    
+
     async with aiohttp.ClientSession() as session:
         async with session.get('https://api.example.com/users/2') as response:
             user2 = await response.json()
-    
+
     # ✅ Good: Reuse session (connection pooling)
     async with aiohttp.ClientSession() as session:
         async with session.get('https://api.example.com/users/1') as response:
             user1 = await response.json()
-        
+
         async with session.get('https://api.example.com/users/2') as response:
             user2 = await response.json()
-    
+
     # Even better: Concurrent requests with same session
     async with aiohttp.ClientSession() as session:
         tasks = [
@@ -130,14 +130,14 @@ async def production_session_example():
         ttl_dns_cache=300,      # DNS cache TTL (seconds)
         use_dns_cache=True,
     )
-    
+
     # Configure timeouts
     timeout = ClientTimeout(
         total=30,       # Total timeout for request
         connect=10,     # Connection timeout
         sock_read=10,   # Socket read timeout
     )
-    
+
     # Create session with configuration
     async with aiohttp.ClientSession(
         connector=connector,
@@ -176,7 +176,7 @@ async def get_examples():
             print(f"Status: {response.status}")
             data = await response.json()
             print(f"Data: {data}")
-        
+
         # GET with query parameters
         params = {'user_id': 123, 'limit': 10, 'offset': 0}
         async with session.get(
@@ -184,7 +184,7 @@ async def get_examples():
             params=params
         ) as response:
             users = await response.json()
-        
+
         # GET with headers
         headers = {'Authorization': 'Bearer token123'}
         async with session.get(
@@ -192,7 +192,7 @@ async def get_examples():
             headers=headers
         ) as response:
             data = await response.json()
-        
+
         # GET with timeout
         timeout = aiohttp.ClientTimeout (total=5)
         try:
@@ -227,7 +227,7 @@ async def post_examples():
         ) as response:
             created_user = await response.json()
             print(f"Created user: {created_user}")
-        
+
         # POST form data
         form_data = {'username': 'alice', 'password': 'secret'}
         async with session.post(
@@ -235,7 +235,7 @@ async def post_examples():
             data=form_data  # Content-Type: application/x-www-form-urlencoded
         ) as response:
             result = await response.json()
-        
+
         # POST multipart (file upload)
         data = aiohttp.FormData()
         data.add_field('file',
@@ -243,7 +243,7 @@ async def post_examples():
                       filename='document.pdf',
                       content_type='application/pdf')
         data.add_field('description', 'My document')
-        
+
         async with session.post(
             'https://api.example.com/upload',
             data=data
@@ -272,7 +272,7 @@ async def other_methods():
             json=user_update
         ) as response:
             updated_user = await response.json()
-        
+
         # PATCH (partial update)
         partial_update = {'email': 'newemail@example.com'}
         async with session.patch(
@@ -280,11 +280,11 @@ async def other_methods():
             json=partial_update
         ) as response:
             updated_user = await response.json()
-        
+
         # DELETE
         async with session.delete('https://api.example.com/users/123') as response:
             print(f"Deleted: {response.status == 204}")
-        
+
         # HEAD (get headers only, no body)
         async with session.head('https://api.example.com/large-file') as response:
             content_length = response.headers.get('Content-Length')
@@ -313,29 +313,29 @@ async def response_handling():
         async with session.get('https://httpbin.org/json') as response:
             data = await response.json()
             print(f"JSON: {type (data)}")
-        
+
         # Read as text
         async with session.get('https://httpbin.org/html') as response:
             text = await response.text()
             print(f"Text: {len (text)} characters")
-        
+
         # Read as bytes
         async with session.get('https://httpbin.org/bytes/100') as response:
             content = await response.read()
             print(f"Bytes: {len (content)} bytes")
-        
+
         # Stream large response
         async with session.get('https://httpbin.org/stream/100') as response:
             # Read line by line (memory efficient)
             async for line in response.content:
                 data = line.decode('utf-8')
                 print(f"Line: {data[:50]}...")
-        
+
         # Check status
         async with session.get('https://httpbin.org/status/404') as response:
             print(f"Status: {response.status}")
             print(f"OK: {response.ok}")  # True if 200 <= status < 400
-            
+
             # Raise exception for error statuses
             response.raise_for_status()  # Raises ClientResponseError
 
@@ -365,21 +365,21 @@ async def headers_cookies():
             headers=headers
         ) as response:
             data = await response.json()
-        
+
         # Response headers
         async with session.get('https://httpbin.org/response-headers') as response:
             print(f"Content-Type: {response.headers.get('Content-Type')}")
             print(f"All headers: {dict (response.headers)}")
-        
+
         # Cookies (automatic handling)
         async with session.get('https://httpbin.org/cookies/set?name=value') as response:
             pass  # Cookie set automatically
-        
+
         async with session.get('https://httpbin.org/cookies') as response:
             # Cookies sent automatically with subsequent requests
             cookies_data = await response.json()
             print(f"Cookies: {cookies_data}")
-        
+
         # Manual cookie setting
         cookies = {'session_id': 'abc123', 'user_id': '456'}
         async with session.get(
@@ -417,28 +417,28 @@ async def error_handling():
                 data = await response.json()
         except asyncio.TimeoutError:
             print("Request timed out!")
-        
+
         # Connection error
         try:
             async with session.get('https://nonexistent-domain-12345.com') as response:
                 data = await response.json()
         except aiohttp.ClientConnectorError as e:
             print(f"Connection error: {e}")
-        
+
         # HTTP error status
         try:
             async with session.get('https://httpbin.org/status/500') as response:
                 response.raise_for_status()  # Raises for 4xx/5xx
         except aiohttp.ClientResponseError as e:
             print(f"HTTP error: {e.status} - {e.message}")
-        
+
         # SSL error
         try:
             async with session.get('https://expired.badssl.com/') as response:
                 data = await response.text()
         except aiohttp.ClientSSLError as e:
             print(f"SSL error: {e}")
-        
+
         # General client error (catches all above)
         try:
             async with session.get('https://api.example.com/data') as response:
@@ -466,13 +466,13 @@ async def fetch_with_retry (session, url, retries=3):
             async with session.get (url, timeout=aiohttp.ClientTimeout (total=10)) as response:
                 response.raise_for_status()
                 return await response.json()
-        
+
         except (aiohttp.ClientError, asyncio.TimeoutError) as e:
             if attempt == retries - 1:
                 # Last attempt, give up
                 print(f"Failed after {retries} attempts: {e}")
                 raise
-            
+
             # Exponential backoff: 1s, 2s, 4s
             wait_time = 2 ** attempt
             print(f"Attempt {attempt + 1} failed, retrying in {wait_time}s...")
@@ -510,18 +510,18 @@ async def download_file (url, destination):
             # Get file size
             total_size = int (response.headers.get('Content-Length', 0))
             print(f"Downloading {total_size:,} bytes...")
-            
+
             downloaded = 0
             with open (destination, 'wb') as f:
                 async for chunk in response.content.iter_chunked(8192):
                     f.write (chunk)
                     downloaded += len (chunk)
-                    
+
                     # Progress indicator
                     if total_size:
                         percent = (downloaded / total_size) * 100
                         print(f"Progress: {percent:.1f}%", end='\\r')
-            
+
             print(f"\\nDownloaded to {destination}")
 
 # asyncio.run (download_file('https://example.com/large-file.zip', 'file.zip'))
@@ -547,12 +547,12 @@ async def consume_sse (url):
             # Read events as they arrive
             async for line in response.content:
                 line = line.decode('utf-8').strip()
-                
+
                 if line.startswith('data:'):
                     # Extract event data
                     event_data = line[5:].strip()
                     print(f"Event: {event_data}")
-                    
+
                     # Process event
                     await handle_event (event_data)
 
@@ -582,27 +582,27 @@ import asyncio
 async def websocket_example():
     """Connect to WebSocket server"""
     session = aiohttp.ClientSession()
-    
+
     async with session.ws_connect('wss://echo.websocket.org') as ws:
         # Send message
         await ws.send_str('Hello, WebSocket!')
-        
+
         # Receive message
         async for msg in ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 print(f"Received: {msg.data}")
-                
+
                 # Send another message
                 await ws.send_str (f"Echo: {msg.data}")
-                
+
                 # Close after one exchange
                 await ws.close()
                 break
-            
+
             elif msg.type == aiohttp.WSMsgType.ERROR:
                 print(f"WebSocket error: {ws.exception()}")
                 break
-    
+
     await session.close()
 
 asyncio.run (websocket_example())
@@ -620,13 +620,13 @@ import asyncio
 
 class WebSocketClient:
     """Robust WebSocket client with reconnection"""
-    
+
     def __init__(self, url):
         self.url = url
         self.session = None
         self.ws = None
         self.should_reconnect = True
-    
+
     async def connect (self):
         """Connect with automatic reconnection"""
         while self.should_reconnect:
@@ -634,46 +634,46 @@ class WebSocketClient:
                 self.session = aiohttp.ClientSession()
                 self.ws = await self.session.ws_connect (self.url)
                 print("WebSocket connected")
-                
+
                 # Process messages
                 await self.receive_messages()
-            
+
             except Exception as e:
                 print(f"Connection error: {e}")
-                
+
                 if self.session:
                     await self.session.close()
-                
+
                 if self.should_reconnect:
                     print("Reconnecting in 5 seconds...")
                     await asyncio.sleep(5)
                 else:
                     break
-    
+
     async def receive_messages (self):
         """Receive and process messages"""
         async for msg in self.ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
                 await self.handle_message (msg.data)
-            
+
             elif msg.type == aiohttp.WSMsgType.CLOSED:
                 print("WebSocket closed")
                 break
-            
+
             elif msg.type == aiohttp.WSMsgType.ERROR:
                 print(f"WebSocket error: {self.ws.exception()}")
                 break
-    
+
     async def handle_message (self, data):
         """Handle incoming message"""
         print(f"Received: {data}")
         # Process message...
-    
+
     async def send (self, data):
         """Send message"""
         if self.ws and not self.ws.closed:
             await self.ws.send_str (data)
-    
+
     async def close (self):
         """Close connection"""
         self.should_reconnect = False
@@ -703,7 +703,7 @@ from aiohttp import TCPConnector, ClientTimeout
 
 class HTTPClient:
     """Production HTTP client with optimized settings"""
-    
+
     def __init__(self):
         # Connection pooling
         connector = TCPConnector(
@@ -712,14 +712,14 @@ class HTTPClient:
             ttl_dns_cache=300,      # DNS cache 5 minutes
             enable_cleanup_closed=True,  # Clean up closed connections
         )
-        
+
         # Timeouts
         timeout = ClientTimeout(
             total=30,
             connect=10,
             sock_read=10,
         )
-        
+
         # Session with best practices
         self.session = aiohttp.ClientSession(
             connector=connector,
@@ -729,34 +729,34 @@ class HTTPClient:
                 'User-Agent': 'MyApp/1.0',
             }
         )
-    
+
     async def get (self, url, **kwargs):
         """GET with retry"""
         return await self._request('GET', url, **kwargs)
-    
+
     async def post (self, url, **kwargs):
         """POST with retry"""
         return await self._request('POST', url, **kwargs)
-    
+
     async def _request (self, method, url, retries=3, **kwargs):
         """Request with retry logic"""
         for attempt in range (retries):
             try:
                 async with self.session.request (method, url, **kwargs) as response:
                     return await response.json()
-            
+
             except aiohttp.ClientError as e:
                 if attempt == retries - 1:
                     raise
                 await asyncio.sleep(2 ** attempt)
-    
+
     async def close (self):
         """Close session"""
         await self.session.close()
-    
+
     async def __aenter__(self):
         return self
-    
+
     async def __aexit__(self, *args):
         await self.close()
 

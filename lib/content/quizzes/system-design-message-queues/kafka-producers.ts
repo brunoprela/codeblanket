@@ -252,14 +252,7 @@ Example: Payment processing
 - Multi-partition writes (payment + inventory): Transactions needed ✅
 \`\`\`
 
-**Key Takeaways:**
-
-1. **Idempotence prevents duplicates through PID + Sequence numbers**
-2. **Broker deduplicates based on sequence number tracking**
-3. **Handles retries transparently (no application logic needed)**
-4. **Performance impact minimal: 2-3× latency, 90% throughput**
-5. **Always enable idempotence (default in modern Kafka)**
-6. **Use transactions for cross-partition exactly-once**`,
+**Key Takeaways:**1. **Idempotence prevents duplicates through PID + Sequence numbers**2. **Broker deduplicates based on sequence number tracking**3. **Handles retries transparently (no application logic needed)**4. **Performance impact minimal: 2-3× latency, 90% throughput**5. **Always enable idempotence (default in modern Kafka)**6. **Use transactions for cross-partition exactly-once**`,
     keyPoints: [
       'Idempotence uses Producer ID (PID) + Sequence numbers to prevent duplicates',
       'Broker tracks last sequence number per (PID, Partition) for deduplication',
@@ -966,9 +959,7 @@ public void benchmarkBatching() {
 // Config 3 (aggressive): 2,000ms, 5,000 msg/sec (15× faster)
 \`\`\`
 
-**Key Takeaways:**
-
-1. **Batching dramatically improves throughput** (10-100× fewer network calls)
+**Key Takeaways:**1. **Batching dramatically improves throughput** (10-100× fewer network calls)
 2. **linger.ms adds latency** (trade-off for throughput)
 3. **Larger batches → Better compression** (4× vs 1.4×)
 4. **User-facing: Small batches, short linger** (latency critical)

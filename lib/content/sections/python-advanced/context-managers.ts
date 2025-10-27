@@ -25,9 +25,7 @@ with MyContextManager() as manager:
     print("Inside context")
 \`\`\`
 
-**Common Use Cases:**
-
-1. **File Handling:**
+**Common Use Cases:**1. **File Handling:**
 \`\`\`python
 # Without context manager (error-prone)
 f = open('file.txt')

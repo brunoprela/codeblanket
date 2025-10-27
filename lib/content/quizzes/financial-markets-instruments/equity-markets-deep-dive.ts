@@ -137,8 +137,7 @@ class MarketInefficiencies:
     }
 \`\`\`
 
-**Why These Persist:**
-1. **Speed barriers**: HFT requires millions in infrastructure
+**Why These Persist:**1. **Speed barriers**: HFT requires millions in infrastructure
 2. **Capacity limits**: StatArb works until too much capital chases it
 3. **Complexity**: Alternative data requires ML + domain knowledge
 4. **Risk**: Arbitrage requires capital, leverage, risk appetite
@@ -403,9 +402,7 @@ return results
 - AWS EKS (managed Kubernetes)
 - Prometheus + Grafana (monitoring)
 
-**Performance Optimizations:**
-
-1. **Partitioning**: Kafka topics by symbol (parallel processing)
+**Performance Optimizations:**1. **Partitioning**: Kafka topics by symbol (parallel processing)
 2. **Caching**: Redis for hot data (avoid DB queries)
 3. **Compression**: Protobuf for wire format (smaller than JSON)
 4. **Batch Processing**: Group alerts to avoid spam

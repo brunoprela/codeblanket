@@ -735,8 +735,7 @@ builder.visit (tree)
 print(builder.generate_summary())
 \`\`\`
 
-**Exercise Tasks:**
-1. Extend the CodeMapBuilder to track variable assignments
+**Exercise Tasks:**1. Extend the CodeMapBuilder to track variable assignments
 2. Add detection for method calls within classes
 3. Build a dependency graph showing which functions call which
 4. Generate a JSON representation suitable for an API

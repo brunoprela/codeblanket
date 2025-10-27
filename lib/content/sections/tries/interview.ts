@@ -61,9 +61,7 @@ class TrieNode:
 
 *Interviewer: Implement a trie with insert, search, and startsWith.*
 
-**You:**
-
-1. **Clarify:**
+**You:**1. **Clarify:**
    - "Should I handle only lowercase letters?"
    - "Do we need to support deletion?"
    - "Any constraints on number of words or length?"

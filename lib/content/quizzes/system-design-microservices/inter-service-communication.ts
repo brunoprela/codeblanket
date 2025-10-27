@@ -1122,8 +1122,7 @@ Use **Jaeger UI** for visualization:
 2. **OpenTelemetry** for vendor-neutral instrumentation
 3. **Sampling**: Head-based (simple) or tail-based (smarter)
 4. **Storage**: Cassandra for traces, Elasticsearch for search
-5. **Always trace errors and slow requests**
-6. **Jaeger/Zipkin** for visualization
+5. **Always trace errors and slow requests**6. **Jaeger/Zipkin** for visualization
 7. **Auto-instrumentation** for frameworks, manual for business logic
 8. **Batch span exports** for efficiency (5-second batches)`,
     keyPoints: [

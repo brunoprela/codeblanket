@@ -868,9 +868,7 @@ General-purpose time-series database designed for high write throughput and flex
 ❌ **Limited ecosystem** - smaller community than PostgreSQL
 ❌ **Flux learning curve** - powerful but complex query language
 
-**Ideal Use Cases:**
-
-1. **IoT sensor data** - millions of devices sending metrics
+**Ideal Use Cases:**1. **IoT sensor data** - millions of devices sending metrics
 2. **Application metrics** - non-monitoring use cases (analytics, dashboards)
 3. **Real-time analytics** - fast aggregations over time windows
 4. **Financial data** - stock prices, trading data
@@ -941,9 +939,7 @@ Time-series extension for PostgreSQL - combines RDBMS power with time-series opt
 ❌ **Memory usage** - PostgreSQL can be memory-hungry
 ❌ **Horizontal scaling** - more complex than InfluxDB clustering
 
-**Ideal Use Cases:**
-
-1. **Hybrid workloads** - need both time-series AND relational data
+**Ideal Use Cases:**1. **Hybrid workloads** - need both time-series AND relational data
 2. **Financial systems** - need ACID transactions with time-series data
 3. **Migrating from PostgreSQL** - already using PostgreSQL
 4. **Complex analytics** - need JOINs, window functions, CTEs
@@ -1034,9 +1030,7 @@ Monitoring and alerting system specifically designed for operational metrics.
 ❌ **Limited query capabilities** - PromQL less powerful than SQL
 ❌ **Not general-purpose** - specifically for monitoring
 
-**Ideal Use Cases:**
-
-1. **Infrastructure monitoring** - servers, containers, services
+**Ideal Use Cases:**1. **Infrastructure monitoring** - servers, containers, services
 2. **Kubernetes monitoring** - native integration
 3. **Application metrics** - RED (Rate, Errors, Duration) metrics
 4. **Alerting** - operational alerts and on-call

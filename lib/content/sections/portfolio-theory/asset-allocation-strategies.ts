@@ -1,7 +1,7 @@
 export const assetAllocationStrategies = {
   title: 'Asset Allocation Strategies',
   id: 'asset-allocation-strategies',
-  content: \`
+  content: `
 # Asset Allocation Strategies
 
 ## Introduction

@@ -689,9 +689,7 @@ print(f"\\nRecommendation: {estimate['recommendation']}")
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Liquidity Dimensions**: Spread (tightness), depth, resilience
+**Key Takeaways:**1. **Liquidity Dimensions**: Spread (tightness), depth, resilience
 2. **Square-Root Law**: Impact ~ sqrt (size), not linear!
 3. **Impact Components**: Temporary (recovers) + permanent (doesn't)
 4. **Optimal Execution**: Balance impact vs timing risk

@@ -67,7 +67,7 @@ def extract_person_json (text: str) -> dict:
         ],
         response_format={"type": "json_object"}  # ← Enable JSON mode!
     )
-    
+
     # Parse JSON
     json_text = response.choices[0].message.content
     return json.loads (json_text)
@@ -96,9 +96,9 @@ def extract_with_schema (text: str, schema: dict) -> dict:
     """
     Extract data with specific JSON schema.
     """
-    
+
     schema_str = json.dumps (schema, indent=2)
-    
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         messages=[
@@ -117,7 +117,7 @@ Return ONLY valid JSON matching this schema."""
         ],
         response_format={"type": "json_object"}
     )
-    
+
     return json.loads (response.choices[0].message.content)
 
 # Define schema
@@ -161,10 +161,10 @@ def extract_person_typed (text: str) -> Person:
     Extract person with Pydantic validation.
     """
     client = OpenAI()
-    
+
     # Get schema from Pydantic model
     schema = Person.schema()
-    
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         messages=[
@@ -183,10 +183,10 @@ Return ONLY valid JSON."""
         ],
         response_format={"type": "json_object"}
     )
-    
+
     # Parse and validate
     json_data = json.loads (response.choices[0].message.content)
-    
+
     # Pydantic validates automatically!
     return Person(**json_data)
 
@@ -230,7 +230,7 @@ class Employee(BaseModel):
     start_date: date
     address: Address
     skills: List[str]
-    
+
     @validator('employee_id')
     def validate_employee_id (cls, v):
         """Custom validation for employee ID."""
@@ -242,7 +242,7 @@ class Employee(BaseModel):
 def extract_employee (text: str) -> Employee:
     """Extract employee with nested models and validation."""
     client = OpenAI()
-    
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         messages=[
@@ -262,7 +262,7 @@ Return ONLY valid JSON."""
         ],
         response_format={"type": "json_object"}
     )
-    
+
     json_data = json.loads (response.choices[0].message.content)
     return Employee(**json_data)
 
@@ -334,7 +334,7 @@ class Recipe(BaseModel):
     ingredients: List[str] = Field (description="List of ingredients")
     instructions: List[str] = Field (description="Step-by-step instructions")
     prep_time_minutes: int = Field (ge=0, description="Prep time in minutes")
-    
+
     @validator('ingredients')
     def validate_ingredients (cls, v):
         if len (v) < 2:
@@ -380,7 +380,7 @@ result = client.chat.completions.create(
     messages=[
         {"role": "user", "content": """
         Extract all people mentioned:
-        
+
         John is a software engineer.
         Sarah works as a doctor.
         Mike is a teacher.
@@ -444,25 +444,25 @@ def parse_contact_regex (llm_output: str) -> Contact:
     Parse contact from LLM output using regex.
     Handles various output formats.
     """
-    
+
     # Try to extract name
     name_match = re.search (r'Name:?\\s*([^\\n,]+)', llm_output, re.IGNORECASE)
     name = name_match.group(1).strip() if name_match else None
-    
+
     # Extract email
     email_match = re.search(
         r'\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b',
         llm_output
     )
     email = email_match.group(0) if email_match else None
-    
+
     # Extract phone
     phone_match = re.search(
         r'\\(?(\\d{3})\\)?[-. ]?(\\d{3})[-. ]?(\\d{4})',
         llm_output
     )
     phone = phone_match.group(0) if phone_match else None
-    
+
     return Contact (name=name, email=email, phone=phone)
 
 # Test with different LLM output formats
@@ -501,14 +501,14 @@ def parse_with_retry(
     """
     Try to parse LLM output, retry if it fails.
     """
-    
+
     # Try 1: Direct JSON parsing
     try:
         data = json.loads (llm_output)
         return model_class(**data)
     except (json.JSONDecodeError, ValidationError):
         pass
-    
+
     # Try 2: Extract JSON from markdown
     try:
         # Look for \`\`\`json ... \`\`\` blocks
@@ -518,7 +518,7 @@ def parse_with_retry(
             return model_class(**data)
     except (json.JSONDecodeError, ValidationError):
         pass
-    
+
     # Try 3: Extract any {...} block
     try:
         json_match = re.search (r'{.*}', llm_output, re.DOTALL)
@@ -527,7 +527,7 @@ def parse_with_retry(
             return model_class(**data)
     except (json.JSONDecodeError, ValidationError):
         pass
-    
+
     # Failed - return raw dict or None
     return {'raw_output': llm_output, 'parse_failed': True}
 
@@ -564,7 +564,7 @@ def extract_with_retry(
     """
     Extract data, retry with feedback if parsing fails.
     """
-    
+
     messages = [
         {
             "role": "system",
@@ -578,20 +578,20 @@ Return ONLY valid JSON, no extra text."""
             "content": f"Extract from: {text}"
         }
     ]
-    
+
     for attempt in range (max_retries):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
             messages=messages,
             response_format={"type": "json_object"}
         )
-        
+
         output = response.choices[0].message.content
-        
+
         # Try to parse
         try:
             data = json.loads (output)
-            
+
             # Validate against schema (simple check)
             if all (key in data for key in schema.keys()):
                 return data
@@ -606,7 +606,7 @@ Return ONLY valid JSON, no extra text."""
                     "role": "user",
                     "content": f"Missing fields: {missing}. Please include them."
                 })
-        
+
         except json.JSONDecodeError as e:
             # Invalid JSON - ask for correction
             messages.append({
@@ -617,7 +617,7 @@ Return ONLY valid JSON, no extra text."""
                 "role": "user",
                 "content": f"Invalid JSON: {e}. Please provide valid JSON."
             })
-    
+
     raise ValueError (f"Failed to parse after {max_retries} attempts")
 
 # Usage
@@ -643,14 +643,14 @@ class ProductionParser:
     """
     Production-ready parser with multiple strategies.
     """
-    
+
     def __init__(self, use_instructor: bool = True):
         if use_instructor:
             self.client = instructor.from_openai(OpenAI())
         else:
             self.client = OpenAI()
         self.use_instructor = use_instructor
-    
+
     def extract(
         self,
         text: str,
@@ -661,12 +661,12 @@ class ProductionParser:
         """
         Extract structured data with automatic retries.
         """
-        
+
         if self.use_instructor:
             return self._extract_with_instructor (text, model_class, system_prompt)
         else:
             return self._extract_with_json_mode (text, model_class, system_prompt, max_retries)
-    
+
     def _extract_with_instructor(
         self,
         text: str,
@@ -674,18 +674,18 @@ class ProductionParser:
         system_prompt: Optional[str]
     ) -> T:
         """Extract using instructor library."""
-        
+
         messages = []
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": text})
-        
+
         return self.client.chat.completions.create(
             model="gpt-3.5-turbo",
             response_model=model_class,
             messages=messages
         )
-    
+
     def _extract_with_json_mode(
         self,
         text: str,
@@ -694,9 +694,9 @@ class ProductionParser:
         max_retries: int
     ) -> Optional[T]:
         """Extract using JSON mode with retries."""
-        
+
         schema = model_class.schema()
-        
+
         messages = [
             {
                 "role": "system",
@@ -707,7 +707,7 @@ class ProductionParser:
                 "content": text
             }
         ]
-        
+
         for attempt in range (max_retries):
             try:
                 response = self.client.chat.completions.create(
@@ -715,10 +715,10 @@ class ProductionParser:
                     messages=messages,
                     response_format={"type": "json_object"}
                 )
-                
+
                 json_data = json.loads (response.choices[0].message.content)
                 return model_class(**json_data)
-            
+
             except (json.JSONDecodeError, ValidationError) as e:
                 if attempt < max_retries - 1:
                     # Add error feedback
@@ -732,7 +732,7 @@ class ProductionParser:
                     })
                 else:
                     return None
-        
+
         return None
 
 # Usage

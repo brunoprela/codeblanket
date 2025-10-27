@@ -1020,8 +1020,7 @@ js_symbols = analyzer.analyze_file (javascript_code, 'javascript')
 print(analyzer.generate_context_summary (js_symbols))
 \`\`\`
 
-**Exercise Tasks:**
-1. Add support for more languages (TypeScript, Go, Java)
+**Exercise Tasks:**1. Add support for more languages (TypeScript, Go, Java)
 2. Extract function parameters and return types
 3. Build a dependency graph showing which functions call which
 4. Add query-based pattern matching for specific constructs

@@ -1,9 +1,9 @@
 export const marketMakingStrategies = {
-    title: 'Market Making Strategies',
-    slug: 'market-making-strategies',
-    description:
-        'Master market making: bid-ask spread management, inventory risk, adverse selection, and high-frequency market making',
-    content: `
+  title: 'Market Making Strategies',
+  slug: 'market-making-strategies',
+  description:
+    'Master market making: bid-ask spread management, inventory risk, adverse selection, and high-frequency market making',
+  content: `
 # Market Making Strategies
 
 ## Introduction: Liquidity Provision as a Business
@@ -41,13 +41,11 @@ Market makers are the invisible backbone of financial markets. Every time you pl
 Profit = Spread Revenue - Inventory Cost - Adverse Selection - Operational Costs
 \`\`\`
 
-**Revenue Sources:**
-1. **Bid-Ask Spread**: Buy at bid, sell at ask, capture spread
+**Revenue Sources:**1. **Bid-Ask Spread**: Buy at bid, sell at ask, capture spread
 2. **Rebates**: Exchange rebates for providing liquidity ($0.0020-$0.0030 per share)
 3. **Payment for Order Flow**: Retail brokers pay for their orders
 
-**Cost Sources:**
-1. **Inventory Risk**: Price moves while holding inventory
+**Cost Sources:**1. **Inventory Risk**: Price moves while holding inventory
 2. **Adverse Selection**: Informed traders trade against you
 3. **Technology**: Co-location, data feeds, infrastructure
 4. **Regulatory**: Compliance, market data fees
@@ -511,8 +509,7 @@ class MarketMakingEngine:
         self.logger.info(
             f"Trade executed: {side.value} {size} @ {price:.2f}, "
             f"New inventory: {self.inventory}, "
-            f"Realized P&L: ${self.realized_pnl: .2f
-}"
+            f"Realized P&L: \${self.realized_pnl:.2f}"
         )
     
     def calculate_pnl(self, current_price: float) -> Dict[str, float]:
@@ -585,10 +582,10 @@ market_data = {
 quote = mm.generate_quotes(market_data)
 if quote:
     print(f"\\n=== Market Making Quote ===")
-print(f"Bid: ${quote.bid_price:.2f} x {quote.bid_size}")
-print(f"Ask: ${quote.ask_price:.2f} x {quote.ask_size}")
+print(f"Bid: \${quote.bid_price:.2f} x {quote.bid_size}")
+print(f"Ask: \${quote.ask_price:.2f} x {quote.ask_size}")
 print(f"Spread: {quote.spread_bps:.2f} bps")
-print(f"Mid: ${quote.mid_price:.2f}")
+print(f"Mid: \${quote.mid_price:.2f}")
     
     # Simulate trade
 mm.handle_trade_execution(Side.BUY, 150.00, 100, is_aggressive = False)
@@ -597,10 +594,10 @@ mm.handle_trade_execution(Side.SELL, 150.05, 100, is_aggressive = False)
     # Calculate P & L
 pnl = mm.calculate_pnl(150.025)
 print(f"\\n=== P&L Report ===")
-print(f"Realized P&L: ${pnl['realized_pnl']:.2f}")
-print(f"Unrealized P&L: ${pnl['unrealized_pnl']:.2f}")
-print(f"Total P&L: ${pnl['total_pnl']:.2f}")
-print(f"Spread Revenue: ${pnl['spread_revenue']:.2f}")
+print(f"Realized P&L: \${pnl['realized_pnl']:.2f}")
+print(f"Unrealized P&L: \${pnl['unrealized_pnl']:.2f}")
+print(f"Total P&L: \${pnl['total_pnl']:.2f}")
+print(f"Spread Revenue: \${pnl['spread_revenue']:.2f}")
 print(f"Number of Trades: {pnl['num_trades']}")
 \`\`\`
 
@@ -612,8 +609,7 @@ print(f"Number of Trades: {pnl['num_trades']}")
 
 **Definition**: Adverse selection occurs when informed traders systematically trade against your quotes before you can adjust them.
 
-**Example:**
-1. News breaks: Company announces earnings beat
+**Example:**1. News breaks: Company announces earnings beat
 2. HFT sees news in 1 microsecond
 3. Market maker quotes still stale (haven't updated yet)
 4. HFT buys at your (now too low) ask
@@ -1095,8 +1091,7 @@ class InventoryRiskManager:
 - Rebates from exchanges
 - Securities lending
 
-**Key Success Factors:**
-1. **Scale**: Volume creates data, data improves models
+**Key Success Factors:**1. **Scale**: Volume creates data, data improves models
 2. **Technology**: Fastest infrastructure wins
 3. **Risk Management**: Survived 2008, Flash Crash, COVID
 4. **Diversification**: Equities, options, futures, FX
@@ -1133,8 +1128,7 @@ class InventoryRiskManager:
 - Flash crashes (no time to react)
 - Toxic order flow (constantly adversely selected)
 
-**Critical Success Factors:**
-1. **Technology**: Sub-millisecond latency required
+**Critical Success Factors:**1. **Technology**: Sub-millisecond latency required
 2. **Risk Management**: Inventory limits sacred
 3. **Adverse Selection**: Detect and avoid informed flow
 4. **Scale**: Need volume for profitability

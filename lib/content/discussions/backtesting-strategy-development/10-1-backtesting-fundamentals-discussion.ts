@@ -81,9 +81,7 @@ Ask: "How many parameters does the strategy have?"
 
 ### Red Flags to Look For
 
-**Major Red Flags (Deal Breakers):**
-
-1. **No out-of-sample testing**
+**Major Red Flags (Deal Breakers):**1. **No out-of-sample testing**
    - If they optimized on 2015-2023 and have no hold-out period
    - They should have optimized on 2015-2020, tested on 2021-2023
 
@@ -260,8 +258,7 @@ for phase_method in [validator.phase_1_code_review,
 - **Upside**: Maybe the strategy is real and generates great returns
 - **Downside**: Likely backtest flaws lead to losses, lawsuits, company failure
 
-**Recommended Path:**
-1. Spend 4 weeks on validation (code review, walk-forward, Monte Carlo)
+**Recommended Path:**1. Spend 4 weeks on validation (code review, walk-forward, Monte Carlo)
 2. If passes, run 6 months paper trading
 3. Deploy with company money first ($500K)
 4. Scale to client funds only after 6-12 months of proven live performance
@@ -1177,8 +1174,7 @@ A strategy with Sharpe 2.8 in-sample might only achieve 1.0-1.5 in live trading.
 
 "Great initiative on developing a strategy! However, the methodology has a critical flaw: testing 50 parameter combinations on the same dataset creates **data mining bias**. You found parameters that fit the noise in AAPL during 2020-2023, not a genuine edge.
 
-**Next steps:**
-1. Let's redo this with proper train/validation/test splits
+**Next steps:**1. Let's redo this with proper train/validation/test splits
 2. Implement walk-forward analysis to test robustness
 3. Test on multiple stocks (not just AAPL)
 4. Calculate statistical significance

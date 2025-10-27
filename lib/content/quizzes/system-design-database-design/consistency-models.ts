@@ -18,9 +18,7 @@ export const consistencymodelsQuiz = [
 - High availability (users must work offline)
 - Linearizability too restrictive (would require locking entire document)
 
-**Causal Consistency Benefits:**
-
-1. **Preserves Intent**: If User A types "hello" then User B replies "world" (seeing "hello"), causal consistency ensures all users see "hello" before "world"
+**Causal Consistency Benefits:**1. **Preserves Intent**: If User A types "hello" then User B replies "world" (seeing "hello"), causal consistency ensures all users see "hello" before "world"
 
 2. **Allows Concurrent Edits**: Users A and B can simultaneously edit different parts of the document without waiting for each other
 
@@ -349,8 +347,7 @@ Add version field to products:
 
 **Recommendation:**
 
-**Use the hybrid approach:**
-1. Keep eventually consistent reads for browsing (fast, cheap)
+**Use the hybrid approach:**1. Keep eventually consistent reads for browsing (fast, cheap)
 2. Add caching with short TTL (even faster)
 3. Use strongly consistent reads only at checkout (accurate when it matters)
 4. Show price change warnings if price differs from cart

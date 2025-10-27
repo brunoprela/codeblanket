@@ -944,9 +944,7 @@ def measure_latency(monitor: PerformanceMonitor, component: str, operation: str)
 
 ## Summary
 
-**Key Architectural Principles:**
-
-1. **Event-Driven:** Loose coupling, asynchronous processing
+**Key Architectural Principles:**1. **Event-Driven:** Loose coupling, asynchronous processing
 2. **Microservices:** Independent scaling, deployment, fault isolation
 3. **State Management:** Centralized state in Redis for consistency
 4. **Error Handling:** Circuit breakers, retries, graceful degradation

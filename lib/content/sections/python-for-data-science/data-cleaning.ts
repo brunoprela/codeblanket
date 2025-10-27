@@ -542,12 +542,12 @@ def validate_schema (df, expected):
             issues.append (f"Missing column: {col}")
         elif df[col].dtype != dtype:
             issues.append (f"Wrong type for {col}: expected {dtype}, got {df[col].dtype}")
-    
+
     # Check for extra columns
     extra_cols = set (df.columns) - set (expected.keys())
     if extra_cols:
         issues.append (f"Extra columns: {extra_cols}")
-    
+
     return issues
 
 issues = validate_schema (df, expected_schema)
@@ -567,41 +567,41 @@ def clean_dataset (df):
     Comprehensive data cleaning pipeline
     """
     print(f"Starting with {len (df)} rows")
-    
+
     # 1. Remove duplicates
     df = df.drop_duplicates()
     print(f"After removing duplicates: {len (df)} rows")
-    
+
     # 2. Handle missing values
     # Drop rows where critical columns are missing
     df = df.dropna (subset=['customer_id', 'transaction_date'])
-    
+
     # Fill numeric columns with median
     numeric_cols = df.select_dtypes (include=[np.number]).columns
     for col in numeric_cols:
         df[col].fillna (df[col].median(), inplace=True)
-    
+
     # Fill categorical columns with mode
     categorical_cols = df.select_dtypes (include=['object']).columns
     for col in categorical_cols:
         if df[col].notna().any():
             df[col].fillna (df[col].mode()[0], inplace=True)
-    
+
     print(f"After handling missing values: {df.isnull().sum().sum()} missing values remain")
-    
+
     # 3. Fix data types
     if 'transaction_date' in df.columns:
         df['transaction_date'] = pd.to_datetime (df['transaction_date'], errors='coerce')
-    
+
     if 'amount' in df.columns:
         df['amount'] = pd.to_numeric (df['amount'], errors='coerce')
-    
+
     # 4. Clean strings
     string_cols = df.select_dtypes (include=['object']).columns
     for col in string_cols:
         df[col] = df[col].str.strip()
         df[col] = df[col].str.lower()
-    
+
     # 5. Remove outliers (using IQR method)
     for col in numeric_cols:
         Q1 = df[col].quantile(0.25)
@@ -610,14 +610,14 @@ def clean_dataset (df):
         lower = Q1 - 1.5 * IQR
         upper = Q3 + 1.5 * IQR
         df = df[(df[col] >= lower) & (df[col] <= upper)]
-    
+
     print(f"After removing outliers: {len (df)} rows")
-    
+
     # 6. Reset index
     df = df.reset_index (drop=True)
-    
+
     print(f"Cleaning complete! Final dataset: {len (df)} rows, {len (df.columns)} columns")
-    
+
     return df
 
 # Usage

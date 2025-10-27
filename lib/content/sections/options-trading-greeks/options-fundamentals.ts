@@ -289,15 +289,15 @@ if __name__ == "__main__":
     test_prices = np.array([90, 95, 100, 105, 110, 115, 120])
     
     print(f"\\nOption: {long_call.quantity} × {long_call.option_type.upper()} "
-          f"@ Strike ${long_call.strike}, Premium ${long_call.premium}")
-    print(f"Breakeven: ${calculate_breakeven(long_call):.2f}")
+          f"@ Strike \${long_call.strike}, Premium \${long_call.premium}")
+    print(f"Breakeven: \${calculate_breakeven(long_call):.2f}")
     print("\\nStock Price | Payoff | P&L")
     print("-" * 40)
     
     for price in test_prices:
         payoff = call_payoff(price, long_call.strike)
         pnl = option_profit_loss(long_call, price)
-        print(f"${price:6.2f}  | ${payoff:6.2f} | ${pnl:7.2f}")
+        print(f"\${price:6.2f}  | \${payoff:6.2f} | \${pnl:7.2f}")
     
     # Example 2: Long Put
     print("\\n### Example 2: Long Put ###")
@@ -309,15 +309,15 @@ if __name__ == "__main__":
     )
     
     print(f"\\nOption: {long_put.quantity} × {long_put.option_type.upper()} "
-          f"@ Strike ${long_put.strike}, Premium ${long_put.premium}")
-    print(f"Breakeven: ${calculate_breakeven(long_put):.2f}")
+          f"@ Strike \${long_put.strike}, Premium \${long_put.premium}")
+    print(f"Breakeven: \${calculate_breakeven(long_put):.2f}")
     print("\\nStock Price | Payoff | P&L")
     print("-" * 40)
     
     for price in test_prices:
         payoff = put_payoff(price, long_put.strike)
         pnl = option_profit_loss(long_put, price)
-        print(f"${price:6.2f}  | ${payoff:6.2f} | ${pnl:7.2f}")
+        print(f"\${price:6.2f}  | \${payoff:6.2f} | \${pnl:7.2f}")
     
     # Example 3: Short Call (negative quantity)
     print("\\n### Example 3: Short Call ###")
@@ -329,15 +329,15 @@ if __name__ == "__main__":
     )
     
     print(f"\\nOption: {short_call.quantity} × {short_call.option_type.upper()} "
-          f"@ Strike ${short_call.strike}, Premium ${short_call.premium}")
-    print(f"Breakeven: ${calculate_breakeven(short_call):.2f}")
+          f"@ Strike \${short_call.strike}, Premium \${short_call.premium}")
+    print(f"Breakeven: \${calculate_breakeven(short_call):.2f}")
     print("\\nStock Price | Payoff | P&L")
     print("-" * 40)
     
     for price in test_prices:
         payoff = call_payoff(price, short_call.strike)
         pnl = option_profit_loss(short_call, price)
-        print(f"${price:6.2f}  | ${payoff:6.2f} | ${pnl:7.2f}")
+        print(f"\${price:6.2f}  | \${payoff:6.2f} | \${pnl:7.2f}")
 \`\`\`
 
 **Output:**
@@ -403,30 +403,30 @@ def plot_option_payoff(option: OptionContract,
     
     # P&L curve
     plt.plot(stock_prices, pnl, 'b-', linewidth=2, 
-             label=f'{option.quantity} × {option.option_type.upper()} @ ${option.strike}')
+             label=f'{option.quantity} × {option.option_type.upper()} @ \${option.strike}')
     
     # Zero line
     plt.axhline(y=0, color='black', linestyle='-', linewidth=0.5, alpha=0.5)
     
     # Strike line
     plt.axvline(x=option.strike, color='red', linestyle='--', 
-                linewidth=1, alpha=0.7, label=f'Strike: ${option.strike}')
+                linewidth=1, alpha=0.7, label=f'Strike: \${option.strike}')
     
     # Breakeven line
     plt.axvline(x=breakeven, color='green', linestyle='--', 
-                linewidth=1, alpha=0.7, label=f'Breakeven: ${breakeven:.2f}')
+                linewidth=1, alpha=0.7, label=f'Breakeven: \${breakeven:.2f}')
     
     # Styling
     plt.xlabel('Stock Price at Expiration', fontsize=12)
     plt.ylabel('Profit / Loss ($)', fontsize=12)
     plt.title(f'Option Payoff Diagram: {option.quantity} × {option.option_type.upper()} ' +
-              f'Strike ${option.strike}, Premium ${option.premium}', fontsize=14, fontweight='bold')
+              f'Strike \${option.strike}, Premium \${option.premium}', fontsize=14, fontweight='bold')
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=10)
     
     # Format y-axis as currency
     from matplotlib.ticker import FuncFormatter
-    plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda x, p: f'${x:,.0f}'))
+    plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda x, p: f'\${x:,.0f}'))
     
     # Shade profit/loss regions
     plt.fill_between(stock_prices, 0, pnl, where=(pnl > 0), 
@@ -663,7 +663,7 @@ if __name__ == "__main__":
     stock_price = 100
     
     print("=" * 70)
-    print(f"OPTION MONEYNESS ANALYSIS (Stock Price: ${stock_price})")
+    print(f"OPTION MONEYNESS ANALYSIS (Stock Price: \${stock_price})")
     print("=" * 70)
     
     # Test different strikes
@@ -680,7 +680,7 @@ if __name__ == "__main__":
         )
         moneyness = classify_moneyness(stock_price, strike, 'call')
         
-        print(f"${strike:<7.0f} ${price:<7.2f} ${intrinsic:<11.2f} ${time_val:<11.2f} {moneyness.value}")
+        print(f"\${strike:<7.0f} \${price:<7.2f} \${intrinsic:<11.2f} \${time_val:<11.2f} {moneyness.value}")
 \`\`\`
 
 **Output:**
@@ -733,8 +733,7 @@ $120     $0.10    $0.00        $0.10        Deep Out-Of-The-Money
 - You can exercise today, tomorrow, or any day until Jan 20
 - Useful if dividend is paid before expiration
 
-**When to Exercise Early (American):**
-1. **Deep ITM call with dividend**: Capture dividend
+**When to Exercise Early (American):**1. **Deep ITM call with dividend**: Capture dividend
 2. **Deep ITM put**: Time value very small, capture intrinsic now
 3. **Risk management**: Lock in profits
 
@@ -899,7 +898,7 @@ spy_calls = {
 }
 
 print("SPY OPTIONS (30 days to expiration)")
-print(f"Underlying: ${spy_price}")
+print(f"Underlying: \${spy_price}")
 print("\\nStrike | Mid Price | Intrinsic | Time Value | Moneyness")
 print("-" * 70)
 
@@ -910,7 +909,7 @@ for strike, data in spy_calls.items():
     )
     moneyness = classify_moneyness(spy_price, strike, 'call')
     
-    print(f"${strike:<4} | ${mid_price:>7.2f} | ${intrinsic:>9.2f} | ${time_val:>10.2f} | {moneyness.value}")
+    print(f"\${strike:<4} | \${mid_price:>7.2f} | \${intrinsic:>9.2f} | \${time_val:>10.2f} | {moneyness.value}")
 \`\`\`
 
 **Key Insights:**
@@ -949,4 +948,3 @@ for strike, data in spy_calls.items():
 **Remember:** Options are powerful tools but come with unique risks. Always understand your maximum loss before entering a trade. In the next section, we'll dive deeper into calls and puts, including short positions and advanced concepts like put-call parity.
 `,
 };
-

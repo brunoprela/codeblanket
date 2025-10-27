@@ -584,8 +584,7 @@ LOGGING = {
 - ✅ Regular security audits
 - ✅ Keep dependencies updated
 
-**OWASP Top 10 Coverage:**
-1. **Injection**: Use ORM, validate input
+**OWASP Top 10 Coverage:**1. **Injection**: Use ORM, validate input
 2. **Broken Authentication**: Strong passwords, rate limiting
 3. **Sensitive Data Exposure**: Encryption, HTTPS
 4. **XML External Entities**: Validate XML input

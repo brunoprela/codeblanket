@@ -802,9 +802,7 @@ class GoodMiddleware:
 
 ## Production Deployment Checklist
 
-**Before deploying middleware:**
-
-1. ✅ **Test thoroughly**: Unit tests + integration tests
+**Before deploying middleware:**1. ✅ **Test thoroughly**: Unit tests + integration tests
 2. ✅ **Performance impact**: Measure overhead
 3. ✅ **Exception handling**: Graceful failure
 4. ✅ **Logging**: Appropriate log levels
@@ -825,8 +823,7 @@ class GoodMiddleware:
 - **Use for cross-cutting concerns**: Auth, logging, security, rate limiting
 - **Test thoroughly**: Middleware affects every request
 
-**Common Middleware Patterns:**
-1. Request timing and monitoring
+**Common Middleware Patterns:**1. Request timing and monitoring
 2. Authentication and authorization
 3. Rate limiting and throttling
 4. CORS handling

@@ -654,9 +654,7 @@ if incoming.load < local.load:
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is gossip**: Peer-to-peer epidemic information spread
+### **Key Concepts to Explain**1. **What is gossip**: Peer-to-peer epidemic information spread
 2. **Why use it**: Scalability, fault tolerance, decentralization
 3. **How it works**: Select random peers, exchange state, merge
 4. **Types**: Push, pull, push-pull

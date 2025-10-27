@@ -82,20 +82,20 @@ client = OpenAI()
 
 def simple_stream (prompt: str):
     """Basic streaming example."""
-    
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         stream=True  # ← Enable streaming!
     )
-    
+
     # Iterate over chunks
     for chunk in response:
         # Check if chunk has content
         if chunk.choices[0].delta.content is not None:
             content = chunk.choices[0].delta.content
             print(content, end=', flush=True)
-    
+
     print()  # New line at end
 
 # Usage
@@ -112,25 +112,25 @@ client = OpenAI()
 
 def inspect_stream_chunks (prompt: str):
     """Examine streaming chunk structure."""
-    
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         stream=True
     )
-    
+
     for i, chunk in enumerate (response):
         print(f"\\nChunk {i}:")
         print(f"  ID: {chunk.id}")
         print(f"  Model: {chunk.model}")
         print(f"  Choices: {len (chunk.choices)}")
-        
+
         if chunk.choices:
             choice = chunk.choices[0]
             print(f"  Delta role: {choice.delta.role}")
             print(f"  Delta content: {choice.delta.content}")
             print(f"  Finish reason: {choice.finish_reason}")
-        
+
         if i >= 5:  # Just show first few
             print("\\n... (truncated)")
             break
@@ -206,11 +206,11 @@ class StreamingHandler:
     """
     Production-ready streaming handler with callbacks.
     """
-    
+
     def __init__(self, model: str = "gpt-3.5-turbo"):
         self.client = OpenAI()
         self.model = model
-    
+
     def stream(
         self,
         messages: list,
@@ -221,7 +221,7 @@ class StreamingHandler:
     ) -> Generator[StreamChunk, None, None]:
         """
         Stream with callbacks for handling chunks.
-        
+
         Args:
             messages: Chat messages
             on_chunk: Called for each content chunk
@@ -229,9 +229,9 @@ class StreamingHandler:
             on_error: Called if error occurs
             **kwargs: Additional parameters (temperature, etc.)
         """
-        
+
         full_content = []
-        
+
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -239,41 +239,41 @@ class StreamingHandler:
                 stream=True,
                 **kwargs
             )
-            
+
             for chunk in response:
                 if not chunk.choices:
                     continue
-                
+
                 choice = chunk.choices[0]
                 content = choice.delta.content
                 finish_reason = choice.finish_reason
-                
+
                 # Create structured chunk
                 stream_chunk = StreamChunk(
                     content=content,
                     finish_reason=finish_reason,
                     is_final=finish_reason is not None
                 )
-                
+
                 # Collect content
                 if content:
                     full_content.append (content)
-                    
+
                     # Call chunk callback
                     if on_chunk:
                         on_chunk (content)
-                
+
                 yield stream_chunk
-                
+
                 # Check if done
                 if finish_reason:
                     complete_text = '.join (full_content)
-                    
+
                     if on_complete:
                         on_complete (complete_text)
-                    
+
                     break
-        
+
         except Exception as e:
             if on_error:
                 on_error (e)
@@ -317,12 +317,12 @@ class StreamAccumulator:
     """
     Accumulate streaming chunks into complete message.
     """
-    
+
     def __init__(self):
         self.chunks: List[str] = []
         self.role: Optional[str] = None
         self.finish_reason: Optional[str] = None
-    
+
     def add_chunk (self, chunk) -> Optional[str]:
         """
         Add chunk to accumulator.
@@ -330,40 +330,40 @@ class StreamAccumulator:
         """
         if not chunk.choices:
             return None
-        
+
         choice = chunk.choices[0]
         delta = choice.delta
-        
+
         # Capture role (first chunk)
         if delta.role:
             self.role = delta.role
-        
+
         # Capture content
         if delta.content:
             self.chunks.append (delta.content)
             return delta.content
-        
+
         # Capture finish reason
         if choice.finish_reason:
             self.finish_reason = choice.finish_reason
-        
+
         return None
-    
+
     def get_full_content (self) -> str:
         """Get complete accumulated content."""
         return '.join (self.chunks)
-    
+
     def to_message (self) -> Dict[str, str]:
         """Convert to message format."""
         return {
             'role': self.role or 'assistant',
             'content': self.get_full_content()
         }
-    
+
     def is_complete (self) -> bool:
         """Check if stream is complete."""
         return self.finish_reason is not None
-    
+
     def reset (self):
         """Reset for reuse."""
         self.chunks = []
@@ -411,41 +411,41 @@ def safe_stream(
     Stream with error handling and retry logic.
     """
     client = OpenAI()
-    
+
     for attempt in range (max_retries):
         try:
             content_parts = []
             start_time = time.time()
-            
+
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=messages,
                 stream=True
             )
-            
+
             for chunk in response:
                 # Check timeout
                 if time.time() - start_time > timeout:
                     raise TimeoutError (f"Stream exceeded {timeout}s")
-                
+
                 # Extract content
                 if chunk.choices and chunk.choices[0].delta.content:
                     content = chunk.choices[0].delta.content
                     content_parts.append (content)
                     print(content, end=', flush=True)
-                
+
                 # Check if done
                 if chunk.choices and chunk.choices[0].finish_reason:
                     print()  # New line
                     return '.join (content_parts)
-            
+
             # If we get here, stream ended without finish_reason
             print("\\n[Warning: Stream ended unexpectedly]")
             return '.join (content_parts)
-        
+
         except Exception as e:
             print(f"\\n[Error on attempt {attempt + 1}: {e}]")
-            
+
             if attempt < max_retries - 1:
                 wait_time = 2 ** attempt  # Exponential backoff
                 print(f"[Retrying in {wait_time}s...]")
@@ -476,21 +476,21 @@ import sys
 def stream_to_console (prompt: str):
     """Stream output directly to console."""
     client = OpenAI()
-    
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         stream=True
     )
-    
+
     print("Assistant: ", end=')
-    
+
     for chunk in response:
         if chunk.choices[0].delta.content:
             content = chunk.choices[0].delta.content
             print(content, end=', flush=True)
             sys.stdout.flush()  # Force output
-    
+
     print()  # Newline at end
 
 stream_to_console("Tell me a joke")
@@ -517,26 +517,26 @@ async def chat_stream (prompt: str):
     """
     Streaming endpoint for web clients.
     """
-    
+
     def generate():
         """Generator function for SSE."""
-        
+
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             stream=True
         )
-        
+
         for chunk in response:
             if chunk.choices[0].delta.content:
                 content = chunk.choices[0].delta.content
-                
+
                 # Format as SSE
                 yield f"data: {json.dumps({'content': content})}\\n\\n"
-        
+
         # Send done event
         yield f"data: {json.dumps({'done': True})}\\n\\n"
-    
+
     return StreamingResponse(
         generate(),
         media_type="text/event-stream"
@@ -548,7 +548,7 @@ const eventSource = new EventSource('/chat/stream?prompt=Hello');
 
 eventSource.onmessage = (event) => {
     const data = JSON.parse (event.data);
-    
+
     if (data.done) {
         eventSource.close();
     } else {
@@ -564,25 +564,25 @@ eventSource.onmessage = (event) => {
 def stream_to_file (prompt: str, filepath: str):
     """Stream to console AND save to file."""
     client = OpenAI()
-    
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         stream=True
     )
-    
+
     with open (filepath, 'w') as f:
         for chunk in response:
             if chunk.choices[0].delta.content:
                 content = chunk.choices[0].delta.content
-                
+
                 # Write to console
                 print(content, end=', flush=True)
-                
+
                 # Write to file
                 f.write (content)
                 f.flush()  # Force write to disk
-    
+
     print(f"\\n\\nSaved to {filepath}")
 
 stream_to_file(
@@ -598,13 +598,13 @@ class StreamingConversation:
     """
     Manage streaming conversations with history.
     """
-    
+
     def __init__(self, system_prompt: str = "You are helpful."):
         self.client = OpenAI()
         self.messages = [
             {"role": "system", "content": system_prompt}
         ]
-    
+
     def stream_chat (self, user_input: str) -> str:
         """
         Stream a turn in the conversation.
@@ -614,36 +614,36 @@ class StreamingConversation:
             "role": "user",
             "content": user_input
         })
-        
+
         # Stream response
         response = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=self.messages,
             stream=True
         )
-        
+
         # Accumulate assistant response
         assistant_message = []
-        
+
         print("Assistant: ", end=')
-        
+
         for chunk in response:
             if chunk.choices[0].delta.content:
                 content = chunk.choices[0].delta.content
                 assistant_message.append (content)
                 print(content, end=', flush=True)
-        
+
         print()  # Newline
-        
+
         # Add to history
         full_response = '.join (assistant_message)
         self.messages.append({
             "role": "assistant",
             "content": full_response
         })
-        
+
         return full_response
-    
+
     def get_history (self) -> list:
         """Get conversation history."""
         return self.messages.copy()
@@ -685,37 +685,37 @@ def measure_stream_performance (prompt: str) -> StreamMetrics:
     Measure streaming performance metrics.
     """
     client = OpenAI()
-    
+
     start_time = time.time()
     first_token_time = None
     chunk_count = 0
     token_count = 0
-    
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         stream=True
     )
-    
+
     for chunk in response:
         chunk_count += 1
-        
+
         if chunk.choices[0].delta.content:
             # Mark first token time
             if first_token_time is None:
                 first_token_time = time.time() - start_time
-            
+
             # Count tokens (rough estimate)
             content = chunk.choices[0].delta.content
             token_count += len (content.split())
-            
+
             print(content, end=', flush=True)
-    
+
     total_time = time.time() - start_time
     tokens_per_second = token_count / total_time if total_time > 0 else 0
-    
+
     print()  # Newline
-    
+
     return StreamMetrics(
         time_to_first_token=first_token_time or 0,
         total_time=total_time,
@@ -747,11 +747,11 @@ class CancelableStream:
     """
     Stream that can be canceled.
     """
-    
+
     def __init__(self):
         self.client = OpenAI()
         self.should_cancel = False
-    
+
     def stream_with_cancel(
         self,
         messages: list,
@@ -765,20 +765,20 @@ class CancelableStream:
             messages=messages,
             stream=True
         )
-        
+
         content_parts = []
-        
+
         for chunk in response:
             # Check if canceled
             if cancel_event.is_set():
                 print("\\n[Stream canceled]")
                 break
-            
+
             if chunk.choices[0].delta.content:
                 content = chunk.choices[0].delta.content
                 content_parts.append (content)
                 print(content, end=', flush=True)
-        
+
         return '.join (content_parts)
 
 # Usage

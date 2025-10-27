@@ -63,9 +63,7 @@ Greedy **fails** for coins [25, 20, 5, 1]:
 
 ---
 
-**Common Greedy Strategies:**
-
-1. **Earliest First**: Select task finishing earliest
+**Common Greedy Strategies:**1. **Earliest First**: Select task finishing earliest
 2. **Latest First**: Select task starting latest
 3. **Largest First**: Select largest available item
 4. **Smallest First**: Select smallest available item

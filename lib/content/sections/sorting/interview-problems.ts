@@ -125,9 +125,7 @@ def merge_intervals (intervals):
     return merged
 \`\`\`
 
-**Common Interview Questions:**
-
-1. **"Implement quick sort"** → Know the partition logic
+**Common Interview Questions:**1. **"Implement quick sort"** → Know the partition logic
 2. **"Find Kth largest element"** → Quick select or heap
 3. **"Merge K sorted lists"** → Min heap
 4. **"Sort array with limited values (0,1,2)"** → Counting or Dutch flag

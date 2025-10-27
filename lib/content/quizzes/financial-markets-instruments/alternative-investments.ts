@@ -61,8 +61,7 @@ Required premium: 3% per year of lockup
 - Stocks: 10% return, liquid
 - PE: Need 10% + (3% × 5 years) = 25% return for 5-year lockup
 
-**PE Return Sources:**
-1. Multiple expansion (30-40%): Buy 10x EBITDA, sell 12x
+**PE Return Sources:**1. Multiple expansion (30-40%): Buy 10x EBITDA, sell 12x
 2. Operational improvement (30-40%): Grow revenue, improve margins
 3. Leverage (20-30%): 60% debt amplifies equity returns
 4. Fee drag (-10 to -20%): 2% + 20% carry
@@ -91,14 +90,12 @@ decision = should_invest(0.18, 0.10, 5, 0.15)
 # Returns: (True, 0.15) → Invest up to 15%
 \`\`\`
 
-**Increase PE When:**
-1. Early expansion (PE thrives in growth)
+**Increase PE When:**1. Early expansion (PE thrives in growth)
 2. Low rates (cheap debt)
 3. High public valuations (PE offers value)
 4. Long time horizon
 
-**Decrease PE When:**
-1. Late cycle (LBO risk)
+**Decrease PE When:**1. Late cycle (LBO risk)
 2. Rising rates (expensive debt)
 3. Need liquidity soon
 4. Poor GP track record

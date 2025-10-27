@@ -373,9 +373,7 @@ if __name__ == "__main__":
     print("Pyramiding: Up to 4 units, add every 0.5× ATR")
 \`\`\`
 
-**Key Features:**
-
-1. **Risk Management**: Strict 1% risk per trade, ATR-based stops
+**Key Features:**1. **Risk Management**: Strict 1% risk per trade, ATR-based stops
 2. **Trend Filter**: ADX > 25 ensures only trading in trending markets
 3. **Pyramiding**: Adds to winners systematically (up to 4 units)
 4. **Position Sizing**: Automatically adjusts based on volatility (ATR)
@@ -704,14 +702,12 @@ class HybridTrendMeanReversion:
 
 **Trade-Offs:**
 
-**Advantages of Hybrid:**
-1. **Higher Win Rate** (52% vs 35%): Less psychologically painful
+**Advantages of Hybrid:**1. **Higher Win Rate** (52% vs 35%): Less psychologically painful
 2. **Lower Drawdowns**: Mean reversion profits during consolidations
 3. **More Consistent**: Returns in both trending and ranging markets
 4. **Better Sharpe**: Smoother equity curve
 
-**Disadvantages:**
-1. **Complexity**: Two systems to maintain, more code/testing
+**Disadvantages:**1. **Complexity**: Two systems to maintain, more code/testing
 2. **Lower Profit Factor**: 2.1x vs 2.7x (still acceptable)
 3. **Regime Detection**: Requires accurate regime classification (ADX, volatility)
 4. **Capital Allocation**: Must split capital (reduces size per component)
@@ -1109,8 +1105,7 @@ class Turtles20Strategy:
 - More competition (crowding)
 - But 25-30% still excellent (vs S&P 500's 10%)
 
-**Key Innovations:**
-1. **Speed**: Faster signals (10-day vs 20-day) to front-run crowd
+**Key Innovations:**1. **Speed**: Faster signals (10-day vs 20-day) to front-run crowd
 2. **Diversification**: 100+ markets to spread alpha
 3. **Selectivity**: Only trade high-vol regimes (VIX > 15, ADX > 25)
 4. **Smaller Size**: 0.5% risk vs 1% (reduce market impact)

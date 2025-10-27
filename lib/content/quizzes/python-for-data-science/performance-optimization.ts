@@ -283,9 +283,7 @@ df['api_data',] = df['user_id',].apply (fetch_data)
 # 3. Cache results
 \`\`\`
 
-**Best Practices:**
-
-1. **Start vectorized**: Always look for vectorized solution first
+**Best Practices:**1. **Start vectorized**: Always look for vectorized solution first
 2. **Break down complex operations**: Decompose into vectorizable steps
 3. **Use NumPy ufuncs**: np.sin, np.exp, np.sqrt, etc. are all vectorized
 4. **Check for built-ins**: Pandas/NumPy often have optimized functions
@@ -636,9 +634,7 @@ gc.collect()
 print(f"Memory after cleanup: {memory_usage_mb():.2f} MB")
 \`\`\`
 
-**Best Practices:**
-
-1. **Profile first**: Use memory_usage (deep=True) to find problem columns
+**Best Practices:**1. **Profile first**: Use memory_usage (deep=True) to find problem columns
 2. **Right-size integers**: int8 for small ranges, not always int64
 3. **Categorical for strings**: Especially with low cardinality
 4. **Load selectively**: Only columns you need
@@ -671,9 +667,7 @@ A well-optimized DataFrame can be 10-100x smaller, making impossible problems tr
       'Compare different approaches to the same data processing task: loops, apply(), vectorization, and NumPy ufuncs. When would you choose each, and what are the trade-offs?',
     sampleAnswer: `Understanding when to use each approach is critical for writing efficient data processing code. There\'s a performance hierarchy, but also trade-offs in readability and flexibility.
 
-**Performance Hierarchy (Slowest → Fastest):**
-
-1. ❌ Python loops (iterrows)
+**Performance Hierarchy (Slowest → Fastest):**1. ❌ Python loops (iterrows)
 2. ⚠️ apply() with Python function
 3. ✅ apply() with NumPy function
 4. ✅✅ Vectorized Pandas operations
@@ -1014,9 +1008,7 @@ df['result',] = complex_calculation (x, y, z)
 # Subsequent calls are fast (compiled to machine code)
 \`\`\`
 
-**Best Practices:**
-
-1. **Start with vectorization**: Always try this first
+**Best Practices:**1. **Start with vectorization**: Always try this first
 2. **Profile before optimizing**: Don't guess bottlenecks
 3. **Readability matters**: Fast code you can't maintain is bad code
 4. **Document when using apply()**: Explain why not vectorized

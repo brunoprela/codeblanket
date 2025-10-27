@@ -200,8 +200,7 @@ More understandable alternative to Paxos, used in **etcd**, **Consul**, **Cockro
 **How it works**:
 
 1. **Follower State**: All nodes start as followers
-2. **Timeout**: If follower doesn't hear from leader, becomes **candidate**
-3. **Request Votes**: Candidate requests votes from all nodes
+2. **Timeout**: If follower doesn't hear from leader, becomes **candidate**3. **Request Votes**: Candidate requests votes from all nodes
 4. **Vote**: Nodes vote for first candidate they hear from (per term)
 5. **Majority**: Candidate with majority becomes leader
 6. **Heartbeats**: Leader sends heartbeats to maintain authority

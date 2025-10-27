@@ -37,8 +37,7 @@ This section covers cointegration testing, pairs trading implementation, mean re
 - Share prices move together over time (correlation ≈ 0.8)
 - Spread: \(S_t = P_{KO,t} - \\beta \\cdot P_{PEP,t}\) should be stationary
 
-**Trade logic:**
-1. Spread widens beyond 2σ (KO expensive, PEP cheap) → Short KO, long PEP
+**Trade logic:**1. Spread widens beyond 2σ (KO expensive, PEP cheap) → Short KO, long PEP
 2. Spread reverts to mean → Close positions, profit
 3. Stop loss if spread exceeds 3-4σ (regime change, cointegration broke)
 
@@ -160,8 +159,7 @@ X_t = \\phi X_{t-1} + (1-\\phi)\\mu + \\epsilon_t
 
 Where \(\\phi = e^{-\\theta \\Delta t}\) (relates to continuous-time \(\\theta\)).
 
-**Estimation:**
-1. Fit AR(1): \(X_t = a + b X_{t-1} + \\epsilon_t\)
+**Estimation:**1. Fit AR(1): \(X_t = a + b X_{t-1} + \\epsilon_t\)
 2. Extract: \(\\phi = b\), \(\\mu = a/(1-b)\), \(\\theta = -\\ln(\\phi)/\\Delta t\)
 3. Half-life: \(t_{1/2} = \\ln(2)/\\theta\)
 

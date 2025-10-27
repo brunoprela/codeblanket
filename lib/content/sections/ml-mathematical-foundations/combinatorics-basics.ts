@@ -144,7 +144,7 @@ def combinations_formula (n, r):
     return comb (n, r)
 
 # Example: Selecting features for a model
-all_features = ['age', 'income', 'education', 'credit_score', 'debt_ratio', 
+all_features = ['age', 'income', 'education', 'credit_score', 'debt_ratio',
                 'employment', 'location', 'marital_status']
 n_features = len (all_features)
 select_k = 3
@@ -171,7 +171,7 @@ def compare_perm_comb (n, r):
     """Compare permutations vs combinations"""
     p = permutations_formula (n, r)
     c = combinations_formula (n, r)
-    
+
     print(f"n={n}, r={r}:")
     print(f"  Permutations (order matters): {p}")
     print(f"  Combinations (order doesn't matter): {c}")
@@ -233,10 +233,10 @@ def count_cv_orderings (n_samples, k_folds):
     fold_size = n_samples // k_folds
     # Simplified: C(n, fold_size) for first fold, C(n-fold_size, fold_size) for second, etc.
     # Actual formula is multinomial coefficient
-    
+
     # For equal-sized folds: n! / (fold_size!)^k * k!
     # Divided by k! if folds are unordered
-    
+
     return comb (n_samples, fold_size)
 
 n_samples = 100
@@ -256,15 +256,15 @@ def count_feature_subsets (n_features, min_k=1, max_k=None):
     """Count all possible feature subsets of size k to max_k"""
     if max_k is None:
         max_k = n_features
-    
+
     total = 0
     counts = {}
-    
+
     for k in range (min_k, max_k + 1):
         count = comb (n_features, k)
         counts[k] = count
         total += count
-    
+
     return counts, total
 
 n_features = 20
@@ -296,10 +296,10 @@ plt.show()
 def ensemble_combinations (n_models, min_ensemble_size=2):
     """Count ways to form ensembles from n models"""
     combinations = {}
-    
+
     for k in range (min_ensemble_size, n_models + 1):
         combinations[k] = comb (n_models, k)
-    
+
     return combinations
 
 n_models = 10
@@ -322,7 +322,7 @@ def hyperparameter_search_space (param_grid):
     grid_size = 1
     for param, values in param_grid.items():
         grid_size *= len (values)
-    
+
     return grid_size
 
 # Example search space

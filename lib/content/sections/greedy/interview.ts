@@ -56,9 +56,7 @@ export const interviewSection = {
 
 *Interviewer: Can you reach last index?*
 
-**You:**
-
-1. **Clarify:**
+**You:**1. **Clarify:**
    - "Is array always valid (no negatives)?"
    - "Can values be 0?"
 

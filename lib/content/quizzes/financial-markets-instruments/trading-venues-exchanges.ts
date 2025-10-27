@@ -84,7 +84,7 @@ class SmartOrderRouter:
         β = 0.6 (concavity)
         ADV = Average Daily Volume
         """
-        impact_bps = 10 * (order_size / adv) ** 0.6
+        impact_bps = 10 * (order_size / adv) **0.6
         
         return impact_bps
 \`\`\`
@@ -100,8 +100,7 @@ class SmartOrderRouter:
 - Information leakage (some pools leak)
 - Adverse selection (trading against informed flow)
 
-**Optimal Strategy:**
-1. **Start with dark pools** (40% of order, 0 market impact)
+**Optimal Strategy:**1. **Start with dark pools** (40% of order, 0 market impact)
 2. **TWAP on lit markets** (30%, spread over 4 hours)
 3. **Iceberg orders** (20%, show 1K shares, hide 9K)
 4. **VWAP for remainder** (10%, match market rhythm)

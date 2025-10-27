@@ -8,8 +8,7 @@ export const hashingSection = {
   content: `**What is a Hash Table?**
 A data structure that maps keys to values using a hash function, providing O(1) average-case operations.
 
-**How It Works:**
-1. **Hash Function:** Converts key to array index
+**How It Works:**1. **Hash Function:** Converts key to array index
 2. **Collision Handling:** Chaining or open addressing
 3. **Load Factor:** Determines when to resize (typically 0.75)
 

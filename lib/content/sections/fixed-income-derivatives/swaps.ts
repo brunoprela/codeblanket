@@ -1,7 +1,7 @@
 export const swaps = {
-    title: 'Swaps (Interest Rate, Currency)',
-    id: 'swaps',
-    content: `
+  title: 'Swaps (Interest Rate, Currency)',
+  id: 'swaps',
+  content: `
 # Swaps (Interest Rate, Currency)
 
 ## Introduction

@@ -132,7 +132,7 @@ class NBBOCalculator:
 if execution_price < nbbo['bid']:
     return {
         'violation': True,
-        'reason': f"Sell at ${execution_price: .2f
+        'reason': f"Sell at ${execution_price:.2f}
 } < NBBO bid ${ nbbo['bid']:.2f }",
 'nbbo_price': nbbo['bid'],
     'nbbo_exchanges': nbbo['bid_exchanges'],
@@ -486,7 +486,7 @@ result = monitor.check_limit_up_down(current_price=142.00)  # >5% decline
 
 if result['triggered']:
     print(f"⚠ CIRCUIT BREAKER: {result['type']}")
-    print(f"  Price: ${result['current_price']: .2f}, Band: ${ result['band']: .2f } ")
+    print(f"  Price: ${result['current_price']:.2f}, Band: ${ result['band']:.2f } ")
 print(f"  Action: {result['action']}")
 \`\`\`
 

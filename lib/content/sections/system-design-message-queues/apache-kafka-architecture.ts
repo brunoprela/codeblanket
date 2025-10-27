@@ -11,9 +11,7 @@ export const apachekafkaarchitectureSection = {
 
 **Kafka** = Distributed Commit Log + Pub/Sub Messaging + Stream Processing
 
-### **Key Capabilities:**
-
-1. **Publish/Subscribe** to streams of records
+### **Key Capabilities:**1. **Publish/Subscribe** to streams of records
 2. **Store** streams durably and reliably
 3. **Process** streams in real-time
 
@@ -74,9 +72,7 @@ Each partition:
 - Stored on different brokers (distributed)
 \`\`\`
 
-**Why Partitions?**
-
-1. **Scalability**: Topic can exceed single server capacity
+**Why Partitions?**1. **Scalability**: Topic can exceed single server capacity
 2. **Parallelism**: Multiple consumers process simultaneously
 3. **Throughput**: Write to multiple partitions in parallel
 
@@ -133,8 +129,7 @@ Each broker:
 - Communicates with other brokers
 \`\`\`
 
-**Broker Responsibilities:**
-1. Receive messages from producers
+**Broker Responsibilities:**1. Receive messages from producers
 2. Assign offsets
 3. Store messages to disk (commit log)
 4. Serve messages to consumers
@@ -488,9 +483,7 @@ Use case: Database changelog, state snapshots
 
 ## Kafka Performance Characteristics
 
-### **Why Kafka is Fast:**
-
-1. **Sequential Disk I/O**
+### **Why Kafka is Fast:**1. **Sequential Disk I/O**
    - Append-only log (sequential writes)
    - Sequential writes faster than random (even on HDD)
    - Modern OS page cache optimization
@@ -664,8 +657,7 @@ Trade-offs:
 
 ## Key Takeaways
 
-1. **Kafka = Distributed commit log + Pub/sub + Stream processing**
-2. **Topics partitioned for scalability** → Parallel reads/writes
+1. **Kafka = Distributed commit log + Pub/sub + Stream processing**2. **Topics partitioned for scalability** → Parallel reads/writes
 3. **Offsets enable replay** → Reprocess historical data
 4. **Replication ensures durability** → Leader/follower model
 5. **Consumer groups enable scaling** → Add consumers for parallelism

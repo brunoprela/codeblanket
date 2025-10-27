@@ -510,10 +510,7 @@ if __name__ == "__main__":
 
 ## Key Takeaways
 
-1. **Credit spread = compensation for default risk + liquidity + risk premium**
-2. **Default probability and LGD drive expected loss**
-3. **Investment grade (BBB+) vs High Yield (BB+) cutoff is critical**
-4. **Historical default rates**: Aaa 0.5%, Baa 6%, B 30% (10-year cumulative)
+1. **Credit spread = compensation for default risk + liquidity + risk premium**2. **Default probability and LGD drive expected loss**3. **Investment grade (BBB+) vs High Yield (BB+) cutoff is critical**4. **Historical default rates**: Aaa 0.5%, Baa 6%, B 30% (10-year cumulative)
 5. **Recovery rates**: Senior secured 60-80%, subordinated 20-40%
 6. **Fallen angels** = forced selling opportunity
 7. **Spread analysis**: Compare market spread to fair value

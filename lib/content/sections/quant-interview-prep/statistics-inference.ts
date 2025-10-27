@@ -16,8 +16,7 @@ Statistical inference is the backbone of quantitative trading and risk managemen
 - Recognize and avoid statistical fallacies
 - Apply inference to trading problems
 
-**Why Interviewers Test This:**
-1. **Strategy validation**: Is your backtest result real or luck?
+**Why Interviewers Test This:**1. **Strategy validation**: Is your backtest result real or luck?
 2. **Risk management**: How confident are we in our VaR estimates?
 3. **Parameter estimation**: What\'s the true expected return?
 4. **A/B testing**: Is Strategy B better than Strategy A?
@@ -316,8 +315,7 @@ SE(S) ≈ √((1 + S²/2)/n)
 
 ### 2.2 Width of Confidence Intervals
 
-**How to make CI narrower:**
-1. **Increase sample size** (most important): Width ∝ 1/√n
+**How to make CI narrower:**1. **Increase sample size** (most important): Width ∝ 1/√n
 2. **Lower confidence level**: 90% narrower than 95% narrower than 99%
 3. **Reduce variance**: σ directly affects width
 
@@ -347,9 +345,7 @@ Want: 2 × 1.96 × (1.5%/√n) ≤ 0.1%
 
 ### 3.1 The Classical Framework
 
-**Five Steps:**
-
-1. **State hypotheses**
+**Five Steps:**1. **State hypotheses**
    - H₀: Null hypothesis (status quo, no effect)
    - H₁: Alternative hypothesis (what you're trying to show)
 
@@ -514,8 +510,7 @@ n ≈ [(1.645 + 0.842) × 1.5 / 0.08]²
 - ❌ "1 - P(H₁ is true | data)"
 - ❌ "Importance of the result"
 
-**Key Points:**
-1. P-value is NOT posterior probability of H₀
+**Key Points:**1. P-value is NOT posterior probability of H₀
 2. P-value depends on sample size: large n → small p even for tiny effects
 3. P-value says nothing about effect size or practical importance
 4. "Significant" ≠ "Important"
@@ -755,8 +750,7 @@ Not significant after correction!
 
 **Alternative to FWER:** Control the *proportion* of false discoveries.
 
-**Benjamini-Hochberg procedure:**
-1. Order p-values: p₍₁₎ ≤ p₍₂₎ ≤ ... ≤ p₍k₎
+**Benjamini-Hochberg procedure:**1. Order p-values: p₍₁₎ ≤ p₍₂₎ ≤ ... ≤ p₍k₎
 2. Find largest i such that p₍ᵢ₎ ≤ (i/k)α
 3. Reject H₍₁₎, ..., H₍ᵢ₎
 
@@ -793,8 +787,7 @@ Largest i with p₍ᵢ₎ ≤ (i/k)α is i=2.
 
 **Power = P(reject H₀ | H₁ is true)**
 
-**Factors affecting power:**
-1. **Sample size n** ↑ → Power ↑
+**Factors affecting power:**1. **Sample size n** ↑ → Power ↑
 2. **Effect size δ** ↑ → Power ↑ (easier to detect large effects)
 3. **Significance level α** ↑ → Power ↑ (but more Type I errors)
 4. **Variability σ** ↓ → Power ↑
@@ -826,7 +819,7 @@ Z = (0.078 - 0.1) / 0.0474 = -0.464
 Power = P(Z > -0.464) = Φ(0.464) ≈ 0.679
 \`\`\`
 
-**Answer:** 67.9% power
+**Answer:**67.9% power
 
 ### 6.2 Sample Size Formulas
 
@@ -968,8 +961,7 @@ This is complex—usually estimated via simulation.
 
 **Why it's bad:** Inflates Type I error rate dramatically.
 
-**Solutions:**
-1. **Pre-registration:** State hypotheses before seeing data
+**Solutions:**1. **Pre-registration:** State hypotheses before seeing data
 2. **Hold-out set:** Test on independent data
 3. **Multiple testing correction:** Bonferroni, FDR
 4. **Cross-validation:** Proper out-of-sample testing
@@ -1382,16 +1374,14 @@ if __name__ == "__main__":
 
 ## Summary
 
-**Essential Skills:**
-1. **Construct confidence intervals** - especially for means, Sharpe ratios
+**Essential Skills:**1. **Construct confidence intervals** - especially for means, Sharpe ratios
 2. **Perform hypothesis tests** - one-sample, two-sample, paired
 3. **Interpret p-values correctly** - what they mean and don't mean
 4. **Calculate power and sample size** - understand feasibility
 5. **Handle multiple testing** - Bonferroni, FDR
 6. **Avoid pitfalls** - p-hacking, look-ahead bias, overfitting
 
-**Interview Tips:**
-1. Always state H₀ and H₁ explicitly
+**Interview Tips:**1. Always state H₀ and H₁ explicitly
 2. Check assumptions (normality, independence)
 3. Consider practical vs. statistical significance
 4. Acknowledge limitations (small sample, violations)

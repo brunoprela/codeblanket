@@ -653,9 +653,7 @@ Non-cryptographic (xxHash):
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is anti-entropy**: Background process to sync all replicas
+### **Key Concepts to Explain**1. **What is anti-entropy**: Background process to sync all replicas
 2. **Why needed**: Safety net, catches cold data, handles permanent failures
 3. **Merkle trees**: Efficient comparison using hashes, O(log N) descend
 4. **How it works**: Compare root hashes, descend into differing branches, sync leaf data

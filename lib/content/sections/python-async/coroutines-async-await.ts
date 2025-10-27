@@ -196,21 +196,21 @@ print(asyncio.iscoroutinefunction (regular_function))  # False
 
 async def full_featured_coroutine():
     """Demonstrates all async features"""
-    
+
     # await expression
     await asyncio.sleep(0.1)
-    
+
     # async with
     async with async_context_manager() as resource:
         data = resource.read()
-    
+
     # async for
     async for item in async_generator():
         process (item)
-    
+
     # Regular Python code
     result = compute_something()
-    
+
     return result
 \`\`\`
 
@@ -283,10 +283,10 @@ async def main():
 async def main():
     loop = asyncio.get_running_loop()
     future = loop.create_future()
-    
+
     # Set result later
     loop.call_later(1.0, lambda: future.set_result("future result"))
-    
+
     result = await future  # ✅ Can await futures
     print(result)
 
@@ -326,10 +326,10 @@ async def step2():
 async def sequential():
     """Wait for each step to complete"""
     start = time.time()
-    
+
     result1 = await step1()  # Waits 1s
     result2 = await step2()  # Then waits 0.5s
-    
+
     elapsed = time.time() - start
     print(f"Sequential: {elapsed:.2f}s")  # ~1.5s
     return result1, result2
@@ -337,15 +337,15 @@ async def sequential():
 async def concurrent():
     """Start both, then wait for both"""
     start = time.time()
-    
+
     # Start both without waiting
     task1 = asyncio.create_task (step1())
     task2 = asyncio.create_task (step2())
-    
+
     # Now wait for both
     result1 = await task1  # Waits ~1s (both run concurrently)
     result2 = await task2  # Already done!
-    
+
     elapsed = time.time() - start
     print(f"Concurrent: {elapsed:.2f}s")  # ~1.0s
     return result1, result2
@@ -389,10 +389,10 @@ async def test():
     # These two are functionally equivalent
     r1 = await explicit_await()  # "done"
     r2 = await return_await()    # "done"
-    
+
     # This is wrong!
     r3 = await just_return()  # TypeError or warning
-    
+
     print(f"r1={r1}, r2={r2}")
 
 # When to use each:
@@ -476,7 +476,7 @@ async def main():
         "https://httpbin.org/delay/2",
         "https://httpbin.org/delay/3",
     ]
-    
+
     async for url, content in fetch_pages (urls):
         print(f"Fetched {url}: {len (content)} bytes")
 
@@ -505,7 +505,7 @@ async def async_squares (n):
 async def main():
     # Async generator expression
     gen = (x async for x in async_squares(5) if x > 5)
-    
+
     async for value in gen:
         print(value)
 
@@ -517,7 +517,7 @@ asyncio.run (main())
 async def filter_large_files (file_paths):
     """Yield only files larger than 1MB"""
     return (
-        path 
+        path
         async for path in async_scan_files (file_paths)
         if (await async_get_size (path)) > 1_000_000
     )
@@ -547,15 +547,15 @@ async def main():
     # Async list comprehension
     result = [x async for x in async_range(5)]
     print(f"Result: {result}")  # [0, 1, 2, 3, 4]
-    
+
     # With condition
     evens = [x async for x in async_range(10) if x % 2 == 0]
     print(f"Evens: {evens}")  # [0, 2, 4, 6, 8]
-    
+
     # Async dict comprehension
     squares = {x: x**2 async for x in async_range(5)}
     print(f"Squares: {squares}")  # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
-    
+
     # Async set comprehension
     unique = {x % 3 async for x in async_range(10)}
     print(f"Unique: {unique}")  # {0, 1, 2}
@@ -586,15 +586,15 @@ async def main():
         "https://httpbin.org/delay/0",
         "https://httpbin.org/delay/0",
     ]
-    
+
     # ❌ Wrong: This runs sequentially!
     sizes_sequential = [await fetch_size (url) for url in urls]
     # Each await blocks before starting next
-    
+
     # ✅ Correct: Create tasks, then gather
     sizes_concurrent = await asyncio.gather(*[fetch_size (url) for url in urls])
     # All fetches start immediately, wait for all to complete
-    
+
     print(f"Sequential: {sizes_sequential}")
     print(f"Concurrent: {sizes_concurrent}")
 
@@ -624,15 +624,15 @@ async def process_user (session, user_id):
 
 async def main():
     user_ids = range(1, 101)  # 100 users
-    
+
     async with aiohttp.ClientSession() as session:
         # Process all users concurrently
         tasks = [process_user (session, uid) for uid in user_ids]
         users = await asyncio.gather(*tasks)
-    
+
     # Filter using list comprehension (sync, already have data)
     verified_users = [u for u in users if u.get('verified')]
-    
+
     print(f"Processed {len (users)} users")
     print(f"Verified: {len (verified_users)}")
 
@@ -663,7 +663,7 @@ async def main():
     result2 = await fetch_data("source2")  # Wait another 1s
     result3 = await fetch_data("source3")  # Wait another 1s
     # Total: 3 seconds
-    
+
     # ✅ Concurrent (fast)
     results = await asyncio.gather(
         fetch_data("source1"),
@@ -694,7 +694,7 @@ async def main():
         result = await risky_operation (will_fail=True)
     except ValueError as e:
         print(f"Caught: {e}")
-    
+
     # With gather, use return_exceptions=True
     results = await asyncio.gather(
         risky_operation (will_fail=False),
@@ -702,7 +702,7 @@ async def main():
         risky_operation (will_fail=False),
         return_exceptions=True,  # Don't stop on first error
     )
-    
+
     for i, result in enumerate (results):
         if isinstance (result, Exception):
             print(f"Task {i} failed: {result}")
@@ -735,7 +735,7 @@ async def main():
         result = await asyncio.wait_for (slow_operation(), timeout=2.0)
     except asyncio.TimeoutError:
         print("Operation timed out!")
-    
+
     # Multiple operations with overall timeout
     try:
         results = await asyncio.wait_for(
@@ -780,7 +780,7 @@ async def main():
     # ❌ Forgot await - gets coroutine object, not result!
     result = get_data()
     print(f"Result: {result}")  # <coroutine object get_data at 0x...>
-    
+
     # ✅ Correct
     result = await get_data()
     print(f"Result: {result}")  # "data"
@@ -810,14 +810,14 @@ async def good_example():
 
 async def test():
     start = time.time()
-    
+
     # Start three concurrent operations
     await asyncio.gather(
         bad_example(),
         bad_example(),
         bad_example(),
     )
-    
+
     print(f"Bad: {time.time() - start:.2f}s")  # ~6.0s (sequential!)
 
 asyncio.run (test())
@@ -841,13 +841,13 @@ async def async_function():
 def sync_function():
     # ❌ This doesn't work!
     result = async_function()  # Just returns coroutine object
-    
+
     # ❌ This doesn't work either!
     result = await async_function()  # SyntaxError: await outside async function
-    
+
     # ✅ Correct way: Create event loop
     result = asyncio.run (async_function())  # Works, but creates new loop
-    
+
     # ✅ Or use run_in_executor to call sync from async context
     # (Reverse: call sync from async)
 

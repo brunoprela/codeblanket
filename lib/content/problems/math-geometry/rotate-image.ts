@@ -15,8 +15,7 @@ export const rotate_imageProblem: Problem = {
 You have to rotate the image **in-place**, which means you have to modify the input 2D matrix directly.
 
 
-**Approach:**
-1. Transpose the matrix (swap rows with columns)
+**Approach:**1. Transpose the matrix (swap rows with columns)
 2. Reverse each row
 
 **Key Insight:**

@@ -520,7 +520,7 @@ def get_user_stats (user_id: str) -> Dict[str, Any]:
     # Generate natural language summary
     summary = f"""User {stats['name']} has been a member since {stats['joined_date']}.
 They have made {stats['order_count']} orders with a total value of \${stats['total_spent']:.2f}.
-Their average order value is \${ stats['avg_order_value']: .2f }.
+Their average order value is \${ stats['avg_order_value']:.2f }.
 Last activity was { stats['days_since_last_activity'] } days ago."""
 
 return {

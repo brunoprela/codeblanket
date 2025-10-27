@@ -33,14 +33,14 @@ async def async_function():
         result = await risky_operation()
     except ValueError as e:
         print(f"Error: {e}")
-    
+
     # Scenario 2: Multiple concurrent tasks
     results = await asyncio.gather(
         task1(), task2(), task3(),
         return_exceptions=True  # Critical!
     )
     # results may contain exceptions!
-    
+
     # Scenario 3: Task cancellation
     task = asyncio.create_task (long_operation())
     try:
@@ -76,20 +76,20 @@ async def fetch_data (url):
     try:
         # Simulated network request
         await asyncio.sleep(0.1)
-        
+
         if 'invalid' in url:
             raise ValueError (f"Invalid URL: {url}")
-        
+
         return f"Data from {url}"
-    
+
     except ValueError as e:
         print(f"❌ Error: {e}")
         return None
-    
+
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
         return None
-    
+
     finally:
         # Always runs (cleanup)
         print(f"✅ Cleanup for {url}")
@@ -186,7 +186,7 @@ async def with_return_exceptions():
         task(1), task(2), task(3),
         return_exceptions=True  # Critical!
     )
-    
+
     for i, result in enumerate (results, 1):
         if isinstance (result, Exception):
             print(f"Task {i} failed: {result}")
@@ -196,7 +196,7 @@ async def with_return_exceptions():
 async def main():
     print("Without return_exceptions:")
     await without_return_exceptions()
-    
+
     print("\\nWith return_exceptions:")
     await with_return_exceptions()
 
@@ -236,21 +236,21 @@ async def fetch_all_urls (urls: List[str]):
         *[fetch_url (url) for url in urls],
         return_exceptions=True
     )
-    
+
     # Process results
     successes = []
     failures = []
-    
+
     for url, result in zip (urls, results):
         if isinstance (result, Exception):
             failures.append({'url': url, 'error': str (result)})
         else:
             successes.append({'url': url, 'content': result})
-    
+
     # Report
     print(f"✅ Successes: {len (successes)}")
     print(f"❌ Failures: {len (failures)}")
-    
+
     return successes, failures
 
 async def main():
@@ -259,9 +259,9 @@ async def main():
         'https://error.com',
         'https://another.com',
     ]
-    
+
     successes, failures = await fetch_all_urls (urls)
-    
+
     for failure in failures:
         print(f"Failed: {failure['url']} - {failure['error']}")
 
@@ -288,25 +288,25 @@ async def cancellable_task():
         await asyncio.sleep(10)  # Long operation
         print("Task completed")
         return "success"
-    
+
     except asyncio.CancelledError:
         print("Task cancelled, cleaning up...")
         # Cleanup code here
         raise  # Re-raise CancelledError (important!)
-    
+
     finally:
         print("Task cleanup")
 
 async def main():
     # Create task
     task = asyncio.create_task (cancellable_task())
-    
+
     # Let it run briefly
     await asyncio.sleep(0.5)
-    
+
     # Cancel it
     task.cancel()
-    
+
     try:
         await task
     except asyncio.CancelledError:
@@ -335,19 +335,19 @@ class Application:
     def __init__(self):
         self.tasks = []
         self.shutdown_event = asyncio.Event()
-    
+
     async def worker (self, name: str):
         """Worker task"""
         try:
             while not self.shutdown_event.is_set():
                 print(f"{name} working...")
                 await asyncio.sleep(1)
-        
+
         except asyncio.CancelledError:
             print(f"{name} cancelled, saving state...")
             await asyncio.sleep(0.1)  # Simulate state save
             raise
-    
+
     async def start (self):
         """Start application"""
         # Create worker tasks
@@ -355,33 +355,33 @@ class Application:
             asyncio.create_task (self.worker (f"Worker-{i}"))
             for i in range(3)
         ]
-        
+
         # Wait for shutdown signal
         await self.shutdown_event.wait()
-        
+
         # Cancel all tasks
         print("Shutting down...")
         for task in self.tasks:
             task.cancel()
-        
+
         # Wait for all to complete
         await asyncio.gather(*self.tasks, return_exceptions=True)
         print("Shutdown complete")
-    
+
     def shutdown (self):
         """Trigger shutdown"""
         self.shutdown_event.set()
 
 async def main():
     app = Application()
-    
+
     # Setup signal handler
     loop = asyncio.get_running_loop()
     loop.add_signal_handler(
         signal.SIGINT,
         app.shutdown
     )
-    
+
     await app.start()
 
 # asyncio.run (main())
@@ -414,7 +414,7 @@ async def with_timeout():
             timeout=2.0
         )
         print(f"Result: {result}")
-    
+
     except asyncio.TimeoutError:
         print("Operation timed out")
 
@@ -437,17 +437,17 @@ async def operation_with_resources():
     try:
         print("Acquiring resources...")
         resource = "database-connection"
-        
+
         print("Processing...")
         await asyncio.sleep(10)  # Long operation
-        
+
         return "success"
-    
+
     except asyncio.CancelledError:
         print("Operation cancelled, releasing resources...")
         # Cleanup code
         raise
-    
+
     finally:
         print("Cleanup completed")
 
@@ -486,7 +486,7 @@ import asyncio
 class BackgroundTaskManager:
     def __init__(self):
         self.tasks = set()
-    
+
     def create_task (self, coro):
         """Create background task with error handling"""
         task = asyncio.create_task (coro)
@@ -494,7 +494,7 @@ class BackgroundTaskManager:
         task.add_done_callback (self.tasks.discard)
         task.add_done_callback (self._handle_task_result)
         return task
-    
+
     def _handle_task_result (self, task):
         """Handle task completion/errors"""
         try:
@@ -504,14 +504,14 @@ class BackgroundTaskManager:
                 print(f"❌ Background task failed: {exc}")
         except asyncio.CancelledError:
             print(f"⚠️  Background task cancelled")
-    
+
     async def shutdown (self):
         """Shutdown all background tasks"""
         if self.tasks:
             print(f"Shutting down {len (self.tasks)} tasks...")
             for task in self.tasks:
                 task.cancel()
-            
+
             await asyncio.gather(*self.tasks, return_exceptions=True)
 
 async def background_worker (n):
@@ -523,14 +523,14 @@ async def background_worker (n):
 
 async def main():
     manager = BackgroundTaskManager()
-    
+
     # Create background tasks
     for i in range(5):
         manager.create_task (background_worker (i))
-    
+
     # Let them run
     await asyncio.sleep(2)
-    
+
     # Shutdown
     await manager.shutdown()
 
@@ -562,16 +562,16 @@ async def retry_with_backoff(
 ) -> T:
     """Retry coroutine with exponential backoff"""
     delay = initial_delay
-    
+
     for attempt in range (max_retries):
         try:
             return await coro_func(*args, **kwargs)
-        
+
         except Exception as e:
             if attempt == max_retries - 1:
                 # Last attempt, raise
                 raise
-            
+
             print(f"Attempt {attempt + 1} failed: {e}")
             print(f"Retrying in {delay}s...")
             await asyncio.sleep (delay)
@@ -625,11 +625,11 @@ class CircuitBreaker:
         self.failure_threshold = failure_threshold
         self.timeout = timeout
         self.recovery_timeout = recovery_timeout
-        
+
         self.state = CircuitState.CLOSED
         self.failure_count = 0
         self.last_failure_time = None
-    
+
     async def call (self, coro_func, *args, **kwargs):
         """Execute function through circuit breaker"""
         if self.state == CircuitState.OPEN:
@@ -639,26 +639,26 @@ class CircuitBreaker:
                 print("🟡 Circuit HALF_OPEN, testing...")
             else:
                 raise Exception("Circuit breaker OPEN")
-        
+
         try:
             result = await coro_func(*args, **kwargs)
-            
+
             # Success
             if self.state == CircuitState.HALF_OPEN:
                 print("✅ Circuit CLOSED, recovered")
                 self.state = CircuitState.CLOSED
-            
+
             self.failure_count = 0
             return result
-        
+
         except Exception as e:
             self.failure_count += 1
             self.last_failure_time = time.time()
-            
+
             if self.failure_count >= self.failure_threshold:
                 print(f"🔴 Circuit OPEN (failures: {self.failure_count})")
                 self.state = CircuitState.OPEN
-            
+
             raise
 
 async def unreliable_service():
@@ -670,14 +670,14 @@ async def unreliable_service():
 
 async def main():
     breaker = CircuitBreaker (failure_threshold=3)
-    
+
     for i in range(10):
         try:
             result = await breaker.call (unreliable_service)
             print(f"Request {i}: {result}")
         except Exception as e:
             print(f"Request {i} failed: {e}")
-        
+
         await asyncio.sleep(1)
 
 asyncio.run (main())

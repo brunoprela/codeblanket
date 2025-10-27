@@ -35,8 +35,7 @@ By the end of this section, you'll understand:
 
 **Financial model**: A mathematical representation of a company's operations, expressed through linked financial statements and supporting schedules, used to forecast performance and value the business.
 
-**Key characteristics:**
-1. **Forward-looking**: Projects future performance based on assumptions
+**Key characteristics:**1. **Forward-looking**: Projects future performance based on assumptions
 2. **Integrated**: Income statement, balance sheet, and cash flow link together
 3. **Flexible**: Allows scenario analysis by changing assumptions
 4. **Documented**: Clear labeling, color coding, and notes
@@ -146,9 +145,7 @@ Typical Size: 100-300 rows
 
 ### The Golden Rule: Separation of Concerns
 
-**Professional models separate:**
-
-1. **Inputs (Assumptions)**: All user-changeable assumptions in one place
+**Professional models separate:**1. **Inputs (Assumptions)**: All user-changeable assumptions in one place
 2. **Calculations**: Formulas and logic (reference inputs, never hard-code)
 3. **Outputs (Results)**: Summary tables, charts, key metrics
 
@@ -629,9 +626,7 @@ create_color_coded_model()
 
 ### Documentation Best Practices
 
-**Every professional model should include:**
-
-1. **Cover Page**
+**Every professional model should include:**1. **Cover Page**
    - Model purpose and scope
    - Author and date
    - Version history
@@ -896,8 +891,8 @@ class ModelValidator:
         if difference > tolerance:
             raise ValueError(
                 f"Balance sheet doesn't balance! "
-                f"Assets: ${assets:, .0f
-}, L+E: ${ liabilities + equity:, .0f }, "
+                f"Assets: ${assets:,.0f}
+}, L+E: ${ liabilities + equity:,.0f }, "
                 f"Difference: ${difference:,.0f}"
             )
 print(f"✓ Balance sheet balances (diff: ${difference:.2f})")

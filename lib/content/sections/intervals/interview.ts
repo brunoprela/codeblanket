@@ -59,9 +59,7 @@ export const interviewSection = {
 
 *Interviewer: Given intervals, merge all overlapping ones.*
 
-**You:**
-
-1. **Clarify:**
+**You:**1. **Clarify:**
    - "Are intervals inclusive on both ends?"
    - "Can I modify the input?"
    - "Are they already sorted?"

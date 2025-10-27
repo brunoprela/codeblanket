@@ -51,16 +51,14 @@ print(f"Speedup (apply vs vectorized): {time_apply/time_vectorized:.1f}x")
 
 **Why This Huge Difference?**
 
-**Apply with Lambda:**
-1. Python loop over 1 million elements
+**Apply with Lambda:**1. Python loop over 1 million elements
 2. Each element calls Python lambda function
 3. Type checking for every call
 4. Python object overhead
 5. No SIMD (Single Instruction Multiple Data)
 6. No compiler optimizations
 
-**Vectorized Operations:**
-1. Single call to compiled C/Cython code
+**Vectorized Operations:**1. Single call to compiled C/Cython code
 2. Operations on contiguous memory
 3. SIMD instructions (process multiple values at once)
 4. CPU cache-friendly access patterns
@@ -885,9 +883,7 @@ df['year',] = pd.to_datetime (df['date_string',]).dt.year
 df['month',] = pd.to_datetime (df['date_string',]).dt.month  # Redundant conversion!
 \`\`\`
 
-**Key Takeaways:**
-
-1. **Accessors provide vectorized operations** for domain-specific data types
+**Key Takeaways:**1. **Accessors provide vectorized operations** for domain-specific data types
 2. **.dt is dramatically faster** than .apply() for datetime (100-1000x)
 3. **.str is moderately faster** than .apply() for strings (2-10x)
 4. **Automatic NaN handling** is a major convenience

@@ -157,9 +157,9 @@ Sector: {company_info['sector']}
 Market Cap: \${company_info['market_cap']:,.0f}
 
 Price Performance(1 year):
-- Current: \${ price_data['Close'].iloc[-1]: .2f }
-- 52 - week high: \${ company_info['52_week_high']: .2f }
-- 52 - week low: \${ company_info['52_week_low']: .2f }
+- Current: \${ price_data['Close'].iloc[-1]:.2f }
+- 52 - week high: \${ company_info['52_week_high']:.2f }
+- 52 - week low: \${ company_info['52_week_low']:.2f }
 - YTD return: { ((price_data['Close'].iloc[-1] / price_data['Close'].iloc[0]) - 1) * 100: .1f }%
 
   Valuation:
@@ -169,8 +169,8 @@ Price Performance(1 year):
   Technical Indicators:
 - RSI: { technical['rsi']: .1f }
 - MACD: { technical['macd']: .2f }
-- 50 - day MA: \${ technical['ma_50']: .2f }
-- 200 - day MA: \${ technical['ma_200']: .2f }
+- 50 - day MA: \${ technical['ma_50']:.2f }
+- 200 - day MA: \${ technical['ma_200']:.2f }
 
 Recent News:
 { self._format_news (news) }
@@ -354,8 +354,8 @@ class PortfolioManager:
         combined_returns = sum (portfolio_returns)
         
         return {
-            "volatility_annual": combined_returns.std() * (252 ** 0.5),  # Annualized
-            "sharpe_ratio": (combined_returns.mean() * 252) / (combined_returns.std() * (252 ** 0.5)),
+            "volatility_annual": combined_returns.std() * (252 **0.5),  # Annualized
+            "sharpe_ratio": (combined_returns.mean() * 252) / (combined_returns.std() * (252 **0.5)),
             "max_drawdown": (combined_returns.cumsum().max() - combined_returns.cumsum().min())
         }
     
@@ -369,7 +369,7 @@ Analyze this investment portfolio and provide recommendations:
 
 Portfolio Summary:
 - Total Value: \${portfolio['total_value']:,.2f}
-- Total Gain / Loss: \${ portfolio['total_gain_loss']:, .2f } ({ portfolio['total_gain_loss_pct']: .1f } %)
+- Total Gain / Loss: \${ portfolio['total_gain_loss']:,.2f } ({ portfolio['total_gain_loss_pct']: .1f } %)
 
 Holdings:
 { self._format_holdings (portfolio['holdings']) }

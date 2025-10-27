@@ -219,9 +219,7 @@ Thought:"""
         return "\\n\\n".join (history_parts)
 \`\`\`
 
-**Advantages over Sequential:**
-
-1. **Explicit Reasoning**: Thoughts are recorded and auditable
+**Advantages over Sequential:**1. **Explicit Reasoning**: Thoughts are recorded and auditable
 2. **Adaptive**: Can change strategy based on observations
 3. **Error Recovery**: Can reason about failures and try alternatives
 4. **Explainable**: Clear chain of reasoning for debugging
@@ -429,9 +427,7 @@ Complex workflows → LangGraph
 Multi-agent collaboration → CrewAI
 Unique requirements → Custom
 
-**Migration Strategy:**
-
-1. **Decouple Your Logic:**
+**Migration Strategy:**1. **Decouple Your Logic:**
 \`\`\`python
 # Don't do this (framework-coupled):
 from langchain import Chain

@@ -72,7 +72,7 @@ urls = [
 with ThreadPoolExecutor (max_workers=3) as executor:
     # Submit tasks
     futures = [executor.submit (download_file, url) for url in urls]
-    
+
     # Get results
     for future in futures:
         result = future.result()
@@ -128,7 +128,7 @@ with ThreadPoolExecutor (max_workers=3) as executor:
     future1 = executor.submit (fetch_data, "API-1", 1)
     future2 = executor.submit (fetch_data, "API-2", 2)
     future3 = executor.submit (fetch_data, "API-3", 0.5)
-    
+
     # Process as they complete (not in order)
     futures = [future1, future2, future3]
     for future in as_completed (futures):
@@ -162,11 +162,11 @@ def cpu_intensive_task (n):
 
 if __name__ == '__main__':
     data = [10_000_000] * 8
-    
+
     # Using ProcessPoolExecutor
     with ProcessPoolExecutor (max_workers=4) as executor:
         results = list (executor.map (cpu_intensive_task, data))
-    
+
     print(f"Completed {len (results)} tasks")
 
 # 4× speedup on 4-core CPU
@@ -227,21 +227,21 @@ def slow_task (n):
 with ThreadPoolExecutor (max_workers=2) as executor:
     # Submit task
     future = executor.submit (slow_task, 3)
-    
+
     # Check if done
     print(f"Done: {future.done()}")  # False
-    
+
     # Check if running
     print(f"Running: {future.running()}")  # True
-    
+
     # Wait for completion
     time.sleep(1)
     print(f"Done: {future.done()}")  # False (still running)
-    
+
     # Get result (blocks until done)
     result = future.result()
     print(f"Result: {result}")  # 6
-    
+
     print(f"Done: {future.done()}")  # True
 \`\`\`
 
@@ -261,7 +261,7 @@ def slow_operation():
 
 with ThreadPoolExecutor (max_workers=1) as executor:
     future = executor.submit (slow_operation)
-    
+
     try:
         # Wait maximum 2 seconds
         result = future.result (timeout=2.0)
@@ -294,7 +294,7 @@ with ThreadPoolExecutor (max_workers=2) as executor:
     # Submit task with callback
     future1 = executor.submit (task, 5)
     future1.add_done_callback (callback)
-    
+
     future2 = executor.submit (task, 10)
     future2.add_done_callback (callback)
 
@@ -326,7 +326,7 @@ def failing_task (n):
 
 with ThreadPoolExecutor (max_workers=3) as executor:
     futures = [executor.submit (failing_task, i) for i in range(4)]
-    
+
     for i, future in enumerate (futures):
         try:
             result = future.result()
@@ -361,7 +361,7 @@ def task (n):
 with ThreadPoolExecutor (max_workers=5) as executor:
     # Submit tasks
     futures = {executor.submit (task, i): i for i in range(10)}
-    
+
     # Process as they complete
     for future in as_completed (futures):
         task_id = futures[future]
@@ -391,7 +391,7 @@ from typing import List, Callable, Any
 class BatchProcessor:
     def __init__(self, max_workers: int = 10):
         self.max_workers = max_workers
-    
+
     def process_batch(
         self,
         items: List[Any],
@@ -401,18 +401,18 @@ class BatchProcessor:
         """Process items in batches"""
         results = []
         errors = []
-        
+
         with ThreadPoolExecutor (max_workers=self.max_workers) as executor:
             # Process in chunks
             for i in range(0, len (items), chunk_size):
                 chunk = items[i:i + chunk_size]
-                
+
                 # Submit chunk
                 futures = [
                     executor.submit (process_func, item)
                     for item in chunk
                 ]
-                
+
                 # Collect results
                 for future in futures:
                     try:
@@ -420,7 +420,7 @@ class BatchProcessor:
                         results.append (result)
                     except Exception as e:
                         errors.append (str (e))
-        
+
         return {
             'results': results,
             'errors': errors,
@@ -459,7 +459,7 @@ class RateLimitedExecutor:
         self.executor = ThreadPoolExecutor (max_workers=max_workers)
         self.semaphore = Semaphore (rate_limit)
         self.rate_limit = rate_limit
-    
+
     def submit (self, func, *args, **kwargs):
         """Submit task with rate limiting"""
         def wrapper():
@@ -469,9 +469,9 @@ class RateLimitedExecutor:
                 finally:
                     # Release after minimum interval
                     time.sleep(1.0 / self.rate_limit)
-        
+
         return self.executor.submit (wrapper)
-    
+
     def shutdown (self):
         self.executor.shutdown()
 
@@ -508,15 +508,15 @@ items = list (range(100))
 with ThreadPoolExecutor (max_workers=10) as executor:
     # Submit all tasks
     futures = {executor.submit (process_item, item): item for item in items}
-    
+
     # Track progress
     completed = 0
     total = len (futures)
-    
+
     for future in as_completed (futures):
         completed += 1
         percentage = (completed / total) * 100
-        
+
         try:
             result = future.result()
             print(f"Progress: {percentage:.1f}% ({completed}/{total})")
@@ -549,7 +549,7 @@ def blocking_io (n):
 
 async def main():
     loop = asyncio.get_running_loop()
-    
+
     # Create executor
     with ThreadPoolExecutor (max_workers=3) as executor:
         # Run blocking operation in executor
@@ -557,7 +557,7 @@ async def main():
             loop.run_in_executor (executor, blocking_io, i)
             for i in range(5)
         ]
-        
+
         # Await all
         results = await asyncio.gather(*tasks)
         print(f"Results: {results}")

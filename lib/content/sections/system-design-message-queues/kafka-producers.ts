@@ -31,9 +31,7 @@ Replication to Followers
 Acknowledgment (acks)
 \`\`\`
 
-### **Producer Components:**
-
-1. **Serializer**: Converts objects to bytes
+### **Producer Components:**1. **Serializer**: Converts objects to bytes
 2. **Partitioner**: Determines target partition
 3. **Record Accumulator**: Batches records
 4. **Sender**: Asynchronous network I/O
@@ -630,9 +628,7 @@ producer.close();
 
 ## Producer in System Design Interviews
 
-### **Discussion Points:**
-
-1. **Partitioning Strategy:**
+### **Discussion Points:**1. **Partitioning Strategy:**
    - "Use user_id as partition key for ordering per user"
    - "12 partitions for parallelism"
 

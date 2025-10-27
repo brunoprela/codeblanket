@@ -497,8 +497,7 @@ for issue, details in issues.items():
 7. **Learning curves**: Visualize if you need more data or different complexity
 8. **Document findings**: Keep track of what you've tried
 
-**Debugging Workflow:**
-1. Establish baseline performance
+**Debugging Workflow:**1. Establish baseline performance
 2. Diagnose bias vs variance
 3. Analyze error patterns
 4. Check data quality

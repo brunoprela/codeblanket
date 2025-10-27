@@ -24,11 +24,11 @@ async def fetch_all_manual (urls):
     for url in urls:
         task = asyncio.create_task (fetch (url))
         tasks.append (task)
-    
+
     for task in tasks:
         result = await task
         results.append (result)
-    
+
     return results
 
 # ✅ With: Built-in gather()
@@ -107,14 +107,14 @@ async def fetch_data (source, delay):
 
 async def main():
     start = time.time()
-    
+
     # Run all concurrently
     results = await asyncio.gather(
         fetch_data("API-1", 2.0),
         fetch_data("API-2", 1.0),
         fetch_data("API-3", 1.5),
     )
-    
+
     elapsed = time.time() - start
     print(f"Results: {results}")
     print(f"Time: {elapsed:.2f}s")  # ~2.0s (max delay)
@@ -156,7 +156,7 @@ async def test_gather_errors():
         )
     except ValueError as e:
         print(f"Caught: {e}")
-    
+
     # Strategy 2: Collect all results/exceptions
     print("\nStrategy 2: Collect all")
     results = await asyncio.gather(
@@ -165,7 +165,7 @@ async def test_gather_errors():
         task_success(3),
         return_exceptions=True  # Don't raise, collect exceptions
     )
-    
+
     for i, result in enumerate (results):
         if isinstance (result, Exception):
             print(f"Task {i} failed: {result}")
@@ -209,13 +209,13 @@ async def test_wait():
         asyncio.create_task (worker(2, 2.0)),
         asyncio.create_task (worker(3, 3.0)),
     }
-    
+
     # Wait for all to complete
     done, pending = await asyncio.wait (tasks)
-    
+
     print(f"Completed: {len (done)}")
     print(f"Pending: {len (pending)}")
-    
+
     for task in done:
         print(f"Result: {task.result()}")
 
@@ -251,21 +251,21 @@ async def test_wait_strategies():
         asyncio.create_task (worker(1)),
         asyncio.create_task (worker(2)),
     }
-    
+
     start = time.time()
     done, pending = await asyncio.wait(
         tasks,
         return_when=asyncio.FIRST_COMPLETED
     )
     elapsed = time.time() - start
-    
+
     print(f"Time: {elapsed:.1f}s")  # ~1.0s
     print(f"Done: {len (done)}, Pending: {len (pending)}")
-    
+
     # Cancel remaining
     for task in pending:
         task.cancel()
-    
+
     # Strategy 2: Wait with timeout
     print("\nWait with timeout:")
     tasks = {
@@ -273,17 +273,17 @@ async def test_wait_strategies():
         asyncio.create_task (worker(1)),
         asyncio.create_task (worker(2)),
     }
-    
+
     start = time.time()
     done, pending = await asyncio.wait(
         tasks,
         timeout=1.5  # Wait at most 1.5 seconds
     )
     elapsed = time.time() - start
-    
+
     print(f"Time: {elapsed:.1f}s")  # ~1.5s
     print(f"Done: {len (done)}, Pending: {len (pending)}")
-    
+
     # Cancel remaining
     for task in pending:
         task.cancel()
@@ -342,7 +342,7 @@ async def test_sleeps():
     )
     elapsed = time.time() - start
     print(f"Total time: {elapsed:.1f}s\n")  # ~4.0s (sequential!)
-    
+
     # Test 2: Non-blocking sleep (good)
     print("Test 2: Non-blocking sleep")
     start = time.time()
@@ -393,11 +393,11 @@ async def main():
         "https://api.example.com/users/2",
         "https://api.example.com/users/3",
     ]
-    
+
     results = await asyncio.gather(*[
         fetch_data_correctly (url) for url in urls
     ])
-    
+
     return results
 
 # asyncio.run (main())
@@ -432,7 +432,7 @@ async def producer (queue, producer_id):
         await asyncio.sleep (random.uniform(0.1, 0.5))
         await queue.put (item)
         print(f"Producer {producer_id}: Produced {item}")
-    
+
     print(f"Producer {producer_id}: Done")
 
 async def consumer (queue, consumer_id):
@@ -451,24 +451,24 @@ async def consumer (queue, consumer_id):
 async def main():
     # Create queue
     queue = asyncio.Queue (maxsize=10)
-    
+
     # Start producers and consumers
     producers = [
         asyncio.create_task (producer (queue, i))
         for i in range(2)
     ]
-    
+
     consumers = [
         asyncio.create_task (consumer (queue, i))
         for i in range(3)
     ]
-    
+
     # Wait for producers to finish
     await asyncio.gather(*producers)
-    
+
     # Wait for queue to be empty
     await queue.join()
-    
+
     # Cancel consumers (they'll timeout and exit)
     for c in consumers:
         c.cancel()
@@ -504,15 +504,15 @@ async def access_resource (semaphore, n):
 async def test_semaphore():
     # Allow only 3 concurrent accesses
     semaphore = asyncio.Semaphore(3)
-    
+
     start = time.time()
-    
+
     # Create 10 tasks, but only 3 can run at once
     await asyncio.gather(*[
         access_resource (semaphore, i)
         for i in range(10)
     ])
-    
+
     elapsed = time.time() - start
     print(f"\nTotal time: {elapsed:.1f}s")  # ~4s (10 tasks / 3 concurrent / 1s each)
 
@@ -537,21 +537,21 @@ import asyncio
 async def test_bounded():
     # BoundedSemaphore prevents releasing more than acquired
     sem = asyncio.BoundedSemaphore(2)
-    
+
     async with sem:
         print("Acquired once")
-    
+
     try:
         sem.release()  # ❌ Error: Can't release more than acquired
     except ValueError as e:
         print(f"Error: {e}")
-    
+
     # Regular Semaphore allows over-release (usually wrong)
     regular_sem = asyncio.Semaphore(2)
     async with regular_sem:
         pass
     regular_sem.release()  # ✓ Allowed (but probably wrong)
-    
+
     print("BoundedSemaphore prevents bugs from over-release")
 
 asyncio.run (test_bounded())
@@ -574,11 +574,11 @@ import asyncio
 
 class Counter:
     """Thread-safe counter with lock"""
-    
+
     def __init__(self):
         self.value = 0
         self.lock = asyncio.Lock()
-    
+
     async def increment (self):
         """Increment counter (critical section)"""
         async with self.lock:
@@ -589,13 +589,13 @@ class Counter:
 
 async def test_lock():
     counter = Counter()
-    
+
     # 100 concurrent increments
     await asyncio.gather(*[
         counter.increment()
         for _ in range(100)
     ])
-    
+
     print(f"Final count: {counter.value}")  # 100 (correct!)
 
 asyncio.run (test_lock())
@@ -632,16 +632,16 @@ async def setter (event):
 
 async def test_event():
     event = asyncio.Event()
-    
+
     # Multiple waiters
     waiters = [
         asyncio.create_task (waiter (event, i))
         for i in range(3)
     ]
-    
+
     # One setter
     setter_task = asyncio.create_task (setter (event))
-    
+
     # Wait for all
     await asyncio.gather(*waiters, setter_task)
 

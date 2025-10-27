@@ -1,7 +1,7 @@
 export const greeksDeltaGammaThetaVegaRho = {
-    title: 'The Greeks: Delta, Gamma, Theta, Vega, Rho',
-    id: 'greeks-delta-gamma-theta-vega-rho',
-    content: `
+  title: 'The Greeks: Delta, Gamma, Theta, Vega, Rho',
+  id: 'greeks-delta-gamma-theta-vega-rho',
+  content: `
 # The Greeks: Delta, Gamma, Theta, Vega, Rho
 
 ## Introduction
@@ -151,7 +151,7 @@ sigma = 0.20  # 20% vol
 call_delta = calculate_delta(S, K, T, r, sigma, 'call')
 put_delta = calculate_delta(S, K, T, r, sigma, 'put')
 
-print(f"\\nATM Option (Stock=${S}, Strike=${K}):")
+print(f"\\nATM Option (Stock=\${S}, Strike=\${K}):")
 print(f"Call Delta: {call_delta:.4f} ({call_delta*100:.2f}%)")
 print(f"Put Delta: {put_delta:.4f} ({put_delta*100:.2f}%)")
 print(f"\\nCall + Put Delta: {call_delta + put_delta:.4f} (should ≈ 0 for ATM)")
@@ -177,7 +177,7 @@ for strike in strikes:
     else:
         moneyness = "ATM"
     
-    print(f"${strike:< 7} { call_d:> 9.4f } { put_d:> 9.4f } { moneyness } ")
+    print(f"\${strike:< 7} { call_d:> 9.4f } { put_d:> 9.4f } { moneyness } ")
 
 # Example 3: Delta Hedging
 print("\\n" + "=" * 70)
@@ -341,7 +341,7 @@ for strike in strikes:
     else:
         interp = "Low (far from ATM)"
     
-    print(f"${strike: <7} { gamma:> 9.4f } { interp } ")
+    print(f"\${strike: <7} { gamma:> 9.4f } { interp } ")
 
 # Example 2: Gamma P & L Impact
 print("\\n" + "=" * 70)
@@ -362,7 +362,7 @@ for move in stock_moves:
 
 note = "No change" if move == 0 else ("Profit (long gamma)" if gamma_pnl > 0 else "")
 
-print(f"${move:>+4}        ${gamma_pnl:>7.2f}         {note}")
+print(f"\${move:>+4}        \${gamma_pnl:>7.2f}         {note}")
 
 print("\\n*Long gamma = profit from ANY stock move (up or down)")
 print("*Gamma P&L is ALWAYS positive for long options")
@@ -376,7 +376,7 @@ initial_stock = 100
 initial_delta = calculate_delta(initial_stock, 100, T, r, sigma, 'call')
 gamma = calculate_gamma(initial_stock, 100, T, r, sigma)
 
-print(f"\\nInitial: Stock=${initial_stock}, Delta={initial_delta:.4f}, Gamma={gamma:.4f}")
+print(f"\\nInitial: Stock=\${initial_stock}, Delta={initial_delta:.4f}, Gamma={gamma:.4f}")
 print(f"\\n{'New Stock':<12} {'Actual Δ':<12} {'Estimated Δ':<15} {'Difference'}")
 print("-" * 70)
 
@@ -388,7 +388,7 @@ estimated_delta = initial_delta + gamma * (new_stock - initial_stock)
 
 diff = actual_delta - estimated_delta
 
-print(f"${new_stock:<11} {actual_delta:>11.4f}  {estimated_delta:>14.4f}  {diff:>11.4f}")
+print(f"\${new_stock:<11} {actual_delta:>11.4f}  {estimated_delta:>14.4f}  {diff:>11.4f}")
 
 print("\\n*Gamma approximation works well for small moves")
 print("*Larger moves need second-order (gamma) correction")
@@ -506,7 +506,7 @@ for T in expirations:
     theta_annual = theta_daily * 365
     weekly_decay = theta_daily * 7
     
-    print(f"{days:>8.0f} days    ${theta_daily:> 8.2f}        ${ theta_annual:> 10.2f }       ${ weekly_decay:> 7.2f } ")
+    print(f"{days:>8.0f} days    \${theta_daily:> 8.2f}        \${ theta_annual:> 10.2f }       \${ weekly_decay:> 7.2f } ")
 
 print("\\n*Theta accelerates as expiration approaches")
 print("*1-week option loses ~10× more per day than 1-year option")
@@ -534,7 +534,7 @@ theta_pct = (abs(theta) / call_price) * 100 if call_price > 0.01 else 0
 
 moneyness = "ATM" if strike == 100 else ("ITM" if strike < 100 else "OTM")
 
-print(f"${strike:<9} {moneyness:<12} ${theta:>8.2f}          {theta_pct:>6.2f}%")
+print(f"\${strike:<9} {moneyness:<12} \${theta:>8.2f}          {theta_pct:>6.2f}%")
 
 print("\\n*ATM options have highest absolute theta")
 print("*But as % of price, OTM options decay faster")
@@ -547,8 +547,8 @@ print("=" * 70)
 initial_price = 5.00
 initial_theta = -0.05  # Losing $0.05 per day
 
-print(f"\\nInitial option price: ${initial_price}")
-print(f"Daily theta: ${initial_theta}")
+print(f"\\nInitial option price: \${initial_price}")
+print(f"Daily theta: \${initial_theta}")
 print(f"\\n{'Days Passed':<15} {'Price':<10} {'Value Lost':<15} {'% Remaining'}")
 print("-" * 70)
 
@@ -557,7 +557,7 @@ for days in [0, 5, 10, 15, 20, 25, 30]:
 value_lost = initial_price - price
 pct_remaining = (price / initial_price) * 100
 
-print(f"{days:<15} ${price:>8.2f}   ${value_lost:>10.2f}        {pct_remaining:>6.1f}%")
+print(f"{days:<15} \${price:>8.2f}   \${value_lost:>10.2f}        {pct_remaining:>6.1f}%")
 
 print("\\n*Linear approximation (actual decay is non-linear)")
 print("*Real options decay faster near expiration")
@@ -639,7 +639,7 @@ strikes = [90, 95, 100, 105, 110]
 for strike in strikes:
     vega = calculate_vega(S, strike, T, r, sigma)
     moneyness = "ATM" if strike == 100 else ("ITM" if strike < S else "OTM")
-    print(f"Strike ${strike}: Vega = ${vega: .4f} per 1 % vol({ moneyness })")
+    print(f"Strike \${strike}: Vega = \${vega:.4f} per 1 % vol({ moneyness })")
 
 print("\\n### Vega by Time to Expiration (ATM) ###\\n")
 K = 100
@@ -648,7 +648,7 @@ expirations = [7 / 365, 30 / 365, 60 / 365, 90 / 365, 180 / 365, 365 / 365]
 for T in expirations:
     vega = calculate_vega(S, K, T, r, sigma)
 days = T * 365
-print(f"{days:>3.0f} days: Vega = ${vega:.4f} per 1% vol")
+print(f"{days:>3.0f} days: Vega = \${vega:.4f} per 1% vol")
 
 print("\\n*Longer expiration = Higher vega")
 print("*More time = more uncertainty = more sensitivity to vol")
@@ -664,8 +664,8 @@ contracts = 10
 vol_changes = [-5, -2, -1, 0, 1, 2, 5]
 
 print(f"\\nPosition: {contracts} ATM call contracts")
-print(f"Vega per contract: ${vega_atm:.4f} per 1% vol")
-print(f"Position Vega: ${vega_atm * contracts:.2f} per 1% vol\\n")
+print(f"Vega per contract: \${vega_atm:.4f} per 1% vol")
+print(f"Position Vega: \${vega_atm * contracts:.2f} per 1% vol\\n")
 
 print(f"{'Vol Change':<15} {'P&L':<15} {'Note'}")
 print("-" * 70)
@@ -680,7 +680,7 @@ note = "Loss (vol decreased)"
     else:
 note = "No change"
 
-print(f"{vol_change:+3}%           ${pnl:>+8.2f}     {note}")
+print(f"{vol_change:+3}%           \${pnl:>+8.2f}     {note}")
 
 print("\\n*VIX spike from 15 to 20 (+5%) would profit $" +
     f"{vega_atm * contracts * 5:.2f}")
@@ -786,12 +786,12 @@ for option_type in ['call', 'put']:
     greeks = calculate_all_greeks(S, K, T, r, sigma, option_type)
     
     print(f"\\n### {option_type.upper()} GREEKS ###")
-    print(f"Stock=${S}, Strike=${K}, {T*365:.0f} days, Vol={sigma*100:.0f}%")
+    print(f"Stock=\${S}, Strike=\${K}, {T*365:.0f} days, Vol={sigma*100:.0f}%")
     print(f"\\nDelta:  {greeks['delta']:>+8.4f}  (per $1 stock move)")
     print(f"Gamma:  {greeks['gamma']:>+8.4f}  (delta change per $1)")
-    print(f"Theta:  ${greeks['theta']:> +8.2f}  per day")
-print(f"Vega:   ${greeks['vega']:>+8.2f}  per 1% vol")
-print(f"Rho:    ${greeks['rho']:>+8.2f}  per 1% rate")
+    print(f"Theta:  \${greeks['theta']:> +8.2f}  per day")
+print(f"Vega:   \${greeks['vega']:>+8.2f}  per 1% vol")
+print(f"Rho:    \${greeks['rho']:>+8.2f}  per 1% rate")
 \`\`\`
 
 ---
@@ -821,4 +821,3 @@ print(f"Rho:    ${greeks['rho']:>+8.2f}  per 1% rate")
 In the next section, we'll dive deep into **implied volatility** - the most critical input to option pricing and the "language" options traders speak.
 `,
 };
-

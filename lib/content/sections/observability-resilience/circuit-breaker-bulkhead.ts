@@ -34,9 +34,7 @@ User Request → API → Database (down)
 - 2017: GitLab.com 18-hour outage from database issue
 - 2020: Cloudflare global outage from single bad configuration
 
-### **Solution Patterns**
-
-1. **Circuit Breaker**: Stop calling failing services
+### **Solution Patterns**1. **Circuit Breaker**: Stop calling failing services
 2. **Bulkhead**: Isolate failures to prevent spread
 3. **Timeout**: Don't wait forever
 4. **Fallback**: Gracefully degrade
@@ -603,9 +601,7 @@ Payment API:
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **Circuit Breaker**: Stop calling failing services
+### **Key Concepts**1. **Circuit Breaker**: Stop calling failing services
 2. **Three States**: Closed, open, half-open
 3. **Bulkhead**: Isolate failures with resource partitioning
 4. **Fallback**: What to do when breaker is open

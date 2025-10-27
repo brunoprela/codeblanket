@@ -406,8 +406,7 @@ for result in scenarios[: 3]:
 print(f"  Spot=\${result['spot']}, Vol={result['vol']*100:.0f}%: P&L=\${result['pnl']:,.0f}")
 \`\`\`
 
-**Key Components:**
-1. Black-Scholes pricing engine
+**Key Components:**1. Black-Scholes pricing engine
 2. Greeks calculation (delta, gamma, vega, theta, rho)
 3. Portfolio aggregation
 4. Delta hedging recommendations

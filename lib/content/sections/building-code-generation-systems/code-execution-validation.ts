@@ -701,7 +701,7 @@ def calculate_primes (n):
     primes = []
     for num in range(2, n + 1):
         is_prime = True
-        for i in range(2, int (num ** 0.5) + 1):
+        for i in range(2, int (num **0.5) + 1):
             if num % i == 0:
                 is_prime = False
                 break
@@ -746,20 +746,13 @@ if report['errors']:
 1. **Always use sandboxing** for code execution
 2. **Set resource limits** (memory, CPU, time)
 3. **Disable network** by default
-4. **Run tests automatically**
-5. **Validate with examples**
-6. **Measure performance**
-7. **Check for errors** before deploying
+4. **Run tests automatically**5. **Validate with examples**6. **Measure performance**7. **Check for errors** before deploying
 8. **Use minimal container images**
 
 ### ❌ DON'T:
-1. **Execute untrusted code directly**
-2. **Skip resource limits**
-3. **Allow network access** without reason
+1. **Execute untrusted code directly**2. **Skip resource limits**3. **Allow network access** without reason
 4. **Trust generated code** without validation
-5. **Skip error checking**
-6. **Ignore performance**
-7. **Run indefinitely** without timeouts
+5. **Skip error checking**6. **Ignore performance**7. **Run indefinitely** without timeouts
 8. **Give too many privileges**
 
 ## Next Steps

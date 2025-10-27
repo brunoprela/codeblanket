@@ -491,7 +491,7 @@ def accretion_sensitivity_table(
     
     df = pd.DataFrame(
         results,
-        index=[f"${s / 1_000_000: .0f}M" for s in synergy_range],
+        index=[f"${s / 1_000_000:.0f}M" for s in synergy_range],
 columns = [f"{p:.0%}" for p in premium_range]
     )
 df.index.name = 'Synergies →'

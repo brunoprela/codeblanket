@@ -27,9 +27,7 @@ This section explores the economics, mathematics, and technology of professional
 
 ### 1. Market Maker Economics
 
-**Revenue Sources:**
-
-1. **Bid-Ask Spread:**
+**Revenue Sources:**1. **Bid-Ask Spread:**
    - **Capture:** Buy at bid ($100.00), sell at ask ($100.05) → profit $0.05 per share.
    - **Volume:** Execute thousands of round trips daily.
    - **Example:** 1 million shares daily × $0.03 average spread = $30,000 daily revenue.
@@ -45,9 +43,7 @@ This section explores the economics, mathematics, and technology of professional
    - **Benefit:** Retail flow is typically uninformed (lower adverse selection risk).
    - **Profit:** Market maker provides price improvement (better than NBBO), still captures most of spread.
 
-**Costs:**
-
-1. **Adverse Selection:**
+**Costs:**1. **Adverse Selection:**
    - **Losses to Informed Traders:** Trading with parties who have superior information.
    - **Magnitude:** 30-60% of gross spread captured.
    - **Example:** Capture $0.03 spread, but lose $0.015 on average to informed traders → net $0.015.
@@ -154,9 +150,7 @@ Where Λ is base arrival rate, k controls sensitivity to price.
 
 ### 4. Adverse Selection Management
 
-**Detection:**
-
-1. **Order Flow Analysis:**
+**Detection:**1. **Order Flow Analysis:**
    - **Persistent One-Sided Pressure:** Multiple buys (or sells) in succession → likely informed.
    - **Large Orders:** Aggressive market orders of significant size.
    - **Timing:** Orders just before news releases, earnings, macro events.
@@ -171,9 +165,7 @@ Where Λ is base arrival rate, k controls sensitivity to price.
    - **Formula:** Realized Spread = 2 × (Fill Price - Midpoint 5 minutes later)
    - **Negative Realized Spread:** Indicates adverse selection (you lost money).
 
-**Mitigation:**
-
-1. **Spread Widening:**
+**Mitigation:**1. **Spread Widening:**
    - **Before Earnings:** Widen spread by 50-200% to compensate for higher adverse selection risk.
    - **During News:** Stop quoting momentarily, wait for information to be digested.
 
@@ -542,7 +534,7 @@ print("=" * 70)
 for key, value in analysis.items():
     if isinstance(value, float):
         if 'per_share' in key:
-            print(f"{key:>30}: ${value: .4f
+            print(f"{key:>30}: ${value:.4f}
 }")
         elif 'margin' in key:
 print(f"{key:>30}: {value:.2f}%")
@@ -593,8 +585,7 @@ print(f"{key:>30}: {value:,}")
 
 **Task:** Implement a market maker with basic inventory management and adaptive spread.
 
-**Requirements:**
-1. Start with neutral inventory (0 shares).
+**Requirements:**1. Start with neutral inventory (0 shares).
 2. Post bid and ask quotes around current midpoint.
 3. Adjust spread based on inventory (widen when inventory is large).
 4. Implement position limits (±5,000 shares).

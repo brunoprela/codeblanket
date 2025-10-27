@@ -13,9 +13,7 @@ Queues are common in interviews, especially for BFS and level-order traversal pr
 
 ## Recognizing Queue Problems
 
-**Look for these keywords:**
-
-1. **"Level by level"** → Level-order traversal with queue
+**Look for these keywords:**1. **"Level by level"** → Level-order traversal with queue
 2. **"Breadth-first"** → BFS with queue
 3. **"Order of arrival"** → FIFO queue
 4. **"First-come, first-served"** → Queue scheduling
@@ -165,9 +163,7 @@ def sliding_window (nums, k):
 
 ## Communication Tips
 
-**What to say during the interview:**
-
-1. **Identify the pattern:**
+**What to say during the interview:**1. **Identify the pattern:**
    > "This is a level-order traversal problem, so I'll use a queue for BFS."
 
 2. **Explain FIFO:**

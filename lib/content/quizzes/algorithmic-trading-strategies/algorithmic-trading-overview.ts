@@ -195,8 +195,7 @@ logger.info(json.dumps({
 - Microservices: Single process fine for now (premature optimization)
 - Kubernetes: EC2 instance adequate for small fund
 
-**Critical Success Factors:**
-1. Comprehensive pre-trade risk checks (prevent fat fingers)
+**Critical Success Factors:**1. Comprehensive pre-trade risk checks (prevent fat fingers)
 2. Real-time P&L monitoring (know your exposure)
 3. Kill switch (protect capital in disasters)
 4. Complete audit trail (debugging and compliance)
@@ -358,15 +357,13 @@ print(f"MFT: {mft['annual_return_pct']:.1f}% annual, Sharpe: {mft['sharpe_estima
 
 **Recommendation: Medium-Frequency Trading (MFT)**
 
-**Why MFT:**
-1. **Capital adequate**: $500K sufficient to start
+**Why MFT:**1. **Capital adequate**: $500K sufficient to start
 2. **Infrastructure affordable**: $2K/month vs $100K/month
 3. **Manageable alone**: 1-2 people can operate
 4. **Higher profit per trade**: $0.50/share vs $0.0005/share
 5. **Regulatory simpler**: Avoid market maker registration
 
-**Why NOT HFT:**
-1. **Capital insufficient**: Need $10M+ minimum
+**Why NOT HFT:**1. **Capital insufficient**: Need $10M+ minimum
 2. **Infrastructure too expensive**: $100K/month infrastructure + $30K colocation
 3. **Requires team**: Need C++/kernel developers
 4. **Regulatory complex**: Market maker registration, extensive testing
@@ -391,9 +388,7 @@ print(f"MFT: {mft['annual_return_pct']:.1f}% annual, Sharpe: {mft['sharpe_estima
 - **Q3-Q4**: 10-20% return if strategy works
 - **Year 2+**: 20-40% if strategy remains robust
 
-**Path Forward with $500K:**
-
-1. **Start**: Develop 2-3 uncorrelated MFT strategies
+**Path Forward with $500K:**1. **Start**: Develop 2-3 uncorrelated MFT strategies
 2. **Paper trade**: 3-6 months to validate
 3. **Go live**: Start with $50K (10% of capital)
 4. **Scale**: Increase to $500K over 6-12 months if profitable
@@ -740,8 +735,7 @@ class StrategyDegradationDiagnostic:
 
 Given: 2.5 Sharpe in backtest, 0.8 in live → classic overfitting signature
 
-**Recommended Actions:**
-1. Run walk-forward analysis (should see consistent degradation)
+**Recommended Actions:**1. Run walk-forward analysis (should see consistent degradation)
 2. Simplify strategy (fewer parameters)
 3. Test on different markets/periods
 4. Require economic rationale (why should this work?)

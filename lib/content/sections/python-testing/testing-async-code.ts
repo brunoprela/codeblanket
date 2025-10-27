@@ -99,7 +99,7 @@ async def test_multiple_awaits():
     data1 = await fetch_data(1)
     data2 = await fetch_data(2)
     data3 = await fetch_data(3)
-    
+
     assert data1 != data2 != data3
     assert all (data is not None for data in [data1, data2, data3])
 \`\`\`
@@ -117,11 +117,11 @@ async def test_async_exception():
 async def test_async_timeout_handling():
     """Test function handles timeout gracefully"""
     import asyncio
-    
+
     async def slow_operation():
         await asyncio.sleep(10)
         return "done"
-    
+
     with pytest.raises (asyncio.TimeoutError):
         await asyncio.wait_for (slow_operation(), timeout=1.0)
 \`\`\`
@@ -158,32 +158,32 @@ async def test_with_async_fixture (async_client):
 async def async_db_engine():
     """Session-scoped async database engine"""
     from sqlalchemy.ext.asyncio import create_async_engine
-    
+
     engine = create_async_engine("postgresql+asyncpg://test:test@localhost/testdb")
-    
+
     # Setup: Create tables
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     yield engine
-    
+
     # Teardown: Drop tables
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
-    
+
     await engine.dispose()
 
 @pytest.fixture
 async def async_db_session (async_db_engine):
     """Function-scoped async session with rollback"""
     from sqlalchemy.ext.asyncio import AsyncSession
-    
+
     async with async_db_engine.connect() as connection:
         async with connection.begin() as transaction:
             session = AsyncSession (bind=connection)
-            
+
             yield session
-            
+
             await session.close()
             await transaction.rollback()
 \`\`\`
@@ -195,7 +195,7 @@ async def async_db_session (async_db_engine):
 async def async_redis():
     """Async Redis connection"""
     import aioredis
-    
+
     redis = await aioredis.create_redis_pool("redis://localhost")
     yield redis
     redis.close()
@@ -205,12 +205,12 @@ async def async_redis():
 async def async_cache (async_redis):
     """Cache service using async Redis"""
     from myapp.cache import Cache
-    
+
     cache = Cache (async_redis)
     await cache.clear()  # Start with clean cache
-    
+
     yield cache
-    
+
     await cache.clear()  # Cleanup
 
 @pytest.mark.asyncio
@@ -237,10 +237,10 @@ async def test_with_async_mock():
     # Create AsyncMock
     mock_fetch = AsyncMock()
     mock_fetch.return_value = {"id": 1, "name": "Alice"}
-    
+
     # Use in test
     result = await mock_fetch()
-    
+
     assert result["name"] == "Alice"
     mock_fetch.assert_called_once()
 \`\`\`
@@ -254,10 +254,10 @@ async def test_with_mocker (mocker):
     # Patch async function
     mock_fetch = mocker.patch("myapp.services.fetch_data", new_callable=AsyncMock)
     mock_fetch.return_value = {"status": "success", "data": [1, 2, 3]}
-    
+
     # Call function that uses fetch_data
     result = await process_user_data()
-    
+
     assert result["status"] == "success"
     assert len (result["data"]) == 3
     mock_fetch.assert_called_once()
@@ -271,10 +271,10 @@ async def test_mock_side_effect (mocker):
         {"page": 2, "items": [4, 5, 6]},
         {"page": 3, "items": []},  # Last page
     ]
-    
+
     # Function paginating through API
     all_items = await fetch_all_pages()
-    
+
     assert len (all_items) == 6
     assert mock_api.call_count == 3
 \`\`\`
@@ -292,18 +292,18 @@ async def test_mock_async_context_manager (mocker):
     mock_session.__aenter__ = AsyncMock (return_value=mock_session)
     mock_session.__aexit__ = AsyncMock (return_value=None)
     mock_session.get = AsyncMock()
-    
+
     # Mock response
     mock_response = MagicMock()
     mock_response.json = AsyncMock (return_value={"data": "test"})
     mock_response.__aenter__ = AsyncMock (return_value=mock_response)
     mock_response.__aexit__ = AsyncMock (return_value=None)
-    
+
     mock_session.get.return_value = mock_response
-    
+
     # Patch ClientSession
     mocker.patch("aiohttp.ClientSession", return_value=mock_session)
-    
+
     # Test code using aiohttp
     async with aiohttp.ClientSession() as session:
         async with session.get("https://api.example.com") as resp:
@@ -322,7 +322,7 @@ async def test_mock_async_context_manager (mocker):
 async def test_concurrent_requests():
     """Test multiple concurrent async operations"""
     import asyncio
-    
+
     # Execute 10 requests concurrently
     results = await asyncio.gather(
         fetch_data(1),
@@ -336,10 +336,10 @@ async def test_concurrent_requests():
         fetch_data(9),
         fetch_data(10),
     )
-    
+
     assert len (results) == 10
     assert all (r is not None for r in results)
-    
+
     # Verify all IDs are unique
     ids = [r["id"] for r in results]
     assert len (set (ids)) == 10  # All unique
@@ -348,12 +348,12 @@ async def test_concurrent_requests():
 async def test_concurrent_with_comprehension():
     """Test concurrent operations with comprehension"""
     import asyncio
-    
+
     # More elegant syntax
     results = await asyncio.gather(*[
         fetch_data (i) for i in range(1, 101)
     ])
-    
+
     assert len (results) == 100
 \`\`\`
 
@@ -364,20 +364,20 @@ async def test_concurrent_with_comprehension():
 async def test_race_condition_handling():
     """Test code handles race conditions"""
     import asyncio
-    
+
     # Shared resource
     counter = {"value": 0}
     lock = asyncio.Lock()
-    
+
     async def increment_with_lock():
         async with lock:
             current = counter["value"]
             await asyncio.sleep(0.001)  # Simulate slow operation
             counter["value"] = current + 1
-    
+
     # Run 100 concurrent increments
     await asyncio.gather(*[increment_with_lock() for _ in range(100)])
-    
+
     # With lock: counter = 100 (correct)
     assert counter["value"] == 100
 
@@ -385,16 +385,16 @@ async def test_race_condition_handling():
 async def test_race_condition_without_lock():
     """Demonstrate race condition without lock"""
     import asyncio
-    
+
     counter = {"value": 0}
-    
+
     async def increment_without_lock():
         current = counter["value"]
         await asyncio.sleep(0.001)
         counter["value"] = current + 1
-    
+
     await asyncio.gather(*[increment_without_lock() for _ in range(100)])
-    
+
     # Without lock: counter < 100 (race condition)
     assert counter["value"] < 100  # Demonstrates the problem
 \`\`\`
@@ -406,13 +406,13 @@ async def test_race_condition_without_lock():
 async def test_gather_with_exceptions():
     """Test asyncio.gather handles exceptions"""
     import asyncio
-    
+
     async def success():
         return "ok"
-    
+
     async def failure():
         raise ValueError("Error")
-    
+
     # By default, gather raises first exception
     with pytest.raises(ValueError):
         await asyncio.gather(
@@ -420,7 +420,7 @@ async def test_gather_with_exceptions():
             failure(),
             success(),
         )
-    
+
     # return_exceptions=True collects exceptions
     results = await asyncio.gather(
         success(),
@@ -428,7 +428,7 @@ async def test_gather_with_exceptions():
         success(),
         return_exceptions=True
     )
-    
+
     assert results[0] == "ok"
     assert isinstance (results[1], ValueError)
     assert results[2] == "ok"
@@ -451,23 +451,23 @@ async def test_async_context_manager():
 async def test_async_context_manager_exception():
     """Test context manager handles exceptions"""
     connection_closed = False
-    
+
     class TestConnection:
         async def __aenter__(self):
             return self
-        
+
         async def __aexit__(self, exc_type, exc_val, exc_tb):
             nonlocal connection_closed
             connection_closed = True
             return False  # Don't suppress exception
-        
+
         async def query (self):
             raise ValueError("Query failed")
-    
+
     with pytest.raises(ValueError):
         async with TestConnection() as conn:
             await conn.query()
-    
+
     # Verify __aexit__ was called
     assert connection_closed
 \`\`\`
@@ -484,11 +484,11 @@ async def test_async_generator():
         for i in range (n):
             await asyncio.sleep(0.01)  # Simulate async operation
             yield i
-    
+
     items = []
     async for item in async_range(5):
         items.append (item)
-    
+
     assert items == [0, 1, 2, 3, 4]
 
 @pytest.mark.asyncio
@@ -499,19 +499,19 @@ async def test_async_generator_with_data():
         for i in range(100):
             await asyncio.sleep(0.001)
             yield {"id": i, "name": f"user{i}"}
-    
+
     # Process in batches
     batch = []
     count = 0
     async for user in stream_users():
         batch.append (user)
         count += 1
-        
+
         if len (batch) == 10:
             # Process batch
             assert all("name" in u for u in batch)
             batch.clear()
-    
+
     assert count == 100
 \`\`\`
 
@@ -524,11 +524,11 @@ async def test_async_generator_with_data():
 async def test_timeout_with_wait_for():
     """Test operation times out appropriately"""
     import asyncio
-    
+
     async def slow_operation():
         await asyncio.sleep(10)
         return "done"
-    
+
     # Operation should timeout
     with pytest.raises (asyncio.TimeoutError):
         await asyncio.wait_for (slow_operation(), timeout=1.0)
@@ -537,11 +537,11 @@ async def test_timeout_with_wait_for():
 async def test_timeout_success():
     """Test fast operation doesn't timeout"""
     import asyncio
-    
+
     async def fast_operation():
         await asyncio.sleep(0.1)
         return "done"
-    
+
     # Should complete successfully
     result = await asyncio.wait_for (fast_operation(), timeout=5.0)
     assert result == "done"
@@ -550,7 +550,7 @@ async def test_timeout_success():
 async def test_custom_timeout():
     """Test custom timeout implementation"""
     import asyncio
-    
+
     async def operation_with_timeout (timeout):
         try:
             async with asyncio.timeout (timeout):  # Python 3.11+
@@ -558,10 +558,10 @@ async def test_custom_timeout():
                 return "completed"
         except asyncio.TimeoutError:
             return "timed out"
-    
+
     result_timeout = await operation_with_timeout(0.5)
     assert result_timeout == "timed out"
-    
+
     result_success = await operation_with_timeout(5.0)
     assert result_success == "completed"
 \`\`\`
@@ -591,7 +591,7 @@ async def test_fastapi_post (async_db_session):
             "username": "alice",
             "email": "alice@example.com"
         })
-        
+
         assert response.status_code == 201
         data = response.json()
         assert data["username"] == "alice"
@@ -601,7 +601,7 @@ async def test_fastapi_post (async_db_session):
 async def test_fastapi_websocket():
     """Test FastAPI WebSocket"""
     from fastapi.testclient import TestClient
-    
+
     with TestClient (app) as client:
         with client.websocket_connect("/ws") as websocket:
             websocket.send_text("Hello")
@@ -620,19 +620,19 @@ async def test_fastapi_websocket():
 async def async_test_db():
     """Complete async database fixture"""
     from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-    
+
     # Create engine
     engine = create_async_engine("sqlite+aiosqlite:///:memory:")
-    
+
     # Create tables
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     # Create session
     async with AsyncSession (engine) as session:
         yield session
         await session.rollback()
-    
+
     # Cleanup
     await engine.dispose()
 \`\`\`
@@ -643,7 +643,7 @@ async def async_test_db():
 class AsyncUserFactory:
     """Factory for creating async test users"""
     _counter = 0
-    
+
     @classmethod
     async def create (cls, session, **kwargs):
         cls._counter += 1
@@ -655,7 +655,7 @@ class AsyncUserFactory:
         await session.commit()
         await session.refresh (user)
         return user
-    
+
     @classmethod
     async def create_batch (cls, session, count):
         users = []
@@ -672,17 +672,17 @@ class AsyncUserFactory:
 async def test_retry_logic (mocker):
     """Test async retry mechanism"""
     mock_api = mocker.patch("myapp.api.external_call", new_callable=AsyncMock)
-    
+
     # First 2 calls fail, 3rd succeeds
     mock_api.side_effect = [
         Exception("Network error"),
         Exception("Timeout"),
         {"status": "ok"}
     ]
-    
+
     # Function with retry logic
     result = await call_with_retry (max_attempts=3)
-    
+
     assert result["status"] == "ok"
     assert mock_api.call_count == 3
 \`\`\`

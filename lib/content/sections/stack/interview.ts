@@ -47,9 +47,7 @@ What property does your stack maintain at each step?
 
 ---
 
-**Interview Communication:**
-
-1. **State the approach:** "I'll use a stack to track unmatched opening brackets."
+**Interview Communication:**1. **State the approach:** "I'll use a stack to track unmatched opening brackets."
 2. **Explain the invariant:** "The stack will always contain brackets that haven't found their closing pair yet."
 3. **Walk through example:** Show 2-3 steps of stack operations
 4. **Discuss complexity:** Time O(N), Space O(N) for stack
@@ -75,9 +73,7 @@ What property does your stack maintain at each step?
 
 ---
 
-**Practice Plan:**
-
-1. **Basics (Day 1-2):**
+**Practice Plan:**1. **Basics (Day 1-2):**
    - Valid Parentheses
    - Implement Stack (Min, Max variants)
 

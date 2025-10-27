@@ -1,7 +1,7 @@
 export const tradeReconciliation = {
-    title: 'Trade Reconciliation',
-    id: 'trade-reconciliation',
-    content: `
+  title: 'Trade Reconciliation',
+  id: 'trade-reconciliation',
+  content: `
 # Trade Reconciliation
 
 ## Introduction
@@ -612,7 +612,7 @@ class SettlementReconciliation:
                 f"{si.symbol:<8} "
                 f"{si.side:<6} "
                 f"{float(si.quantity):>10,.0f} "
-                f"${float(si.net_amount):> 14,.2f} "
+                f"\${float(si.net_amount):> 14,.2f} "
                 f"{si.status:<12}"
             )
         
@@ -622,9 +622,9 @@ total_buy = sum(si.net_amount for si in pending if si.side == "BUY")
         net_cash = total_sell - total_buy
 
 print("-" * 90)
-print(f"Total Buy:  ${float(total_buy):>14,.2f}")
-print(f"Total Sell: ${float(total_sell):>14,.2f}")
-print(f"Net Cash:   ${float(net_cash):>14,.2f}")
+print(f"Total Buy:  \${float(total_buy):>14,.2f}")
+print(f"Total Sell: \${float(total_sell):>14,.2f}")
+print(f"Net Cash:   \${float(net_cash):>14,.2f}")
 \`\`\`
 
 ---
@@ -718,7 +718,7 @@ class BreakResolutionEngine:
         if price_diff <= self.auto_resolve_threshold:
             # Auto-accept broker price for small differences
             print(f"[Resolution] Auto-accepting broker price: {internal.trade_id}")
-            print(f"  Internal: ${internal.price}, Broker: ${broker.price}, Diff: ${price_diff}")
+            print(f"  Internal: \${internal.price}, Broker: \${broker.price}, Diff: \${price_diff}")
             
             # Update internal trade price to match broker
             internal.price = broker.price
@@ -736,7 +736,7 @@ class BreakResolutionEngine:
         else:
             # Large price difference needs manual review
             print(f"[Resolution] Large price difference, escalating: {internal.trade_id}")
-            print(f"  Internal: ${internal.price}, Broker: ${broker.price}, Diff: ${price_diff}")
+            print(f"  Internal: \${internal.price}, Broker: \${broker.price}, Diff: \${price_diff}")
             
             self.resolution_history.append({
                 'break_id': internal.trade_id,
@@ -848,8 +848,7 @@ class ReconciliationMonitoring:
 
 ## Summary
 
-**Trade Reconciliation Essentials:**
-1. **Automated matching**: Match internal trades to broker confirmations with fuzzy logic
+**Trade Reconciliation Essentials:**1. **Automated matching**: Match internal trades to broker confirmations with fuzzy logic
 2. **Break detection**: Identify missing trades, quantity/price mismatches with severity classification
 3. **Partial fills**: Handle trades split across multiple broker confirmations
 4. **T+2 Settlement**: Reconcile with DTCC for settlement on trade date + 2 business days
@@ -868,4 +867,3 @@ class ReconciliationMonitoring:
 **Next Section**: Module 14.9 - Low-Latency Programming Techniques
 `,
 };
-

@@ -44,9 +44,7 @@ export const alertingStrategiesSection = {
 - High-fatigue teams: 50+ alerts/day
 - Result: Critical alerts missed for hours
 
-### **Causes**
-
-1. **Too Many Alerts**
+### **Causes**1. **Too Many Alerts**
    - Alert on everything "just in case"
    - Low thresholds
    - No aggregation
@@ -706,9 +704,7 @@ Why: Adapts to traffic
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **Alert Fatigue**: Too many alerts → ignored alerts
+### **Key Concepts**1. **Alert Fatigue**: Too many alerts → ignored alerts
 2. **Symptom vs Cause**: Alert on user impact, not infrastructure
 3. **Actionable**: Every alert must require human action
 4. **Four Golden Signals**: Latency, traffic, errors, saturation

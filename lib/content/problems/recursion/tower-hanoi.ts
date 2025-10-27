@@ -19,8 +19,7 @@ export const tower_hanoiProblem: Problem = {
 - Move all disks to target rod
 - Rules: Only move one disk at a time, never place larger disk on smaller disk
 
-**Solution Pattern:**
-1. Move n-1 disks from source to auxiliary (using target)
+**Solution Pattern:**1. Move n-1 disks from source to auxiliary (using target)
 2. Move largest disk from source to target
 3. Move n-1 disks from auxiliary to target (using source)
 

@@ -125,16 +125,14 @@ Simulate thousands of return scenarios:
 
 ### CVaR Calculation
 
-**Historical Simulation:**
-1. Calculate VaR (5th percentile)
+**Historical Simulation:**1. Calculate VaR (5th percentile)
 2. Average all returns worse than VaR
 
 **Example:** 250 returns, 95% VaR = -2.6% (13th worst)
 - 12 worst returns: -4.2%, -3.8%, -3.5%, ..., -2.7%
 - CVaR = Average of worst 12 = -3.4%
 
-**Monte Carlo:**
-1. Run 10,000 simulations
+**Monte Carlo:**1. Run 10,000 simulations
 2. Identify worst 500 scenarios (5%)
 3. Average losses in those 500 scenarios
 

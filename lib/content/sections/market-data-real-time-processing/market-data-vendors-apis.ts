@@ -198,7 +198,7 @@ iex_api = MarketDataAPI(
 
 # Get real-time quote
 quote = iex_api.get_quote("AAPL")
-print(f"AAPL: Bid ${quote['bid']}, Ask ${quote['ask']}")
+print(f"AAPL: Bid \${quote['bid']}, Ask \${quote['ask']}")
 
 # Get historical data
 start = datetime(2024, 1, 1)
@@ -210,7 +210,7 @@ print(f"Retrieved {len(bars)} hourly bars")
 symbols = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]
 quotes = iex_api.get_bulk_quotes(symbols)
 for symbol, quote in quotes.items():
-    print(f"{symbol}: ${quote['last']}")
+    print(f"{symbol}: \\${quote['last']}")
 \`\`\`
 
 ### WebSocket Real-Time Pattern
@@ -374,10 +374,10 @@ class RealtimeDataFeed:
 async def market_data_handler(data: dict):
     """Handle incoming market data"""
     if data['type'] == 'quote':
-        print(f"{data['symbol']}: Bid ${data['bid_price']} × {data['bid_size']}, "
-              f"Ask ${data['ask_price']} × {data['ask_size']}")
+        print(f"{data['symbol']}: Bid \\${data['bid_price']} × {data['bid_size']}, "
+              f"Ask \${data['ask_price']} × {data['ask_size']}")
     elif data['type'] == 'trade':
-        print(f"{data['symbol']}: Trade ${data['price']} × {data['size']}")
+        print(f"{data['symbol']}: Trade \\${data['price']} × {data['size']}")
 
 async def main():
     # Initialize feed
@@ -460,9 +460,9 @@ class PolygonDataFeed:
         """Handle WebSocket messages"""
         for msg in msgs:
             if isinstance(msg, EquityQuote):
-                print(f"Quote: {msg.symbol} ${msg.bid_price} x ${msg.ask_price}")
+                print(f"Quote: {msg.symbol} \${msg.bid_price} x \${msg.ask_price}")
             elif isinstance(msg, EquityTrade):
-                print(f"Trade: {msg.symbol} ${msg.price} x {msg.size}")
+                print(f"Trade: {msg.symbol} \\${msg.price} x {msg.size}")
     
     def _handle_error(self, error):
         print(f"WebSocket error: {error}")

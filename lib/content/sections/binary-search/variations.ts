@@ -33,8 +33,7 @@ export const variationsSection = {
 **Problem:** Find first failing version in sequence.
 **Key Insight:** Find first True in array of [False, False, ..., True, True].
 
-**Problem-Solving Framework:**
-1. **Identify if binary search applies:**
+**Problem-Solving Framework:**1. **Identify if binary search applies:**
    - Is there a sorted order? (explicit or implicit)
    - Can you check a condition in O(1) or O(log n)?
    - Is the answer monotonic? (if x works, all smaller/larger x work too)

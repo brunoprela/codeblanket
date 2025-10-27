@@ -118,9 +118,7 @@ Data Sources → Message Queue → Stream Processing → Data Store → Real-tim
                  (Query both)
 \`\`\`
 
-**Components:**
-
-1. **Batch Layer**: Process complete historical data
+**Components:**1. **Batch Layer**: Process complete historical data
    - High latency but accurate
    - Recompute views from scratch
    - Handles all data
@@ -221,8 +219,7 @@ Source → Extract → Transform (Spark/Airflow) → Load → Warehouse
                    Staging Area
 \`\`\`
 
-**Process:**
-1. **Extract**: Pull data from sources (APIs, databases, files)
+**Process:**1. **Extract**: Pull data from sources (APIs, databases, files)
 2. **Transform**: Clean, filter, aggregate, join data
 3. **Load**: Insert transformed data into warehouse
 
@@ -271,8 +268,7 @@ Source → Extract → Load → Warehouse → Transform (SQL/dbt)
                  Raw tables           Transformed views
 \`\`\`
 
-**Process:**
-1. **Extract**: Pull data from sources
+**Process:**1. **Extract**: Pull data from sources
 2. **Load**: Insert raw data into warehouse (fast!)
 3. **Transform**: Use SQL/dbt to transform within warehouse
 

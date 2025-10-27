@@ -25,8 +25,7 @@ Running user-generated or LLM-generated code poses serious risks:
 - Privilege escalation
 - Code injection
 
-**Our Goals:**
-1. Isolate code execution from the host system
+**Our Goals:**1. Isolate code execution from the host system
 2. Limit resources (CPU, memory, disk, time)
 3. Restrict dangerous operations
 4. Monitor execution

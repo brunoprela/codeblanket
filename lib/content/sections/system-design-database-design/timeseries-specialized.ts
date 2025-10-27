@@ -50,8 +50,7 @@ CREATE INDEX idx_metrics_name_time ON metrics (metric_name, timestamp);
 -- After 1 month: 43 billion rows
 \`\`\`
 
-**Problems:**
-1. **Storage explosion:** Indexes grow massive (often 2-3x data size)
+**Problems:**1. **Storage explosion:** Indexes grow massive (often 2-3x data size)
 2. **Write performance degrades:** B-tree index updates are expensive at scale
 3. **Query performance suffers:** Scanning billions of rows is slow
 4. **No compression:** Traditional databases don't compress time-series well
@@ -344,7 +343,7 @@ time: 2024-01-01 00:00:00, cpu_min: 42.1, cpu_avg: 48.5, cpu_max: 67.2
 CREATE RETENTION POLICY "raw" ON "metrics" DURATION 7d REPLICATION 1 DEFAULT
 
 -- Downsample to 1-minute after 7 days
-SELECT mean("value") 
+SELECT mean("value")
 INTO "metrics"."monthly".:MEASUREMENT
 FROM "metrics"."raw".:MEASUREMENT
 GROUP BY time(1m), *
@@ -472,7 +471,7 @@ CREATE TABLE events (
 ) WITH CLUSTERING ORDER BY (event_time DESC);
 
 -- Fast queries by user and date
-SELECT * FROM events 
+SELECT * FROM events
 WHERE user_id = ? AND event_date = ?
 ORDER BY event_time DESC
 LIMIT 100;
@@ -574,16 +573,10 @@ S3 (Object Storage)
 
 ## Key Takeaways
 
-1. **Time-series databases optimize for append-only, time-stamped data**
-2. **10-20x better compression than traditional RDBMS**
-3. **Built-in features: downsampling, retention policies, time-based functions**
-4. **Choose based on use case:** Prometheus (monitoring), InfluxDB (general TSDB), TimescaleDB (PostgreSQL + time-series)
+1. **Time-series databases optimize for append-only, time-stamped data**2. **10-20x better compression than traditional RDBMS**3. **Built-in features: downsampling, retention policies, time-based functions**4. **Choose based on use case:** Prometheus (monitoring), InfluxDB (general TSDB), TimescaleDB (PostgreSQL + time-series)
 5. **Not suitable for:** Low write volume, complex relationships, frequent updates
-6. **Graph databases excel at relationship queries**
-7. **Search databases (Elasticsearch) for full-text search and logs**
-8. **Polyglot persistence:** Use multiple databases for different needs
-9. **Time-series compression uses delta encoding and pattern detection**
-10. **Downsampling reduces storage and improves long-range query performance**
+6. **Graph databases excel at relationship queries**7. **Search databases (Elasticsearch) for full-text search and logs**8. **Polyglot persistence:** Use multiple databases for different needs
+9. **Time-series compression uses delta encoding and pattern detection**10. **Downsampling reduces storage and improves long-range query performance**
 
 ## Summary
 

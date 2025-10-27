@@ -60,7 +60,7 @@ print(f"Classes: {target_names}")
 plt.figure (figsize=(10, 6))
 colors = ['red', 'blue', 'green']
 for i, color, name in zip([0, 1, 2], colors, target_names):
-    plt.scatter(X[y == i, 0], X[y == i, 1], 
+    plt.scatter(X[y == i, 0], X[y == i, 1],
                c=color, label=name, alpha=0.6, s=50)
 plt.xlabel (feature_names[0])
 plt.ylabel (feature_names[1])
@@ -77,7 +77,7 @@ Given data matrix \\( X \\) (n samples × m features):
 
 1. **Center the data**: \\( X_{centered} = X - \\mu \\)
 
-2. **Compute covariance matrix**: 
+2. **Compute covariance matrix**:
 $$\\Sigma = \\frac{1}{n-1} X_{centered}^T X_{centered}$$
 
 3. **Eigenvalue decomposition**:
@@ -135,7 +135,7 @@ print(f"Total variance explained: {pca.explained_variance_ratio_.sum():.2%}")
 # Visualize PCA projection
 plt.figure (figsize=(10, 6))
 for i, color, name in zip([0, 1, 2], colors, target_names):
-    plt.scatter(X_pca[y == i, 0], X_pca[y == i, 1], 
+    plt.scatter(X_pca[y == i, 0], X_pca[y == i, 1],
                c=color, label=name, alpha=0.6, s=50)
 
 plt.xlabel (f'PC1 ({pca.explained_variance_ratio_[0]:.1%} variance)')
@@ -172,7 +172,7 @@ plt.xticks (range(1, len (pca_full.explained_variance_ratio_) + 1))
 
 plt.subplot(1, 2, 2)
 cumulative_variance = np.cumsum (pca_full.explained_variance_ratio_)
-plt.plot (range(1, len (cumulative_variance) + 1), 
+plt.plot (range(1, len (cumulative_variance) + 1),
          cumulative_variance, 'go-', linewidth=2, markersize=8)
 plt.xlabel('Number of Components')
 plt.ylabel('Cumulative Explained Variance')
@@ -233,7 +233,7 @@ cv_scores = []
 for n in n_components_range:
     pca_temp = PCA(n_components=n)
     X_temp = pca_temp.fit_transform(X_scaled)
-    
+
     # Evaluate with logistic regression
     clf = LogisticRegression (max_iter=1000)
     scores = cross_val_score (clf, X_temp, y, cv=5)
@@ -300,23 +300,23 @@ plt.show()
 def biplot(X_pca, loadings, labels, feature_names):
     ''Create a biplot showing data and loadings''
     plt.figure (figsize=(12, 8))
-    
+
     # Plot data points
     colors = ['red', 'blue', 'green']
     for i, color, name in zip([0, 1, 2], colors, target_names):
         mask = labels == i
-        plt.scatter(X_pca[mask, 0], X_pca[mask, 1], 
+        plt.scatter(X_pca[mask, 0], X_pca[mask, 1],
                    c=color, label=name, alpha=0.5, s=50)
-    
+
     # Plot loading vectors
     for i, feature in enumerate (feature_names):
-        plt.arrow(0, 0, 
+        plt.arrow(0, 0,
                  loadings[i, 0]*3, loadings[i, 1]*3,
-                 head_width=0.1, head_length=0.1, 
+                 head_width=0.1, head_length=0.1,
                  fc='black', ec='black', linewidth=2)
-        plt.text (loadings[i, 0]*3.2, loadings[i, 1]*3.2, 
+        plt.text (loadings[i, 0]*3.2, loadings[i, 1]*3.2,
                 feature, fontsize=10, fontweight='bold')
-    
+
     plt.xlabel (f'PC1')
     plt.ylabel (f'PC2')
     plt.title('PCA Biplot: Data Points + Feature Loadings')
@@ -369,7 +369,7 @@ print(f"Variance explained: {pca_digits.explained_variance_ratio_.sum():.2%}")
 
 # Visualize
 plt.figure (figsize=(12, 8))
-scatter = plt.scatter(X_digits_pca[:, 0], X_digits_pca[:, 1], 
+scatter = plt.scatter(X_digits_pca[:, 0], X_digits_pca[:, 1],
                      c=y_digits, cmap='tab10', s=20, alpha=0.6)
 plt.colorbar (scatter, ticks=range(10))
 plt.xlabel (f'PC1 ({pca_digits.explained_variance_ratio_[0]:.1%})')
@@ -397,7 +397,7 @@ ax = fig.add_subplot(111, projection='3d')
 
 for digit in range(10):
     mask = y_digits == digit
-    ax.scatter(X_digits_pca_3d[mask, 0], 
+    ax.scatter(X_digits_pca_3d[mask, 0],
               X_digits_pca_3d[mask, 1],
               X_digits_pca_3d[mask, 2],
               label=str (digit), s=20, alpha=0.6)
@@ -429,17 +429,17 @@ for idx, n_comp in enumerate (n_components_list):
     # Apply PCA
     pca_recon = PCA(n_components=n_comp)
     X_compressed = pca_recon.fit_transform(X_digits_scaled)
-    
+
     # Reconstruct
     X_reconstructed = pca_recon.inverse_transform(X_compressed)
     X_reconstructed = scaler_digits.inverse_transform(X_reconstructed)
-    
+
     # Show first digit
     reconstructed_digit = X_reconstructed[0].reshape(8, 8)
-    
+
     # Calculate reconstruction error
     mse = np.mean((X_digits[0] - X_reconstructed[0])**2)
-    
+
     axes[idx].imshow (reconstructed_digit, cmap='gray')
     axes[idx].set_title (f'{n_comp} components\\nMSE: {mse:.2f}')
     axes[idx].axis('off')
@@ -522,11 +522,11 @@ for n_comp in [5, 10, 20, 30]:
     pca = PCA(n_components=n_comp)
     X_train_pca = pca.fit_transform(X_train_scaled)
     X_test_pca = pca.transform(X_test_scaled)
-    
+
     clf_pca = RandomForestClassifier (n_estimators=100, random_state=42)
     clf_pca.fit(X_train_pca, y_train)
     y_pred_pca = clf_pca.predict(X_test_pca)
-    
+
     accuracy = accuracy_score (y_test, y_pred_pca)
     variance_explained = pca.explained_variance_ratio_.sum()
     results[f'PCA ({n_comp} comp, {variance_explained:.1%} var)'] = accuracy
@@ -686,15 +686,15 @@ for idx, n_comp in enumerate (n_components_list, 1):
     pca = PCA(n_components=n_comp)
     X_compressed = pca.fit_transform(X_faces)
     X_reconstructed = pca.inverse_transform(X_compressed)
-    
+
     reconstructed_face = X_reconstructed[0].reshape (face_shape)
-    
+
     # Compression ratio
     original_size = X_faces.shape[1]
     compressed_size = n_comp
     ratio = original_size / compressed_size
     compression_ratios.append (ratio)
-    
+
     axes[idx].imshow (reconstructed_face, cmap='gray')
     axes[idx].set_title (f'{n_comp} components\\n{ratio:.1f}x compression')
     axes[idx].axis('off')
@@ -730,9 +730,9 @@ pca_genes = PCA(n_components=2)
 X_genes_pca = pca_genes.fit_transform(X_genes_scaled)
 
 plt.figure (figsize=(10, 6))
-plt.scatter(X_genes_pca[y_genes==0, 0], X_genes_pca[y_genes==0, 1], 
+plt.scatter(X_genes_pca[y_genes==0, 0], X_genes_pca[y_genes==0, 1],
            c='blue', label='Healthy', alpha=0.6, s=50)
-plt.scatter(X_genes_pca[y_genes==1, 0], X_genes_pca[y_genes==1, 1], 
+plt.scatter(X_genes_pca[y_genes==1, 0], X_genes_pca[y_genes==1, 1],
            c='red', label='Disease', alpha=0.6, s=50)
 plt.xlabel (f'PC1 ({pca_genes.explained_variance_ratio_[0]:.1%})')
 plt.ylabel (f'PC2 ({pca_genes.explained_variance_ratio_[1]:.1%})')

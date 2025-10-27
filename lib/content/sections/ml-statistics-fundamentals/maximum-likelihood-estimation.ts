@@ -99,11 +99,7 @@ print("→ Training neural networks = Maximum likelihood estimation!")
 
 ## Key Takeaways
 
-1. **MLE finds parameters that maximize P(data|parameters)**
-2. **Log-likelihood is more stable than likelihood**
-3. **OLS = MLE under normality assumption**
-4. **Cross-entropy = Negative log-likelihood**
-5. **Foundation of most statistical models**
+1. **MLE finds parameters that maximize P(data|parameters)**2. **Log-likelihood is more stable than likelihood**3. **OLS = MLE under normality assumption**4. **Cross-entropy = Negative log-likelihood**5. **Foundation of most statistical models**
 
 MLE connects classical statistics to modern machine learning!
 `,

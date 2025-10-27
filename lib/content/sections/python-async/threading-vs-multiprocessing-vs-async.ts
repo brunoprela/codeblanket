@@ -207,7 +207,7 @@ def task (n):
 with ThreadPoolExecutor (max_workers=5) as executor:
     # Submit tasks
     futures = [executor.submit (task, i) for i in range(10)]
-    
+
     # Get results
     results = [future.result() for future in futures]
     print(f"Results: {results}")
@@ -275,15 +275,15 @@ if __name__ == '__main__':
         Process (target=worker, args=("Process-2",)),
         Process (target=worker, args=("Process-3",)),
     ]
-    
+
     # Start processes
     for p in processes:
         p.start()
-    
+
     # Wait for completion
     for p in processes:
         p.join()
-    
+
     print("All processes complete")
 
 # Output:
@@ -318,7 +318,7 @@ if __name__ == '__main__':
             cpu_intensive_task,
             [10_000_000] * 8
         ))
-    
+
     print(f"Results: {len (results)} computed")
 
 # With 4 cores: 8 tasks complete in ~2× single-task time
@@ -344,14 +344,14 @@ def process_chunk (data):
 if __name__ == '__main__':
     # Generate large dataset
     data = np.random.rand(10_000_000)
-    
+
     # Split into chunks
     chunks = np.array_split (data, 8)
-    
+
     # Process in parallel
     with Pool (processes=4) as pool:
         results = pool.map (process_chunk, chunks)
-    
+
     total = sum (results)
     print(f"Total: {total}")
 
@@ -425,7 +425,7 @@ async def main():
         worker("Task-2", 1),
         worker("Task-3", 3),
     ]
-    
+
     # Run concurrently
     results = await asyncio.gather(*tasks)
     print(f"Results: {results}")
@@ -635,19 +635,19 @@ Decision Matrix for Concurrency Model
 def choose_concurrency_model (workload_type, concurrency_level, task_duration):
     """
     Choose best concurrency model
-    
+
     Parameters:
     - workload_type: 'cpu' or 'io'
     - concurrency_level: number of concurrent operations
     - task_duration: 'short' (<100ms) or 'long' (>100ms)
     """
-    
+
     if workload_type == 'cpu':
         if concurrency_level <= cpu_count():
             return "Multiprocessing (ProcessPoolExecutor)"
         else:
             return "Multiprocessing with chunking"
-    
+
     elif workload_type == 'io':
         if concurrency_level < 50:
             return "Threading (ThreadPoolExecutor)"
@@ -655,7 +655,7 @@ def choose_concurrency_model (workload_type, concurrency_level, task_duration):
             return "Async (asyncio + aiohttp)"
         else:
             return "Async (definitely asyncio)"
-    
+
     return "Sequential (simplest)"
 
 # Examples:

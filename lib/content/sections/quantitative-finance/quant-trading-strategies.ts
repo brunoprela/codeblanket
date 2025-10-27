@@ -16,8 +16,7 @@ Quantitative trading strategies systematically exploit market inefficiencies usi
 - **Systematic**: No discretionary overrides (discipline eliminates emotional bias)
 - **Scalable**: Automated execution handles thousands of signals simultaneously
 
-**Major strategy families:**
-1. **Momentum**: Trend continuation (time-series and cross-sectional)
+**Major strategy families:**1. **Momentum**: Trend continuation (time-series and cross-sectional)
 2. **Mean reversion**: Price reversals (short-term and statistical arbitrage)
 3. **Trend following**: Directional bets on sustained moves
 4. **Volatility arbitrage**: Trade realized vs implied volatility
@@ -102,21 +101,18 @@ Where:
 
 **Why does momentum work?**
 
-**Behavioral explanations:**
-1. **Underreaction to news**: Investors slowly incorporate information → prices drift in direction of news
+**Behavioral explanations:**1. **Underreaction to news**: Investors slowly incorporate information → prices drift in direction of news
 2. **Herding**: Institutional investors follow trends (career risk: "nobody gets fired for buying IBM")
 3. **Disposition effect**: Investors hold losers too long, sell winners too early → delays price adjustment
 
-**Risk-based explanations:**
-1. **Time-varying risk**: Momentum is compensation for crash risk (option-like payoff)
+**Risk-based explanations:**1. **Time-varying risk**: Momentum is compensation for crash risk (option-like payoff)
 2. **Delayed information**: Small caps underreact more than large caps (information diffusion)
 
 ### Momentum Crashes
 
 **2009 example:** Momentum strategy lost **-73%** in months following Lehman bankruptcy.
 
-**Mechanism:**
-1. Pre-crisis: Momentum long high-beta stocks (rallied most), short low-beta stocks (fell least)
+**Mechanism:**1. Pre-crisis: Momentum long high-beta stocks (rallied most), short low-beta stocks (fell least)
 2. Crisis hits: High-beta stocks collapse → momentum longs crushed
 3. Post-crisis rally: Losers (low-quality, high-beta) rally sharply (+100-200%) → momentum shorts squeezed
 

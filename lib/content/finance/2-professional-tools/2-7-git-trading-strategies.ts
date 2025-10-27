@@ -472,8 +472,7 @@ Lead researcher reviews code:
 - Good test coverage
 - Backtest improvements are significant
 
-**Concerns:**
-1. Line 47: Kelly fraction might be too aggressive in high-vol regimes
+**Concerns:**1. Line 47: Kelly fraction might be too aggressive in high-vol regimes
 2. Consider adding maximum position size cap
 3. Need to test on 2008-2009 crisis period
 
@@ -654,8 +653,7 @@ Need to investigate if this is due to:
 2. Bug in code (not expected)
 3. Data quality issue
 
-**Steps to Reproduce:**
-1. Run python scripts/backtest.py --start 2020-01-01 --end 2020-12-31
+**Steps to Reproduce:**1. Run python scripts/backtest.py --start 2020-01-01 --end 2020-12-31
 2. Observe max drawdown in results/
 
 **Expected:** ~15-20% max drawdown (based on historical average)

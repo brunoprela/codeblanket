@@ -50,9 +50,7 @@ What makes a window valid or invalid?
 
 ---
 
-**Interview Communication:**
-
-1. **Identify pattern:** "This is a sliding window problem because we're looking for contiguous elements."
+**Interview Communication:**1. **Identify pattern:** "This is a sliding window problem because we're looking for contiguous elements."
 
 2. **Choose approach:** "I'll use a variable-size window with a hash set to track distinct characters."
 
@@ -88,9 +86,7 @@ What makes a window valid or invalid?
 
 ---
 
-**Practice Plan:**
-
-1. **Fixed Window (Day 1-2):**
+**Practice Plan:**1. **Fixed Window (Day 1-2):**
    - Maximum Sum Subarray of Size K
    - Maximum Average Subarray
 

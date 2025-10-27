@@ -90,11 +90,7 @@ print("✓ Enables causal inference")
 
 ## Key Takeaways
 
-1. **Randomization eliminates confounders**
-2. **Calculate sample size before experiment**
-3. **Power analysis prevents wasted effort**
-4. **A/B testing = proper experimental design**
-5. **Causal inference requires experiments**
+1. **Randomization eliminates confounders**2. **Calculate sample size before experiment**3. **Power analysis prevents wasted effort**4. **A/B testing = proper experimental design**5. **Causal inference requires experiments**
 
 Proper experimental design is essential for reliable ML experiments!
 `,

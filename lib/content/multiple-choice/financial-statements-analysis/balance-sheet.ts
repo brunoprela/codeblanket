@@ -70,13 +70,13 @@ def analyze_liquidity_problem(
     
     PROBLEM:
     Company has \${quick_assets:,.0f} in liquid assets
-    But owes \${ current_liabilities:, .0f } in short - term obligations
+    But owes \${ current_liabilities:,.0f } in short - term obligations
 
-SHORTFALL: \${ shortfall:, .0f }
+SHORTFALL: \${ shortfall:,.0f }
     
     This means:
 1. Cannot pay ALL current liabilities from liquid assets
-2. Would need to sell \${ shortfall:, .0f } of inventory
+2. Would need to sell \${ shortfall:,.0f } of inventory
 3. Inventory may not sell quickly or at book value
 4. If creditors demand payment → LIQUIDITY CRISIS
     
@@ -448,7 +448,7 @@ def analyze_leverage_risk (company_a: dict, company_b: dict) -> str:
     
     Company A (High Leverage):
       Debt: \${debt_a:,.0f}
-Equity: \${ equity_a:, .0f }
+Equity: \${ equity_a:,.0f }
 Debt - to - Equity: { debt_to_equity_a: .1f } x
 
 RISKS:
@@ -463,8 +463,8 @@ RISKS:
 - But interest coverage may be inadequate
       
     Company B(Low Leverage):
-Debt: \${ debt_b:, .0f }
-Equity: \${ equity_b:, .0f }
+Debt: \${ debt_b:,.0f }
+Equity: \${ equity_b:,.0f }
 Debt - to - Equity: { debt_to_equity_b: .1f } x
 
 BENEFITS:
@@ -1292,7 +1292,7 @@ def show_real_world_examples():
         print(f"  Model: {data['business_model']}")
         
         if ccc < 0:
-            print(f"  → NEGATIVE CCC: Generates \${abs (ccc)} days of float!")
+            print(f"  → NEGATIVE CCC: Generates \${abs(ccc)} days of float!")
 
 show_real_world_examples()
 \`\`\`

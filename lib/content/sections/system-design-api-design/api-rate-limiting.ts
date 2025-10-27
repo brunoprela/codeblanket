@@ -9,9 +9,7 @@ export const apiratelimitingSection = {
 
 ## Why Rate Limiting?
 
-### **Benefits**
-
-1. **Prevent abuse**: Block malicious actors and scrapers
+### **Benefits**1. **Prevent abuse**: Block malicious actors and scrapers
 2. **Fair usage**: Ensure no single client monopolizes resources
 3. **Cost control**: Limit expensive operations
 4. **Service protection**: Prevent cascade failures

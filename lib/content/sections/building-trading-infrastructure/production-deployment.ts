@@ -758,8 +758,7 @@ rollback_triggers:
 | Database schema change | Blue-Green | Test fully before switching |
 | Configuration change only | Rolling | Simplest, minimal risk |
 
-**Key Principles:**
-1. **Never deploy during market hours** (9:30 AM - 4:00 PM ET) unless critical fix
+**Key Principles:**1. **Never deploy during market hours** (9:30 AM - 4:00 PM ET) unless critical fix
 2. **Always have rollback plan** ready before starting
 3. **Monitor intensively** for first 2 hours post-deployment
 4. **Test everything in staging** first (no surprises in prod)

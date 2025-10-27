@@ -50,9 +50,7 @@ export const interviewSection = {
 
 **Interview Communication:**
 
-**Example: Kth Largest Element**
-
-1. **Clarify:**
+**Example: Kth Largest Element**1. **Clarify:**
    - "Is the array sorted or unsorted?"
    - "Can I modify the input array?"
    - "What if k > array length?"
@@ -107,9 +105,7 @@ export const interviewSection = {
 
 ---
 
-**Practice Plan:**
-
-1. **Basics (Day 1-2):**
+**Practice Plan:**1. **Basics (Day 1-2):**
    - Kth Largest Element
    - Top K Frequent Elements
    - Last Stone Weight

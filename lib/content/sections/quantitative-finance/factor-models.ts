@@ -43,15 +43,13 @@ R_i - R_f = \\alpha_i + \\beta_{i,M}(R_M - R_f) + \\beta_{i,SMB} \\cdot SMB + \\
 
 ### Factor Construction Methodology
 
-**SMB (Size Factor):**
-1. Sort all stocks by market capitalization
+**SMB (Size Factor):**1. Sort all stocks by market capitalization
 2. Split into two groups: Small (bottom 50%) and Big (top 50%)
 3. Calculate value-weighted returns for each group
 4. \(SMB = R_{Small} - R_{Big}\)
 5. Historical premium: ~2-3% annually (varies by period/market)
 
-**HML (Value Factor):**
-1. Sort stocks by book-to-market ratio (BE/ME = Book Equity / Market Equity)
+**HML (Value Factor):**1. Sort stocks by book-to-market ratio (BE/ME = Book Equity / Market Equity)
 2. Split into three groups: High (top 30%), Medium (middle 40%), Low (bottom 30%)
 3. Calculate value-weighted returns for High and Low portfolios
 4. \(HML = R_{High\\_BE/ME} - R_{Low\\_BE/ME}\)
@@ -118,8 +116,7 @@ R_i - R_f = \\alpha_i + \\beta_{M}(R_M - R_f) + \\beta_{SMB} \\cdot SMB + \\beta
 
 ### Improvement Over Three-Factor Model
 
-**Why add RMW and CMA?**
-1. **Better explanatory power**: Five-factor model explains 71-73% of variance vs 68-70% for three-factor (higher \(R^2\))
+**Why add RMW and CMA?**1. **Better explanatory power**: Five-factor model explains 71-73% of variance vs 68-70% for three-factor (higher \(R^2\))
 2. **Subsumes HML**: In many tests, HML becomes insignificant when RMW and CMA are added
 3. **Profitability**: Directly captures quality dimension (profitable firms outperform unprofitable)
 4. **Investment**: Captures growth vs value more precisely than book-to-market alone
@@ -155,8 +152,7 @@ R_i - R_f = \\alpha_i + \\beta_{M}(R_M - R_f) + \\beta_{SMB} \\cdot SMB + \\beta
 - One-month reversal: Stocks that went up last month tend to reverse slightly
 - But 12-month momentum (skipping last month) is strongly positive
 
-**Why does momentum work?**
-1. **Underreaction**: Investors slow to incorporate new information → drift continues
+**Why does momentum work?**1. **Underreaction**: Investors slow to incorporate new information → drift continues
 2. **Behavioral biases**: Anchoring, representativeness, confirmation bias
 3. **Herding**: Positive feedback trading amplifies trends
 4. **Risk-based**: Momentum crashes during market reversals (especially in panic recoveries)
@@ -250,8 +246,7 @@ Risk-free | | 2% | **2.0%**
 
 **Definition:** Rules-based strategies that target specific factor exposures (alternative to market-cap weighting).
 
-**Common smart beta strategies:**
-1. **Equal weight**: All stocks get 1/N weight → overweights small caps vs market-cap
+**Common smart beta strategies:**1. **Equal weight**: All stocks get 1/N weight → overweights small caps vs market-cap
 2. **Minimum volatility**: Optimize for lowest portfolio volatility → defensive strategy
 3. **Fundamental weighting**: Weight by fundamentals (sales, earnings, book value) → value tilt
 4. **Multi-factor**: Combine multiple factors (value + momentum + quality)
@@ -272,8 +267,7 @@ Risk-free | | 2% | **2.0%**
 
 **Can you time factors?** (Active debate)
 
-**Timing signals:**
-1. **Valuation**: When value spread (valuation difference between value and growth) is wide → value should outperform
+**Timing signals:**1. **Valuation**: When value spread (valuation difference between value and growth) is wide → value should outperform
 2. **Macro regime**: Momentum works in trending markets, mean reversion in choppy markets
 3. **Volatility**: Low-vol factor outperforms during high-volatility regimes
 4. **Economic cycle**: Value outperforms in early recovery, momentum in mid-cycle
@@ -738,8 +732,7 @@ risk_decomp = factor_risk_decomposition (portfolio_betas, factor_cov_matrix, idi
 
 **Scenario:** Evaluating if a hedge fund's 15% annual return is due to skill or factor exposures.
 
-**Approach:**
-1. Run FF6 regression on fund returns
+**Approach:**1. Run FF6 regression on fund returns
 2. Extract alpha (after adjusting for market, size, value, profitability, investment, momentum)
 3. Test statistical significance (t-stat > 2.0 for 5% significance)
 4. If alpha is insignificant, fund is just a "beta multiplier" (expensive factor exposure)

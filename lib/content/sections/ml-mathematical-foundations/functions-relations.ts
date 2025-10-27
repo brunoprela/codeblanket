@@ -117,14 +117,14 @@ print("\\nVectorized predictions:", predicted_prices_vec)
 \`\`\`python
 def plot_linear_functions():
     x = np.linspace(-5, 5, 100)
-    
+
     plt.figure (figsize=(10, 6))
-    
+
     # Different slopes
     plt.plot (x, 2*x + 1, label='f (x) = 2x + 1', linewidth=2)
     plt.plot (x, -x + 3, label='f (x) = -x + 3', linewidth=2)
     plt.plot (x, 0.5*x - 2, label='f (x) = 0.5x - 2', linewidth=2)
-    
+
     plt.xlabel('x')
     plt.ylabel('f (x)')
     plt.title('Linear Functions')
@@ -153,14 +153,14 @@ print("Linear functions plotted")
 \`\`\`python
 def plot_quadratic_functions():
     x = np.linspace(-5, 5, 100)
-    
+
     plt.figure (figsize=(10, 6))
-    
+
     # Different quadratics
     plt.plot (x, x**2, label='f (x) = x²', linewidth=2)
     plt.plot (x, -x**2 + 4, label='f (x) = -x² + 4', linewidth=2)
     plt.plot (x, 0.5*x**2 - 2*x + 1, label='f (x) = 0.5x² - 2x + 1', linewidth=2)
-    
+
     plt.xlabel('x')
     plt.ylabel('f (x)')
     plt.title('Quadratic Functions')
@@ -237,14 +237,14 @@ print("\\nFeature names:", poly_features.get_feature_names_out(['x']))
 \`\`\`python
 def plot_exponential_functions():
     x = np.linspace(-2, 3, 100)
-    
+
     plt.figure (figsize=(10, 6))
-    
+
     # Growth and decay
     plt.plot (x, np.exp (x), label='f (x) = eˣ (growth)', linewidth=2)
     plt.plot (x, np.exp(-x), label='f (x) = e⁻ˣ (decay)', linewidth=2)
     plt.plot (x, 2**x, label='f (x) = 2ˣ', linewidth=2)
-    
+
     plt.xlabel('x')
     plt.ylabel('f (x)')
     plt.title('Exponential Functions')
@@ -290,14 +290,14 @@ print("Sum:", probabilities.sum())  # Should be 1.0
 \`\`\`python
 def plot_logarithmic_functions():
     x = np.linspace(0.1, 10, 100)
-    
+
     plt.figure (figsize=(10, 6))
-    
+
     # Different bases
     plt.plot (x, np.log (x), label='f (x) = ln (x) (natural log)', linewidth=2)
     plt.plot (x, np.log10(x), label='f (x) = log₁₀(x)', linewidth=2)
     plt.plot (x, np.log2(x), label='f (x) = log₂(x)', linewidth=2)
-    
+
     plt.xlabel('x')
     plt.ylabel('f (x)')
     plt.title('Logarithmic Functions')

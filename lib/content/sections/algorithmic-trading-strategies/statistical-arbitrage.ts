@@ -872,8 +872,7 @@ class StatArbRiskManager:
 - Execution costs too high (high turnover)
 - Correlation≠cointegration (correlations can diverge)
 
-**Best Practices:**
-1. **Test Cointegration**: Use ADF test, require p < 0.05
+**Best Practices:**1. **Test Cointegration**: Use ADF test, require p < 0.05
 2. **Calculate Half-Life**: Ensure < 60 days
 3. **Dynamic Hedge Ratios**: Use Kalman filter for time-varying β
 4. **Diversify**: 20-50 pairs minimum

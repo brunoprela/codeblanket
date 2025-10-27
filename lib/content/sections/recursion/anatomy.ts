@@ -124,8 +124,7 @@ def factorial (n):
 
 When writing \`factorial (n)\`, assume \`factorial (n-1)\` gives you the correct answer. Don't try to trace through all the calls mentally - that's what the computer does.
 
-**Think in two steps:**
-1. "If I had the answer for a smaller problem, how would I solve this one?"
+**Think in two steps:**1. "If I had the answer for a smaller problem, how would I solve this one?"
 2. "What's the smallest problem I can solve directly?"
 
 This "leap of faith" is crucial for thinking recursively.`,

@@ -589,9 +589,7 @@ print(data_quality_report (data))
 5. **Outliers**: Detect using Z-score (parametric) or IQR (non-parametric)
 6. **Pandas describe()**: Quick comprehensive summary
 7. **Box plots**: Visual summary of distribution
-8. **Always compute descriptive stats before modeling**
-9. **Use robust statistics (median, IQR) for skewed data**
-10. **CV compares variability across different scales**
+8. **Always compute descriptive stats before modeling**9. **Use robust statistics (median, IQR) for skewed data**10. **CV compares variability across different scales**
 
 ## Connection to Machine Learning
 

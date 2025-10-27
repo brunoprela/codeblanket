@@ -395,11 +395,11 @@ def verify_demorgan():
             # Law 1: ¬(p ∧ q) = ¬p ∨ ¬q
             left1 = not (p and q)
             right1 = (not p) or (not q)
-            
+
             # Law 2: ¬(p ∨ q) = ¬p ∧ ¬q
             left2 = not (p or q)
             right2 = (not p) and (not q)
-            
+
             print(f"p={p}, q={q}:")
             print(f"  ¬(p∧q)={left1}, ¬p∨¬q={right1}, Equal: {left1 == right1}")
             print(f"  ¬(p∨q)={left2}, ¬p∧¬q={right2}, Equal: {left2 == right2}")
@@ -440,16 +440,16 @@ import pandas as pd
 def generate_truth_table (n_variables):
     """Generate truth table for n Boolean variables"""
     from itertools import product
-    
+
     # Generate all combinations
     combinations = list (product([False, True], repeat=n_variables))
-    
+
     # Create column names
     var_names = [f'p{i+1}' for i in range (n_variables)]
-    
+
     # Create DataFrame
     df = pd.DataFrame (combinations, columns=var_names)
-    
+
     return df
 
 # Example: 3 variables
@@ -502,9 +502,9 @@ def decision_tree_logic (age, income, credit_score):
     """
     condition1 = age >= 25 and income > 50000
     condition2 = credit_score > 700
-    
+
     approve = condition1 or condition2
-    
+
     return approve, condition1, condition2
 
 # Test cases
@@ -578,7 +578,7 @@ print(f"Test samples: {len (test_indices)}")
 print(f"No overlap: {len (train_indices & test_indices) == 0}")
 
 # Feature selection using sets
-available_features = {'age', 'income', 'education', 'credit_score', 
+available_features = {'age', 'income', 'education', 'credit_score',
                      'employment_history', 'debt_ratio'}
 selected_by_correlation = {'income', 'credit_score', 'debt_ratio'}
 selected_by_importance = {'age', 'income', 'credit_score'}

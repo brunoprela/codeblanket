@@ -309,8 +309,7 @@ A **multi-layer perceptron (MLP)** stacks multiple layers of perceptrons (neuron
 Input Layer → Hidden Layer (s) → Output Layer
 \`\`\`
 
-**Layer Types:**
-1. **Input Layer**: Receives input features (not counted as a layer)
+**Layer Types:**1. **Input Layer**: Receives input features (not counted as a layer)
 2. **Hidden Layer (s)**: Intermediate processing layers with non-linear activations
 3. **Output Layer**: Produces final predictions
 
@@ -644,8 +643,7 @@ plt.show()
 
 While the Universal Approximation Theorem says we only need one hidden layer, **deep networks (many layers) are more efficient**:
 
-**Advantages of Depth:**
-1. **Hierarchical Feature Learning**: Each layer learns increasingly abstract features
+**Advantages of Depth:**1. **Hierarchical Feature Learning**: Each layer learns increasingly abstract features
    - Layer 1: Edges and textures
    - Layer 2: Shapes and patterns
    - Layer 3: Object parts

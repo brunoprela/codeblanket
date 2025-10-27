@@ -35,8 +35,7 @@ export const problemsolvingSection = {
 - Time: O(log n) - explain why
 - Space: O(1) iterative, O(log n) recursive
 
-**Common Interview Follow-ups:**
-1. "What if there are duplicates?" → Find first/last occurrence
+**Common Interview Follow-ups:**1. "What if there are duplicates?" → Find first/last occurrence
 2. "What if it's rotated?" → Modified binary search
 3. "Can you do it recursively?" → Show recursive version
 4. "What about 2D array?" → Treat as 1D or use 2D binary search
@@ -53,8 +52,7 @@ export const problemsolvingSection = {
 ❌ Integer overflow in mid calculation
 ❌ Wrong return value (returning value instead of index)
 
-**How to Practice:**
-1. Master the basic template first
+**How to Practice:**1. Master the basic template first
 2. Solve "find first/last occurrence" problems
 3. Try rotated array problems
 4. Tackle abstract binary search problems

@@ -30,8 +30,7 @@ export const statisticalArbitrageMC = [
 - But spread: $50 → $90 (widened by $40)
 - Spread did NOT revert → not cointegrated
 
-**What Happens If You Trade Anyway:**
-1. Enter long spread at z-score -2 (spread "low")
+**What Happens If You Trade Anyway:**1. Enter long spread at z-score -2 (spread "low")
 2. Spread keeps widening (relationship broke)
 3. Hit stop loss at z-score -3
 4. Large loss
@@ -70,8 +69,7 @@ Half-life = time for spread to revert halfway to mean.
 
 **Rule of Thumb:** Half-life should be < 60 days, ideally < 30 days.
 
-**Problems with 80-Day Half-Life:**
-1. **Long Holding Periods**: Will hold 80+ days per trade
+**Problems with 80-Day Half-Life:**1. **Long Holding Periods**: Will hold 80+ days per trade
 2. **Capital Efficiency**: Capital locked up for months
 3. **Regime Risk**: Market can change in 80 days
 4. **Opportunity Cost**: Better opportunities elsewhere

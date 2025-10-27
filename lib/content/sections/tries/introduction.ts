@@ -48,9 +48,7 @@ Example: Insert "cat", "car", "dog"
 
 ---
 
-**Common Use Cases:**
-
-1. **Autocomplete / Type-ahead**
+**Common Use Cases:**1. **Autocomplete / Type-ahead**
    - Google search suggestions
    - IDE code completion
 

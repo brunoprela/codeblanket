@@ -95,9 +95,7 @@ With transformer models (BERT, GPT), even sentiment analysis benefits from minim
       'A financial sentiment analysis system trained on news articles is performing poorly on social media posts (tweets). Describe what preprocessing inconsistencies might cause this, and propose a solution for handling both data sources.',
     sampleAnswer: `This is a classic domain mismatch problem where preprocessing designed for one text type fails on another:
 
-**Preprocessing Inconsistencies:**
-
-1. **Language Style Differences:**
+**Preprocessing Inconsistencies:**1. **Language Style Differences:**
 
 News articles:
 - Formal language: "The Federal Reserve announced..."
@@ -263,9 +261,7 @@ This is common in production NLP systems where text sources vary widely.`,
       'You are building an NLP pipeline that will be maintained for years. Explain why preprocessing consistency between training and inference is critical, and describe a production-grade approach to ensure consistency, including versioning and testing strategies.',
     sampleAnswer: `Preprocessing consistency is one of the most common sources of bugs in production NLP systems, often causing silent failures that degrade performance without obvious errors:
 
-**Why Consistency is Critical:**
-
-1. **Feature Space Mismatch:**
+**Why Consistency is Critical:**1. **Feature Space Mismatch:**
 
 Training time:
 \`\`\`python
@@ -300,9 +296,7 @@ If training removes 40% of tokens (stopwords) but inference removes 20%, the mod
 
 Small preprocessing inconsistencies → OOV tokens → incorrect predictions → cumulative error over time → degraded system performance.
 
-**Common Sources of Inconsistency:**
-
-1. **Hardcoded preprocessing**: Different code for training and inference
+**Common Sources of Inconsistency:**1. **Hardcoded preprocessing**: Different code for training and inference
 2. **Library version changes**: NLTK update changes tokenization slightly
 3. **Missing dependencies**: Inference environment missing spaCy model
 4. **Configuration drift**: Settings changed during debugging, not reverted
@@ -578,9 +572,7 @@ jobs:
           python scripts/check_config_drift.py
 \`\`\`
 
-**Best Practices Summary:**
-
-1. **Version everything**: Preprocessor code, config, dependencies
+**Best Practices Summary:**1. **Version everything**: Preprocessor code, config, dependencies
 2. **Serialize preprocessor**: Save fitted preprocessor object, not just code
 3. **Pin dependencies**: Exact library versions in requirements.txt
 4. **Comprehensive testing**: Unit tests for consistency

@@ -55,15 +55,13 @@ FTX Collapse (\$8B customer funds missing)
 
 **Comparison to 2008 Financial Crisis:**
 
-**Similarities:**
-1. **Leverage**: Both had excessive leverage (banks 30x+, crypto funds 10x+)
+**Similarities:**1. **Leverage**: Both had excessive leverage (banks 30x+, crypto funds 10x+)
 2. **Interconnectedness**: Lehman → AIG → banks; 3AC → lenders → FTX
 3. **Opacity**: CDOs were opaque; crypto lending was opaque
 4. **Hubris**: "Housing never goes down" / "Luna can't fail"
 5. **Contagion**: One failure triggers cascade
 
-**Differences:**
-1. **Bailouts**: Governments bailed out banks (TARP); crypto had no bailout (good/bad?)
+**Differences:**1. **Bailouts**: Governments bailed out banks (TARP); crypto had no bailout (good/bad?)
 2. **Systemic risk**: 2008 threatened global economy; crypto was ~$2T isolated bubble
 3. **Leverage limits**: Banks have capital requirements; crypto has none
 4. **Transparency**: Banks report to regulators; crypto doesn't (yet)
@@ -113,16 +111,14 @@ class RiskManagement:
 
 **For Quantitative Trading Firms:**
 
-**CEX is Better For:**
-1. **High-frequency trading**: Need low latency (<10ms)
+**CEX is Better For:**1. **High-frequency trading**: Need low latency (<10ms)
 2. **Large size**: Deep liquidity, low slippage
 3. **Leverage**: Many strategies require margin
 4. **Fiat on/off-ramps**: Convert to USD for risk management
 5. **Multiple pairs**: Trade hundreds of pairs simultaneously
 6. **API reliability**: Stable REST/WebSocket APIs
 
-**DEX is Better For:**
-1. **Long-term holds**: Self-custody reduces counterparty risk
+**DEX is Better For:**1. **Long-term holds**: Self-custody reduces counterparty risk
 2. **New tokens**: DEXs list tokens faster than CEXs
 3. **Arbitrage**: Cross-DEX price differences
 4. **DeFi strategies**: Yield farming, liquidity provision
@@ -284,8 +280,7 @@ system.rebalance_allocation()
 system.arbitrage_cex_dex()
 \`\`\`
 
-**Risk Management:**
-1. **CEX risk**: Never keep more than 30% on exchanges (FTX taught us)
+**Risk Management:**1. **CEX risk**: Never keep more than 30% on exchanges (FTX taught us)
 2. **DEX risk**: Audit smart contracts before using
 3. **Gas risk**: ETH gas can spike to $100+ per transaction
 4. **Slippage**: Use TWAP for large DEX orders

@@ -641,9 +641,7 @@ sum_actual = sum (line_items)
 
 **Why Other Options Are Incorrect**:
 
-**A) Apple made an error / short the stock - WRONG**
-
-0.08% is far too small to indicate an accounting error. Public companies have:
+**A) Apple made an error / short the stock - WRONG**0.08% is far too small to indicate an accounting error. Public companies have:
 - External auditors (Deloitte, PwC, etc.)
 - Internal controls
 - SEC review

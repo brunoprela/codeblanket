@@ -612,9 +612,7 @@ http_request_duration_seconds_bucket{le="1.0"} 100
 
 ## Interview Tips
 
-### **Key Concepts**
-
-1. **Trace vs Span**: Trace is full request, span is single operation
+### **Key Concepts**1. **Trace vs Span**: Trace is full request, span is single operation
 2. **Context Propagation**: Headers carry trace_id and span_id
 3. **Sampling**: Don't trace everything, sample 1-10%
 4. **Use Cases**: Bottleneck identification, error debugging

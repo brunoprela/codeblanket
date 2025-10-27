@@ -755,9 +755,7 @@ for query in queries:
 
 ## Summary
 
-**Key ORM Optimization Techniques:**
-
-1. **Use select_related** for ForeignKey/OneToOne (SQL JOIN)
+**Key ORM Optimization Techniques:**1. **Use select_related** for ForeignKey/OneToOne (SQL JOIN)
 2. **Use prefetch_related** for ManyToMany/reverse ForeignKey (separate queries)
 3. **Use only/defer** to fetch only needed fields
 4. **Use values/values_list** for read-only operations

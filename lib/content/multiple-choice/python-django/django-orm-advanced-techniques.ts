@@ -40,8 +40,7 @@ Complex aggregations are typically done with aggregation functions like Sum(), A
 **Why D is incorrect:**
 F() expressions don't automatically optimize query performance. select_related() is a separate optimization technique for reducing queries through SQL JOINs.
 
-**Production Use Cases:**
-1. **Atomic Updates**: Incrementing counters, updating timestamps
+**Production Use Cases:**1. **Atomic Updates**: Incrementing counters, updating timestamps
 2. **Field Comparisons**: Finding records where one field > another
 3. **Calculations**: Database-level math operations
 4. **Avoiding Race Conditions**: Safe concurrent updates
@@ -465,8 +464,7 @@ Article.objects.update(
 )
 \`\`\`
 
-**Important Notes:**
-1. **Signals**: \`update()\` does NOT trigger model signals (pre_save, post_save)
+**Important Notes:**1. **Signals**: \`update()\` does NOT trigger model signals (pre_save, post_save)
 2. **Validation**: \`update()\` bypasses model validation
 3. **save() override**: Custom save() logic is not executed
 4. **Performance**: Much faster for bulk operations

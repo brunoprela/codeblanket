@@ -191,11 +191,7 @@ print(robust_cov.covariance_)
 
 ## Key Takeaways
 
-1. **Robust methods handle outliers gracefully**
-2. **Median > Mean for heavy-tailed data**
-3. **Huber/RANSAC regression for outlier resistance**
-4. **Multiple outlier detection methods exist**
-5. **Critical for financial and real-world data**
+1. **Robust methods handle outliers gracefully**2. **Median > Mean for heavy-tailed data**3. **Huber/RANSAC regression for outlier resistance**4. **Multiple outlier detection methods exist**5. **Critical for financial and real-world data**
 
 Robust statistics is essential for production ML systems!
 `,

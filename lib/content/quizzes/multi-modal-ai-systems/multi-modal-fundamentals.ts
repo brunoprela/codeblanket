@@ -6,8 +6,7 @@ export const multiModalFundamentalsQuiz = [
     hint: 'Think about separate processing pipelines, unified embeddings, and hybrid search.',
     sampleAnswer: `A comprehensive multi-modal real estate system would include:
 
-**Architecture:**
-1. **Ingestion Layer**: Separate queues for each modality (images, videos, audio, text)
+**Architecture:**1. **Ingestion Layer**: Separate queues for each modality (images, videos, audio, text)
 2. **Processing Pipelines**: 
    - Images: Extract features, generate descriptions, detect key features (bedrooms, kitchen, etc.)
    - Videos: Extract frames, transcribe narration, detect room transitions
@@ -45,8 +44,7 @@ export const multiModalFundamentalsQuiz = [
     hint: 'Consider individual modality analysis, cross-modal consistency, and confidence scoring.',
     sampleAnswer: `Cross-modal content moderation presents unique challenges:
 
-**Key Challenges:**
-1. **Context Dependency**: Content may be benign in one modality but harmful when combined
+**Key Challenges:**1. **Context Dependency**: Content may be benign in one modality but harmful when combined
 2. **Evasion Techniques**: Users deliberately split harmful content across modalities
 3. **Cultural Nuances**: Interpretation varies by context, culture, region
 4. **Scale**: Must process millions of items daily with low latency
@@ -167,8 +165,7 @@ The system must balance safety, speed, and user experience while being adaptable
 
 **Choose Late Fusion with Smart Routing:**
 
-**Reasoning:**
-1. **Cost Efficiency**: Most queries are text-only. Don't process image/audio unnecessarily
+**Reasoning:**1. **Cost Efficiency**: Most queries are text-only. Don't process image/audio unnecessarily
    - Text-only: ~$0.001 per query
    - Text+Image: ~$0.015 per query
    - Text+Image+Audio: ~$0.025 per query

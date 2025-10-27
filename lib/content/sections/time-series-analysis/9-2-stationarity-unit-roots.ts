@@ -175,9 +175,7 @@ $$X_t = \\phi X_{t-1} + \\epsilon_t$$
 
 Where $\\epsilon_t \\sim N(0, \\sigma^2)$ is white noise.
 
-**Three cases:**
-
-1. **$|\\phi| < 1$**: Stationary (mean-reverting)
+**Three cases:**1. **$|\\phi| < 1$**: Stationary (mean-reverting)
 2. **$\\phi = 1$**: Unit root (random walk) - NON-STATIONARY
 3. **$|\\phi| > 1$**: Explosive (also non-stationary)
 
@@ -334,8 +332,7 @@ $$\\Delta X_t = \\alpha + \\beta t + \\gamma X_{t-1} + \\sum_{i=1}^p \\delta_i \
 
 Tests if $\\gamma = 0$ (unit root) vs $\\gamma < 0$ (stationary).
 
-**Three variants:**
-1. No constant, no trend
+**Three variants:**1. No constant, no trend
 2. Constant, no trend
 3. Constant and trend
 
@@ -894,9 +891,7 @@ A series can fail stationarity tests due to structural breaks (regime changes), 
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Stationarity** means constant mean, variance, and autocovariance structure
+**Key Takeaways:**1. **Stationarity** means constant mean, variance, and autocovariance structure
 2. **Unit root** = non-stationary stochastic trend
 3. **Stock prices** are non-stationary (random walk)
 4. **Returns** are (approximately) stationary

@@ -50,8 +50,7 @@ lr_scaled = 0.001 * 8 = 0.008
 - Can take larger steps safely
 - Maintains similar learning dynamics
 
-**Modern Best Practices:**
-1. Start with 32-64 (good default)
+**Modern Best Practices:**1. Start with 32-64 (good default)
 2. Increase until GPU memory full or convergence slows
 3. Use linear scaling rule for LR
 4. Add warmup for very large batches (>1024)`,

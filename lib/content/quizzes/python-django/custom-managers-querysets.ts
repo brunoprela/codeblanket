@@ -436,8 +436,7 @@ class ArticleViewSet (viewsets.ModelViewSet):
 # /api/articles/?author_name=john&created_after=2024-01-01
 \`\`\`
 
-**Security Considerations:**
-1. ✅ Whitelist allowed fields
+**Security Considerations:**1. ✅ Whitelist allowed fields
 2. ✅ Validate operators
 3. ✅ Sanitize user input
 4. ✅ Limit query complexity

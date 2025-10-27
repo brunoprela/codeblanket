@@ -621,9 +621,7 @@ Renewal arrives at T=30.5s (too late).
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is a lease**: Time-bound exclusive permission
+### **Key Concepts to Explain**1. **What is a lease**: Time-bound exclusive permission
 2. **Why needed**: Automatic failure recovery, prevent split-brain
 3. **How it works**: Grant, renew, expire
 4. **Trade-offs**: Lease duration (short = fast recovery, long = less overhead)

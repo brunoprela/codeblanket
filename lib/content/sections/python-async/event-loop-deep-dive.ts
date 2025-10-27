@@ -50,7 +50,7 @@ Simplified Event Loop Concept
 def simple_event_loop():
     """Simplified event loop implementation"""
     tasks = []  # List of pending tasks
-    
+
     while tasks:
         # Check each task
         for task in tasks[:]:  # Copy list to allow modification
@@ -68,7 +68,7 @@ def simple_event_loop():
             else:
                 # Task waiting for I/O, check later
                 pass
-        
+
         # Brief pause to avoid busy-waiting
         time.sleep(0.001)  # 1ms
 
@@ -101,7 +101,7 @@ async def main():
     # Create tasks (registers them with event loop)
     t1 = asyncio.create_task (task1())
     t2 = asyncio.create_task (task2())
-    
+
     # Event loop will manage both tasks
     results = await asyncio.gather (t1, t2)
     print(f"Results: {results}")
@@ -166,24 +166,24 @@ def event_loop_cycle():
     """
     One iteration of the event loop (simplified)
     """
-    
+
     # Phase 1: Run all ready tasks
     while ready_queue:
         task = ready_queue.pop(0)
         task.step()  # Run until next await
-    
+
     # Phase 2: Check for completed I/O
     ready_ios = io_selector.select (timeout=0)
     for io in ready_ios:
         task = io.task
         ready_queue.append (task)
-    
+
     # Phase 3: Run scheduled callbacks
     now = time.time()
     while scheduled_callbacks and scheduled_callbacks[0].when <= now:
         callback = scheduled_callbacks.pop(0)
         callback.run()
-    
+
     # Phase 4: Check for idle work
     if not ready_queue and not scheduled_callbacks:
         # Wait for I/O with timeout
@@ -204,38 +204,38 @@ import time
 
 class TracingEventLoop:
     """Wrapper to trace event loop operations"""
-    
+
     def __init__(self, loop):
         self.loop = loop
         self.call_count = 0
-    
+
     async def trace_task (self, name, delay):
         """Task that prints each step"""
         self.call_count += 1
         print(f"[{time.time():.2f}] {name}: Starting (call #{self.call_count})")
-        
+
         await asyncio.sleep (delay)
-        
+
         self.call_count += 1
         print(f"[{time.time():.2f}] {name}: Resumed (call #{self.call_count})")
-        
+
         return f"{name} result"
 
 async def main():
     """Run multiple tasks and see event loop switching"""
     tracer = TracingEventLoop (asyncio.get_event_loop())
-    
+
     start = time.time()
-    
+
     # Create three tasks with different delays
     results = await asyncio.gather(
         tracer.trace_task("Task-A", 0.3),
         tracer.trace_task("Task-B", 0.1),
         tracer.trace_task("Task-C", 0.2),
     )
-    
+
     elapsed = time.time() - start
-    
+
     print(f"\\nCompleted in {elapsed:.2f}s")
     print(f"Total event loop calls: {tracer.call_count}")
     print(f"Results: {results}")
@@ -249,7 +249,7 @@ asyncio.run (main())
 # [0.10] Task-B: Resumed (call #4)
 # [0.20] Task-C: Resumed (call #5)
 # [0.30] Task-A: Resumed (call #6)
-# 
+#
 # Completed in 0.30s
 # Total event loop calls: 6
 # Results: ['Task-A result', 'Task-B result', 'Task-C result']
@@ -318,7 +318,7 @@ try:
     # Run a single coroutine
     result = loop.run_until_complete (task())
     print(f"Result: {result}")
-    
+
     # Run multiple coroutines
     results = loop.run_until_complete (asyncio.gather(
         task(),
@@ -326,7 +326,7 @@ try:
         task()
     ))
     print(f"Results: {results}")
-    
+
 finally:
     # Always close the loop
     loop.close()
@@ -350,13 +350,13 @@ import asyncio
 async def inner_task():
     """Task that needs the current event loop"""
     loop = asyncio.get_running_loop()  # Python 3.7+
-    
+
     print(f"Loop: {loop}")
     print(f"Loop is running: {loop.is_running()}")
-    
+
     # Schedule a callback
     loop.call_later(1.0, lambda: print("Delayed callback!"))
-    
+
     await asyncio.sleep(1.5)
 
 async def main():
@@ -393,10 +393,10 @@ async def main():
     """Setup and start background tasks"""
     # Start background task
     task = asyncio.create_task (background_task())
-    
+
     # Simulate other work
     await asyncio.sleep(10)
-    
+
     # Cancel background task
     task.cancel()
     try:
@@ -470,12 +470,12 @@ def thread_function():
     # This thread needs its own event loop
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop (loop)
-    
+
     async def thread_task():
         print(f"Running in thread: {threading.current_thread().name}")
         await asyncio.sleep(1)
         return "Thread result"
-    
+
     result = loop.run_until_complete (thread_task())
     loop.close()
     return result
@@ -532,9 +532,9 @@ import sys
 if sys.platform == 'win32':
     # Python 3.8+: ProactorEventLoop is default on Windows
     # Supports subprocesses and pipes (SelectorEventLoop doesn't)
-    
+
     asyncio.set_event_loop_policy (asyncio.WindowsProactorEventLoopPolicy())
-    
+
     # Or for compatibility with older networking code:
     asyncio.set_event_loop_policy (asyncio.WindowsSelectorEventLoopPolicy())
 
@@ -573,17 +573,17 @@ def callback (n):
 
 async def main():
     loop = asyncio.get_running_loop()
-    
+
     # Schedule callbacks
     loop.call_soon (callback, 1)
     loop.call_soon (callback, 2)
     loop.call_soon (callback, 3)
-    
+
     print("Callbacks scheduled")
-    
+
     # Give event loop a chance to run callbacks
     await asyncio.sleep(0)
-    
+
     print("After callbacks")
 
 asyncio.run (main())
@@ -599,18 +599,18 @@ asyncio.run (main())
 def process_items (items):
     """Process items without blocking too long"""
     loop = asyncio.get_running_loop()
-    
+
     def process_batch (batch):
         for item in batch:
             # Process item
             pass
-        
+
         # If more items, schedule next batch
         if items:
             next_batch = items[:100]
             items[:] = items[100:]
             loop.call_soon (process_batch, next_batch)
-    
+
     process_batch (items[:100])
     items[:] = items[100:]
 \`\`\`
@@ -633,14 +633,14 @@ def delayed_callback (start_time):
 async def main():
     loop = asyncio.get_running_loop()
     start = time.time()
-    
+
     # Schedule callbacks at different times
     loop.call_later(1.0, delayed_callback, start)  # After 1 second
     loop.call_later(2.0, delayed_callback, start)  # After 2 seconds
     loop.call_later(0.5, delayed_callback, start)  # After 0.5 seconds
-    
+
     print("Callbacks scheduled")
-    
+
     # Wait for callbacks to execute
     await asyncio.sleep(2.5)
 
@@ -657,12 +657,12 @@ class TimeoutManager:
     def __init__(self, loop):
         self.loop = loop
         self.handle = None
-    
+
     def set_timeout (self, callback, delay):
         """Set a timeout"""
         self.cancel_timeout()
         self.handle = self.loop.call_later (delay, callback)
-    
+
     def cancel_timeout (self):
         """Cancel pending timeout"""
         if self.handle:
@@ -682,20 +682,20 @@ import time
 
 async def main():
     loop = asyncio.get_running_loop()
-    
+
     # Get loop time (monotonic clock)
     now = loop.time()
     print(f"Current loop time: {now:.2f}")
-    
+
     # Schedule at absolute time
     target = now + 2.0
-    
+
     def callback():
         actual = loop.time()
         print(f"Callback at {actual:.2f} (target was {target:.2f})")
-    
+
     loop.call_at (target, callback)
-    
+
     # Wait for callback
     await asyncio.sleep(2.5)
 
@@ -705,16 +705,16 @@ asyncio.run (main())
 async def schedule_at_specific_time (hour, minute, callback):
     """Schedule callback at specific time of day"""
     loop = asyncio.get_running_loop()
-    
+
     from datetime import datetime, timedelta
-    
+
     now = datetime.now()
     target = now.replace (hour=hour, minute=minute, second=0, microsecond=0)
-    
+
     if target <= now:
         # Time has passed today, schedule for tomorrow
         target += timedelta (days=1)
-    
+
     delay = (target - now).total_seconds()
     loop.call_later (delay, callback)
 \`\`\`
@@ -734,27 +734,27 @@ import time
 def blocking_work (loop, message):
     """Work done in separate thread"""
     time.sleep(2)  # Simulate blocking I/O
-    
+
     # Schedule callback in event loop (thread-safe)
     loop.call_soon_threadsafe (lambda: print(f"From thread: {message}"))
 
 async def main():
     loop = asyncio.get_running_loop()
-    
+
     # Start blocking work in thread
     thread = threading.Thread(
         target=blocking_work,
         args=(loop, "Work complete!")
     )
     thread.start()
-    
+
     print("Thread started, doing async work...")
-    
+
     # Do async work while thread runs
     for i in range(5):
         await asyncio.sleep(0.5)
         print(f"Async work {i}")
-    
+
     thread.join()
 
 asyncio.run (main())
@@ -771,11 +771,11 @@ asyncio.run (main())
 # Use case: Integrating threading with asyncio
 class AsyncThreadPool:
     """Run blocking functions in thread pool, return to async"""
-    
+
     def __init__(self, loop, max_workers=4):
         self.loop = loop
         self.executor = ThreadPoolExecutor (max_workers=max_workers)
-    
+
     async def run (self, func, *args):
         """Run blocking function in thread, return result to async"""
         future = self.loop.run_in_executor (self.executor, func, *args)
@@ -813,10 +813,10 @@ async def async_operation():
 async def main():
     # Create task
     task = asyncio.create_task (async_operation())
-    
+
     # Add callback
     task.add_done_callback (operation_complete)
-    
+
     # Wait for completion
     await task
 
@@ -838,17 +838,17 @@ import asyncio
 
 async def main():
     loop = asyncio.get_running_loop()
-    
+
     # Create a future
     future = loop.create_future()
-    
+
     def set_result():
         """Callback that sets future result"""
         future.set_result("Result from callback!")
-    
+
     # Schedule result to be set after 1 second
     loop.call_later(1.0, set_result)
-    
+
     print("Waiting for future...")
     result = await future
     print(f"Got result: {result}")
@@ -858,7 +858,7 @@ asyncio.run (main())
 # Use case: Wrapping callback-based APIs
 class CallbackAPI:
     """Legacy callback-based API"""
-    
+
     def fetch_data (self, callback):
         """Fetch data, call callback when done"""
         # Simulate async operation
@@ -869,17 +869,17 @@ async def use_callback_api():
     """Wrap callback API for async use"""
     api = CallbackAPI()
     loop = asyncio.get_running_loop()
-    
+
     # Create future to await
     future = loop.create_future()
-    
+
     # Callback sets future result
     def callback (data):
         future.set_result (data)
-    
+
     # Start operation
     api.fetch_data (callback)
-    
+
     # Await future
     result = await future
     return result
@@ -906,16 +906,16 @@ import time
 async def measure_task_creation_overhead():
     """Measure overhead of creating tasks"""
     iterations = 10000
-    
+
     async def empty_task():
         pass
-    
+
     # Measure task creation
     start = time.time()
     tasks = [asyncio.create_task (empty_task()) for _ in range (iterations)]
     await asyncio.gather(*tasks)
     elapsed = time.time() - start
-    
+
     per_task = (elapsed / iterations) * 1_000_000  # microseconds
     print(f"Task creation overhead: {per_task:.2f}μs per task")
     print(f"Can handle {int(1_000_000 / per_task)} tasks per second")
@@ -923,15 +923,15 @@ async def measure_task_creation_overhead():
 async def measure_context_switching():
     """Measure context switching overhead"""
     iterations = 1000
-    
+
     async def switch_task():
         for _ in range(100):
             await asyncio.sleep(0)  # Yield control
-    
+
     start = time.time()
     await asyncio.gather(*[switch_task() for _ in range (iterations)])
     elapsed = time.time() - start
-    
+
     switches = iterations * 100
     per_switch = (elapsed / switches) * 1_000_000  # microseconds
     print(f"Context switch: {per_switch:.2f}μs")
@@ -939,14 +939,14 @@ async def measure_context_switching():
 async def measure_io_multiplexing():
     """Measure I/O multiplexing efficiency"""
     num_connections = 1000
-    
+
     async def connection():
         await asyncio.sleep(0.1)
-    
+
     start = time.time()
     await asyncio.gather(*[connection() for _ in range (num_connections)])
     elapsed = time.time() - start
-    
+
     print(f"{num_connections} concurrent I/O operations: {elapsed:.2f}s")
     print(f"Throughput: {num_connections / elapsed:.0f} ops/second")
 
@@ -963,9 +963,9 @@ asyncio.run (main())
 # Typical output:
 # Task creation overhead: 15μs per task
 # Can handle 66,666 tasks per second
-# 
+#
 # Context switch: 2μs
-# 
+#
 # 1000 concurrent I/O operations: 0.10s
 # Throughput: 10,000 ops/second
 \`\`\`

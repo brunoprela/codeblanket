@@ -775,8 +775,7 @@ Multi-index architectures enable scalable, specialized RAG:
 
 **Key Takeaway:** Multi-index systems trade complexity for better accuracy and performance at scale.
 
-**Production Pattern:**
-1. Start with single index
+**Production Pattern:**1. Start with single index
 2. Add specialized indexes as you scale
 3. Implement simple rule-based routing first
 4. Upgrade to ML/LLM routing with data

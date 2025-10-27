@@ -8,8 +8,7 @@ export const codingChallenges = {
 
 Coding interviews at quantitative trading firms (Citadel, Jane Street, Two Sigma, Jump Trading, HRT, SIG, DRW, etc.) test different skills than typical software engineering interviews. While FAANG interviews focus on general algorithms and data structures, quant interviews emphasize:
 
-**Core Focus Areas:**
-1. **Financial algorithms** - Option pricers, portfolio optimization, backtesting
+**Core Focus Areas:**1. **Financial algorithms** - Option pricers, portfolio optimization, backtesting
 2. **Numerical computation** - Precision, stability, efficiency
 3. **Data structures for trading** - Order books, tick data, position tracking
 4. **Mathematical correctness** - Exact solutions, edge cases, numerical issues

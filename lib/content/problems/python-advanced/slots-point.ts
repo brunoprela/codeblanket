@@ -49,7 +49,7 @@ This tests:
         self.y = y
     
     def distance_from_origin(self):
-        return (self.x ** 2 + self.y ** 2) ** 0.5
+        return (self.x ** 2 + self.y ** 2) **0.5
 
 
 def test_slots():
@@ -79,7 +79,7 @@ def test_slots():
         self.y = y
     
     def distance_from_origin(self):
-        return (self.x ** 2 + self.y ** 2) ** 0.5
+        return (self.x ** 2 + self.y ** 2) **0.5
 
 
 def test_slots():

@@ -22,9 +22,7 @@ Where:
 - Σ = covariance matrix (3×3)
 - w^T Σ w = portfolio variance (quadratic form)
 
-**Constraints:**
-
-1. **Budget constraint:** \\( \\sum_{i=1}^{3} w_i = 1 \\) (fully invested)
+**Constraints:**1. **Budget constraint:** \\( \\sum_{i=1}^{3} w_i = 1 \\) (fully invested)
 
 2. **Target return:** \\( w^T \\mu = R_{target} \\)
    Where μ = expected returns [8%, 10%, 12%]
@@ -69,7 +67,7 @@ The Lagrange multipliers λ₁ and λ₂ are determined by the two constraints.
 
 **Algorithm to Construct Frontier:**
 
-```
+\`\`\`
 For each target return R_target from min_return to max_return:
                 1. Solve quadratic program:
                 minimize: w^ T Σ w
@@ -89,7 +87,7 @@ Result: Set of(σ_p, R_target) points forming efficient frontier
 
 **Practical Implementation (Python/CVXPY):**
 
-```python
+\`\`\`python
 import cvxpy as cp
 
 w = cp.Variable(3)
@@ -134,9 +132,7 @@ A\\sigma_p^2 - 2BR_p + CR_p^2 = D
 
 This is the **equation of a hyperbola** in (σ, R) space!
 
-**Intuitive Explanation:**
-
-1. **Two-fund separation:** Any portfolio on the frontier can be expressed as a combination of two frontier portfolios.
+**Intuitive Explanation:**1. **Two-fund separation:** Any portfolio on the frontier can be expressed as a combination of two frontier portfolios.
 
 2. **Combination of two points:** When you combine two portfolios on a hyperbola, you trace out a hyperbola.
 
@@ -180,9 +176,7 @@ The hyperbolic curvature reflects **diversification benefits** from imperfect co
 
 The portfolio with lowest possible variance among all feasible portfolios.
 
-**Special Properties:**
-
-1. **No return constraint:** Found by minimizing variance subject only to budget constraint
+**Special Properties:**1. **No return constraint:** Found by minimizing variance subject only to budget constraint
 2. **Unique:** Only one GMVP (assuming Σ is positive definite)
 3. **Vertex of hyperbola:** Leftmost point on efficient frontier
 4. **Risk-agnostic:** Doesn't depend on expected returns, only on covariance matrix
@@ -200,7 +194,7 @@ Where **1** is vector of ones.
 
 **For Our Example:**
 
-```python
+\`\`\`python
 Sigma_inv = np.linalg.inv(Sigma)
 ones = np.ones(3)
 
@@ -218,9 +212,7 @@ Result (approximate):
 - Risk: ~13.2% (lower than any individual asset's 15%)
 - **Diversification benefit:** Risk lower than lowest-risk asset!
 
-**Why GMVP is Special:**
-
-1. **Starting point of efficient frontier:** All efficient portfolios have higher return and higher risk
+**Why GMVP is Special:**1. **Starting point of efficient frontier:** All efficient portfolios have higher return and higher risk
 
 2. **Market neutral strategies:** Many hedge funds target GMVP-like portfolios
 
@@ -269,9 +261,7 @@ Result (approximate):
 
 **Practical Complexity:**
 
-**Using modern QP solver (CVXPY/MOSEK/Gurobi):**
-
-1. **Setup time:** 
+**Using modern QP solver (CVXPY/MOSEK/Gurobi):**1. **Setup time:** 
    - Covariance matrix computation: 1-5 seconds (if computing from returns)
    - Matrix storage: 8 MB
 
@@ -294,9 +284,7 @@ Result (approximate):
 | Memory | KB | 100 MB | 100,000x |
 | Scaling | O(1) | O(n³) | Cubic |
 
-**Challenges at Scale (1000+ assets):**
-
-1. **Covariance estimation:**
+**Challenges at Scale (1000+ assets):**1. **Covariance estimation:**
    - Need 1000×1000 covariance matrix
    - Requires 1000+ observations for reliable estimates
    - With 250 trading days/year: need 4+ years of daily data
@@ -316,9 +304,7 @@ Result (approximate):
    - 1000 weights can lead to extreme positions (long/short hundreds of %)
    - **Solution:** Add position limits, turnover constraints
 
-**Modern Approaches for Large-Scale:**
-
-1. **Factor models:**
+**Modern Approaches for Large-Scale:**1. **Factor models:**
    - Reduce 1000×1000 covariance to 50×50 factor covariance
    - Complexity: O(k²n) where k = factors ≈ 50, n = 1000
    - Time: Seconds instead of minutes
@@ -496,9 +482,7 @@ The tangency portfolio maximizes:
 
 This is exactly what appears in the numerator of w*! Maximizing this expression maximizes utility for all values of A.
 
-**Intuitive Explanation:**
-
-1. **Best risk-return trade-off:** Tangency portfolio offers the most excess return per unit of risk.
+**Intuitive Explanation:**1. **Best risk-return trade-off:** Tangency portfolio offers the most excess return per unit of risk.
 
 2. **Dominance:** Any other portfolio on the frontier is dominated by combining tangency portfolio with risk-free asset:
    - Want lower risk than tangency? → Lend (hold cash + tangency)
@@ -584,9 +568,7 @@ w^* = \\frac{8\\%}{1.5 \\times 0.1445} = 184\\%
 - Risk: 184% × 17% = **31.28%**
 - Sharpe: **0.471**
 
-**Key Observations:**
-
-1. **All portfolios have identical Sharpe ratio** (0.471) - the slope of CAL
+**Key Observations:**1. **All portfolios have identical Sharpe ratio** (0.471) - the slope of CAL
 
 2. **Risk increases linearly** with allocation to tangency portfolio
 
@@ -618,9 +600,7 @@ w^* = \\frac{8\\%}{1.5 \\times 0.1445} = 184\\%
 - All weights ≥ 0
 - Σwᵢ = 1
 
-**Effects on Efficient Frontier:**
-
-1. **Truncated frontier:** 
+**Effects on Efficient Frontier:**1. **Truncated frontier:** 
    - Frontier ends at highest-return asset (can't exceed it)
    - Frontier ends at lowest-return asset on downside
    - Fewer portfolio combinations available
@@ -650,9 +630,7 @@ With assets [8%, 10%, 12%] returns:
 - Σwᵢ = 1 (weights can be negative)
 - No bounds on individual weights (can be <0 or >100%)
 
-**Effects:**
-
-1. **Extended frontier:**
+**Effects:**1. **Extended frontier:**
    - Can achieve returns > highest asset's return
    - Can achieve returns < lowest asset's return
    - Much larger feasible set
@@ -693,25 +671,19 @@ With assets [8%, 10%, 12%] returns:
 
 **Practical Considerations:**
 
-**Challenges with Short Selling:**
-
-1. **Borrowing costs:** Pay interest on borrowed securities (1-5% annually)
+**Challenges with Short Selling:**1. **Borrowing costs:** Pay interest on borrowed securities (1-5% annually)
 2. **Recall risk:** Lender can demand securities back anytime
 3. **Unlimited loss potential:** Shorted stock can rise infinitely
 4. **Margin requirements:** Must post 150% collateral
 5. **Hard-to-borrow stocks:** Some stocks expensive or impossible to short
 6. **Regulatory:** Many funds prohibited from shorting
 
-**Why Institutional Investors Use It:**
-
-1. **Higher Sharpe ratios:** 10-30% improvement
+**Why Institutional Investors Use It:**1. **Higher Sharpe ratios:** 10-30% improvement
 2. **Market-neutral strategies:** Long good stocks, short bad ones
 3. **Risk management:** Short to hedge specific exposures
 4. **130/30 funds:** 130% long, 30% short (controlled leverage)
 
-**Why Retail Investors Typically Don't:**
-
-1. **Complexity:** Hard to manage
+**Why Retail Investors Typically Don't:**1. **Complexity:** Hard to manage
 2. **Costs:** Borrowing fees add up
 3. **Risk:** Unlimited downside on shorts
 4. **Margin calls:** Can be forced to close positions
@@ -757,9 +729,7 @@ Corner portfolios are portfolios along the efficient frontier where the composit
 
 In constrained optimization, the efficient frontier is **piecewise linear in composition space**. Between corner portfolios, the optimal portfolio is a simple linear combination of two adjacent corner portfolios.
 
-**Key Properties:**
-
-1. **Constraint transitions:** At corner portfolios, either:
+**Key Properties:**1. **Constraint transitions:** At corner portfolios, either:
    - An asset enters the portfolio (weight goes from 0% to >0%)
    - An asset exits the portfolio (weight goes from >0% to 0%)
    - An asset hits a constraint limit (e.g., reaches 50% maximum)
@@ -797,9 +767,7 @@ Let's trace the efficient frontier from minimum to maximum return:
 - Return: 12%
 - Only Asset 3 remains (max return portfolio)
 
-**Why Important:**
-
-1. **Computational efficiency:** 
+**Why Important:**1. **Computational efficiency:** 
    - Only need to compute ~5-20 corner portfolios (not 1000+ points)
    - Entire frontier is linear interpolation between corners
    - Reduces computation from O(n × m) to O(k) where k << n
@@ -830,9 +798,7 @@ For N assets with long-only constraints:
 
 **Relationship to Problem Structure:**
 
-**Factors affecting corner portfolio count:**
-
-1. **Number of assets (N):**
+**Factors affecting corner portfolio count:**1. **Number of assets (N):**
    - More assets → more potential corners
    - But not linear! Typically O(√N) to O(N/2)
 
@@ -861,9 +827,7 @@ For N assets with long-only constraints:
 
 **Key Insight:** Number of corners grows **sub-linearly** with number of assets!
 
-**Why Not N Corners?**
-
-1. **Substitutability:** Similar assets (same sector, high correlation) don't each get a corner
+**Why Not N Corners?**1. **Substitutability:** Similar assets (same sector, high correlation) don't each get a corner
 
 2. **Dominance:** Some assets never optimal (low return + high risk)
 
@@ -890,7 +854,7 @@ Adding constraints generally increases corner portfolios:
 
 Compute frontier by solving optimization for each target return:
 
-```
+\`\`\`
 For i = 1 to 1000:  # 1000 points on frontier
     R_target = interpolate(R_min, R_max, i)
     Solve QP: minimize σ²
@@ -909,7 +873,7 @@ For 1000 assets: 1000 × 1000³ = **10¹² operations** (hours!)
 
 Exploits corner portfolio structure:
 
-```
+\`\`\`
     1. Find global minimum variance portfolio(1 QP)
     2. Follow efficient frontier by:
     - Identify which constraint becomes active next
@@ -964,9 +928,7 @@ For 1000 assets: 300 × 1000² = **3×10⁸ operations** (seconds!)
 | CL + Warm Start | O(K × N × log N) | Seconds | Practical winner |
 | Hierarchical | O((N/S)³ × S) | Seconds | S = sectors |
 
-**Why It Matters:**
-
-1. **Real-time optimization:** Can reoptimize portfolios intraday
+**Why It Matters:**1. **Real-time optimization:** Can reoptimize portfolios intraday
 
 2. **Robustness analysis:** Run 1000s of scenarios (Monte Carlo)
 
@@ -1026,9 +988,7 @@ Institutional investor manages $1B with sector limits:
 
 **Practical Implications:**
 
-**For Portfolio Managers:**
-
-1. **Anticipate transitions:**
+**For Portfolio Managers:**1. **Anticipate transitions:**
    - Know sector limit will bind at ~9% return
    - Prepare client communication
    - Understand risk profile changes after corner
@@ -1075,9 +1035,7 @@ This crosses a critical threshold. Your portfolio will become significantly more
 - **Fire sale:** Illiquid market, prices fall further
 - **Vicious cycle**
 
-**Understanding Corners Helps:**
-
-1. **Anticipate forced rebalancing:** Know when small return changes trigger large trades
+**Understanding Corners Helps:**1. **Anticipate forced rebalancing:** Know when small return changes trigger large trades
 
 2. **Stress testing:** "What if Tech returns fall 2%?" → Corner shifts, requires 40% reallocation
 

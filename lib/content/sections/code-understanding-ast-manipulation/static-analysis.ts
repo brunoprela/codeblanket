@@ -1117,8 +1117,7 @@ for i, action in enumerate (analyzer.get_actionable_items(), 1):
     print(f"{i}. {action}")
 \`\`\`
 
-**Exercise Tasks:**
-1. Add more bug patterns (type errors, logic errors)
+**Exercise Tasks:**1. Add more bug patterns (type errors, logic errors)
 2. Implement code metrics (coupling, cohesion)
 3. Build a custom rule engine for project-specific checks
 4. Add auto-fix suggestions for common issues

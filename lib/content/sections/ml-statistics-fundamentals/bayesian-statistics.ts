@@ -98,11 +98,8 @@ print("With more data, posterior → MLE")
 
 ## Key Takeaways
 
-1. **Bayes: P(θ|data) ∝ P(data|θ) × P(θ)**
-2. **Prior → Data → Posterior**
-3. **Credible intervals**: Direct probability statements
-4. **Incorporates prior knowledge**
-5. **Foundation for Bayesian ML**
+1. **Bayes: P(θ|data) ∝ P(data|θ) × P(θ)**2. **Prior → Data → Posterior**3. **Credible intervals**: Direct probability statements
+4. **Incorporates prior knowledge**5. **Foundation for Bayesian ML**
 
 Bayesian methods are powerful for incorporating domain knowledge and quantifying uncertainty!
 `,

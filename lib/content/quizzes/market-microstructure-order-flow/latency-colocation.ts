@@ -246,17 +246,13 @@ class LatencyMonitor:
                 f"exceeded threshold {threshold_ns/1000:.1f}μs")
 \`\`\`
 
-**Bottleneck Identification Techniques**
-
-1. **Flamegraph Analysis**: Profile component latencies over time, visualize where time is spent
+**Bottleneck Identification Techniques**1. **Flamegraph Analysis**: Profile component latencies over time, visualize where time is spent
 2. **Queue Depth Monitoring**: Track message queue sizes (high depth = bottleneck)
 3. **CPU Saturation**: Monitor per-core CPU usage (>80% = potential bottleneck)
 4. **Context Switches**: Excessive switches indicate scheduling issues
 5. **Cache Misses**: L1/L2/L3 cache miss rates (use `perf stat`)
 
-**Production Tools and Protocols**
-
-1. **Hardware**: Intel QuickAssist, Solarflare NICs with Onload, Mellanox ConnectX
+**Production Tools and Protocols**1. **Hardware**: Intel QuickAssist, Solarflare NICs with Onload, Mellanox ConnectX
 2. **Timestamping**: DPDK for userspace packet processing, kernel bypass
 3. **Clock Sync**: Meinberg PTP grandmasters, Microsemi GPS receivers
 4. **Monitoring**: Prometheus + Grafana for dashboards, custom binary logging for low overhead
@@ -433,23 +429,22 @@ results = roi.analyze_roi()
 print("Co-location ROI Analysis")
 print("=" * 50)
 print(f"\\nAnnual Benefits:")
-print(f"  Fill rate improvement: ${results['annual_benefits']['fill_rate_improvement']:, .0f
-} ")
-print(f"  Adverse selection reduction: ${results['annual_benefits']['adverse_selection_reduction']:,.0f}")
-print(f"  New latency-sensitive strategies: ${results['annual_benefits']['new_strategies']:,.0f}")
-print(f"  TOTAL BENEFITS: ${results['annual_benefits']['total']:,.0f}")
+print(f"  Fill rate improvement: \${results['annual_benefits']['fill_rate_improvement']:,.0f})"
+print(f"  Adverse selection reduction: \${results['annual_benefits']['adverse_selection_reduction']:,.0f}")
+print(f"  New latency-sensitive strategies: \${results['annual_benefits']['new_strategies']:,.0f}")
+print(f"  TOTAL BENEFITS: \${results['annual_benefits']['total']:,.0f}")
 
 print(f"\\nAnnual Costs:")
 for cost_type, amount in results['annual_costs'].items():
     if cost_type != 'total':
-        print(f"  {cost_type.replace('_', ' ').title()}: ${amount:,.0f}")
-print(f"  TOTAL COSTS: ${results['annual_costs']['total']:,.0f}")
+        print(f"  {cost_type.replace('_', ' ').title()}: \${amount:,.0f}")
+print(f"  TOTAL COSTS: \${results['annual_costs']['total']:,.0f}")
 
 print(f"\\nROI Metrics:")
-print(f"  Net annual benefit: ${results['net_annual_benefit']:,.0f}")
+print(f"  Net annual benefit: \${results['net_annual_benefit']:,.0f}")
 print(f"  ROI: {results['roi_percent']:.1f}%")
 print(f"  Payback period: {results['payback_months']:.1f} months")
-print(f"  NPV (3 years, 10% discount): ${results['npv_3year']:,.0f}")
+print(f"  NPV (3 years, 10% discount): \${results['npv_3year']:,.0f}")
 \`\`\`
 
 **Output:**
@@ -513,8 +508,7 @@ These strategies contribute significantly to the $1.26M "new strategies" revenue
 ✅ **Competitive necessity**: 5M shares/day volume justifies infrastructure investment  
 ✅ **Strategic enabler**: Opens new revenue streams beyond existing strategies
 
-**Implementation Plan:**
-1. **Month 1**: Sign co-location agreement, order hardware
+**Implementation Plan:**1. **Month 1**: Sign co-location agreement, order hardware
 2. **Month 2**: Deploy redundant infrastructure, test connectivity
 3. **Month 3**: Migrate production systems, validate latency improvements
 4. **Month 4**: Launch latency-sensitive strategies, measure results
@@ -554,9 +548,7 @@ R = Risk Management Server
 OG = Order Gateway
 \`\`\`
 
-**Component Roles:**
-
-1. **Grandmaster Clock (GM)**: Source of truth time, typically GPS-disciplined atomic oscillator
+**Component Roles:**1. **Grandmaster Clock (GM)**: Source of truth time, typically GPS-disciplined atomic oscillator
 2. **Boundary Clocks (BC)**: PTP-aware switches that terminate and regenerate PTP messages
 3. **Ordinary Clocks (OC)**: End servers that synchronize to grandmaster via boundary clocks
 
@@ -919,9 +911,7 @@ class PTPMonitor:
         return offset_ok and path_delay_ok
 \`\`\`
 
-**Why Nanosecond Synchronization is Critical**
-
-1. **Latency Measurement**: With 100ns clock accuracy, can measure latency of individual components (strategy execution ~10μs)
+**Why Nanosecond Synchronization is Critical**1. **Latency Measurement**: With 100ns clock accuracy, can measure latency of individual components (strategy execution ~10μs)
 2. **Event Ordering**: Correctly order market data events from multiple venues
 3. **Arbitrage Detection**: Identify price discrepancies across venues (require <1μs accuracy to determine which price was first)
 4. **Regulatory Compliance**: Regulators require accurate timestamps (CAT reporting, FINRA 4552)

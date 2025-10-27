@@ -935,8 +935,7 @@ Production RAG systems require comprehensive infrastructure:
 
 **Key Takeaway:** Production RAG is 20% retrieval+generation, 80% infrastructure.
 
-**Production Pattern:**
-1. Start with basic RAG
+**Production Pattern:**1. Start with basic RAG
 2. Add caching layer
 3. Implement monitoring
 4. Add error handling

@@ -15,9 +15,7 @@ export const implement_trieProblem: Problem = {
 **Trie** is a tree-like data structure used to store strings. Each node represents a character, and paths from root to nodes represent prefixes.
 
 
-**Methods to Implement:**
-
-1. \`Trie()\` - Initializes the trie object
+**Methods to Implement:**1. \`Trie()\` - Initializes the trie object
 2. \`insert(word)\` - Inserts string \`word\` into the trie
 3. \`search(word)\` - Returns \`true\` if \`word\` is in the trie (as complete word)
 4. \`starts_with(prefix)\` - Returns \`true\` if there is a word with prefix \`prefix\`

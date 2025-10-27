@@ -81,8 +81,7 @@ if __name__ == '__main__':
     print(f"Duration: {duration:.2f}s")  # ~13-15 seconds! 🐌
 \`\`\`
 
-**Problems:**
-1. **Poor UX**: User waits 13+ seconds for simple registration
+**Problems:**1. **Poor UX**: User waits 13+ seconds for simple registration
 2. **Resource Waste**: Web workers blocked during I/O operations
 3. **No Retry**: If email fails, user registration rolls back
 4. **Scalability**: 100 concurrent registrations = 100 blocked threads
@@ -514,9 +513,7 @@ def fetch_stock_price (self, symbol: str):
 
 ## When to Use Task Queues
 
-### ✅ **Use Task Queues For:**
-
-1. **Operations that take >1 second**
+### ✅ **Use Task Queues For:**1. **Operations that take >1 second**
    - Email sending, SMS, push notifications
    - PDF/report generation
    - Image/video processing
@@ -541,9 +538,7 @@ def fetch_stock_price (self, symbol: str):
    - Logging to third-party services
    - Updating recommendation models
 
-### ❌ **Don't Use Task Queues For:**
-
-1. **Operations needed for response**
+### ❌ **Don't Use Task Queues For:**1. **Operations needed for response**
    - User authentication (must verify immediately)
    - Payment authorization (must know result)
    - Search results (user expects immediate results)

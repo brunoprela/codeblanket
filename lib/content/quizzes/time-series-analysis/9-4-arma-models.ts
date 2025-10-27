@@ -321,9 +321,7 @@ exponentially-weighted parameter updates.
 
 ### Recommended Solution
 
-**Hybrid Approach: Adaptive ARMA with Monitoring**
-
-1. **Use rolling-window estimation** (90-120 days)
+**Hybrid Approach: Adaptive ARMA with Monitoring**1. **Use rolling-window estimation** (90-120 days)
 2. **Monitor regime changes** (volatility, parameter stability)
 3. **Automatic model re-selection** when diagnostics fail
 4. **Fallback to simpler model** (AR(1)) in high uncertainty
@@ -398,9 +396,7 @@ class AdaptiveARMASystem:
 
 ### Monitoring System Design
 
-**Real-time Monitoring Dashboard:**
-
-1. **Parameter Evolution Chart**
+**Real-time Monitoring Dashboard:**1. **Parameter Evolution Chart**
    - Track φ₁, φ₂, θ₁ over time
    - Alert if |change| > 0.15
 
@@ -427,9 +423,7 @@ class AdaptiveARMASystem:
 
 ### Final Recommendation
 
-**Choose Option D (with modifications):**
-
-1. **Short-term** (immediate fix):
+**Choose Option D (with modifications):**1. **Short-term** (immediate fix):
    - Retrain ARMA(2,1) on recent 120 days
    - Implement monitoring system
    - Set up alerts for parameter drift
@@ -740,9 +734,7 @@ def diagnose_ma_estimation(returns: pd.Series) -> dict:
     return diagnostics
 \`\`\`
 
-**Fix strategies:**
-
-1. **Enforce Invertibility Constraint**
+**Fix strategies:**1. **Enforce Invertibility Constraint**
 \`\`\`python
 # In statsmodels
 model = ARIMA(data, order=(0, 0, 1), 
@@ -843,9 +835,7 @@ print("HFT with non-invertible MA(1):")
 print(disaster)
 \`\`\`
 
-**Safeguards:**
-
-1. **Parameter Validation**
+**Safeguards:**1. **Parameter Validation**
    - Check |θ| < 0.95 (buffer from boundary)
    - Alert if parameter near boundary
 
@@ -863,8 +853,7 @@ print(disaster)
 
 ### Summary
 
-**Invertibility matters because:**
-1. Ensures unique, stable error representation
+**Invertibility matters because:**1. Ensures unique, stable error representation
 2. Prevents forecast explosions
 3. Guarantees convergence of recursions
 4. Required for consistent estimation

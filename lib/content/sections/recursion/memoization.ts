@@ -207,9 +207,7 @@ print(lcs("ABCDEF", "ACDF"))  # 4 ("ACDF")
 
 ## When to Use Memoization
 
-✅ **Use memoization when:**
-
-1. **Overlapping Subproblems:**
+✅ **Use memoization when:**1. **Overlapping Subproblems:**
    - Same inputs computed multiple times
    - Example: Fibonacci, DP problems
 
@@ -225,9 +223,7 @@ print(lcs("ABCDEF", "ACDF"))  # 4 ("ACDF")
    - Limited number of unique inputs
    - Cache won't grow too large
 
-❌ **Don't use memoization when:**
-
-1. **No Overlapping Subproblems:**
+❌ **Don't use memoization when:**1. **No Overlapping Subproblems:**
    - Each input computed once
    - Example: simple array traversal
 

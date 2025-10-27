@@ -838,8 +838,7 @@ Minimize variance in risk contributions
 
 **Definition**: Trade based on macroeconomic views across assets and geographies
 
-**Approach:**
-1. Analyze macro indicators (GDP, inflation, rates)
+**Approach:**1. Analyze macro indicators (GDP, inflation, rates)
 2. Form views on direction
 3. Express views across assets
 4. Manage risk dynamically
@@ -939,8 +938,7 @@ def crypto_equity_signal(btc_return, spy_return, correlation):
 - Over-optimization (too many parameters)
 - Execution complexity
 
-**Critical Success Factors:**
-1. **True Diversification**: Uncorrelated assets
+**Critical Success Factors:**1. **True Diversification**: Uncorrelated assets
 2. **Risk Management**: Position sizing by risk, not capital
 3. **Execution**: Multiple brokers, APIs, markets
 4. **Rebalancing**: Systematic and disciplined

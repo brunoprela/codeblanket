@@ -497,9 +497,7 @@ print(f"\\nTotal Transaction Costs: \${transaction_costs:,.2f}")
 print(f"Total Taxes: \${taxes:,.2f}")
 \`\`\`
 
-**Trade-offs Summary:**
-
-1. Mean-Variance: Best for maximizing return per risk, but sensitive to input estimates
+**Trade-offs Summary:**1. Mean-Variance: Best for maximizing return per risk, but sensitive to input estimates
 2. Risk Parity: More stable, better diversification, but may have lower returns
 3. Maximum Sharpe: Optimizes risk-adjusted returns, but concentrated in high-Sharpe assets
 4. Black-Litterman: Incorporates views, more realistic, but complex to implement

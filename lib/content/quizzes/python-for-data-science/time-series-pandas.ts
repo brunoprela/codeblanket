@@ -28,9 +28,7 @@ print(f"Daily: {len (df)} rows → Monthly: {len (monthly)} rows")
 # Daily: 365 rows → Monthly: 12 rows
 \`\`\`
 
-**When to use resampling:**
-
-1. **Changing reporting period:**
+**When to use resampling:**1. **Changing reporting period:**
 \`\`\`python
 # Convert hourly to daily reports
 hourly_data.resample('D').agg({'sales': 'sum', 'customers': 'mean'})
@@ -75,9 +73,7 @@ print(f"Input: {len (df)} rows → Output: {len (df)} rows")
 # Input: 100 rows → Output: 100 rows (same)
 \`\`\`
 
-**When to use rolling windows:**
-
-1. **Technical indicators:**
+**When to use rolling windows:**1. **Technical indicators:**
 \`\`\`python
 # Moving averages
 df['SMA_50',] = df['price',].rolling(50).mean()
@@ -223,9 +219,7 @@ Need to operate on time series?
       └─ Smoothing (past & future OK) → center=True
 \`\`\`
 
-**Best Practices:**
-
-1. **Be explicit about aggregation:**
+**Best Practices:**1. **Be explicit about aggregation:**
 \`\`\`python
 # Good: Clear intent
 monthly = daily.resample('ME').agg({'sales': 'sum', 'price': 'mean'})
@@ -275,9 +269,7 @@ Use resampling when you need different time granularity. Use rolling windows whe
       'Discuss strategies for handling missing data in time series, particularly irregular timestamps and gaps. How do forward fill, backward fill, and interpolation differ, and when is each appropriate?',
     sampleAnswer: `Missing data in time series requires special handling because temporal ordering matters. The choice of strategy depends on the data's nature and your analysis goals.
 
-**Types of Missing Data in Time Series:**
-
-1. **Irregular timestamps** (data arrives at non-uniform intervals)
+**Types of Missing Data in Time Series:**1. **Irregular timestamps** (data arrives at non-uniform intervals)
 2. **Gaps** (missing observations in regular series)
 3. **Data quality issues** (sensors failures, transmission errors)
 4. **Non-trading periods** (weekends, holidays in financial data)
@@ -936,9 +928,7 @@ signals = generate_signals (df)
 print(signals.tail())
 \`\`\`
 
-**Common Pitfalls Summary:**
-
-1. **Look-ahead bias**: Never use \`center=True\` or future data
+**Common Pitfalls Summary:**1. **Look-ahead bias**: Never use \`center=True\` or future data
 2. **Insufficient data**: Indicators need minimum periods
 3. **adjust parameter**: Use \`adjust=False\` for standard EMA
 4. **Division by zero**: Handle zero denominators
@@ -946,9 +936,7 @@ print(signals.tail())
 6. **Overfitting**: Don't optimize on same data you test on
 7. **Transaction costs**: Paper trading profits disappear with real costs
 
-**Best Practices:**
-
-1. **Vectorize calculations**:
+**Best Practices:**1. **Vectorize calculations**:
 \`\`\`python
 # Good: Vectorized
 df['signal',] = (df['SMA_20',] > df['SMA_50',]).astype (int)

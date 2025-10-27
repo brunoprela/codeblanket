@@ -19,8 +19,7 @@ const outOfSampleTestingDiscussion: Content = {
 
 These incidents cost the fund approximately $8M in capital deployed to overfit strategies. You've been tasked with designing a secure test set management system that makes it technologically impossible to compromise test data while still allowing legitimate final validation.
 
-**Design a comprehensive system that addresses:**
-1. How to physically/logically separate test data
+**Design a comprehensive system that addresses:**1. How to physically/logically separate test data
 2. Access control and audit logging
 3. Cryptographic verification of data integrity
 4. One-time-access enforcement
@@ -567,9 +566,7 @@ if __name__ == "__main__":
     example_secure_workflow()
 \`\`\`
 
-**Key System Features:**
-
-1. **Cryptographic Encryption**: Test data encrypted at rest
+**Key System Features:**1. **Cryptographic Encryption**: Test data encrypted at rest
 2. **One-Time Access**: Database-enforced single access to test sets
 3. **Audit Logging**: Every access attempt logged with timestamp, user, justification
 4. **Integrity Verification**: SHA-256 hashes ensure data hasn't been tampered with
@@ -577,9 +574,7 @@ if __name__ == "__main__":
 6. **Critical Alerts**: Real-time notifications when test sets are accessed
 7. **Compliance Monitoring**: Automated detection of unreported validations
 
-**Organizational Processes:**
-
-1. **Pre-registration**: Strategies must be registered before test access
+**Organizational Processes:**1. **Pre-registration**: Strategies must be registered before test access
 2. **Investment Committee Review**: Test results reviewed before deployment
 3. **Penalties**: Researchers who violate test set policy face consequences
 4. **Training**: Mandatory training on proper OOS testing procedures
@@ -598,8 +593,7 @@ This system makes it technologically impossible to accidentally or intentionally
 
 The strategy passes all other checks (no look-ahead bias, proper transaction costs, statistically significant on train/val). But the OOS test shows severe degradation. The lead researcher argues: "The test period was unusual—COVID volatility. We should test on a different period."
 
-**Questions:**
-1. How should you handle this failed OOS test?
+**Questions:**1. How should you handle this failed OOS test?
 2. Is the researcher's argument valid?
 3. What options exist going forward?
 4. How do you prevent similar situations?
@@ -729,9 +723,7 @@ print(f"\\nRecommendation:\\n{evaluation['recommendation']}")
 print("="*80)
 \`\`\`
 
-**Why "Unusual Period" is Not Valid:**
-
-1. **Defeats Purpose**: OOS testing exists precisely to test robustness under various conditions, including unusual ones
+**Why "Unusual Period" is Not Valid:**1. **Defeats Purpose**: OOS testing exists precisely to test robustness under various conditions, including unusual ones
 2. **Cherry-Picking**: Choosing a "better" test period is just another form of overfitting
 3. **Real World**: Live trading encounters unusual periods all the time
 4. **Slippery Slope**: Every failed test can be excused as "unusual"
@@ -770,9 +762,7 @@ print("="*80)
 
 ❌ "Let's just retest on 2019 data" - This is p-hacking with test sets
 
-**Prevention for Future:**
-
-1. **Pre-register strategies** with parameters and test dates before any testing
+**Prevention for Future:**1. **Pre-register strategies** with parameters and test dates before any testing
 2. **Require economic rationale** not just statistical patterns
 3. **Ensemble methods** often more robust than single models
 4. **Simpler models** (regularization, feature selection)
@@ -799,8 +789,7 @@ Failed OOS tests are the norm, not the exception. The key is accepting them grac
 - **Swing trading**: 2-5 trades per week  
 - **Position trading**: 1-2 trades per month
 
-**Questions:**
-1. What minimum test set size (in time and number of trades) should each strategy type have?
+**Questions:**1. What minimum test set size (in time and number of trades) should each strategy type have?
 2. How do you handle strategies with very few trades in the test period?
 3. Should test set requirements be flexible or fixed?
 

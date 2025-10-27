@@ -164,8 +164,7 @@ Inflation Adjustment:
 - Toggle "real" vs "nominal" dollars
 - Show both: "$500K in 30 years = $207K in today's dollars (3% inflation)"
 
-**Key Success Metrics:**
-1. Users complete tutorial: >80% completion rate
+**Key Success Metrics:**1. Users complete tutorial: >80% completion rate
 2. Users change mind: 30%+ change decision after seeing calculation
 3. Users share: "This saved me $50K!" testimonials
 4. Users return: Calculate multiple scenarios (lottery, pension, etc.)
@@ -469,8 +468,7 @@ Interactive Feature:
 
 "You can turn a 20% strategy into a 60% strategy by using leverage, IF it's efficient!"
 
-**Statistical Considerations:**
-1. Minimum sample size: Need 3+ years of daily data for reliable Sharpe ratio
+**Statistical Considerations:**1. Minimum sample size: Need 3+ years of daily data for reliable Sharpe ratio
 2. Non-normal returns: Real returns have fat tails (use Sortino for tail risk)
 3. Autocorrelation: Some strategies have serial correlation (adjust standard errors)
 4. Regime changes: Bull market Sharpe ≠ Bear market Sharpe (show both)

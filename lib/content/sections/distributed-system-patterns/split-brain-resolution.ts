@@ -617,9 +617,7 @@ Eventually discovered days later. ❌
 
 ## Interview Tips
 
-### **Key Concepts to Explain**
-
-1. **What is split-brain**: Cluster divides, both partitions think they're primary
+### **Key Concepts to Explain**1. **What is split-brain**: Cluster divides, both partitions think they're primary
 2. **Why dangerous**: Data inconsistency, conflicting operations, lost updates
 3. **Prevention**: Quorum, fencing tokens, leases, STONITH
 4. **Detection**: Heartbeat monitoring, consensus state, quorum checks

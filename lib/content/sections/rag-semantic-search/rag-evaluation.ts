@@ -823,8 +823,7 @@ RAG evaluation requires multi-dimensional assessment:
 
 **Key Takeaway:** Build evaluation into your RAG system from day one. You can't improve what you don't measure.
 
-**Production Pattern:**
-1. Create evaluation dataset early
+**Production Pattern:**1. Create evaluation dataset early
 2. Measure baseline performance
 3. Iterate and re-evaluate
 4. A/B test improvements

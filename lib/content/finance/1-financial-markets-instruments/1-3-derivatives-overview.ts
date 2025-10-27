@@ -569,7 +569,7 @@ print(f"  (Locked in $1.10, market is $1.15, saved $0.05 per euro)")
 
 # Scenario 2: EUR weakens to 1.05
 payoff2 = usd_eur_forward.calculate_payoff(1.05)
-print(f"\\nScenario 2: EUR at \${payoff2['spot_at_maturity']}")
+print(f"\\nScenario 2: EUR at \\${payoff2['spot_at_maturity']}")
 print(f"  {payoff2['long_party']}: {'Gains' if payoff2['long_payoff'] > 0 else 'Loses'} \${abs (payoff2['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
 print(f"  (Locked in $1.10, market is $1.05, overpaid $0.05 per euro)")
 
@@ -1021,9 +1021,7 @@ He was right.
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **Derivatives = Contracts** whose value derives from underlying assets
+**Key Takeaways:**1. **Derivatives = Contracts** whose value derives from underlying assets
 2. **Three uses**: Hedging (reduce risk), Speculation (take risk), Arbitrage (exploit mispricings)
 3. **Four types**: Forwards, Futures, Options, Swaps
 4. **Leverage is inherent** - small moves = big P&L swings

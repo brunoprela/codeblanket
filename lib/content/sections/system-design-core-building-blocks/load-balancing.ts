@@ -263,8 +263,7 @@ Monitor actual traffic. If server returns errors, mark as unhealthy.
 
 Load balancer sets a cookie with server identifier.
 
-**Flow:**
-1. User's first request → LB routes to Server A
+**Flow:**1. User's first request → LB routes to Server A
 2. LB sets cookie: \`LB_COOKIE = server_a\`
 3. Subsequent requests include cookie → Always route to Server A
 
@@ -288,8 +287,7 @@ Hash client IP to determine server (discussed above).
 
 Store session in shared storage (Redis, database).
 
-**Flow:**
-1. User logs in → Session stored in Redis with session ID
+**Flow:**1. User logs in → Session stored in Redis with session ID
 2. Server sets cookie: \`SESSION_ID = abc123\`
 3. Any server can retrieve session from Redis using session ID
 
@@ -448,8 +446,7 @@ upstream backend {
 
 ## Key Takeaways
 
-1. ** Load balancers distribute traffic across multiple servers for availability and scalability **
-    2. ** Algorithm choice matters **: Round Robin for simple cases, Least Connections for long - lived connections
+1. ** Load balancers distribute traffic across multiple servers for availability and scalability **2. ** Algorithm choice matters **: Round Robin for simple cases, Least Connections for long - lived connections
 3. ** Layer 4 vs Layer 7 **: Choose based on need for content - based routing
 4. ** Health checks are critical **: Detect and remove unhealthy servers
 5. ** Avoid sticky sessions **: Design stateless servers with shared session storage

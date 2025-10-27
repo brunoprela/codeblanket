@@ -725,9 +725,7 @@ Avoids computing normalizing constant (which requires integration).
 | **High-D continuous** | Normalizing flows | Tractable density |
 | **Score matching** | Avoid density | Model score instead |
 
-**Key Insights:**
-
-1. **Cross-entropy loss = empirical approximation of integral**
+**Key Insights:**1. **Cross-entropy loss = empirical approximation of integral**
    - We replace E_P with sample average
    - Works because of law of large numbers
 

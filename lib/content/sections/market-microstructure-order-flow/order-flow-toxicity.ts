@@ -529,8 +529,7 @@ print(classifier.get_feature_importance())
 **10:05 AM - VPIN spikes to 0.55 (high toxicity):**
 - **Observation:** Order imbalance shows 70% buy volume in last 50K shares traded
 - **Inference:** Informed traders detected news early, are buying aggressively
-- **Response:**
-  1. **Widen spread:** Bid $149.95 (-3 bps), Ask $150.08 (+6 bps) → spread = 13 cents
+- **Response:**1. **Widen spread:** Bid $149.95 (-3 bps), Ask $150.08 (+6 bps) → spread = 13 cents
   2. **Reduce size:** Quote only 200 shares per side (vs 1,000 normally)
   3. **Increase monitoring:** Real-time P&L tracking, inventory alerts
 
@@ -561,8 +560,7 @@ print(classifier.get_feature_importance())
 
 **Task:** Implement a real-time toxicity monitoring system that calculates VPIN and triggers alerts.
 
-**Requirements:**
-1. Calculate VPIN from streaming trade data
+**Requirements:**1. Calculate VPIN from streaming trade data
 2. Trigger alerts when VPIN exceeds thresholds (0.5, 0.7)
 3. Track P&L impact of toxic flow (compare filled trades during high vs low VPIN)
 4. Visualize VPIN, order imbalance, and P&L in real-time dashboard

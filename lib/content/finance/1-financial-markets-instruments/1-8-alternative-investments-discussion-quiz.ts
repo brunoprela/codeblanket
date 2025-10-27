@@ -174,14 +174,12 @@ print(f"Required Premium: {decision['required_premium']:.0f}%")
 print(f"Decision: {'INVEST (up to {:.0f}%)'.format (decision['max_allocation']) if decision['acceptable'] else 'PASS'}")
 \`\`\`
 
-**When to Increase PE Allocation:**
-1. **Early in expansion**: PE thrives in growing economies
+**When to Increase PE Allocation:**1. **Early in expansion**: PE thrives in growing economies
 2. **Low rates**: Cheap debt amplifies returns
 3. **High public valuations**: PE offers better value
 4. **Long time horizon**: Can handle illiquidity
 
-**When to Reduce:**
-1. **Late cycle**: LBOs more risky
+**When to Reduce:**1. **Late cycle**: LBOs more risky
 2. **Rising rates**: Debt becomes expensive
 3. **Need liquidity**: Upcoming obligations
 4. **Poor GP track record**: Returns don't justify fees`,
@@ -292,8 +290,7 @@ for flag in fraud_check['red_flags']:
 print(f"\\nFraud Risk: {fraud_check['fraud_risk']}")
 \`\`\`
 
-**Due Diligence Checklist:**
-1. ✅ Independent administrator (verify directly)
+**Due Diligence Checklist:**1. ✅ Independent administrator (verify directly)
 2. ✅ Big 4 auditor (check audit opinion)
 3. ✅ Prime broker verification (call them)
 4. ✅ Strategy capacity analysis (can it scale?)

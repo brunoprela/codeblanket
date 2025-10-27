@@ -31,8 +31,7 @@ Forward proxy sits between clients and the internet, forwarding client requests 
 
 ### **How it Works**
 
-**Flow:**
-1. Client configures browser to use proxy
+**Flow:**1. Client configures browser to use proxy
 2. Client sends request to proxy: "GET google.com"
 3. Proxy forwards request to google.com (on behalf of client)
 4. Google sees proxy IP, not client IP
@@ -75,8 +74,7 @@ Reverse proxy sits in front of backend servers, forwarding client requests to ap
 
 ### **How it Works**
 
-**Flow:**
-1. Client sends request to example.com
+**Flow:**1. Client sends request to example.com
 2. DNS resolves to reverse proxy IP (not backend server)
 3. Reverse proxy receives request
 4. Proxy forwards to backend server (internal network)

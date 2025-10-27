@@ -17,8 +17,7 @@ In this section, we'll explore how function calling works, why it's revolutionar
 
 Function calling (also called "tool use" in some systems like Claude) allows an LLM to:
 
-1. **Recognize when it needs external information or capabilities**
-2. **Choose appropriate functions to call** from a provided set of tools
+1. **Recognize when it needs external information or capabilities**2. **Choose appropriate functions to call** from a provided set of tools
 3. **Generate properly formatted function arguments** based on the conversation context
 4. **Process function results** and incorporate them into its response
 

@@ -7,8 +7,7 @@ export const interviewSection = {
   title: 'Interview Strategy',
   content: `**Recognizing DP Problems:**
 
-**Strong Indicators:**
-1. "Find maximum/minimum" → Optimization
+**Strong Indicators:**1. "Find maximum/minimum" → Optimization
 2. "Count ways to..." → Counting
 3. "Is it possible to..." → Decision
 4. Naive recursion too slow (exponential)
@@ -67,8 +66,7 @@ export const interviewSection = {
 
 *Interviewer: Find minimum coins to make amount using given coins.*
 
-**You:**
-1. **Clarify:** "Can I use each coin unlimited times? Can amount be 0? Are coins always positive?"
+**You:**1. **Clarify:** "Can I use each coin unlimited times? Can amount be 0? Are coins always positive?"
 
 2. **Identify:** "This looks like an optimization problem with optimal substructure. If I can make amount \`i\`, I can make amount \`i + coin\` with one more coin."
 

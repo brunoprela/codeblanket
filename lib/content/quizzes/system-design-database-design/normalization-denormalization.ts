@@ -629,9 +629,7 @@ def search_products (query, filters):
     )
 \`\`\`
 
-**Benefits of CQRS Architecture:**
-
-1. **Scalability:**
+**Benefits of CQRS Architecture:**1. **Scalability:**
    - Scale write and read databases independently
    - Read replicas for order_summary
    - Redis for hot data, Elasticsearch for search
@@ -648,9 +646,7 @@ def search_products (query, filters):
    - Event store provides audit trail
    - Rebuild read models from events if corrupted
 
-**Trade-offs:**
-
-1. **Complexity:** More components, more code
+**Trade-offs:**1. **Complexity:** More components, more code
 2. **Eventual Consistency:** Read models lag behind writes (typically 100-1000ms)
 3. **Debugging:** Harder to trace bugs across models
 4. **Storage:** Redundant data in multiple read models
@@ -900,9 +896,7 @@ dim_product (product_key, name, category, subcategory, brand)
 
 **Migration Strategy: OLTP → Star Schema**
 
-**Phase 1: Design Star Schema**
-
-1. **Identify Facts:** What business processes to analyze?
+**Phase 1: Design Star Schema**1. **Identify Facts:** What business processes to analyze?
    - Orders, shipments, returns, payments
 
 2. **Define Grain:** What does one fact row represent?
@@ -1052,9 +1046,7 @@ ALTER TABLE dim_customer ADD COLUMN original_segment VARCHAR(50);
 ALTER TABLE dim_customer ADD COLUMN current_segment VARCHAR(50);
 \`\`\`
 
-**Phase 4: Optimization**
-
-1. **Partitioning:**
+**Phase 4: Optimization**1. **Partitioning:**
 \`\`\`sql
 -- Partition fact table by date
 CREATE TABLE fact_orders_2024_01 PARTITION OF fact_orders

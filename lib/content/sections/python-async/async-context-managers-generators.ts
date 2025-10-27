@@ -90,12 +90,12 @@ import asyncio
 
 class AsyncDatabaseConnection:
     """Async context manager for database connections"""
-    
+
     def __init__(self, host, port):
         self.host = host
         self.port = port
         self.connection = None
-    
+
     async def __aenter__(self):
         """Called when entering 'async with' block"""
         print(f"Connecting to {self.host}:{self.port}...")
@@ -103,17 +103,17 @@ class AsyncDatabaseConnection:
         self.connection = f"Connection to {self.host}"
         print("Connected!")
         return self  # Return value is assigned to 'as' variable
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Called when exiting 'async with' block"""
         print("Closing connection...")
         await asyncio.sleep(0.2)  # Simulate cleanup
         self.connection = None
         print("Connection closed!")
-        
+
         # Return False to propagate exceptions, True to suppress
         return False
-    
+
     async def query (self, sql):
         """Execute query on connection"""
         if not self.connection:
@@ -151,17 +151,17 @@ class ResourceManager:
         print("Acquiring resource...")
         await asyncio.sleep(0.1)
         return self
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         print(f"Releasing resource...")
         print(f"  Exception type: {exc_type}")
         print(f"  Exception value: {exc_val}")
         await asyncio.sleep(0.1)
-        
+
         if exc_type is ValueError:
             print("  Suppressing ValueError")
             return True  # Suppress this exception
-        
+
         return False  # Propagate other exceptions
 
 async def test_exceptions():
@@ -170,7 +170,7 @@ async def test_exceptions():
     async with ResourceManager() as rm:
         print("Working with resource")
     print()
-    
+
     # Test 2: ValueError (suppressed)
     print("Test 2: ValueError (suppressed)")
     try:
@@ -179,7 +179,7 @@ async def test_exceptions():
     except ValueError:
         print("ValueError was not caught (shouldn't happen)")
     print("Continued after suppressed exception\\n")
-    
+
     # Test 3: RuntimeError (propagated)
     print("Test 3: RuntimeError (propagated)")
     try:
@@ -229,10 +229,10 @@ async def database_transaction (connection):
     """Context manager for database transactions"""
     print("BEGIN TRANSACTION")
     await connection.execute("BEGIN")
-    
+
     try:
         yield connection  # Provide connection to 'as' variable
-        
+
         # If we get here, commit
         print("COMMIT")
         await connection.execute("COMMIT")
@@ -249,13 +249,13 @@ class MockConnection:
 
 async def main():
     conn = MockConnection()
-    
+
     # Successful transaction
     print("Successful transaction:")
     async with database_transaction (conn):
         await conn.execute("INSERT INTO users VALUES (1, 'Alice')")
         await conn.execute("INSERT INTO users VALUES (2, 'Bob')")
-    
+
     print("\\nFailed transaction:")
     # Failed transaction (automatic rollback)
     try:
@@ -364,17 +364,17 @@ async def process_pages():
         'https://httpbin.org/status/404',
         'https://httpbin.org/delay/1',
     ]
-    
+
     processed_count = 0
-    
+
     async for page in fetch_pages (urls):
         processed_count += 1
-        
+
         if 'error' in page:
             print(f"[{processed_count}] Error fetching {page['url']}: {page['error']}")
         else:
             print(f"[{processed_count}] Fetched {page['url']}: {page['status']} ({len (page['content'])} bytes)")
-    
+
     print(f"\\nProcessed {processed_count} pages")
 
 # asyncio.run (process_pages())
@@ -451,21 +451,21 @@ async def echo_generator():
 
 async def main():
     gen = echo_generator()
-    
+
     # Start generator
     await gen.asend(None)  # First send must be None
-    
+
     # Send values
     result = await gen.asend("Hello")
     print(f"Got: {result}")
-    
+
     result = await gen.asend("World")
     print(f"Got: {result}")
-    
+
     # Throw exception into generator
     result = await gen.athrow(ValueError("Something wrong"))
     print(f"Got: {result}")
-    
+
     # Close generator
     await gen.aclose()
 
@@ -502,7 +502,7 @@ class AsyncDatabasePool:
         self.min_size = min_size
         self.max_size = max_size
         self.pool = None
-    
+
     async def __aenter__(self):
         """Initialize connection pool"""
         print(f"Creating connection pool ({self.min_size}-{self.max_size} connections)")
@@ -512,19 +512,19 @@ class AsyncDatabasePool:
             max_size=self.max_size
         )
         return self
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Close connection pool"""
         print("Closing connection pool")
         await self.pool.close()
         return False
-    
+
     @asynccontextmanager
     async def acquire (self):
         """Acquire connection from pool"""
         async with self.pool.acquire() as connection:
             yield connection
-    
+
     @asynccontextmanager
     async def transaction (self):
         """Acquire connection and start transaction"""
@@ -534,24 +534,24 @@ class AsyncDatabasePool:
 
 async def main():
     dsn = "postgresql://user:password@localhost/mydb"
-    
+
     async with AsyncDatabasePool (dsn) as db:
         # Simple query with auto-managed connection
         async with db.acquire() as conn:
             users = await conn.fetch("SELECT * FROM users")
             print(f"Found {len (users)} users")
-        
+
         # Transaction with auto-commit/rollback
         async with db.transaction() as conn:
             await conn.execute("INSERT INTO users (name) VALUES ($1)", "Alice")
             await conn.execute("INSERT INTO orders (user_id) VALUES ($1)", 1)
             # Automatically commits if no exception
-        
+
         # Multiple concurrent queries (pool manages connections)
         async def fetch_user (user_id):
             async with db.acquire() as conn:
                 return await conn.fetchrow("SELECT * FROM users WHERE id = $1", user_id)
-        
+
         users = await asyncio.gather(*[fetch_user (i) for i in range(1, 11)])
 
 # Connection pool automatically created and closed
@@ -571,7 +571,7 @@ from contextlib import asynccontextmanager
 
 class RateLimiter:
     """Rate limiter using token bucket algorithm"""
-    
+
     def __init__(self, rate, per):
         """
         rate: Number of requests allowed
@@ -582,20 +582,20 @@ class RateLimiter:
         self.allowance = rate
         self.last_check = time.time()
         self.lock = asyncio.Lock()
-    
+
     async def acquire (self):
         """Wait until request is allowed"""
         async with self.lock:
             current = time.time()
             time_passed = current - self.last_check
             self.last_check = current
-            
+
             # Add tokens for time passed
             self.allowance += time_passed * (self.rate / self.per)
-            
+
             if self.allowance > self.rate:
                 self.allowance = self.rate
-            
+
             if self.allowance < 1.0:
                 # Not enough tokens, wait
                 sleep_time = (1.0 - self.allowance) * (self.per / self.rate)
@@ -606,20 +606,20 @@ class RateLimiter:
 
 class RateLimitedClient:
     """API client with rate limiting"""
-    
+
     def __init__(self, rate=10, per=1.0):
         self.limiter = RateLimiter (rate, per)
         self.session = None
-    
+
     async def __aenter__(self):
         import aiohttp
         self.session = aiohttp.ClientSession()
         return self
-    
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.session.close()
         return False
-    
+
     async def get (self, url):
         """Rate-limited GET request"""
         await self.limiter.acquire()
@@ -630,10 +630,10 @@ async def main():
     # Allow 10 requests per second
     async with RateLimitedClient (rate=10, per=1.0) as client:
         urls = [f"https://api.example.com/data/{i}" for i in range(50)]
-        
+
         # Makes 50 requests, automatically rate-limited to 10/second
         results = await asyncio.gather(*[client.get (url) for url in urls])
-        
+
         print(f"Fetched {len (results)} items (rate-limited)")
 
 # Takes ~5 seconds (50 requests / 10 per second)
@@ -670,7 +670,7 @@ async def transform_data (records: AsyncIterator[dict]) -> AsyncIterator[dict]:
             'email': record['email'].lower(),
             'created_at': record.get('created_at'),
         }
-        
+
         # Validate
         if transformed['email'] and '@' in transformed['email']:
             yield transformed
@@ -679,17 +679,17 @@ async def load_data (records: AsyncIterator[dict], batch_size=100):
     """Load: Insert records into database in batches"""
     batch = []
     count = 0
-    
+
     async for record in records:
         batch.append (record)
-        
+
         if len (batch) >= batch_size:
             # Insert batch
             await insert_batch (batch)
             count += len (batch)
             print(f"Loaded {count} records")
             batch = []
-    
+
     # Insert remaining
     if batch:
         await insert_batch (batch)
@@ -717,7 +717,7 @@ async def main():
         "https://api.example.com/users?page=2",
         "https://api.example.com/users?page=3",
     ]
-    
+
     await etl_pipeline (sources)
 
 # asyncio.run (main())
@@ -766,7 +766,7 @@ class TempResource:
     async def __aenter__(self):
         self.resource = await acquire_resource()
         return self.resource
-    
+
     async def __aexit__(self, *args):
         await release_resource (self.resource)
 \`\`\`

@@ -23,13 +23,13 @@ export const unionfindSection = {
 class UnionFind:
     def __init__(self, n):
         self.parent = list (range (n))  # Each node is its own parent
-    
+
     def find (self, x):
         """Find root of x"""
         if self.parent[x] != x:
             return self.find (self.parent[x])
         return x
-    
+
     def union (self, x, y):
         """Merge sets containing x and y"""
         root_x = self.find (x)
@@ -56,19 +56,19 @@ class UnionFind:
     def __init__(self, n):
         self.parent = list (range (n))
         self.rank = [0] * n  # Tree height
-    
+
     def find (self, x):
         if self.parent[x] != x:
             self.parent[x] = self.find (self.parent[x])
         return self.parent[x]
-    
+
     def union (self, x, y):
         root_x = self.find (x)
         root_y = self.find (y)
-        
+
         if root_x == root_y:
             return False  # Already in same set
-        
+
         # Attach smaller rank tree under larger rank
         if self.rank[root_x] < self.rank[root_y]:
             self.parent[root_x] = root_y
@@ -77,7 +77,7 @@ class UnionFind:
         else:
             self.parent[root_y] = root_x
             self.rank[root_x] += 1
-        
+
         return True  # Successfully merged
 \`\`\`
 

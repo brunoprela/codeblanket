@@ -31,9 +31,7 @@ Application Processing
 Offset Commit (Mark as Processed)
 \`\`\`
 
-### **Consumer Components:**
-
-1. **Group Coordinator**: Manages consumer group membership
+### **Consumer Components:**1. **Group Coordinator**: Manages consumer group membership
 2. **Partition Assignment**: Distributes partitions across consumers
 3. **Offset Manager**: Tracks processed offsets
 4. **Deserializer**: Converts bytes to objects
@@ -61,9 +59,7 @@ Each partition → Exactly one consumer in group
 Each consumer → One or more partitions
 \`\`\`
 
-### **Key Benefits:**
-
-1. **Load Balancing**: Work distributed across consumers
+### **Key Benefits:**1. **Load Balancing**: Work distributed across consumers
 2. **Scalability**: Add consumers to increase throughput
 3. **Fault Tolerance**: If consumer fails, partitions reassigned
 4. **Independent Processing**: Different groups process independently
@@ -319,12 +315,9 @@ while (true) {
 
 **Rebalancing** is the process of redistributing partitions among consumers when the group membership changes.
 
-### **Rebalance Triggers:**
-
-1. **Consumer joins group** (scale up)
+### **Rebalance Triggers:**1. **Consumer joins group** (scale up)
 2. **Consumer leaves/crashes** (scale down, failure)
-3. **Partitions added to topic**
-4. **Consumer exceeds session timeout** (heartbeat fails)
+3. **Partitions added to topic**4. **Consumer exceeds session timeout** (heartbeat fails)
 
 ### **Rebalance Process:**
 
@@ -604,9 +597,7 @@ Monitor with: JMX metrics, Kafka Manager, Confluent Control Center
 
 ## Consumer in System Design Interviews
 
-### **Discussion Points:**
-
-1. **Consumer Group Design:**
+### **Discussion Points:**1. **Consumer Group Design:**
    - "12 partitions, 12 consumers for parallelism"
    - "Consumer group per use case (analytics, email, warehouse)"
 

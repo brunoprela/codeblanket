@@ -744,21 +744,12 @@ print(new_tests)
 1. **Generate comprehensive tests** - happy path + edge cases + errors
 2. **Use descriptive test names** - test_<scenario>_<expected>
 3. **Follow AAA pattern** - Arrange, Act, Assert
-4. **Mock external dependencies**
-5. **Generate parametrized tests** for multiple cases
-6. **Include test data generation**
-7. **Add clear assertions** with messages
+4. **Mock external dependencies**5. **Generate parametrized tests** for multiple cases
+6. **Include test data generation**7. **Add clear assertions** with messages
 8. **Generate integration tests** for workflows
 
 ### ❌ DON'T:
-1. **Only test happy path**
-2. **Use vague test names**
-3. **Skip edge cases**
-4. **Test without mocking dependencies**
-5. **Generate redundant tests**
-6. **Forget error cases**
-7. **Skip assertions**
-8. **Ignore code coverage**
+1. **Only test happy path**2. **Use vague test names**3. **Skip edge cases**4. **Test without mocking dependencies**5. **Generate redundant tests**6. **Forget error cases**7. **Skip assertions**8. **Ignore code coverage**
 
 ## Next Steps
 

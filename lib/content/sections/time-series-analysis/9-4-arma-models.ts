@@ -743,8 +743,7 @@ Always check:
 ### Best Practices
 
 1. **Test stationarity first** - ADF test before fitting
-2. **Use ACF/PACF for initial order selection**
-3. **Compare multiple models** with AIC/BIC
+2. **Use ACF/PACF for initial order selection**3. **Compare multiple models** with AIC/BIC
 4. **Validate residuals** - must be white noise
 5. **Out-of-sample testing** - true test of model
 6. **Keep it simple** - prefer lower orders
@@ -753,9 +752,7 @@ Always check:
 
 ## Summary
 
-**Key Takeaways:**
-
-1. **AR models**: Past values predict future ($X_t = \\phi X_{t-1} + \\epsilon_t$)
+**Key Takeaways:**1. **AR models**: Past values predict future ($X_t = \\phi X_{t-1} + \\epsilon_t$)
 2. **MA models**: Past errors affect current value ($X_t = \\epsilon_t + \\theta \\epsilon_{t-1}$)
 3. **ARMA combines both**: More parsimonious representation
 4. **Model selection**: Use AIC/BIC, prefer BIC for parsimony

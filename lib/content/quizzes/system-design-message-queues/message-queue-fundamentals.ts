@@ -22,8 +22,7 @@ In the queue pattern, each message is consumed by exactly one consumer from a gr
 - Consumers compete for messages
 - Message deleted after successful consumption
 
-**Use Cases:**
-1. **Task Distribution/Work Queues:**
+**Use Cases:**1. **Task Distribution/Work Queues:**
    - Image processing pipeline: 1000 images → 10 worker processes
    - Each worker processes ~100 images (automatic load balancing)
    - Example: Video transcoding, report generation, batch email sending
@@ -62,8 +61,7 @@ In pub/sub, each message is broadcast to all subscribed consumers. Each subscrib
 - Subscribers independent of each other
 - Fan-out: One message → Many recipients
 
-**Use Cases:**
-1. **Event Broadcasting:**
+**Use Cases:**1. **Event Broadcasting:**
    - User registration event → Email service, Analytics service, CRM service
    - Each service gets same event, processes independently
    - Example: E-commerce order placed → Payment, Inventory, Email, Analytics
@@ -531,9 +529,7 @@ Result: Customer charged once, payment recorded once ✅
 Result: Customer not charged, failure recorded, no retries ✅
 \`\`\`
 
-**Why This Works:**
-
-1. **At-Least-Once Delivery:** Queue guarantees message not lost
+**Why This Works:**1. **At-Least-Once Delivery:** Queue guarantees message not lost
 2. **Idempotency Keys:** Payment gateway (Stripe) deduplicates charges
 3. **Database Unique Constraint:** Prevents duplicate payment records
 4. **Check Before Processing:** Skip if already processed

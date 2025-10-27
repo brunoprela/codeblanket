@@ -139,9 +139,9 @@ export const pnlCalculationQuiz = [
       'position.mark_to_market(152.00)\n' +
       '# Unrealized: 80 × ($152 - $150.375) = $130\n' +
       '\n' +
-      'print(f"Realized P&L: ${position.realized_pnl:.2f}")  # $150.00\n' +
-      'print(f"Unrealized P&L: ${position.unrealized_pnl:.2f}")  # $130.00\n' +
-      'print(f"Total P&L: ${position.total_pnl():.2f}")  # $280.00\n' +
+      'print(f"Realized P&L: \${position.realized_pnl:.2f}")  # $150.00\n' +
+      'print(f"Unrealized P&L: \${position.unrealized_pnl:.2f}")  # $130.00\n' +
+      'print(f"Total P&L: \${position.total_pnl():.2f}")  # $280.00\n' +
       '```',
     keyPoints: [
       'Step 1: Buy 100 @ $150, position = 100 shares @ $150 cost, realized P&L = $0',

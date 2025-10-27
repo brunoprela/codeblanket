@@ -131,8 +131,7 @@ def two_sum_sorted (nums: List[int], target: int) -> List[int]:
 
 **Problem:** Find all **unique triplets** that sum to zero.
 
-**Challenges:**
-1. **Three elements** instead of two
+**Challenges:**1. **Three elements** instead of two
 2. Need **all unique triplets** (no duplicates)
 3. Time limit: must be better than O(n³)
 
@@ -323,8 +322,7 @@ def four_sum (nums: List[int], target: int) -> List[List[int]]:
 - "Triplets" → 3Sum  
 - "Unique" → Need to skip duplicates
 
-**Approach Selection:**
-1. **Unsorted, two elements** → Hash table
+**Approach Selection:**1. **Unsorted, two elements** → Hash table
 2. **Sorted, two elements** → Two pointers
 3. **Three+ elements** → Sort + fix first (s) + two pointers
 4. **Space constrained** → Sort first, use two pointers
@@ -351,8 +349,7 @@ Time: O(n²), Space: O(1) excluding output"
 - ❌ Not considering sorted vs unsorted
 - ❌ Using hash table when two pointers is more efficient
 
-**Practice Progression:**
-1. Master Two Sum (hash table)
+**Practice Progression:**1. Master Two Sum (hash table)
 2. Practice Two Sum II (two pointers)
 3. Tackle 3Sum (combining techniques)
 4. Attempt 4Sum (harder but same pattern)

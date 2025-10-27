@@ -117,8 +117,8 @@ quote = Level1Quote(
     volume=1_250_000
 )
 
-print(f"Spread: ${quote.spread} ({quote.spread_bps} bps)")
-print(f"Mid: ${quote.mid_price}")
+print(f"Spread: \\${quote.spread} ({quote.spread_bps} bps)")
+print(f"Mid: \\${quote.mid_price}")
 print(f"Latency: {(quote.receive_timestamp - quote.exchange_timestamp).total_seconds() * 1000:.2f}ms")
 \`\`\`
 
@@ -153,7 +153,7 @@ class Level1Strategy:
             
             if abs(price_change_pct) > 0.5:  # 0.5% move
                 print(f"{symbol}: Large move {price_change_pct:.2f}% "
-                      f"(${last.mid_price} → ${quote.mid_price})")
+                      f"(\${last.mid_price} → \${quote.mid_price})")
         
         # 4. Imbalance Detection (basic)
         bid_value = float(quote.bid_price * quote.bid_size)
@@ -271,7 +271,7 @@ snapshot = Level2Snapshot(
 
 print(f"Best Bid: {snapshot.best_bid.price} × {snapshot.best_bid.size}")
 print(f"Best Ask: {snapshot.best_ask.price} × {snapshot.best_ask.size}")
-print(f"Spread: ${snapshot.spread}")
+print(f"Spread: \\${snapshot.spread}")
 print(f"Top 5 bid volume: {snapshot.total_bid_volume(5)}")
 print(f"Top 5 ask volume: {snapshot.total_ask_volume(5)}")
 print(f"Imbalance: {snapshot.volume_imbalance(5):.2f}")

@@ -106,8 +106,7 @@ P = \\sum_{t=1}^{n} \\frac{C}{(1 + YTM)^t} + \\frac{F}{(1 + YTM)^n}
 
 Solve for YTM (requires numerical methods-Newton-Raphson, bisection).
 
-**Assumptions (limitations):**
-1. Hold bond to maturity (no early sale)
+**Assumptions (limitations):**1. Hold bond to maturity (no early sale)
 2. Reinvest all coupons at YTM (unrealistic-reinvestment risk)
 3. No default (issuer pays all cash flows)
 
@@ -237,8 +236,7 @@ DV01 \\approx D_{Mod} \\times P \\times 0.0001
 
 **Key:** Duration matching minimizes interest rate risk around the liability horizon.
 
-**Limitations:**
-1. Only works for parallel yield curve shifts (all rates move equally)
+**Limitations:**1. Only works for parallel yield curve shifts (all rates move equally)
 2. Requires periodic rebalancing (duration drifts as time passes and yields change)
 3. Convexity mismatch can still cause tracking error
 
@@ -317,8 +315,7 @@ C = \\frac{1}{P} \\sum_{t=1}^{n} \\frac{t \\cdot (t+1) \\cdot C_t}{(1+y)^{t+2}}
 
 **Yield curve:** Graph of yields vs maturity for bonds of similar credit quality (typically government bonds).
 
-**Shape types:**
-1. **Normal (upward sloping):** Long-term yields > short-term yields (typical)
+**Shape types:**1. **Normal (upward sloping):** Long-term yields > short-term yields (typical)
 2. **Inverted (downward sloping):** Short-term > long-term (recession signal)
 3. **Flat:** Similar yields across maturities (transition phase)
 4. **Humped:** Medium-term yields highest (rare)
@@ -359,8 +356,7 @@ Continue for 2-year, 3-year, ... bonds to build entire zero curve.
 
 **Steep curve (normal):** Long rates >> short rates.
 
-**Carry trade strategy:**
-1. Borrow short-term (low rate)
+**Carry trade strategy:**1. Borrow short-term (low rate)
 2. Invest long-term (high rate)
 3. Profit: Long yield - short rate (positive carry)
 
@@ -372,8 +368,7 @@ Continue for 2-year, 3-year, ... bonds to build entire zero curve.
 
 **Historical evidence:** Every U.S. recession since 1950 was preceded by yield curve inversion (10yr - 2yr < 0).
 
-**Mechanism:**
-1. Fed hikes short-term rates aggressively (fighting inflation)
+**Mechanism:**1. Fed hikes short-term rates aggressively (fighting inflation)
 2. Long-term yields stay low (market expects future rate cuts in recession)
 3. Inversion: Short > long
 4. 12-18 months later: Recession occurs
@@ -395,8 +390,7 @@ Continue for 2-year, 3-year, ... bonds to build entire zero curve.
 \\text{Credit Spread} = YTM_{corporate} - YTM_{government}
 \]
 
-**Components:**
-1. **Default risk premium:** Compensation for probability of default
+**Components:**1. **Default risk premium:** Compensation for probability of default
 2. **Liquidity premium:** Corporates less liquid than Treasuries
 3. **Tax effects:** Municipal bonds tax-exempt → lower yields
 
@@ -880,8 +874,7 @@ credit_spread_analysis (spreads)
 
 **Problem:** Pension fund has \$500M liability in 15 years. How to hedge interest rate risk?
 
-**Solution:**
-1. Calculate liability duration: 15 years (zero-coupon-like)
+**Solution:**1. Calculate liability duration: 15 years (zero-coupon-like)
 2. Build bond portfolio with duration = 15 years
 3. Options: Buy 15-year zero-coupon bonds (perfect match), or mix of 10Y and 20Y bonds (weighted avg duration = 15)
 

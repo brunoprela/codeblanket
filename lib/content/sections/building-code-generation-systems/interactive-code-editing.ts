@@ -744,20 +744,12 @@ if user_choice == "3":  # Modify
 2. **Ask clarifying questions** when needed
 3. **Show diffs** before applying
 4. **Support undo/redo** functionality
-5. **Allow iterative refinement**
-6. **Request confirmation** for changes
-7. **Track edit history**
-8. **Provide clear feedback** to user
+5. **Allow iterative refinement**6. **Request confirmation** for changes
+7. **Track edit history**8. **Provide clear feedback** to user
 
 ### ❌ DON'T:
-1. **Apply changes without confirmation**
-2. **Lose conversation context**
-3. **Skip clarifying questions** for vague requests
-4. **Forget edit history**
-5. **Make undo impossible**
-6. **Hide what changes will be made**
-7. **Ignore user feedback**
-8. **Rush to apply edits**
+1. **Apply changes without confirmation**2. **Lose conversation context**3. **Skip clarifying questions** for vague requests
+4. **Forget edit history**5. **Make undo impossible**6. **Hide what changes will be made**7. **Ignore user feedback**8. **Rush to apply edits**
 
 ## Next Steps
 
