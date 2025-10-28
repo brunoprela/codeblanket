@@ -96,7 +96,7 @@ v.PB(10);
 
 pair<int, int> p = MP(3, 4);
 cout << p.F << " " << p.S << endl;
-\`\`\```
+\`\`\`
 
 ### 4. Min/Max for Multiple Values
 

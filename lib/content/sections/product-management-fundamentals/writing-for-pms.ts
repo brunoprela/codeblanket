@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# Writing for Product Managers
 
@@ -554,7 +554,7 @@ _italic_
 **Remember**: Great PMs are great writers. Invest in this skill—it compounds over your career.
 `;
 
-export const writingForPMsSection: Section = {
+export const writingForPMsSection: ModuleSection = {
   id: 'writing-for-pms',
   title: 'Writing for Product Managers',
   content,

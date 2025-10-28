@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# The PM Toolkit
 
@@ -544,7 +544,7 @@ Product managers use dozens of tools daily to document, plan, analyze, design, a
 **Remember**: Great PMs master their tools, they don't let tools master them.
 `;
 
-export const pmToolkitSection: Section = {
+export const pmToolkitSection: ModuleSection = {
   id: 'pm-toolkit',
   title: 'The PM Toolkit',
   content,

@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# PM Communication Skills
 
@@ -525,7 +525,7 @@ Influence comes from trust. Invest in relationships before you need to influence
 **Remember**: Great PMs are great communicators. This skill compounds over your entire career. Invest in it deliberately.
 `;
 
-export const pmCommunicationSection: Section = {
+export const pmCommunicationSection: ModuleSection = {
   id: 'pm-communication',
   title: 'PM Communication Skills',
   content,

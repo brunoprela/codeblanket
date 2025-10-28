@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# The Product Manager Mindset
 
@@ -612,7 +612,7 @@ Rate yourself (1-5 scale) on each mindset element:
 Remember: Great PMs aren't born—they're made through deliberate practice of these mindsets.
 `;
 
-export const pmMindsetSection: Section = {
+export const pmMindsetSection: ModuleSection = {
   id: 'pm-mindset',
   title: 'The Product Manager Mindset',
   content,

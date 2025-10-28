@@ -475,7 +475,7 @@ resource "null_resource" "trigger_instance_refresh" {
   provisioner "local-exec" {
     command = <<-EOF
       aws autoscaling start-instance-refresh \
-        --auto-scaling-group-name ${aws_autoscaling_group.app.name} \
+        --auto-scaling-group-name \${aws_autoscaling_group.app.name} \
         --preferences MinHealthyPercentage=66,InstanceWarmup=300
     EOF
   }

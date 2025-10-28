@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# Product Discovery vs Product Delivery
 
@@ -489,7 +489,7 @@ For your current feature idea:
 Remember: **Great discovery enables great delivery. Skip discovery at your own risk.**
 `;
 
-export const discoveryVsDeliverySection: Section = {
+export const discoveryVsDeliverySection: ModuleSection = {
   id: 'discovery-vs-delivery',
   title: 'Product Discovery vs Product Delivery',
   content,

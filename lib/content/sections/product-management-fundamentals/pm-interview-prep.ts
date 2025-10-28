@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# PM Interview Preparation
 
@@ -479,7 +479,7 @@ Algorithm uses **geospatial indexing** (like quadtrees) to quickly find drivers 
 Good luck! 🚀
 `;
 
-export const pmInterviewPrepSection: Section = {
+export const pmInterviewPrepSection: ModuleSection = {
   id: 'pm-interview-prep',
   title: 'PM Interview Preparation',
   content,

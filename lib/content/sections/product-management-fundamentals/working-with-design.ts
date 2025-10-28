@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# Working with Design
 
@@ -569,7 +569,7 @@ Questions for Design:
 **Remember**: Great products require great PM-Design partnerships. Invest in the relationship.
 `;
 
-export const workingWithDesignSection: Section = {
+export const workingWithDesignSection: ModuleSection = {
   id: 'working-with-design',
   title: 'Working with Design',
   content,

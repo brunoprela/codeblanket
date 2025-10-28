@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# Working with Engineering
 
@@ -475,7 +475,7 @@ Refactor saves us time long-term."
 **Remember**: Great PM-Engineering relationships are built through consistent respect, clear communication, and shared ownership of outcomes.
 `;
 
-export const workingWithEngineeringSection: Section = {
+export const workingWithEngineeringSection: ModuleSection = {
   id: 'working-with-engineering',
   title: 'Working with Engineering',
   content,

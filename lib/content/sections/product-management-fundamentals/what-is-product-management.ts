@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# What is Product Management
 
@@ -580,7 +580,7 @@ Rate yourself (1-5 scale) on these dimensions:
 Remember: Skills can be developed. A low score isn't disqualifying—it's a roadmap for growth.
 `;
 
-export const whatIsProductManagementSection: Section = {
+export const whatIsProductManagementSection: ModuleSection = {
   id: 'what-is-product-management',
   title: 'What is Product Management',
   content,

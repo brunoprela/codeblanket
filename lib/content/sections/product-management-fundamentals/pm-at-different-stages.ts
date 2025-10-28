@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# PM at Different Company Stages
 
@@ -372,7 +372,7 @@ PM roles vary dramatically by company stage. A PM at a 10-person startup does co
 **Remember**: Your career is 40 years. Try different stages. Each teaches valuable lessons.
 `;
 
-export const pmAtDifferentStagesSection: Section = {
+export const pmAtDifferentStagesSection: ModuleSection = {
   id: 'pm-at-different-stages',
   title: 'PM at Different Company Stages',
   content,

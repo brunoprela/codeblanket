@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# Working with Sales and Marketing
 
@@ -429,7 +429,7 @@ This section covers how to build strong partnerships with Sales and Marketing te
 **Remember**: Sales and Marketing are partners in bringing products to market. Invest in these relationships.
 `;
 
-export const workingWithSalesMarketingSection: Section = {
+export const workingWithSalesMarketingSection: ModuleSection = {
   id: 'working-with-sales-marketing',
   title: 'Working with Sales and Marketing',
   content,

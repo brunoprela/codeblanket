@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# PM Core Competencies Framework
 
@@ -599,7 +599,7 @@ Set calendar reminder to review progress in 3 months.
 Remember: Great PMs are made, not born. Deliberate practice of these competencies will make you exceptional over time.
 `;
 
-export const coreCompetenciesSection: Section = {
+export const coreCompetenciesSection: ModuleSection = {
   id: 'core-competencies',
   title: 'PM Core Competencies Framework',
   content,

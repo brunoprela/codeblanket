@@ -343,7 +343,7 @@ s3_upload_with_retry() {
         
         if [[ $attempt -le $max_attempts ]]; then
             local sleep_time=$((attempt * 5))
-            log "Retrying in ${sleep_time}s..."
+            log "Retrying in \${sleep_time}s..."
             sleep "$sleep_time"
         fi
     done

@@ -3,7 +3,7 @@
  * Product Management Fundamentals Module
  */
 
-import { Section } from '../../../types';
+import { ModuleSection } from '../../../types';
 
 const content = `# PM Career Development
 
@@ -383,7 +383,7 @@ EDUCATION
 **Remember**: PM careers are marathons, not sprints. Invest in continuous growth, build relationships, and stay curious.
 `;
 
-export const pmCareerDevelopmentSection: Section = {
+export const pmCareerDevelopmentSection: ModuleSection = {
   id: 'pm-career-development',
   title: 'PM Career Development',
   content,

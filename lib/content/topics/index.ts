@@ -305,8 +305,8 @@ const allTopics = [
 // Build moduleCategories for backward compatibility
 // Each module becomes its own category with a single 'module' property
 export const moduleCategories = allTopics.flatMap((topic) =>
-  topic.modules
-    .map((moduleId) => {
+  (topic.modules as string[])
+    .map((moduleId: string) => {
       const moduleData = allModulesMap[moduleId];
       if (!moduleData) return null;
       return {
@@ -326,7 +326,7 @@ export const topicSections = allTopics.map((topic) => ({
   id: topic.id,
   title: topic.title,
   icon: topic.icon,
-  modules: topic.modules
+  modules: (topic.modules as string[])
     .map((moduleId) => {
       const moduleData = allModulesMap[moduleId];
       if (!moduleData) return null;

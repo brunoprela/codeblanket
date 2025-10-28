@@ -349,7 +349,7 @@ Expected:
 - Set compilation command: \`g++ - std=c++17 - O2 - Wall\`
 
 **3. Set Up Template**
-- Create `.cph` folder in your workspace
+- Create \`.cph\` folder in your workspace
 - Add \`template.cpp\` with your template
 
 ### Using CPH
@@ -595,7 +595,7 @@ Create \`.vscode / cpp.code - snippets\`:
 
 ### Compile Quickly
 
-**Alias in `.bashrc`:**
+**Alias in \`.bashrc\`:**
 \`\`\`bash
 alias run='g++ -std=c++17 -O2 -Wall $1.cpp -o $1 && ./$1'
 \`\`\`

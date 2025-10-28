@@ -304,7 +304,7 @@ App (2.1ms)
 │     └─ PostList (9.6ms)
 │        ├─ Post (0.4ms) × 24 times
 └─ Footer (0.2ms)
-\`\`\```
+\`\`\`
 
 **Colors indicate render duration:**
 - **Green**: Fast (< 1ms)
