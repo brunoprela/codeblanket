@@ -891,11 +891,10 @@ class ModelValidator:
         if difference > tolerance:
             raise ValueError(
                 f"Balance sheet doesn't balance! "
-                f"Assets: ${assets:,.0f}
-}, L+E: ${ liabilities + equity:,.0f }, "
-                f"Difference: ${difference:,.0f}"
+                f"Assets: \${assets:,.0f}, L+E: \${liabilities + equity:,.0f}, "
+                f"Difference: \${difference:,.0f}"
             )
-print(f"✓ Balance sheet balances (diff: ${difference:.2f})")
+        print(f"✓ Balance sheet balances (diff: \${difference:.2f})")
 
 @staticmethod
     def check_cash_flow(
@@ -917,11 +916,11 @@ difference = abs(ending_cash - calculated_ending)
 if difference > tolerance:
             raise ValueError(
     f"Cash flow doesn't tie! "
-                f"Expected: ${calculated_ending:,.0f}, "
-                f"Actual: ${ending_cash:,.0f}, "
-                f"Difference: ${difference:,.0f}"
+                f"Expected: \${calculated_ending:,.0f}, "
+                f"Actual: \${ending_cash:,.0f}, "
+                f"Difference: \${difference:,.0f}"
 )
-print(f"✓ Cash flow ties (diff: ${difference:.2f})")
+print(f"✓ Cash flow ties (diff: \${difference:.2f})")
 
 @staticmethod
     def check_reasonableness(

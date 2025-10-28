@@ -354,7 +354,7 @@ pass
     ```
 
 
-**3. Fallback Plan**
+            ** 3. Fallback Plan**
     - Keep old vendor data archived
     - Document all discrepancies
     - Have process to roll back if needed
@@ -366,7 +366,7 @@ pass
             - 4 % have minor differences(<1%) due to rounding
                 - 1 % have significant differences requiring investigation
 
-                    ** Common root causes:**1. Different split adjustment methodologies(most common)
+                    ** Common root causes:** 1. Different split adjustment methodologies(most common)
 2. Different dividend adjustment approaches
 3. Time zone handling for international stocks
 4. Data source differences(some vendors use last trade, others use mid - price)

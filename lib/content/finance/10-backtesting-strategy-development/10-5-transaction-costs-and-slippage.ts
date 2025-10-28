@@ -1063,7 +1063,7 @@ if __name__ == "__main__":
     
     print("\\n\\nOptimal Execution Schedule (first 5 intervals):")
     print(schedule.head().to_string(index=False))
-    print(f"\\nTotal execution cost: ${schedule['impact_dollars'].sum():,.2f} ")
+    print(f"\\nTotal execution cost: ${schedule['impact_dollars'].sum():, .2f} ")
 \`\`\`
 
 ## Production Considerations
@@ -1499,7 +1499,8 @@ def example_backtest_with_slippage():
     print(f"Filled trades: {results['filled'].sum()}")
     print(f"\\nAverage slippage: {results[results['filled']]['slippage_bps'].mean():.2f} bps")
     print(f"Median slippage: {results[results['filled']]['slippage_bps'].median():.2f} bps")
-    print(f"Total slippage cost: ${results[results['filled']]['total_slippage_dollars'].sum():,.2f} ")
+    print(f"Total slippage cost: ${results[results['filled']]['total_slippage_dollars'].sum():, .2f
+} ")
 
 return results
 

@@ -1,7 +1,7 @@
 export const sensitivityScenarioAnalysis = {
-    title: 'Sensitivity and Scenario Analysis',
-    id: 'sensitivity-scenario-analysis',
-    content: `
+  title: 'Sensitivity and Scenario Analysis',
+  id: 'sensitivity-scenario-analysis',
+  content: `
 # Sensitivity and Scenario Analysis
 
 ## Introduction
@@ -346,5 +346,5 @@ print(tornado_data[['Variable', 'Impact']].to_string(index=False))
 ---
 
 **Next Section**: [Monte Carlo Valuation](./monte-carlo-valuation) →
-\`,
+`,
 };

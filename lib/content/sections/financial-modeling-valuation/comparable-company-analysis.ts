@@ -746,11 +746,8 @@ def create_football_field(
         ax.add_patch(rect)
         
         # Add value labels
-        ax.text(low, y_pos, f'${low:.1f}
-}B', 
-va = 'center', ha = 'right', fontsize = 10, fontweight = 'bold')
-ax.text(high, y_pos, f'${high:.1f}B',
-    va = 'center', ha = 'left', fontsize = 10, fontweight = 'bold')
+        ax.text(low, y_pos, f'\${low:.1f}B', va='center', ha='right', fontsize=10, fontweight='bold')
+        ax.text(high, y_pos, f'\${high:.1f}B', va='center', ha='left', fontsize=10, fontweight='bold')
         
         # Add midpoint
 mid = (low + high) / 2
@@ -760,7 +757,7 @@ ax.plot([mid, mid], [y_pos - 0.3, y_pos + 0.3],
     # Current price line
 if current_price:
     ax.axvline(current_price, color = 'red', linestyle = '--',
-        linewidth = 2, label = f'Current Price: ${current_price:.1f}B')
+        linewidth = 2, label = f'Current Price: \${current_price:.1f}B')
 ax.legend(loc = 'upper right')
     
     # Formatting

@@ -1,7 +1,7 @@
 export const automatedModelGeneration = {
-    title: 'Automated Model Generation',
-    id: 'automated-model-generation',
-    content: `
+  title: 'Automated Model Generation',
+  id: 'automated-model-generation',
+  content: `
 # Automated Model Generation
 
 ## Introduction
@@ -141,5 +141,5 @@ for key, value in results.items():
 ---
 
 **Next Section**: [Valuation Platform Project](./valuation-platform-project) →
-\`,
+`,
 };

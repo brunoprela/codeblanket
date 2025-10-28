@@ -838,7 +838,8 @@ results = self.portfolio.get_performance_metrics()
         
         # Print summary
 print(f"\\nPerformance Summary:")
-print(f"  Final Value: ${results['final_value']:,.2f}
+print(f"  Final Value: ${results['final_value']:, .2f
+}
 }")
 print(f"  Total Return: {results['total_return']:.2f}%")
 print(f"  Sharpe Ratio: {results['sharpe_ratio']:.2f}")

@@ -549,9 +549,9 @@ for key, value in exit_analysis.items():
     elif 'IRR' in key:
         print(f"  {key:.<40} {value:.1%}")
     elif isinstance(value, (int, float)) and 'Year' not in key:
-        print(f"  {key:.<40} ${value / 1_000_000:> 10,.0f}M")
+        print(f"  {key:.<40} \${value / 1_000_000:10,.0f}M")
     else:
-print(f"  {key:.<40} {value}")
+        print(f"  {key:.<40} {value}")
 
 # Sensitivity analysis
 print("\\n\\nIRR Sensitivity Analysis:")

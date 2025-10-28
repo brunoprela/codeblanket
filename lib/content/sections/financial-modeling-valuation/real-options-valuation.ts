@@ -1,7 +1,7 @@
 export const realOptionsValuation = {
-    title: 'Real Options Valuation',
-    id: 'real-options-valuation',
-    content: `
+  title: 'Real Options Valuation',
+  id: 'real-options-valuation',
+  content: `
 # Real Options Valuation
 
 ## Introduction
@@ -115,5 +115,5 @@ print(f"Total project value: \${option_value:,.0f} (may be worth waiting)")
 - Common in: R&D, natural resources, infrastructure, tech platforms
 
 **Next Section**: [Dividend Discount Model](./dividend-discount-model) →
-\`,
+`,
 };

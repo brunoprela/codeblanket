@@ -202,8 +202,7 @@ for key, value in result.items():
     if '%' in key:
         print(f"  {key:.<35} {value:.1%}")
     else:
-        print(f"  {key:.<35} ${value:.2f}
-}")
+        print(f"  {key:.<35} \${value:.2f}")
 \`\`\`
 
 ---

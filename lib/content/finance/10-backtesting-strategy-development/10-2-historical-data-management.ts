@@ -487,7 +487,8 @@ adjusted_price_before = adjusted.loc['2013-12-31', 'Close']
 adjusted_price_after = adjusted.loc['2023-12-31', 'Close']
 
 print("Without split adjustment:")
-print(f"  2013: ${price_before_splits:.2f}
+print(f"  2013: ${price_before_splits: .2f
+}
 }")
 print(f"  2023: ${price_after_splits:.2f}")
 print(f"  Ratio: {price_before_splits/price_after_splits:.2f}x")

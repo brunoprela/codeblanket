@@ -1,6 +1,6 @@
 export const buildingKnowledgeBase = {
-  title: 'Building a Knowledge Base',
-  content: `
+    title: 'Building a Knowledge Base',
+    content: `
 # Building a Knowledge Base
 
 ## Introduction
@@ -546,7 +546,9 @@ print(f"Update status: {result['status']}")
 
 ## Deduplication
 
-Prevent duplicate content: `\`\`python
+Prevent duplicate content:
+
+\`\`\`python
 from typing import Set
 import numpy as np
 

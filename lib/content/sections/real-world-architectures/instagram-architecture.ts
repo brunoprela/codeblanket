@@ -3,9 +3,9 @@
  */
 
 export const instagramarchitectureSection = {
-  id: 'instagram-architecture',
-  title: 'Instagram Architecture',
-  content: `Instagram is one of the world's largest social media platforms with over 2 billion users, sharing 100+ million photos and videos daily. Acquired by Facebook (now Meta) in 2012 for $1 billion, Instagram has evolved from a simple photo-sharing app to a comprehensive social platform. This section explores the architecture that enables Instagram to scale globally while maintaining performance.
+   id: 'instagram-architecture',
+   title: 'Instagram Architecture',
+   content: `Instagram is one of the world's largest social media platforms with over 2 billion users, sharing 100+ million photos and videos daily. Acquired by Facebook (now Meta) in 2012 for $1 billion, Instagram has evolved from a simple photo-sharing app to a comprehensive social platform. This section explores the architecture that enables Instagram to scale globally while maintaining performance.
 
 ## Overview
 
@@ -291,7 +291,9 @@ Update: When user likes photo → Increment counter (eventual consistency)
 
 **Comments**:
 
-Similar to likes but with additional content: `\`\`
+Similar to likes but with additional content:
+
+\`\`\`
 Table: comments
 Partition Key: photo_id
 Clustering Key: timestamp DESC
