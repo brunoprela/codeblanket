@@ -974,7 +974,7 @@ class TenantAdmin (admin.ModelAdmin):
 This architecture provides secure, scalable multi-tenancy for SaaS applications.
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

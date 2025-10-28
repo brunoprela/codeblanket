@@ -447,7 +447,7 @@ class ArticleViewSet (viewsets.ModelViewSet):
 This approach provides flexible, safe, and reusable filtering for APIs and views.
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

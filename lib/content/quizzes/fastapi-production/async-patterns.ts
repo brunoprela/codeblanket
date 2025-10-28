@@ -17,7 +17,7 @@ export const asyncPatternsQuiz = [
       'Design async database operations using SQLAlchemy async engine for a high-traffic API. The implementation must handle: (1) connection pooling configuration, (2) async transactions for consistency, (3) concurrent queries without race conditions, (4) proper session management, and (5) error handling with rollback. Show how to implement async CRUD operations and explain the performance benefits over synchronous database access. What are the pitfalls of mixing sync and async database code?',
     answer: `Complete async database implementation with SQLAlchemy async engine, connection pooling (pool_size=20), async sessions, transaction management, and proper error handling. Explains how async allows thousands of concurrent database operations vs sync blocking and warns against mixing sync/async database calls.`,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-async-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),
@@ -93,7 +93,7 @@ export const asyncPatternsMultipleChoice = [
     explanation:
       "Common mistake: async def endpoint(): result = sync_db_query() (blocks event loop!). Sync operations in async functions don't automatically become async (option 4). Mixing is allowed (option 3) but requires care. Pattern for fixing: Use asyncio.to_thread() to run blocking code: result = await asyncio.to_thread (sync_function). Or use async alternatives: async with httpx.AsyncClient(), async SQLAlchemy. The danger: One blocking call in an async endpoint blocks all other requests. Not a syntax error (option 2) but a performance killer. Always use async versions of libraries in async endpoints.",
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-async-mc-${idx + 1}`,
   ...q,
 }));

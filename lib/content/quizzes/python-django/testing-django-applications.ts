@@ -407,7 +407,7 @@ pytest --cov=myapp --cov-report=html --cov-report=term-missing
 \`\`\`
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

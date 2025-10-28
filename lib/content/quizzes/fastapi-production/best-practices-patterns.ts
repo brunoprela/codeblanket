@@ -17,7 +17,7 @@ export const bestPracticesPatternsQuiz = [
       'Design a performance optimization strategy for a FastAPI application experiencing slow response times under load. The strategy must address: (1) database query optimization (N+1 queries, indexes, connection pooling), (2) caching strategies (Redis for hot data), (3) async operations for I/O, (4) response model optimization (only return needed fields), (5) monitoring and profiling to identify bottlenecks. Implement examples showing before/after optimization with measurable performance improvements. How do you identify which optimization to prioritize?',
     answer: `Comprehensive optimization strategy: Fix N+1 queries with selectinload (100 queries → 2), add database indexes (1000ms → 50ms), implement Redis caching (skip DB entirely for hot data), use async for external APIs (sequential 3s → concurrent 1s), use response models to limit data (1MB → 100KB). Prioritize by measuring with Prometheus: identify slowest endpoints (p95 latency), profile with py-spy, optimize highest-impact first.`,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-best-practices-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),
@@ -93,7 +93,7 @@ export const bestPracticesPatternsMultipleChoice = [
     explanation:
       "Code quality tool benefits: Black (consistent formatting, no style debates), isort (organized imports), ruff (fast linting, catches bugs like unused variables), mypy (type checking catches type errors before runtime). Benefits: Team consistency (code looks uniform), catch bugs early (mypy finds type mismatches), faster reviews (no style discussions), easier onboarding (predictable code). Setup: pre-commit hooks run tools automatically on git commit. They don't affect runtime performance (option 2), aren't required by FastAPI (option 3), and don't fix logic bugs automatically (option 4) - they catch potential issues and enforce standards. Production pattern: Run in CI/CD, block merge if checks fail.",
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `best-practices-patterns-mc-${idx + 1}`,
   ...q,
 }));

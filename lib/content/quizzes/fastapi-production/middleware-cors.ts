@@ -271,7 +271,7 @@ async function apiCall() {
 
 **Distributed**: Redis ensures rate limits work across multiple API servers (all check same Redis instance).`,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-middleware-cors-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

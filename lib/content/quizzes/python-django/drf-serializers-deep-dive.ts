@@ -1163,7 +1163,7 @@ class ArticleSerializer(ProfilingSerializerMixin, serializers.ModelSerializer):
 These optimizations can improve API performance by 100x or more!
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

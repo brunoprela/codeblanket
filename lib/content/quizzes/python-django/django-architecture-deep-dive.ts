@@ -274,7 +274,7 @@ articles = Article.objects.select_related('author').prefetch_related(
 This optimization can reduce hundreds of queries to just a handful, dramatically improving performance.
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

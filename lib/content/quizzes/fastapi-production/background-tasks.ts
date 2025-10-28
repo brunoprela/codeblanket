@@ -1273,7 +1273,7 @@ celery_app.conf.broker_pool_limit = 10
 ✅ Diagnostic tools: Scripts to identify stuck queues  
 ✅ Regular reviews: Analyze slow tasks weekly`,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-background-tasks-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

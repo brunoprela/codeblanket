@@ -873,7 +873,7 @@ def test_audit_log_on_denied_access (client, db):
 5. **Session timeout**: Auto-logout after inactivity
 6. **MFA for privileged roles**: Require MFA for doctors and admins`,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-authz-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

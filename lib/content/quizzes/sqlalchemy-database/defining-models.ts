@@ -1,4 +1,4 @@
-import { MultipleChoiceQuestion } from '@/lib/types';
+// import { MultipleChoiceQuestion } from '@/lib/types';
 
 export const definingModelsQuiz = [
   {

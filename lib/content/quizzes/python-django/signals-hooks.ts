@@ -807,7 +807,7 @@ PluginRegistry.register('seo_optimizer', SEOOptimizerPlugin)
 This architecture enables a flexible, extensible application where functionality can be added without touching core code.
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

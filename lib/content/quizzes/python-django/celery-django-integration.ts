@@ -357,7 +357,7 @@ CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 min soft limit
 \`\`\`
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

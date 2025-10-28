@@ -17,7 +17,7 @@ export const testingFastapiQuiz = [
       'Design a testing strategy for rate-limited endpoints that use Redis. The tests must verify: (1) requests within limit succeed, (2) requests exceeding limit return 429, (3) rate limit resets after time window, (4) different rate limits for authenticated vs anonymous users, and (5) rate limits work correctly across multiple test runs. How would you mock or set up Redis for testing? Show the complete test implementation with proper cleanup.',
     answer: `Complete testing strategy for rate-limited endpoints including Redis mock setup, test isolation with cleanup, time manipulation for testing window resets, and verification of different rate limits per user tier.`,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-testing-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),
@@ -93,4 +93,7 @@ export const testingFastapiMultipleChoice = [
     explanation:
       'Pytest fixtures enable DRY testing by providing reusable setup/teardown. Common fixtures: @pytest.fixture def client(): return TestClient (app) (test client), @pytest.fixture def db(): (database session with rollback), @pytest.fixture def authenticated_client(): (client with auth token). Fixtures can depend on other fixtures, have different scopes (function, session), and automatically handle cleanup with yield. Benefits: Reduce boilerplate, ensure consistent test setup, automatic cleanup, composition through fixture dependencies.',
   },
-].map(({ id, ...q }, idx) => ({ id: `testing-fastapi-mc-${idx + 1}`, ...q }));
+].map(({ id: _id, ...q }, idx) => ({
+  id: `testing-fastapi-mc-${idx + 1}`,
+  ...q,
+}));

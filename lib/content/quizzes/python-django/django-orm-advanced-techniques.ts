@@ -651,7 +651,7 @@ def check_database_health():
 This architecture allows horizontal scaling of read traffic while maintaining data consistency for writes.
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

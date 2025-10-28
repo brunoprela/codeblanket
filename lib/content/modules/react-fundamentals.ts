@@ -3,7 +3,12 @@
  * Module 1: Foundational React concepts including components, JSX, props, state, and hooks
  */
 
-import { Module, DiscussionItem, MultipleChoiceQuestion } from '../../types';
+import {
+  Module,
+  DiscussionItem,
+  MultipleChoiceQuestion,
+  QuizQuestion,
+} from '../../types';
 
 // Import sections
 import { introductionToReactJsx } from '../sections/react-fundamentals/introduction-to-react-jsx';
@@ -43,6 +48,7 @@ export const reactFundamentalsModule: Module = {
   title: 'React Fundamentals',
   description:
     'Master the core concepts of modern React including components, JSX, props, state, and hooks',
+  icon: '⚛️',
   learningObjectives: [
     "Understand React's component-based architecture and Virtual DOM",
     'Write modern function components with TypeScript',
@@ -57,29 +63,34 @@ export const reactFundamentalsModule: Module = {
   sections: [
     {
       ...introductionToReactJsx,
+      quiz: introductionToReactJsxDiscussion as unknown as QuizQuestion[],
       discussion:
         introductionToReactJsxDiscussion as unknown as DiscussionItem[],
       multipleChoice: introductionToReactJsxMultipleChoice,
     },
     {
       ...functionComponentsTypescript,
+      quiz: functionComponentsTypescriptDiscussion as unknown as QuizQuestion[],
       discussion:
         functionComponentsTypescriptDiscussion as unknown as DiscussionItem[],
       multipleChoice: functionComponentsTypescriptMultipleChoice,
     },
     {
       ...stateManagementUseState,
+      quiz: stateManagementUseStateDiscussion as unknown as QuizQuestion[],
       discussion:
         stateManagementUseStateDiscussion as unknown as DiscussionItem[],
       multipleChoice: stateManagementUseStateMultipleChoice,
     },
     {
       ...eventHandling,
+      quiz: eventHandlingDiscussion as unknown as QuizQuestion[],
       discussion: eventHandlingDiscussion as unknown as DiscussionItem[],
       multipleChoice: eventHandlingMultipleChoice,
     },
     {
       ...conditionalRendering,
+      quiz: conditionalRenderingDiscussion.questions as unknown as QuizQuestion[],
       discussion:
         conditionalRenderingDiscussion.questions as unknown as DiscussionItem[],
       multipleChoice: (conditionalRenderingQuiz.questions ||
@@ -87,6 +98,7 @@ export const reactFundamentalsModule: Module = {
     },
     {
       ...listsAndKeys,
+      quiz: listsAndKeysDiscussion.questions as unknown as QuizQuestion[],
       discussion:
         listsAndKeysDiscussion.questions as unknown as DiscussionItem[],
       multipleChoice: (listsAndKeysQuiz.questions ||
@@ -94,6 +106,7 @@ export const reactFundamentalsModule: Module = {
     },
     {
       ...formsIntroduction,
+      quiz: formsIntroductionDiscussion.questions as unknown as QuizQuestion[],
       discussion:
         formsIntroductionDiscussion.questions as unknown as DiscussionItem[],
       multipleChoice: (formsIntroductionQuiz.questions ||
@@ -101,6 +114,7 @@ export const reactFundamentalsModule: Module = {
     },
     {
       ...reactDeveloperTools,
+      quiz: reactDeveloperToolsDiscussion.questions as unknown as QuizQuestion[],
       discussion:
         reactDeveloperToolsDiscussion.questions as unknown as DiscussionItem[],
       multipleChoice: (reactDeveloperToolsQuiz.questions ||
@@ -108,6 +122,7 @@ export const reactFundamentalsModule: Module = {
     },
     {
       ...legacyPatternsAndMigration,
+      quiz: legacyPatternsAndMigrationDiscussion.questions as unknown as QuizQuestion[],
       discussion:
         legacyPatternsAndMigrationDiscussion.questions as unknown as DiscussionItem[],
       multipleChoice: (legacyPatternsAndMigrationQuiz.questions ||

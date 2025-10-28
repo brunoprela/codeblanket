@@ -624,7 +624,7 @@ async function cancelDownload (exportId) {
 5. **Cancellation**: Set flag, check in generator loop
 6. **Cleanup**: Background task removes old progress data`,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-file-uploads-streaming-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

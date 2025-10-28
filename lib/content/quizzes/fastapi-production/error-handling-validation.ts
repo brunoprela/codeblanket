@@ -402,7 +402,7 @@ async function handleApiError (error: Response) {
 - Development: Full details, stack traces, input values
 - Always include: request_id for support ticket correlation`,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `fastapi-error-handling-validation-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),

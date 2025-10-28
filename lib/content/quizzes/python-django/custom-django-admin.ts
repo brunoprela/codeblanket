@@ -1276,7 +1276,7 @@ class ArticleAdmin(NestedModelAdmin):
 These advanced features create a powerful, user-friendly admin interface for content management.
       `,
   },
-].map(({ id, ...q }, idx) => ({
+].map(({ id: _id, ...q }, idx) => ({
   id: `django-q-${idx + 1}`,
   question: q.question,
   sampleAnswer: String(q.answer),
