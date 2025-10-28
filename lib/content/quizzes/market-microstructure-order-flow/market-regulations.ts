@@ -1,10 +1,11 @@
 import { DiscussionQuestion } from '@/lib/types';
 
 export const marketRegulationsQuiz: DiscussionQuestion[] = [
-    {
-        id: 'market-regulations-dq-1',
-        question: 'Design a comprehensive trade surveillance system that detects spoofing, layering, and wash trading in real-time. Your system must: (1) Define quantitative thresholds for suspicious patterns (order-to-trade ratios, cancel rates, time-to-cancel distributions), (2) Implement machine learning models to identify sophisticated manipulation strategies, (3) Generate alerts with different severity levels (low/medium/high/critical), (4) Integrate with order management systems to automatically pause suspicious accounts, and (5) Produce regulatory reports in SEC/FINRA format. Include specific algorithms, false positive mitigation strategies, and explain how to balance detection sensitivity with operational efficiency.',
-        sampleAnswer: `A production-grade trade surveillance system requires sophisticated pattern detection combined with machine learning to identify market manipulation while minimizing false positives. Here's a comprehensive design:
+  {
+    id: 'market-regulations-dq-1',
+    question:
+      'Design a comprehensive trade surveillance system that detects spoofing, layering, and wash trading in real-time. Your system must: (1) Define quantitative thresholds for suspicious patterns (order-to-trade ratios, cancel rates, time-to-cancel distributions), (2) Implement machine learning models to identify sophisticated manipulation strategies, (3) Generate alerts with different severity levels (low/medium/high/critical), (4) Integrate with order management systems to automatically pause suspicious accounts, and (5) Produce regulatory reports in SEC/FINRA format. Include specific algorithms, false positive mitigation strategies, and explain how to balance detection sensitivity with operational efficiency.',
+    sampleAnswer: `A production-grade trade surveillance system requires sophisticated pattern detection combined with machine learning to identify market manipulation while minimizing false positives. Here's a comprehensive design:
 
 **1. System Architecture**
 
@@ -475,12 +476,13 @@ class RegulatoryReporter:
 - Analyst capacity: 20 alerts/day per analyst
 - SLA: 95% of alerts reviewed within SLA window
 
-This system successfully balances regulatory compliance, operational efficiency, and detection effectiveness by combining rule-based detection with ML, tiered monitoring, and automated actions for critical cases.`
-    },
-    {
-        id: 'market-regulations-dq-2',
-        question: 'Implement a Reg NMS Rule 611 (Order Protection Rule) compliance engine that prevents trade-throughs. Your system receives quotes from 13 exchanges and must: (1) Calculate NBBO in real-time (<100 microseconds latency), (2) Validate every order execution against NBBO before completion, (3) Handle edge cases (stale quotes, exchange outages, ISOs), (4) Generate exception reports for regulators, and (5) Maintain audit logs proving compliance. Describe the data structures for efficient NBBO calculation, race condition handling when quotes update during execution, and how to prove to auditors that no trade-through violations occurred.',
-        sampleAnswer: `Reg NMS Rule 611 compliance requires microsecond-level NBBO tracking with bulletproof auditability. Here's a production-grade implementation:
+This system successfully balances regulatory compliance, operational efficiency, and detection effectiveness by combining rule-based detection with ML, tiered monitoring, and automated actions for critical cases.`,
+  },
+  {
+    id: 'market-regulations-dq-2',
+    question:
+      'Implement a Reg NMS Rule 611 (Order Protection Rule) compliance engine that prevents trade-throughs. Your system receives quotes from 13 exchanges and must: (1) Calculate NBBO in real-time (<100 microseconds latency), (2) Validate every order execution against NBBO before completion, (3) Handle edge cases (stale quotes, exchange outages, ISOs), (4) Generate exception reports for regulators, and (5) Maintain audit logs proving compliance. Describe the data structures for efficient NBBO calculation, race condition handling when quotes update during execution, and how to prove to auditors that no trade-through violations occurred.',
+    sampleAnswer: `Reg NMS Rule 611 compliance requires microsecond-level NBBO tracking with bulletproof auditability. Here's a production-grade implementation:
 
 **1. System Architecture**
 
@@ -1028,7 +1030,7 @@ class ComplianceAuditor:
         - 99th percentile latency: {self.get_p99_nbbo_latency()}μs
         - Quote updates processed: {self.get_quote_count():,}
         
-        All audit logs available in database table `audit_log`.
+        All audit logs available in database table \`audit_log\`.
         No material violations detected.
         
         Compliance Officer: [Name]
@@ -1037,12 +1039,13 @@ class ComplianceAuditor:
         
         return report
 
-This implementation achieves <100μs NBBO calculation, zero trade-throughs through rigorous validation, and provides complete audit trail for regulatory compliance.`
-    },
-    {
-        id: 'market-regulations-dq-3',
-        question: 'Your European trading firm must comply with MiFID II algorithmic trading requirements. Design a comprehensive compliance program that includes: (1) Algorithmic trading registration (determining if >50% threshold is met), (2) Best execution reporting with quarterly statistics, (3) Transaction reporting with microsecond timestamps, (4) Kill switch implementation that can halt all algos within 1 second, and (5) Double volume cap monitoring for dark pools (8% per venue, 4% total). Explain how to prove best execution to regulators, the technical architecture for microsecond-accurate timestamps, and strategies for staying within dark pool volume caps.',
-        sampleAnswer: `MiFID II compliance is significantly more stringent than US regulations, requiring comprehensive monitoring and reporting systems. Here's a complete compliance program:
+This implementation achieves <100μs NBBO calculation, zero trade-throughs through rigorous validation, and provides complete audit trail for regulatory compliance.`,
+  },
+  {
+    id: 'market-regulations-dq-3',
+    question:
+      'Your European trading firm must comply with MiFID II algorithmic trading requirements. Design a comprehensive compliance program that includes: (1) Algorithmic trading registration (determining if >50% threshold is met), (2) Best execution reporting with quarterly statistics, (3) Transaction reporting with microsecond timestamps, (4) Kill switch implementation that can halt all algos within 1 second, and (5) Double volume cap monitoring for dark pools (8% per venue, 4% total). Explain how to prove best execution to regulators, the technical architecture for microsecond-accurate timestamps, and strategies for staying within dark pool volume caps.',
+    sampleAnswer: `MiFID II compliance is significantly more stringent than US regulations, requiring comprehensive monitoring and reporting systems. Here's a complete compliance program:
 
 **1. Algorithmic Trading Registration (>50% Threshold)**
 
@@ -1576,6 +1579,6 @@ class DarkPoolRoutingStrategy:
         # If no dark pool has capacity, route to lit exchange
         return 'NYSE' # Or best lit venue
 
-This comprehensive MiFID II compliance program ensures regulatory adherence through automated monitoring, microsecond timestamps, emergency controls, and proactive volume cap management.`
-    }
+This comprehensive MiFID II compliance program ensures regulatory adherence through automated monitoring, microsecond timestamps, emergency controls, and proactive volume cap management.`,
+  },
 ];

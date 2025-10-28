@@ -1,10 +1,11 @@
 import { DiscussionQuestion } from '@/lib/types';
 
 export const darkPoolsAlternativeVenuesQuiz: DiscussionQuestion[] = [
-    {
-        id: 'dark-pools-alternative-venues-dq-1',
-        question: 'You are building a smart order routing (SOR) system for an institutional asset manager executing large orders (50,000-500,000 shares). Design a comprehensive venue selection algorithm that balances: (1) fill rate optimization across dark pools and lit exchanges, (2) information leakage detection and mitigation, (3) transaction cost minimization (fees, spreads, market impact), and (4) latency management. Your system must handle real-time routing decisions within microseconds. Describe the scoring model, machine learning approaches for predicting venue performance, fallback strategies when dark pools don't fill, and how to detect when a venue's execution quality has degraded.',
-        sampleAnswer: `Building a production-grade smart order routing system requires sophisticated real-time decision-making that balances multiple competing objectives. Here's a comprehensive architecture:
+  {
+    id: 'dark-pools-alternative-venues-dq-1',
+    question:
+      "You are building a smart order routing (SOR) system for an institutional asset manager executing large orders (50,000-500,000 shares). Design a comprehensive venue selection algorithm that balances: (1) fill rate optimization across dark pools and lit exchanges, (2) information leakage detection and mitigation, (3) transaction cost minimization (fees, spreads, market impact), and (4) latency management. Your system must handle real-time routing decisions within microseconds. Describe the scoring model, machine learning approaches for predicting venue performance, fallback strategies when dark pools don't fill, and how to detect when a venue's execution quality has degraded.",
+    sampleAnswer: `Building a production-grade smart order routing system requires sophisticated real-time decision-making that balances multiple competing objectives. Here's a comprehensive architecture:
 
 **1. Architecture Overview**
 
@@ -285,29 +286,30 @@ Target latency budget: <50μs from order receipt to routing decision.
 - Demonstrate best execution quarterly (required by SEC Reg NMS)
 - Report to TCA system for transaction cost analysis
 
-This SOR system achieves: 35% dark pool fill rate (saving ~$0.03/share on spread), <2ms routing latency, and 60% reduction in information leakage vs naive routing. For a firm trading 10M shares/day, this saves ~$1M/month in execution costs.`
-    },
-    {
-        id: 'dark-pools-alternative-venues-dq-2',
-        question: 'Analyze IEX's 350-microsecond speed bump from multiple perspectives: (1) How does it protect institutional investors from latency arbitrage?(2) Why do HFT firms oppose it?(3) What are the trade- offs(reduced latency arbitrage vs.potentially lower fill rates) ? (4) Could the speed bump mechanism be improved or optimized ? (5) Should other exchanges adopt similar mechanisms ? Support your analysis with quantitative estimates of the value protected / lost by the speed bump, and discuss whether speed bumps represent a sustainable solution or merely an arms race pause.',
-sampleAnswer: `IEX's speed bump is one of the most innovative and controversial mechanisms in modern market microstructure. Let's analyze it comprehensively:
+This SOR system achieves: 35% dark pool fill rate (saving ~$0.03/share on spread), <2ms routing latency, and 60% reduction in information leakage vs naive routing. For a firm trading 10M shares/day, this saves ~$1M/month in execution costs.`,
+  },
+  {
+    id: 'dark-pools-alternative-venues-dq-2',
+    question:
+      "Analyze IEX's 350-microsecond speed bump from multiple perspectives: (1) How does it protect institutional investors from latency arbitrage?(2) Why do HFT firms oppose it?(3) What are the trade- offs(reduced latency arbitrage vs.potentially lower fill rates) ? (4) Could the speed bump mechanism be improved or optimized ? (5) Should other exchanges adopt similar mechanisms ? Support your analysis with quantitative estimates of the value protected / lost by the speed bump, and discuss whether speed bumps represent a sustainable solution or merely an arms race pause.",
+    sampleAnswer: `IEX's speed bump is one of the most innovative and controversial mechanisms in modern market microstructure. Let's analyze it comprehensively:
 
 **1. Protection Mechanism**
 
 The 350μs speed bump creates a temporal barrier that prevents latency arbitrage by ensuring that price updates (which are not delayed) reach IEX's matching engine before incoming predatory orders...
 
-[Full answer continues with detailed analysis of protection mechanisms, HFT opposition rationale, quantitative ROI calculations, speed bump optimization proposals, and industry-wide adoption feasibility - approximately 1,100 words]`
-    },
-{
+[Full answer continues with detailed analysis of protection mechanisms, HFT opposition rationale, quantitative ROI calculations, speed bump optimization proposals, and industry-wide adoption feasibility - approximately 1,100 words]`,
+  },
+  {
     id: 'dark-pools-alternative-venues-dq-3',
-        question: 'Information leakage from dark pools is a critical concern for institutional investors. Design a comprehensive monitoring and detection system that identifies when a dark pool has been compromised by information leakage. Your system should: (1) Define quantitative metrics for information leakage (price impact, quote fading, volume patterns), (2) Implement real-time detection algorithms that can identify leakage within minutes, (3) Create a venue quality scoring system that incorporates leakage history, (4) Design automated responses (reduce allocation, blacklist venue), and (5) Build a dashboard for compliance and execution teams. Include statistical tests, machine learning classifiers, and thresholds for actionable alerts.',
-            sampleAnswer: `Information leakage detection requires sophisticated statistical analysis and real-time monitoring. Here's a production system design:
+    question:
+      'Information leakage from dark pools is a critical concern for institutional investors. Design a comprehensive monitoring and detection system that identifies when a dark pool has been compromised by information leakage. Your system should: (1) Define quantitative metrics for information leakage (price impact, quote fading, volume patterns), (2) Implement real-time detection algorithms that can identify leakage within minutes, (3) Create a venue quality scoring system that incorporates leakage history, (4) Design automated responses (reduce allocation, blacklist venue), and (5) Build a dashboard for compliance and execution teams. Include statistical tests, machine learning classifiers, and thresholds for actionable alerts.',
+    sampleAnswer: `Information leakage detection requires sophisticated statistical analysis and real-time monitoring. Here's a production system design:
 
 **System Architecture:**
 
 The Information Leakage Detection System (ILDS) consists of five modules: (1) Real-Time Data Collection, (2) Statistical Analysis Engine, (3) ML-Based Anomaly Detection, (4) Venue Quality Scoring, and (5) Automated Response System...
 
-[Full answer continues with detailed metric definitions, statistical tests for leakage detection, ML models for pattern recognition, venue scoring methodology, automated response strategies, and compliance dashboard design - approximately 1,000 words]`
-}
+[Full answer continues with detailed metric definitions, statistical tests for leakage detection, ML models for pattern recognition, venue scoring methodology, automated response strategies, and compliance dashboard design - approximately 1,000 words]`,
+  },
 ];
-

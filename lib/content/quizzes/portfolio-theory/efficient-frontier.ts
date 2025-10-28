@@ -1,12 +1,12 @@
 export const efficientFrontierQuiz = {
-    id: 'efficient-frontier',
-    title: 'Efficient Frontier',
-    questions: [
-        {
-            id: 'ef-construction',
-            text: `Explain the mathematical process of constructing the efficient frontier using quadratic programming. Given three assets with expected returns [8%, 10%, 12%], volatilities [15%, 18%, 22%], and a correlation matrix with values ranging from 0.3 to 0.6, describe: (1) how to formulate the optimization problem for finding minimum variance portfolios at different target returns, (2) why the efficient frontier is a hyperbola in mean-variance space, (3) how to identify the global minimum variance portfolio and why it's special, and (4) the computational complexity of solving this for 1000 assets vs 3 assets.`,
-            type: 'discussion' as const,
-            sampleAnswer: `**1. Formulating the Optimization Problem**
+  id: 'efficient-frontier',
+  title: 'Efficient Frontier',
+  questions: [
+    {
+      id: 'ef-construction',
+      text: `Explain the mathematical process of constructing the efficient frontier using quadratic programming. Given three assets with expected returns [8%, 10%, 12%], volatilities [15%, 18%, 22%], and a correlation matrix with values ranging from 0.3 to 0.6, describe: (1) how to formulate the optimization problem for finding minimum variance portfolios at different target returns, (2) why the efficient frontier is a hyperbola in mean-variance space, (3) how to identify the global minimum variance portfolio and why it's special, and (4) the computational complexity of solving this for 1000 assets vs 3 assets.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**1. Formulating the Optimization Problem**
 
 The efficient frontier consists of portfolios that minimize risk (variance) for each level of target return. This is a **constrained quadratic optimization problem**.
 
@@ -83,7 +83,7 @@ For each target return R_target from min_return to max_return:
     - Sharpe ratio: (R_target - Rf) / σ_p
 
 Result: Set of(σ_p, R_target) points forming efficient frontier
-    ```
+    \`\`\`
 
 **Practical Implementation (Python/CVXPY):**
 
@@ -104,7 +104,7 @@ problem.solve()
 
 optimal_weights = w.value
 portfolio_risk = np.sqrt(problem.value)
-    ```
+    \`\`\`
 
 **2. Why the Efficient Frontier is a Hyperbola**
 
@@ -199,7 +199,7 @@ Sigma_inv = np.linalg.inv(Sigma)
 ones = np.ones(3)
 
 w_GMVP = Sigma_inv @ones / (ones @ Sigma_inv @ ones)
-    ```
+    \`\`\`
 
 Result (approximate):
 - w₁ = 58% (lowest vol asset gets highest weight)
@@ -352,7 +352,7 @@ Result (approximate):
 **Key Insight:**
 
 Computational complexity grows **cubically** (O(n³)) with number of assets. At scale, the statistical challenge (estimating covariance) often dominates the computational challenge. Factor models and shrinkage methods address both issues simultaneously.`,
-    keyPoints: [
+      keyPoints: [
         'Efficient frontier constructed by solving quadratic program: minimize w^T Σ w subject to target return and budget constraints',
         'Frontier is hyperbola in mean-variance space due to quadratic objective and linear constraints; curvature reflects diversification benefits',
         'Global minimum variance portfolio (GMVP) is hyperbola vertex; unique portfolio minimizing risk regardless of return',
@@ -360,12 +360,12 @@ Computational complexity grows **cubically** (O(n³)) with number of assets. At 
         'Computational complexity O(n³) for n assets; 3 assets takes <1ms, 1000 assets takes 1-2 seconds per optimization',
         'Scaling challenges at 1000+ assets: covariance estimation, matrix inversion stability, extreme optimal positions',
         'Factor models reduce 1000×1000 problem to ~50×50, enabling efficient optimization at scale',
-        'Practical approach: use standard QP solvers for <100 assets, factor models for 100-1000 assets, approximate methods beyond'
-    ]
+        'Practical approach: use standard QP solvers for <100 assets, factor models for 100-1000 assets, approximate methods beyond',
+      ],
     },
-{
-    id: 'ef-tangency-portfolio',
-        text: `The tangency portfolio (maximum Sharpe ratio portfolio) is the most important portfolio on the efficient frontier. Given a risk-free rate of 4%, and the following efficient frontier portfolios:
+    {
+      id: 'ef-tangency-portfolio',
+      text: `The tangency portfolio (maximum Sharpe ratio portfolio) is the most important portfolio on the efficient frontier. Given a risk-free rate of 4%, and the following efficient frontier portfolios:
 
 Portfolio A: Return = 8%, Risk = 10%
 Portfolio B: Return = 10%, Risk = 13%
@@ -373,8 +373,8 @@ Portfolio C: Return = 12%, Risk = 17%
 Portfolio D: Return = 14%, Risk = 22%
 
 (1) Calculate the Sharpe ratio for each portfolio and identify which is closest to the tangency portfolio. (2) Explain why the tangency portfolio represents the optimal risky portfolio for all investors regardless of risk preferences. (3) Describe how investors with different risk tolerances should combine the tangency portfolio with the risk-free asset to achieve their optimal portfolios. (4) Discuss what happens if short selling is prohibited vs. allowed, and how this affects the tangency portfolio and capital allocation line.`,
-            type: 'discussion' as const,
-                sampleAnswer: `**1. Calculating Sharpe Ratios**
+      type: 'discussion' as const,
+      sampleAnswer: `**1. Calculating Sharpe Ratios**
 
 Sharpe Ratio formula:
 \\[
@@ -704,22 +704,22 @@ With assets [8%, 10%, 12%] returns:
 **Conclusion:**
 
 The tangency portfolio is the cornerstone of modern portfolio theory. Its maximum Sharpe ratio makes it optimal for all investors, who differ only in how much they allocate to it vs. the risk-free asset. Short selling can enhance the tangency portfolio's Sharpe ratio by 20-30% but introduces significant practical challenges. For most investors, the long-only tangency portfolio provides an excellent balance of theory and practicality.`,
-                    keyPoints: [
-                        'Tangency portfolio has maximum Sharpe ratio; found where line from risk-free rate is tangent to efficient frontier',
-                        'Two-fund separation theorem: all investors hold same tangency portfolio, differ only in mix with risk-free asset',
-                        'Optimal weight formula: w* = (R_T - R_f) / (A × σ²_T) where A is risk aversion; higher A → more conservative → more cash',
-                        'Conservative investors: <100% in tangency + cash; Moderate: ~100% tangency; Aggressive: >100% tangency (leveraged)',
-                        'All combinations of tangency + risk-free asset have identical Sharpe ratio equal to tangency portfolio Sharpe',
-                        'Long-only constraint: tangency Sharpe ~0.40-0.50, limited to corner solutions, easier to implement',
-                        'Short selling allowed: tangency Sharpe can reach 0.55-0.65, extreme positions (±100%+), higher risk and complexity',
-                        'Practical trade-off: long-only for simplicity and safety, shorting for institutional investors seeking maximum efficiency'
-                    ]
-},
-{
-    id: 'ef-corner-portfolios',
-        text: `The Critical Line Algorithm identifies "corner portfolios" as the key to efficiently computing the entire efficient frontier. Explain: (1) what corner portfolios are and why they're important for efficient frontier construction, (2) how the number of corner portfolios relates to the number of assets and constraints, (3) why modern algorithms can compute the efficient frontier for 1000 assets faster than naive approaches that optimize for each target return separately, and (4) provide a real-world scenario where understanding corner portfolios helps explain sudden changes in optimal portfolio composition as target returns change.`,
-            type: 'discussion' as const,
-                sampleAnswer: `**1. What Are Corner Portfolios and Why They're Important**
+      keyPoints: [
+        'Tangency portfolio has maximum Sharpe ratio; found where line from risk-free rate is tangent to efficient frontier',
+        'Two-fund separation theorem: all investors hold same tangency portfolio, differ only in mix with risk-free asset',
+        'Optimal weight formula: w* = (R_T - R_f) / (A × σ²_T) where A is risk aversion; higher A → more conservative → more cash',
+        'Conservative investors: <100% in tangency + cash; Moderate: ~100% tangency; Aggressive: >100% tangency (leveraged)',
+        'All combinations of tangency + risk-free asset have identical Sharpe ratio equal to tangency portfolio Sharpe',
+        'Long-only constraint: tangency Sharpe ~0.40-0.50, limited to corner solutions, easier to implement',
+        'Short selling allowed: tangency Sharpe can reach 0.55-0.65, extreme positions (±100%+), higher risk and complexity',
+        'Practical trade-off: long-only for simplicity and safety, shorting for institutional investors seeking maximum efficiency',
+      ],
+    },
+    {
+      id: 'ef-corner-portfolios',
+      text: `The Critical Line Algorithm identifies "corner portfolios" as the key to efficiently computing the entire efficient frontier. Explain: (1) what corner portfolios are and why they're important for efficient frontier construction, (2) how the number of corner portfolios relates to the number of assets and constraints, (3) why modern algorithms can compute the efficient frontier for 1000 assets faster than naive approaches that optimize for each target return separately, and (4) provide a real-world scenario where understanding corner portfolios helps explain sudden changes in optimal portfolio composition as target returns change.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**1. What Are Corner Portfolios and Why They're Important**
 
 **Definition:**
 
@@ -865,7 +865,7 @@ For i = 1 to 1000:  # 1000 points on frontier
 Total time: 1000 × (time per QP)
            = 1000 × O(N³)
         = O(1000 × N³)
-            ```
+            \`\`\`
 
 For 1000 assets: 1000 × 1000³ = **10¹² operations** (hours!)
 
@@ -884,7 +884,7 @@ Exploits corner portfolio structure:
 Total time: K × (work per corner)
            = K × O(N²)  # simpler than full QP
         = O(K × N²)
-            ```
+            \`\`\`
 
 Where K = number of corners ≈ N/3
 
@@ -1070,17 +1070,16 @@ Portfolio composition doesn't change smoothly along efficient frontier. It chang
 **Conclusion:**
 
 Corner portfolios are the "skeleton" of the efficient frontier. They reveal the structural transitions in optimal portfolio composition and enable efficient computation. In practice, recognizing when you're approaching a corner portfolio helps anticipate major reallocation needs, manage trading costs, and communicate strategy changes to clients. The Critical Line Algorithm's exploitation of corner portfolios makes modern portfolio optimization computationally tractable even for thousands of assets.`,
-        keyPoints: [
-            'Corner portfolios are frontier points where constraints become active/inactive; represent structural changes in optimal composition',
-            'Number of corners typically N/3 to N/2 for N assets; grows sub-linearly due to asset substitutability and dominance',
-            'Critical Line Algorithm computes corners only, interpolates between them; 1000x faster than naive grid approach',
-            'Between corners, optimal weights change linearly; at corners, abrupt reallocation as different constraints bind',
-            'Modern algorithms achieve O(K×N²) vs naive O(M×N³) where K≈N/3 corners << M≈1000 grid points',
-            'Real-world example: sector limit constraints create corners where small target return changes cause large reallocations',
-            'Understanding corners essential for anticipating forced rebalancing, managing trading costs, and client communication',
-            'Corner portfolios provide structural insight into how optimal portfolios transition from conservative to aggressive'
-        ]
-}
-  ]
+      keyPoints: [
+        'Corner portfolios are frontier points where constraints become active/inactive; represent structural changes in optimal composition',
+        'Number of corners typically N/3 to N/2 for N assets; grows sub-linearly due to asset substitutability and dominance',
+        'Critical Line Algorithm computes corners only, interpolates between them; 1000x faster than naive grid approach',
+        'Between corners, optimal weights change linearly; at corners, abrupt reallocation as different constraints bind',
+        'Modern algorithms achieve O(K×N²) vs naive O(M×N³) where K≈N/3 corners << M≈1000 grid points',
+        'Real-world example: sector limit constraints create corners where small target return changes cause large reallocations',
+        'Understanding corners essential for anticipating forced rebalancing, managing trading costs, and client communication',
+        'Corner portfolios provide structural insight into how optimal portfolios transition from conservative to aggressive',
+      ],
+    },
+  ],
 };
-

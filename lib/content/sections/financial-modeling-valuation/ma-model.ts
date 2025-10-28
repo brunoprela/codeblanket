@@ -1,7 +1,7 @@
 export const maModel = {
-    title: 'M&A (Merger & Acquisition) Model',
-    id: 'ma-model',
-    content: `
+  title: 'M&A (Merger & Acquisition) Model',
+  id: 'ma-model',
+  content: `
 # M&A (Merger & Acquisition) Model
 
 ## Introduction
@@ -546,5 +546,5 @@ print((sensitivity * 100).round(2).to_string())
 ---
 
 **Next Section**: [Sensitivity and Scenario Analysis](./sensitivity-scenario-analysis) →
-\`,
+`,
 };

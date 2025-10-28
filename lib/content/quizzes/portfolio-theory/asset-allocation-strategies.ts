@@ -1,12 +1,12 @@
 export const assetAllocationStrategiesQuiz = {
-    id: 'asset-allocation-strategies',
-    title: 'Asset Allocation Strategies',
-    questions: [
-        {
-            id: 'aas-strategic-tactical',
-            text: `Compare strategic asset allocation (SAA) versus tactical asset allocation (TAA) for a $500M pension fund with 25-year horizon. The fund's policy portfolio is 60% Global Equities, 25% Fixed Income, 10% Real Estate, 5% Commodities. Discuss: (1) how to set SAA targets based on the fund's liability structure, risk tolerance, and long-term capital market assumptions, (2) when and how TAA should deviate from SAA (triggers, limits, expected alpha), (3) calculate the information ratio needed to justify a 5% tracking error from tactical tilts, and (4) analyze a real scenario: If your model predicts equities will underperform by 3% over next 12 months with 65% confidence, what tactical adjustment should you make?`,
-            type: 'discussion' as const,
-            sampleAnswer: `**1. Setting Strategic Asset Allocation**
+  id: 'asset-allocation-strategies',
+  title: 'Asset Allocation Strategies',
+  questions: [
+    {
+      id: 'aas-strategic-tactical',
+      text: `Compare strategic asset allocation (SAA) versus tactical asset allocation (TAA) for a $500M pension fund with 25-year horizon. The fund's policy portfolio is 60% Global Equities, 25% Fixed Income, 10% Real Estate, 5% Commodities. Discuss: (1) how to set SAA targets based on the fund's liability structure, risk tolerance, and long-term capital market assumptions, (2) when and how TAA should deviate from SAA (triggers, limits, expected alpha), (3) calculate the information ratio needed to justify a 5% tracking error from tactical tilts, and (4) analyze a real scenario: If your model predicts equities will underperform by 3% over next 12 months with 65% confidence, what tactical adjustment should you make?`,
+      type: 'discussion' as const,
+      sampleAnswer: `**1. Setting Strategic Asset Allocation**
 
 **Step 1: Analyze Liability Structure**
 
@@ -68,7 +68,7 @@ Equities    1.00  0.20  0.60  0.40
 Fixed Inc   0.20  1.00  0.25  0.10
 Real Estate 0.60  0.25  1.00  0.35
 Commodities 0.40  0.10  0.35  1.00
-                ```
+\`\`\`
 
 **Step 4: Optimization with Constraints**
 
@@ -455,49 +455,48 @@ The key insight: TAA adjustments should be **proportional to conviction**. A 65%
 - **For 65% conviction, -3% prediction: 3% equity reduction**
 
 The goal is adding value (0.5-1.5% annually) while maintaining discipline and avoiding catastrophic errors. TAA is a tool, not a strategy - SAA remains the foundation.`,
-            keyPoints: [
-                'SAA set using liability duration matching, risk capacity, and long-term capital market assumptions',
-                'Pension fund example: 60/25/10/5 (Equity/FI/RE/Comm) targets 7% return, 15% vol, 12-year duration',
-                'TAA limits typically ±10% per asset class, ≤5% tracking error; requires IR≥0.3 to justify deviations',
-                'Information ratio breakeven for 5% TE: IR≥0.04 for costs, IR≥0.3 for meaningful alpha (1.5%)',
-                'Tactical position sizing: Kelly formula suggests 30% of max deviation for 65% confidence signal',
-                'For -3% equity prediction at 65% confidence: reduce equities by 3% (from 60% to 57%), reallocate to bonds/cash',
-                'Expected value of tactical trade: ~0.02% ($90k on $500M) after costs; marginal but positive',
-                'Alternative: use put options for asymmetric payoff; costs 0.045% premium for downside protection'
-            ]
-        },
-        {
-            id: 'aas-lifecycle',
-            text: `Design a lifecycle asset allocation glide path for target-date retirement funds. Compare three approaches: (1) traditional declining equity glide path (100-age rule), (2) dynamic glide path adjusting for market valuations (reduce equities when CAPE > 25, increase when CAPE < 15), and (3) deferred annuity + risk assets (rising equity glide path). For a 35-year-old investor with 30 years to retirement, $50k current savings, $15k annual contributions, salary $80k: calculate the optimal glide path using each approach, model outcomes across 1000 Monte Carlo scenarios including sequence risk in the 5 years before/after retirement, and determine which approach maximizes retirement wealth while limiting downside risk (5th percentile outcome).`,
-            type: 'discussion' as const,
-            sampleAnswer: `**[Full comprehensive 8000+ word answer covering traditional vs dynamic vs rising equity glide paths, Monte Carlo simulation methodology, sequence risk quantification, downside protection analysis, and optimal lifecycle strategy recommendations with detailed calculations across all three approaches]**`,
-            keyPoints: [
-                'Traditional 100-age rule: 35-year-old starts 65% equities, declines to 35% by retirement at 65',
-                'Dynamic glide path adjusts for valuations: CAPE>25 reduces equity by 10%, CAPE<15 increases by 10%',
-                'Rising equity glide path with deferred annuity: starts 50% equity, rises to 70% near retirement as annuity locks income',
-                'Monte Carlo 1000 runs: traditional median $1.8M, dynamic $2.1M (+17%), rising equity $2.0M',
-                'Sequence risk critical: -40% in years 60-65 reduces final wealth by 35-45% across all approaches',
-                'Traditional best downside protection: 5th percentile $850k; dynamic $780k (risk of bad timing); rising equity $900k',
-                'Dynamic glide path wins on median outcome (+17%) but has 12% worse worst-case due to tactical timing errors',
-                'Optimal recommendation: traditional base with modest dynamic adjustments (±5% equity range, not ±10%)'
-            ]
-        },
-        {
-            id: 'aas-multi-period',
-            text: `Multi-period optimization considers how investment opportunities change over time. A 45-year-old executive with $2M investable assets, 15 years to retirement, faces time-varying expected returns: equities mean-revert (high valuations today = low future returns), bond yields determine forward returns precisely, and volatility is predictable via VIX. Explain: (1) how to formulate multi-period optimization using dynamic programming vs single-period MVO, (2) demonstrate the equity allocation rule when mean reversion is strong (AR(1) coefficient = -0.4): how should current CAPE of 30 (vs historical mean 17) affect allocation, (3) derive optimal portfolio rebalancing strategy when future volatility is predictable (when VIX spikes to 40, how does this change the optimal equity allocation), and (4) calculate the welfare gain from multi-period optimization vs static allocation - typically 1-3% annual certainty equivalent return improvement.`,
-            type: 'discussion' as const,
-            sampleAnswer: `**[Full comprehensive 8000+ word answer on multi-period dynamic programming, mean reversion impact on allocation, volatility timing strategies, welfare analysis of dynamic vs static allocation, with complete mathematical derivations and numerical examples]**`,
-            keyPoints: [
-                'Multi-period optimization uses Bellman equation: V(W,t) = max E[u(C) + βV(W_{t+1}, t+1)]; accounts for changing opportunities',
-                'Single-period MVO myopic: assumes constant returns; multi-period forward-looking: adjusts for predictability',
-                'Mean reversion with AR(1)=-0.4: CAPE 30 vs mean 17 implies 2% lower equity returns; reduce allocation by 15-20pp',
-                'Optimal equity rule under mean reversion: α_t = α_base - γ(Valuation_t - Mean) where γ≈0.8-1.2',
-                'VIX spike to 40 (from normal 15): volatility 2.7x higher; optimal equity falls from 60% to 35-40% temporarily',
-                'Volatility timing rule: when σ_t > 1.5×σ_mean, reduce equity by 30-40%; reverses when volatility normalizes',
-                'Welfare gain from multi-period vs static: 1.5-2.5% annual certainty equivalent for mean-reverting assets',
-                'Practical implementation requires reliable predictors: valuations (R²~0.4), yields (R²~0.8), volatility (R²~0.3)'
-            ]
-        }
-    ]
+      keyPoints: [
+        'SAA set using liability duration matching, risk capacity, and long-term capital market assumptions',
+        'Pension fund example: 60/25/10/5 (Equity/FI/RE/Comm) targets 7% return, 15% vol, 12-year duration',
+        'TAA limits typically ±10% per asset class, ≤5% tracking error; requires IR≥0.3 to justify deviations',
+        'Information ratio breakeven for 5% TE: IR≥0.04 for costs, IR≥0.3 for meaningful alpha (1.5%)',
+        'Tactical position sizing: Kelly formula suggests 30% of max deviation for 65% confidence signal',
+        'For -3% equity prediction at 65% confidence: reduce equities by 3% (from 60% to 57%), reallocate to bonds/cash',
+        'Expected value of tactical trade: ~0.02% ($90k on $500M) after costs; marginal but positive',
+        'Alternative: use put options for asymmetric payoff; costs 0.045% premium for downside protection',
+      ],
+    },
+    {
+      id: 'aas-lifecycle',
+      text: `Design a lifecycle asset allocation glide path for target-date retirement funds. Compare three approaches: (1) traditional declining equity glide path (100-age rule), (2) dynamic glide path adjusting for market valuations (reduce equities when CAPE > 25, increase when CAPE < 15), and (3) deferred annuity + risk assets (rising equity glide path). For a 35-year-old investor with 30 years to retirement, $50k current savings, $15k annual contributions, salary $80k: calculate the optimal glide path using each approach, model outcomes across 1000 Monte Carlo scenarios including sequence risk in the 5 years before/after retirement, and determine which approach maximizes retirement wealth while limiting downside risk (5th percentile outcome).`,
+      type: 'discussion' as const,
+      sampleAnswer: `**[Full comprehensive 8000+ word answer covering traditional vs dynamic vs rising equity glide paths, Monte Carlo simulation methodology, sequence risk quantification, downside protection analysis, and optimal lifecycle strategy recommendations with detailed calculations across all three approaches]**`,
+      keyPoints: [
+        'Traditional 100-age rule: 35-year-old starts 65% equities, declines to 35% by retirement at 65',
+        'Dynamic glide path adjusts for valuations: CAPE>25 reduces equity by 10%, CAPE<15 increases by 10%',
+        'Rising equity glide path with deferred annuity: starts 50% equity, rises to 70% near retirement as annuity locks income',
+        'Monte Carlo 1000 runs: traditional median $1.8M, dynamic $2.1M (+17%), rising equity $2.0M',
+        'Sequence risk critical: -40% in years 60-65 reduces final wealth by 35-45% across all approaches',
+        'Traditional best downside protection: 5th percentile $850k; dynamic $780k (risk of bad timing); rising equity $900k',
+        'Dynamic glide path wins on median outcome (+17%) but has 12% worse worst-case due to tactical timing errors',
+        'Optimal recommendation: traditional base with modest dynamic adjustments (±5% equity range, not ±10%)',
+      ],
+    },
+    {
+      id: 'aas-multi-period',
+      text: `Multi-period optimization considers how investment opportunities change over time. A 45-year-old executive with $2M investable assets, 15 years to retirement, faces time-varying expected returns: equities mean-revert (high valuations today = low future returns), bond yields determine forward returns precisely, and volatility is predictable via VIX. Explain: (1) how to formulate multi-period optimization using dynamic programming vs single-period MVO, (2) demonstrate the equity allocation rule when mean reversion is strong (AR(1) coefficient = -0.4): how should current CAPE of 30 (vs historical mean 17) affect allocation, (3) derive optimal portfolio rebalancing strategy when future volatility is predictable (when VIX spikes to 40, how does this change the optimal equity allocation), and (4) calculate the welfare gain from multi-period optimization vs static allocation - typically 1-3% annual certainty equivalent return improvement.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**[Full comprehensive 8000+ word answer on multi-period dynamic programming, mean reversion impact on allocation, volatility timing strategies, welfare analysis of dynamic vs static allocation, with complete mathematical derivations and numerical examples]**`,
+      keyPoints: [
+        'Multi-period optimization uses Bellman equation: V(W,t) = max E[u(C) + βV(W_{t+1}, t+1)]; accounts for changing opportunities',
+        'Single-period MVO myopic: assumes constant returns; multi-period forward-looking: adjusts for predictability',
+        'Mean reversion with AR(1)=-0.4: CAPE 30 vs mean 17 implies 2% lower equity returns; reduce allocation by 15-20pp',
+        'Optimal equity rule under mean reversion: α_t = α_base - γ(Valuation_t - Mean) where γ≈0.8-1.2',
+        'VIX spike to 40 (from normal 15): volatility 2.7x higher; optimal equity falls from 60% to 35-40% temporarily',
+        'Volatility timing rule: when σ_t > 1.5×σ_mean, reduce equity by 30-40%; reverses when volatility normalizes',
+        'Welfare gain from multi-period vs static: 1.5-2.5% annual certainty equivalent for mean-reverting assets',
+        'Practical implementation requires reliable predictors: valuations (R²~0.4), yields (R²~0.8), volatility (R²~0.3)',
+      ],
+    },
+  ],
 };
-

@@ -1,7 +1,7 @@
 export const bondPricingFundamentals = {
-    title: 'Bond Pricing Fundamentals',
-    id: 'bond-pricing-fundamentals',
-    content: `
+  title: 'Bond Pricing Fundamentals',
+  id: 'bond-pricing-fundamentals',
+  content: `
 # Bond Pricing Fundamentals
 
 ## Introduction
@@ -538,7 +538,7 @@ print(f"Clean Price: \${clean_price:.2f}")
 print(f"Accrued Interest: \${accrued:.2f}")
 print(f"Dirty Price (settlement): \${dirty:.2f}")
 print(f"\\nBuyer pays: \${dirty:.2f}")
-print(f"Seller receives: ${dirty:.2f} (${clean_price:.2f} + \${accrued:.2f} accrued)")
+print(f"Seller receives: \${dirty:.2f} (\${clean_price:.2f} + \${accrued:.2f} accrued)")
 \`\`\`
 
 ---
@@ -622,4 +622,3 @@ treasury, price = price_treasury_note()
 **Next Section**: Yield Curves and Term Structure - bootstrapping spot rates and understanding the yield curve.
 `,
 };
-

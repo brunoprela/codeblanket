@@ -1,7 +1,7 @@
 export const marketMicrostructureFundamentals = {
-    title: 'Market Microstructure Fundamentals',
-    id: 'market-microstructure-fundamentals',
-    content: `
+  title: 'Market Microstructure Fundamentals',
+  id: 'market-microstructure-fundamentals',
+  content: `
 # Market Microstructure Fundamentals
 
 ## Introduction
@@ -211,7 +211,7 @@ class LimitOrder:
         self.order_type = 'LIMIT'
     
     def __repr__(self):
-        return f"Limit {self.side} {self.quantity} {self.symbol} @ ${self.limit_price}"
+        return f"Limit {self.side} {self.quantity} {self.symbol} @ \${self.limit_price}"
 
 # Example
 order = LimitOrder('AAPL', 'BUY', 100, 150.00)
@@ -260,7 +260,7 @@ class StopOrder:
     
     def __repr__(self):
         status = "TRIGGERED" if self.triggered else "WAITING"
-        return f"Stop {self.side} {self.quantity} {self.symbol} @ ${self.stop_price} [{status}]"
+        return f"Stop {self.side} {self.quantity} {self.symbol} @ \${self.stop_price} [{status}]"
 
 # Example: Stop-loss on long position
 order = StopOrder('AAPL', 'SELL', 100, 145.00)
@@ -294,7 +294,7 @@ class IOCOrder:
         self.time_in_force = 'IOC'
     
     def __repr__(self):
-        return f"IOC {self.side} {self.quantity} {self.symbol} @ ${self.limit_price}"
+        return f"IOC {self.side} {self.quantity} {self.symbol} @ \${self.limit_price}"
 
 # Example
 order = IOCOrder('AAPL', 'BUY', 1000, 150.00)
@@ -328,7 +328,7 @@ class FOKOrder:
         self.time_in_force = 'FOK'
     
     def __repr__(self):
-        return f"FOK {self.side} {self.quantity} {self.symbol} @ ${self.limit_price}"
+        return f"FOK {self.side} {self.quantity} {self.symbol} @ \${self.limit_price}"
 
 # Example
 order = FOKOrder('AAPL', 'BUY', 1000, 150.00)
@@ -542,7 +542,7 @@ class OrderBook:
 if i < len(ask_prices):
     price = ask_prices[i]
 qty = self.asks[price].total_quantity
-ask_str = f"${price:.2f}
+ask_str = f"\${price:.2f}
 } x { qty }"
             else:
 ask_str = ""
@@ -551,7 +551,7 @@ print(f"{bid_str:<30} | {ask_str:<30}")
 
 spread = self.get_spread()
 if spread:
-    print(f"\\nSpread: ${spread:.2f}")
+    print(f"\\nSpread: \${spread:.2f}")
 
 # Example usage
 book = OrderBook('AAPL')
@@ -582,7 +582,7 @@ trades = book.add_limit_order(LimitOrder('AAPL', 'BUY', 300, 150.11))
 
 print(f"\\nExecuted {len(trades)} trades:")
 for trade in trades:
-    print(f"  {trade['quantity']} shares @ ${trade['price']:.2f}")
+    print(f"  {trade['quantity']} shares @ \${trade['price']:.2f}")
 
 # Trades:
 # 100 shares @$150.10(first order at $150.10, time priority)
@@ -819,7 +819,7 @@ def handle_new_order(event: Event):
 
 def handle_trade(event: Event):
     trade = event.data
-    print(f"[{event.timestamp}] Trade: {trade['quantity']} @ ${trade['price']}")
+    print(f"[{event.timestamp}] Trade: {trade['quantity']} @ \${trade['price']}")
     # Update positions, PnL...
 
 processor.register_handler(EventType.ORDER_NEW, handle_new_order)
@@ -856,6 +856,5 @@ processor.stop()
 6. **Understanding market mechanics** improves execution quality and system design
 
 **Next Section**: We dive into order book dynamics - how the book evolves, imbalance as a signal, and reconstructing order books from tick data.
-`
+`,
 };
-

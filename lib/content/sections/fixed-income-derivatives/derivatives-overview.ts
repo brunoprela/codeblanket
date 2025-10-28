@@ -1,7 +1,7 @@
 export const derivativesOverview = {
-    title: 'Derivatives Overview',
-    id: 'derivatives-overview',
-    content: `
+  title: 'Derivatives Overview',
+  id: 'derivatives-overview',
+  content: `
 # Derivatives Overview
 
 ## Introduction
@@ -517,4 +517,3 @@ print(f"  Rho: \${call_greeks['rho']:.2f}")
 **Next Section**: Forward and Futures Contracts - detailed mechanics, basis, carry, convergence.
 `,
 };
-

@@ -1,7 +1,7 @@
 export const durationConvexity = {
-    title: 'Duration and Convexity',
-    id: 'duration-convexity',
-    content: `
+  title: 'Duration and Convexity',
+  id: 'duration-convexity',
+  content: `
 # Duration and Convexity
 
 ## Introduction
@@ -704,4 +704,3 @@ D_portfolio = Σ(w_i × D_i)
 **Next Section**: Credit Risk and Spreads - understanding default risk and credit analysis.
 `,
 };
-

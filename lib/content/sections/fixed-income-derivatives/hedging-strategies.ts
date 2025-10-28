@@ -1,7 +1,7 @@
 export const hedgingStrategies = {
-    title: 'Hedging Strategies',
-    id: 'hedging-strategies',
-    content: `
+  title: 'Hedging Strategies',
+  id: 'hedging-strategies',
+  content: `
 # Hedging Strategies
 
 ## Introduction
@@ -435,4 +435,3 @@ Cost: Put premium (2-3% annually typical)
 **Next Section**: Fixed Income Portfolio Management - strategies, benchmarking, active vs passive.
 `,
 };
-

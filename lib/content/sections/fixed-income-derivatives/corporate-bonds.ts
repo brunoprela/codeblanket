@@ -1,7 +1,7 @@
 export const corporateBonds = {
-    title: 'Corporate Bonds',
-    id: 'corporate-bonds',
-    content: `
+  title: 'Corporate Bonds',
+  id: 'corporate-bonds',
+  content: `
 # Corporate Bonds
 
 ## Introduction
@@ -565,7 +565,7 @@ for stock_price in [20, 25, 30, 35, 40]:
 value = convert.value(0.04, 0.02)
 conv_val = convert.conversion_value
 
-print(f"Stock ${stock_price}: Convertible ${value:.2f}, Conversion \${conv_val:.2f}")
+print(f"Stock ${stock_price}: Convertible \${value:.2f}, Conversion \${conv_val:.2f}")
 \`\`\`
 
 ---
@@ -642,4 +642,3 @@ If SOFR = 4.5%, coupon = 4.5% + 1.5% = 6.0% for next period
 **Next Section**: Government Securities - Treasuries, TIPS, and the risk-free benchmark.
 `,
 };
-

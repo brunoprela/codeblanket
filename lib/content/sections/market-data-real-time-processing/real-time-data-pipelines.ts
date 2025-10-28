@@ -251,5 +251,5 @@ print(f"Replayed {len(historical)} historical quotes")
 6. **Implement backpressure** - Don't overwhelm slow consumers
 
 Now you can build production-grade real-time data pipelines!
-\`,
+`,
 };

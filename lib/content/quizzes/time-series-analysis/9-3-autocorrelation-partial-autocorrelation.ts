@@ -1,9 +1,9 @@
 export const autocorrelationPartialAutocorrelationQuiz = [
-    {
-        id: 1,
-        question:
-            "A quantitative researcher discovers that daily returns of a momentum ETF show ACF values of [0.15, 0.12, 0.09, 0.07, 0.05] at lags 1-5 (all statistically significant with p < 0.01). The trading desk wants to build a 'momentum continuation' strategy that goes long when yesterday's return was positive. The risk manager objects: 'This violates the Efficient Market Hypothesis - returns shouldn't be predictable. The strategy will lose money after transaction costs.' You need to: (1) Explain whether significant ACF genuinely indicates an exploitable market inefficiency or could be spurious, (2) Calculate the theoretical maximum profit from this autocorrelation pattern, (3) Determine the transaction cost threshold above which the strategy becomes unprofitable, and (4) Design three statistical tests to validate if this is a real tradeable pattern or data mining artifact.",
-        answer: `## Comprehensive Answer:
+  {
+    id: 1,
+    question:
+      "A quantitative researcher discovers that daily returns of a momentum ETF show ACF values of [0.15, 0.12, 0.09, 0.07, 0.05] at lags 1-5 (all statistically significant with p < 0.01). The trading desk wants to build a 'momentum continuation' strategy that goes long when yesterday's return was positive. The risk manager objects: 'This violates the Efficient Market Hypothesis - returns shouldn't be predictable. The strategy will lose money after transaction costs.' You need to: (1) Explain whether significant ACF genuinely indicates an exploitable market inefficiency or could be spurious, (2) Calculate the theoretical maximum profit from this autocorrelation pattern, (3) Determine the transaction cost threshold above which the strategy becomes unprofitable, and (4) Design three statistical tests to validate if this is a real tradeable pattern or data mining artifact.",
+    answer: `## Comprehensive Answer:
 
 ### Part 1: Is This Genuine Market Inefficiency?
 
@@ -412,12 +412,12 @@ Then it MIGHT be exploitable. But for typical execution, abandon this strategy."
 3. Bootstrap test
 
 If pattern survives these tests AND we can get execution costs down, it's worth revisiting. Otherwise, pattern is either spurious or unexploitable."`,
-    },
-    {
-        id: 2,
-        question:
-            "Your ARIMA modeling system identifies that daily S&P 500 returns have: ACF that decays geometrically (0.08, 0.06, 0.05, 0.04...) and PACF that cuts off sharply after lag 1 (0.08 at lag 1, then all near zero). This suggests an AR(1) model. However, when you fit AR(1) and examine the residuals, the Ljung-Box test shows p-value < 0.001 (rejecting white noise residuals). Additionally, the squared residuals show even stronger autocorrelation than the original returns (ACF of squared residuals: 0.25, 0.20, 0.18...). Explain: (1) What the residual autocorrelation means for your AR(1) model, (2) What the autocorrelation in squared residuals indicates, (3) Why simple ARIMA models fail here, and (4) The correct model class to use and how to validate the final model.",
-        answer: `## Comprehensive Answer:
+  },
+  {
+    id: 2,
+    question:
+      'Your ARIMA modeling system identifies that daily S&P 500 returns have: ACF that decays geometrically (0.08, 0.06, 0.05, 0.04...) and PACF that cuts off sharply after lag 1 (0.08 at lag 1, then all near zero). This suggests an AR(1) model. However, when you fit AR(1) and examine the residuals, the Ljung-Box test shows p-value < 0.001 (rejecting white noise residuals). Additionally, the squared residuals show even stronger autocorrelation than the original returns (ACF of squared residuals: 0.25, 0.20, 0.18...). Explain: (1) What the residual autocorrelation means for your AR(1) model, (2) What the autocorrelation in squared residuals indicates, (3) Why simple ARIMA models fail here, and (4) The correct model class to use and how to validate the final model.',
+    answer: `## Comprehensive Answer:
 
 ### Part 1: What Residual Autocorrelation Means
 
@@ -743,7 +743,7 @@ def validate_ar_garch(model_results, returns: pd.Series) -> dict:
 
 **Additional Considerations:**1. **If Student-t distribution fits better:**
    - Fat tails beyond GARCH
-   - Use `dist='t'` in arch_model
+   - Use \`dist='t'\` in arch_model
 
 2. **If asymmetric effects (leverage effect):**
    - Negative shocks increase volatility more
@@ -765,12 +765,12 @@ def validate_ar_garch(model_results, returns: pd.Series) -> dict:
 
 **The key insight:** 
 Returns may be unpredictable (EMH), but VOLATILITY is highly predictable (clustering). GARCH captures this.`,
-    },
-    {
-        id: 3,
-        question:
-            "A pairs trading algorithm monitors the spread between two cointegrated stocks. The trading rule is: 'Enter trade when spread exceeds 2 standard deviations, exit when spread returns to mean.' Historical backtests show excellent returns (Sharpe 2.5). However, you notice the spread's ACF shows: ACF(1)=0.95, ACF(2)=0.90, ACF(3)=0.86 - very slow geometric decay. The PACF shows a large spike at lag 1 (0.95) then drops to near zero. Your colleague says: 'Perfect! The high ACF(1)=0.95 means the spread is very persistent, so our mean-reversion trades have a high success rate.' Explain: (1) Why your colleague's interpretation is backwards and dangerous, (2) What ACF(1)=0.95 actually indicates about mean reversion speed, (3) How to calculate the optimal entry/exit thresholds given this ACF pattern, and (4) Why the backtest Sharpe of 2.5 is likely overstated and how to get a realistic estimate.",
-        answer: `## Comprehensive Answer:
+  },
+  {
+    id: 3,
+    question:
+      "A pairs trading algorithm monitors the spread between two cointegrated stocks. The trading rule is: 'Enter trade when spread exceeds 2 standard deviations, exit when spread returns to mean.' Historical backtests show excellent returns (Sharpe 2.5). However, you notice the spread's ACF shows: ACF(1)=0.95, ACF(2)=0.90, ACF(3)=0.86 - very slow geometric decay. The PACF shows a large spike at lag 1 (0.95) then drops to near zero. Your colleague says: 'Perfect! The high ACF(1)=0.95 means the spread is very persistent, so our mean-reversion trades have a high success rate.' Explain: (1) Why your colleague's interpretation is backwards and dangerous, (2) What ACF(1)=0.95 actually indicates about mean reversion speed, (3) How to calculate the optimal entry/exit thresholds given this ACF pattern, and (4) Why the backtest Sharpe of 2.5 is likely overstated and how to get a realistic estimate.",
+    answer: `## Comprehensive Answer:
 
 ### Part 1: Why Colleague's Interpretation is Wrong
 
@@ -1158,6 +1158,5 @@ print(realistic['summary'])
    - Adjust strategy for slow reversion (wider thresholds, patient capital)
 
 **Bottom line:** High persistence (ACF ≈ 1) is BAD for mean-reversion trading, not good!`,
-    },
+  },
 ];
-

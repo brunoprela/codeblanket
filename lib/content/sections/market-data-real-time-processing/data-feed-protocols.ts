@@ -1,7 +1,7 @@
 export const dataFeedProtocols = {
-    title: 'Data Feed Protocols (FIX, FAST, ITCH)',
-    id: 'data-feed-protocols',
-    content: `
+  title: 'Data Feed Protocols (FIX, FAST, ITCH)',
+  id: 'data-feed-protocols',
+  content: `
 # Data Feed Protocols (FIX, FAST, ITCH)
 
 ## Introduction
@@ -53,20 +53,20 @@ FIX is the **de facto standard** for electronic trading communication. Created i
 (Note: | represents SOH character - Start of Header, ASCII 0x01)
 
 **Tag Meanings:**
-- `8`: Begin String (FIX.4.4)
-- `9`: Body Length (178 bytes)
-- `35`: Message Type (D = New Order Single)
-- `49`: Sender CompID
-- `56`: Target CompID
-- `34`: Message Sequence Number
-- `52`: Sending Time
-- `11`: Client Order ID (ORDER123)
-- `55`: Symbol (AAPL)
-- `54`: Side (1 = Buy, 2 = Sell)
-- `38`: Order Quantity (100 shares)
-- `40`: Order Type (2 = Limit)
-- `44`: Price (150.25)
-- `10`: Checksum
+- \`8\`: Begin String (FIX.4.4)
+- \`9\`: Body Length (178 bytes)
+- \`35\`: Message Type (D = New Order Single)
+- \`49\`: Sender CompID
+- \`56\`: Target CompID
+- \`34\`: Message Sequence Number
+- \`52\`: Sending Time
+- \`11\`: Client Order ID (ORDER123)
+- \`55\`: Symbol (AAPL)
+- \`54\`: Side (1 = Buy, 2 = Sell)
+- \`38\`: Order Quantity (100 shares)
+- \`40\`: Order Type (2 = Limit)
+- \`44\`: Price (150.25)
+- \`10\`: Checksum
 
 ### FIX Message Structure
 
@@ -448,15 +448,15 @@ ITCH is NASDAQ's proprietary market data protocol delivering **every order and t
 - **Volume**: 400+ million messages per day
 
 **ITCH Message Types:**
-- `A`: Add Order
-- `F`: Add Order with MPID
-- `E`: Order Executed
-- `C`: Order Executed with Price
-- `X`: Order Cancel
-- `D`: Order Delete
-- `U`: Order Replace
-- `P`: Trade (non-cross)
-- `Q`: Cross Trade
+- \`A\`: Add Order
+- \`F\`: Add Order with MPID
+- \`E\`: Order Executed
+- \`C\`: Order Executed with Price
+- \`X\`: Order Cancel
+- \`D\`: Order Delete
+- \`U\`: Order Replace
+- \`P\`: Trade (non-cross)
+- \`Q\`: Cross Trade
 
 ### ITCH Message Structure
 
@@ -631,7 +631,7 @@ print(f"Type: {message.message_type}")
 print(f"Stock: {message.data['stock']}")
 print(f"Side: {message.data['side']}")
 print(f"Shares: {message.data['shares']}")
-print(f"Price: ${message.data['price']:.2f}")
+print(f"Price: \${message.data['price']:.2f}")
 # Type: A
 # Stock: AAPL
 # Side: BUY
@@ -836,4 +836,3 @@ Now that you understand financial protocols, you can:
 These protocols are the foundation of professional trading systems - mastering them opens doors to institutional finance infrastructure.
 `,
 };
-

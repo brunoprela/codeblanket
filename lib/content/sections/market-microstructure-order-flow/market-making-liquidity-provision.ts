@@ -1,7 +1,7 @@
 export const marketMakingLiquidityProvision = {
-    title: 'Market Making and Liquidity Provision',
-    id: 'market-making-liquidity-provision',
-    content: `
+  title: 'Market Making and Liquidity Provision',
+  id: 'market-making-liquidity-provision',
+  content: `
 # Market Making and Liquidity Provision
 
 ## Introduction
@@ -534,12 +534,12 @@ print("=" * 70)
 for key, value in analysis.items():
     if isinstance(value, float):
         if 'per_share' in key:
-            print(f"{key:>30}: ${value:.4f}
+            print(f"{key:>30}: \${value:.4f}
 }")
         elif 'margin' in key:
 print(f"{key:>30}: {value:.2f}%")
         else:
-print(f"{key:>30}: ${value:,.2f}")
+print(f"{key:>30}: \${value:,.2f}")
     else:
 print(f"{key:>30}: {value:,}")
 \`\`\`
@@ -650,6 +650,5 @@ class SimpleMarketMaker:
 4. **PFOF Disclosure:** If receiving PFOF, must disclose to clients and demonstrate execution quality (Rule 606 reports).
 
 5. **Spoofing:** Placing quotes with intent to cancel before execution to manipulate prices is illegal (Dodd-Frank Act).
-`
+`,
 };
-

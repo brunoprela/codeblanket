@@ -1,9 +1,9 @@
 export const historicalDataManagementDiscussion = [
-    {
-        id: 1,
-        question:
-            "Your trading firm is switching data vendors from Provider A to Provider B to save costs. The new provider's historical data for Apple (AAPL) shows different prices than Provider A for the same dates in 2020. What process would you implement to investigate and resolve these discrepancies? How would you ensure data quality when migrating terabytes of historical data?",
-        answer: `## Comprehensive Data Vendor Migration Strategy:
+  {
+    id: 1,
+    question:
+      "Your trading firm is switching data vendors from Provider A to Provider B to save costs. The new provider's historical data for Apple (AAPL) shows different prices than Provider A for the same dates in 2020. What process would you implement to investigate and resolve these discrepancies? How would you ensure data quality when migrating terabytes of historical data?",
+    answer: `## Comprehensive Data Vendor Migration Strategy:
 
 ### The Problem
 
@@ -400,11 +400,11 @@ class DataQualityMonitor:
                 - Parallel operation: 3 - 6 months(safest)
 `,
   },
-{
+  {
     id: 2,
-        question:
-    "Design a point-in-time database schema that tracks S&P 500 constituent changes over 20 years, ensuring your backtests never use future information about which stocks were/weren't in the index. Include how you'd handle additions, deletions, and sector reclassifications. Provide SQL schema and explain query patterns.",
-        answer: `## Point -in -Time Database Design:
+    question:
+      "Design a point-in-time database schema that tracks S&P 500 constituent changes over 20 years, ensuring your backtests never use future information about which stocks were/weren't in the index. Include how you'd handle additions, deletions, and sector reclassifications. Provide SQL schema and explain query patterns.",
+    answer: `## Point -in -Time Database Design:
 
 ### The Challenge
 
@@ -784,11 +784,11 @@ This schema enables:
 **Critical for production trading systems.**
 `,
   },
-{
+  {
     id: 3,
-        question:
-    "You're building a market data pipeline that ingests data from multiple sources (primary vendor, backup vendor, exchange direct feeds). How would you design a system to automatically detect and handle data quality issues in real-time? Include your approach to handling conflicts when sources disagree, data gaps, and corporate actions that aren't immediately reported. What monitoring and alerting would you implement?",
-        answer: `## Real-Time Data Quality System Design:
+    question:
+      "You're building a market data pipeline that ingests data from multiple sources (primary vendor, backup vendor, exchange direct feeds). How would you design a system to automatically detect and handle data quality issues in real-time? Include your approach to handling conflicts when sources disagree, data gaps, and corporate actions that aren't immediately reported. What monitoring and alerting would you implement?",
+    answer: `## Real-Time Data Quality System Design:
 
 ### Architecture Overview
 
@@ -1346,4 +1346,3 @@ This system provides:
 `,
   },
 ];
-

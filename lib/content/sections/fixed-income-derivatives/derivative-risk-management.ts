@@ -1,7 +1,7 @@
 export const derivativeRiskManagement = {
-        title: 'Derivative Risk Management',
-        id: 'derivative-risk-management',
-        content: `
+  title: 'Derivative Risk Management',
+  id: 'derivative-risk-management',
+  content: `
 # Derivative Risk Management
 
 ## Introduction
@@ -225,7 +225,7 @@ self.horizon_days = horizon_days
 self.portfolio_value = sum(p.market_value for p in positions)
 
     logger.info(
-        f"Initialized VaR: ${self.portfolio_value / 1e6:.1f
+        f"Initialized VaR: \${self.portfolio_value / 1e6:.1f
 }M portfolio, "
             f"{confidence*100:.0f}% confidence, {horizon_days}day horizon"
     )
@@ -405,7 +405,7 @@ incremental = full_var - reduced_var
 
 logger.debug(
         f"Incremental VaR for {removed_position.instrument_id}: "
-            f"${incremental/1e6:.2f}M"
+            f"\${incremental/1e6:.2f}M"
 )
 
 return incremental
@@ -652,4 +652,3 @@ print(f"Result: {'PASS ✓' if backtest_results['pass'] else 'FAIL ✗'}")
 **Next Section**: Project - Build comprehensive fixed income analytics platform integrating all concepts.
 `,
 };
-

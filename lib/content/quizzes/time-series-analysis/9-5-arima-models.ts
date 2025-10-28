@@ -428,14 +428,14 @@ def empirical_comparison_test(prices: pd.Series,
 === 10-Year S&P 500 Backtest Results ===
 
 ARIMA on Prices:
-  RMSE: ${metrics['arima_price']['rmse']:.2f}
-  MAE: ${metrics['arima_price']['mae']:.2f}
+  RMSE: \${metrics['arima_price']['rmse']:.2f}
+  MAE: \${metrics['arima_price']['mae']:.2f}
   Direction Acc: {metrics['arima_price']['direction_accuracy']*100:.1f}%
   Convergence Rate: {metrics['arima_price']['convergence_rate']*100:.0f}%
 
 ARMA on Log Returns:
-  RMSE: ${metrics['arma_return']['rmse']:.2f}
-  MAE: ${metrics['arma_return']['mae']:.2f}
+  RMSE: \${metrics['arma_return']['rmse']:.2f}
+  MAE: \${metrics['arma_return']['mae']:.2f}
   Direction Acc: {metrics['arma_return']['direction_accuracy']*100:.1f}%
   Convergence Rate: {metrics['arma_return']['convergence_rate']*100:.0f}%
 
@@ -546,4 +546,3 @@ Lower AIC in-sample ≠ better forecasts out-of-sample. AIC penalizes complexity
 **Key principle:** In trading, simplicity and robustness beat complexity.`,
   },
 ];
-

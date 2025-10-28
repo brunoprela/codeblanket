@@ -1,7 +1,7 @@
 export const creditDefaultSwaps = {
-    title: 'Credit Default Swaps (CDS)',
-    id: 'credit-default-swaps',
-    content: `
+  title: 'Credit Default Swaps (CDS)',
+  id: 'credit-default-swaps',
+  content: `
 # Credit Default Swaps (CDS)
 
 ## Introduction
@@ -387,4 +387,3 @@ If any constituent defaults: Payoff on that name, index continues
 **Next Section**: Exotic Derivatives - barriers, digitals, structured products.
 `,
 };
-

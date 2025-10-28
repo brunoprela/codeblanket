@@ -1,7 +1,7 @@
 export const dividendDiscountModel = {
-    title: 'Dividend Discount Model (DDM)',
-    id: 'dividend-discount-model',
-    content: `
+  title: 'Dividend Discount Model (DDM)',
+  id: 'dividend-discount-model',
+  content: `
 # Dividend Discount Model (DDM)
 
 ## Introduction
@@ -269,5 +269,5 @@ print(f"\\nCost of Equity (CAPM): {coe:.2%}")
 ---
 
 **Next Section**: [Sum-of-the-Parts Valuation](./sum-of-parts-valuation) →
-\`,
+`,
 };

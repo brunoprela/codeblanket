@@ -588,7 +588,7 @@ class CollaborativeAIAssistant {
           },
           {
             role: 'user',
-            content: `Current code:\\n\${content}\\n\\nSuggest one improvement.\`
+            content: \`Current code:\\n\${content}\\n\\nSuggest one improvement.\`
           }
         ],
         temperature: 0.3

@@ -1,10 +1,11 @@
 import { DiscussionQuestion } from '@/lib/types';
 
 export const latencyColocationQuiz: DiscussionQuestion[] = [
-    {
-        id: 'latency-colocation-dq-1',
-        question: 'Design a comprehensive latency measurement and monitoring system for a high-frequency trading platform that needs to track end-to-end latency from market data arrival to order acknowledgment. Your system must measure network latency, processing latency at each component (data normalizer, strategy engine, risk manager, order gateway), and queuing delays. Describe the instrumentation approach (hardware timestamping vs software), clock synchronization strategy (PTP vs GPS), data collection architecture, real-time alerting for latency spikes, and how you would identify bottlenecks. Include specific tools, protocols, and techniques used in production HFT systems.',
-        sampleAnswer: `Designing a production-grade latency measurement system for HFT requires nanosecond-precision instrumentation across the entire trading pipeline. Here's a comprehensive architecture:
+  {
+    id: 'latency-colocation-dq-1',
+    question:
+      'Design a comprehensive latency measurement and monitoring system for a high-frequency trading platform that needs to track end-to-end latency from market data arrival to order acknowledgment. Your system must measure network latency, processing latency at each component (data normalizer, strategy engine, risk manager, order gateway), and queuing delays. Describe the instrumentation approach (hardware timestamping vs software), clock synchronization strategy (PTP vs GPS), data collection architecture, real-time alerting for latency spikes, and how you would identify bottlenecks. Include specific tools, protocols, and techniques used in production HFT systems.',
+    sampleAnswer: `Designing a production-grade latency measurement system for HFT requires nanosecond-precision instrumentation across the entire trading pipeline. Here's a comprehensive architecture:
 
 **Hardware Timestamping Infrastructure**
 
@@ -250,7 +251,7 @@ class LatencyMonitor:
 2. **Queue Depth Monitoring**: Track message queue sizes (high depth = bottleneck)
 3. **CPU Saturation**: Monitor per-core CPU usage (>80% = potential bottleneck)
 4. **Context Switches**: Excessive switches indicate scheduling issues
-5. **Cache Misses**: L1/L2/L3 cache miss rates (use `perf stat`)
+5. **Cache Misses**: L1/L2/L3 cache miss rates (use \`perf stat\`)
 
 **Production Tools and Protocols**1. **Hardware**: Intel QuickAssist, Solarflare NICs with Onload, Mellanox ConnectX
 2. **Timestamping**: DPDK for userspace packet processing, kernel bypass
@@ -258,12 +259,13 @@ class LatencyMonitor:
 4. **Monitoring**: Prometheus + Grafana for dashboards, custom binary logging for low overhead
 5. **Analysis**: eBPF for kernel tracing, Intel VTune for CPU profiling
 
-This system provides comprehensive latency visibility with minimal performance impact, enabling rapid identification and resolution of performance issues in production HFT environments.`
-    },
-{
+This system provides comprehensive latency visibility with minimal performance impact, enabling rapid identification and resolution of performance issues in production HFT environments.`,
+  },
+  {
     id: 'latency-colocation-dq-2',
-        question: 'A proprietary trading firm is evaluating whether to invest in co-location at a major exchange datacenter. The exchange charges $10,000/month per cabinet, $5,000/month for a 10Gbps cross-connect, and requires a 12-month commitment. The firm currently executes from a nearby facility with 2ms round-trip latency to the exchange, while co-location would provide <100μs latency. The firm trades 5 million shares per day with an average spread capture of $0.01 per share. Analyze the ROI of co-location by estimating: (1) latency advantage in microseconds, (2) increased fill rates and reduced adverse selection from faster execution, (3) opportunity to run latency-sensitive strategies (arbitrage, quote stuffing mitigation), (4) infrastructure and operational costs beyond co-location fees, and (5) breakeven analysis. Should they co-locate?',
-            sampleAnswer: `The co-location decision is a critical strategic choice that requires comprehensive financial and operational analysis. Let's break down the ROI calculation systematically.
+    question:
+      'A proprietary trading firm is evaluating whether to invest in co-location at a major exchange datacenter. The exchange charges $10,000/month per cabinet, $5,000/month for a 10Gbps cross-connect, and requires a 12-month commitment. The firm currently executes from a nearby facility with 2ms round-trip latency to the exchange, while co-location would provide <100μs latency. The firm trades 5 million shares per day with an average spread capture of $0.01 per share. Analyze the ROI of co-location by estimating: (1) latency advantage in microseconds, (2) increased fill rates and reduced adverse selection from faster execution, (3) opportunity to run latency-sensitive strategies (arbitrage, quote stuffing mitigation), (4) infrastructure and operational costs beyond co-location fees, and (5) breakeven analysis. Should they co-locate?',
+    sampleAnswer: `The co-location decision is a critical strategic choice that requires comprehensive financial and operational analysis. Let's break down the ROI calculation systematically.
 
 **1. Latency Advantage Quantification**
 
@@ -514,12 +516,13 @@ These strategies contribute significantly to the $1.26M "new strategies" revenue
 4. **Month 4**: Launch latency-sensitive strategies, measure results
 5. **Ongoing**: Continuous optimization, explore additional co-location venues
 
-For a firm trading 5M shares/day, co-location is not optional—it's table stakes for competitiveness.`
-    },
-{
+For a firm trading 5M shares/day, co-location is not optional—it's table stakes for competitiveness.`,
+  },
+  {
     id: 'latency-colocation-dq-3',
-        question: 'Explain how to implement Precision Time Protocol (PTP) for clock synchronization in a distributed trading system with components across multiple servers. Your trading architecture has: market data servers, strategy servers, risk management servers, and order gateway servers, all within the same co-location facility. Describe the PTP network topology (boundary clocks, transparent clocks, ordinary clocks), grandmaster clock selection and redundancy, synchronization messages (Sync, Follow_Up, Delay_Req, Delay_Resp), how to achieve sub-microsecond accuracy, handling network congestion that affects PTP packets, and monitoring clock offset. Include configuration examples and explain why nanosecond-level time synchronization is critical for measuring latency and detecting arbitrage opportunities.',
-            sampleAnswer: `Precision Time Protocol (PTP) IEEE 1588v2 is essential for distributed trading systems where accurate latency measurement and event ordering across servers requires nanosecond-level time synchronization. Here's a comprehensive implementation guide.
+    question:
+      'Explain how to implement Precision Time Protocol (PTP) for clock synchronization in a distributed trading system with components across multiple servers. Your trading architecture has: market data servers, strategy servers, risk management servers, and order gateway servers, all within the same co-location facility. Describe the PTP network topology (boundary clocks, transparent clocks, ordinary clocks), grandmaster clock selection and redundancy, synchronization messages (Sync, Follow_Up, Delay_Req, Delay_Resp), how to achieve sub-microsecond accuracy, handling network congestion that affects PTP packets, and monitoring clock offset. Include configuration examples and explain why nanosecond-level time synchronization is critical for measuring latency and detecting arbitrage opportunities.',
+    sampleAnswer: `Precision Time Protocol (PTP) IEEE 1588v2 is essential for distributed trading systems where accurate latency measurement and event ordering across servers requires nanosecond-level time synchronization. Here's a comprehensive implementation guide.
 
 **PTP Network Topology and Architecture**
 
@@ -921,7 +924,6 @@ Without nanosecond-level synchronization, it's impossible to accurately measure 
 
 **Conclusion**
 
-PTP provides the timing foundation for distributed trading systems, enabling accurate latency measurement and event ordering essential for HFT strategies. Proper implementation with hardware timestamping, boundary clocks, and robust monitoring achieves sub-microsecond accuracy necessary for competitive trading.`
-}
+PTP provides the timing foundation for distributed trading systems, enabling accurate latency measurement and event ordering essential for HFT strategies. Proper implementation with hardware timestamping, boundary clocks, and robust monitoring achieves sub-microsecond accuracy necessary for competitive trading.`,
+  },
 ];
-

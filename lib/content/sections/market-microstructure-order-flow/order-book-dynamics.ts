@@ -1,7 +1,7 @@
 export const orderBookDynamics = {
-    title: 'Order Book Dynamics',
-    id: 'order-book-dynamics',
-    content: `
+  title: 'Order Book Dynamics',
+  id: 'order-book-dynamics',
+  content: `
 # Order Book Dynamics
 
 ## Introduction
@@ -197,9 +197,9 @@ mid = self.get_mid_price()
 
 print(f"\\n{'-'*60}")
 if mid:
-    print(f"Mid: ${float(mid):.4f}")
+    print(f"Mid: \${float(mid):.4f}")
 if spread:
-    print(f"Spread: ${float(spread):.4f} ({spread_bps:.2f} bps)")
+    print(f"Spread: \${float(spread):.4f} ({spread_bps:.2f} bps)")
 print(f"{'='*60}\\n")
 
 # Example usage
@@ -600,11 +600,11 @@ book.add_bid(Decimal('149.99'), 500)
 book.add_ask(Decimal('150.01'), 200)   # Small ask
 book.add_ask(Decimal('150.02'), 300)
 
-print(f"Simple mid: ${float(book.get_mid_price()):.4f}")
+print(f"Simple mid: \${float(book.get_mid_price()):.4f}")
 # Output: $150.005
 
 microprice = calculate_microprice(book)
-print(f"Microprice: ${float(microprice):.4f}")
+print(f"Microprice: \${float(microprice):.4f}")
 # Output: $150.0067(closer to ask due to larger bid volume)
 
 imbalance = calculate_imbalance(book, depth = 2)
@@ -875,8 +875,8 @@ async def subscribe_orderbook(symbol: str = 'btcusdt'):
                 best_ask, ask_qty = asks[0]
                 spread = best_ask - best_bid
                 
-                print(f"BBO: ${best_bid} x {bid_qty} / ${best_ask} x {ask_qty}")
-                print(f"Spread: ${spread}")
+                print(f"BBO: \${best_bid} x {bid_qty} / \${best_ask} x {ask_qty}")
+                print(f"Spread: \${spread}")
 
 # Run
 # asyncio.run(subscribe_orderbook('btcusdt'))
@@ -924,7 +924,7 @@ def plot_depth_chart(book: OrderBook, depth: int = 20):
     # Mid price line
     mid = book.get_mid_price()
     if mid:
-        ax.axvline(float(mid), color='blue', linestyle='--', linewidth=1, label=f'Mid: ${float(mid):.2f}')
+        ax.axvline(float(mid), color='blue', linestyle='--', linewidth=1, label=f'Mid: \${float(mid):.2f}')
 
 ax.set_xlabel('Price ($)')
 ax.set_ylabel('Cumulative Volume')
@@ -954,6 +954,5 @@ fig = plot_depth_chart(book)
 6. **Visualization** (depth charts) reveals liquidity and market sentiment
 
 **Next Section**: Price discovery process - how order flow translates to price movements and information incorporation into markets.
-`
+`,
 };
-

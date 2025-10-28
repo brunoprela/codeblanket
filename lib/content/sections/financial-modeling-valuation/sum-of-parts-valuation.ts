@@ -1,7 +1,7 @@
 export const sumOfPartsValuation = {
-    title: 'Sum-of-the-Parts (SOTP) Valuation',
-    id: 'sum-of-parts-valuation',
-    content: `
+  title: 'Sum-of-the-Parts (SOTP) Valuation',
+  id: 'sum-of-parts-valuation',
+  content: `
 # Sum-of-the-Parts (SOTP) Valuation
 
 ## Introduction
@@ -322,5 +322,5 @@ print(f"  No conglomerate discount detected.")
 ---
 
 **Next Section**: [Automated Model Generation](./automated-model-generation) →
-\`,
+`,
 };

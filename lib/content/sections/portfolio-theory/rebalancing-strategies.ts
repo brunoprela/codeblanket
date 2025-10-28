@@ -1,7 +1,7 @@
 export const rebalancingStrategies = {
-    title: 'Rebalancing Strategies',
-    id: 'rebalancing-strategies',
-    content: `
+  title: 'Rebalancing Strategies',
+  id: 'rebalancing-strategies',
+  content: `
 # Rebalancing Strategies
 
 ## Introduction
@@ -267,7 +267,7 @@ class CalendarRebalancer:
                 rebalance_dates.append(date)
                 
                 print(f"Rebalanced on {date.strftime('%Y-%m-%d')}: Turnover=\${turnover:,.0f}
-}, Cost = ${ trade_cost:.2f }")
+}, Cost = \${ trade_cost:.2f }")
         
         # Create results DataFrame
 results = pd.DataFrame({
@@ -941,4 +941,3 @@ Higher volatility + lower correlation = higher bonus.
 In the next section, we'll explore **Factor Models (Fama-French)**: how to understand and use factor exposures in portfolio construction.
 `,
 };
-

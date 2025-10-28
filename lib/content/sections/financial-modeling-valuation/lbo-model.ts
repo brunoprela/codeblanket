@@ -1,7 +1,7 @@
 export const lboModel = {
-    title: 'Leveraged Buyout (LBO) Model',
-    id: 'lbo-model',
-    content: `
+  title: 'Leveraged Buyout (LBO) Model',
+  id: 'lbo-model',
+  content: `
 # Leveraged Buyout (LBO) Model
 
 ## Introduction
@@ -621,5 +621,5 @@ IRR driven by:
 ---
 
 **Next Section**: [M&A Model](./ma-model) →
-\`,
+`,
 };

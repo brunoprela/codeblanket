@@ -1,12 +1,12 @@
 export const capitalMarketLineQuiz = {
-    id: 'capital-market-line',
-    title: 'Capital Market Line',
-    questions: [
-        {
-            id: 'cml-derivation',
-            text: `Derive the Capital Market Line (CML) equation starting from first principles. Given a risk-free rate of 3%, market portfolio return of 11%, and market portfolio volatility of 18%, calculate: (1) the slope of the CML and interpret its meaning, (2) the expected return and risk for a portfolio that is 150% invested in the market (50% leverage), (3) the optimal allocation to the market portfolio for an investor with utility function U = E(R) - 0.5Aσ² where A = 4, and (4) explain why the CML dominates the efficient frontier and what this means for optimal investing.`,
-            type: 'discussion' as const,
-            sampleAnswer: `**1. Deriving the Capital Market Line**
+  id: 'capital-market-line',
+  title: 'Capital Market Line',
+  questions: [
+    {
+      id: 'cml-derivation',
+      text: `Derive the Capital Market Line (CML) equation starting from first principles. Given a risk-free rate of 3%, market portfolio return of 11%, and market portfolio volatility of 18%, calculate: (1) the slope of the CML and interpret its meaning, (2) the expected return and risk for a portfolio that is 150% invested in the market (50% leverage), (3) the optimal allocation to the market portfolio for an investor with utility function U = E(R) - 0.5Aσ² where A = 4, and (4) explain why the CML dominates the efficient frontier and what this means for optimal investing.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**1. Deriving the Capital Market Line**
 
 **Starting Principles:**
 
@@ -295,7 +295,7 @@ Return
         | /╱
         |/____________________> Risk
   Rf
-            ```
+            \`\`\`
 
 The CML lies **above** the efficient frontier everywhere except at the market portfolio (tangency point).
 
@@ -387,22 +387,22 @@ The CML represents the **"efficient set"** when a risk-free asset exists. It dom
 - **Passive investing justification:** Market portfolio is optimal, no need for active management
 
 The CML is the theoretical foundation for index investing and the practical reason why passive index funds have beaten most active managers over long periods.`,
-        keyPoints: [
-            'CML equation: E(Rp) = Rf + [(RM-Rf)/σM] × σp; linear relationship between risk and return when risk-free asset available',
-            'CML slope = market Sharpe ratio = (RM-Rf)/σM = 0.444 in example; represents price of risk in equilibrium',
-            'Leverage scales return and risk proportionally; 150% market gives 15% return, 27% risk, same 0.444 Sharpe ratio',
-            'Optimal allocation formula: w* = (RM-Rf)/(A×σM²); higher risk aversion A → lower allocation to market',
-            'CML dominates efficient frontier everywhere except tangency point; combining Rf with market beats other frontier portfolios',
-            'Two-fund separation theorem: all investors hold same market portfolio, differ only in Rf/market ratio based on risk tolerance',
-            'Practical implication: hold market index fund, adjust risk with cash allocation rather than picking different stocks',
-            'CML provides theoretical foundation for passive index investing strategy used by Vanguard, Bogle, and billions in assets'
-        ]
+      keyPoints: [
+        'CML equation: E(Rp) = Rf + [(RM-Rf)/σM] × σp; linear relationship between risk and return when risk-free asset available',
+        'CML slope = market Sharpe ratio = (RM-Rf)/σM = 0.444 in example; represents price of risk in equilibrium',
+        'Leverage scales return and risk proportionally; 150% market gives 15% return, 27% risk, same 0.444 Sharpe ratio',
+        'Optimal allocation formula: w* = (RM-Rf)/(A×σM²); higher risk aversion A → lower allocation to market',
+        'CML dominates efficient frontier everywhere except tangency point; combining Rf with market beats other frontier portfolios',
+        'Two-fund separation theorem: all investors hold same market portfolio, differ only in Rf/market ratio based on risk tolerance',
+        'Practical implication: hold market index fund, adjust risk with cash allocation rather than picking different stocks',
+        'CML provides theoretical foundation for passive index investing strategy used by Vanguard, Bogle, and billions in assets',
+      ],
     },
     {
-        id: 'cml-vs-sml',
-        text: `Compare and contrast the Capital Market Line (CML) and the Security Market Line (SML) from the Capital Asset Pricing Model (CAPM). Explain: (1) what each line represents and what can be plotted on each, (2) why CML applies only to efficient portfolios while SML applies to all assets and portfolios, (3) the difference between total risk (σ) and systematic risk (β) and why each line uses different risk measures, and (4) provide a real-world example of an asset that lies on the SML but below the CML, explaining what this means for investment decisions.`,
-            type: 'discussion' as const,
-                sampleAnswer: `**1. What Each Line Represents**
+      id: 'cml-vs-sml',
+      text: `Compare and contrast the Capital Market Line (CML) and the Security Market Line (SML) from the Capital Asset Pricing Model (CAPM). Explain: (1) what each line represents and what can be plotted on each, (2) why CML applies only to efficient portfolios while SML applies to all assets and portfolios, (3) the difference between total risk (σ) and systematic risk (β) and why each line uses different risk measures, and (4) provide a real-world example of an asset that lies on the SML but below the CML, explaining what this means for investment decisions.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**1. What Each Line Represents**
 
 **Capital Market Line (CML):**
 
@@ -465,7 +465,7 @@ Return                      Return
     | /● Market                 | /● Market
         | /___________> σ            |/___________ > β
   Rf    Total Risk            Rf  Systematic Risk
-    ```
+    \`\`\`
 
 **Key Difference Summary:**
 
@@ -807,7 +807,7 @@ Almost all individual stocks lie **on the SML** (priced fairly for systematic ri
 2. For concentrated investors: Holding individual stocks is suboptimal (below CML) - should hold diversified index instead
 
 The CML tells us **diversification is powerful** - by eliminating idiosyncratic risk, diversified portfolios achieve better risk-return tradeoffs than individual securities.`,
-    keyPoints: [
+      keyPoints: [
         'CML plots total risk (σ) vs return for efficient portfolios only; SML plots systematic risk (β) vs return for all assets',
         'CML applies to combinations of risk-free asset + market portfolio; SML applies universally to individual stocks, bonds, any asset',
         'Total risk = systematic risk + idiosyncratic risk; only systematic risk is priced in equilibrium (CAPM)',
@@ -815,14 +815,14 @@ The CML tells us **diversification is powerful** - by eliminating idiosyncratic 
         'Beta measures only non-diversifiable market risk; sigma measures all volatility including company-specific events',
         'For diversified investors, SML is relevant (idiosyncratic risk diversifies away); for concentrated investors, CML matters',
         'Example: JNJ at 9% return, 16% vol, 0.7 beta → on/above SML (good for diversified) but below CML (poor for concentrated)',
-        'Practical implication: institutional investors use SML for stock selection; retail should hold market index (on CML) not individual stocks'
-    ]
+        'Practical implication: institutional investors use SML for stock selection; retail should hold market index (on CML) not individual stocks',
+      ],
     },
-{
-    id: 'cml-leverage',
-        text: `Analyze the role of leverage in the Capital Market Line framework. A hedge fund wants to target 15% annualized return using CML strategy (market portfolio + risk-free asset combinations). Given: Rf = 3%, market return = 11%, market volatility = 18%. Calculate: (1) the required allocation to achieve 15% return and the resulting portfolio volatility, (2) the leverage ratio and amount that needs to be borrowed per $1 million invested, (3) the impact on returns if the borrowing rate is 5% instead of the risk-free rate of 3%, and (4) discuss the practical risks of leverage (margin calls, volatility drag, fat tails) and when leveraged CML strategies are appropriate vs. inappropriate.`,
-            type: 'discussion' as const,
-                sampleAnswer: `**1. Required Allocation for 15% Return**
+    {
+      id: 'cml-leverage',
+      text: `Analyze the role of leverage in the Capital Market Line framework. A hedge fund wants to target 15% annualized return using CML strategy (market portfolio + risk-free asset combinations). Given: Rf = 3%, market return = 11%, market volatility = 18%. Calculate: (1) the required allocation to achieve 15% return and the resulting portfolio volatility, (2) the leverage ratio and amount that needs to be borrowed per $1 million invested, (3) the impact on returns if the borrowing rate is 5% instead of the risk-free rate of 3%, and (4) discuss the practical risks of leverage (margin calls, volatility drag, fat tails) and when leveraged CML strategies are appropriate vs. inappropriate.`,
+      type: 'discussion' as const,
+      sampleAnswer: `**1. Required Allocation for 15% Return**
 
 **CML Equation:**
 \\[
@@ -1313,17 +1313,16 @@ For most investors, achieving 15% returns through 1.5x leverage (150% market) is
 4. Options strategies (covered calls, cash-secured puts)
 
 **Leverage should only be used by sophisticated investors with professional risk management, long time horizons, and ability to withstand 50%+ drawdowns without forced selling.**`,
-                    keyPoints: [
-                        '150% market allocation required for 15% return target; results in 27% volatility and 1.5x leverage ratio',
-                        'Need to borrow $500K per $1M invested; borrowing at 5% vs 3% reduces return from 15% to 14% (1% drag)',
-                        'Margin calls triggered at ~55% market drawdown with 1.5x leverage; forced liquidation locks in losses',
-                        'Volatility drag increases with leverage: 27% vol causes 3.65% drag vs 1.62% for unlevered, reducing geometric returns',
-                        'Fat tail events (Black Monday, 2008, 2020) occur 10-50x more often than normal distribution predicts, devastating leveraged portfolios',
-                        'Appropriate for: institutions with risk management, long horizons (20+ years), moderate leverage (1.2-1.3x)',
-                        'Inappropriate for: retail investors, short horizons, high leverage (2x+), high volatility environments',
-                        'Historical 1.5x leverage adds only 0.7% annual return vs 50% more volatility and 85% max drawdown - poor risk/reward for most'
-                    ]
-}
-  ]
+      keyPoints: [
+        '150% market allocation required for 15% return target; results in 27% volatility and 1.5x leverage ratio',
+        'Need to borrow $500K per $1M invested; borrowing at 5% vs 3% reduces return from 15% to 14% (1% drag)',
+        'Margin calls triggered at ~55% market drawdown with 1.5x leverage; forced liquidation locks in losses',
+        'Volatility drag increases with leverage: 27% vol causes 3.65% drag vs 1.62% for unlevered, reducing geometric returns',
+        'Fat tail events (Black Monday, 2008, 2020) occur 10-50x more often than normal distribution predicts, devastating leveraged portfolios',
+        'Appropriate for: institutions with risk management, long horizons (20+ years), moderate leverage (1.2-1.3x)',
+        'Inappropriate for: retail investors, short horizons, high leverage (2x+), high volatility environments',
+        'Historical 1.5x leverage adds only 0.7% annual return vs 50% more volatility and 85% max drawdown - poor risk/reward for most',
+      ],
+    },
+  ],
 };
-

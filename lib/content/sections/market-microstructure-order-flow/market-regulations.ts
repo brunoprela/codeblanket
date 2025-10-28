@@ -1,7 +1,7 @@
 export const marketRegulations = {
-    title: 'Market Regulations (Reg NMS & MiFID II)',
-    id: 'market-regulations',
-    content: `# Market Regulations (Reg NMS & MiFID II)
+  title: 'Market Regulations (Reg NMS & MiFID II)',
+  id: 'market-regulations',
+  content: `# Market Regulations (Reg NMS & MiFID II)
 
 ## Introduction
 
@@ -132,8 +132,8 @@ class NBBOCalculator:
 if execution_price < nbbo['bid']:
     return {
         'violation': True,
-        'reason': f"Sell at ${execution_price:.2f}
-} < NBBO bid ${ nbbo['bid']:.2f }",
+        'reason': f"Sell at \${execution_price:.2f}
+} < NBBO bid \${ nbbo['bid']:.2f }",
 'nbbo_price': nbbo['bid'],
     'nbbo_exchanges': nbbo['bid_exchanges'],
         'price_difference': nbbo['bid'] - execution_price
@@ -154,7 +154,7 @@ nbbo_calc.update_quote(Quote(Exchange.CBOE, bid = 99.99, ask = 100.11,
 
 # Calculate NBBO
 nbbo = nbbo_calc.calculate_nbbo()
-print(f"NBBO: ${nbbo['bid']:.2f} x ${nbbo['ask']:.2f}")
+print(f"NBBO: \${nbbo['bid']:.2f} x \${nbbo['ask']:.2f}")
 print(f"  Best bid from: {[e.value for e in nbbo['bid_exchanges']]}")
 print(f"  Best ask from: {[e.value for e in nbbo['ask_exchanges']]}")
 
@@ -486,7 +486,7 @@ result = monitor.check_limit_up_down(current_price=142.00)  # >5% decline
 
 if result['triggered']:
     print(f"⚠ CIRCUIT BREAKER: {result['type']}")
-    print(f"  Price: ${result['current_price']:.2f}, Band: ${ result['band']:.2f } ")
+    print(f"  Price: \${result['current_price']:.2f}, Band: \${ result['band']:.2f } ")
 print(f"  Action: {result['action']}")
 \`\`\`
 
@@ -624,6 +624,5 @@ Regulatory compliance is non-negotiable for modern trading systems:
 - **Circuit breakers** prevent excessive volatility
 
 Compliance failures result in substantial fines, trading suspensions, and reputational damage. Automated compliance monitoring is essential for production trading systems.
-`
+`,
 };
-

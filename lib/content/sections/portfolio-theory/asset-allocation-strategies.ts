@@ -759,5 +759,5 @@ Implement vol-targeting strategy:
     - Time/skill for active management
 
 In the next section, we'll explore **Rebalancing Strategies** in depth: when, how, and why to rebalance portfolios.
-\`
+`,
 };

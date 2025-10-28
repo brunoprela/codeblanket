@@ -18,7 +18,7 @@ export const arimaModelsMultipleChoice = [
   {
     id: 2,
     question:
-      'An ARIMA(0,1,1) model is fit to daily stock prices with θ = -0.2. What is the 1-step ahead forecast for tomorrow's price if today's price is $100 and today's residual is $0.50?',
+      "An ARIMA(0,1,1) model is fit to daily stock prices with θ = -0.2. What is the 1-step ahead forecast for tomorrow's price if today's price is $100 and today's residual is $0.50?",
     options: [
       '$100.00 (random walk forecast)',
       '$99.90 (incorporating negative MA term)',
@@ -44,7 +44,7 @@ export const arimaModelsMultipleChoice = [
     ],
     correctAnswer: 2,
     explanation:
-      "4 parameters total (excluding constant). SARIMA(p,d,q)(P,D,Q)ₛ parameters: (1) Non-seasonal AR: φ₁, ..., φₚ → 1 parameter (p=1), (2) Non-seasonal MA: θ₁, ..., θ_q → 1 parameter (q=1), (3) Seasonal AR: Φ₁, ..., Φₚ → 1 parameter (P=1), (4) Seasonal MA: Θ₁, ..., Θ_Q → 1 parameter (Q=1). The d and D are differencing orders (not parameters), s=12 is the seasonal period (fixed). Total parameters to estimate: p + q + P + Q = 1+1+1+1 = 4. If include constant: 5 parameters. Warning: High parameter count risks overfitting. For 5 years monthly data (60 obs), 4 parameters is ~7% of data → reasonable. Seasonal models need sufficient data: want at least 4-5 full seasonal cycles (48-60 months for monthly with s=12).",
+      '4 parameters total (excluding constant). SARIMA(p,d,q)(P,D,Q)ₛ parameters: (1) Non-seasonal AR: φ₁, ..., φₚ → 1 parameter (p=1), (2) Non-seasonal MA: θ₁, ..., θ_q → 1 parameter (q=1), (3) Seasonal AR: Φ₁, ..., Φₚ → 1 parameter (P=1), (4) Seasonal MA: Θ₁, ..., Θ_Q → 1 parameter (Q=1). The d and D are differencing orders (not parameters), s=12 is the seasonal period (fixed). Total parameters to estimate: p + q + P + Q = 1+1+1+1 = 4. If include constant: 5 parameters. Warning: High parameter count risks overfitting. For 5 years monthly data (60 obs), 4 parameters is ~7% of data → reasonable. Seasonal models need sufficient data: want at least 4-5 full seasonal cycles (48-60 months for monthly with s=12).',
     difficulty: 'intermediate',
   },
   {
@@ -76,8 +76,7 @@ export const arimaModelsMultipleChoice = [
     ],
     correctAnswer: 2,
     explanation:
-      "Add seasonal component (SARIMA with s=12). Residual ACF significant at lag 12 (but not nearby lags) suggests ANNUAL seasonality: lag 12 = 12 months = 1 year. This pattern indicates your non-seasonal ARIMA missed seasonal dynamics. Solution: Upgrade to SARIMA(p,d,q)(P,D,Q)₁₂. Start with (P,D,Q) = (1,0,1) or (0,1,1) at seasonal frequency. Why not high-order AR/MA? Adding AR(12) or MA(12) requires 12+ parameters (wasteful). Seasonal models are parsimonious: Φ₁₂ captures annual pattern with 1 parameter. Example: If current model is ARIMA(1,1,1), try SARIMA(1,1,1)(1,0,1)₁₂ or SARIMA(1,1,1)(0,1,1)₁₂. Re-fit and check if lag 12 ACF becomes insignificant. Common in finance: Quarterly earnings → lag 12 in monthly stock data. Retail sales → December spike. Always inspect ACF for seasonal patterns!",
+      'Add seasonal component (SARIMA with s=12). Residual ACF significant at lag 12 (but not nearby lags) suggests ANNUAL seasonality: lag 12 = 12 months = 1 year. This pattern indicates your non-seasonal ARIMA missed seasonal dynamics. Solution: Upgrade to SARIMA(p,d,q)(P,D,Q)₁₂. Start with (P,D,Q) = (1,0,1) or (0,1,1) at seasonal frequency. Why not high-order AR/MA? Adding AR(12) or MA(12) requires 12+ parameters (wasteful). Seasonal models are parsimonious: Φ₁₂ captures annual pattern with 1 parameter. Example: If current model is ARIMA(1,1,1), try SARIMA(1,1,1)(1,0,1)₁₂ or SARIMA(1,1,1)(0,1,1)₁₂. Re-fit and check if lag 12 ACF becomes insignificant. Common in finance: Quarterly earnings → lag 12 in monthly stock data. Retail sales → December spike. Always inspect ACF for seasonal patterns!',
     difficulty: 'advanced',
   },
 ];
-

@@ -148,5 +148,5 @@ WHERE symbol = 'AAPL'
 6. **Separate hot/cold storage** - Recent data on SSD, old on HDD
 
 Now you can store billions of ticks efficiently!
-\`,
+`,
 };

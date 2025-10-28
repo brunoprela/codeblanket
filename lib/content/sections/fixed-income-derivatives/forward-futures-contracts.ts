@@ -1,7 +1,7 @@
 export const forwardFuturesContracts = {
-    title: 'Forward and Futures Contracts',
-    id: 'forward-futures-contracts',
-    content: `
+  title: 'Forward and Futures Contracts',
+  id: 'forward-futures-contracts',
+  content: `
 # Forward and Futures Contracts
 
 ## Introduction
@@ -507,4 +507,3 @@ Short 120 futures contracts to hedge
 **Next Section**: Swaps - interest rate swaps, currency swaps, valuation and applications.
 `,
 };
-
