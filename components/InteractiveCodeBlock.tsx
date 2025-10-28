@@ -1,13 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import SimpleEditor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs';
-import 'prismjs/components/prism-python';
+import dynamic from 'next/dynamic';
 
 import { getPyodide } from '@/lib/pyodide';
 import { usePyodide } from '@/lib/hooks/usePyodide';
 import { ClientOnlySyntaxHighlighter } from './ClientOnlySyntaxHighlighter';
+
+// Dynamically import Monaco Editor with no SSR
+const Editor = dynamic(() => import('@monaco-editor/react'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-[300px] items-center justify-center bg-[#282a36]">
+      <div className="flex items-center gap-2 text-sm text-[#6272a4]">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#bd93f9] border-t-transparent" />
+        Loading editor...
+      </div>
+    </div>
+  ),
+});
 
 interface InteractiveCodeBlockProps {
   code: string;
@@ -200,30 +211,75 @@ json.dumps(_plot_images)
       )}
 
       {/* Code Editor */}
-      <div className="bg-[#282a36] p-4">
-        <pre
-          className="language-python"
-          style={{ margin: 0, background: 'transparent' }}
-        >
-          <SimpleEditor
-            value={code}
-            onValueChange={setCode}
-            highlight={(code) => highlight(code, languages.python, 'python')}
-            padding={0}
-            style={{
-              fontFamily:
-                '"Fira Code", "Fira Mono", "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace',
-              fontSize: 14,
-              minHeight: '100px',
-              backgroundColor: 'transparent',
-              color: '#f8f8f2',
-              outline: 'none',
-              lineHeight: '1.5',
-              caretColor: '#f8f8f2',
-            }}
-            textareaClassName="focus:outline-none"
-          />
-        </pre>
+      <div className="bg-[#282a36]">
+        <Editor
+          height="300px"
+          defaultLanguage={language}
+          language={language}
+          value={code}
+          onChange={(value) => setCode(value || '')}
+          theme="dracula"
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            roundedSelection: true,
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            tabSize: 4,
+            wordWrap: 'on',
+            wrappingStrategy: 'advanced',
+            padding: { top: 16, bottom: 16 },
+            fontFamily:
+              '"Fira Code", "Fira Mono", "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace',
+            fontLigatures: true,
+            cursorBlinking: 'smooth',
+            cursorSmoothCaretAnimation: 'on',
+            smoothScrolling: true,
+            contextmenu: false,
+            scrollbar: {
+              verticalScrollbarSize: 10,
+              horizontalScrollbarSize: 10,
+            },
+          }}
+          beforeMount={(monaco) => {
+            // Define Dracula theme for Monaco
+            monaco.editor.defineTheme('dracula', {
+              base: 'vs-dark',
+              inherit: true,
+              rules: [
+                { token: 'comment', foreground: '6272a4', fontStyle: 'italic' },
+                { token: 'keyword', foreground: 'ff79c6' },
+                { token: 'operator', foreground: 'ff79c6' },
+                { token: 'string', foreground: 'f1fa8c' },
+                { token: 'number', foreground: 'bd93f9' },
+                { token: 'function', foreground: '50fa7b' },
+                { token: 'class', foreground: '8be9fd' },
+                { token: 'type', foreground: '8be9fd' },
+                { token: 'variable', foreground: 'f8f8f2' },
+                { token: 'parameter', foreground: 'ffb86c' },
+                { token: 'constant', foreground: 'bd93f9' },
+              ],
+              colors: {
+                'editor.background': '#282a36',
+                'editor.foreground': '#f8f8f2',
+                'editor.lineHighlightBackground': '#44475a',
+                'editor.selectionBackground': '#44475a',
+                'editorCursor.foreground': '#f8f8f2',
+                'editorLineNumber.foreground': '#6272a4',
+                'editorLineNumber.activeForeground': '#f8f8f2',
+                'editor.inactiveSelectionBackground': '#44475a',
+                'editorWhitespace.foreground': '#44475a',
+                'editorIndentGuide.background': '#44475a',
+                'editorIndentGuide.activeBackground': '#6272a4',
+              },
+            });
+          }}
+          onMount={(editor, monaco) => {
+            // Set Dracula theme after mount
+            monaco.editor.setTheme('dracula');
+          }}
+        />
       </div>
 
       {/* Action Buttons */}
