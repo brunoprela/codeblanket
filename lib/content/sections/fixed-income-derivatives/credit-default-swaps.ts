@@ -324,7 +324,7 @@ mtm = cds.mark_to_market(market_spread, hazard_rate)
 
 print(f"Market spread: {market_spread*10000:.0f} bp")
 print(f"Contract spread: {cds.spread*10000:.0f} bp")
-print(f"MTM (buyer): ${mtm:,.2f}
+print(f"MTM (buyer): \${mtm:,.2f}
 }")
 
 if mtm > 0:

@@ -283,7 +283,7 @@ class FuturesContract:
         else:  # short
             pnl = -num_ticks * self.tick_value * self.contracts
         
-        logger.info(f"Daily P&L: ${pnl:,.2f}
+        logger.info(f"Daily P&L: \${pnl:,.2f}
 }")
         
         # Update futures price for next day
@@ -354,7 +354,7 @@ price = (
     self.S * norm.cdf(-self.d1)
 )
 
-logger.info(f"{option_type.value} option price: ${price:.2f}")
+logger.info(f"{option_type.value} option price: \${price:.2f}")
 
 return price
     
@@ -426,7 +426,7 @@ print(f"Agreed forward price: {forward.forward_price:.2f}")
     
     # Mark - to - market
 mtm = forward.mark_to_market(current_forward = 113.0)
-print(f"MTM value: ${mtm:,.2f}")
+print(f"MTM value: \${mtm:,.2f}")
 
 print("\\n=== Futures Contract ===\\n")
 
@@ -439,10 +439,10 @@ futures = FuturesContract(
     
     # Daily settlement
 pnl_day1 = futures.daily_settlement(new_price = 110.5)
-print(f"Day 1 P&L: ${pnl_day1:,.2f}")
+print(f"Day 1 P&L: \${pnl_day1:,.2f}")
 
 pnl_day2 = futures.daily_settlement(new_price = 110.25)
-print(f"Day 2 P&L: ${pnl_day2:,.2f}")
+print(f"Day 2 P&L: \${pnl_day2:,.2f}")
 
 print("\\n=== Options ===\\n")
 
@@ -457,8 +457,8 @@ option = BlackScholesOption(
 call_price = option.price(OptionType.CALL)
 put_price = option.price(OptionType.PUT)
 
-print(f"Call option price: ${call_price:.2f}")
-print(f"Put option price: ${put_price:.2f}")
+print(f"Call option price: \${call_price:.2f}")
+print(f"Put option price: \${put_price:.2f}")
     
     # Greeks
 call_greeks = option.greeks(OptionType.CALL)
@@ -466,9 +466,9 @@ call_greeks = option.greeks(OptionType.CALL)
 print("\\nCall Option Greeks:")
 print(f"  Delta: {call_greeks['delta']:.4f}")
 print(f"  Gamma: {call_greeks['gamma']:.4f}")
-print(f"  Vega: ${call_greeks['vega']:.2f}")
-print(f"  Theta: ${call_greeks['theta']:.2f}/day")
-print(f"  Rho: ${call_greeks['rho']:.2f}")
+print(f"  Vega: \${call_greeks['vega']:.2f}")
+print(f"  Theta: \${call_greeks['theta']:.2f}/day")
+print(f"  Rho: \${call_greeks['rho']:.2f}")
 \`\`\`
 
 ---

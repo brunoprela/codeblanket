@@ -1,7 +1,7 @@
 export const precedentTransactions = {
-    title: 'Precedent Transaction Analysis',
-    id: 'precedent-transactions',
-    content: `
+  title: 'Precedent Transaction Analysis',
+  id: 'precedent-transactions',
+  content: `
 # Precedent Transaction Analysis
 
 ## Introduction
@@ -715,4 +715,3 @@ Transaction comps answer: **"What would a buyer pay to acquire this company?"** 
 **Next Section**: [LBO Model](./lbo-model) →
 `,
 };
-

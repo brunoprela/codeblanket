@@ -1,9 +1,9 @@
 export const historicalDataManagement = {
-    title: 'Historical Data Management',
-    slug: 'historical-data-management',
-    description:
-        'Master the complexities of managing historical market data for backtesting, including handling corporate actions, avoiding survivorship bias, and ensuring data quality',
-    content: `
+  title: 'Historical Data Management',
+  slug: 'historical-data-management',
+  description:
+    'Master the complexities of managing historical market data for backtesting, including handling corporate actions, avoiding survivorship bias, and ensuring data quality',
+  content: `
 # Historical Data Management
 
 ## Introduction: Why Data Quality Makes or Breaks Backtests
@@ -487,16 +487,14 @@ adjusted_price_before = adjusted.loc['2013-12-31', 'Close']
 adjusted_price_after = adjusted.loc['2023-12-31', 'Close']
 
 print("Without split adjustment:")
-print(f"  2013: ${price_before_splits: .2f
-}
-}")
-print(f"  2023: ${price_after_splits:.2f}")
+print(f"  2013: \${price_before_splits:.2f}")
+print(f"  2023: \${price_after_splits:.2f}")
 print(f"  Ratio: {price_before_splits/price_after_splits:.2f}x")
 print("  → Looks like massive price drop!\\n")
 
 print("With split adjustment:")
-print(f"  2013: ${adjusted_price_before:.2f}")
-print(f"  2023: ${adjusted_price_after:.2f}")
+print(f"  2013: \${adjusted_price_before:.2f}")
+print(f"  2023: \${adjusted_price_after:.2f}")
 print(f"  Ratio: {adjusted_price_before/adjusted_price_after:.2f}x")
 print("  → Now shows true economic performance")
 
@@ -847,19 +845,18 @@ storage_comparison = {
 
 Production data pipelines are complex but essential. Invest the time upfront to get data right.
 `,
-    exercises: [
-        {
-            prompt:
-                'Build a data validation pipeline that automatically checks new market data for quality issues and alerts when problems are detected. Include validation for splits, price anomalies, and missing data.',
-            solution:
-                '// Implementation includes: 1) DataValidator class with comprehensive checks, 2) Automated pipeline that runs daily, 3) Alert system for critical issues, 4) Dashboard showing data quality metrics, 5) Integration with data providers, 6) Logging and monitoring',
-        },
-        {
-            prompt:
-                'Implement a corporate actions handler that automatically detects and adjusts for stock splits and dividends. Compare adjusted vs unadjusted returns to show the impact.',
-            solution:
-                '// Implementation includes: 1) Split detection algorithm, 2) Dividend tracking, 3) Backward price adjustment, 4) Before/after comparison, 5) Visualization of impact, 6) Edge case handling (reverse splits, special dividends)',
-        },
-    ],
+  exercises: [
+    {
+      prompt:
+        'Build a data validation pipeline that automatically checks new market data for quality issues and alerts when problems are detected. Include validation for splits, price anomalies, and missing data.',
+      solution:
+        '// Implementation includes: 1) DataValidator class with comprehensive checks, 2) Automated pipeline that runs daily, 3) Alert system for critical issues, 4) Dashboard showing data quality metrics, 5) Integration with data providers, 6) Logging and monitoring',
+    },
+    {
+      prompt:
+        'Implement a corporate actions handler that automatically detects and adjusts for stock splits and dividends. Compare adjusted vs unadjusted returns to show the impact.',
+      solution:
+        '// Implementation includes: 1) Split detection algorithm, 2) Dividend tracking, 3) Backward price adjustment, 4) Before/after comparison, 5) Visualization of impact, 6) Edge case handling (reverse splits, special dividends)',
+    },
+  ],
 };
-

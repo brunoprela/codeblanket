@@ -1,7 +1,7 @@
 export const threeStatementModel = {
-    title: 'Three-Statement Model Building',
-    id: 'three-statement-model',
-    content: `
+  title: 'Three-Statement Model Building',
+  id: 'three-statement-model',
+  content: `
 # Three-Statement Model Building
 
 ## Introduction
@@ -962,4 +962,3 @@ The three-statement model is the foundation. Everything else builds on this.
 **Next Section**: [DCF (Discounted Cash Flow) Model](./dcf-model) →
 `,
 };
-

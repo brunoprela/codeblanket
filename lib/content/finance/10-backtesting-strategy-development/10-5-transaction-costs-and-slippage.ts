@@ -1,12 +1,13 @@
-import { Content } from "@/lib/types";
+import { Content } from '@/lib/types';
 
 const transactionCostsAndSlippage: Content = {
-    title: "Transaction Costs and Slippage",
-    description: "Master realistic transaction cost modeling, bid-ask spreads, market impact, commission structures, and slippage estimation for accurate backtesting",
-    sections: [
-        {
-            title: "Introduction to Transaction Costs",
-            content: `
+  title: 'Transaction Costs and Slippage',
+  description:
+    'Master realistic transaction cost modeling, bid-ask spreads, market impact, commission structures, and slippage estimation for accurate backtesting',
+  sections: [
+    {
+      title: 'Introduction to Transaction Costs',
+      content: `
 # Introduction to Transaction Costs
 
 Transaction costs are often the difference between a profitable strategy on paper and one that loses money in live trading. Many backtests fail in production because they underestimate or completely ignore these costs.
@@ -283,10 +284,10 @@ Regularly compare:
 4. **Stale cost assumptions**: Not updating for changing market structure
 5. **Forgetting opportunity costs**: Unfilled limit orders have costs too
 `,
-        },
-        {
-            title: "Bid-Ask Spread Modeling",
-            content: `
+    },
+    {
+      title: 'Bid-Ask Spread Modeling',
+      content: `
 # Bid-Ask Spread Modeling
 
 The bid-ask spread is the difference between the highest price a buyer is willing to pay (bid) and the lowest price a seller will accept (ask). It's a fundamental transaction cost.
@@ -679,10 +680,10 @@ Predict future spreads based on:
 - Volume patterns
 - Market regime
 `,
-        },
-        {
-            title: "Market Impact Models",
-            content: `
+    },
+    {
+      title: 'Market Impact Models',
+      content: `
 # Market Impact Models
 
 Market impact is the price movement caused by executing a trade. Large orders can significantly move prices against the trader, especially in less liquid stocks.
@@ -1063,7 +1064,7 @@ if __name__ == "__main__":
     
     print("\\n\\nOptimal Execution Schedule (first 5 intervals):")
     print(schedule.head().to_string(index=False))
-    print(f"\\nTotal execution cost: ${schedule['impact_dollars'].sum():, .2f} ")
+    print(f"\\nTotal execution cost: \${schedule['impact_dollars'].sum():,.2f}")
 \`\`\`
 
 ## Production Considerations
@@ -1101,9 +1102,9 @@ Market impact is a critical cost that scales non-linearly with order size. Produ
 - Adjust strategies based on realized costs
 `,
     },
-{
-    title: "Slippage Estimation and Modeling",
-        content: `
+    {
+      title: 'Slippage Estimation and Modeling',
+      content: `
 # Slippage Estimation and Modeling
 
 Slippage is the difference between the expected execution price and the actual execution price. It combines spread costs, market impact, and timing effects.
@@ -1499,8 +1500,7 @@ def example_backtest_with_slippage():
     print(f"Filled trades: {results['filled'].sum()}")
     print(f"\\nAverage slippage: {results[results['filled']]['slippage_bps'].mean():.2f} bps")
     print(f"Median slippage: {results[results['filled']]['slippage_bps'].median():.2f} bps")
-    print(f"Total slippage cost: ${results[results['filled']]['total_slippage_dollars'].sum():, .2f
-} ")
+    print(f"Total slippage cost: \${results[results['filled']]['total_slippage_dollars'].sum():,.2f}")
 
 return results
 
@@ -1581,9 +1581,9 @@ Accurate slippage modeling is essential for:
 Production systems must continuously calibrate slippage models against realized execution costs.
 `,
     },
-{
-    title: "Production Implementation and Best Practices",
-        content: `
+    {
+      title: 'Production Implementation and Best Practices',
+      content: `
 # Production Implementation and Best Practices
 
 Implementing transaction cost and slippage models in production requires careful engineering, monitoring, and continuous calibration.
@@ -2048,4 +2048,3 @@ Accurate transaction cost modeling is essential for realistic backtesting and st
 };
 
 export default transactionCostsAndSlippage;
-

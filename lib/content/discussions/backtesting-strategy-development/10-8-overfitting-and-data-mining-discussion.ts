@@ -1,12 +1,13 @@
-import { Content } from "@/lib/types";
+import { Content } from '@/lib/types';
 
 const overfittingAndDataMiningDiscussion: Content = {
-    title: "Overfitting and Data Mining - Discussion Questions",
-    description: "Deep-dive discussion questions on overfitting detection, multiple testing correction, and building robust trading strategies",
-    sections: [
-        {
-            title: "Discussion Questions",
-            content: `
+  title: 'Overfitting and Data Mining - Discussion Questions',
+  description:
+    'Deep-dive discussion questions on overfitting detection, multiple testing correction, and building robust trading strategies',
+  sections: [
+    {
+      title: 'Discussion Questions',
+      content: `
 # Discussion Questions: Overfitting and Data Mining
 
 ## Question 1: Building an Overfitting Detection System for a Quant Fund
@@ -975,12 +976,12 @@ def forward_test(strategy, new_data) -> Dict:
 
 **Test 3: Stress Test Historical Crises**
 
-```python
+\`\`\`python
 def crisis_test(strategy) -> Dict:
-        """How did it perform in 2008, 2020, etc?"""
+    """How did it perform in 2008, 2020, etc?"""
     # Real strategies should survive(or explain why not)
     pass
-            ```
+\`\`\`
 
 #### Recommended Actions
 
@@ -1024,4 +1025,3 @@ This protects both the fund and its clients from the dangers of overfit strategi
 };
 
 export default overfittingAndDataMiningDiscussion;
-

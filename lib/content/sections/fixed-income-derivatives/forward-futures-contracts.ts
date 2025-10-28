@@ -451,7 +451,7 @@ if __name__ == "__main__":
         
         print(f"{bond.cusip}:")
         print(f"  Coupon: {bond.coupon_rate*100:.2f}%")
-        print(f"  Price: ${bond.price:.2f}")
+        print(f"  Price: \${bond.price:.2f}")
 print(f"  Conversion Factor: {cf:.4f}")
 print(f"  Implied Repo: {repo:.2f}%")
 print()

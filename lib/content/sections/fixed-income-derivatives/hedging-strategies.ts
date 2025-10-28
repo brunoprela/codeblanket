@@ -239,7 +239,7 @@ self.rebalance_count = 0
         # Initial hedge
 self._rebalance()
 
-logger.info(f"Initialized delta hedger at spot ${initial_spot}")
+logger.info(f"Initialized delta hedger at spot \${initial_spot}")
     
     def portfolio_delta(self) -> float:
 """Calculate total portfolio delta"""
@@ -275,7 +275,7 @@ self.rebalance_count += 1
 
 logger.debug(
     f"Rebalance #{self.rebalance_count}: "
-            f"Traded {shares_to_trade:.2f} shares at ${self.spot:.2f}"
+            f"Traded {shares_to_trade:.2f} shares at \${self.spot:.2f}"
 )
 
 return shares_to_trade, cost
@@ -372,7 +372,7 @@ result = hedger.update_spot(price)
 
 if result.get('rebalanced', True):
     print(
-        f"Spot ${result['spot']:.2f} ({result['spot_change']:+.2f}): "
+        f"Spot \${result['spot']:.2f} ({result['spot_change']:+.2f}): "
                 f"Delta {result['pre_delta']:+.2f} → {result['post_delta']:+.2f}, "
                 f"Traded {result['shares_traded']:+.2f} shares"
     )
@@ -381,8 +381,8 @@ if result.get('rebalanced', True):
 print("\\n=== Hedging Summary ===\\n")
 print(f"Rebalances: {hedger.rebalance_count}")
 print(f"Final stock position: {hedger.stock_position:.2f} shares")
-print(f"Hedge P&L: ${hedger.total_pnl():,.2f}")
-print(f"Estimated transaction costs: ${hedger.trading_costs():,.2f}")
+print(f"Hedge P&L: \${hedger.total_pnl():,.2f}")
+print(f"Estimated transaction costs: \${hedger.trading_costs():,.2f}")
 \`\`\`
 
 ---

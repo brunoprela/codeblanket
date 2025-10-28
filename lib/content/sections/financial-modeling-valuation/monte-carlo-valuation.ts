@@ -1,7 +1,7 @@
 export const monteCarloValuation = {
-    title: 'Monte Carlo Simulation for Valuation',
-    id: 'monte-carlo-valuation',
-    content: `
+  title: 'Monte Carlo Simulation for Valuation',
+  id: 'monte-carlo-valuation',
+  content: `
 # Monte Carlo Simulation for Valuation
 
 ## Introduction

@@ -1,9 +1,9 @@
 export const eventDrivenBacktestingArchitecture = {
-    title: 'Event-Driven Backtesting Architecture',
-    slug: 'event-driven-backtesting-architecture',
-    description:
-        'Master building production-grade event-driven backtesting systems that closely simulate real trading environments',
-    content: `
+  title: 'Event-Driven Backtesting Architecture',
+  slug: 'event-driven-backtesting-architecture',
+  description:
+    'Master building production-grade event-driven backtesting systems that closely simulate real trading environments',
+  content: `
 # Event-Driven Backtesting Architecture
 
 ## Introduction: Why Event-Driven Architecture Matters
@@ -837,11 +837,9 @@ print("-" * 60)
 results = self.portfolio.get_performance_metrics()
         
         # Print summary
-print(f"\\nPerformance Summary:")
-print(f"  Final Value: ${results['final_value']:, .2f
-}
-}")
-print(f"  Total Return: {results['total_return']:.2f}%")
+        print(f"\\nPerformance Summary:")
+        print(f"  Final Value: \${results['final_value']:,.2f}")
+        print(f"  Total Return: {results['total_return']:.2f}%")
 print(f"  Sharpe Ratio: {results['sharpe_ratio']:.2f}")
 print(f"  Max Drawdown: {results['max_drawdown']:.2f}%")
 print(f"  Total Trades: {results['num_trades']}")
@@ -885,19 +883,18 @@ results = engine.run()
 
 This architecture forms the foundation for production trading systems.
 `,
-    exercises: [
-        {
-            prompt:
-                'Extend the event-driven engine to support multiple strategies running simultaneously on the same data. Track performance of each strategy separately.',
-            solution:
-                '// Add strategy_id to all events, Portfolio tracks positions per strategy, Aggregate results across strategies',
-        },
-        {
-            prompt:
-                'Implement a more sophisticated execution handler that simulates partial fills based on volume.',
-            solution:
-                '// Check if order size > % of bar volume, Split large orders across multiple bars, Model market impact',
-        },
-    ],
+  exercises: [
+    {
+      prompt:
+        'Extend the event-driven engine to support multiple strategies running simultaneously on the same data. Track performance of each strategy separately.',
+      solution:
+        '// Add strategy_id to all events, Portfolio tracks positions per strategy, Aggregate results across strategies',
+    },
+    {
+      prompt:
+        'Implement a more sophisticated execution handler that simulates partial fills based on volume.',
+      solution:
+        '// Check if order size > % of bar volume, Split large orders across multiple bars, Model market impact',
+    },
+  ],
 };
-

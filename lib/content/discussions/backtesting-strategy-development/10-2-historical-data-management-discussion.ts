@@ -350,11 +350,10 @@ class DataQualityMonitor:
         # 2. Validate corporate actions
         # 3. Compare against previous day's close
         # 4. Alert on anomalies
-pass
-    ```
+        pass
+\`\`\`
 
-
-            ** 3. Fallback Plan**
+**3. Fallback Plan**
     - Keep old vendor data archived
     - Document all discrepancies
     - Have process to roll back if needed
@@ -364,9 +363,9 @@ pass
     ** Typical findings:**
         - 95 % of tickers match within 0.1 %
             - 4 % have minor differences(<1%) due to rounding
-                - 1 % have significant differences requiring investigation
+                 - 1% have significant differences requiring investigation
 
-                    ** Common root causes:** 1. Different split adjustment methodologies(most common)
+                    **Common root causes:** 1. Different split adjustment methodologies (most common)
 2. Different dividend adjustment approaches
 3. Time zone handling for international stocks
 4. Data source differences(some vendors use last trade, others use mid - price)
@@ -710,25 +709,25 @@ class PointInTimeIndex:
 
 **1. Same-Day Addition and Removal**
 
-```sql
+\`\`\`sql
 --Stock added and removed same day(rare but possible)
 --Use start_date <= date AND end_date > date(not >=)
 --This excludes stocks removed on that day
-    ```
+    \`\`\`
 
 **2. Sector Reclassifications**
 
-```sql
+\`\`\`sql
 --Google moved from Technology to Communication Services on Sept 24, 2018
 INSERT INTO sector_classifications(ticker, effective_date, sector, changed_from)
 VALUES('GOOGL', '2018-09-24', 'Communication Services', 'Technology');
 
 --Query automatically uses correct sector for each date
-    ```
+    \`\`\`
 
 **3. Corporate Actions (Mergers)**
 
-```sql
+\`\`\`sql
 --When Stock A acquires Stock B
 --Stock B is removed from index
 UPDATE index_constituents
@@ -737,13 +736,13 @@ SET end_date = '2020-06-15',
 WHERE ticker = 'STOCKB';
 
 --Stock A may increase weight but stays in index
-    ```
+    \`\`\`
 
 ### Performance Optimization
 
 **For large backtests:**1. **Pre-materialize membership flags**
 
-```sql
+\`\`\`sql
 --Run nightly job to update in_sp500 flag in daily_prices
 UPDATE daily_prices dp
 SET in_sp500 = EXISTS(
@@ -755,15 +754,15 @@ SET in_sp500 = EXISTS(
 );
 
 --Now queries are much faster(no JOIN needed)
-    ```
+    \`\`\`
 
 2. **Partition tables by year**
 
-```sql
+\`\`\`sql
 --For TimescaleDB or native PostgreSQL partitioning
 CREATE TABLE daily_prices_2020 PARTITION OF daily_prices
 FOR VALUES FROM('2020-01-01') TO('2021-01-01');
-```
+\`\`\`
 
 ### Data Sources
 
@@ -1252,7 +1251,7 @@ class MetricsCollector:
 
 **1. Data Gap Detection and Fill**
 
-```python
+\`\`\`python
     class DataGapHandler:
     """
     Detect and handle data gaps
@@ -1280,7 +1279,7 @@ class MetricsCollector:
         # Try backup sources
         # If not available, use last known value with flag
         pass
-        ```
+        \`\`\`
 
 **2. Corporate Action Delayed Reporting**
 
@@ -1288,7 +1287,7 @@ class MetricsCollector:
 
 
 
-```python
+\`\`\`python
     class CorporateActionBuffer:
     """
     Buffer for handling delayed corporate action reporting
@@ -1320,7 +1319,7 @@ class MetricsCollector:
         # Notify systems
         # Update database
     pass
-        ```
+        \`\`\`
 
 ### Production Checklist
 

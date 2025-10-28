@@ -1,6 +1,6 @@
 export const buildingKnowledgeBase = {
-    title: 'Building a Knowledge Base',
-    content: `
+  title: 'Building a Knowledge Base',
+  content: `
 # Building a Knowledge Base
 
 ## Introduction

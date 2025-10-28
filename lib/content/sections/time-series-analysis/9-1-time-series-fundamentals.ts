@@ -1,9 +1,9 @@
 export const timeSeriesFundamentals = {
-    title: 'Time Series Fundamentals',
-    slug: 'time-series-fundamentals',
-    description:
-        'Master the foundations of time series analysis for financial data, including data structures, visualization, and returns calculation',
-    content: `
+  title: 'Time Series Fundamentals',
+  slug: 'time-series-fundamentals',
+  description:
+    'Master the foundations of time series analysis for financial data, including data structures, visualization, and returns calculation',
+  content: `
 # Time Series Fundamentals
 
 ## Introduction: Why Time Series Analysis Matters for Finance
@@ -456,9 +456,8 @@ simple_ret = calc.simple_returns(prices)
 log_ret = calc.log_returns(prices)
 
 print("Price Series:")
-print(f"Start: ${prices.iloc[0]: .2f
-}")
-print(f"End: ${prices.iloc[-1]:.2f}")
+print(f"Start: \${prices.iloc[0]:.2f}")
+print(f"End: \${prices.iloc[-1]:.2f}")
 print(f"Total Change: {(prices.iloc[-1]/prices.iloc[0] - 1)*100:.2f}%\\n")
 
 print("Return Statistics:")
@@ -940,4 +939,3 @@ Time series analysis is the foundation of quantitative finance. Key takeaways:
 In the next sections, we'll build on these fundamentals to develop sophisticated time series models for forecasting and trading.
 `,
 };
-

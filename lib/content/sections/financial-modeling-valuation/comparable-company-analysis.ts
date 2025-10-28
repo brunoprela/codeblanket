@@ -1,7 +1,7 @@
 export const comparableCompanyAnalysis = {
-    title: 'Comparable Company Analysis (Comps)',
-    id: 'comparable-company-analysis',
-    content: `
+  title: 'Comparable Company Analysis (Comps)',
+  id: 'comparable-company-analysis',
+  content: `
 # Comparable Company Analysis (Comps)
 
 ## Introduction
@@ -838,4 +838,3 @@ Comps are **fast and intuitive** but require **judgment**. The art is selecting 
 **Next Section**: [Precedent Transaction Analysis](./precedent-transactions) →
 `,
 };
-

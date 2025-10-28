@@ -316,7 +316,7 @@ var_return = horizon_return + z_score * horizon_vol
 var_dollar = abs(var_return * self.portfolio_value)
 
 logger.debug(
-        f"Parametric VaR: ${var_dollar/1e6:.2f}M "
+        f"Parametric VaR: \${var_dollar/1e6:.2f}M "
             f"(vol={volatility*100:.2f}%, z={z_score:.2f})"
 )
 
@@ -364,7 +364,7 @@ percentile = (1 - self.confidence) * 100
 var_dollar = abs(np.percentile(portfolio_pnl, percentile))
 
 logger.debug(
-        f"Monte Carlo VaR ({num_simulations} sims): ${var_dollar/1e6:.2f}M"
+        f"Monte Carlo VaR ({num_simulations} sims): \${var_dollar/1e6:.2f}M"
 )
 
 return var_dollar
@@ -557,17 +557,17 @@ calc = VaRCalculator(
         horizon_days = 1
 )
 
-print(f"Portfolio Value: ${calc.portfolio_value/1e6:.1f}M")
+print(f"Portfolio Value: \${calc.portfolio_value/1e6:.1f}M")
 print(f"Confidence Level: {calc.confidence*100:.0f}%")
 print(f"Time Horizon: {calc.horizon_days} day\\n")
     
     # Parametric VaR
 param_var = calc.parametric_var(volatility = 0.008)  # 0.8 % daily vol
-print(f"Parametric VaR: ${param_var/1e6:.2f}M ({param_var/calc.portfolio_value*100:.2f}%)")
+print(f"Parametric VaR: \${param_var/1e6:.2f}M ({param_var/calc.portfolio_value*100:.2f}%)")
     
     # Monte Carlo VaR
 mc_var = calc.monte_carlo_var(num_simulations = 10000, volatility = 0.008)
-print(f"Monte Carlo VaR: ${mc_var/1e6:.2f}M ({mc_var/calc.portfolio_value*100:.2f}%)")
+print(f"Monte Carlo VaR: \${mc_var/1e6:.2f}M ({mc_var/calc.portfolio_value*100:.2f}%)")
     
     # Generate fake historical returns for demonstration
     np.random.seed(42)
@@ -576,7 +576,7 @@ print(f"Monte Carlo VaR: ${mc_var/1e6:.2f}M ({mc_var/calc.portfolio_value*100:.2
 })
     
     hist_var = calc.historical_var(historical_returns, lookback_days = 250)
-print(f"Historical VaR: ${hist_var/1e6:.2f}M ({hist_var/calc.portfolio_value*100:.2f}%)")
+print(f"Historical VaR: \${hist_var/1e6:.2f}M ({hist_var/calc.portfolio_value*100:.2f}%)")
     
     # Component VaR
 print("\\n=== Component VaR Analysis ===\\n")
@@ -584,7 +584,7 @@ print("\\n=== Component VaR Analysis ===\\n")
 components = calc.component_var(VaRMethod.PARAMETRIC, volatility = 0.008)
 
 for position_id, comp_var in components.items():
-        print(f"{position_id:15}: ${comp_var/1e6:.2f}M ({comp_var/calc.portfolio_value*100:.2f}%)")
+        print(f"{position_id:15}: \${comp_var/1e6:.2f}M ({comp_var/calc.portfolio_value*100:.2f}%)")
     
     # Backtesting
 print("\\n=== VaR Backtesting ===\\n")

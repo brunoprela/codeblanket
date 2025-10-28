@@ -1,7 +1,7 @@
 export const financialModelingFundamentals = {
-    title: 'Financial Modeling Fundamentals',
-    id: 'financial-modeling-fundamentals',
-    content: `
+  title: 'Financial Modeling Fundamentals',
+  id: 'financial-modeling-fundamentals',
+  content: `
 # Financial Modeling Fundamentals
 
 ## Introduction
@@ -1238,4 +1238,3 @@ Financial modeling is a **craft**. The difference between amateur and profession
 **Next Section**: [Three-Statement Model Building](./three-statement-model) →
 `,
 };
-

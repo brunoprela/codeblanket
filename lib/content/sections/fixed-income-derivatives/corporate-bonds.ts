@@ -331,10 +331,10 @@ callable_price = callable.price(ytm, volatility = 0.15)
 
 call_option_value = straight_price - callable_price
 
-print(f"Straight Bond Price: ${straight_price:.2f}
+print(f"Straight Bond Price: \${straight_price:.2f}
 }")
-print(f"Callable Bond Price: ${callable_price:.2f}")
-print(f"Call Option Value: ${call_option_value:.2f}")
+print(f"Callable Bond Price: \${callable_price:.2f}")
+print(f"Call Option Value: \${call_option_value:.2f}")
 print(f"  ({call_option_value/straight_price*100:.2f}% of straight bond value)")
     
     # Effective duration
@@ -352,7 +352,7 @@ for dy in yield_changes:
 new_price = callable.price(new_ytm, volatility = 0.15)
 change_pct = (new_price - callable_price) / callable_price * 100
 
-print(f"Yield: {new_ytm*100:.2f}% ({dy*100:+.0f}%) → Price: ${new_price:.2f} ({change_pct:+.2f}%)")
+print(f"Yield: {new_ytm*100:.2f}% ({dy*100:+.0f}%) → Price: \${new_price:.2f} ({change_pct:+.2f}%)")
 \`\`\`
 
 ---
@@ -447,7 +447,7 @@ class ConvertibleBond:
         ...     stock_volatility=0.30
         ... )
         >>> value = convert.value(risk_free_rate=0.04, credit_spread=0.02)
-        >>> print(f"Convertible value: ${value:.2f}")
+        >>> print(f"Convertible value: \${value:.2f}")
 """
 face_value: float
 coupon_rate: float
@@ -546,15 +546,15 @@ stock_volatility = 0.30  # 30 % stock volatility
     )
 
 print(f"Conversion Ratio: {convert.conversion_ratio} shares")
-print(f"Conversion Price: ${convert.conversion_price:.2f} per share")
-print(f"Current Stock Price: ${convert.stock_price:.2f}")
-print(f"Conversion Value: ${convert.conversion_value:.2f}")
+print(f"Conversion Price: \${convert.conversion_price:.2f} per share")
+print(f"Current Stock Price: \${convert.stock_price:.2f}")
+print(f"Conversion Value: \${convert.conversion_value:.2f}")
 
 bond_floor = convert.bond_floor(risk_free_rate = 0.04, credit_spread = 0.02)
 total_value = convert.value(risk_free_rate = 0.04, credit_spread = 0.02)
 
-print(f"\\nBond Floor (downside protection): ${bond_floor:.2f}")
-print(f"Total Convertible Value: ${total_value:.2f}")
+print(f"\\nBond Floor (downside protection): \${bond_floor:.2f}")
+print(f"Total Convertible Value: \${total_value:.2f}")
 print(f"Conversion Premium: {convert.conversion_premium()*100:.2f}%")
     
     # Scenarios
@@ -565,7 +565,7 @@ for stock_price in [20, 25, 30, 35, 40]:
 value = convert.value(0.04, 0.02)
 conv_val = convert.conversion_value
 
-print(f"Stock ${stock_price}: Convertible ${value:.2f}, Conversion ${conv_val:.2f}")
+print(f"Stock ${stock_price}: Convertible ${value:.2f}, Conversion \${conv_val:.2f}")
 \`\`\`
 
 ---
