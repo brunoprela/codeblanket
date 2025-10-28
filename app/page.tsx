@@ -344,6 +344,17 @@ export default function Home() {
     0,
   );
 
+  // Calculate overall progress percentage
+  const totalCompleted =
+    completedSectionsCount +
+    completedMultipleChoice +
+    completedDiscussions +
+    completedProblems.size;
+  const totalItems =
+    totalSectionsCount + totalMultipleChoice + totalDiscussions + totalProblems;
+  const overallProgressPercent =
+    totalItems > 0 ? Math.round((totalCompleted / totalItems) * 100) : 0;
+
   // Get the selected topic section
   const selectedSection = topicSections.find(
     (section) => section.id === selectedSectionId,
@@ -412,6 +423,24 @@ export default function Home() {
           <div className="text-xs font-medium text-[#f8f8f2] sm:text-sm lg:text-base">
             Problems
           </div>
+        </div>
+      </div>
+
+      {/* Overall Progress Bar */}
+      <div className="mb-6 sm:mb-8">
+        <div className="mb-2 flex items-center justify-between text-sm sm:text-base">
+          <span className="font-semibold text-[#f8f8f2]">
+            Overall Progress: {totalCompleted} / {totalItems}
+          </span>
+          <span className="font-bold text-[#bd93f9]">
+            {overallProgressPercent}%
+          </span>
+        </div>
+        <div className="h-3 overflow-hidden rounded-full bg-[#282a36] shadow-inner sm:h-4">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-[#bd93f9] via-[#ff79c6] to-[#50fa7b] transition-all duration-500 ease-out"
+            style={{ width: `${overallProgressPercent}%` }}
+          />
         </div>
       </div>
 

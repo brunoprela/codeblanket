@@ -223,6 +223,13 @@ export default function ModulePage({
   const [completedMultipleChoice, setCompletedMultipleChoice] = useState(0);
   const [completedDiscussions, setCompletedDiscussions] = useState(0);
 
+  // State for sticky breadcrumb headers
+  const [currentHeaders, setCurrentHeaders] = useState<{
+    h1?: string;
+    h2?: string;
+    h3?: string;
+  }>({});
+
   // Load videos from IndexedDB
   useEffect(() => {
     const loadVideos = async () => {
@@ -445,7 +452,7 @@ export default function ModulePage({
     };
   }, [slug, moduleData.sections]);
 
-  // Get selected section
+  // Get selected section (moved before useEffect to avoid reference error)
   const selectedSection = moduleData.sections.find(
     (s, index) => (s.id || `section-${index}`) === selectedSectionId,
   );
@@ -457,6 +464,61 @@ export default function ModulePage({
   const selectedSectionIdResolved = selectedSection
     ? selectedSection.id || `section-${selectedSectionIndex}`
     : selectedSectionId;
+
+  // Track visible headers using Intersection Observer
+  useEffect(() => {
+    if (!selectedSection) return;
+
+    const observerOptions = {
+      rootMargin: '-80px 0px -80% 0px',
+      threshold: 0,
+    };
+
+    const updateCurrentHeader = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const tagName = element.tagName.toLowerCase();
+          const text = element.textContent || '';
+
+          setCurrentHeaders((prev) => {
+            const newHeaders = { ...prev };
+
+            if (tagName === 'h1') {
+              newHeaders.h1 = text;
+              // Clear lower level headers when new h1 is visible
+              delete newHeaders.h2;
+              delete newHeaders.h3;
+            } else if (tagName === 'h2') {
+              newHeaders.h2 = text;
+              // Clear lower level headers when new h2 is visible
+              delete newHeaders.h3;
+            } else if (tagName === 'h3') {
+              newHeaders.h3 = text;
+            }
+
+            return newHeaders;
+          });
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      updateCurrentHeader,
+      observerOptions,
+    );
+
+    // Observe all h1, h2, and h3 elements in the content area
+    const contentArea = document.querySelector('.module-content');
+    if (contentArea) {
+      const headers = contentArea.querySelectorAll('h1, h2, h3');
+      headers.forEach((header) => observer.observe(header));
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [selectedSection, selectedSectionId]);
 
   // Save completed sections to localStorage
   const toggleSectionComplete = (sectionId: string) => {
@@ -718,8 +780,53 @@ export default function ModulePage({
 
         {/* Right Pane: Section Content */}
         <div className="min-w-0 flex-1">
+          {/* Sticky Breadcrumb Header - Shows current section/subsection */}
+          {selectedSection &&
+            (currentHeaders.h1 || currentHeaders.h2 || currentHeaders.h3) && (
+              <div className="sticky top-0 z-10 border-2 border-[#44475a] bg-[#282a36]/95 px-4 py-2 text-xs backdrop-blur-sm sm:px-6 sm:py-3 sm:text-sm lg:px-8">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  {/* Section Title */}
+                  <span className="flex-shrink-0 font-semibold text-[#bd93f9]">
+                    {selectedSection?.title}
+                  </span>
+
+                  {/* H1 */}
+                  {currentHeaders.h1 && (
+                    <>
+                      <span className="flex-shrink-0 text-[#6272a4]">/</span>
+                      <span className="text-[#ff79c6]">
+                        {currentHeaders.h1}
+                      </span>
+                    </>
+                  )}
+
+                  {/* H2 */}
+                  {currentHeaders.h2 && (
+                    <>
+                      <span className="flex-shrink-0 text-[#6272a4]">/</span>
+                      <span className="text-[#8be9fd]">
+                        {currentHeaders.h2}
+                      </span>
+                    </>
+                  )}
+
+                  {/* H3 */}
+                  {currentHeaders.h3 && (
+                    <>
+                      <span className="flex-shrink-0 text-[#6272a4]">/</span>
+                      <span className="text-[#50fa7b]">
+                        {currentHeaders.h3}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
           {selectedSection && (
-            <div className="rounded-lg border-2 border-[#44475a] bg-[#282a36] p-4 sm:p-6 lg:p-8">
+            <div
+              className={`border-2 border-[#44475a] bg-[#282a36] p-4 sm:p-6 lg:p-8 ${currentHeaders.h1 || currentHeaders.h2 || currentHeaders.h3 ? 'rounded-b-lg border-t-0' : 'rounded-lg'}`}
+            >
               {/* Section Header */}
               <div className="mb-4 flex items-start justify-between gap-3 sm:mb-6">
                 <div className="min-w-0 flex-1">
@@ -778,7 +885,7 @@ export default function ModulePage({
               </div>
 
               {/* Section Content */}
-              <div className="prose prose-invert max-w-none">
+              <div className="prose prose-invert module-content max-w-none">
                 {(() => {
                   // Parse content to handle code blocks and tables
                   const elements: ReactElement[] = [];

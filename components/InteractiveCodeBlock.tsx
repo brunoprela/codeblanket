@@ -166,7 +166,7 @@ json.dumps(_plot_images)
 
   // Show interactive editor
   return (
-    <div className="my-4 rounded-lg border-2 border-[#bd93f9] bg-[#282a36]">
+    <div className="my-4 overflow-hidden rounded-lg border-2 border-[#bd93f9] bg-[#282a36]">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#44475a] bg-[#21222c] px-4 py-2">
         <div className="flex items-center gap-2">
