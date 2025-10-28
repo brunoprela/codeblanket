@@ -151,22 +151,22 @@ put_price = black_scholes(S, K, T, r, sigma, 'put')
 
 print("=== BLACK-SCHOLES PRICING ===")
 print(f"\\nInputs:")
-print(f"  Stock Price: \${S}")
-print(f"  Strike Price: \${K}")
+print(f"  Stock Price: \\$\{S}")
+print(f"  Strike Price: \\$\{K}")
 print(f"  Time to Expiration: {T*365:.0f} days")
 print(f"  Risk-Free Rate: {r*100:.1f}%")
 print(f"  Volatility: {sigma*100:.1f}%")
 print(f"\\nPrices:")
-print(f"  Call Option: \${call_price:.2f}")
-print(f"  Put Option: \${put_price:.2f}")
+print(f"  Call Option: \\$\{call_price:.2f}")
+print(f"  Put Option: \\$\{put_price:.2f}")
 
 # Verify put-call parity
 parity_check = call_price - put_price
 theoretical_parity = S - K * np.exp(-r * T)
 print(f"\\nPut-Call Parity Check:")
-print(f"  C - P = \${parity_check:.4f}")
-print(f"  S - K*e^(-rT) = \${theoretical_parity:.4f}")
-print(f"  Difference: \${abs (parity_check - theoretical_parity):.6f} (should be ~0)")
+print(f"  C - P = \\$\{parity_check:.4f}")
+print(f"  S - K*e^(-rT) = \\$\{theoretical_parity:.4f}")
+print(f"  Difference: \\$\{abs (parity_check - theoretical_parity):.6f} (should be ~0)")
 \`\`\`
 
 **Output**:
@@ -425,8 +425,8 @@ market_call_price = black_scholes(S, K, T, r, true_sigma, 'call')
 market_put_price = black_scholes(S, K, T, r, true_sigma, 'put')
 
 print(f"Market Prices (generated with σ={true_sigma*100:.0f}%):")
-print(f"  Call: \${market_call_price:.2f}")
-print(f"  Put: \${market_put_price:.2f}\\n")
+print(f"  Call: \\$\{market_call_price:.2f}")
+print(f"  Put: \\$\{market_put_price:.2f}\\n")
 
 # Calculate implied volatilities
 iv_call = implied_volatility (market_call_price, S, K, T, r, 'call')
@@ -455,7 +455,7 @@ for strike in strikes:
     ivs.append (iv)
     
     moneyness = (S / strike - 1) * 100
-    print(f"Strike \${strike}: IV={iv*100:.2f}%, Market=\${mkt_price:.2f}, Moneyness={moneyness:+.1f}%")
+    print(f"Strike \${strike}: IV={iv*100:.2f}%, Market=\\$\{mkt_price:.2f}, Moneyness={moneyness:+.1f}%")
 
 # Plot IV vs strike (should be flat if Black-Scholes holds)
 plt.figure (figsize=(10, 6))
@@ -612,10 +612,10 @@ for K in [130, 140, 150, 160, 170]:
     diff = skew_price - flat_price
     pct_diff = (diff / flat_price * 100) if flat_price > 0 else 0
     
-    print(f"Strike \${K}:")
-    print(f"  Flat IV={0.25*100:.0f}%: Put Price=\${flat_price:.2f}")
-    print(f"  Skew IV={skew_vol*100:.1f}%: Put Price=\${skew_price:.2f}")
-    print(f"  Difference: \${diff:+.2f} ({pct_diff:+.1f}%)\\n")
+    print(f"Strike \\$\{K}:")
+    print(f"  Flat IV={0.25*100:.0f}%: Put Price=\\$\{flat_price:.2f}")
+    print(f"  Skew IV={skew_vol*100:.1f}%: Put Price=\\$\{skew_price:.2f}")
+    print(f"  Difference: \\$\{diff:+.2f} ({pct_diff:+.1f}%)\\n")
 \`\`\`
 
 ---
@@ -659,9 +659,9 @@ q = 0.02  # 2% dividend yield
 price_no_div = black_scholes(S, K, T, r, sigma, 'call')
 price_with_div = black_scholes_dividend(S, K, T, r, sigma, q, 'call')
 
-print(f"Call Price (no dividend): \${price_no_div:.2f}")
-print(f"Call Price (2% dividend): \${price_with_div:.2f}")
-print(f"Difference: \${price_no_div - price_with_div:.2f} (calls worth less with dividends)")
+print(f"Call Price (no dividend): \\$\{price_no_div:.2f}")
+print(f"Call Price (2% dividend): \\$\{price_with_div:.2f}")
+print(f"Difference: \\$\{price_no_div - price_with_div:.2f} (calls worth less with dividends)")
 \`\`\`
 
 ### American Options
@@ -764,26 +764,26 @@ sigma = 0.30
 call_greeks = calculate_greeks(S, K, T, r, sigma, 'call')
 put_greeks = calculate_greeks(S, K, T, r, sigma, 'put')
 
-print(f"ATM Call (Strike \${K}):")
+print(f"ATM Call (Strike \\$\{K}):")
 for greek, value in call_greeks.items():
     print(f"  {greek.capitalize()}: {value:.4f}")
 
-print(f"\\nATM Put (Strike \${K}):")
+print(f"\\nATM Put (Strike \\$\{K}):")
 for greek, value in put_greeks.items():
     print(f"  {greek.capitalize()}: {value:.4f}")
 
 # Interpretation
 print("\\n=== INTERPRETATION ===")
 print(f"\\nDelta (Call={call_greeks['delta']:.2f}):")
-print(f"  If stock increases by \${1}, call price increases by \${call_greeks['delta']:.2f}")
+print(f"  If stock increases by \${1}, call price increases by \\$\{call_greeks['delta']:.2f}")
 print(f"\\nGamma ({call_greeks['gamma']:.4f}):")
 print(f"  If stock increases by $1, delta increases by {call_greeks['gamma']:.4f}")
 print(f"\\nTheta ({call_greeks['theta']:.4f}):")
-print(f"  Call loses \${abs (call_greeks['theta']):.2f} per day from time decay")
+print(f"  Call loses \\$\{abs (call_greeks['theta']):.2f} per day from time decay")
 print(f"\\nVega ({call_greeks['vega']:.4f}):")
-print(f"  If volatility increases 1%, call price increases \${call_greeks['vega']:.2f}")
+print(f"  If volatility increases 1%, call price increases \\$\{call_greeks['vega']:.2f}")
 print(f"\\nRho ({call_greeks['rho']:.4f}):")
-print(f"  If interest rate increases 1%, call price increases \${call_greeks['rho']:.2f}")
+print(f"  If interest rate increases 1%, call price increases \\$\{call_greeks['rho']:.2f}")
 \`\`\`
 
 ---

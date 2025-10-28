@@ -29,7 +29,7 @@ export const hyperparameterTuningMultipleChoice = {
       correctAnswer: 1,
       explanation:
         "Tuning on test set means selecting hyperparameters that happen to work well on that specific test set, possibly by chance. This 'leaks' information about the test set into your model selection, giving optimistically biased performance estimates. Always tune on validation set, test once at the end.",
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Methodology',
     },
     {
@@ -72,7 +72,7 @@ export const hyperparameterTuningMultipleChoice = {
       correctAnswer: 2,
       explanation:
         'Learning rate is typically the most critical hyperparameter for neural networks. Too high causes divergence, too low results in slow convergence or getting stuck. It affects training dynamics more than most other hyperparameters and often requires careful tuning.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Neural Networks',
     },
   ],

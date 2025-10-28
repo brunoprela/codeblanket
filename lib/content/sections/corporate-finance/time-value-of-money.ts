@@ -41,12 +41,12 @@ Most people instinctively choose today. But let's quantify the difference:
 PV_today = 1_000_000
 FV_future = PV_today * (1 + 0.07)**10
 
-print(f"$1M today grows to: \${FV_future:,.0f}")
+print(f"$1M today grows to: \\$\{FV_future:,.0f}")
 # $1M today grows to: $1, 967, 151
 
 # What\'s $1M in 10 years worth today?
 PV_future = 1_000_000 / (1 + 0.07) ** 10
-print(f"$1M in 10 years is worth today: \${PV_future:,.0f}")
+print(f"$1M in 10 years is worth today: \\$\{PV_future:,.0f}")
 # $1M in 10 years is worth today: $508, 349
 \`\`\`
 
@@ -136,9 +136,9 @@ rate = 0.07  # 7% annual return
 years = 40
 
 fv = future_value (pv, rate, years)
-print(f"Initial investment: \${pv:,.0f}")
-print(f"Future value (40 years, 7%): \${fv:,.0f}")
-print(f"Total growth: \${fv - pv:,.0f}")
+print(f"Initial investment: \\$\{pv:,.0f}")
+print(f"Future value (40 years, 7%): \\$\{fv:,.0f}")
+print(f"Total growth: \\$\{fv - pv:,.0f}")
 print(f"Multiple: {fv / pv:.1f}x")
 
 # Output:
@@ -249,15 +249,15 @@ option_b_fv = 20_000_000  # Future payment
 years = 20
 
 print("Lottery Decision Analysis")
-print(f"\\nOption A: \${option_a:,.0f} today")
-print(f"Option B: \${option_b_fv:,.0f} in {years} years")
+print(f"\\nOption A: \\$\{option_a:,.0f} today")
+print(f"Option B: \\$\{option_b_fv:,.0f} in {years} years")
 print("\\nPresent Value of Option B at different discount rates:")
 print("-" * 60)
 
 for rate in [0.03, 0.05, 0.07, 0.09]:
     pv_b = present_value (option_b_fv, rate, years)
 better = "Option B wins" if pv_b > option_a else "Option A wins"
-print(f"Rate: {rate:.0%} | PV of Option B: \${pv_b:,.0f} | {better}")
+print(f"Rate: {rate:.0%} | PV of Option B: \\$\{pv_b:,.0f} | {better}")
 
 # Output:
 # Lottery Decision Analysis
@@ -355,7 +355,7 @@ rate = 0.06  # 6% annual
 years = 10
 
 results = compare_compounding (pv, rate, years)
-print(f"Initial Investment: \${pv:,.0f}")
+print(f"Initial Investment: \\$\{pv:,.0f}")
 print(f"Annual Rate: {rate:.0%}")
 print(f"Time Period: {years} years")
 print("\\n" + results.to_string (index = False))
@@ -528,12 +528,12 @@ fv = fv_annuity (monthly_pmt, monthly_rate, months)
 total_contributed = monthly_pmt * months
 
 print("Retirement Savings Plan:")
-print(f"Monthly contribution: \${monthly_pmt:,.0f}")
+print(f"Monthly contribution: \\$\{monthly_pmt:,.0f}")
 print(f"Annual return: {annual_rate:.0%}")
 print(f"Time period: 30 years")
-print(f"\\nTotal contributed: \${total_contributed:,.0f}")
-print(f"Future value: \${fv:,.0f}")
-print(f"Investment gains: \${fv - total_contributed:,.0f}")
+print(f"\\nTotal contributed: \\$\{total_contributed:,.0f}")
+print(f"Future value: \\$\{fv:,.0f}")
+print(f"Investment gains: \\$\{fv - total_contributed:,.0f}")
 print(f"Return multiple: {fv / total_contributed:.1f}x")
 
 # Output:
@@ -593,12 +593,12 @@ fv_ordinary = fv_annuity (pmt, rate, years)
 fv_due = fv_annuity_due (pmt, rate, years)
 
 print("Ordinary Annuity vs Annuity Due")
-print(f"Payment: \${pmt:,.0f} per year")
+print(f"Payment: \\$\{pmt:,.0f} per year")
 print(f"Rate: {rate:.0%}")
 print(f"Period: {years} years")
-print(f"\\nFV Ordinary Annuity: \${fv_ordinary:,.0f}")
-print(f"FV Annuity Due: \${fv_due:,.0f}")
-print(f"Difference: \${fv_due - fv_ordinary:,.0f}")
+print(f"\\nFV Ordinary Annuity: \\$\{fv_ordinary:,.0f}")
+print(f"FV Annuity Due: \\$\{fv_due:,.0f}")
+print(f"Difference: \\$\{fv_due - fv_ordinary:,.0f}")
 print(f"Percentage increase: {(fv_due/fv_ordinary - 1)*100:.1f}%")
 
 # Output:
@@ -668,9 +668,9 @@ required_return = 0.08
 pv = pv_perpetuity (annual_dividend, required_return)
 
 print("Preferred Stock Valuation:")
-print(f"Annual dividend: \${annual_dividend:.2f}")
+print(f"Annual dividend: \\$\{annual_dividend:.2f}")
 print(f"Required return: {required_return:.0%}")
-print(f"Present value: \${pv:.2f}")
+print(f"Present value: \\$\{pv:.2f}")
 
 # Output:
 # Preferred Stock Valuation:
@@ -729,13 +729,13 @@ div_growth = 0.05  # 5% annual growth
 stock_value = pv_growing_perpetuity (next_dividend, required_return, div_growth)
 
 print("Stock Valuation (Gordon Growth Model):")
-print(f"Next year's dividend (D1): \${next_dividend:.2f}")
+print(f"Next year's dividend (D1): \\$\{next_dividend:.2f}")
 print(f"Required return: {required_return:.0%}")
 print(f"Dividend growth rate: {div_growth:.0%}")
-print(f"Intrinsic value: \${stock_value:.2f}")
+print(f"Intrinsic value: \\$\{stock_value:.2f}")
 
 # Verify with manual calculation
-print(f"\\nManual: \${next_dividend} / ({required_return} - {div_growth}) = \${stock_value:.2f}")
+print(f"\\nManual: \${next_dividend} / ({required_return} - {div_growth}) = \\$\{stock_value:.2f}")
 
 # Output:
 # Stock Valuation(Gordon Growth Model):
@@ -803,12 +803,12 @@ months = years * 12
 monthly_pmt = pmt_loan (loan_amount, monthly_rate, months)
 
 print("Mortgage Calculator:")
-print(f"Loan amount: \${loan_amount:,.0f}")
+print(f"Loan amount: \\$\{loan_amount:,.0f}")
 print(f"Annual rate: {annual_rate:.2%}")
 print(f"Term: {years} years")
-print(f"\\nMonthly payment: \${monthly_pmt:,.2f}")
-print(f"Total paid over {years} years: \${monthly_pmt * months:,.0f}")
-print(f"Total interest paid: \${monthly_pmt * months - loan_amount:,.0f}")
+print(f"\\nMonthly payment: \\$\{monthly_pmt:,.2f}")
+print(f"Total paid over {years} years: \\$\{monthly_pmt * months:,.0f}")
+print(f"Total interest paid: \\$\{monthly_pmt * months - loan_amount:,.0f}")
 
 # Output:
 # Mortgage Calculator:
@@ -883,7 +883,7 @@ months = years * 12
 schedule = amortization_schedule (car_loan, monthly_rate, months)
 
 print("Car Loan Amortization Schedule")
-print(f"Loan: \${car_loan:,.0f} at { annual_rate: .1 %} for { years } years")
+print(f"Loan: \\$\{car_loan:,.0f} at { annual_rate: .1 %} for { years } years")
 print("\\nFirst 6 months:")
 print(schedule.head(6).to_string (index = False))
 print("\\nLast 6 months:")
@@ -1039,10 +1039,10 @@ result = compare_job_offers(
 )
 
 print("Job Offer Comparison (5-year NPV):")
-print(f"Company A: \${result['Company A NPV']:,.0f}")
-print(f"Company B: \${result['Company B NPV']:,.0f}")
+print(f"Company A: \\$\{result['Company A NPV']:,.0f}")
+print(f"Company B: \\$\{result['Company B NPV']:,.0f}")
 print(f"\\nBetter choice: {result['Better Choice']}")
-print(f"Advantage: \${result['Advantage']:,.0f}")
+print(f"Advantage: \\$\{result['Advantage']:,.0f}")
 
 # Output:
 # Job Offer Comparison(5 - year NPV):
@@ -1125,13 +1125,13 @@ result = lease_vs_buy(
 
 print("Lease vs Buy Analysis:")
 print(f"\\nLease Option:")
-print(f"  Monthly payment: \${result['Lease Payment']:.2f}")
-print(f"  PV of total cost: \${result['PV Lease Cost']:,.0f}")
+print(f"  Monthly payment: \\$\{result['Lease Payment']:.2f}")
+print(f"  PV of total cost: \\$\{result['PV Lease Cost']:,.0f}")
 print(f"\\nBuy Option:")
-print(f"  Monthly payment: \${result['Buy Payment']:.2f}")
-print(f"  PV of net cost: \${result['PV Buy Cost']:,.0f}")
+print(f"  Monthly payment: \\$\{result['Buy Payment']:.2f}")
+print(f"  PV of net cost: \\$\{result['PV Buy Cost']:,.0f}")
 print(f"\\nBetter option: {result['Better Option']}")
-print(f"Savings: \${abs (result['Savings by Leasing']):,.0f}")
+print(f"Savings: \\$\{abs (result['Savings by Leasing']):,.0f}")
 
 # Output:
 # Lease vs Buy Analysis:
@@ -1240,12 +1240,12 @@ print("Early Payoff vs Invest Analysis:")
 print(f"\\nEarly Payoff Option:")
 print(f"  Months to payoff: {result['Early Payoff']['Months to payoff']}")
 print(f"  Months saved: {result['Early Payoff']['Months saved']}")
-print(f"  Interest saved: \${result['Early Payoff']['Interest saved']:,.0f}")
+print(f"  Interest saved: \\$\{result['Early Payoff']['Interest saved']:,.0f}")
 print(f"\\nInvestment Option:")
-print(f"  Final investment value: \${result['Investment']['Final value']:,.0f}")
-print(f"  Total invested: \${result['Investment']['Total invested']:,.0f}")
+print(f"  Final investment value: \\$\{result['Investment']['Final value']:,.0f}")
+print(f"  Total invested: \\$\{result['Investment']['Total invested']:,.0f}")
 print(f"\\nBetter option: {result['Better Option']}")
-print(f"Net benefit: \${abs (result['Net Benefit of Investing']):,.0f}")
+print(f"Net benefit: \\$\{abs (result['Net Benefit of Investing']):,.0f}")
 
 # Output:
 # Early Payoff vs Invest Analysis:
@@ -1284,9 +1284,9 @@ fv_wrong = 10000 * (1 + 0.12)**120  # 120 months
 # ✅ CORRECT: Convert to monthly rate
 fv_correct = 10000 * (1 + 0.12/12)**120
 
-print(f"Wrong: \${fv_wrong:,.0f}")
-print(f"Correct: \${fv_correct:,.0f}")
-print(f"Difference: \${fv_wrong - fv_correct:,.0f}")
+print(f"Wrong: \\$\{fv_wrong:,.0f}")
+print(f"Correct: \\$\{fv_correct:,.0f}")
+print(f"Difference: \\$\{fv_wrong - fv_correct:,.0f}")
 
 # Output:
 # Wrong: $1, 635, 299, 841
@@ -1359,8 +1359,8 @@ print(f"Real rate: {real_rate:.2%}")
 fv_nominal = 10000 * (1 + nominal_rate)**10
 fv_real = 10000 * (1 + real_rate)**10
 
-print(f"\\nFV in nominal dollars: \${fv_nominal:,.0f}")
-print(f"FV in today's dollars: \${fv_real:,.0f}")
+print(f"\\nFV in nominal dollars: \\$\{fv_nominal:,.0f}")
+print(f"FV in today's dollars: \\$\{fv_real:,.0f}")
 
 # Output:
 # Nominal rate: 7.00 %
@@ -1573,11 +1573,11 @@ print("=" * 60)
 
 # Future value
 fv = calc.future_value (pv=1000, rate=0.07, nper=10)
-print(f"1. FV of $1,000 at 7% for 10 years: \${fv:,.2f}")
+print(f"1. FV of $1,000 at 7% for 10 years: \\$\{fv:,.2f}")
 
 # Present value
 pv = calc.present_value (fv = 10000, rate = 0.05, nper = 20)
-print(f"2. PV of $10,000 in 20 years at 5%: \${pv:,.2f}")
+print(f"2. PV of $10,000 in 20 years at 5%: \\$\{pv:,.2f}")
 
 # Loan payment
 pmt = calc.payment (pv = 200000, rate = 0.045 / 12, nper = 30 * 12)

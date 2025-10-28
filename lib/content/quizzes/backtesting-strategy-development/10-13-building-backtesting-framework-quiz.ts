@@ -29,7 +29,7 @@ const buildingBacktestingFrameworkQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       'Performance metrics should be calculated by a separate Portfolio or Analytics component following the separation of concerns principle. The Strategy class should ONLY contain trading logic (signals generation). The ExecutionHandler simulates order fills. The DataHandler provides market data. Mixing responsibilities makes code harder to test, maintain, and reuse. For example, you should be able to swap in a different strategy without changing metrics calculation, or change slippage models without touching strategy code. This modular design is standard in production systems at firms like Two Sigma and WorldQuant.',
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'framework-3',

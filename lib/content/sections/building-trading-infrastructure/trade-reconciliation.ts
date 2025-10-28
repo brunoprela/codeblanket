@@ -622,9 +622,9 @@ total_buy = sum(si.net_amount for si in pending if si.side == "BUY")
         net_cash = total_sell - total_buy
 
 print("-" * 90)
-print(f"Total Buy:  \${float(total_buy):>14,.2f}")
-print(f"Total Sell: \${float(total_sell):>14,.2f}")
-print(f"Net Cash:   \${float(net_cash):>14,.2f}")
+print(f"Total Buy:  \\$\{float(total_buy):>14,.2f}")
+print(f"Total Sell: \\$\{float(total_sell):>14,.2f}")
+print(f"Net Cash:   \\$\{float(net_cash):>14,.2f}")
 \`\`\`
 
 ---
@@ -718,7 +718,7 @@ class BreakResolutionEngine:
         if price_diff <= self.auto_resolve_threshold:
             # Auto-accept broker price for small differences
             print(f"[Resolution] Auto-accepting broker price: {internal.trade_id}")
-            print(f"  Internal: \${internal.price}, Broker: \${broker.price}, Diff: \${price_diff}")
+            print(f"  Internal: \${internal.price}, Broker: \${broker.price}, Diff: \\$\{price_diff}")
             
             # Update internal trade price to match broker
             internal.price = broker.price
@@ -736,7 +736,7 @@ class BreakResolutionEngine:
         else:
             # Large price difference needs manual review
             print(f"[Resolution] Large price difference, escalating: {internal.trade_id}")
-            print(f"  Internal: \${internal.price}, Broker: \${broker.price}, Diff: \${price_diff}")
+            print(f"  Internal: \${internal.price}, Broker: \${broker.price}, Diff: \\$\{price_diff}")
             
             self.resolution_history.append({
                 'break_id': internal.trade_id,

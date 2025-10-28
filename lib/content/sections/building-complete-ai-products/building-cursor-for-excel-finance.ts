@@ -599,7 +599,7 @@ dcf = await analyzer.build_dcf_model(
     discount_rate=0.10,
     terminal_growth_rate=0.03
 )
-print(f"Enterprise Value: \${dcf['enterprise_value']:,.2f}")
+print(f"Enterprise Value: \\$\{dcf['enterprise_value']:,.2f}")
 \`\`\`
 
 ---

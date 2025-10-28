@@ -14,7 +14,7 @@ export const modelDebuggingMultipleChoice = {
       correctAnswer: 1,
       explanation:
         "Large gap between training (98%) and test (65%) performance is a classic sign of overfitting. The model has memorized training data specifics that don't generalize. Solutions: reduce complexity, add regularization, get more data, or improve feature engineering.",
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Diagnosis',
     },
     {
@@ -78,7 +78,7 @@ export const modelDebuggingMultipleChoice = {
       correctAnswer: 1,
       explanation:
         "80% of ML problems are data problems! Always check data quality first: missing values, incorrect labels, data leakage, train-test distribution match, feature preprocessing, and temporal ordering. Most 'model' problems are actually data problems in disguise.",
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Best Practices',
     },
   ],

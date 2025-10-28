@@ -264,7 +264,7 @@ print("\\n\\nSOTP SUMMARY:")
 for key, value in sotp_result.items():
     if key != 'Segment Details':
         if isinstance(value, (int, float)):
-            print(f"  {key:.<45} \${value/1_000_000:>10,.0f}M")
+            print(f"  {key:.<45} \\$\{value/1_000_000:>10,.0f}M")
 
 # Conglomerate discount
 discount_analysis = sotp_model.conglomerate_discount(
@@ -277,7 +277,7 @@ for key, value in discount_analysis.items():
     if '%' in key:
         print(f"  {key:.<45} {value:10.1%}")
     elif isinstance(value, (int, float)):
-        print(f"  {key:.<45} \${value / 1_000_000:10,.0f}M")
+        print(f"  {key:.<45} \\$\{value / 1_000_000:10,.0f}M")
 
 print("\\n\\nINTERPRETATION:")
 discount_pct = discount_analysis['Conglomerate Discount (%)']

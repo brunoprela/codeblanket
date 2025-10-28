@@ -181,11 +181,11 @@ quote = Quote(
 
 print("=== Level 1 Market Data ===\\n")
 print(f"{quote.symbol}")
-print(f"Bid: \${quote.bid:.2f} x {quote.bid_size}")
-print(f"Ask: \${quote.ask:.2f} x {quote.ask_size}")
-print(f"Last: \${quote.last:.2f} x {quote.last_size}")
-print(f"Spread: \${quote.spread():.2f} ({quote.spread_bps():.1f} bps)")
-print(f"Mid: \${quote.mid_price():.2f}")
+print(f"Bid: \\$\{quote.bid:.2f} x {quote.bid_size}")
+print(f"Ask: \\$\{quote.ask:.2f} x {quote.ask_size}")
+print(f"Last: \\$\{quote.last:.2f} x {quote.last_size}")
+print(f"Spread: \\$\{quote.spread():.2f} ({quote.spread_bps():.1f} bps)")
+print(f"Mid: \\$\{quote.mid_price():.2f}")
 
 # Example: Level 2 order book
 order_book = OrderBook(
@@ -211,14 +211,14 @@ print("\\n\\n=== Level 2 Order Book ===\\n")
 print(f"{order_book.symbol} @ {order_book.timestamp.strftime('%H:%M:%S')}\\n")
 print("Bids (top 5):")
 for level in order_book.bids:
-    print(f"  \${level.price:.2f} x {level.size:,} ({level.num_orders} orders)")
+    print(f"  \\$\{level.price:.2f} x {level.size:,} ({level.num_orders} orders)")
 
 print("\\nAsks (top 5):")
 for level in order_book.asks:
-    print(f"  \${level.price:.2f} x {level.size:,} ({level.num_orders} orders)")
+    print(f"  \\$\{level.price:.2f} x {level.size:,} ({level.num_orders} orders)")
 
 print(f"\\nImbalance: {order_book.imbalance(5):.2%}")
-print(f"Weighted Mid: \${order_book.weighted_mid_price(3):.2f}")
+print(f"Weighted Mid: \\$\{order_book.weighted_mid_price(3):.2f}")
 
 # Data level comparison
 comparison = MarketDataComparison.compare_levels()
@@ -362,7 +362,7 @@ print(f"  SIP Latency: {latency_value['sip_latency']:.1f}ms")
 print(f"  Direct Feed Latency: {latency_value['direct_latency']:.1f}ms")
 print(f"  Advantage: {latency_value['latency_advantage']:.1f}ms faster")
 print(f"  Expected Price Move: {latency_value['expected_price_move_bps']:.2f} bps")
-print(f"  Value: \${latency_value['value_per_million_traded']:.0f} per $1M traded")
+print(f"  Value: \\$\{latency_value['value_per_million_traded']:.0f} per $1M traded")
 print(f"\\n  {latency_value['interpretation']}")
 \`\`\`
 
@@ -477,7 +477,7 @@ auction_result = discovery.simulate_opening_auction (buy_orders, sell_orders)
 print("\\n\\n=== Opening Auction Price Discovery ===\\n")
 print(f"Buy Orders: {auction_result['buy_orders']}")
 print(f"Sell Orders: {auction_result['sell_orders']}")
-print(f"\\nClearing Price: \${auction_result['clearing_price']:.2f}")
+print(f"\\nClearing Price: \\$\{auction_result['clearing_price']:.2f}")
 print(f"Volume: {auction_result['volume']:,} shares")
 print(f"\\nInterpretation: Price that maximizes trading volume")
 
@@ -657,7 +657,7 @@ trades = [
 ]
 
 vwap = system.calculate_vwap("AAPL", trades)
-print(f"\\nVWAP: \${vwap:.2f}")
+print(f"\\nVWAP: \\$\{vwap:.2f}")
 \`\`\`
 
 ---

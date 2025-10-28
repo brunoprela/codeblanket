@@ -523,13 +523,13 @@ class PaperTradingEngine:
         print("\\n" + "="*60)
         print("PAPER TRADING STATUS")
         print("="*60)
-        print(f"\\nEquity: \${equity:,.2f}")
-        print(f"Cash: \${self.cash:,.2f}")
-        print(f"P&L: \${equity - self.initial_capital:,.2f} ({(equity/self.initial_capital - 1):.2%})")
+        print(f"\\nEquity: \\$\{equity:,.2f}")
+        print(f"Cash: \\$\{self.cash:,.2f}")
+        print(f"P&L: \\$\{equity - self.initial_capital:,.2f} ({(equity/self.initial_capital - 1):.2%})")
         
         print(f"\\nPositions: {len (self.positions)}")
         for symbol, pos in self.positions.items():
-            print(f"  {symbol}: {pos.quantity} @ \${pos.avg_entry_price:.2f}")
+            print(f"  {symbol}: {pos.quantity} @ \\$\{pos.avg_entry_price:.2f}")
         
         print(f"\\nTrades: {len (self.trades)}")
         print(f"Open Orders: {sum(1 for o in self.orders if o.status == 'pending')}")

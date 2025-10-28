@@ -776,11 +776,11 @@ manager = ProductionConversationManager(
 # Have conversation
 result1 = manager.chat("What are Python decorators?")
 print(result1['response'])
-print(f"Cost: \${result1['cost']:.6f}")
+print(f"Cost: \\$\{result1['cost']:.6f}")
 
 result2 = manager.chat("Show me an example")
 print(result2['response'])
-print(f"Total cost: \${result2['total_cost']:.6f}")
+print(f"Total cost: \\$\{result2['total_cost']:.6f}")
 
 # Save for later
 manager.save_conversation("conversation.json")

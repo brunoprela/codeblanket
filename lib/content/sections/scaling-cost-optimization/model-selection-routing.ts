@@ -123,7 +123,7 @@ output_tokens = 500
 
 for model_name, model in AVAILABLE_MODELS.items():
     cost = estimate_cost (model, input_tokens, output_tokens)
-    print(f"{model_name}: \${cost:.4f}")
+    print(f"{model_name}: \\$\{cost:.4f}")
 
 # Output:
 # gpt - 4 - turbo: $0.0250
@@ -378,7 +378,7 @@ class CascadeRouter:
                 # Estimate cost (assume 1000 input, 500 output tokens)
                 estimated_cost = estimate_cost (model, 1000, 500)
                 if total_cost + estimated_cost > max_cost:
-                    print(f"⚠️  Would exceed max cost (\\\${max_cost}), skipping")
+                    print(f"⚠️  Would exceed max cost (\\\\$\{max_cost}), skipping")
                     continue
             
             try:
@@ -396,7 +396,7 @@ class CascadeRouter:
                 cost = estimate_cost (model, usage.prompt_tokens, usage.completion_tokens)
                 total_cost += cost
                 
-                print(f"  Cost: \${cost:.4f}")
+                print(f"  Cost: \\$\{cost:.4f}")
                 
                 # Check quality
 if quality_checker (content, prompt):
@@ -432,14 +432,14 @@ router = CascadeRouter()
 result = await router.execute_with_cascade(
     "What is 2 + 2?"
 )
-print(f"Model used: {result['model']}, Cost: \${result['cost']:.4f}")
+print(f"Model used: {result['model']}, Cost: \\$\{result['cost']:.4f}")
 # Output: Model used: gemini - 1.5 - flash, Cost: $0.0002
 
 # Complex query: might need to cascade up
 result = await router.execute_with_cascade(
     "Implement a thread-safe LRU cache in Python with O(1) operations"
 )
-print(f"Model used: {result['model']}, Cost: \${result['cost']:.4f}")
+print(f"Model used: {result['model']}, Cost: \\$\{result['cost']:.4f}")
 # Output: Model used: claude - 3 - 5 - sonnet, Cost: $0.0105(after trying cheaper models)
 \`\`\`
 
@@ -928,7 +928,7 @@ class ProductionModelRouter:
         
         print(f"🎯 Routing Decision: {decision.model}")
         print(f"   Reasoning: {decision.reasoning}")
-        print(f"   Estimated cost: \${decision.estimated_cost:.4f}")
+        print(f"   Estimated cost: \\$\{decision.estimated_cost:.4f}")
         
         # Execute with cascade if enabled
         if self.enable_cascade:

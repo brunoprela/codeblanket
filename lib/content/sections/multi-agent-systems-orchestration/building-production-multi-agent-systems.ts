@@ -658,8 +658,8 @@ class MonitoringDashboard:
             print(f"  {key}: {value}")
         
         print(f"\\n💰 COSTS:")
-        print(f"  Hourly: \${data['costs']['hourly']:.2f}")
-        print(f"  Remaining: \${data['costs']['remaining']:.2f}")
+        print(f"  Hourly: \\$\{data['costs']['hourly']:.2f}")
+        print(f"  Remaining: \\$\{data['costs']['remaining']:.2f}")
 
 print(f"\\n🤖 AGENTS:")
 print(f"  Available: {data['agents']['available']}/{data['agents']['total']}")

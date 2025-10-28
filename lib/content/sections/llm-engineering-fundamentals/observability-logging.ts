@@ -499,7 +499,7 @@ class RealtimeDashboard:
 
         print(f"\\nUSAGE:")
         print(f"  Tokens/min: {metrics['tokens_per_minute']:.0f}")
-        print(f"  Cost/min: \${metrics['cost_per_minute']:.6f}")
+        print(f"  Cost/min: \\$\{metrics['cost_per_minute']:.6f}")
 
 print("=" * 60 + "\\n")
 

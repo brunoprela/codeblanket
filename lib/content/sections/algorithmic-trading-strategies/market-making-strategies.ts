@@ -582,10 +582,10 @@ market_data = {
 quote = mm.generate_quotes(market_data)
 if quote:
     print(f"\\n=== Market Making Quote ===")
-print(f"Bid: \${quote.bid_price:.2f} x {quote.bid_size}")
-print(f"Ask: \${quote.ask_price:.2f} x {quote.ask_size}")
+print(f"Bid: \\$\{quote.bid_price:.2f} x {quote.bid_size}")
+print(f"Ask: \\$\{quote.ask_price:.2f} x {quote.ask_size}")
 print(f"Spread: {quote.spread_bps:.2f} bps")
-print(f"Mid: \${quote.mid_price:.2f}")
+print(f"Mid: \\$\{quote.mid_price:.2f}")
     
     # Simulate trade
 mm.handle_trade_execution(Side.BUY, 150.00, 100, is_aggressive = False)
@@ -594,10 +594,10 @@ mm.handle_trade_execution(Side.SELL, 150.05, 100, is_aggressive = False)
     # Calculate P & L
 pnl = mm.calculate_pnl(150.025)
 print(f"\\n=== P&L Report ===")
-print(f"Realized P&L: \${pnl['realized_pnl']:.2f}")
-print(f"Unrealized P&L: \${pnl['unrealized_pnl']:.2f}")
-print(f"Total P&L: \${pnl['total_pnl']:.2f}")
-print(f"Spread Revenue: \${pnl['spread_revenue']:.2f}")
+print(f"Realized P&L: \\$\{pnl['realized_pnl']:.2f}")
+print(f"Unrealized P&L: \\$\{pnl['unrealized_pnl']:.2f}")
+print(f"Total P&L: \\$\{pnl['total_pnl']:.2f}")
+print(f"Spread Revenue: \\$\{pnl['spread_revenue']:.2f}")
 print(f"Number of Trades: {pnl['num_trades']}")
 \`\`\`
 

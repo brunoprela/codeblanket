@@ -13,7 +13,6 @@ export const autocorrelationPartialAutocorrelationMultipleChoice = [
     correctAnswer: 1,
     explanation:
       'This is a textbook AR(1) signature: (1) PACF cuts off sharply after lag 1 → AR order = 1, (2) ACF decays geometrically (0.9, 0.81=0.9², 0.73≈0.9³) → confirms AR, (3) PACF(1)=0.9 is the AR coefficient φ. The geometric decay rate matches φ^k. NOT non-stationary because: φ=0.9 < 1 (stationary), and decay is consistent geometric (not slow random walk decay). NOT MA because MA(1) would have ACF that cuts off after lag 1, not geometric decay. Key distinction: AR → PACF cuts off, ACF decays. MA → ACF cuts off, PACF decays.',
-    difficulty: 'intermediate',
   },
   {
     id: 2,
@@ -29,7 +28,6 @@ export const autocorrelationPartialAutocorrelationMultipleChoice = [
     correctAnswer: 1,
     explanation:
       "This is the SIGNATURE of volatility clustering that requires GARCH modeling: (1) Residuals white noise (p=0.42 > 0.05) → Mean equation (AR part) is adequate. (2) Squared residuals correlated (p=0.001 < 0.05) → Variance is TIME-VARYING and PREDICTABLE. This means: Returns = μ + ε_t where ε_t = σ_t × z_t. While z_t is unpredictable, σ_t is predictable from past squared shocks. Solution: AR(1)-GARCH(1,1) model. Why not other options: (A) Wrong - squared residuals should be white noise if variance is constant, (C) Wrong - adding AR lags won't fix variance clustering, (D) Wrong - this is a model specification issue, not data problem, (E) VERY wrong - ignoring this means underestimating risk and getting wrong confidence intervals!",
-    difficulty: 'advanced',
   },
   {
     id: 3,
@@ -45,7 +43,6 @@ export const autocorrelationPartialAutocorrelationMultipleChoice = [
     correctAnswer: 2,
     explanation:
       'Half-life formula: t_½ = -ln(2)/ln(φ) where φ = ACF(1). For φ=0.95: t_½ = -ln(2)/ln(0.95) = -0.693/(-0.0513) ≈ 13.5 periods. This indicates VERY SLOW mean reversion. Trading implications: (1) Long holding periods (13.5 periods to decay 50%, ~45 periods to decay 90%), (2) Need wide entry thresholds (2.5-3σ instead of 2σ), (3) Wide stop-losses (spread can overshoot significantly), (4) Low trade frequency, (5) Higher capital requirements (capital tied up longer). Compare: φ=0.5 → half-life = 1 period (fast), φ=0.7 → half-life = 2.4 periods (moderate). High ACF ≈ 1 is BAD for mean-reversion trading (not good!) because convergence is slow and risky. Infinite half-life only if φ ≥ 1 (unit root).',
-    difficulty: 'advanced',
   },
   {
     id: 4,
@@ -61,7 +58,6 @@ export const autocorrelationPartialAutocorrelationMultipleChoice = [
     correctAnswer: 3,
     explanation:
       "With multiple hypothesis testing (testing 20+ lags), we expect ~1 false positive at α=0.05 level. A single significant lag out of many is likely SPURIOUS. Statistical evidence: (1) If testing 20 lags at 5% significance, expect 20 × 0.05 = 1 false positive by chance, (2) One significant lag doesn't form coherent pattern, (3) Bonferroni correction: adjusted α = 0.05/20 = 0.0025, likely not significant after correction. Proper validation: (1) Check if lag-5 significance persists in different sub-periods, (2) Out-of-sample validation, (3) Check if economic explanation exists (e.g., settlement lags), (4) Test if pattern exists in other markets. Why NOT other options: (A) MA(5) would show significance at multiple lags 1-5, (C) Possible but need more evidence than single lag, (E) Cycles don't create single-lag spikes. Bottom line: Don't trade based on single significant lag - likely data mining artifact.",
-    difficulty: 'intermediate',
   },
   {
     id: 5,
@@ -77,6 +73,5 @@ export const autocorrelationPartialAutocorrelationMultipleChoice = [
     correctAnswer: 1,
     explanation:
       "Choose ARMA(1,1) based on PARSIMONY PRINCIPLE (Occam's Razor): When multiple models fit adequately, choose the simplest. Evidence: (1) Lower AIC/BIC → ARMA(1,1) preferred by information criteria (penalize complexity), (2) Residuals white noise → Model is adequate (captures all patterns), (3) Fewer parameters → Less overfitting risk, (4) Better out-of-sample performance (typically), (5) Easier to interpret and maintain. Box-Jenkins methodology: ACF/PACF guide initial selection, but information criteria make final choice. ARMA(2,2) risks: (1) Overfitting - capturing noise as signal, (2) Parameter estimation uncertainty increases with more parameters, (3) Out-of-sample degradation. Why NOT average: (A) Model averaging adds complexity without benefit if both adequate, (B) ARMA(1,1) sufficient. Rule: If diagnostics pass, prefer simpler model. Only use complex model if it significantly improves fit (lower IC + better diagnostics).",
-    difficulty: 'intermediate',
   },
 ];

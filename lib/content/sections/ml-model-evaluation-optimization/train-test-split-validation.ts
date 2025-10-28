@@ -402,14 +402,14 @@ model.fit(X_train, y_train)
 # Step 4: Evaluate on validation set (for hyperparameter tuning)
 y_val_pred = model.predict(X_val)
 val_rmse = np.sqrt (mean_squared_error (y_val, y_val_pred))
-print(f"\\nValidation RMSE: \${val_rmse*100000:.2f}")
+print(f"\\nValidation RMSE: \\$\{val_rmse*100000:.2f}")
 
 # Step 5: Final evaluation on test set (only once!)
 y_test_pred = model.predict(X_test)
 test_rmse = np.sqrt (mean_squared_error (y_test, y_test_pred))
 test_r2 = r2_score (y_test, y_test_pred)
 print(f"\\nFinal Test Performance:")
-print(f"  RMSE: \${test_rmse*100000:.2f}")
+print(f"  RMSE: \\$\{test_rmse*100000:.2f}")
 print(f"  R²: {test_r2:.4f}")
 \`\`\`
 

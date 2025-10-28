@@ -281,8 +281,8 @@ mape = np.mean (np.abs((test_actuals_original - test_preds_original) / test_actu
 r2 = r2_score (test_actuals_original, test_preds_original)
 
 print("\\n=== Test Results ===")
-print(f"MAE: \${mae:.2f}")
-print(f"RMSE: \${rmse:.2f}")
+print(f"MAE: \\$\{mae:.2f}")
+print(f"RMSE: \\$\{rmse:.2f}")
 print(f"MAPE: {mape:.2f}%")
 print(f"R²: {r2:.4f}")
 
@@ -403,8 +403,8 @@ cnn_rmse = np.sqrt (mean_squared_error (test_actuals_original, cnn_preds_origina
 cnn_r2 = r2_score (test_actuals_original, cnn_preds_original)
 
 print("\\n=== CNN Test Results ===")
-print(f"MAE: \${cnn_mae:.2f}")
-print(f"RMSE: \${cnn_rmse:.2f}")
+print(f"MAE: \\$\{cnn_mae:.2f}")
+print(f"RMSE: \\$\{cnn_rmse:.2f}")
 print(f"R²: {cnn_r2:.4f}")
 \`\`\`
 
@@ -604,14 +604,14 @@ transformer_preds_original = scaler_y.inverse_transform (transformer_preds.resha
 print("\\n=== Model Comparison ===")
 print(f"{'Model':<15} {'MAE':>10} {'RMSE':>10} {'R²':>8}")
 print("-" * 45)
-print(f"{'LSTM':<15} \${mae:>9.2f} \${rmse:>9.2f} {r2:>8.4f}")
-print(f"{'1D CNN':<15} \${cnn_mae:>9.2f} \${cnn_rmse:>9.2f} {cnn_r2:>8.4f}")
+print(f"{'LSTM':<15} \${mae:>9.2f} \\$\{rmse:>9.2f} {r2:>8.4f}")
+print(f"{'1D CNN':<15} \${cnn_mae:>9.2f} \\$\{cnn_rmse:>9.2f} {cnn_r2:>8.4f}")
 
 trans_mae = mean_absolute_error (test_actuals_original, transformer_preds_original)
 trans_rmse = np.sqrt (mean_squared_error (test_actuals_original, transformer_preds_original))
 trans_r2 = r2_score (test_actuals_original, transformer_preds_original)
 
-print(f"{'Transformer':<15} \${trans_mae:>9.2f} \${trans_rmse:>9.2f} {trans_r2:>8.4f}")
+print(f"{'Transformer':<15} \${trans_mae:>9.2f} \\$\{trans_rmse:>9.2f} {trans_r2:>8.4f}")
 \`\`\`
 
 ---
@@ -721,8 +721,8 @@ ensemble_rmse = np.sqrt (mean_squared_error (test_actuals_original, ensemble_pre
 ensemble_r2 = r2_score (test_actuals_original, ensemble_preds)
 
 print("\\n=== Ensemble Results ===")
-print(f"MAE: \${ensemble_mae:.2f}")
-print(f"RMSE: \${ensemble_rmse:.2f}")
+print(f"MAE: \\$\{ensemble_mae:.2f}")
+print(f"RMSE: \\$\{ensemble_rmse:.2f}")
 print(f"R²: {ensemble_r2:.4f}")
 
 # Plot all predictions

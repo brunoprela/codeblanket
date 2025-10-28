@@ -772,8 +772,8 @@ metrics = cache.get_metrics()
 print("\\nCache Metrics:")
 print(f"  Hit rate: {metrics['hit_rate']:.1f}%")
 print(f"  Cost reduction: {metrics['cost_reduction']:.1f}%")
-print(f"  Saved: \${metrics['saved_cost']:.4f}")
-print(f"  Spent: \${metrics['total_api_cost']:.4f}")
+print(f"  Saved: \\$\{metrics['saved_cost']:.4f}")
+print(f"  Spent: \\$\{metrics['total_api_cost']:.4f}")
 \`\`\`
 
 ## Key Takeaways

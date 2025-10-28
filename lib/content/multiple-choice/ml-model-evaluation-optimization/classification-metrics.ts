@@ -30,7 +30,7 @@ export const classificationMetricsMultipleChoice = {
       correctAnswer: 2,
       explanation:
         "In medical diagnosis, missing a disease (false negative) can be life-threatening, while false positives lead to additional testing (acceptable cost). High recall ensures we don't miss actual cases, even if it means more false alarms.",
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Application',
     },
     {
@@ -45,7 +45,7 @@ export const classificationMetricsMultipleChoice = {
       correctAnswer: 1,
       explanation:
         "AUC-ROC of 0.5 means the model has no discrimination ability - it's equivalent to random guessing. AUC=1.0 is perfect, AUC=0.5 is random, and AUC<0.5 means the model is performing worse than random.",
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'ROC Analysis',
     },
     {

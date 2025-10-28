@@ -256,7 +256,7 @@ messages = [
 result = client.chat (messages, model="gpt-3.5-turbo")
 
 print(result['content'])
-print(f"Cost: \${result['cost']:.6f}")
+print(f"Cost: \\$\{result['cost']:.6f}")
 print(f"Latency: {result['latency']:.2f}s")
 print(f"Tokens: {result['usage']['total_tokens']}")
 \`\`\`
@@ -677,13 +677,13 @@ def compare_provider_costs(
     results.sort (key=lambda x: x[1])
     
     for model, cost in results:
-        print(f"{model:30s} \${cost:.6f}")
+        print(f"{model:30s} \\$\{cost:.6f}")
 
 cheapest = results[0]
 most_expensive = results[-1]
 
-print(f"\\nCheapest: {cheapest[0]} (\${cheapest[1]:.6f})")
-print(f"Most expensive: {most_expensive[0]} (\${most_expensive[1]:.6f})")
+print(f"\\nCheapest: {cheapest[0]} (\\$\{cheapest[1]:.6f})")
+print(f"Most expensive: {most_expensive[0]} (\\$\{most_expensive[1]:.6f})")
 print(f"Difference: {most_expensive[1] / cheapest[1]:.1f}x more expensive")
 
 compare_provider_costs (prompt_tokens = 1000, completion_tokens = 500)

@@ -479,10 +479,10 @@ calc = DurationCalculator(bond)
 metrics = calc.calculate_metrics(ytm)
 
 print("Bond Metrics:")
-print(f"  Price: \${metrics['price']:.2f}")
+print(f"  Price: \\$\{metrics['price']:.2f}")
 print(f"  Macaulay Duration: {metrics['macaulay_duration']:.2f} years")
 print(f"  Modified Duration: {metrics['modified_duration']:.2f}")
-print(f"  DV01: \${metrics['dv01']:.4f}")
+print(f"  DV01: \\$\{metrics['dv01']:.4f}")
 print(f"  Convexity: {metrics['convexity']:.2f}")
     
     # Test price sensitivity
@@ -519,9 +519,9 @@ portfolio.add_position(bond_long, market_value = 1_500_000, ytm = 0.065)
 port_metrics = portfolio.aggregate_metrics()
 
 print(f"Portfolio Metrics:")
-print(f"  Total Value: \${port_metrics['total_market_value']:,.0f}")
+print(f"  Total Value: \\$\{port_metrics['total_market_value']:,.0f}")
 print(f"  Modified Duration: {port_metrics['modified_duration']:.2f}")
-print(f"  DV01: \${port_metrics['dv01']:,.2f}")
+print(f"  DV01: \\$\{port_metrics['dv01']:,.2f}")
 print(f"  Convexity: {port_metrics['convexity']:.2f}")
     
     # Immunization hedge
@@ -533,7 +533,7 @@ print(f"Current Duration: {hedge['current_duration']:.2f}")
 print(f"Target Duration: {hedge['target_duration']:.2f}")
 print(f"Duration Gap: {hedge['duration_gap']:.2f}")
 print(f"Action: {hedge['action'].upper()} duration")
-print(f"DV01 Change Needed: \${hedge['dv01_change_needed']:,.2f}")
+print(f"DV01 Change Needed: \\$\{hedge['dv01_change_needed']:,.2f}")
 \`\`\`
 
 ---

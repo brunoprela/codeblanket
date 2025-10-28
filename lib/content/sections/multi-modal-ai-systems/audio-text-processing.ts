@@ -982,7 +982,7 @@ def estimate_transcription_cost(
 
 # Example: 1 hour of audio
 cost = estimate_transcription_cost(3600)
-print(f"Cost for 1 hour: \${cost:.2f}")
+print(f"Cost for 1 hour: \\$\{cost:.2f}")
 \`\`\`
 
 ### 3. Quality Validation

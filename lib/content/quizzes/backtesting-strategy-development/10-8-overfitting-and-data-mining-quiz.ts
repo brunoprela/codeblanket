@@ -44,7 +44,7 @@ const overfittingAndDataMiningQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       "The rule of thumb is to have at least 30 observations per parameter to avoid overfitting. With 1,000 observations and 8 parameters, you have 125 observations per parameter, which is well above the minimum threshold. However, this is just a guideline—you should still use proper validation techniques (out-of-sample testing, cross-validation) regardless of this ratio. Having sufficient observations per parameter reduces but doesn't eliminate overfitting risk. The actual risk also depends on model complexity, data quality, and how many combinations you test.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'overfit-4',

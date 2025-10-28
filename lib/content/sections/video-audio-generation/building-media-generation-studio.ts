@@ -116,7 +116,7 @@ class MediaGenerationStudio:
         await self.job_queue.enqueue (job)
         
         print(f"✅ Job submitted: {job.job_id}")
-        print(f"   Estimated cost: \${estimated_cost:.4f}")
+        print(f"   Estimated cost: \\$\{estimated_cost:.4f}")
 
 return job.job_id
     

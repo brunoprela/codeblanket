@@ -180,16 +180,16 @@ if __name__ == "__main__":
     
     # Buy 100 AAPL @ $150
     engine.update_position('AAPL', 100, 150.0)
-    print(f"After buy: Unrealized P&L = \${engine.get_unrealized_pnl():.2f}")
+    print(f"After buy: Unrealized P&L = \\$\{engine.get_unrealized_pnl():.2f}")
     
     # Price moves to $155
     engine.update_market_price('AAPL', 155.0, 1000000)
-    print(f"After price move: Unrealized P&L = \${engine.get_unrealized_pnl():.2f}")
+    print(f"After price move: Unrealized P&L = \\$\{engine.get_unrealized_pnl():.2f}")
     
     # Sell 50 AAPL @ $155
     engine.update_position('AAPL', -50, 155.0)
-    print(f"After partial close: Realized P&L = \${engine.realized_pnl:.2f}")
-    print(f"After partial close: Unrealized P&L = \${engine.get_unrealized_pnl():.2f}")
+    print(f"After partial close: Realized P&L = \\$\{engine.realized_pnl:.2f}")
+    print(f"After partial close: Unrealized P&L = \\$\{engine.get_unrealized_pnl():.2f}")
 \`\`\`
 
 ---
@@ -360,9 +360,9 @@ if __name__ == "__main__":
     param_var = calculator.parametric_var (confidence_level=0.95, horizon_days=1)
     mc_var = calculator.monte_carlo_var (confidence_level=0.95, horizon_days=1)
     
-    print(f"Historical VaR (95%, 1-day): \${hist_var:,.2f}")
-    print(f"Parametric VaR (95%, 1-day): \${param_var:,.2f}")
-    print(f"Monte Carlo VaR (95%, 1-day): \${mc_var:,.2f}")
+    print(f"Historical VaR (95%, 1-day): \\$\{hist_var:,.2f}")
+    print(f"Parametric VaR (95%, 1-day): \\$\{param_var:,.2f}")
+    print(f"Monte Carlo VaR (95%, 1-day): \\$\{mc_var:,.2f}")
 \`\`\`
 
 ---

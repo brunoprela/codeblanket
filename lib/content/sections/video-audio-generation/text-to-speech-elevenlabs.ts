@@ -215,7 +215,7 @@ class ElevenLabsTTS:
         self.total_cost += cost
         
         print(f"✅ Generated in {generation_time:.2f}s")
-        print(f"   Cost: \${cost:.4f} (Total: \${self.total_cost:.4f})")
+        print(f"   Cost: \${cost:.4f} (Total: \\$\{self.total_cost:.4f})")
         
         # Save if path provided
 if output_path:
@@ -670,7 +670,7 @@ print("\\n=== Usage Statistics ===")
 usage = tts.get_usage()
 print(json.dumps (usage, indent = 2))
 
-print(f"\\n💰 Session cost: \${tts.total_cost:.4f}")
+print(f"\\n💰 Session cost: \\$\{tts.total_cost:.4f}")
 print(f"   Characters processed: {tts.total_characters:,}")
 
 if __name__ == "__main__":

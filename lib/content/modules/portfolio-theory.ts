@@ -51,7 +51,7 @@ import { portfolioOptimizationProjectMC } from '@/lib/content/multiple-choice/po
 // Transform functions for quizzes and multiple choice
 const transformQuizQuestion = (q: any) => ({
   id: q.id,
-  text: q.text,
+  question: q.text,
   type: q.type,
   sampleAnswer: q.sampleAnswer,
   keyPoints: q.keyPoints,

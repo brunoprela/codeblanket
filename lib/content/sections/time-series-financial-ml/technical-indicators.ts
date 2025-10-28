@@ -94,8 +94,8 @@ plt.show()
 
 # Calculate lag
 sma_ema_diff = abs (sma_50 - ema_50)
-print(f"\\nAverage SMA-EMA difference: \${sma_ema_diff.mean():.2f}")
-print(f"Max SMA-EMA difference: \${sma_ema_diff.max():.2f}")
+print(f"\\nAverage SMA-EMA difference: \\$\{sma_ema_diff.mean():.2f}")
+print(f"Max SMA-EMA difference: \\$\{sma_ema_diff.max():.2f}")
 \`\`\`
 
 ### Weighted Moving Average (WMA)
@@ -454,9 +454,9 @@ plt.tight_layout()
 plt.show()
 
 print(f"\\n=== ATR Statistics ===")
-print(f"Current ATR: \${atr.iloc[-1]:.2f}")
+print(f"Current ATR: \\$\{atr.iloc[-1]:.2f}")
 print(f"Current ATR %: {atr_pct.iloc[-1]:.2f}%")
-print(f"Average ATR: \${atr.mean():.2f}")
+print(f"Average ATR: \\$\{atr.mean():.2f}")
 print(f"Average ATR %: {atr_pct.mean():.2f}%")
 
 # Use ATR for stop-loss
@@ -465,9 +465,9 @@ stop_loss = close - (atr * stop_multiplier)
 take_profit = close + (atr * stop_multiplier * 2)  # 2:1 reward:risk
 
 print(f"\\nWith 2x ATR stops:")
-print(f"Entry: \${close.iloc[-1]:.2f}")
-print(f"Stop Loss: \${stop_loss.iloc[-1]:.2f}")
-print(f"Take Profit: \${take_profit.iloc[-1]:.2f}")
+print(f"Entry: \\$\{close.iloc[-1]:.2f}")
+print(f"Stop Loss: \\$\{stop_loss.iloc[-1]:.2f}")
+print(f"Take Profit: \\$\{take_profit.iloc[-1]:.2f}")
 print(f"Risk: \${(close.iloc[-1] - stop_loss.iloc[-1]):.2f}")
 print(f"Reward: \${(take_profit.iloc[-1] - close.iloc[-1]):.2f}")
 \`\`\`

@@ -59,7 +59,7 @@ const timeSeriesCrossValidationQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 0,
     explanation:
       "Expanding window (also called 'anchored') starts training from a fixed point and grows the training set with each fold—mimicking how strategies are deployed in production where you accumulate more history over time. Rolling window uses a fixed-size training window that slides forward—this tests whether the strategy can adapt to regime changes using only recent data. Both are valid; expanding is more realistic for production deployment, while rolling is stricter and tests adaptability. Option B is wrong (rolling uses less data per fold). Option C is incorrect (both apply to all frequencies). They are distinctly different approaches with different purposes.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'tscv-5',

@@ -105,7 +105,7 @@ print(f"Meaning: 1 {eur_usd.base_currency} = {eur_usd.exchange_rate} {eur_usd.qu
 
 # Convert 1,000 EUR to USD
 usd_amount = eur_usd.convert_amount(1000, 'base_to_quote')
-print(f"\\n€1,000 = \${usd_amount:,.2f}")
+print(f"\\n€1,000 = \\$\{usd_amount:,.2f}")
 
 # Convert 10,000 USD to EUR
 eur_amount = eur_usd.convert_amount(10000, 'quote_to_base')
@@ -120,9 +120,9 @@ print(f"Meaning: 1 {usd_eur.base_currency} = {usd_eur.exchange_rate:.4f} {usd_eu
 # Calculate pip value for standard lot(100,000 EUR)
 pip_value = eur_usd.calculate_pip_value(100000, pip_decimal = 4)
 print(f"\\nFor 100,000 EUR position:")
-print(f"1 pip (0.0001) move = \${pip_value:.2f}")
+print(f"1 pip (0.0001) move = \\$\{pip_value:.2f}")
 print(f"If EUR/USD moves from 1.0850 to 1.0950 (+100 pips)")
-print(f"Profit = 100 pips × \${pip_value:.2f} = \${pip_value * 100:,.2f}")
+print(f"Profit = 100 pips × \${pip_value:.2f} = \\$\{pip_value * 100:,.2f}")
 \`\`\`
 
 **Key Terminology:**
@@ -238,7 +238,7 @@ print("\\n=== Forex Market Structure ===\\n")
 print("MAJOR PAIRS (Most Liquid):")
 for pair, info in ForexMarketClassification.MAJORS.items():
     print(f"  {pair} ({info['name']})")
-    print(f"    Volume: \${info['daily_volume'] / 1e9:.0f}B daily")
+    print(f"    Volume: \\$\{info['daily_volume'] / 1e9:.0f}B daily")
 print(f"    Spread: {info['typical_spread_pips']} pips")
 print(f"    {info['characteristics']}\\n")
 
@@ -251,7 +251,7 @@ for pair, info in ForexMarketClassification.EXOTICS.items():
     print(f"  {pair}: {info['risk']}")
 
 turnover = ForexMarketClassification.calculate_daily_turnover()
-print(f"\\nTotal Daily Turnover: \${turnover['total_market']/1e12:.1f} Trillion")
+print(f"\\nTotal Daily Turnover: \\$\{turnover['total_market']/1e12:.1f} Trillion")
 print(f"{turnover['interpretation']}")
 \`\`\`
 
@@ -511,7 +511,7 @@ ppp = ExchangeRateModel.purchasing_power_parity(
     base_exchange_rate=1.0
 )
 print("1. Purchasing Power Parity:")
-print(f"   US Big Mac: \${ppp['domestic_price']}")
+print(f"   US Big Mac: \\$\{ppp['domestic_price']}")
 print(f"   EU Big Mac: €{ppp['foreign_price']}")
 print(f"   Implied EUR/USD: {ppp['implied_exchange_rate']:.4f}")
 print(f"   {ppp['interpretation']}")
@@ -534,8 +534,8 @@ bop = ExchangeRateModel.balance_of_payments_effect(
     capital_account_balance=80    # Capital inflows to US
 )
 print(f"\\n3. Balance of Payments:")
-print(f"   Current Account: \${bop['current_account']}B (trade deficit)")
-print(f"   Capital Account: +\${bop['capital_account']}B (inflows)")
+print(f"   Current Account: \\$\{bop['current_account']}B (trade deficit)")
+print(f"   Capital Account: +\\$\{bop['capital_account']}B (inflows)")
 print(f"   Effect: {bop['effect']}")
 \`\`\`
 
@@ -654,9 +654,9 @@ print(f"         Rate Differential: {(carry.target_rate - carry.funding_rate)*10
 
 result = carry.calculate_carry(365)
 print(f"Annual Returns (if FX unchanged):")
-print(f"  Interest Earned ({carry.target_currency}): \${result['target_interest_earned']:,.0f}")
-print(f"  Interest Paid ({carry.funding_currency}): \${result['funding_cost_paid']:,.0f}")
-print(f"  Net Carry: \${result['net_carry']:,.0f}")
+print(f"  Interest Earned ({carry.target_currency}): \\$\{result['target_interest_earned']:,.0f}")
+print(f"  Interest Paid ({carry.funding_currency}): \\$\{result['funding_cost_paid']:,.0f}")
+print(f"  Net Carry: \\$\{result['net_carry']:,.0f}")
 print(f"  Carry Return: {result['carry_return_pct']:.2f}%")
 
 # Simulate scenarios
@@ -778,7 +778,7 @@ verbal = CentralBankIntervention.verbal_intervention("EUR", "too strong")
 print(f"1. {verbal['type']}")
 print(f"   Currency: {verbal['currency']}")
 print(f"   Statement: {verbal['statement']}")
-print(f"   Cost: \${verbal['cost']}")
+print(f"   Cost: \\$\{verbal['cost']}")
 print(f"   Effectiveness: {verbal['effectiveness']}")
 
 # Direct intervention
@@ -790,7 +790,7 @@ direct = CentralBankIntervention.direct_intervention(
 )
 print(f"\\n2. {direct['type']}")
 print(f"   Action: {direct['action'].title()} JPY")
-print(f"   Amount: \${direct['amount'] / 1e9:.0f}B")
+print(f"   Amount: \\$\{direct['amount'] / 1e9:.0f}B")
 print(f"   Impact: {direct['expected_impact']}")
 print(f"   Duration: {direct['duration']}")
 
@@ -989,7 +989,7 @@ class FXTradingSystem:
 system = FXTradingSystem (account_currency="USD")
 
 print("\\n=== FX Trading System ===\\n")
-print(f"Initial Balance: \${system.account_balance:,.0f}")
+print(f"Initial Balance: \\$\{system.account_balance:,.0f}")
 
 # Open long EUR / USD position
 trade1 = system.execute_market_order(
@@ -1004,7 +1004,7 @@ if trade1['status'] == 'FILLED':
 print(f"  Side: {trade1['side'].upper()}")
 print(f"  Size: {trade1['lot_size']} lot ({trade1['notional']:,.0f} {trade1['pair'][:3]})")
 print(f"  Entry: {trade1['entry_price']:.4f}")
-print(f"  Margin Used: \${trade1['margin_used']:,.0f}")
+print(f"  Margin Used: \\$\{trade1['margin_used']:,.0f}")
 
 # Open short GBP / USD position
 trade2 = system.execute_market_order(
@@ -1023,11 +1023,11 @@ print(f"  Entry: {trade2['entry_price']:.4f}")
 # Check portfolio
 metrics = system.calculate_portfolio_metrics()
 print(f"\\nPortfolio Metrics:")
-print(f"  Total Equity: \${metrics['total_equity']:,.0f}")
-print(f"  Margin Used: \${metrics['margin_used']:,.0f}")
-print(f"  Free Margin: \${metrics['account_balance']:,.0f}")
+print(f"  Total Equity: \\$\{metrics['total_equity']:,.0f}")
+print(f"  Margin Used: \\$\{metrics['margin_used']:,.0f}")
+print(f"  Free Margin: \\$\{metrics['account_balance']:,.0f}")
 print(f"  Leverage: {metrics['leverage']:.1f}x")
-print(f"  Unrealized P&L: \${metrics['unrealized_pnl']:,.2f}")
+print(f"  Unrealized P&L: \\$\{metrics['unrealized_pnl']:,.2f}")
 print(f"  Margin Level: {metrics['margin_level']:.0f}%")
 
 # Close first position
@@ -1035,9 +1035,9 @@ close_result = system.close_position (trade1['position_id'])
 print(f"\\nClosed Position: {close_result['position_id']}")
 print(f"  Entry: {close_result['entry_price']:.4f}")
 print(f"  Exit: {close_result['exit_price']:.4f}")
-print(f"  P&L: \${close_result['pnl']:,.2f}")
+print(f"  P&L: \\$\{close_result['pnl']:,.2f}")
 print(f"  Return: {close_result['pnl_pct']:.2f}%")
-print(f"  New Balance: \${close_result['new_balance']:,.0f}")
+print(f"  New Balance: \\$\{close_result['new_balance']:,.0f}")
 \`\`\`
 
 ---

@@ -184,11 +184,11 @@ sources_uses = transaction.calculate_sources_uses(ebitda=150_000_000)
 print("LBO Sources and Uses ($ millions):\\n")
 print("USES:")
 for item, value in sources_uses['Uses'].items():
-    print(f"  {item:.<40} \${value/1_000_000:>10,.0f}")
+    print(f"  {item:.<40} \\$\{value/1_000_000:>10,.0f}")
 
 print("\\nSOURCES:")
 for item, value in sources_uses['Sources'].items():
-    print(f"  {item:.<40} \${value/1_000_000:>10,.0f}")
+    print(f"  {item:.<40} \\$\{value/1_000_000:>10,.0f}")
 
 print("\\nMETRICS:")
 for item, value in sources_uses['Metrics'].items():
@@ -549,7 +549,7 @@ for key, value in exit_analysis.items():
     elif 'IRR' in key:
         print(f"  {key:.<40} {value:.1%}")
     elif isinstance(value, (int, float)) and 'Year' not in key:
-        print(f"  {key:.<40} \${value / 1_000_000:10,.0f}M")
+        print(f"  {key:.<40} \\$\{value / 1_000_000:10,.0f}M")
     else:
         print(f"  {key:.<40} {value}")
 

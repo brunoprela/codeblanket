@@ -46,7 +46,7 @@ export const multiClassMultiLabelMetricsMultipleChoice = {
       correctAnswer: 1,
       explanation:
         'Hamming Loss is the fraction of wrong labels (both false positives and false negatives) divided by total labels. For example, if you predict [1,0,1] but truth is [1,1,0], 2 out of 3 labels are wrong, Hamming Loss = 2/3 = 0.67.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Multi-label',
     },
     {

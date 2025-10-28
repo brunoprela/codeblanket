@@ -31,10 +31,10 @@ import { portfolioGreeksManagementQuiz } from '@/lib/content/quizzes/options-tra
 import { moduleProjectOptionsPlatformQuiz } from '@/lib/content/quizzes/options-trading-greeks/module-project-options-platform';
 
 // Import multiple choice
-import { optionsFundamentalsMC } from '@/lib/content/multiple-choice/options-trading-greeks/options-fundamentals';
-import { callPutDeepDiveMC } from '@/lib/content/multiple-choice/options-trading-greeks/call-put-deep-dive';
-import { optionsPricingBlackScholesMC } from '@/lib/content/multiple-choice/options-trading-greeks/options-pricing-black-scholes';
-import { greeksDeltaGammaThetaVegaRhoMC } from '@/lib/content/multiple-choice/options-trading-greeks/greeks-delta-gamma-theta-vega-rho';
+import { optionsFundamentalsMultipleChoice as optionsFundamentalsMC } from '@/lib/content/multiple-choice/options-trading-greeks/options-fundamentals';
+import { callPutDeepDiveMultipleChoice as callPutDeepDiveMC } from '@/lib/content/multiple-choice/options-trading-greeks/call-put-deep-dive';
+import { optionsPricingBlackScholesMultipleChoice as optionsPricingBlackScholesMC } from '@/lib/content/multiple-choice/options-trading-greeks/options-pricing-black-scholes';
+import { greeksDeltaGammaThetaVegaRhoMultipleChoice as greeksDeltaGammaThetaVegaRhoMC } from '@/lib/content/multiple-choice/options-trading-greeks/greeks-delta-gamma-theta-vega-rho';
 import { impliedVolatilityMC } from '@/lib/content/multiple-choice/options-trading-greeks/implied-volatility';
 import { optionsTradingStrategiesMC } from '@/lib/content/multiple-choice/options-trading-greeks/options-trading-strategies';
 import { coveredCallsProtectivePutsMC } from '@/lib/content/multiple-choice/options-trading-greeks/covered-calls-protective-puts';

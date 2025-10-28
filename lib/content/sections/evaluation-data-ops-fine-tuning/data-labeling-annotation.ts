@@ -86,7 +86,7 @@ recommendation = LabelingStrategy.recommend_strategy(
 )
 
 print(f"Recommended: {recommendation['recommended_strategy']}")
-print(f"Est. cost: \${recommendation['estimated_cost']:,.2f}")
+print(f"Est. cost: \\$\{recommendation['estimated_cost']:,.2f}")
 print(f"Est. time: {recommendation['estimated_days']:.0f} days")
 \`\`\`
 

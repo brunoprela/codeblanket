@@ -1,7 +1,7 @@
 export const dataQualityValidation = {
-  title: 'Data Quality and Validation',
-  id: 'data-quality-validation',
-  content: `
+    title: 'Data Quality and Validation',
+    id: 'data-quality-validation',
+    content: `
 # Data Quality and Validation
 
 ## Introduction
@@ -119,7 +119,7 @@ class RealTimeValidator:
             pct_change = abs(float((current_mid - last_mid) / last_mid)) * 100
             
             if pct_change > 10:  # 10% move
-                errors.append(f"Price spike: {pct_change:.1f}% move from ${last_mid} to ${current_mid}")
+                errors.append(f"Price spike: \{pct_change:.1f}% move from $\{last_mid} to $\{current_mid}")
                 self._record_error('price_spike')
             elif pct_change > 5:  # 5% move
                 warnings.append(f"Large price move: {pct_change:.1f}%")
@@ -287,7 +287,7 @@ detector = AnomalyDetector(window_size=100, threshold_sigma=3.0)
 result = detector.detect_price_anomaly('AAPL', 155.50)
 if result['is_anomaly']:
     print(f"Price anomaly detected! Z-score: {result['z_score']:.2f}")
-    print(f"Price: $155.50 vs Mean: \${result['mean']:.2f}(±\${result['std']:.2f})")
+    print(f"Price: $155.50 vs Mean: \${result['mean']:.2f}(±\\$\{result['std']:.2f})")
 \`\`\`
 
 ---

@@ -256,11 +256,11 @@ position = Position('AAPL', 100, 150.00)
 
 # Price moves
 position.update_price(155.00)
-print(f"Unrealized P&L: \${position.unrealized_pnl():,.2f}")
+print(f"Unrealized P&L: \\$\{position.unrealized_pnl():,.2f}")
 
 # Close half position
 realized = position.realized_pnl(155.00, 50)
-print(f"Realized P&L (50 shares): \${realized:,.2f}")
+print(f"Realized P&L (50 shares): \\$\{realized:,.2f}")
 \`\`\`
 
 ### Bid-Ask Spread
@@ -372,9 +372,9 @@ current_prices = {'AAPL': 155.00, 'MSFT': 310.00}
 mtm = portfolio.mark_to_market (current_prices)
 
 print(f"\\n=== Mark-to-Market ===")
-print(f"Market value: \${mtm['market_value']:,.2f}")
-print(f"Cost basis: \${mtm['cost_basis']:,.2f}")
-print(f"Unrealized P&L: \${mtm['unrealized_pnl']:,.2f}")
+print(f"Market value: \\$\{mtm['market_value']:,.2f}")
+print(f"Cost basis: \\$\{mtm['cost_basis']:,.2f}")
+print(f"Unrealized P&L: \\$\{mtm['unrealized_pnl']:,.2f}")
 print(f"Return: {mtm['return_pct']:.2f}%")
 \`\`\`
 

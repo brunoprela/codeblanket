@@ -134,7 +134,7 @@ optimal_x = result.x
 min_cost = result.fun
 
 print(f"Optimal dimension: {optimal_x:.2f} m")
-print(f"Minimum cost: \${min_cost:.2f}")
+print(f"Minimum cost: \\$\{min_cost:.2f}")
 print(f"Height: {1000/(optimal_x**2):.2f} m")
 
 # Verify with derivative

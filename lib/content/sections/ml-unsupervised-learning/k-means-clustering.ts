@@ -392,7 +392,7 @@ plt.show()
 for segment in range(5):
     segment_data = customers[customers['Segment'] == segment]
     print(f"\\nSegment {segment}:")
-    print(f"  Avg Income: \${segment_data['Annual_Income'].mean():.1f}k")
+    print(f"  Avg Income: \\$\{segment_data['Annual_Income'].mean():.1f}k")
     print(f"  Avg Spending Score: {segment_data['Spending_Score'].mean():.1f}")
     print(f"  Size: {len (segment_data)} customers")
 \`\`\`

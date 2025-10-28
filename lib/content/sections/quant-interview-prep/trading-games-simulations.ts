@@ -309,7 +309,7 @@ def simulate_game (n_rounds: int = 10, true_value: float = 10.0) -> dict:
     mm = MarketMaker()
     trader = InformedTrader (true_value)
     
-    print(f"Starting game (true value = \${true_value:.2f})")
+    print(f"Starting game (true value = \\$\{true_value:.2f})")
     print("="*70)
     
     for round_num in range(1, n_rounds + 1):
@@ -321,16 +321,16 @@ action = trader.decide (bid, ask)
 
         if action == 'buy':
             mm.execute_trade('sold', ask, true_value)
-            print(f"Round {round_num:2d}: Bid \${bid:.2f} / Ask \${ask:.2f} → "
+            print(f"Round {round_num:2d}: Bid \${bid:.2f} / Ask \\$\{ask:.2f} → "
                   f"SOLD at \${ask:.2f} | Inv: {mm.inventory:+2d} | "
                   f"Est: \${mm.estimated_value:.2f}")
         elif action == 'sell':
             mm.execute_trade('bought', bid, true_value)
-            print(f"Round {round_num:2d}: Bid \${bid:.2f} / Ask \${ask:.2f} → "
+            print(f"Round {round_num:2d}: Bid \${bid:.2f} / Ask \\$\{ask:.2f} → "
                   f"BOUGHT at \${bid:.2f} | Inv: {mm.inventory:+2d} | "
                   f"Est: \${mm.estimated_value:.2f}")
         else:
-            print(f"Round {round_num:2d}: Bid \${bid:.2f} / Ask \${ask:.2f} → "
+            print(f"Round {round_num:2d}: Bid \${bid:.2f} / Ask \\$\{ask:.2f} → "
                   f"PASS | Inv: {mm.inventory:+2d} | Est: \${mm.estimated_value:.2f}")
     
     # Final P & L
@@ -338,9 +338,9 @@ final_pnl = mm.mark_to_market (true_value)
 
 print("=" * 70)
 print(f"Final inventory: {mm.inventory}")
-print(f"Cash P&L: \${mm.cash_pnl:.2f}")
-print(f"MTM adjustment: \${mm.inventory * true_value:.2f}")
-print(f"Total P&L: \${final_pnl:.2f}")
+print(f"Cash P&L: \\$\{mm.cash_pnl:.2f}")
+print(f"MTM adjustment: \\$\{mm.inventory * true_value:.2f}")
+print(f"Total P&L: \\$\{final_pnl:.2f}")
 
 return {
     'final_pnl': final_pnl,
@@ -369,11 +369,11 @@ if action == 'buy':
 mm.execute_trade('bought', bid, 10.0)
 pnls.append (mm.mark_to_market(10.0))
 
-print(f"Mean P&L: \${np.mean (pnls):.2f}")
-print(f"Std Dev: \${np.std (pnls):.2f}")
+print(f"Mean P&L: \\$\{np.mean (pnls):.2f}")
+print(f"Std Dev: \\$\{np.std (pnls):.2f}")
 print(f"Win Rate: {np.mean([p > 0 for p in pnls]):.1%}")
-print(f"25th %ile: \${np.percentile (pnls, 25):.2f}")
-print(f"75th %ile: \${np.percentile (pnls, 75):.2f}")
+print(f"25th %ile: \\$\{np.percentile (pnls, 25):.2f}")
+print(f"75th %ile: \\$\{np.percentile (pnls, 75):.2f}")
 \`\`\`
 
 ### Interview Tips

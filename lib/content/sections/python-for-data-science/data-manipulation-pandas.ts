@@ -549,8 +549,8 @@ sales['cumulative_revenue'] = sales['revenue'].cumsum()
 sales['daily_revenue'] = sales.groupby (sales['date'].dt.date)['revenue'].transform('sum')
 
 print(sales.head())
-print(f"\\nTotal revenue: \${sales['revenue'].sum():,.2f}")
-print(f"Average transaction: \${sales['revenue'].mean():.2f}")
+print(f"\\nTotal revenue: \\$\{sales['revenue'].sum():,.2f}")
+print(f"Average transaction: \\$\{sales['revenue'].mean():.2f}")
 \`\`\`
 
 ## Key Takeaways

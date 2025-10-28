@@ -253,9 +253,9 @@ book.add_order (limit_buy)
 book.add_order (limit_sell)
 
 print("Initial market:")
-print(f"  Best bid: \${book.get_best_bid_ask()[0]:.2f}")
-print(f"  Best ask: \${book.get_best_bid_ask()[1]:.2f}")
-print(f"  Spread: \${book.get_spread():.2f}")
+print(f"  Best bid: \\$\{book.get_best_bid_ask()[0]:.2f}")
+print(f"  Best ask: \\$\{book.get_best_bid_ask()[1]:.2f}")
+print(f"  Spread: \\$\{book.get_spread():.2f}")
 
 # Retail investor places market buy order
 market_buy = Order("order3", "AAPL", OrderSide.BUY, OrderType.MARKET, 50)
@@ -263,7 +263,7 @@ executions = book.add_order (market_buy)
 
 print(f"\\nMarket buy executed:")
 for i, exec in enumerate (executions, 1):
-    print(f"  Fill {i}: {exec['quantity']} shares @ \${exec['price']:.2f}")
+    print(f"  Fill {i}: {exec['quantity']} shares @ \\$\{exec['price']:.2f}")
 
 # Retail investor places limit buy order
 limit_buy2 = Order("order4", "AAPL", OrderSide.BUY, OrderType.LIMIT, 100, limit_price = 149.50)
@@ -418,15 +418,15 @@ print("\\n=== Order Execution ===")
 print(f"Order: Buy 100 AAPL")
 print(f"NBBO: $150.00 / $150.02 (bid/ask)")
 print(f"\\nExecution:")
-print(f"  Filled at: \${execution['execution_price']:.2f}")
-print(f"  Exchange price: \${execution['reference_price']:.2f}")
-print(f"  Price improvement: \${execution['price_improvement']:.2f}/share")
-print(f"  Customer savings: \${execution['customer_savings']:.2f}")
+print(f"  Filled at: \\$\{execution['execution_price']:.2f}")
+print(f"  Exchange price: \\$\{execution['reference_price']:.2f}")
+print(f"  Price improvement: \\$\{execution['price_improvement']:.2f}/share")
+print(f"  Customer savings: \\$\{execution['customer_savings']:.2f}")
 print(f"  Routed to: {execution['routed_to']}")
 print(f"\\nBroker Economics:")
-print(f"  PFOF payment: \${execution['pfof_payment']:.2f}")
+print(f"  PFOF payment: \\$\{execution['pfof_payment']:.2f}")
 print(f"  Commission: $0.00")
-print(f"  Net revenue: \${execution['pfof_payment']:.2f}")
+print(f"  Net revenue: \\$\{execution['pfof_payment']:.2f}")
 \`\`\`
 
 ---

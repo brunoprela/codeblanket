@@ -98,7 +98,7 @@ def geometric_brownian_motion():
     np.random.seed(42)
     
     print("=== Geometric Brownian Motion ===")
-    print(f"S_0 = \${S0}")
+    print(f"S_0 = \\$\{S0}")
     print(f"μ (drift) = {mu:.1%} per year")
     print(f"σ (volatility) = {sigma:.1%} per year")
     print()
@@ -129,10 +129,10 @@ def geometric_brownian_motion():
     plt.legend()
     
     print(f"Final prices after {T} year:")
-    print(f"  Mean: \${np.mean (final_prices):.2f}")
-print(f"  Std: \${np.std (final_prices):.2f}")
-print(f"  Min: \${np.min (final_prices):.2f}")
-print(f"  Max: \${np.max (final_prices):.2f}")
+    print(f"  Mean: \\$\{np.mean (final_prices):.2f}")
+print(f"  Std: \\$\{np.std (final_prices):.2f}")
+print(f"  Min: \\$\{np.min (final_prices):.2f}")
+print(f"  Max: \\$\{np.max (final_prices):.2f}")
 
 geometric_brownian_motion()
 \`\`\`

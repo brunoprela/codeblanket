@@ -389,10 +389,10 @@ analysis = tca.calculate_implementation_shortfall(
 
 print("\\n\\n=== Transaction Cost Analysis ===\\n")
 print(f"Target: Buy 10,000 @ decision price $100.00\\n")
-print(f"Delay Cost: \${analysis['delay_cost']:,.0f} (arrival - decision)")
-print(f"Execution Cost: \${analysis['execution_cost']:,.0f} (fill - arrival)")
-print(f"Opportunity Cost: \${analysis['opportunity_cost']:,.0f} (unfilled)")
-print(f"\\nTotal Cost: \${analysis['total_cost']:,.0f}")
+print(f"Delay Cost: \\$\{analysis['delay_cost']:,.0f} (arrival - decision)")
+print(f"Execution Cost: \\$\{analysis['execution_cost']:,.0f} (fill - arrival)")
+print(f"Opportunity Cost: \\$\{analysis['opportunity_cost']:,.0f} (unfilled)")
+print(f"\\nTotal Cost: \\$\{analysis['total_cost']:,.0f}")
 print(f"Cost in bps: {analysis['cost_bps']:.1f} bps")
 print(f"Fill Rate: {analysis['fill_rate']:.1f}%")
 \`\`\`

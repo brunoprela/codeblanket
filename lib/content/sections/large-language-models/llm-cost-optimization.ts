@@ -24,7 +24,7 @@ def calculate_cost (input_tokens, output_tokens, model="claude-sonnet"):
 
 # Example: 100k calls/day
 cost_per_day = calculate_cost(1000, 200, "claude-sonnet") * 100000
-print(f"Daily cost: \${cost_per_day:.2f}")  # $600/day = $18k/month
+print(f"Daily cost: \\$\{cost_per_day:.2f}")  # $600/day = $18k/month
 \`\`\`
 
 ## Optimization Strategies

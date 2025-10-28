@@ -421,7 +421,7 @@ expected_loss = recovery_analyzer.expected_loss(
     loss_given_default=1 - recovery
 )
 
-print(f"Expected Loss: \${expected_loss:,.0f}")
+print(f"Expected Loss: \\$\{expected_loss:,.0f}")
 \`\`\`
 
 ## Key Takeaways

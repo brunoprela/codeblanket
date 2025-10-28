@@ -143,7 +143,7 @@ for model, prompt_tokens, completion_tokens in examples:
     cost = calculate_cost (prompt_tokens, completion_tokens, model)
     print(f"{model}:")
     print(f"  {prompt_tokens} input + {completion_tokens} output tokens")
-    print(f"  Cost: \${cost['total_cost']:.6f}")
+    print(f"  Cost: \\$\{cost['total_cost']:.6f}")
 print()
 \`\`\`
 
@@ -246,8 +246,8 @@ class CostTracker:
         print(f"Total tokens: {summary['total_tokens']:,}")
         print(f"  - Prompt: {summary['total_prompt_tokens']:,}")
         print(f"  - Completion: {summary['total_completion_tokens']:,}")
-        print(f"Total cost: \${summary['total_cost']:.6f}")
-print(f"Avg cost/request: \${summary['average_cost_per_request']:.6f}")
+        print(f"Total cost: \\$\{summary['total_cost']:.6f}")
+print(f"Avg cost/request: \\$\{summary['average_cost_per_request']:.6f}")
 
 # Usage
 tracker = CostTracker("gpt-3.5-turbo")
@@ -255,11 +255,11 @@ tracker = CostTracker("gpt-3.5-turbo")
 # Make requests
 result1 = tracker.chat([{ "role": "user", "content": "What is Python?" }])
 print(result1['response'])
-print(f"Cost: \${result1['cost']:.6f}")
+print(f"Cost: \\$\{result1['cost']:.6f}")
 
 result2 = tracker.chat([{ "role": "user", "content": "Explain machine learning" }])
 print(result2['response'])
-print(f"Cost: \${result2['cost']:.6f}")
+print(f"Cost: \\$\{result2['cost']:.6f}")
 
 # View summary
 tracker.print_summary()
@@ -378,10 +378,10 @@ class CostDashboard:
         
         print(f"\\nOVERALL:")
         print(f"  Total requests: {stats['total_requests']:,}")
-        print(f"  Total cost: \${stats['total_cost']:.4f}")
-print(f"  Average cost/request: \${stats['average_cost']:.6f}")
-print(f"  Min cost: \${stats['min_cost']:.6f}")
-print(f"  Max cost: \${stats['max_cost']:.6f}")
+        print(f"  Total cost: \\$\{stats['total_cost']:.4f}")
+print(f"  Average cost/request: \\$\{stats['average_cost']:.6f}")
+print(f"  Min cost: \\$\{stats['min_cost']:.6f}")
+print(f"  Max cost: \\$\{stats['max_cost']:.6f}")
 
 print(f"\\nTOKENS:")
 print(f"  Total tokens: {stats['total_tokens']:,}")
@@ -390,15 +390,15 @@ print(f"  Average tokens/request: {stats['average_tokens']:.0f}")
 print(f"\\nCOST BY MODEL:")
 for model, cost in stats['cost_by_model'].items():
     pct = (cost / stats['total_cost']) * 100
-print(f"  {model}: \${cost:.4f} ({pct:.1f}%)")
+print(f"  {model}: \\$\{cost:.4f} ({pct:.1f}%)")
 
 print(f"\\nRECENT:")
-print(f"  Last 24h cost: \${stats['recent_24h_cost']:.4f}")
+print(f"  Last 24h cost: \\$\{stats['recent_24h_cost']:.4f}")
 
 print(f"\\nTOP 5 EXPENSIVE REQUESTS:")
 expensive = self.get_expensive_requests(5)
 for i, req in enumerate (expensive, 1):
-    print(f"  {i}. \${req['cost']:.6f} - {req['total_tokens']:,} tokens - {req['model']}")
+    print(f"  {i}. \\$\{req['cost']:.6f} - {req['total_tokens']:,} tokens - {req['model']}")
 
 # Usage
 dashboard = CostDashboard()
@@ -512,9 +512,9 @@ print(f"Reduction: {(1 - optimized_len/original_len) * 100:.1f}%")
 original_cost = calculate_cost (original_len, 500, "gpt-3.5-turbo")['total_cost']
 optimized_cost = calculate_cost (optimized_len, 500, "gpt-3.5-turbo")['total_cost']
 
-print(f"\\nOriginal cost: \${original_cost:.6f}")
-print(f"Optimized cost: \${optimized_cost:.6f}")
-print(f"Savings: \${original_cost - optimized_cost:.6f} ({(1 - optimized_cost/original_cost) * 100:.1f}%)")
+print(f"\\nOriginal cost: \\$\{original_cost:.6f}")
+print(f"Optimized cost: \\$\{optimized_cost:.6f}")
+print(f"Savings: \\$\{original_cost - optimized_cost:.6f} ({(1 - optimized_cost/original_cost) * 100:.1f}%)")
 \`\`\`
 
 ### Strategy 3: Cache Responses
@@ -650,12 +650,12 @@ messages = [{"role": "user", "content": "What is 2+2?"}]
 # First call - cache miss
 result1 = chat_with_cache (messages)
 print(f"Response: {result1['response']}")
-print(f"Cost: \${result1['cost']:.6f}\\n")
+print(f"Cost: \\$\{result1['cost']:.6f}\\n")
 
 # Second call - cache hit!
 result2 = chat_with_cache (messages)
 print(f"Response: {result2['response']}")
-print(f"Cost: \${result2['cost']:.6f}\\n")
+print(f"Cost: \\$\{result2['cost']:.6f}\\n")
 
 # View cache stats
 stats = cache.get_stats()
@@ -723,9 +723,9 @@ individual_cost = len (items) * calculate_cost(50, 10, "gpt-3.5-turbo")['total_c
 # Method 2: Batch request (cheap!)
 batch_cost = calculate_cost(200, 30, "gpt-3.5-turbo")['total_cost']
 
-print(f"Individual requests cost: \${individual_cost:.6f}")
-print(f"Batch request cost: \${batch_cost:.6f}")
-print(f"Savings: \${individual_cost - batch_cost:.6f} ({(1-batch_cost/individual_cost)*100:.1f}%)")
+print(f"Individual requests cost: \\$\{individual_cost:.6f}")
+print(f"Batch request cost: \\$\{batch_cost:.6f}")
+print(f"Savings: \\$\{individual_cost - batch_cost:.6f} ({(1-batch_cost/individual_cost)*100:.1f}%)")
 
 # Run batch
 results = batch_classify (items)
@@ -858,8 +858,8 @@ monitor.log_request (cost)
 
 # Check status
 status = monitor.get_status()
-print(f"\\nDaily: \${status['daily']['spent']:.2f} / \${status['daily']['budget']:.2f} ({status['daily']['usage_pct']:.1f}%)")
-print(f"Monthly: \${status['monthly']['spent']:.2f} / \${status['monthly']['budget']:.2f} ({status['monthly']['usage_pct']:.1f}%)")
+print(f"\\nDaily: \${status['daily']['spent']:.2f} / \\$\{status['daily']['budget']:.2f} ({status['daily']['usage_pct']:.1f}%)")
+print(f"Monthly: \${status['monthly']['spent']:.2f} / \\$\{status['monthly']['budget']:.2f} ({status['monthly']['usage_pct']:.1f}%)")
 \`\`\`
 
 ## Key Takeaways

@@ -346,11 +346,11 @@ swap = InterestRateSwap(
     
     # Value swap
 npv = swap.value(curve)
-print(f"Swap NPV: \${npv:,.2f}")
+print(f"Swap NPV: \\$\{npv:,.2f}")
     
     # Calculate DV01
 dv01 = swap.dv01(curve)
-print(f"DV01: \${dv01:,.2f} per bp")
+print(f"DV01: \\$\{dv01:,.2f} per bp")
     
     # Scenario analysis
 print("\\n=== Rate Shock Scenarios ===\\n")
@@ -363,7 +363,7 @@ shocked_curve = DiscountCurve(dates, shocked_dfs)
 shocked_npv = swap.value(shocked_curve)
 pnl = shocked_npv - npv
 
-print(f"Rates {shock_bp:+4d}bp: NPV \${shocked_npv:>12,.0f}, P&L \${pnl:>10,.0f}")
+print(f"Rates {shock_bp:+4d}bp: NPV \${shocked_npv:>12,.0f}, P&L \\$\{pnl:>10,.0f}")
 \`\`\`
 
 ---

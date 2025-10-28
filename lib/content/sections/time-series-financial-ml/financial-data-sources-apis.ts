@@ -76,7 +76,7 @@ ticker = yf.Ticker('AAPL')
 info = ticker.info
 print(f"\\n=== AAPL Info ===")
 print(f"Sector: {info.get('sector')}")
-print(f"Market Cap: \${info.get('marketCap', 0) / 1e9:.2f}B")
+print(f"Market Cap: \\$\{info.get('marketCap', 0) / 1e9:.2f}B")
 print(f"P/E Ratio: {info.get('trailingPE', 'N/A')}")
 print(f"Dividend Yield: {info.get('dividendYield', 0)*100:.2f}%")
 
@@ -409,9 +409,9 @@ def get_polygon_snapshot (ticker):
 snapshot = get_polygon_snapshot('SPY')
 if snapshot:
     print(f"\\n=== Real-Time Quote ===")
-    print(f"Price: \${snapshot['price']:.2f}")
+    print(f"Price: \\$\{snapshot['price']:.2f}")
 print(f"Change: {snapshot['change_percent']:.2f}%")
-print(f"Bid: \${snapshot['bid']:.2f}, Ask: \${snapshot['ask']:.2f}")
+print(f"Bid: \${snapshot['bid']:.2f}, Ask: \\$\{snapshot['ask']:.2f}")
 \`\`\`
 
 ---
@@ -467,7 +467,7 @@ fed_funds = fred.get_series('DFF', observation_start='2010-01-01')
 vix = fred.get_series('VIXCLS', observation_start='2010-01-01')
 
 print("\\n=== Economic Indicators ===")
-print(f"Latest GDP: \${gdp.iloc[-1]:.2f}B")
+print(f"Latest GDP: \\$\{gdp.iloc[-1]:.2f}B")
 print(f"Latest Unemployment: {unemployment.iloc[-1]:.1f}%")
 print(f"Latest Fed Funds Rate: {fed_funds.iloc[-1]:.2f}%")
 print(f"Latest VIX: {vix.iloc[-1]:.2f}")

@@ -941,9 +941,9 @@ predicted_return, cache = trading_net.predict_return (prices, volumes)
 
 print("Trading Neural Network Prediction:")
 print("-" * 60)
-print(f"Current Price: \${prices[-1]:.2f}")
+print(f"Current Price: \\$\{prices[-1]:.2f}")
 print(f"Predicted Next-Day Return: {predicted_return:.2%}")
-print(f"Predicted Next-Day Price: \${prices[-1] * (1 + predicted_return):.2f}")
+print(f"Predicted Next-Day Price: \\$\{prices[-1] * (1 + predicted_return):.2f}")
 
 # Analyze what the network "sees"
 print("\\nInternal Activations:")

@@ -14,7 +14,7 @@ const strategyParameterOptimizationQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "Grid search evaluates ALL possible combinations, which grows exponentially: 10 × 10 × 10 = 1,000 combinations. This is why grid search doesn't scale beyond 4-5 parameters. With 5 parameters and 10 values each, you'd need 100,000 evaluations. Option A incorrectly adds instead of multiplying. Options B and D miscalculate. This exponential growth is called the 'curse of dimensionality.' Professional solutions: Bayesian optimization (intelligently samples ~50-100 points), genetic algorithms (evolutionary search), or random search (surprisingly effective—testing 100 random combinations often finds near-optimal solutions).",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'opt-2',

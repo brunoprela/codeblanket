@@ -228,10 +228,10 @@ y = price
 beta = fit_multiple_linear_regression(X, y)
 
 print("Fitted coefficients:")
-print(f"Intercept: \${beta[0]:,.0f}")
-print(f"Size coefficient: \${beta[1]:.2f} per sq ft")
-print(f"Bedrooms coefficient: \${beta[2]:,.0f} per bedroom")
-print(f"Age coefficient: \${beta[3]:.2f} per year")
+print(f"Intercept: \\$\{beta[0]:,.0f}")
+print(f"Size coefficient: \\$\{beta[1]:.2f} per sq ft")
+print(f"Bedrooms coefficient: \\$\{beta[2]:,.0f} per bedroom")
+print(f"Age coefficient: \\$\{beta[3]:.2f} per year")
 
 # Make predictions
 X_with_intercept = np.column_stack([np.ones (len(X)), X])
@@ -240,7 +240,7 @@ y_pred = X_with_intercept @beta
 # Evaluate
 mse = np.mean((y - y_pred) ** 2)
 rmse = np.sqrt (mse)
-print(f"\\nRMSE: \${rmse:,.0f}")
+print(f"\\nRMSE: \\$\{rmse:,.0f}")
 \`\`\`
 
 ## Using Scikit-Learn
@@ -276,7 +276,7 @@ model.fit(X_train, y_train)
 
 # Model parameters
 print("Model Parameters:")
-print(f"Intercept: \${model.intercept_:,.0f}")
+print(f"Intercept: \\$\{model.intercept_:,.0f}")
 print("\\nCoefficients:")
 for feature, coef in zip(X.columns, model.coef_):
     print(f"  {feature}: {coef:,.2f}")
@@ -289,9 +289,9 @@ y_test_pred = model.predict(X_test)
 print("\\nModel Performance:")
 print(f"Training R²: {r2_score (y_train, y_train_pred):.4f}")
 print(f"Test R²: {r2_score (y_test, y_test_pred):.4f}")
-print(f"\\nTraining RMSE: \${np.sqrt (mean_squared_error (y_train, y_train_pred)):,.0f}")
-print(f"Test RMSE: \${np.sqrt (mean_squared_error (y_test, y_test_pred)):,.0f}")
-print(f"\\nTest MAE: \${mean_absolute_error (y_test, y_test_pred):,.0f}")
+print(f"\\nTraining RMSE: \\$\{np.sqrt (mean_squared_error (y_train, y_train_pred)):,.0f}")
+print(f"Test RMSE: \\$\{np.sqrt (mean_squared_error (y_test, y_test_pred)):,.0f}")
+print(f"\\nTest MAE: \\$\{mean_absolute_error (y_test, y_test_pred):,.0f}")
 \`\`\`
 
 ## Assumptions of Linear Regression
@@ -671,11 +671,11 @@ print(f"\\nFeatures: {list (df.columns[:-1])}")
 print(f"Target: {df.columns[-1]}")
 
 print(f"\\nPrice statistics:")
-print(f"  Mean: \${df['price'].mean():,.0f}")
-print(f"  Median: \${df['price'].median():,.0f}")
-print(f"  Std: \${df['price'].std():,.0f}")
-print(f"  Min: \${df['price'].min():,.0f}")
-print(f"  Max: \${df['price'].max():,.0f}")
+print(f"  Mean: \\$\{df['price'].mean():,.0f}")
+print(f"  Median: \\$\{df['price'].median():,.0f}")
+print(f"  Std: \\$\{df['price'].std():,.0f}")
+print(f"  Min: \\$\{df['price'].min():,.0f}")
+print(f"  Max: \\$\{df['price'].max():,.0f}")
 
 # Split features and target
 X = df.drop('price', axis = 1)
@@ -706,7 +706,7 @@ print("\\nModel trained successfully!")
 
 # Display coefficients
 print("\\nModel Parameters:")
-print(f"Intercept: \${model.intercept_:,.2f}")
+print(f"Intercept: \\$\{model.intercept_:,.2f}")
 print("\\nCoefficients:")
 coef_df = pd.DataFrame({
     'Feature': X.columns,
@@ -734,8 +734,8 @@ r2 = r2_score (y_true, y_pred)
 mape = np.mean (np.abs((y_true - y_pred) / y_true)) * 100
 
 print(f"\\n{dataset_name}:")
-print(f"  MAE:  \${mae:,.2f}")
-print(f"  RMSE: \${rmse:,.2f}")
+print(f"  MAE:  \\$\{mae:,.2f}")
+print(f"  RMSE: \\$\{rmse:,.2f}")
 print(f"  R²:   {r2:.4f}")
 print(f"  MAPE: {mape:.2f}%")
 
@@ -775,7 +775,7 @@ predicted = y_test_pred[idx]
 diff = predicted - actual
 pct_error = (diff / actual) * 100
 
-print(f"\${actual:>14,.0f} \${predicted:>14,.0f} \${diff:>14,.0f} {pct_error:>9.1f}%")
+print(f"\${actual:>14,.0f} \${predicted:>14,.0f} \\$\{diff:>14,.0f} {pct_error:>9.1f}%")
 
 # Feature importance visualization
 print("\\n" + "=" * 60)
@@ -794,10 +794,10 @@ print("RESIDUAL ANALYSIS")
 print("=" * 60)
 
 print(f"\\nResidual statistics:")
-print(f"  Mean: \${np.mean (residuals):,.2f} (should be close to 0)")
-print(f"  Std:  \${np.std (residuals):,.2f}")
-print(f"  Min:  \${np.min (residuals):,.2f}")
-print(f"  Max:  \${np.max (residuals):,.2f}")
+print(f"  Mean: \\$\{np.mean (residuals):,.2f} (should be close to 0)")
+print(f"  Std:  \\$\{np.std (residuals):,.2f}")
+print(f"  Min:  \\$\{np.min (residuals):,.2f}")
+print(f"  Max:  \\$\{np.max (residuals):,.2f}")
 
 # Summary
 print("\\n" + "=" * 60)

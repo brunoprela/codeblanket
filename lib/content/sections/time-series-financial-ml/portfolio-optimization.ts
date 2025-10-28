@@ -891,10 +891,10 @@ for month in range(12):
     else:
         action = "Hold"
     
-    print(f"{month+1:<6} {max_drift:>6.2%}   {action:<12} \${cost * portfolio_value:>6.0f}")
+    print(f"{month+1:<6} {max_drift:>6.2%}   {action:<12} \\$\{cost * portfolio_value:>6.0f}")
 
-print(f"\\nFinal Portfolio Value: \${portfolio_value:,.0f}")
-print(f"Total Transaction Costs: \${cumulative_cost:,.0f}")
+print(f"\\nFinal Portfolio Value: \\$\{portfolio_value:,.0f}")
+print(f"Total Transaction Costs: \\$\{cumulative_cost:,.0f}")
 \`\`\`
 
 ---

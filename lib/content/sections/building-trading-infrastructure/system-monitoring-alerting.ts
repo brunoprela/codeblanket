@@ -713,7 +713,7 @@ groups:
           team: trading
         annotations:
           summary: "Daily loss approaching limit"
-          description: "Portfolio P&L: ${{ $value }} (limit: -$50K)"
+          description: "Portfolio P&L: \${{ \$value }} (limit: -\$50K)"
       
       - alert: DailyLossLimitBreached
         expr: trading_portfolio_pnl_usd < -50000
@@ -723,7 +723,7 @@ groups:
           team: trading
         annotations:
           summary: "CRITICAL: Daily loss limit breached"
-          description: "Portfolio P&L: ${{ $value }} - STOP TRADING"
+          description: "Portfolio P&L: \${{ \$value }} - STOP TRADING"
           runbook_url: "https://wiki.company.com/runbooks/loss-limit-breach"
       
       - alert: LargePnLMove
@@ -733,7 +733,7 @@ groups:
           team: trading
         annotations:
           summary: "Large P&L move detected"
-          description: "P&L moved ${{ $value }} in 5 minutes"
+          description: "P&L moved \${{ \$value }} in 5 minutes"
       
       # ============================================================
       # ORDER ALERTS

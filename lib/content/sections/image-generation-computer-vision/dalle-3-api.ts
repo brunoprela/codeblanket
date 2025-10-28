@@ -799,7 +799,7 @@ result = dalle.generate_with_retry(
 )
 
 print(f"Generated: {result.local_path}")
-print(f"Cost: \${result.cost}")
+print(f"Cost: \\$\{result.cost}")
 print(f"Revised: {result.revised_prompt}")
 
 # Batch generation
@@ -817,7 +817,7 @@ results = dalle.batch_generate(
 
 # Check total cost
 stats = dalle.get_statistics()
-print(f"Total cost: \${stats['total_cost']:.2f}")
+print(f"Total cost: \\$\{stats['total_cost']:.2f}")
 print(f"Generated {stats['total_generations']} images")
 \`\`\`
 
@@ -943,7 +943,7 @@ estimate = optimizer.estimate_cost(
     size="1024x1024",
     quality="standard"
 )
-print(f"Estimated cost: \${estimate['total']:.2f}")
+print(f"Estimated cost: \\$\{estimate['total']:.2f}")
 
 # 2. Optimize settings
 settings = optimizer.optimize_settings({

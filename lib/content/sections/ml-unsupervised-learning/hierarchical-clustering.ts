@@ -623,7 +623,7 @@ for segment in range(1, 4):
     print(f"\\nSegment {segment} (n={len (segment_data)}):")
     print(f"  Avg Recency: {segment_data['Recency'].mean():.1f} days")
     print(f"  Avg Frequency: {segment_data['Frequency'].mean():.1f} purchases")
-    print(f"  Avg Monetary: \${segment_data['Monetary'].mean():.2f}")
+    print(f"  Avg Monetary: \\$\{segment_data['Monetary'].mean():.2f}")
 \`\`\`
 
 ## Advantages of Hierarchical Clustering

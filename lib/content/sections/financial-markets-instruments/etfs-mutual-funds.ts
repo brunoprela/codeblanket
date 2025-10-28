@@ -142,11 +142,11 @@ print("=== ETF vs Mutual Fund Comparison ===\\n")
 for fund in funds:
     chars = fund.get_characteristics()
     print(f"{fund.name} ({fund.ticker}) - {fund.fund_type.value}")
-    print(f"  AUM: \${fund.aum/1e9:.0f}B")
+    print(f"  AUM: \\$\{fund.aum/1e9:.0f}B")
     print(f"  Expense Ratio: {fund.expense_ratio:.2f}%")
     print(f"  Trading: {chars['trading']}")
     print(f"  Pricing: {chars['pricing']}")
-    print(f"  Minimum: \${fund.minimum_investment:,.0f}")
+    print(f"  Minimum: \\$\{fund.minimum_investment:,.0f}")
     print(f"  Tax Efficiency: {chars['tax_efficiency']}\\n")
 \`\`\`
 
@@ -263,11 +263,11 @@ comparison = IndexFund.passive_vs_active_returns (years=10)
 print(f"\\n\\n=== 10-Year Performance: Passive vs Active ===\\n")
 print(f"Passive Index Fund:")
 print(f"  Net Return: {comparison['passive_return']:.2f}% annually")
-print(f"  $10K grows to: \${comparison['passive_final']:,.0f}")
+print(f"  $10K grows to: \\$\{comparison['passive_final']:,.0f}")
 print(f"\\nActive Management:")
 print(f"  Net Return: {comparison['active_return']:.2f}% annually")
-print(f"  $10K grows to: \${comparison['active_final']:,.0f}")
-print(f"\\nDifference: \${comparison['difference']:,.0f} (passive wins!)")
+print(f"  $10K grows to: \\$\{comparison['active_final']:,.0f}")
+print(f"\\nDifference: \\$\{comparison['difference']:,.0f} (passive wins!)")
 \`\`\`
 
 **Why Passive Wins:**1. **Fees**: 0.03% vs 0.75%+ (0.72% difference × 10 years = 7.5%!)
@@ -558,15 +558,15 @@ arb = etf.check_arbitrage_opportunity()
 
 print("\\n=== ETF Arbitrage Mechanism ===\\n")
 print(f"ETF: {etf.etf_ticker}")
-print(f"NAV: \${arb['nav']:.2f}")
-print(f"Market Price: \${arb['market_price']:.2f}")
-print(f"Difference: \${arb['difference']:.2f} ({arb['difference_pct']:.2f}%)")
+print(f"NAV: \\$\{arb['nav']:.2f}")
+print(f"Market Price: \\$\{arb['market_price']:.2f}")
+print(f"Difference: \\$\{arb['difference']:.2f} ({arb['difference_pct']:.2f}%)")
 print(f"Arbitrage Opportunity: {'YES' if arb['arbitrage'] else 'NO'}")
 
 if arb['arbitrage']:
     print(f"\\nAction: {arb['action']}")
     print(f"Trade: {arb['trade']}")
-    print(f"Profit per Unit: \${arb['profit_per_unit']:,.0f}")
+    print(f"Profit per Unit: \\$\{arb['profit_per_unit']:,.0f}")
 \`\`\`
 
 **Why This Matters:**1. **Keeps price close to NAV**: Arbitrageurs eliminate premiums/discounts
@@ -657,8 +657,8 @@ etf_system = ETFTradingSystem()
 spy_analysis = etf_system.calculate_etf_premium_discount('SPY')
 print("\\n=== ETF Trading System ===\\n")
 print(f"SPY Analysis:")
-print(f"  Market Price: \${spy_analysis['market_price']:.2f}")
-print(f"  NAV: \${spy_analysis['nav']:.2f}")
+print(f"  Market Price: \\$\{spy_analysis['market_price']:.2f}")
+print(f"  NAV: \\$\{spy_analysis['nav']:.2f}")
 print(f"  Premium/Discount: {spy_analysis['premium_discount_pct']:.2f}%")
 print(f"  Action: {spy_analysis['action']}")
 
@@ -667,11 +667,11 @@ portfolio = etf_system.build_core_satellite_portfolio()
 print(f"\\n\\nCore-Satellite Portfolio (\$1M):")
 print(f"\\nCore (70% - Low-cost index):")
 for etf, amount in portfolio['core'].items():
-    print(f"  {etf}: \${amount:,.0f}")
+    print(f"  {etf}: \\$\{amount:,.0f}")
 
 print(f"\\nSatellite (30% - Tactical):")
 for etf, amount in portfolio['satellite'].items():
-    print(f"  {etf}: \${amount:,.0f}")
+    print(f"  {etf}: \\$\{amount:,.0f}")
 \`\`\`
 
 ---

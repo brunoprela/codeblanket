@@ -726,7 +726,7 @@ def get_company_info (ticker):
     print(f"Company: {info.get('longName')}")
     print(f"Industry: {info.get('industry')}")
     print(f"Sector: {info.get('sector')}")
-    print(f"Market Cap: \${info.get('marketCap'):,.0f}")
+    print(f"Market Cap: \\$\{info.get('marketCap'):,.0f}")
 print(f"Description: {info.get('longBusinessSummary')}")
 
 return info

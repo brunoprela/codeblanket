@@ -88,10 +88,10 @@ class InvestmentBankRevenue:
 gs = InvestmentBankRevenue()
 
 print("Goldman Sachs Annual Revenue (est.):")
-print(f"  M&A Advisory: \${gs.m_and_a_fees(500_000_000_000, 0.01) / 1e9:.1f}B")
-print(f"  IPO Underwriting: \${gs.ipo_underwriting(50_000_000_000, 0.06) / 1e9:.1f}B")
-print(f"  Trading (250 days): \${gs.trading_revenue(5_000_000_000_000, 0.0003) * 250 / 1e9:.1f}B")
-print(f"  Wealth Mgmt: \${gs.wealth_management(500_000_000_000, 0.015) / 1e9:.1f}B")
+print(f"  M&A Advisory: \\$\{gs.m_and_a_fees(500_000_000_000, 0.01) / 1e9:.1f}B")
+print(f"  IPO Underwriting: \\$\{gs.ipo_underwriting(50_000_000_000, 0.06) / 1e9:.1f}B")
+print(f"  Trading (250 days): \\$\{gs.trading_revenue(5_000_000_000_000, 0.0003) * 250 / 1e9:.1f}B")
+print(f"  Wealth Mgmt: \\$\{gs.wealth_management(500_000_000_000, 0.015) / 1e9:.1f}B")
 
 # Output:
 # Goldman Sachs Annual Revenue (est.):
@@ -260,15 +260,15 @@ fees = calculate_hedge_fund_fees(
 )
 
 print("Hedge Fund Fee Example:")
-print(f"  Investment: \${fees['aum']:,.0f}")
+print(f"  Investment: \\$\{fees['aum']:,.0f}")
 print(f"  Gross Return: {fees['gross_return']:.1%}")
-print(f"  Gross Profit: \${fees['gross_profit']:,.0f}")
+print(f"  Gross Profit: \\$\{fees['gross_profit']:,.0f}")
 print(f"")
-print(f"  Management Fee (2%): \${fees['management_fee']:,.0f}")
-print(f"  Performance Fee (20% of profit): \${fees['performance_fee']:,.0f}")
-print(f"  Total Fees: \${fees['total_fees']:,.0f}")
+print(f"  Management Fee (2%): \\$\{fees['management_fee']:,.0f}")
+print(f"  Performance Fee (20% of profit): \\$\{fees['performance_fee']:,.0f}")
+print(f"  Total Fees: \\$\{fees['total_fees']:,.0f}")
 print(f"")
-print(f"  Your Net Profit: \${fees['net_profit']:,.0f}")
+print(f"  Your Net Profit: \\$\{fees['net_profit']:,.0f}")
 print(f"  Your Net Return: {fees['net_return']:.1%}")
 print(f"  Fund takes {fees['fund_share']:.1%} of profit")
 
@@ -414,16 +414,16 @@ def asset_manager_economics (aum: float, expense_ratio: float,
 # Example: Compare S&P 500 ETFs
 print("\\nVanguard S&P 500 ETF (VOO) - 0.03% expense ratio:")
 voo = asset_manager_economics (aum=300_000_000_000, expense_ratio=0.0003)
-print(f"  AUM: \${voo['aum'] / 1e9:.0f}B")
-print(f"  Revenue: \${voo['revenue']/1e6:.0f}M")
-print(f"  Profit: \${voo['profit']/1e6:.0f}M")
+print(f"  AUM: \\$\{voo['aum'] / 1e9:.0f}B")
+print(f"  Revenue: \\$\{voo['revenue']/1e6:.0f}M")
+print(f"  Profit: \\$\{voo['profit']/1e6:.0f}M")
 print(f"  Profit Margin: {voo['profit_margin']:.1%}")
 
 print("\\nActive Mutual Fund - 0.75% expense ratio:")
 active = asset_manager_economics (aum = 10_000_000_000, expense_ratio = 0.0075)
-print(f"  AUM: \${active['aum']/1e9:.0f}B")
-print(f"  Revenue: \${active['revenue']/1e6:.0f}M")
-print(f"  Profit: \${active['profit']/1e6:.0f}M")
+print(f"  AUM: \\$\{active['aum']/1e9:.0f}B")
+print(f"  Revenue: \\$\{active['revenue']/1e6:.0f}M")
+print(f"  Profit: \\$\{active['profit']/1e6:.0f}M")
 print(f"  Profit Margin: {active['profit_margin']:.1%}")
 
 # Output:
@@ -578,10 +578,10 @@ class ExchangeRevenue:
 nasdaq = ExchangeRevenue()
 
 print("NASDAQ Annual Revenue (est.):")
-print(f"  Transaction Fees: \${nasdaq.transaction_fees(500_000_000_000, 0.0002) / 1e9:.1f}B")
-print(f"  Market Data: \${nasdaq.market_data_fees(200_000, 75)/1e9:.1f}B")
-print(f"  Listing Fees: \${nasdaq.listing_fees(3_000, 75_000)/1e9:.1f}B")
-print(f"  Co-location: \${nasdaq.co_location_fees(150, 60_000)/1e9:.1f}B")
+print(f"  Transaction Fees: \\$\{nasdaq.transaction_fees(500_000_000_000, 0.0002) / 1e9:.1f}B")
+print(f"  Market Data: \\$\{nasdaq.market_data_fees(200_000, 75)/1e9:.1f}B")
+print(f"  Listing Fees: \\$\{nasdaq.listing_fees(3_000, 75_000)/1e9:.1f}B")
+print(f"  Co-location: \\$\{nasdaq.co_location_fees(150, 60_000)/1e9:.1f}B")
 
 # Output:
 # NASDAQ Annual Revenue (est.):
@@ -740,14 +740,14 @@ class FintechRevenue:
 stripe = FintechRevenue()
 
 print("Stripe Annual Revenue (est. $10B):")
-print(f"  Payment Processing: \${stripe.payment_processing(300_000_000_000, 0.029, 0.30) / 1e9:.1f}B")
+print(f"  Payment Processing: \\$\{stripe.payment_processing(300_000_000_000, 0.029, 0.30) / 1e9:.1f}B")
 print(f"  (300B volume, 6B transactions)")
 
 print("\\nChime Annual Revenue (est. $2B):")
-print(f"  Interchange: \${stripe.interchange_revenue(100_000_000_000, 0.02)/1e9:.1f}B")
+print(f"  Interchange: \\$\{stripe.interchange_revenue(100_000_000_000, 0.02)/1e9:.1f}B")
 
 print("\\nCoinbase Annual Revenue (est. $3B):")
-print(f"  Trading Fees: \${stripe.crypto_trading_fees(200_000_000_000, 0.015)/1e9:.1f}B")
+print(f"  Trading Fees: \\$\{stripe.crypto_trading_fees(200_000_000_000, 0.015)/1e9:.1f}B")
 
 # Output:
 # Stripe Annual Revenue (est.$10B):
@@ -903,9 +903,9 @@ citadel_mm = market_maker_profit(
 print("Citadel Securities Market Making (est.):")
 print(f"  Quotes per day: {citadel_mm['quotes_per_day']:,}")
 print(f"  Trades per day: {citadel_mm['trades_per_day']:,.0f}")
-print(f"  Profit per trade: \${citadel_mm['profit_per_trade']:.2f}")
-print(f"  Daily profit: \${citadel_mm['daily_profit']:,.0f}")
-print(f"  Annual profit: \${citadel_mm['annual_profit']/1e9:.1f}B")
+print(f"  Profit per trade: \\$\{citadel_mm['profit_per_trade']:.2f}")
+print(f"  Daily profit: \\$\{citadel_mm['daily_profit']:,.0f}")
+print(f"  Annual profit: \\$\{citadel_mm['annual_profit']/1e9:.1f}B")
 
 # Output:
 # Citadel Securities Market Making (est.):

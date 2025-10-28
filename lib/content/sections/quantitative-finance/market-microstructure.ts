@@ -501,15 +501,15 @@ class OrderBook:
         print("\\n" + "="*50)
         print("ORDER BOOK")
         print("="*50)
-        print(f"Spread: \${self.get_spread():.2f}")
-print(f"Mid Price: \${self.get_mid_price():.2f}")
+        print(f"Spread: \\$\{self.get_spread():.2f}")
+print(f"Mid Price: \\$\{self.get_mid_price():.2f}")
 print("\\nAsks (Sell Orders):")
 for price, qty in reversed (depth['asks']):
-    print(f"  \${price:.2f}  |  {qty} shares")
+    print(f"  \\$\{price:.2f}  |  {qty} shares")
 print("-" * 50)
 print("Bids (Buy Orders):")
 for price, qty in depth['bids']:
-    print(f"  \${price:.2f}  |  {qty} shares")
+    print(f"  \\$\{price:.2f}  |  {qty} shares")
 
 # Example: Build order book
 book = OrderBook()
@@ -534,8 +534,8 @@ print("=" * 50)
 fills, avg_price, slippage = book.market_order('buy', 1000)
 print(f"\\nFills:")
 for price, qty in fills:
-    print(f"  {qty} shares @ \${price:.2f}")
-print(f"\\nAverage Price: \${avg_price:.4f}")
+    print(f"  {qty} shares @ \\$\{price:.2f}")
+print(f"\\nAverage Price: \\$\{avg_price:.4f}")
 print(f"Slippage: {slippage} shares (unfilled)")
 
 book.display()

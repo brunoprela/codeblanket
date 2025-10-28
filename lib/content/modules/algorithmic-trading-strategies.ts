@@ -38,9 +38,9 @@ import { strategyPerformanceAttributionQuiz } from '../quizzes/algorithmic-tradi
 import { projectMultiStrategyTradingSystemQuiz } from '../quizzes/algorithmic-trading-strategies/project-multi-strategy-trading-system';
 
 // Import multiple choice
-import { algorithmicTradingOverviewMC } from '../multiple-choice/algorithmic-trading-strategies/algorithmic-trading-overview';
-import { trendFollowingStrategiesMC } from '../multiple-choice/algorithmic-trading-strategies/trend-following-strategies';
-import { meanReversionStrategiesMC } from '../multiple-choice/algorithmic-trading-strategies/mean-reversion-strategies';
+import { algorithmicTradingOverviewMultipleChoice as algorithmicTradingOverviewMC } from '../multiple-choice/algorithmic-trading-strategies/algorithmic-trading-overview';
+import { trendFollowingStrategiesMultipleChoice as trendFollowingStrategiesMC } from '../multiple-choice/algorithmic-trading-strategies/trend-following-strategies';
+import { meanReversionStrategiesMultipleChoice as meanReversionStrategiesMC } from '../multiple-choice/algorithmic-trading-strategies/mean-reversion-strategies';
 import { statisticalArbitrageMC } from '../multiple-choice/algorithmic-trading-strategies/statistical-arbitrage';
 import { pairsTradingMC } from '../multiple-choice/algorithmic-trading-strategies/pairs-trading';
 import { momentumStrategiesMC } from '../multiple-choice/algorithmic-trading-strategies/momentum-strategies';

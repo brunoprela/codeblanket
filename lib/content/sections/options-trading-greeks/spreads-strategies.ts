@@ -74,10 +74,10 @@ max_loss = (short_strike - long_strike) - net_credit
 breakeven = short_strike - net_credit
 
 print(f"Bull Put Spread: {short_strike}/{long_strike}")
-print(f"  Net Credit: \${net_credit}")
-print(f"  Max Profit: \${max_profit} (at \${short_strike}+)")
-print(f"  Max Loss: \${max_loss} (at \${long_strike} or below)")
-print(f"  Breakeven: \${breakeven}")
+print(f"  Net Credit: \\$\{net_credit}")
+print(f"  Max Profit: \${max_profit} (at \\$\{short_strike}+)")
+print(f"  Max Loss: \${max_loss} (at \\$\{long_strike} or below)")
+print(f"  Breakeven: \\$\{breakeven}")
 print(f"  Return on Risk: {(max_profit / max_loss * 100):.1f}%")
 \`\`\`
 
@@ -133,9 +133,9 @@ max_loss = (long_strike - short_strike) - net_credit
 breakeven = short_strike + net_credit
 
 print(f"Bear Call Spread: {short_strike}/{long_strike}")
-print(f"  Max Profit: \${max_profit} (at \${short_strike} or below)")
-print(f"  Max Loss: \${max_loss} (at \${long_strike}+)")
-print(f"  Breakeven: \${breakeven}")
+print(f"  Max Profit: \${max_profit} (at \\$\{short_strike} or below)")
+print(f"  Max Loss: \${max_loss} (at \\$\{long_strike}+)")
+print(f"  Breakeven: \\$\{breakeven}")
 \`\`\`
 
 ---
@@ -206,11 +206,11 @@ max_loss = net_debit
 breakevens = [lower + net_debit, upper - net_debit]
 
 print(f"\\nLong Call Butterfly: {lower}/{middle}/{upper}")
-print(f"  Net Debit: \${net_debit:.2f}")
-print(f"  Max Profit: \${max_profit:.2f} (at \${middle})")
-print(f"  Max Loss: \${net_debit:.2f} (at \${lower} or below, \${upper} or above)")
-print(f"  Breakevens: \${breakevens[0]:.2f} and \${breakevens[1]:.2f}")
-print(f"  Profit Range: \${breakevens[0]:.2f} - \${breakevens[1]:.2f}")
+print(f"  Net Debit: \\$\{net_debit:.2f}")
+print(f"  Max Profit: \${max_profit:.2f} (at \\$\{middle})")
+print(f"  Max Loss: \${net_debit:.2f} (at \${lower} or below, \\$\{upper} or above)")
+print(f"  Breakevens: \${breakevens[0]:.2f} and \\$\{breakevens[1]:.2f}")
+print(f"  Profit Range: \${breakevens[0]:.2f} - \\$\{breakevens[1]:.2f}")
 \`\`\`
 
 ### Long Put Butterfly
@@ -282,9 +282,9 @@ plt.show()
 max_profit = net_credit
 max_loss = wing_width - net_credit
 
-print(f"Iron Butterfly: ATM \${atm_strike}, Wings ±\${wing_width}")
-print(f"  Max Profit: \${max_profit} (at \${atm_strike})")
-print(f"  Max Loss: \${max_loss} (at wings or beyond)")
+print(f"Iron Butterfly: ATM \${atm_strike}, Wings ±\\$\{wing_width}")
+print(f"  Max Profit: \${max_profit} (at \\$\{atm_strike})")
+print(f"  Max Loss: \\$\{max_loss} (at wings or beyond)")
 \`\`\`
 
 ---
@@ -339,7 +339,7 @@ plt.grid(True, alpha=0.3)
 plt.show()
 
 print(f"Condor strikes: {strikes}")
-print(f"Profit zone: \${strikes[1]}-\${strikes[2]}")
+print(f"Profit zone: \${strikes[1]}-\\$\{strikes[2]}")
 \`\`\`
 
 ---
@@ -416,9 +416,9 @@ final_value = df['spread_value'].iloc[-1]
 profit = final_value - initial_value
 
 print(f"\\nCalendar Spread Simulation:")
-print(f"  Initial Cost: \${initial_value:.2f}")
-print(f"  Value at Day 30: \${df['spread_value'].iloc[30]:.2f}")
-print(f"  Profit: \${profit:.2f}")
+print(f"  Initial Cost: \\$\{initial_value:.2f}")
+print(f"  Value at Day 30: \\$\{df['spread_value'].iloc[30]:.2f}")
+print(f"  Profit: \\$\{profit:.2f}")
 \`\`\`
 
 ### Diagonal Spread

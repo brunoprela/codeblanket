@@ -615,7 +615,7 @@ print("\\nAdaptive Strategy:")
 print(f"  Total Return: {adaptive_performance['total_return']:.2%}")
 print(f"  Sharpe Ratio: {adaptive_performance['sharpe_ratio']:.2f}")
 print(f"  Max Drawdown: {adaptive_performance['max_drawdown']:.2%}")
-print(f"  Final Equity: $\${adaptive_performance['final_equity']:,.0f}")
+print(f"  Final Equity: $\\$\{adaptive_performance['final_equity']:,.0f}")
 
 print("\\nBuy-and-Hold:")
 print(f"  Total Return: {bh_return:.2%}")

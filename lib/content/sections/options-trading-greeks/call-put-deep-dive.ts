@@ -56,10 +56,10 @@ max_loss = premium * 100  # $300
 max_profit = float('inf')  # Unlimited
 breakeven = strike + premium  # $108
 
-print(f"Long Call: \${strike} Strike, \${premium} Premium")
-print(f"Max Loss: \${max_loss}")
+print(f"Long Call: \${strike} Strike, \\$\{premium} Premium")
+print(f"Max Loss: \\$\{max_loss}")
 print(f"Max Profit: Unlimited")
-print(f"Breakeven: \${breakeven}")
+print(f"Breakeven: \\$\{breakeven}")
 print(f"Required Move: {(breakeven/stock_price - 1)*100:.1f}%")
 \`\`\`
 
@@ -105,10 +105,10 @@ risk_pct = 0.02  # Risk 2% per trade
 premium = 3.00
 
 contracts = calculate_position_size(account, risk_pct, premium)
-print(f"Account: \${account:,}")
-print(f"Risk per trade: {risk_pct*100}% (\${account*risk_pct:,})")
+print(f"Account: \\$\{account:,}")
+print(f"Risk per trade: {risk_pct*100}% (\\$\{account*risk_pct:,})")
 print(f"Max contracts: {contracts}")
-print(f"Total risk: \${contracts * premium * 100:,}")
+print(f"Total risk: \\$\{contracts * premium * 100:,}")
 \`\`\`
 
 **Stop Loss Strategy:**
@@ -152,10 +152,10 @@ max_profit = premium * 100  # $300
 max_loss = float('inf')  # Unlimited
 breakeven = strike + premium  # $108
 
-print(f"Short Call: \${strike} Strike, \${premium} Premium")
-print(f"Max Profit: \${max_profit}")
+print(f"Short Call: \${strike} Strike, \\$\{premium} Premium")
+print(f"Max Profit: \\$\{max_profit}")
 print(f"Max Loss: Unlimited ⚠️")
-print(f"Breakeven: \${breakeven}")
+print(f"Breakeven: \\$\{breakeven}")
 \`\`\`
 
 **Scenarios at Expiration:**
@@ -218,12 +218,12 @@ result = covered_call_analysis(
 )
 
 print("Covered Call Analysis:")
-print(f"Stock cost: \${result['stock_cost']:,}")
-print(f"Premium collected: \${result['premium_collected']}")
-print(f"Net cost: \${result['net_cost']}")
-print(f"Max profit: \${result['max_profit']} ({result['return_if_called']:.1f}% return)")
-print(f"Max loss: \${result['max_loss']} (if stock → $0)")
-print(f"Breakeven: \${result['breakeven']}")
+print(f"Stock cost: \\$\{result['stock_cost']:,}")
+print(f"Premium collected: \\$\{result['premium_collected']}")
+print(f"Net cost: \\$\{result['net_cost']}")
+print(f"Max profit: \\$\{result['max_profit']} ({result['return_if_called']:.1f}% return)")
+print(f"Max loss: \\$\{result['max_loss']} (if stock → $0)")
+print(f"Breakeven: \\$\{result['breakeven']}")
 \`\`\`
 
 **Naked Call Margin Requirements:**
@@ -267,10 +267,10 @@ max_loss = premium * 100  # $250
 max_profit = (strike - premium) * 100  # $9,250 (if stock → $0)
 breakeven = strike - premium  # $92.50
 
-print(f"Long Put: \${strike} Strike, \${premium} Premium")
-print(f"Max Loss: \${max_loss}")
-print(f"Max Profit: \${max_profit} (if stock → $0)")
-print(f"Breakeven: \${breakeven}")
+print(f"Long Put: \${strike} Strike, \\$\{premium} Premium")
+print(f"Max Loss: \\$\{max_loss}")
+print(f"Max Profit: \\$\{max_profit} (if stock → $0)")
+print(f"Breakeven: \\$\{breakeven}")
 print(f"Required Move: {(stock_price/breakeven - 1)*100:.1f}% down")
 \`\`\`
 
@@ -332,11 +332,11 @@ result = protective_put_analysis(
 )
 
 print("Protective Put Analysis:")
-print(f"Stock value: \${result['stock_value']:,}")
-print(f"Insurance cost: \${result['insurance_cost']} ({(result['insurance_cost']/result['stock_value'])*100:.1f}%)")
-print(f"Floor value: \${result['floor_value']:,} (minimum portfolio value)")
-print(f"Max loss: \${result['max_loss']} ({result['max_loss_pct']:.1f}%)")
-print(f"Breakeven: \${result['breakeven']}")
+print(f"Stock value: \\$\{result['stock_value']:,}")
+print(f"Insurance cost: \\$\{result['insurance_cost']} ({(result['insurance_cost']/result['stock_value'])*100:.1f}%)")
+print(f"Floor value: \\$\{result['floor_value']:,} (minimum portfolio value)")
+print(f"Max loss: \\$\{result['max_loss']} ({result['max_loss_pct']:.1f}%)")
+print(f"Breakeven: \\$\{result['breakeven']}")
 print(f"Protection: {result['protection_level']:.0f}% below current price")
 \`\`\`
 
@@ -378,11 +378,11 @@ max_profit = premium * 100  # $250
 max_loss = (strike - premium) * 100  # $9,250 (if stock → $0)
 breakeven = strike - premium  # $92.50
 
-print(f"Short Put: \${strike} Strike, \${premium} Premium")
-print(f"Max Profit: \${max_profit}")
-print(f"Max Loss: \${max_loss} (if stock → $0)")
-print(f"Breakeven: \${breakeven}")
-print(f"Required cash collateral: \${strike * 100:,}")
+print(f"Short Put: \${strike} Strike, \\$\{premium} Premium")
+print(f"Max Profit: \\$\{max_profit}")
+print(f"Max Loss: \\$\{max_loss} (if stock → $0)")
+print(f"Breakeven: \\$\{breakeven}")
+print(f"Required cash collateral: \\$\{strike * 100:,}")
 \`\`\`
 
 **Scenarios at Expiration:**
@@ -446,9 +446,9 @@ result = cash_secured_put_analysis(
 )
 
 print("Cash-Secured Put Analysis:")
-print(f"Cash required: \${result['cash_required']:,}")
-print(f"Premium collected: \${result['premium_collected']}")
-print(f"Net purchase price if assigned: \${result['net_purchase_price']}")
+print(f"Cash required: \\$\{result['cash_required']:,}")
+print(f"Premium collected: \\$\{result['premium_collected']}")
+print(f"Net purchase price if assigned: \\$\{result['net_purchase_price']}")
 print(f"Discount to current: {result['discount_to_current']:.1f}%")
 print(f"Return if expires worthless: {result['return_if_expires']:.2f}%")
 print(f"Better than limit order at $95? {result['better_than_limit_order']}")
@@ -565,11 +565,11 @@ result1 = check_put_call_parity(
     transaction_cost=0.10
 )
 
-print(f"Call price: \${result1['market_diff'] + result1['theoretical_diff'] - result1['market_diff']:.2f}")
-print(f"Theoretical C - P: \${result1['theoretical_diff']:.2f}")
-print(f"Market C - P: \${result1['market_diff']:.2f}")
-print(f"Deviation: \${result1['deviation']:.2f}")
-print(f"Arbitrage profit (after costs): \${result1['arbitrage_profit']:.2f}")
+print(f"Call price: \\$\{result1['market_diff'] + result1['theoretical_diff'] - result1['market_diff']:.2f}")
+print(f"Theoretical C - P: \\$\{result1['theoretical_diff']:.2f}")
+print(f"Market C - P: \\$\{result1['market_diff']:.2f}")
+print(f"Deviation: \\$\{result1['deviation']:.2f}")
+print(f"Arbitrage profit (after costs): \\$\{result1['arbitrage_profit']:.2f}")
 print(f"Arbitrage exists: {result1['arbitrage_exists']}")
 print(f"Strategy: {result1['strategy']}")
 
@@ -588,15 +588,15 @@ result2 = check_put_call_parity(
     transaction_cost=0.10
 )
 
-print(f"Theoretical C - P: \${result2['theoretical_diff']:.2f}")
-print(f"Market C - P: \${result2['market_diff']:.2f}")
-print(f"Deviation: \${result2['deviation']:.2f}")
-print(f"Arbitrage profit (after costs): \${result2['arbitrage_profit']:.2f}")
+print(f"Theoretical C - P: \\$\{result2['theoretical_diff']:.2f}")
+print(f"Market C - P: \\$\{result2['market_diff']:.2f}")
+print(f"Deviation: \\$\{result2['deviation']:.2f}")
+print(f"Arbitrage profit (after costs): \\$\{result2['arbitrage_profit']:.2f}")
 print(f"Arbitrage exists: {result2['arbitrage_exists']} ✓")
 print(f"Strategy: {result2['strategy']}")
 print(f"Direction: {result2['direction']}")
-print(f"\\nProfit per share: \${result2['arbitrage_profit']:.2f}")
-print(f"Profit per contract: \${result2['arbitrage_profit'] * 100:.2f}")
+print(f"\\nProfit per share: \\$\{result2['arbitrage_profit']:.2f}")
+print(f"Profit per contract: \\$\{result2['arbitrage_profit'] * 100:.2f}")
 \`\`\`
 
 ---
@@ -657,11 +657,11 @@ result = synthetic_long_stock(
 )
 
 print("Synthetic Long Stock:")
-print(f"Buy {result['call_price']} call + Sell \${result['put_price']} put")
-print(f"Net cost: \${result['net_cost']}")
-print(f"Effective purchase price: \${result['effective_purchase']}")
-print(f"Actual stock price: \${result['stock_price']}")
-print(f"Savings vs buying stock: \${result['savings_vs_stock']}")
+print(f"Buy {result['call_price']} call + Sell \\$\{result['put_price']} put")
+print(f"Net cost: \\$\{result['net_cost']}")
+print(f"Effective purchase price: \\$\{result['effective_purchase']}")
+print(f"Actual stock price: \\$\{result['stock_price']}")
+print(f"Savings vs buying stock: \\$\{result['savings_vs_stock']}")
 print(f"Equivalent to stock? {result['equivalent']}")
 \`\`\`
 
@@ -786,9 +786,9 @@ for pos_type in ["long_call", "short_call", "long_put", "short_put"]:
     print(f"\\n{'='*60}")
     print(f"{risk.position_type}")
     print(f"{'='*60}")
-    print(f"Max Loss: \${risk.max_loss if risk.max_loss != float('inf') else 'UNLIMITED'}")
+    print(f"Max Loss: \\$\{risk.max_loss if risk.max_loss != float('inf') else 'UNLIMITED'}")
     print(f"Defined Risk: {risk.max_loss_defined}")
-    print(f"Margin Required: \${risk.margin_required:,.0f}")
+    print(f"Margin Required: \\$\{risk.margin_required:,.0f}")
     print(f"Risk Level: {risk.risk_level.value}")
     print(f"Beginner-Friendly: {risk.suitable_for_beginners}")
     print(f"\\nWarnings:")
@@ -846,9 +846,9 @@ def calculate_margin_requirement(position_type: str,
 
 # Examples
 print("Margin Requirements:")
-print(f"Long call: \${calculate_margin_requirement('long_call', 100, 100, 1):,.0f}")
-print(f"Short call: \${calculate_margin_requirement('short_call', 100, 100, 1):,.0f}")
-print(f"Short put: \${calculate_margin_requirement('short_put', 100, 100, 1):,.0f}")
+print(f"Long call: \\$\{calculate_margin_requirement('long_call', 100, 100, 1):,.0f}")
+print(f"Short call: \\$\{calculate_margin_requirement('short_call', 100, 100, 1):,.0f}")
+print(f"Short put: \\$\{calculate_margin_requirement('short_put', 100, 100, 1):,.0f}")
 \`\`\`
 
 ### Tax Considerations

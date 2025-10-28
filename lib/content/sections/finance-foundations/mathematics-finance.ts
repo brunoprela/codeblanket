@@ -222,12 +222,12 @@ percentile_5 = np.percentile (final_values, 5)  # VaR 95%
 percentile_95 = np.percentile (final_values, 95)
 
 print(f"\\n=== Monte Carlo Results (10,000 simulations) ===")
-print(f"Initial value: \${initial:,.0f}")
+print(f"Initial value: \\$\{initial:,.0f}")
 print(f"\\nAfter 1 year:")
-print(f"  Mean: \${mean_final:,.0f}")
-print(f"  Median: \${median_final:,.0f}")
-print(f"  5th percentile: \${percentile_5:,.0f} (VaR)")
-print(f"  95th percentile: \${percentile_95:,.0f}")
+print(f"  Mean: \\$\{mean_final:,.0f}")
+print(f"  Median: \\$\{median_final:,.0f}")
+print(f"  5th percentile: \\$\{percentile_5:,.0f} (VaR)")
+print(f"  95th percentile: \\$\{percentile_95:,.0f}")
 
 prob_loss = np.sum (final_values < initial) / len (final_values)
 print(f"\\nProbability of loss: {prob_loss*100:.1f}%")
@@ -420,11 +420,11 @@ greeks = calculate_greeks(
 )
 
 print(f"\\n=== Option Greeks ===")
-print(f"Option price: \${greeks['price']:.2f}")
-print(f"Delta: {greeks['delta']:.3f} (\${greeks['delta']:.2f} per $1 stock move)")
+print(f"Option price: \\$\{greeks['price']:.2f}")
+print(f"Delta: {greeks['delta']:.3f} (\\$\{greeks['delta']:.2f} per $1 stock move)")
 print(f"Gamma: {greeks['gamma']:.4f} (delta change per $1 move)")
-print(f"Theta: \${greeks['theta']:.2f} (daily time decay)")
-print(f"Vega: \${greeks['vega']:.2f} (per 1% vol change)")
+print(f"Theta: \\$\{greeks['theta']:.2f} (daily time decay)")
+print(f"Vega: \\$\{greeks['vega']:.2f} (per 1% vol change)")
 \`\`\`
 
 ---

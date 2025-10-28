@@ -352,8 +352,8 @@ roi = calc.roi_analysis(
     tokens_saved_per_request = 150  # Moving system prompt into model
 )
 
-print(f"Training cost: \${roi['one_time_training_cost']:.2f}")
-print(f"Monthly savings: \${roi['monthly_savings']:.2f}")
+print(f"Training cost: \\$\{roi['one_time_training_cost']:.2f}")
+print(f"Monthly savings: \\$\{roi['monthly_savings']:.2f}")
 print(f"Break-even: {roi['breakeven_months']:.1f} months")
 
 if roi['worth_it']:

@@ -170,7 +170,7 @@ print("\\nLiquidity Analysis:")
 print(f"Current Ratio: {results['current_ratio']:.2f}")
 print(f"Quick Ratio: {results['quick_ratio']:.2f}")
 print(f"Cash Ratio: {results['cash_ratio']:.2f}")
-print(f"Working Capital: \${results['working_capital']:,.0f}")
+print(f"Working Capital: \\$\{results['working_capital']:,.0f}")
 print(f"Assessment: {results['assessment']}")
 \`\`\`
 

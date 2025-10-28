@@ -155,9 +155,9 @@ btc_price = 43000  # $43K per BTC
 market_cap = btc.calculate_market_cap (btc_price)
 fdv = btc.calculate_fully_diluted_value (btc_price)
 
-print(f"Bitcoin at \${btc_price:,}:")
-print(f"  Market Cap: \${market_cap/1e9:.0f}B")
-print(f"  Fully Diluted Value: \${fdv/1e9:.0f}B")
+print(f"Bitcoin at \\$\{btc_price:,}:")
+print(f"  Market Cap: \\$\{market_cap/1e9:.0f}B")
+print(f"  Fully Diluted Value: \\$\{fdv/1e9:.0f}B")
 print(f"  Remaining to mine: {btc.max_supply - btc.current_supply:,} BTC")
 \`\`\`
 
@@ -358,7 +358,7 @@ sizing = CryptoVolatilityAnalysis.calculate_position_sizing(
 print("Position Sizing for $100K Account:")
 print(f"  Max Risk Tolerance: {sizing['max_risk_tolerance']:.0f}%")
 print(f"  Expected Max Drawdown: {sizing['expected_max_drawdown']:.0f}%")
-print(f"  Safe Position Size: \${sizing['safe_position_size']:,.0f}")
+print(f"  Safe Position Size: \\$\{sizing['safe_position_size']:,.0f}")
 print(f"  As % of Account: {sizing['position_as_pct_of_account']:.0f}%")
 print(f"\\n💡 {sizing['recommendation']}")
 \`\`\`
@@ -576,11 +576,11 @@ contagion = crisis.calculate_contagion_spread(
 )
 
 print("Contagion Analysis:")
-print(f"  Initial Failure: \${contagion['initial_failure']/1e9:.0f}B")
+print(f"  Initial Failure: \\$\{contagion['initial_failure']/1e9:.0f}B")
 print(f"  Connected Entities: {contagion['num_connected_entities']}")
 print(f"  Leverage Ratio: {contagion['leverage_ratio']}x")
-print(f"  Secondary Losses: \${contagion['secondary_losses']/1e9:.0f}B")
-print(f"  Total System Loss: \${contagion['total_system_loss']/1e9:.0f}B")
+print(f"  Secondary Losses: \\$\{contagion['secondary_losses']/1e9:.0f}B")
+print(f"  Total System Loss: \\$\{contagion['total_system_loss']/1e9:.0f}B")
 print(f"  Amplification: {contagion['amplification_factor']:.1f}x")
 print(f"\\n💡 {contagion['interpretation']}")
 \`\`\`
@@ -701,10 +701,10 @@ sizing = system.calculate_position_size(
 
 if 'error' not in sizing:
     print(f"Position Sizing for {sizing['symbol']}:")
-    print(f"  Current Price: \${sizing['current_price']:,.0f}")
+    print(f"  Current Price: \\$\{sizing['current_price']:,.0f}")
     print(f"  Risk per Trade: {sizing['risk_per_trade']:.0f}%")
     print(f"  Stop Loss: {sizing['stop_loss_pct']:.0f}%")
-    print(f"  Position Size: \${sizing['position_size_dollars']:,.0f}")
+    print(f"  Position Size: \\$\{sizing['position_size_dollars']:,.0f}")
     print(f"  = {sizing['position_size_coins']:.4f} BTC")
     print(f"  As % of Capital: {sizing['position_as_pct_of_capital']:.1f}%")
 
@@ -719,7 +719,7 @@ dca = system.implement_dollar_cost_averaging(
 print(f"\\n\\nDollar Cost Averaging Plan:")
 print(f"Total Investment: $10,000 over 10 months\\n")
 for purchase in dca[:3]:
-    print(f"Purchase {purchase['purchase_number']}: {purchase['date']} - \${purchase['amount_usd']:,.0f}")
+    print(f"Purchase {purchase['purchase_number']}: {purchase['date']} - \\$\{purchase['amount_usd']:,.0f}")
 print("...")
 \`\`\`
 

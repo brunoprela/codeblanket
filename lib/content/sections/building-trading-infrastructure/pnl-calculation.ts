@@ -199,9 +199,9 @@ class RealTimePnLCalculator:
         self.last_update = datetime.utcnow()
         
         print(f"[PnLCalculator] {symbol} {side} {quantity} @ {price}")
-        print(f"  Realized P&L: \${snapshot.realized_pnl:.2f})"
-print(f"  Unrealized P&L: \${snapshot.unrealized_pnl:.2f}")
-print(f"  Total P&L: \${snapshot.total_pnl():.2f}")
+        print(f"  Realized P&L: \\$\{snapshot.realized_pnl:.2f})"
+print(f"  Unrealized P&L: \\$\{snapshot.unrealized_pnl:.2f}")
+print(f"  Total P&L: \\$\{snapshot.total_pnl():.2f}")
     
     def _update_unrealized_pnl(self, snapshot: PnLSnapshot, current_price: Decimal):
 """Calculate unrealized P&L"""
@@ -291,12 +291,12 @@ for snapshot in sorted(self.pnl_snapshots.values(), key = lambda s: s.symbol):
     )
 
 print("-" * 120)
-print(f"Total Realized: \${float(self.get_realized_pnl()):.2f}")
-print(f"Total Unrealized: \${float(self.get_unrealized_pnl()):.2f}")
-print(f"Total P&L: \${float(self.get_total_pnl()):.2f}")
-print(f"Intraday High: \${float(self.intraday_high):.2f}")
-print(f"Intraday Low: \${float(self.intraday_low):.2f}")
-print(f"Current Drawdown: \${float(self.calculate_drawdown()):.2f}")
+print(f"Total Realized: \\$\{float(self.get_realized_pnl()):.2f}")
+print(f"Total Unrealized: \\$\{float(self.get_unrealized_pnl()):.2f}")
+print(f"Total P&L: \\$\{float(self.get_total_pnl()):.2f}")
+print(f"Intraday High: \\$\{float(self.intraday_high):.2f}")
+print(f"Intraday Low: \\$\{float(self.intraday_low):.2f}")
+print(f"Current Drawdown: \\$\{float(self.calculate_drawdown()):.2f}")
 
 
 # Example usage
@@ -341,7 +341,7 @@ calc.print_pnl_report()
     # P & L by strategy
 print("\\n\\nP&L by Strategy:")
 for strategy, pnl in calc.get_pnl_by_strategy().items():
-    print(f"  {strategy}: \${float(pnl):.2f}")
+    print(f"  {strategy}: \\$\{float(pnl):.2f}")
 
 # asyncio.run(pnl_calculation_example())
 \`\`\`
@@ -439,24 +439,24 @@ class EODPnLCalculator:
         print("=" * 80)
         
         print(f"\\nP&L Summary:")
-        print(f"  Realized P&L:   \${float(report.realized_pnl):> 12, .2f}")
-print(f"  Unrealized P&L: \${float(report.unrealized_pnl):>12,.2f}")
-print(f"  Total P&L:      \${float(report.total_pnl):>12,.2f}")
+        print(f"  Realized P&L:   \\$\{float(report.realized_pnl):> 12, .2f}")
+print(f"  Unrealized P&L: \\$\{float(report.unrealized_pnl):>12,.2f}")
+print(f"  Total P&L:      \\$\{float(report.total_pnl):>12,.2f}")
 
 print(f"\\nTrading Metrics:")
 print(f"  Trades:         {report.num_trades:>12,}")
-print(f"  Total Fees:     \${float(report.total_fees):>12,.2f}")
+print(f"  Total Fees:     \\$\{float(report.total_fees):>12,.2f}")
 print(f"  Win Rate:       {float(report.win_rate):>11.2%}")
-print(f"  Max Drawdown:   \${float(report.max_drawdown):>12,.2f}")
+print(f"  Max Drawdown:   \\$\{float(report.max_drawdown):>12,.2f}")
 
 print(f"\\nP&L by Strategy:")
 for strategy, pnl in sorted(report.pnl_by_strategy.items(), key = lambda x: x[1], reverse = True):
-    print(f"  {strategy:<20} \${float(pnl):>12,.2f}")
+    print(f"  {strategy:<20} \\$\{float(pnl):>12,.2f}")
 
 print(f"\\nTop P&L by Symbol:")
 sorted_symbols = sorted(report.pnl_by_symbol.items(), key = lambda x: abs(x[1]), reverse = True)[: 10]
 for symbol, pnl in sorted_symbols:
-    print(f"  {symbol:<10} \${float(pnl):>12,.2f}")
+    print(f"  {symbol:<10} \\$\{float(pnl):>12,.2f}")
 
 
 # Example EOD calculation

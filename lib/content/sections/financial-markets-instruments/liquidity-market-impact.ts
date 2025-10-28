@@ -157,9 +157,9 @@ spread_analysis = metrics.calculate_spread_metrics (bid=100.00, ask=100.10)
 
 print("=== Liquidity Metrics ===\\n")
 print("1. Spread Analysis:")
-print(f"  Absolute Spread: \${spread_analysis['absolute_spread']:.2f}")
+print(f"  Absolute Spread: \\$\{spread_analysis['absolute_spread']:.2f}")
 print(f"  Relative Spread: {spread_analysis['relative_spread_bps']:.1f} bps")
-print(f"  Half Spread: \${spread_analysis['half_spread']:.2f}")
+print(f"  Half Spread: \\$\{spread_analysis['half_spread']:.2f}")
 print(f"  {spread_analysis['interpretation']}")
 
 # Example: Depth
@@ -344,7 +344,7 @@ print(f"  Order: {small_order['order_size']:,} shares")
 print(f"  ADV: {small_order['adv']:,}")
 print(f"  Participation: {small_order['participation_rate']:.1f}%")
 print(f"  Total Impact: {small_order['total_impact_bps']:.1f} bps")
-print(f"  Cost: \${small_order['total_cost']:,.0f}")
+print(f"  Cost: \\$\{small_order['total_cost']:,.0f}")
 print(f"  {small_order['key_insight']}")
 
 # Large order(4x size)
@@ -357,7 +357,7 @@ large_order = impact_model.square_root_law(
 print(f"\\n2. Square-Root Law (Large Order - 4x size):")
 print(f"  Order: {large_order['order_size']:,} shares")
 print(f"  Total Impact: {large_order['total_impact_bps']:.1f} bps")
-print(f"  Cost: \${large_order['total_cost']:,.0f}")
+print(f"  Cost: \\$\{large_order['total_cost']:,.0f}")
 print(f"  Impact ratio: {large_order['total_impact_bps']/small_order['total_impact_bps']:.2f}x (not 4x!)")
 
 # Almgren - Chriss optimal execution

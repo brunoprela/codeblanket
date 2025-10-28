@@ -353,16 +353,16 @@ class LBOModel:
         for key, value in su['Sources'].items():
             if key != 'Total Sources':
                 pct = value / self.purchase_price
-                print(f"  {key}: \${value:,.0f}M ({pct:.1%})")
+                print(f"  {key}: \\$\{value:,.0f}M ({pct:.1%})")
 print(f"  {'-' * 66}")
-print(f"  Total: \${su['Sources']['Total Sources']:,.0f}M\\n")
+print(f"  Total: \\$\{su['Sources']['Total Sources']:,.0f}M\\n")
 
 print("Uses of Funds:")
 for key, value in su['Uses'].items():
     if key != 'Total Uses':
-        print(f"  {key}: \${value:,.0f}M")
+        print(f"  {key}: \\$\{value:,.0f}M")
 print(f"  {'-' * 66}")
-print(f"  Total: \${su['Uses']['Total Uses']:,.0f}M\\n")
+print(f"  Total: \\$\{su['Uses']['Total Uses']:,.0f}M\\n")
         
         # Financial projections summary
 print(f"Financial Projections (Year 1 to {self.exit_year}):")
@@ -371,13 +371,13 @@ print(self.projections[summary_cols].to_string (index = False, float_format = la
         
         # Returns
 print(f"\\nReturns Analysis:")
-print(f"  Exit Year {self.exit_year} EBITDA: \${self.returns['Exit EBITDA']:,.0f}M")
+print(f"  Exit Year {self.exit_year} EBITDA: \\$\{self.returns['Exit EBITDA']:,.0f}M")
 print(f"  Exit Multiple: {self.returns['Exit Multiple']:.1f}×")
-print(f"  Exit Enterprise Value: \${self.returns['Exit EV']:,.0f}M")
-print(f"  Less: Remaining Debt: \${self.returns['Exit Debt']:,.0f}M")
+print(f"  Exit Enterprise Value: \\$\{self.returns['Exit EV']:,.0f}M")
+print(f"  Less: Remaining Debt: \\$\{self.returns['Exit Debt']:,.0f}M")
 print(f"  {'─' * 68}")
-print(f"  Exit Equity Value: \${self.returns['Exit Equity Value']:,.0f}M")
-print(f"\\n  Initial Equity Investment: \${self.returns['Equity Invested']:,.0f}M")
+print(f"  Exit Equity Value: \\$\{self.returns['Exit Equity Value']:,.0f}M")
+print(f"\\n  Initial Equity Investment: \\$\{self.returns['Equity Invested']:,.0f}M")
 print(f"  {'=' * 68}")
 print(f"  MOIC: {self.returns['MOIC']:.2f}×")
 print(f"  IRR: {self.returns['IRR']:.1%}")
@@ -542,16 +542,16 @@ bridge = lbo_value_bridge(
 )
 
 print("LBO Value Creation Bridge:")
-print(f"  Entry Equity: \${bridge['Entry Equity']:.0f}M")
-print(f"  Exit Equity: \${bridge['Exit Equity']:.0f}M")
+print(f"  Entry Equity: \\$\{bridge['Entry Equity']:.0f}M")
+print(f"  Exit Equity: \\$\{bridge['Exit Equity']:.0f}M")
 print(f"  {'─' * 40}")
-print(f"  Total Return: \${bridge['Total Return']:.0f}M\\n")
+print(f"  Total Return: \\$\{bridge['Total Return']:.0f}M\\n")
 print(f"  Decomposition:")
-print(f"    1. EBITDA Growth: \${bridge['EBITDA Growth']:.0f}M")
-print(f"    2. Multiple Expansion: \${bridge['Multiple Expansion']:.0f}M")
-print(f"    3. Deleveraging: \${bridge['Deleveraging']:.0f}M")
+print(f"    1. EBITDA Growth: \\$\{bridge['EBITDA Growth']:.0f}M")
+print(f"    2. Multiple Expansion: \\$\{bridge['Multiple Expansion']:.0f}M")
+print(f"    3. Deleveraging: \\$\{bridge['Deleveraging']:.0f}M")
 print(f"  {'─' * 40}")
-print(f"  Total (check): \${bridge['Sum of Components']:.0f}M")
+print(f"  Total (check): \\$\{bridge['Sum of Components']:.0f}M")
 \`\`\`
 
 **Output**:

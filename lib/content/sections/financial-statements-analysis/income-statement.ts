@@ -298,9 +298,9 @@ cogs_total = sum([amt for _, amt in expenses['COGS']])
 sga_total = sum([amt for _, amt in expenses['SG&A']])
 rd_total = sum([amt for _, amt in expenses['R&D']])
 
-print(f"COGS: \${cogs_total:,}")  # $900,000
-print(f"SG&A: \${sga_total:,}")   # $2, 300,000
-print(f"R&D: \${rd_total:,}")     # $2, 600,000
+print(f"COGS: \\$\{cogs_total:,}")  # $900,000
+print(f"SG&A: \\$\{sga_total:,}")   # $2, 300,000
+print(f"R&D: \\$\{rd_total:,}")     # $2, 600,000
 \`\`\`
 
 ### Gross Margin Analysis
@@ -646,8 +646,8 @@ apple_example = {
 }
 
 eps_data = calculate_eps (apple_example)
-print(f"Basic EPS: \${eps_data['basic_eps']:.2f}")
-print(f"Diluted EPS: \${eps_data['diluted_eps']:.2f}")
+print(f"Basic EPS: \\$\{eps_data['basic_eps']:.2f}")
+print(f"Diluted EPS: \\$\{eps_data['diluted_eps']:.2f}")
 print(f"Dilution: {eps_data['dilution_pct']:.1f}%")
 
 # Output:
@@ -810,12 +810,12 @@ def compare_income_statements():
         eps = data['net_income'] / data['shares']
         revenue_per_share = data['revenue'] / data['shares']
         
-        print(f"Revenue: \${data['revenue']:,.0f}M")
+        print(f"Revenue: \\$\{data['revenue']:,.0f}M")
 print(f"Gross Margin: {gross_margin:.1%}")
 print(f"Operating Margin: {operating_margin:.1%}")
 print(f"Net Margin: {net_margin:.1%}")
-print(f"EPS: \${eps:.2f}")
-print(f"Revenue/Share: \${revenue_per_share:.2f}")
+print(f"EPS: \\$\{eps:.2f}")
+print(f"Revenue/Share: \\$\{revenue_per_share:.2f}")
         
         # Efficiency metrics
 print(f"\\nExpense Structure:")

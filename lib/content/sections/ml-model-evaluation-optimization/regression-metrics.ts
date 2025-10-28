@@ -785,7 +785,7 @@ for metric_name, value in metrics.items():
     else:
         # Convert to actual dollars
         dollars = value * 100_000
-        print(f"{metric_name:15s}: {value:.4f} (\${dollars:,.0f})")
+        print(f"{metric_name:15s}: {value:.4f} (\\$\{dollars:,.0f})")
 
 # Metric selection guide
 print("\\n" + "=" * 60)

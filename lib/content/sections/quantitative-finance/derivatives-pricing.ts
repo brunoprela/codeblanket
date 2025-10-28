@@ -329,15 +329,15 @@ div_yield = 0.02
 maturity = 1.0
 
 fwd_price = forward_price (spot, rate, div_yield, maturity)
-print(f"Forward Price: \${fwd_price:.2f}")
+print(f"Forward Price: \\$\{fwd_price:.2f}")
 
 # Arbitrage detection
 market_forward = 105
 if market_forward > fwd_price:
     profit = market_forward - fwd_price
-    print(f"\\nArbitrage Opportunity: Short forward at \${market_forward:.2f}")
-    print(f"Fair value: \${fwd_price:.2f}")
-    print(f"Risk-free profit: \${profit:.2f} per share")
+    print(f"\\nArbitrage Opportunity: Short forward at \\$\{market_forward:.2f}")
+    print(f"Fair value: \\$\{fwd_price:.2f}")
+    print(f"Risk-free profit: \\$\{profit:.2f} per share")
 \`\`\`
 
 ### Swap Valuation
@@ -380,7 +380,7 @@ locked_rate = 0.04
 floating_rates = [0.03, 0.045, 0.05]
 
 swap_val = swap_value (locked_rate, floating_rates, discount_factors, notional)
-print(f"\\nSwap Value: \${swap_val:,.0f}")
+print(f"\\nSwap Value: \\$\{swap_val:,.0f}")
 \`\`\`
 
 ### Asian Option Pricing (Monte Carlo)
@@ -436,7 +436,7 @@ sigma = 0.20
 maturity = 1.0
 
 asian_price = asian_option_mc (spot, strike, rate, sigma, maturity)
-print(f"Asian Call Price: \${asian_price:.2f}")
+print(f"Asian Call Price: \\$\{asian_price:.2f}")
 
 # Compare to vanilla European call (Black-Scholes)
 def black_scholes_call(S, K, r, sigma, T):
@@ -445,8 +445,8 @@ def black_scholes_call(S, K, r, sigma, T):
     return S*norm.cdf (d1) - K*np.exp(-r*T)*norm.cdf (d2)
 
 vanilla_price = black_scholes_call (spot, strike, rate, sigma, maturity)
-print(f"Vanilla European Call: \${vanilla_price:.2f}")
-print(f"\\nAsian option is cheaper: \${vanilla_price - asian_price:.2f} ({(vanilla_price-asian_price)/vanilla_price*100:.1f}% discount)")
+print(f"Vanilla European Call: \\$\{vanilla_price:.2f}")
+print(f"\\nAsian option is cheaper: \\$\{vanilla_price - asian_price:.2f} ({(vanilla_price-asian_price)/vanilla_price*100:.1f}% discount)")
 print("Reason: Averaging reduces volatility → lower option value")
 \`\`\`
 

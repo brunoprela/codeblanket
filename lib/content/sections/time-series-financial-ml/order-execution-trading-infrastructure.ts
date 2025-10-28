@@ -58,7 +58,7 @@ class AlpacaTrader:
             account = self.api.get_account()
             print(f"✓ Connected to Alpaca ({'paper' if paper else 'LIVE'})")
             print(f"  Account: {account.account_number}")
-            print(f"  Equity: \${float (account.equity):,.2f}")
+            print(f"  Equity: \\$\{float (account.equity):,.2f}")
         except Exception as e:
             print(f"✗ Connection failed: {e}")
             raise
@@ -529,15 +529,15 @@ trader = AlpacaTrader(
 # Check account
 account = trader.get_account()
 print(f"\\nAccount Status:")
-print(f"  Equity: \${account['equity']:,.2f}")
-print(f"  Buying Power: \${account['buying_power']:,.2f}")
+print(f"  Equity: \\$\{account['equity']:,.2f}")
+print(f"  Buying Power: \\$\{account['buying_power']:,.2f}")
 
 # Get current positions
 positions = trader.get_positions()
 print(f"\\nOpen Positions: {len (positions)}")
 for pos in positions:
-    print(f"  {pos['symbol']}: {pos['qty']} shares @ \${pos['avg_entry_price']:.2f}")
-    print(f"    P&L: \${pos['unrealized_pl']:.2f} ({pos['unrealized_plpc']:.2%})")
+    print(f"  {pos['symbol']}: {pos['qty']} shares @ \\$\{pos['avg_entry_price']:.2f}")
+    print(f"    P&L: \\$\{pos['unrealized_pl']:.2f} ({pos['unrealized_plpc']:.2%})")
 
 # Place orders (with risk checks)
 symbol = "AAPL"

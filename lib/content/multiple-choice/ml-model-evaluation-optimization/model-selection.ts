@@ -46,7 +46,7 @@ export const modelSelectionMultipleChoice = {
       correctAnswer: 1,
       explanation:
         'Logistic regression (interpretable coefficients) and shallow decision trees (visible decision rules) provide clear explanations for predictions. Essential for regulatory compliance, stakeholder trust, and debugging. Deep learning and large ensembles are black boxes.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Interpretability',
     },
     {

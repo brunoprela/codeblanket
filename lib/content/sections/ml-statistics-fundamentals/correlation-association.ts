@@ -411,8 +411,8 @@ def point_biserial_example():
     print(f"Correlation: {r_pb:.4f}")
     print(f"P-value: {p_value:.4f}")
     print()
-    print(f"Mean income (Female): \${income[gender == 0].mean():,.0f}")
-print(f"Mean income (Male): \${income[gender==1].mean():,.0f}")
+    print(f"Mean income (Female): \\$\{income[gender == 0].mean():,.0f}")
+print(f"Mean income (Male): \\$\{income[gender==1].mean():,.0f}")
 print()
 
 if p_value < 0.05:

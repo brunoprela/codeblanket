@@ -233,7 +233,7 @@ class MetricsCollector:
         print(f"  Success Rate: {self.global_metrics.success_rate:.1%}")
         print(f"  Avg Execution: {self.global_metrics.average_execution_time_ms:.2f}ms")
         print(f"  P95 Execution: {self.global_metrics.p95_execution_time_ms:.2f}ms")
-        print(f"  Total Cost: \${self.global_metrics.total_cost_usd:.4f}")
+        print(f"  Total Cost: \\$\{self.global_metrics.total_cost_usd:.4f}")
 
 print("\\nPer-Tool Metrics:")
 for tool_name, metrics in sorted (self.metrics.items(),
@@ -243,7 +243,7 @@ for tool_name, metrics in sorted (self.metrics.items(),
 print(f"  Calls: {metrics.total_calls}")
 print(f"  Success Rate: {metrics.success_rate:.1%}")
 print(f"  Avg Time: {metrics.average_execution_time_ms:.2f}ms")
-print(f"  Cost: \${metrics.total_cost_usd:.4f}")
+print(f"  Cost: \\$\{metrics.total_cost_usd:.4f}")
 
 if metrics.errors_by_type:
     print(f"  Errors:")

@@ -1059,7 +1059,7 @@ def estimate_monthly_cost (architecture: str):
 print("\\n=== Monthly Infrastructure Costs ===")
 for arch in ["simple_batch", "realtime_cpu", "realtime_gpu"]:
     cost = estimate_monthly_cost (arch)
-    print(f"{arch}: \${cost['total']}/month")
+    print(f"{arch}: \\$\{cost['total']}/month")
 
 print("\\n💡 Tip: Start with batch, upgrade to real-time only if needed")
 \`\`\`

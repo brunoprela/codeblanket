@@ -904,7 +904,7 @@ result = solve_circular_model(
 print("\\nCircular Model Solution:")
 for key, value in result.items():
     if key != 'iterations':
-        print(f"{key.replace('_', ' ').title()}: \${value:,.0f}")
+        print(f"{key.replace('_', ' ').title()}: \\$\{value:,.0f}")
     else:
         print(f"{key.title()}: {value}")
 \`\`\`

@@ -30,7 +30,7 @@ export const trainTestSplitValidationMultipleChoice = {
       correctAnswer: 1,
       explanation:
         'Stratified splitting maintains the original class distribution (95/5) across train and test sets, ensuring both sets are representative. This prevents scenarios where test set might have 98% negative by random chance.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Splitting Strategies',
     },
     {
@@ -62,7 +62,7 @@ export const trainTestSplitValidationMultipleChoice = {
       correctAnswer: 2,
       explanation:
         'The validation set is used during development for hyperparameter tuning and model selection. The test set remains untouched until final evaluation to provide an unbiased estimate of real-world performance.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Validation',
     },
     {
@@ -78,7 +78,7 @@ export const trainTestSplitValidationMultipleChoice = {
       correctAnswer: 2,
       explanation:
         "The large gap between training (95%) and test (70%) performance indicates overfitting. The model has learned patterns specific to the training data that don't generalize to new data.",
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Diagnosis',
     },
   ],

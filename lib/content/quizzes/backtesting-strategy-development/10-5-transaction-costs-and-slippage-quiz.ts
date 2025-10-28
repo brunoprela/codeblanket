@@ -54,7 +54,7 @@ const transactionCostsAndSlippageQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "The bid-ask spread is an implicit cost because it's not a direct fee charged by any party, but rather the cost of immediacy when crossing from one side of the order book to the other. Explicit costs include broker commissions, SEC fees, and exchange fees, which are directly itemized and charged. Implicit costs also include market impact and slippage, which are often larger than explicit costs for institutional traders.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'tc-slippage-5',

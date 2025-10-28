@@ -157,8 +157,8 @@ class DarkPoolMatcher:
         midpoint = nbbo.midpoint()
         executions = []
         
-        print(f"\\n[{self.name}] Matching at midpoint \${midpoint:.2f}")
-        print(f"  NBBO: \${nbbo.bid:.2f} x \${nbbo.ask:.2f} (spread: {nbbo.spread_bps():.1f} bps)")
+        print(f"\\n[{self.name}] Matching at midpoint \\$\{midpoint:.2f}")
+        print(f"  NBBO: \${nbbo.bid:.2f} x \\$\{nbbo.ask:.2f} (spread: {nbbo.spread_bps():.1f} bps)")
         
         # Simple FIFO matching at midpoint
 while self.buy_orders and self.sell_orders:
@@ -167,12 +167,12 @@ sell_order = self.sell_orders[0]
             
             # Check if orders can trade at midpoint
 if buy_order.max_price and buy_order.max_price < midpoint:
-print(f"  Buy order \${buy_order.max_price:.2f} limit <midpoint \${ midpoint:.2f }, skipping")
+print(f"  Buy order \\$\{buy_order.max_price:.2f} limit <midpoint \${ midpoint:.2f }, skipping")
 self.buy_orders.pop(0)
 continue
 
 if sell_order.min_price and sell_order.min_price > midpoint:
-print(f"  Sell order \${sell_order.min_price:.2f} limit > midpoint \${midpoint:.2f}, skipping")
+print(f"  Sell order \${sell_order.min_price:.2f} limit > midpoint \\$\{midpoint:.2f}, skipping")
 self.sell_orders.pop(0)
 continue
             
@@ -199,9 +199,9 @@ execution = {
 executions.append(execution)
 self.executions.append(execution)
 
-print(f"  ✓ MATCHED: {quantity} shares @ \${midpoint:.2f}")
-print(f"    Buyer saves \${execution['buyer_improvement']:.4f}/share vs ask")
-print(f"    Seller gains \${execution['seller_improvement']:.4f}/share vs bid")
+print(f"  ✓ MATCHED: {quantity} shares @ \\$\{midpoint:.2f}")
+print(f"    Buyer saves \\$\{execution['buyer_improvement']:.4f}/share vs ask")
+print(f"    Seller gains \\$\{execution['seller_improvement']:.4f}/share vs bid")
             
             # Update remaining quantities
 buy_order.quantity -= quantity
@@ -254,9 +254,9 @@ stats = dark_pool.get_statistics()
 print(f"\\nDark Pool Statistics:")
 print(f"  Total executions: {stats['total_executions']}")
 print(f"  Total quantity: {stats['total_quantity']:,} shares")
-print(f"  Avg buyer improvement: \${stats['avg_buyer_improvement']:.4f}/share")
-print(f"  Avg seller improvement: \${stats['avg_seller_improvement']:.4f}/share")
-print(f"  Total value improvement: \${stats['total_value_improvement']:.2f}")
+print(f"  Avg buyer improvement: \\$\{stats['avg_buyer_improvement']:.4f}/share")
+print(f"  Avg seller improvement: \\$\{stats['avg_seller_improvement']:.4f}/share")
+print(f"  Total value improvement: \\$\{stats['total_value_improvement']:.2f}")
 \`\`\`
 
 **Output:**
@@ -568,8 +568,8 @@ class IEXSpeedBump:
         self.current_nbbo = new_nbbo
         
         print(f"\\n[IEX] NBBO Update:")
-        print(f"  Old: \${old_nbbo.bid:.2f} x \${ old_nbbo.ask:.2f } ")
-print(f"  New: \${new_nbbo.bid:.2f} x \${new_nbbo.ask:.2f}")
+        print(f"  Old: \\$\{old_nbbo.bid:.2f} x \${ old_nbbo.ask:.2f } ")
+print(f"  New: \${new_nbbo.bid:.2f} x \\$\{new_nbbo.ask:.2f}")
         
         # Cancel resting orders that are now at stale prices
 canceled_orders = []
@@ -608,7 +608,7 @@ released_orders.append(order)
 
 elapsed_us = (current_time_ns - order.arrival_time_ns) / 1000
 print(f"\\n[IEX] Order {order.order_id} released after {elapsed_us:.0f}μs")
-print(f"  Now resting on book: {order.side.value} {order.quantity} @ \${order.price:.2f}")
+print(f"  Now resting on book: {order.side.value} {order.quantity} @ \\$\{order.price:.2f}")
 
 return released_orders
 

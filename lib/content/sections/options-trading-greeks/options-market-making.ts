@@ -62,7 +62,7 @@ class MarketMaker:
         self.stock_position += shares_to_buy
         
         print(f"Sold {contracts} calls (delta {delta:.2f})")
-        print(f"  Received: \${premium * contracts * 100:,.0f})"
+        print(f"  Received: \\$\{premium * contracts * 100:,.0f})"
 print(f"  Hedged: Buy {shares_to_buy:.0f} shares")
     
     def rehedge(self, new_delta, stock_price):
@@ -77,9 +77,9 @@ current_shares = self.stock_position
 shares_to_trade = target_shares - current_shares
 
 if shares_to_trade > 0:
-    print(f"Buy {shares_to_trade:.0f} shares at \${stock_price}")
+    print(f"Buy {shares_to_trade:.0f} shares at \\$\{stock_price}")
 else:
-print(f"Sell {-shares_to_trade:.0f} shares at \${stock_price}")
+print(f"Sell {-shares_to_trade:.0f} shares at \\$\{stock_price}")
 
 self.stock_position += shares_to_trade
 self.capital -= shares_to_trade * stock_price
@@ -114,7 +114,7 @@ mm.rehedge(new_delta = 0.90, stock_price = 110)
 option_value_now = 11.00  # Call now worth $11(stock $110, strike $100)
 pnl = mm.calculate_pnl(stock_price = 110, option_price = option_value_now)
 
-print(f"\\nFinal P&L: \${pnl:,.0f}")
+print(f"\\nFinal P&L: \\$\{pnl:,.0f}")
 print("Market maker stays delta-neutral, profits from spread + gamma scalping")
 \`\`\`
 
@@ -185,22 +185,22 @@ print("=" * 50)
 # Normal market
 bid, ask, mid = quote_option(theoretical_value=5.00, inventory=0)
 print(f"\\nNormal Market:")
-print(f"  Bid: \${bid:.2f} / Ask: \${ask:.2f} (Mid \${mid:.2f})")
+print(f"  Bid: \${bid:.2f} / Ask: \${ask:.2f} (Mid \\$\{mid:.2f})")
 
 # Long inventory(want to sell)
 bid, ask, mid = quote_option(theoretical_value = 5.00, inventory = 100)
 print(f"\\nLong Inventory (want to sell):")
-print(f"  Bid: \${bid:.2f} / Ask: \${ask:.2f}")
+print(f"  Bid: \${bid:.2f} / Ask: \\$\{ask:.2f}")
 
 # Short inventory(want to buy)
 bid, ask, mid = quote_option(theoretical_value = 5.00, inventory = -100)
 print(f"\\nShort Inventory (want to buy):")
-print(f"  Bid: \${bid:.2f} / Ask: \${ask:.2f}")
+print(f"  Bid: \${bid:.2f} / Ask: \\$\{ask:.2f}")
 
 # Illiquid market
 bid, ask, mid = quote_option(theoretical_value = 5.00, liquidity = 2.0)
 print(f"\\nIlliquid Market (2x spread):")
-print(f"  Bid: \${bid:.2f} / Ask: \${ask:.2f}")
+print(f"  Bid: \${bid:.2f} / Ask: \\$\{ask:.2f}")
 \`\`\`
 
 ---
@@ -518,7 +518,7 @@ for i, (direction, quantity) in enumerate(trades):
     
     print(f"\\nTrade {i+1}: {direction.upper()} {quantity} contracts")
     print(f"  Inventory: {manager.inventory:+d} contracts")
-    print(f"  Quotes: \${bid:.2f} / \${ask:.2f}")
+    print(f"  Quotes: \${bid:.2f} / \\$\{ask:.2f}")
 
 if alert:
     print(f"  {alert}")
@@ -599,9 +599,9 @@ class LatencyArbitrage:
         print(f"\\n{'─' * 70}")
         print(f"VALUE OF SPEED:")
         print(f"  Trades per day: {trades_per_day:,}")
-        print(f"  Avg edge per trade: \${avg_profit_per_trade:.2f}")
-print(f"  Daily profit: \${daily_profit:,.0f}")
-print(f"  Annual profit: \${annual_profit:,.0f}")
+        print(f"  Avg edge per trade: \\$\{avg_profit_per_trade:.2f}")
+print(f"  Daily profit: \\$\{daily_profit:,.0f}")
+print(f"  Annual profit: \\$\{annual_profit:,.0f}")
 print(f"\\n  This is why firms pay millions for co-location!")
 
 
@@ -658,16 +658,16 @@ def analyze_pfof_economics():
     
     print(f"\\nPer Contract Economics:")
     print(f"  Revenue:")
-    print(f"    Spread captured: \${spread_captured:.2f}")
-print(f"    Information value: \${information_value:.2f}")
-print(f"    Total revenue: \${spread_captured + information_value:.2f}")
+    print(f"    Spread captured: \\$\{spread_captured:.2f}")
+print(f"    Information value: \\$\{information_value:.2f}")
+print(f"    Total revenue: \\$\{spread_captured + information_value:.2f}")
 
 print(f"\\n  Costs:")
-print(f"    PFOF paid to broker: \${pfof_paid:.2f}")
-print(f"    Adverse selection risk: \${risk:.2f}")
-print(f"    Total costs: \${pfof_paid + risk:.2f}")
+print(f"    PFOF paid to broker: \\$\{pfof_paid:.2f}")
+print(f"    Adverse selection risk: \\$\{risk:.2f}")
+print(f"    Total costs: \\$\{pfof_paid + risk:.2f}")
 
-print(f"\\n  Net profit: \${profit_per_contract:.2f} per contract")
+print(f"\\n  Net profit: \\$\{profit_per_contract:.2f} per contract")
     
     # Scale
 daily_volume = 100000  # 100K contracts per day
@@ -677,8 +677,8 @@ annual_profit = daily_profit * 252
 print(f"\\n{'─' * 70}")
 print(f"AT SCALE:")
 print(f"  Daily volume: {daily_volume:,} contracts")
-print(f"  Daily profit: \${daily_profit:,.0f}")
-print(f"  Annual profit: \${annual_profit:,.0f}")
+print(f"  Daily profit: \\$\{daily_profit:,.0f}")
+print(f"  Annual profit: \\$\{annual_profit:,.0f}")
 
 print(f"\\n{'─' * 70}")
 print(f"WHY PFOF IS VALUABLE:")
@@ -773,17 +773,17 @@ class MarketMakerPnL:
                                   key=lambda x: x[1], reverse=True):
             pct = (pnl / total_pnl * 100) if total_pnl != 0 else 0
             status = '🟢' if pnl > 0 else '🔴' if pnl < 0 else '⚪'
-            print(f"{source.replace('_', ' ').title():<25} \${pnl:> 11, .0f} { status } { pct:> 10.1f }% ")
+            print(f"{source.replace('_', ' ').title():<25} \\$\{pnl:> 11, .0f} { status } { pct:> 10.1f }% ")
 
 print("─" * 70)
-print(f"{'TOTAL':<25} \${total_pnl:>11,.0f}")
+print(f"{'TOTAL':<25} \\$\{total_pnl:>11,.0f}")
 
 print(f"\\n{'─' * 70}")
 print("INSIGHTS:")
         
         # Identify main profit driver
 max_source = max(self.pnl_sources.items(), key = lambda x: x[1])
-print(f"  Largest contributor: {max_source[0].replace('_', ' ').title()} (\${max_source[1]:,.0f})")
+print(f"  Largest contributor: {max_source[0].replace('_', ' ').title()} (\\$\{max_source[1]:,.0f})")
         
         # Check if losing to adverse selection
 if self.pnl_sources['adverse_selection'] < -1000:

@@ -13,7 +13,6 @@ export const stationarityUnitRootsMultipleChoice = [
     correctAnswer: 1,
     explanation:
       "ADF null hypothesis is 'unit root exists'. For prices: p=0.42 > 0.05 → fail to reject null → prices have unit root (non-stationary). For returns: p=0.0001 < 0.05 → reject null → returns are stationary. This is the EXPECTED pattern: stock prices follow random walk (non-stationary) but returns are stationary. Always model returns, not prices. This is not a contradiction - prices are I(1) and returns are I(0). Common misconception: p-value > 0.05 does NOT mean stationary in ADF (opposite!).",
-    difficulty: 'intermediate',
   },
   {
     id: 2,
@@ -29,7 +28,6 @@ export const stationarityUnitRootsMultipleChoice = [
     correctAnswer: 2,
     explanation:
       'Perfect pairs trading setup! Both stocks are I(1): non-stationary in levels (p>0.05) but stationary in first differences (p<0.05). The cointegration test p=0.03 < 0.05 means their linear combination IS stationary despite both being non-stationary individually. This is the DEFINITION of cointegration. Common error: thinking you need to difference first - NO! Cointegration REQUIRES non-stationary series. If you difference first, you destroy the cointegrating relationship. The mean-reverting spread (B - β*A) is your trading signal. Key insight: I(1) + I(1) normally = I(2), but if cointegrated, their combination is I(0). This special property is what makes pairs trading profitable.',
-    difficulty: 'advanced',
   },
   {
     id: 3,
@@ -45,7 +43,6 @@ export const stationarityUnitRootsMultipleChoice = [
     correctAnswer: 1,
     explanation:
       "Conflicting ADF/KPSS results (ADF says stationary, KPSS says non-stationary) typically indicate STRUCTURAL BREAK. ADF tests for unit root assuming constant parameters. KPSS tests for constant mean. If there's a regime change (mean shifts from μ₁ to μ₂), ADF might not detect the unit root, but KPSS will reject constant mean. Example: Returns were volatile 2019-2020 (low mean), then stable 2021-2022 (high mean). Each regime is stationary, but KPSS sees overall non-stationarity. Solution: (1) Test each regime separately, (2) Use regime-switching model, (3) Run Chow test for breaks. NOT a data error - this is informative! Don't discard data, investigate the regime change. This is common in financial data during crisis periods.",
-    difficulty: 'advanced',
   },
   {
     id: 4,
@@ -61,7 +58,6 @@ export const stationarityUnitRootsMultipleChoice = [
     correctAnswer: 1,
     explanation:
       "OVER-DIFFERENCING is a serious error! If a series is I(1) (stationary after 1st difference), differencing again creates I(0) - I(0) = I(-1), which introduces ARTIFICIAL negative autocorrelation. Example: Let X_t be stationary (mean-reverting). Then ΔX_t = X_t - X_{t-1} has negative autocorrelation: if X_t was above mean, X_{t-1} likely below mean (mean reversion), so difference is positive followed by negative. This looks like a pattern but it's an artifact! Over-differenced series: (1) Has negative ACF at lag 1, (2) Worse forecast performance (added noise), (3) Harder to interpret economically. Rule: Difference minimally. If ADF confirms stationary after 1 difference, STOP. Most financial series are I(1) - prices need 1 difference, returns need 0. Second differencing is rarely needed (only for I(2) series like inflation of inflation).",
-    difficulty: 'intermediate',
   },
   {
     id: 5,
@@ -77,6 +73,5 @@ export const stationarityUnitRootsMultipleChoice = [
     correctAnswer: 1,
     explanation:
       "Return model is FAR superior despite lower R²! The price model's performance is SPURIOUS: (1) High in-sample R² (0.95) comes from autocorrelation in non-stationary prices (trend), not real predictive power. Random walk achieves R² > 0.90 with naive forecast! (2) Massive degradation (0.95 → 0.10) indicates overfitting to in-sample trend. (3) Out-of-sample R²=0.10 is barely better than random walk. Return model characteristics: (1) Low but HONEST in-sample R² (0.08) reflects true difficulty of predicting returns. (2) Minimal degradation (0.08 → 0.06) shows stable, generalizable patterns. (3) Model hasn't overfit to spurious trends. Reality check: Financial returns are HARD to predict - R²=0.06 that's consistent is more valuable than R²=0.95 that's spurious. For trading: 53% direction accuracy (from R²=0.06) can be profitable if consistent. Focus on out-of-sample Sharpe ratio and economic significance, not in-sample R².",
-    difficulty: 'advanced',
   },
 ];

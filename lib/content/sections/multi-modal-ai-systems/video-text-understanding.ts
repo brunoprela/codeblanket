@@ -947,7 +947,7 @@ def estimate_video_analysis_cost(
 
 # Example: 2-minute video
 cost = estimate_video_analysis_cost(120, num_frames=16, detail_level="low")
-print(f"Estimated cost: \${cost:.4f}")
+print(f"Estimated cost: \\$\{cost:.4f}")
 \`\`\`
 
 ### 3. Error Handling

@@ -112,14 +112,14 @@ def play_game():
 
 # Simulate
 results = [play_game() for _ in range(100000)]
-print(f"Expected value: \${sum (results)/len (results):.4f}")
+print(f"Expected value: \\$\{sum (results)/len (results):.4f}")
 print(f"Theoretical: $2.00")
 
 # Distribution
 from collections import Counter
 dist = Counter (results)
 for value in sorted (dist.keys())[:10]:
-    print(f"\${value}: {dist[value]/1000:.1f}%")
+    print(f"\\$\{value}: {dist[value]/1000:.1f}%")
 \`\`\`
 
 **Expected Output:**

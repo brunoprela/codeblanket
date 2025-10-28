@@ -558,7 +558,7 @@ valuation = analysis.apply_to_target(
 
 print("\\n\\nTarget Company Implied Valuation ($ millions):")
 for method, value in valuation.items():
-    print(f"  {method:.<45} \${value:> 10,.0f}")
+    print(f"  {method:.<45} \\$\{value:> 10,.0f}")
 \`\`\`
 
 ---

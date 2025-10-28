@@ -635,8 +635,8 @@ exec_analysis = analyzer.analyze_execution(
 )
 
 print(f"Execution Performance:")
-print(f"  Execution VWAP: \${exec_analysis['execution_vwap']:.4f}")
-print(f"  Market VWAP: \${exec_analysis['market_vwap']:.4f}")
+print(f"  Execution VWAP: \\$\{exec_analysis['execution_vwap']:.4f}")
+print(f"  Market VWAP: \\$\{exec_analysis['market_vwap']:.4f}")
 print(f"  Shortfall: {exec_analysis['shortfall_bps']:.2f} bps")
 print(f"  Participation Rate: {exec_analysis['participation_rate']:.2f}%")
 print(f"  {exec_analysis['performance']} vs benchmark")

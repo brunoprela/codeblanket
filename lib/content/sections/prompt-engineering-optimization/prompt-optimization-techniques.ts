@@ -884,7 +884,7 @@ print("Cost/Quality Analysis:")
 for v in result['variants']:
     print(f"\\n{v['name']}:")
 print(f"  Quality: {v['quality']:.3f}")
-print(f"  Cost: \${v['cost']:.4f}")
+print(f"  Cost: \\$\{v['cost']:.4f}")
 print(f"  Efficiency: {v['efficiency']:.1f}")
 
 print(f"\\n{result['recommendation']}")

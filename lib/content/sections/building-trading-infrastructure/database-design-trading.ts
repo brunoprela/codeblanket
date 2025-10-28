@@ -709,20 +709,20 @@ def redis_example():
     # Get position
     print("\\nGetting AAPL position...")
     position = tracker.get_position('ACC-001', 'AAPL')
-    print(f"  Quantity: {position['quantity']}, Avg Cost: \${position['avg_cost']}")
+    print(f"  Quantity: {position['quantity']}, Avg Cost: \\$\{position['avg_cost']}")
     
     # Update P&L
     print("\\nUpdating unrealized P&L...")
     tracker.update_unrealized_pnl('ACC-001', 'AAPL', Decimal('152.00'))
     
     position = tracker.get_position('ACC-001', 'AAPL')
-    print(f"  Unrealized P&L: \${position['unrealized_pnl']}")
+    print(f"  Unrealized P&L: \\$\{position['unrealized_pnl']}")
     
     # Get all positions
     print("\\nAll positions for ACC-001:")
     positions = tracker.get_all_positions('ACC-001')
     for pos in positions:
-        print(f"  {pos['symbol']}: {pos['quantity']} @ \${pos['avg_cost']}")
+        print(f"  {pos['symbol']}: {pos['quantity']} @ \\$\{pos['avg_cost']}")
 
 # redis_example()
 \`\`\`

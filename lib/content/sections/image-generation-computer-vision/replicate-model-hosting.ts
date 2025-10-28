@@ -483,14 +483,14 @@ tracker = CostTracker()
 
 # Estimate before generating
 estimate = tracker.estimate_cost("sdxl", num_images = 100, resolution = "1024x1024")
-print(f"Estimated cost: \${estimate['total']:.2f}")
+print(f"Estimated cost: \\$\{estimate['total']:.2f}")
 
 # Log generation
 tracker.log_generation("sdxl", { "prompt": "..." }, estimated_cost = 0.01)
 
 # Get report
 report = tracker.cost_report()
-print(f"Total cost: \${report['total_cost']:.2f}")
+print(f"Total cost: \\$\{report['total_cost']:.2f}")
 \`\`\`
 
 ## Alternative Platforms

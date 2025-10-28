@@ -13,7 +13,7 @@ export const historicalDataManagementQuiz = [
     correctAnswer: 1,
     explanation:
       "Historical prices should be adjusted BACKWARDS to maintain consistent price scale. A 2-for-1 split doubles shares and halves price. To keep charts meaningful, divide all pre-split prices by 2. So $400 becomes $200 (split-adjusted). This ensures: 1) Charts don't show artificial 50% drops, 2) Returns calculations are accurate, 3) Indicators work correctly. **Without adjustment**: Chart shows crash from $400 to $200. **With adjustment**: Chart shows smooth continuity. Volume should also be multiplied by 2 for pre-split dates. This is why financial websites show 'adjusted close' - it includes all splits and dividends.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 2,

@@ -191,8 +191,8 @@ for venue in venues:
     print(f"{venue.name} ({venue.ticker}):")
     print(f"  Market Share: {venue.market_share*100:.1f}%")
     print(f"  Fee Model: {venue.fee_model}")
-    print(f"  Maker Rebate: \${venue.maker_rebate:.2f}/100 shares")
-    print(f"  Taker Fee: \${venue.taker_fee:.2f}/100 shares")
+    print(f"  Maker Rebate: \\$\{venue.maker_rebate:.2f}/100 shares")
+    print(f"  Taker Fee: \\$\{venue.taker_fee:.2f}/100 shares")
     if chars:
         print(f"  Advantage: {chars['advantage']}")
         print(f"  Best For: {chars['best_for']}")
@@ -207,9 +207,9 @@ cost = nyse.calculate_trading_cost(
 )
 
 print("Trading Cost Example (10K shares @ $50 on NYSE):")
-print(f"  Notional: \${cost['notional']:,.0f}")
+print(f"  Notional: \\$\{cost['notional']:,.0f}")
 print(f"  Role: {cost['role']}")
-print(f"  Exchange Fee: \${cost['exchange_fee']:.2f}")
+print(f"  Exchange Fee: \\$\{cost['exchange_fee']:.2f}")
 print(f"  Cost in bps: {cost['fee_in_bps']:.2f} bps")
 \`\`\`
 
@@ -341,9 +341,9 @@ improvement = dp.calculate_price_improvement(
 )
 
 print("\\nPrice Improvement Example (Buying 1000 shares):")
-print(f"  Lit Market Ask: \${improvement['lit_market_price']:.2f}")
-print(f"  Dark Pool Price: \${improvement['dark_pool_price']:.2f}")
-print(f"  Savings per Share: \${improvement['price_improvement']:.2f}")
+print(f"  Lit Market Ask: \\$\{improvement['lit_market_price']:.2f}")
+print(f"  Dark Pool Price: \\$\{improvement['dark_pool_price']:.2f}")
+print(f"  Savings per Share: \\$\{improvement['price_improvement']:.2f}")
 print(f"  Improvement: {improvement['improvement_bps']:.1f} bps")
 print(f"  Captured: {improvement['pct_of_spread_captured']:.0f}% of spread")
 \`\`\`
@@ -476,12 +476,12 @@ print("Routing Plan:")
 
 total_cost = 0
 for i, route in enumerate (routing_plan, 1):
-    print(f"{i}. {route['venue']}: {route['size']:,} shares @ \${route['price']:.4f}")
+    print(f"{i}. {route['venue']}: {route['size']:,} shares @ \\$\{route['price']:.4f}")
     total_cost += route['cost']
 
 avg_price = total_cost / order_size
-print(f"\\nTotal Cost: \${total_cost:,.2f}")
-print(f"Average Price: \${avg_price:.4f}")
+print(f"\\nTotal Cost: \\$\{total_cost:,.2f}")
+print(f"Average Price: \\$\{avg_price:.4f}")
 \`\`\`
 
 **Key Insight**: SOR can save 0.1-0.5% per trade by optimizing venue selection!
@@ -643,14 +643,14 @@ print("\\n\\n=== Multi-Venue Trading System ===\\n")
 
 # Get NBBO
 nbbo = system.aggregate_market_data('AAPL')
-print(f"NBBO Bid: \${nbbo['nbbo_bid']:.2f} on {', '.join (nbbo['nbbo_bid_venues'])}")
-print(f"NBBO Ask: \${nbbo['nbbo_ask']:.2f} on {', '.join (nbbo['nbbo_ask_venues'])}")
+print(f"NBBO Bid: \\$\{nbbo['nbbo_bid']:.2f} on {', '.join (nbbo['nbbo_bid_venues'])}")
+print(f"NBBO Ask: \\$\{nbbo['nbbo_ask']:.2f} on {', '.join (nbbo['nbbo_ask_venues'])}")
 
 # Execute
 execution = system.execute_with_routing('AAPL', 'BUY', 1000)
 print(f"\\nExecution:")
 print(f"  {execution['side']} {execution['size']} {execution['symbol']}")
-print(f"  @ \${execution['price']:.2f}")
+print(f"  @ \\$\{execution['price']:.2f}")
 print(f"  on {', '.join (execution['venues'])}")
 print(f"  Status: {execution['status']}")
 \`\`\`

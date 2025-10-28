@@ -112,7 +112,7 @@ print(hist.head())
 # Get info
 info = ticker.info
 print(f"\\n{info['longName']}")
-print(f"Market Cap: \${info['marketCap']:,.0f}")
+print(f"Market Cap: \\$\{info['marketCap']:,.0f}")
 print(f"P/E Ratio: {info.get('trailingPE', 'N/A')}")
 print(f"Dividend Yield: {info.get('dividendYield', 0)*100:.2f}%")
 
@@ -175,7 +175,7 @@ def get_stock_data (symbol: str):
 df = get_stock_data('AAPL')
 if df is not None:
     print(df.tail())
-    print(f"\\nLatest close: \${df['close'].iloc[-1]:.2f}")
+    print(f"\\nLatest close: \\$\{df['close'].iloc[-1]:.2f}")
 \`\`\`
 
 **Other endpoints**:
@@ -205,7 +205,7 @@ print(f"Latest unemployment: {unemployment.iloc[-1]:.1f}%")
 
 # Get GDP
 gdp = fred.get_series('GDP')  # Quarterly GDP (billions)
-print(f"Latest GDP: \${gdp.iloc[-1]:.1f}B")
+print(f"Latest GDP: \\$\{gdp.iloc[-1]:.1f}B")
 
 # Get Federal Funds Rate (interest rate)
 fed_funds = fred.get_series('DFF')  # Daily Fed Funds Rate
@@ -406,11 +406,11 @@ SECRET_KEY = "your_alpaca_secret"
 
 async def on_trade (trade):
     """Handle trade updates"""
-    print(f"{trade.symbol}: \${trade.price:.2f} ({ trade.size } shares) ")
+    print(f"{trade.symbol}: \\$\{trade.price:.2f} ({ trade.size } shares) ")
 
 async def on_quote (quote):
 """Handle quote updates"""
-print(f"{quote.symbol}: \${quote.bid_price:.2f} / \${quote.ask_price:.2f}")
+print(f"{quote.symbol}: \${quote.bid_price:.2f} / \\$\{quote.ask_price:.2f}")
 
 async def stream_data():
 """Stream real-time data"""

@@ -562,7 +562,7 @@ cost = estimate_cost (prompt_tokens, completion_tokens)
 
 print(f"Prompt: {prompt_tokens} tokens")
 print(f"Completion: {completion_tokens} tokens")
-print(f"Cost: \${cost:.6f}")
+print(f"Cost: \\$\{cost:.6f}")
 \`\`\`
 
 ### Using OpenAI API
@@ -755,7 +755,7 @@ def calculate_monthly_cost (requests_per_day: int, avg_input_tokens: int, avg_ou
 print("Chat app (10k req/day, 1k in, 200 out):")
 for model in ["Claude 3 Haiku", "GPT-3.5 Turbo", "Claude 3.5 Sonnet"]:
     cost = calculate_monthly_cost(10_000, 1_000, 200, model)
-    print(f"  {model}: \${cost:.2f}/month")
+    print(f"  {model}: \\$\{cost:.2f}/month")
 
 # Output:
 # Claude 3 Haiku: $165 / month (best value for simple chat)

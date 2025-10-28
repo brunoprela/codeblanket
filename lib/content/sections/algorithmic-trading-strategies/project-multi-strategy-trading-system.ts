@@ -1,9 +1,9 @@
 export const projectMultiStrategyTradingSystem = {
-  title: 'Project: Multi-Strategy Trading System',
-  slug: 'project-multi-strategy-trading-system',
-  description:
-    'Build a complete production-ready multi-strategy trading system with backtesting, execution, and monitoring',
-  content: `
+    title: 'Project: Multi-Strategy Trading System',
+    slug: 'project-multi-strategy-trading-system',
+    description:
+        'Build a complete production-ready multi-strategy trading system with backtesting, execution, and monitoring',
+    content: `
 # Project: Multi-Strategy Trading System
 
 ## Introduction: Building Production-Grade Infrastructure
@@ -1137,8 +1137,8 @@ services:
     environment:
       DATABASE_URL: postgresql://trader:secure_password@postgres:5432/trading
       REDIS_URL: redis://redis:6379
-      ALPACA_API_KEY: ${ALPACA_API_KEY}
-      ALPACA_API_SECRET: ${ALPACA_API_SECRET}
+      ALPACA_API_KEY: \${ALPACA_API_KEY}
+      ALPACA_API_SECRET: \${ALPACA_API_SECRET}
     depends_on:
       - postgres
       - redis

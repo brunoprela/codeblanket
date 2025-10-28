@@ -676,15 +676,15 @@ results = sizer.backtest (spy['Close'], returns)
 
 print("=== GARCH Position Sizing Results ===")
 print(f"\\nPosition Statistics:")
-print(f"Average position: \${results['position_size'].mean():,.0f}")
-print(f"Min position: \${results['position_size'].min():,.0f}")
-print(f"Max position: \${results['position_size'].max():,.0f}")
+print(f"Average position: \\$\{results['position_size'].mean():,.0f}")
+print(f"Min position: \\$\{results['position_size'].min():,.0f}")
+print(f"Max position: \\$\{results['position_size'].max():,.0f}")
 
 print(f"\\nPerformance:")
 total_pnl = results['pnl'].sum()
 sharpe = results['pnl'].mean() / results['pnl'].std() * np.sqrt(252)
 
-print(f"Total P&L: \${total_pnl:,.2f}")
+print(f"Total P&L: \\$\{total_pnl:,.2f}")
 print(f"Sharpe Ratio: {sharpe:.2f}")
 
 # Plot results

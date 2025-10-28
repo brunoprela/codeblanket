@@ -104,9 +104,9 @@ total_cost = sum (position['shares'] * position['cost_basis']
 
 print("\\n=== Stock Portfolio ===")
 print(df.to_string (index = False))
-print(f"\\nTotal Cost: \${total_cost:,.2f}")
-print(f"Total Value: \${total_value:,.2f}")
-print(f"Total Gain/Loss: \${total_gain:,.2f} ({(total_gain/total_cost)*100:+.2f}%)")
+print(f"\\nTotal Cost: \\$\{total_cost:,.2f}")
+print(f"Total Value: \\$\{total_value:,.2f}")
+print(f"Total Gain/Loss: \\$\{total_gain:,.2f} ({(total_gain/total_cost)*100:+.2f}%)")
 
 return df
 
@@ -192,8 +192,8 @@ class MutualFund:
         self.cash += amount
         self.shares_outstanding += shares_purchased
         
-        print(f"{investor} purchased {shares_purchased:.2f} shares at \${nav:.2f} NAV")
-print(f"  Investment: \${amount:.2f}")
+        print(f"{investor} purchased {shares_purchased:.2f} shares at \\$\{nav:.2f} NAV")
+print(f"  Investment: \\$\{amount:.2f}")
 
 return shares_purchased
     
@@ -209,8 +209,8 @@ print(f"  Warning: Selling holdings to meet redemption")
 self.cash -= redemption_amount
 self.shares_outstanding -= shares
 
-print(f"{investor} redeemed {shares:.2f} shares at \${nav:.2f} NAV")
-print(f"  Proceeds: \${redemption_amount:.2f}")
+print(f"{investor} redeemed {shares:.2f} shares at \\$\{nav:.2f} NAV")
+print(f"  Proceeds: \\$\{redemption_amount:.2f}")
 
 return redemption_amount
 
@@ -232,14 +232,14 @@ fund.cash = 100_000  # Remaining cash after buying stocks
 
 # Calculate NAV
 nav = fund.calculate_nav()
-print(f"\\nCurrent NAV: \${nav:.2f}")
+print(f"\\nCurrent NAV: \\$\{nav:.2f}")
 
 # Investor buys into fund
 fund.purchase_shares("Alice", 50_000)
 
 # New NAV after purchase
 nav = fund.calculate_nav()
-print(f"\\nUpdated NAV: \${nav:.2f}")
+print(f"\\nUpdated NAV: \\$\{nav:.2f}")
 \`\`\`
 
 **Pros**:
@@ -319,9 +319,9 @@ class ETF:
         
         print(f"\\n=== ETF Creation ===")
         print(f"AP: {authorized_participant}")
-        print(f"Delivers stock basket worth: \${basket_value:,.0f}")
+        print(f"Delivers stock basket worth: \\$\{basket_value:,.0f}")
 print(f"Receives ETF shares: {shares_created:,}")
-print(f"NAV per share: \${nav:.2f}")
+print(f"NAV per share: \\$\{nav:.2f}")
 
 self.shares_outstanding += shares_created
 
@@ -339,8 +339,8 @@ basket_value = shares * nav
 print(f"\\n=== ETF Redemption ===")
 print(f"AP: {authorized_participant}")
 print(f"Delivers ETF shares: {shares:,}")
-print(f"Receives stock basket worth: \${basket_value:,.0f}")
-print(f"NAV per share: \${nav:.2f}")
+print(f"Receives stock basket worth: \\$\{basket_value:,.0f}")
+print(f"NAV per share: \\$\{nav:.2f}")
 
 self.shares_outstanding -= shares
 
@@ -360,9 +360,9 @@ diff = market_price - nav
 diff_pct = (diff / nav) * 100
 
 print(f"\\n=== Arbitrage Check ===")
-print(f"NAV: \${nav:.2f}")
-print(f"Market Price: \${market_price:.2f}")
-print(f"Difference: \${diff:.4f} ({diff_pct:+.3f}%)")
+print(f"NAV: \\$\{nav:.2f}")
+print(f"Market Price: \\$\{market_price:.2f}")
+print(f"Difference: \\$\{diff:.4f} ({diff_pct:+.3f}%)")
 
 if diff_pct > 0.1:  # Premium > 0.1 %
     print("→ PREMIUM: AP should CREATE shares (sell ETF, profit)")
@@ -384,7 +384,7 @@ spy = ETF("SPDR S&P 500 ETF", "SPY", [
 
 # Check NAV
 nav = spy.calculate_nav()
-print(f"SPY NAV: \${nav:.2f}")
+print(f"SPY NAV: \\$\{nav:.2f}")
 
 # Authorized Participant creates shares (when ETF at premium)
 spy.create_shares("Goldman Sachs", 10_000_000)
@@ -486,8 +486,8 @@ class TargetDateFund:
         print(f"\\n=== Target-Date Fund {self.target_year} ===")
         print(f"Years to Retirement: {allocation['years_to_retirement']}")
         print(f"\\nTarget Allocation:")
-        print(f"  Stocks: {allocation['stocks']:.0%} (\${target_stocks:,.0f}) ")
-print(f"  Bonds: {allocation['bonds']:.0%} (\${target_bonds:,.0f})")
+        print(f"  Stocks: {allocation['stocks']:.0%} (\\$\{target_stocks:,.0f}) ")
+print(f"  Bonds: {allocation['bonds']:.0%} (\\$\{target_bonds:,.0f})")
 
 return allocation
 

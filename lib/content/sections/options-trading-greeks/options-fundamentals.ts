@@ -290,14 +290,14 @@ if __name__ == "__main__":
     
     print(f"\\nOption: {long_call.quantity} × {long_call.option_type.upper()} "
           f"@ Strike \${long_call.strike}, Premium \${long_call.premium}")
-    print(f"Breakeven: \${calculate_breakeven(long_call):.2f}")
+    print(f"Breakeven: \\$\{calculate_breakeven(long_call):.2f}")
     print("\\nStock Price | Payoff | P&L")
     print("-" * 40)
     
     for price in test_prices:
         payoff = call_payoff(price, long_call.strike)
         pnl = option_profit_loss(long_call, price)
-        print(f"\${price:6.2f}  | \${payoff:6.2f} | \${pnl:7.2f}")
+        print(f"\${price:6.2f}  | \${payoff:6.2f} | \\$\{pnl:7.2f}")
     
     # Example 2: Long Put
     print("\\n### Example 2: Long Put ###")
@@ -310,14 +310,14 @@ if __name__ == "__main__":
     
     print(f"\\nOption: {long_put.quantity} × {long_put.option_type.upper()} "
           f"@ Strike \${long_put.strike}, Premium \${long_put.premium}")
-    print(f"Breakeven: \${calculate_breakeven(long_put):.2f}")
+    print(f"Breakeven: \\$\{calculate_breakeven(long_put):.2f}")
     print("\\nStock Price | Payoff | P&L")
     print("-" * 40)
     
     for price in test_prices:
         payoff = put_payoff(price, long_put.strike)
         pnl = option_profit_loss(long_put, price)
-        print(f"\${price:6.2f}  | \${payoff:6.2f} | \${pnl:7.2f}")
+        print(f"\${price:6.2f}  | \${payoff:6.2f} | \\$\{pnl:7.2f}")
     
     # Example 3: Short Call (negative quantity)
     print("\\n### Example 3: Short Call ###")
@@ -330,14 +330,14 @@ if __name__ == "__main__":
     
     print(f"\\nOption: {short_call.quantity} × {short_call.option_type.upper()} "
           f"@ Strike \${short_call.strike}, Premium \${short_call.premium}")
-    print(f"Breakeven: \${calculate_breakeven(short_call):.2f}")
+    print(f"Breakeven: \\$\{calculate_breakeven(short_call):.2f}")
     print("\\nStock Price | Payoff | P&L")
     print("-" * 40)
     
     for price in test_prices:
         payoff = call_payoff(price, short_call.strike)
         pnl = option_profit_loss(short_call, price)
-        print(f"\${price:6.2f}  | \${payoff:6.2f} | \${pnl:7.2f}")
+        print(f"\${price:6.2f}  | \${payoff:6.2f} | \\$\{pnl:7.2f}")
 \`\`\`
 
 **Output:**
@@ -663,7 +663,7 @@ if __name__ == "__main__":
     stock_price = 100
     
     print("=" * 70)
-    print(f"OPTION MONEYNESS ANALYSIS (Stock Price: \${stock_price})")
+    print(f"OPTION MONEYNESS ANALYSIS (Stock Price: \\$\{stock_price})")
     print("=" * 70)
     
     # Test different strikes
@@ -680,7 +680,7 @@ if __name__ == "__main__":
         )
         moneyness = classify_moneyness(stock_price, strike, 'call')
         
-        print(f"\${strike:<7.0f} \${price:<7.2f} \${intrinsic:<11.2f} \${time_val:<11.2f} {moneyness.value}")
+        print(f"\${strike:<7.0f} \${price:<7.2f} \${intrinsic:<11.2f} \\$\{time_val:<11.2f} {moneyness.value}")
 \`\`\`
 
 **Output:**
@@ -898,7 +898,7 @@ spy_calls = {
 }
 
 print("SPY OPTIONS (30 days to expiration)")
-print(f"Underlying: \${spy_price}")
+print(f"Underlying: \\$\{spy_price}")
 print("\\nStrike | Mid Price | Intrinsic | Time Value | Moneyness")
 print("-" * 70)
 
@@ -909,7 +909,7 @@ for strike, data in spy_calls.items():
     )
     moneyness = classify_moneyness(spy_price, strike, 'call')
     
-    print(f"\${strike:<4} | \${mid_price:>7.2f} | \${intrinsic:>9.2f} | \${time_val:>10.2f} | {moneyness.value}")
+    print(f"\${strike:<4} | \${mid_price:>7.2f} | \${intrinsic:>9.2f} | \\$\{time_val:>10.2f} | {moneyness.value}")
 \`\`\`
 
 **Key Insights:**

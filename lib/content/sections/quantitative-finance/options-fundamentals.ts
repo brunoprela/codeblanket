@@ -150,17 +150,17 @@ plt.show()
 
 # Calculate key metrics
 print("=== CALL OPTION ANALYSIS ===")
-print(f"\\nCurrent Stock Price: \${current_price}")
-print(f"Strike Price: \${strike}")
-print(f"Premium: \${premium}")
+print(f"\\nCurrent Stock Price: \\$\{current_price}")
+print(f"Strike Price: \\$\{strike}")
+print(f"Premium: \\$\{premium}")
 print(f"\\nLong Call:")
-print(f"  Max Loss: \${premium} (at any price ≤ \${strike})")
+print(f"  Max Loss: \${premium} (at any price ≤ \\$\{strike})")
 print(f"  Max Gain: Unlimited (as stock rises)")
-print(f"  Breakeven: \${strike + premium}")
+print(f"  Breakeven: \\$\{strike + premium}")
 print(f"\\nShort Call:")
-print(f"  Max Gain: \${premium} (at any price ≤ \${strike})")
+print(f"  Max Gain: \${premium} (at any price ≤ \\$\{strike})")
 print(f"  Max Loss: Unlimited (as stock rises)")
-print(f"  Breakeven: \${strike + premium}")
+print(f"  Breakeven: \\$\{strike + premium}")
 \`\`\`
 
 **Key insights**:
@@ -252,17 +252,17 @@ plt.tight_layout()
 plt.show()
 
 print("\\n=== PUT OPTION ANALYSIS ===")
-print(f"\\nCurrent Stock Price: \${current_price}")
-print(f"Strike Price: \${strike}")
-print(f"Premium: \${premium}")
+print(f"\\nCurrent Stock Price: \\$\{current_price}")
+print(f"Strike Price: \\$\{strike}")
+print(f"Premium: \\$\{premium}")
 print(f"\\nLong Put:")
-print(f"  Max Loss: \${premium} (at any price ≥ \${strike})")
-print(f"  Max Gain: \${strike - premium} (if stock goes to $0)")
-print(f"  Breakeven: \${strike - premium}")
+print(f"  Max Loss: \${premium} (at any price ≥ \\$\{strike})")
+print(f"  Max Gain: \\$\{strike - premium} (if stock goes to $0)")
+print(f"  Breakeven: \\$\{strike - premium}")
 print(f"\\nShort Put:")
-print(f"  Max Gain: \${premium} (at any price ≥ \${strike})")
-print(f"  Max Loss: \${strike - premium} (if stock goes to $0)")
-print(f"  Breakeven: \${strike - premium}")
+print(f"  Max Gain: \${premium} (at any price ≥ \\$\{strike})")
+print(f"  Max Loss: \\$\{strike - premium} (if stock goes to $0)")
+print(f"  Breakeven: \\$\{strike - premium}")
 \`\`\`
 
 **Key insights**:
@@ -353,7 +353,7 @@ call_chain = [
 ]
 
 print("=== CALL OPTIONS ANALYSIS ===")
-print(f"Spot Price: \${spot_price}\\n")
+print(f"Spot Price: \\$\{spot_price}\\n")
 
 results = []
 for opt in call_chain:
@@ -361,10 +361,10 @@ for opt in call_chain:
     analysis = option.analyze_value (opt['premium'])
     results.append (analysis)
     
-    print(f"Strike \${analysis['strike']}: {analysis['moneyness']}")
-    print(f"  Market Premium: \${analysis['market_premium']:.2f}")
-    print(f"  Intrinsic Value: \${analysis['intrinsic_value']:.2f}")
-    print(f"  Time Value: \${analysis['time_value']:.2f} ({analysis['pct_time_value']:.1f}%)")
+    print(f"Strike \\$\{analysis['strike']}: {analysis['moneyness']}")
+    print(f"  Market Premium: \\$\{analysis['market_premium']:.2f}")
+    print(f"  Intrinsic Value: \\$\{analysis['intrinsic_value']:.2f}")
+    print(f"  Time Value: \\$\{analysis['time_value']:.2f} ({analysis['pct_time_value']:.1f}%)")
     print()
 
 # Visualize value components
@@ -503,8 +503,8 @@ print("Example 1: Call option on dividend-paying stock")
 print("  Stock: $100, Strike: $90, Time Value: $2, Dividend: $3\\n")
 
 analysis1 = should_exercise_early('call', spot=100, strike=90, time_value=2, dividend=3)
-print(f"  Intrinsic Value: \${analysis1['intrinsic_value']:.2f}")
-print(f"  Time Value: \${analysis1['time_value']:.2f}")
+print(f"  Intrinsic Value: \\$\{analysis1['intrinsic_value']:.2f}")
+print(f"  Time Value: \\$\{analysis1['time_value']:.2f}")
 print(f"  Reason: {analysis1['reason']}")
 print(f"  Recommendation: {analysis1['recommendation']}\\n")
 
@@ -513,8 +513,8 @@ print("Example 2: Deep ITM put option")
 print("  Stock: $50, Strike: $70, Time Value: $1\\n")
 
 analysis2 = should_exercise_early('put', spot=50, strike=70, time_value=1)
-print(f"  Intrinsic Value: \${analysis2['intrinsic_value']:.2f}")
-print(f"  Time Value: \${analysis2['time_value']:.2f}")
+print(f"  Intrinsic Value: \\$\{analysis2['intrinsic_value']:.2f}")
+print(f"  Time Value: \\$\{analysis2['time_value']:.2f}")
 print(f"  Reason: {analysis2['reason']}")
 print(f"  Recommendation: {analysis2['recommendation']}")
 \`\`\`
@@ -573,12 +573,12 @@ plt.grid (alpha=0.3)
 plt.show()
 
 print("=== COVERED CALL ANALYSIS ===")
-print(f"Stock Purchase: \${stock_cost}")
-print(f"Call Strike: \${call_strike}")
-print(f"Premium Received: \${call_premium}")
-print(f"\\nMax Profit: \${(call_strike - stock_cost) + call_premium} (at \${call_strike} or higher)")
-print(f"Max Loss: \${stock_cost - call_premium} (if stock goes to $0)")
-print(f"Breakeven: \${stock_cost - call_premium}")
+print(f"Stock Purchase: \\$\{stock_cost}")
+print(f"Call Strike: \\$\{call_strike}")
+print(f"Premium Received: \\$\{call_premium}")
+print(f"\\nMax Profit: \${(call_strike - stock_cost) + call_premium} (at \\$\{call_strike} or higher)")
+print(f"Max Loss: \\$\{stock_cost - call_premium} (if stock goes to $0)")
+print(f"Breakeven: \\$\{stock_cost - call_premium}")
 \`\`\`
 
 ### 2. Protective Put (Married Put)
@@ -629,12 +629,12 @@ plt.grid (alpha=0.3)
 plt.show()
 
 print("\\n=== PROTECTIVE PUT ANALYSIS ===")
-print(f"Stock Purchase: \${stock_cost}")
-print(f"Put Strike: \${put_strike}")
-print(f"Premium Paid: \${put_premium}")
-print(f"\\nMax Loss: \${(stock_cost - put_strike) + put_premium} (protected below \${put_strike})")
+print(f"Stock Purchase: \\$\{stock_cost}")
+print(f"Put Strike: \\$\{put_strike}")
+print(f"Premium Paid: \\$\{put_premium}")
+print(f"\\nMax Loss: \${(stock_cost - put_strike) + put_premium} (protected below \\$\{put_strike})")
 print(f"Max Gain: Unlimited (minus premium)")
-print(f"Breakeven: \${stock_cost + put_premium}")
+print(f"Breakeven: \\$\{stock_cost + put_premium}")
 \`\`\`
 
 ### 3. Bull Call Spread
@@ -694,12 +694,12 @@ max_loss = net_debit
 breakeven = long_strike + net_debit
 
 print("\\n=== BULL CALL SPREAD ANALYSIS ===")
-print(f"Long Call: \${long_strike} strike, \${long_premium} premium")
-print(f"Short Call: \${short_strike} strike, \${short_premium} premium")
-print(f"\\nNet Debit: \${net_debit}")
-print(f"Max Profit: \${max_profit} (at \${short_strike} or higher)")
-print(f"Max Loss: \${max_loss} (at \${long_strike} or lower)")
-print(f"Breakeven: \${breakeven}")
+print(f"Long Call: \${long_strike} strike, \\$\{long_premium} premium")
+print(f"Short Call: \${short_strike} strike, \\$\{short_premium} premium")
+print(f"\\nNet Debit: \\$\{net_debit}")
+print(f"Max Profit: \${max_profit} (at \\$\{short_strike} or higher)")
+print(f"Max Loss: \${max_loss} (at \\$\{long_strike} or lower)")
+print(f"Breakeven: \\$\{breakeven}")
 print(f"Risk/Reward Ratio: {max_loss/max_profit:.2f}:1")
 \`\`\`
 
@@ -778,13 +778,13 @@ max_profit = net_credit
 max_loss = (put_strikes[1] - put_strikes[0]) - net_credit
 
 print("\\n=== IRON CONDOR ANALYSIS ===")
-print(f"Put Spread: Buy \${put_strikes[0]} / Sell \${put_strikes[1]}")
-print(f"Call Spread: Sell \${call_strikes[0]} / Buy \${call_strikes[1]}")
-print(f"\\nNet Credit Received: \${net_credit}")
-print(f"Max Profit: \${max_profit} (stock between \${put_strikes[1]} and \${call_strikes[0]})")
-print(f"Max Loss: \${max_loss} (stock outside wings)")
-print(f"\\nProfit Range: \${put_strikes[1]} to \${call_strikes[0]}")
-print(f"Breakevens: \${put_strikes[1] - net_credit:.2f} and \${call_strikes[0] + net_credit:.2f}")
+print(f"Put Spread: Buy \${put_strikes[0]} / Sell \\$\{put_strikes[1]}")
+print(f"Call Spread: Sell \${call_strikes[0]} / Buy \\$\{call_strikes[1]}")
+print(f"\\nNet Credit Received: \\$\{net_credit}")
+print(f"Max Profit: \${max_profit} (stock between \${put_strikes[1]} and \\$\{call_strikes[0]})")
+print(f"Max Loss: \\$\{max_loss} (stock outside wings)")
+print(f"\\nProfit Range: \${put_strikes[1]} to \\$\{call_strikes[0]}")
+print(f"Breakevens: \${put_strikes[1] - net_credit:.2f} and \\$\{call_strikes[0] + net_credit:.2f}")
 print(f"Probability of Profit: ~{(call_strikes[0] - put_strikes[1]) / (2 * current_price) * 100:.1f}% (rough estimate)")
 \`\`\`
 
@@ -842,7 +842,7 @@ try:
     aapl_options = get_option_chain('AAPL')
     
     print(f"=== {aapl_options['ticker']} OPTIONS ===")
-    print(f"Current Price: \${aapl_options['current_price']:.2f}")
+    print(f"Current Price: \\$\{aapl_options['current_price']:.2f}")
     print(f"Expiration: {aapl_options['expiration']}\\n")
     
     # Display ATM calls
@@ -1005,11 +1005,11 @@ class OptionStrategy:
             print(f"  {i}. {pos}")
         
         if self.stock_position:
-            print(f"  Stock: {self.stock_position['quantity']} shares @ \${self.stock_position['cost']}")
+            print(f"  Stock: {self.stock_position['quantity']} shares @ \\$\{self.stock_position['cost']}")
         
-        print(f"\\nMax Profit: \${analysis['max_profit']:.2f}")
-        print(f"Max Loss: \${analysis['max_loss']:.2f}")
-        print(f"Breakevens: {', '.join([f'\${be:.2f}' for be in analysis['breakevens']])}")
+        print(f"\\nMax Profit: \\$\{analysis['max_profit']:.2f}")
+        print(f"Max Loss: \\$\{analysis['max_loss']:.2f}")
+        print(f"Breakevens: {', '.join([f'\\$\{be:.2f}' for be in analysis['breakevens']])}")
 
 # Example: Build and analyze strategies
 current = 150

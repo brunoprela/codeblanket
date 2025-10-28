@@ -566,7 +566,7 @@ class BacktestEngine:
             
             # Progress
             if i % 252 == 0:
-                print(f"  Year {i//252}: Portfolio value = \${portfolio_value:,.0f}
+                print(f"  Year {i//252}: Portfolio value = \\$\{portfolio_value:,.0f}
 }, Leverage = { leverage: .2f }x")
 
 print(f"✓ Backtest complete: {len(self.trades)} trades executed\\n")
@@ -701,7 +701,7 @@ for metric, value in metrics.items():
     elif any(x in metric for x in ['Return', 'Volatility', 'Drawdown', 'Rate', '%']):
     print(f"{metric:30s}: {value:.2%}")
     elif 'Costs' in metric:
-print(f"{metric:30s}: \${value:.2f}")
+print(f"{metric:30s}: \\$\{value:.2f}")
     elif 'Leverage' in metric:
 print(f"{metric:30s}: {value:.2f}x")
     else:

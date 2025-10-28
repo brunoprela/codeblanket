@@ -126,7 +126,7 @@ for T in [1/52, 1/12, 0.25, 0.5, 1.0]:
     approx = atm_approximation(S, sigma, T)
     error = abs (exact - approx) / exact * 100
     
-    print(f"T = {T:5.3f} years: Exact = \${exact:6.2f}, "
+    print(f"T = {T:5.3f} years: Exact = \\$\{exact:6.2f}, "
           f"Approx = \${approx:6.2f}, Error = {error:4.1f}%")
 
 # Output:
@@ -314,11 +314,11 @@ for scenario in scenarios:
     )
     
     print(f"\\n{scenario['name']}:")
-    print(f"  C = \${scenario['C']}, P = \${scenario['P']}, "
+    print(f"  C = \${scenario['C']}, P = \\$\{scenario['P']}, "
           f"S = \${scenario['S']}, K = \${scenario['K']}")
-    print(f"  C - P = \${result['actual_diff']:.2f}")
-    print(f"  S - K = \${result['expected_diff']:.2f}")
-    print(f"  Arbitrage: \${result['arbitrage']:.2f} ({result['interpretation']})")
+    print(f"  C - P = \\$\{result['actual_diff']:.2f}")
+    print(f"  S - K = \\$\{result['expected_diff']:.2f}")
+    print(f"  Arbitrage: \\$\{result['arbitrage']:.2f} ({result['interpretation']})")
 
 # Output:
 # Put - Call Parity Arbitrage Detection:
@@ -535,7 +535,7 @@ for T, label in time_periods:
     approx = vega_approximation(S, T)
     error = abs (exact - approx) / exact * 100
     
-    print(f"{label:10s}: Exact ν = \${exact:5.2f}, "
+    print(f"{label:10s}: Exact ν = \\$\{exact:5.2f}, "
           f"Approx ν = \${approx:5.2f}, Error = {error:4.1f}%")
 
 # Output:

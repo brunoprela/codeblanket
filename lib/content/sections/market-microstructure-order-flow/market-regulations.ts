@@ -154,7 +154,7 @@ nbbo_calc.update_quote(Quote(Exchange.CBOE, bid = 99.99, ask = 100.11,
 
 # Calculate NBBO
 nbbo = nbbo_calc.calculate_nbbo()
-print(f"NBBO: \${nbbo['bid']:.2f} x \${nbbo['ask']:.2f}")
+print(f"NBBO: \${nbbo['bid']:.2f} x \\$\{nbbo['ask']:.2f}")
 print(f"  Best bid from: {[e.value for e in nbbo['bid_exchanges']]}")
 print(f"  Best ask from: {[e.value for e in nbbo['ask_exchanges']]}")
 
@@ -486,7 +486,7 @@ result = monitor.check_limit_up_down(current_price=142.00)  # >5% decline
 
 if result['triggered']:
     print(f"⚠ CIRCUIT BREAKER: {result['type']}")
-    print(f"  Price: \${result['current_price']:.2f}, Band: \${ result['band']:.2f } ")
+    print(f"  Price: \\$\{result['current_price']:.2f}, Band: \${ result['band']:.2f } ")
 print(f"  Action: {result['action']}")
 \`\`\`
 

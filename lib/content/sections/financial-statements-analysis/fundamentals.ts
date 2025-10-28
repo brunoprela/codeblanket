@@ -472,7 +472,7 @@ for metric, values in metrics.items():
     annual = [v for v in values if v.get('form') == '10-K']
     if annual:
         latest = annual[-1]
-        print(f"{metric}: \${latest['val']:,.0f}(as of { latest['end'] }) ")
+        print(f"{metric}: \\$\{latest['val']:,.0f}(as of { latest['end'] }) ")
 \`\`\`
 
 **Output example**:
@@ -561,8 +561,8 @@ def analyze_apple_10k():
     
     print("Apple Inc. Financial Analysis (FY2022)")
     print("=" * 50)
-    print(f"Revenue: \${apple_financials['income_statement']['revenue']:,.0f}")
-print(f"Net Income: \${apple_financials['income_statement']['net_income']:,.0f}")
+    print(f"Revenue: \\$\{apple_financials['income_statement']['revenue']:,.0f}")
+print(f"Net Income: \\$\{apple_financials['income_statement']['net_income']:,.0f}")
 print(f"\\nMargins:")
 print(f"  Gross Margin: {analysis['gross_margin']:.1%}")
 print(f"  Operating Margin: {analysis['operating_margin']:.1%}")

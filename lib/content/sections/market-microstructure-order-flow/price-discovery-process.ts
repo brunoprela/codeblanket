@@ -176,7 +176,7 @@ trades = [
 ]
 
 result = glosten_harris_spread(trades)
-print(f"Spread: \${result['spread']:.4f}")
+print(f"Spread: \\$\{result['spread']:.4f}")
 print(f"Adverse Selection: {result['adverse_selection_pct']:.1%}")
 # High adverse selection % → Many informed traders
 # Low adverse selection % → Mostly uninformed flow

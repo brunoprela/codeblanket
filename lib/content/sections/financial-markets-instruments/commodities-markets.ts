@@ -157,14 +157,14 @@ oil = COMMODITIES['CL']
 oil_price = 75  # $75/barrel
 
 position_value = oil.calculate_position_value (oil_price, num_contracts=10)
-print(f"Example: Long 10 WTI Crude contracts at \${oil_price}/barrel")
-print(f"Position Value: \${position_value:,}")
-print(f"(10 contracts × 1,000 barrels × \${oil_price})")
+print(f"Example: Long 10 WTI Crude contracts at \\$\{oil_price}/barrel")
+print(f"Position Value: \\$\{position_value:,}")
+print(f"(10 contracts × 1,000 barrels × \\$\{oil_price})")
 
 # Storage cost for 6 months
 storage = oil.calculate_storage_cost (oil_price, holding_period_days = 180)
-print(f"\\nStorage cost for 6 months: \${storage:.2f} per barrel")
-print(f"Total storage: \${storage * oil.contract_size * 10:,.0f} for position")
+print(f"\\nStorage cost for 6 months: \\$\{storage:.2f} per barrel")
+print(f"Total storage: \\$\{storage * oil.contract_size * 10:,.0f} for position")
 \`\`\`
 
 **Key Differences from Financial Assets:**
@@ -291,10 +291,10 @@ contango = oil_curve.calculate_contango_curve(
     months_forward=[1, 3, 6, 12, 24]
 )
 
-print(f"Spot Price: \${oil_curve.spot_price:.2f}/barrel\\n")
+print(f"Spot Price: \\$\{oil_curve.spot_price:.2f}/barrel\\n")
 print("Futures Prices:")
 for months, data in contango.items():
-    print(f"  {months}M: \${data['futures_price']:.2f} "
+    print(f"  {months}M: \\$\{data['futures_price']:.2f} "
           f"(+\${data['premium']:.2f}, +{data['premium_pct']:.1f}%)")
 
 print(f"\\nInterpretation:")
@@ -312,10 +312,10 @@ backwardation = oil_curve.calculate_backwardation_curve(
     months_forward = [1, 3, 6, 12, 24]
 )
 
-print(f"Spot Price: \${oil_curve.spot_price:.2f}/barrel\\n")
+print(f"Spot Price: \\$\{oil_curve.spot_price:.2f}/barrel\\n")
 print("Futures Prices:")
 for months, data in backwardation.items():
-    print(f"  {months}M: \${data['futures_price']:.2f} "
+    print(f"  {months}M: \\$\{data['futures_price']:.2f} "
           f"(-\${data['discount']:.2f}, -{data['discount_pct']:.1f}%)")
 
 print(f"\\nInterpretation:")
@@ -449,8 +449,8 @@ print(f"  Utilization: {timeline['storage_crisis']['utilization']}")
 print(f"  Problem: {timeline['storage_crisis']['problem']}")
 
 print(f"\\nThe Crash (April 20, 2020):")
-print(f"  Open: \${timeline['the_crash']['april_20_open']}/barrel")
-print(f"  Low: \${timeline['the_crash']['april_20_low']}/barrel")
+print(f"  Open: \\$\{timeline['the_crash']['april_20_open']}/barrel")
+print(f"  Low: \\$\{timeline['the_crash']['april_20_low']}/barrel")
 print(f"  Interpretation: {timeline['the_crash']['interpretation']}")
 
 print(f"\\nTrader Dilemmas:\\n")
@@ -600,11 +600,11 @@ print("\\n=== Commodity Hedging Examples ===\\n")
 print("Example 1: FARMER HEDGING CROP PRICE\\n")
 print(f"Crop: {farmer['crop']}")
 print(f"Production: {farmer['production']:,} bushels")
-print(f"Current Futures: \${farmer['current_futures']}/bushel")
-print(f"Production Cost: \${farmer['production_cost']}/bushel")
+print(f"Current Futures: \\$\{farmer['current_futures']}/bushel")
+print(f"Production Cost: \\$\{farmer['production_cost']}/bushel")
 print(f"\\nHedge Strategy: {farmer['hedge_strategy']}")
-print(f"Locked-in Revenue: \${farmer['locked_in_revenue']:,.0f}")
-print(f"Locked-in Profit: \${farmer['locked_in_profit']:,.0f}")
+print(f"Locked-in Revenue: \\$\{farmer['locked_in_revenue']:,.0f}")
+print(f"Locked-in Profit: \\$\{farmer['locked_in_profit']:,.0f}")
 print(f"Profit Margin: {farmer['profit_margin']:.1f}%")
 print(f"\\n✓ {farmer['protection']}")
 print(f"⚠ {farmer['tradeoff']}")
@@ -619,17 +619,17 @@ hedge_price=3.10  # Locked in at $3.10(slight premium)
 
 print(f"\\n\\nExample 2: AIRLINE HEDGING FUEL COST\\n")
 print(f"Annual Consumption: {airline['annual_consumption']/1e6:.0f}M gallons")
-print(f"Current Price: \${airline['current_price']}/gallon")
+print(f"Current Price: \\$\{airline['current_price']}/gallon")
 print(f"\\nHedge Strategy: {airline['hedge_strategy']}")
-print(f"Locked-in Price: \${airline['locked_in_price']}/gallon")
+print(f"Locked-in Price: \\$\{airline['locked_in_price']}/gallon")
 print(f"Hedged Volume: {airline['hedged_volume']/1e6:.0f}M gallons")
 
 scenario = airline['scenarios']['price_spikes_50pct']
-print(f"\\nScenario: Fuel prices spike 50% to \${scenario['new_price']}/gallon")
-print(f"  Unhedged Cost: \${scenario['unhedged_cost']/1e6:.0f}M")
-print(f"  Hedged Cost: \${scenario['hedged_cost']/1e6:.0f}M")
-print(f"  Savings: \${scenario['savings']/1e6:.0f}M")
-print(f"\\n✓ Hedging saved \${scenario['savings']/1e6:.0f}M when fuel spiked!")
+print(f"\\nScenario: Fuel prices spike 50% to \\$\{scenario['new_price']}/gallon")
+print(f"  Unhedged Cost: \\$\{scenario['unhedged_cost']/1e6:.0f}M")
+print(f"  Hedged Cost: \\$\{scenario['hedged_cost']/1e6:.0f}M")
+print(f"  Savings: \\$\{scenario['savings']/1e6:.0f}M")
+print(f"\\n✓ Hedging saved \\$\{scenario['savings']/1e6:.0f}M when fuel spiked!")
 \`\`\`
 
 **Real-World Examples:**1. **Southwest Airlines** - Famously hedged fuel in 2000s, saved billions
@@ -885,7 +885,7 @@ class CommodityTradingSystem:
 system = CommodityTradingSystem()
 
 print("\\n=== Commodity Trading System ===\\n")
-print(f"Initial Margin: \${system.margin_account:,.0f}")
+print(f"Initial Margin: \\$\{system.margin_account:,.0f}")
 
 # Trade 1: Long crude oil
 oil_trade = system.open_position(
@@ -899,17 +899,17 @@ if oil_trade['status'] == 'FILLED':
     print(f"  Commodity: {oil_trade['commodity_name']}")
 print(f"  Side: {oil_trade['side'].upper()}")
 print(f"  Contracts: {oil_trade['num_contracts']}")
-print(f"  Entry: \${oil_trade['entry_price']:.2f}")
-print(f"  Notional: \${oil_trade['notional_value']:,.0f}")
-print(f"  Margin: \${oil_trade['margin_posted']:,.0f}")
+print(f"  Entry: \\$\{oil_trade['entry_price']:.2f}")
+print(f"  Notional: \\$\{oil_trade['notional_value']:,.0f}")
+print(f"  Margin: \\$\{oil_trade['margin_posted']:,.0f}")
 print(f"  Leverage: {oil_trade['leverage']:.1f}x")
 
 # Check P & L(simulated price move)
 pnl = system.calculate_position_pnl (oil_trade['position_id'])
 print(f"\\nCurrent P&L:")
-print(f"  Current Price: \${pnl['current_price']:.2f}")
-print(f"  Price Change: \${pnl['price_change']:+.2f}")
-print(f"  P&L: \${pnl['pnl_dollars']:,.2f}")
+print(f"  Current Price: \\$\{pnl['current_price']:.2f}")
+print(f"  Price Change: \\$\{pnl['price_change']:+.2f}")
+print(f"  P&L: \\$\{pnl['pnl_dollars']:,.2f}")
 print(f"  Return: {pnl['pnl_percent']:+.1f}%")
 \`\`\`
 

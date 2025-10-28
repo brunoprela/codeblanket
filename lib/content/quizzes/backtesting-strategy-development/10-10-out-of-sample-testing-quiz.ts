@@ -59,7 +59,7 @@ const outOfSampleTestingQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       "The three-way split prevents test set contamination during model selection. Training data is for parameter learning, validation data is for choosing between models/hyperparameters, and test data is for final unbiased evaluation. Without a validation set, you'd tune models based on test performance, which contaminates the test set through repeated access. This is crucial in ML and quantitative trading—you need an unseen dataset for final evaluation. Option A is wrong (validation doesn't increase training data). Option C misunderstands the purpose. Option D is incorrect—you only test once on the test set.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'oos-5',

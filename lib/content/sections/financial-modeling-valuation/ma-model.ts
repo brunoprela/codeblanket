@@ -349,7 +349,7 @@ purchase = transaction_stock.calculate_purchase_price()
 print("\\nPURCHASE PRICE:")
 for key, value in purchase.items():
     if 'Price' in key or '$' in key or 'Cap' in key:
-        print(f"  {key:.<45} \${value:>15,.2f}")
+        print(f"  {key:.<45} \\$\{value:>15,.2f}")
     elif '%' in key:
         print(f"  {key:.<45} {value:>15.1%}")
     else:
@@ -364,25 +364,25 @@ for key, value in consideration.items():
     elif 'Ratio' in key:
         print(f"  {key:.<45} {value:>15.4f}")
     elif isinstance(value, (int, float)):
-        print(f"  {key:.<45} \${value:15,.0f}")
+        print(f"  {key:.<45} \\$\{value:15,.0f}")
 
 # Pro forma
 pro_forma = transaction_stock.calculate_pro_forma()
 print("\\n\\nPRO FORMA COMBINED:")
 for key, value in pro_forma.items():
     if 'EPS' in key:
-        print(f"  {key:.<45} \${value:>15.2f}")
+        print(f"  {key:.<45} \\$\{value:>15.2f}")
     elif isinstance(value, (int, float)):
-print(f"  {key:.<45} \${value:>15,.0f}")
+print(f"  {key:.<45} \\$\{value:>15,.0f}")
 
 # Accretion / Dilution
 accretion = transaction_stock.calculate_accretion_dilution()
 print("\\n\\nACCRETION/DILUTION ANALYSIS:")
 for key, value in accretion.items():
     if 'EPS' in key and '$' in key:
-print(f"  {key:.<45} \${value:>15.2f}")
+print(f"  {key:.<45} \\$\{value:>15.2f}")
     elif 'EPS' in key:
-print(f"  {key:.<45} \${value:>15.2f}")
+print(f"  {key:.<45} \\$\{value:>15.2f}")
     elif '%' in key:
 color = "ACCRETIVE" if value > 0 else "DILUTIVE"
 print(f"  {key:.<45} {value:>14.2%} ({color})")
@@ -399,7 +399,7 @@ for key, value in breakeven.items():
     if '%' in key:
         print(f"  {key:.<45} {value:>15.2%}")
     elif isinstance(value, (int, float)):
-print(f"  {key:.<45} \${value:>15,.0f}")
+print(f"  {key:.<45} \\$\{value:>15,.0f}")
 \`\`\`
 
 ---

@@ -87,18 +87,18 @@ def analyze_stock (ticker: str, period: str = '1y'):
     print(f"{'='*60}")
     print(f"\\nCompany: {info.get('longName', 'N/A')}")
     print(f"Sector: {info.get('sector', 'N/A')}")
-    print(f"Market Cap: \${info.get('marketCap', 0) / 1e9:.1f}B")
+    print(f"Market Cap: \\$\{info.get('marketCap', 0) / 1e9:.1f}B")
 print(f"\\nPrice Information:")
-print(f"  Current: \${df['Close'].iloc[-1]:.2f}")
-print(f"  52-Week High: \${df['Close'].max():.2f}")
-print(f"  52-Week Low: \${df['Close'].min():.2f}")
+print(f"  Current: \\$\{df['Close'].iloc[-1]:.2f}")
+print(f"  52-Week High: \\$\{df['Close'].max():.2f}")
+print(f"  52-Week Low: \\$\{df['Close'].min():.2f}")
 print(f"\\nPerformance:")
 print(f"  Total Return: {total_return:.2%}")
 print(f"  Annualized Volatility: {annual_vol:.2%}")
 print(f"  Max Drawdown: {max_drawdown:.2%}")
 print(f"\\nTrading:")
 print(f"  Avg Daily Volume: {avg_volume:,.0f} shares")
-print(f"  Avg Dollar Volume: \${avg_volume * df['Close'].mean()/1e6:.1f}M")
+print(f"  Avg Dollar Volume: \\$\{avg_volume * df['Close'].mean()/1e6:.1f}M")
     
     # Valuation (if available)
     if 'forwardPE' in info:
@@ -280,12 +280,12 @@ ytm = 0.04  # 4% market yield
 
 price = bond_price (face_value, coupon_rate, years, ytm)
 print(f"\\nBond Characteristics:")
-print(f"  Face Value: \\\${face_value}")
+print(f"  Face Value: \\\\$\{face_value}")
 print(f"  Coupon Rate: {coupon_rate:.1%}")
 print(f"  Years to Maturity: {years}")
 print(f"  Yield to Maturity: {ytm:.1%}")
-print(f"\\nBond Price: \${price:.2f}")
-print(f"Premium/Discount: \${price - face_value:.2f}")
+print(f"\\nBond Price: \\$\{price:.2f}")
+print(f"Premium/Discount: \\$\{price - face_value:.2f}")
 
 if price > face_value:
     print("  → Trading at PREMIUM (coupon > yield)")
@@ -313,7 +313,7 @@ plt.show()
 
 for y, p in zip (yields, prices):
     change = (p - face_value) / face_value * 100
-print(f"  YTM {y:.1%}: Price \${p:.2f} ({change:+.1f}%)")
+print(f"  YTM {y:.1%}: Price \\$\{p:.2f} ({change:+.1f}%)")
 \`\`\`
 
 **Key Insight**: Bond prices and yields move **inversely**. When interest rates rise, bond prices fall.
@@ -439,7 +439,7 @@ def analyze_commodity (ticker: str, name: str, period: str = '5y'):
     print(f"\\n{'='*60}")
     print(f"{name} Analysis ({ticker})")
     print(f"{'='*60}")
-    print(f"\\nCurrent Price: \${current_price:.2f}")
+    print(f"\\nCurrent Price: \\$\{current_price:.2f}")
 print(f"Annualized Return: {annual_return:+.2f}%")
 print(f"Volatility: {volatility:.2f}%")
 print(f"Max Drawdown: {max_dd:.2f}%")
@@ -518,7 +518,7 @@ def analyze_crypto (ticker: str, name: str, period: str = '1y'):
     print(f"\\n{'='*60}")
     print(f"{name} Analysis ({ticker})")
     print(f"{'='*60}")
-    print(f"\\nCurrent Price: \${current_price:,.2f}")
+    print(f"\\nCurrent Price: \\$\{current_price:,.2f}")
 print(f"Total Return: {total_return:+.2f}%")
 print(f"Volatility: {volatility:.2f}%")
 print(f"Sharpe Ratio: {sharpe:.2f}")

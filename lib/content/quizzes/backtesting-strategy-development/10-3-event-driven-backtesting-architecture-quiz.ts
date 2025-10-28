@@ -13,7 +13,7 @@ export const eventDrivenBacktestingArchitectureQuiz = [
     correctAnswer: 1,
     explanation:
       'Event-driven backtesting processes data point-by-point, simulating exactly how live trading works. This allows realistic modeling of: order execution delays, partial fills, market impact, complex portfolio logic, and dynamic risk management. Vectorized backtesting is faster but cannot easily model these realistic execution details. Production systems use event-driven because the backtest code can be reused for live trading with minimal changes.',
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ export const eventDrivenBacktestingArchitectureQuiz = [
     correctAnswer: 2,
     explanation:
       'Correct flow: 1) **Market Event**: New bar data arrives, 2) **Signal Event**: Strategy evaluates data and generates signal, 3) **Order Event**: Portfolio converts signal to order with position sizing, 4) **Fill Event**: Execution handler simulates order execution and creates fill. This mirrors real trading where you receive market data, make trading decision, place order, and receive fill confirmation.',
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 3,

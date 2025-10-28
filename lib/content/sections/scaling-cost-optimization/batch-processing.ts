@@ -498,8 +498,8 @@ class CostOptimizedBatchProcessor:
         self.requests_processed += len (requests)
         
         avg_cost = batch_cost / len (requests)
-        print(f"  Batch cost: \${batch_cost:.4f} (\${avg_cost:.4f}/request)")
-        print(f"  Total saved: \${self._estimate_savings():.2f}\n")
+        print(f"  Batch cost: \${batch_cost:.4f} (\\$\{avg_cost:.4f}/request)")
+        print(f"  Total saved: \\$\{self._estimate_savings():.2f}\n")
         
         return all_results
     

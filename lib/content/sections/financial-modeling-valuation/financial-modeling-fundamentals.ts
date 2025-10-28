@@ -857,7 +857,7 @@ result = solve_circular_model(
 print("Circular Model Solution:")
 for key, value in result.items():
     if key != 'iterations':
-        print(f"{key.title()}: \${value:,.0f}")
+        print(f"{key.title()}: \\$\{value:,.0f}")
     else:
         print(f"{key.title()}: {value}")
 \`\`\`
@@ -894,7 +894,7 @@ class ModelValidator:
                 f"Assets: \${assets:,.0f}, L+E: \${liabilities + equity:,.0f}, "
                 f"Difference: \${difference:,.0f}"
             )
-        print(f"✓ Balance sheet balances (diff: \${difference:.2f})")
+        print(f"✓ Balance sheet balances (diff: \\$\{difference:.2f})")
 
 @staticmethod
     def check_cash_flow(
@@ -920,7 +920,7 @@ if difference > tolerance:
                 f"Actual: \${ending_cash:,.0f}, "
                 f"Difference: \${difference:,.0f}"
 )
-print(f"✓ Cash flow ties (diff: \${difference:.2f})")
+print(f"✓ Cash flow ties (diff: \\$\{difference:.2f})")
 
 @staticmethod
     def check_reasonableness(

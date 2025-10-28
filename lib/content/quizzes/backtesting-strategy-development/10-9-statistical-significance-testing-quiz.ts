@@ -74,7 +74,7 @@ const statisticalSignificanceTestingQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Statistical significance only means the results are unlikely due to chance—it says nothing about whether the strategy is profitable in practice. Example: A strategy with annualized Sharpe of 0.3 might be statistically significant with enough data (large sample size), but after accounting for transaction costs (commission, slippage, market impact), it loses money. Statistical significance is about detecting an effect; economic significance is about whether that effect is large enough to matter. Professional trading firms require BOTH: strategies must be statistically significant AND generate sufficient risk-adjusted returns after all costs to justify capital allocation.',
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
 ];
 

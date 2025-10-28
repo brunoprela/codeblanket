@@ -67,10 +67,10 @@ breakeven_lower = strike - total_premium
 breakeven_upper = strike + total_premium
 max_loss = total_premium
 
-print(f"\\nLong Straddle: \${strike} Strike")
-print(f"  Total Cost: \${total_premium}")
-print(f"  Breakevens: \${breakeven_lower} and \${breakeven_upper}")
-print(f"  Max Loss: \${total_premium} (at \${strike})")
+print(f"\\nLong Straddle: \\$\{strike} Strike")
+print(f"  Total Cost: \\$\{total_premium}")
+print(f"  Breakevens: \${breakeven_lower} and \\$\{breakeven_upper}")
+print(f"  Max Loss: \${total_premium} (at \\$\{strike})")
 print(f"  Max Profit: Unlimited")
 print(f"  Required Move: {(total_premium/strike*100):.1f}% in either direction")
 \`\`\`
@@ -134,9 +134,9 @@ plt.grid(True, alpha=0.3)
 plt.legend()
 plt.show()
 
-print(f"\\nLong Strangle: \${put_strike} Put / \${call_strike} Call")
-print(f"  Total Cost: \${total_premium} (vs $10 straddle)")
-print(f"  Breakevens: \${put_strike - total_premium} and \${call_strike + total_premium}")
+print(f"\\nLong Strangle: \${put_strike} Put / \\$\{call_strike} Call")
+print(f"  Total Cost: \\$\{total_premium} (vs $10 straddle)")
+print(f"  Breakevens: \${put_strike - total_premium} and \\$\{call_strike + total_premium}")
 print(f"  Wider breakevens but cheaper entry")
 \`\`\`
 
@@ -185,11 +185,11 @@ plt.legend()
 plt.ylim(-30, 15)
 plt.show()
 
-print(f"\\nShort Straddle: \${strike} Strike")
-print(f"  Premium Collected: \${total_premium}")
-print(f"  Max Profit: \${total_premium} (at \${strike})")
+print(f"\\nShort Straddle: \\$\{strike} Strike")
+print(f"  Premium Collected: \\$\{total_premium}")
+print(f"  Max Profit: \${total_premium} (at \\$\{strike})")
 print(f"  Max Loss: UNLIMITED")
-print(f"  Profit Zone: \${strike - total_premium} to \${strike + total_premium}")
+print(f"  Profit Zone: \${strike - total_premium} to \\$\{strike + total_premium}")
 \`\`\`
 
 ### Risk Management for Short Straddles
@@ -243,9 +243,9 @@ plt.legend()
 plt.ylim(-30, 15)
 plt.show()
 
-print(f"\\nShort Strangle: \${put_strike} Put / \${call_strike} Call")
-print(f"  Premium: \${total_premium}")
-print(f"  Profit Zone: \${put_strike} to \${call_strike}")
+print(f"\\nShort Strangle: \${put_strike} Put / \\$\{call_strike} Call")
+print(f"  Premium: \\$\{total_premium}")
+print(f"  Profit Zone: \${put_strike} to \\$\{call_strike}")
 print(f"  Still UNLIMITED RISK - use with caution!")
 \`\`\`
 
@@ -276,8 +276,8 @@ def earnings_straddle_analysis(stock_price, expected_move_pct, straddle_cost):
     # Historical average move
     # (would get from past earnings)
     
-    print(f"Earnings Straddle Analysis for \${stock_price} stock:")
-    print(f"  Straddle Cost: \${straddle_cost} ({implied_move_pct:.1f}%)")
+    print(f"Earnings Straddle Analysis for \\$\{stock_price} stock:")
+    print(f"  Straddle Cost: \\$\{straddle_cost} ({implied_move_pct:.1f}%)")
     print(f"  Breakevens: \${stock_price - straddle_cost:.2f
 } and \${ stock_price + straddle_cost:.2f}")
 print(f"  \\nRequired move to profit: > {implied_move_pct:.1f}%")
@@ -328,12 +328,12 @@ def calculate_straddle_greeks(S, K, T, sigma, r=0.05):
     straddle_theta = call_theta + put_theta  # Negative (time decay)
     straddle_vega = call_vega + put_vega  # Positive (long vol)
     
-    print(f"\\nATM Straddle Greeks (Stock \${S}, Strike \${K}):")
-    print(f"  Price: \${straddle_price:.2f}")
+    print(f"\\nATM Straddle Greeks (Stock \${S}, Strike \\$\{K}):")
+    print(f"  Price: \\$\{straddle_price:.2f}")
 print(f"  Delta: {straddle_delta:.3f} (near zero = direction-neutral)")
 print(f"  Gamma: {straddle_gamma:.3f} (positive = benefits from moves)")
-print(f"  Theta: \${straddle_theta:.2f}/day (negative = loses to time)")
-print(f"  Vega: \${straddle_vega:.2f}/1% IV (positive = benefits from vol increase)")
+print(f"  Theta: \\$\{straddle_theta:.2f}/day (negative = loses to time)")
+print(f"  Vega: \\$\{straddle_vega:.2f}/1% IV (positive = benefits from vol increase)")
 
 return {
     'price': straddle_price,
@@ -478,14 +478,14 @@ print("=" * 70)
 print("STRADDLE POSITION CHECK")
 print("=" * 70)
 print(f"\\nInitial:")
-print(f"  Stock: \${adjustment_manager.initial_stock}")
-print(f"  Strike: \${adjustment_manager.strike}")
-print(f"  Premium paid: \${adjustment_manager.premium_paid}")
+print(f"  Stock: \\$\{adjustment_manager.initial_stock}")
+print(f"  Strike: \\$\{adjustment_manager.strike}")
+print(f"  Premium paid: \\$\{adjustment_manager.premium_paid}")
 
 print(f"\\nCurrent (Day 15):")
-print(f"  Stock: \${current_stock} (+{((current_stock - adjustment_manager.initial_stock) / adjustment_manager.initial_stock * 100):.1f}%)")
-print(f"  Position value: \${current_value:.2f}")
-print(f"  P&L: \${pnl:.2f} ({(pnl / adjustment_manager.premium_paid * 100):.1f}%)")
+print(f"  Stock: \\$\{current_stock} (+{((current_stock - adjustment_manager.initial_stock) / adjustment_manager.initial_stock * 100):.1f}%)")
+print(f"  Position value: \\$\{current_value:.2f}")
+print(f"  P&L: \\$\{pnl:.2f} ({(pnl / adjustment_manager.premium_paid * 100):.1f}%)")
 
 if triggers:
     print(f"\\n⚠️  ADJUSTMENT TRIGGERS:")
@@ -536,9 +536,9 @@ def analyze_volatility_crush(entry_iv, post_event_iv, stock_move_pct,
     straddle_entry = call_entry + put_entry
     
     print(f"\\nPRE-EVENT:")
-    print(f"  Stock: \${strike}")
+    print(f"  Stock: \\$\{strike}")
     print(f"  IV: {entry_iv*100:.1f}%")
-    print(f"  ATM Straddle: \${straddle_entry:.2f}")
+    print(f"  ATM Straddle: \\$\{straddle_entry:.2f}")
 print(f"  Days to expiration: {days_to_exp}")
     
     # Post - event(after earnings, 1 day later)
@@ -556,12 +556,12 @@ straddle_post = call_post + put_post
 pnl = straddle_post - straddle_entry
 
 print(f"\\nPOST-EVENT:")
-print(f"  Stock: \${new_stock:.2f} ({stock_move_pct*100:+.1f}%)")
+print(f"  Stock: \\$\{new_stock:.2f} ({stock_move_pct*100:+.1f}%)")
 print(f"  IV: {post_event_iv*100:.1f}% (crushed {(entry_iv - post_event_iv)*100:.1f}%)")
-print(f"  ATM Straddle: \${straddle_post:.2f}")
+print(f"  ATM Straddle: \\$\{straddle_post:.2f}")
 
 print(f"\\n{'─' * 70}")
-print(f"P&L: \${pnl:+.2f} ({pnl/straddle_entry*100:+.1f}%)")
+print(f"P&L: \\$\{pnl:+.2f} ({pnl/straddle_entry*100:+.1f}%)")
 
 if pnl > 0:
     print(f"✓ PROFIT - Stock move overcame vol crush")
@@ -585,7 +585,7 @@ straddle_test = call_test + put_test
 test_pnl = straddle_test - straddle_entry
 
 status = "✓" if test_pnl > 0 else "✗"
-print(f"  {test_move*100:.0f}% move: \${test_pnl:+.2f} {status}")
+print(f"  {test_move*100:.0f}% move: \\$\{test_pnl:+.2f} {status}")
 
 if test_pnl > 0 and(test_move - 0.01) * 100 < 0:
 print(f"  → Break-even at ~{test_move*100:.1f}% stock move")
@@ -673,9 +673,9 @@ plt.show()
 print("=" * 70)
 print("RATIO STRADDLE ANALYSIS")
 print("=" * 70)
-print(f"\\nStandard straddle: 1 call + 1 put = \${call_premium + put_premium}")
+print(f"\\nStandard straddle: 1 call + 1 put = \\$\{call_premium + put_premium}")
 print(f"Ratio straddle: 2 calls + 1 put = \${2 * call_premium + put_premium}")
-print(f"\\nExtra cost: \${call_premium} (but 2× upside leverage)")
+print(f"\\nExtra cost: \\$\{call_premium} (but 2× upside leverage)")
 print(f"\\nUse case: Slightly bullish, want more upside exposure")
 \`\`\`
 
@@ -706,11 +706,11 @@ def nvda_earnings_case_study():
     straddle_cost = atm_call + atm_put  # $68
     
     print(f"\\nPRE-EARNINGS (Nov 20, 2023):")
-    print(f"  NVDA: \${stock_pre}")
+    print(f"  NVDA: \\$\{stock_pre}")
     print(f"  IV: {iv_pre*100:.0f}%")
-    print(f"  ATM Straddle: \${straddle_cost}")
+    print(f"  ATM Straddle: \\$\{straddle_cost}")
     print(f"  Implied move: {(straddle_cost/stock_pre*100):.1f}%")
-    print(f"  Cost for 1 straddle: \${straddle_cost * 100:,.0f}")
+    print(f"  Cost for 1 straddle: \\$\{straddle_cost * 100:,.0f}")
     
     # Post - earnings result
 stock_post = 505  # Stock up ONLY 1 % !
@@ -720,7 +720,7 @@ stock_post = 505  # Stock up ONLY 1 % !
 stock_next_day = 540  # Up 8 % total next day
 
 print(f"\\nPOST-EARNINGS (Nov 21, 2023 - immediate):")
-print(f"  NVDA: \${stock_post} (+{((stock_post-stock_pre)/stock_pre*100):.1f}%)")
+print(f"  NVDA: \\$\{stock_post} (+{((stock_post-stock_pre)/stock_pre*100):.1f}%)")
 print(f"  IV: {iv_post*100:.0f}% (crushed {(iv_pre-iv_post)*100:.0f}%)")
 print(f"\\n  Result: LOSS despite move")
 print(f"  Straddle value ≈ $55 (down from $68)")
@@ -728,7 +728,7 @@ print(f"  P&L: -$13 per share (-19%)")
 print(f"  On $6,800 investment: LOST $1,300")
 
 print(f"\\nNEXT DAY (Nov 22):")
-print(f"  NVDA: \${stock_next_day} (+{((stock_next_day-stock_pre)/stock_pre*100):.1f}% from entry)")
+print(f"  NVDA: \\$\{stock_next_day} (+{((stock_next_day-stock_pre)/stock_pre*100):.1f}% from entry)")
 print(f"  Call value: ~$40 ITM")
 print(f"  Put value: $0")
 print(f"  Straddle value: ~$40")

@@ -676,7 +676,7 @@ if __name__ == "__main__":
     
     print(f"   Latency Advantage: 10ms")
     print(f"   Has Edge: {has_edge}")
-    print(f"   Expected Profit: \${expected_profit:.2f})"
+    print(f"   Expected Profit: \\$\{expected_profit:.2f})"
 \`\`\`
 
 ---

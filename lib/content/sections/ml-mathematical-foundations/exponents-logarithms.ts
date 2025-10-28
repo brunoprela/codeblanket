@@ -215,14 +215,14 @@ def continuous_compound (principal, rate, years):
 P, r, t = 1000, 0.05, 10
 
 # Different compounding frequencies
-print(f"Initial investment: \\\${P}")
+print(f"Initial investment: \\\\$\{P}")
 print(f"Annual rate: {r*100}%")
 print(f"Time: {t} years\\n")
 
-print(f"Annual compounding: \${compound_interest(P, r, 1, t):.2f}")
-print(f"Monthly compounding: \${compound_interest(P, r, 12, t):.2f}")
-print(f"Daily compounding: \${compound_interest(P, r, 365, t):.2f}")
-print(f"Continuous compounding: \${continuous_compound(P, r, t):.2f}")
+print(f"Annual compounding: \\$\{compound_interest(P, r, 1, t):.2f}")
+print(f"Monthly compounding: \\$\{compound_interest(P, r, 12, t):.2f}")
+print(f"Daily compounding: \\$\{compound_interest(P, r, 365, t):.2f}")
+print(f"Continuous compounding: \\$\{continuous_compound(P, r, t):.2f}")
 \`\`\`
 
 ### Trading Application: Portfolio Growth
@@ -243,9 +243,9 @@ months = 12
 final_value = portfolio_growth (initial, monthly_return, months)
 total_return = (final_value - initial) / initial
 
-print(f"Initial portfolio: \${initial:,.2f}")
+print(f"Initial portfolio: \\$\{initial:,.2f}")
 print(f"Average monthly return: {monthly_return*100}%")
-print(f"After {months} months: \${final_value:,.2f}")
+print(f"After {months} months: \\$\{final_value:,.2f}")
 print(f"Total return: {total_return*100:.2f}%")
 print(f"Simple (non-compounded) would be: {monthly_return*months*100:.2f}%")
 \`\`\`

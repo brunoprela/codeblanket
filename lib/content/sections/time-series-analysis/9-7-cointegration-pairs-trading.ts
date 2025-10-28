@@ -527,7 +527,7 @@ position = calculate_position_size(
 
 print("\\n=== Position Sizing ===")
 print(f"Kelly fraction: {position['kelly_fraction']:.2%}")
-print(f"Position value: \${position['position_value']:,.0f}")
+print(f"Position value: \\$\{position['position_value']:,.0f}")
 print(f"Risk: {position['risk_percentage']:.2f}% of portfolio")
 \`\`\`
 

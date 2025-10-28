@@ -127,7 +127,7 @@ plt.show()
 print("=" * 70)
 print("COVERED CALL ANALYSIS")
 print("=" * 70)
-print(f"\\nPosition: Long 100 shares at \${purchase_price}, Short \${strike} call for \${premium}")
+print(f"\\nPosition: Long 100 shares at \${purchase_price}, Short \${strike} call for \\$\{premium}")
 print(f"\\nScenario Analysis:")
 for scenario, price in scenarios.items():
     stock_pl = price - purchase_price
@@ -141,19 +141,19 @@ for scenario, price in scenarios.items():
         status = f"Stock called away at \${strike}"
     
     print(f"\\n{scenario}:")
-    print(f"  Stock P&L: \${stock_pl:.2f}")
-    print(f"  Call P&L: \${call_pl:.2f}")
-    print(f"  Total P&L: \${total_pl:.2f}")
+    print(f"  Stock P&L: \\$\{stock_pl:.2f}")
+    print(f"  Call P&L: \\$\{call_pl:.2f}")
+    print(f"  Total P&L: \\$\{total_pl:.2f}")
     print(f"  Return: {(total_pl / purchase_price * 100):.2f}%")
     print(f"  {status}")
 
 # Calculate metrics
 print(f"\\n{'─' * 70}")
 print("Key Metrics:")
-print(f"  Max Profit: \${strike - purchase_price + premium:.2f} (at \${strike}+)")
+print(f"  Max Profit: \${strike - purchase_price + premium:.2f} (at \\$\{strike}+)")
 print(f"  Max Profit %: {((strike - purchase_price + premium) / purchase_price * 100):.2f}%")
-print(f"  Downside Protection: \${premium:.2f} (breakeven at \${purchase_price - premium:.2f})")
-print(f"  Upside Capped At: \${strike}")
+print(f"  Downside Protection: \${premium:.2f} (breakeven at \\$\{purchase_price - premium:.2f})")
+print(f"  Upside Capped At: \\$\{strike}")
 \`\`\`
 
 ### When to Use Covered Calls
@@ -242,7 +242,7 @@ income_df = monthly_covered_call_income(stock_price, annual_div_yield, monthly_p
 
 print("\\nMONTHLY COVERED CALL INCOME PROJECTION")
 print("=" * 70)
-print(f"Stock: \${stock_price}")
+print(f"Stock: \\$\{stock_price}")
 print(f"Strategy: Sell 1.5% OTM calls monthly")
 print("\\n", income_df.to_string(index=False))
 
@@ -328,8 +328,8 @@ plt.show()
 print("=" * 70)
 print("PROTECTIVE PUT ANALYSIS")
 print("=" * 70)
-print(f"\\nPosition: Long 100 shares at \${purchase_price}")
-print(f"Protection: Long \${put_strike} put for \${put_premium}")
+print(f"\\nPosition: Long 100 shares at \\$\{purchase_price}")
+print(f"Protection: Long \${put_strike} put for \\$\{put_premium}")
 print(f"\\nScenarios:")
 
 scenarios = {
@@ -346,15 +346,15 @@ for scenario, price in scenarios.items():
     total_pl = stock_pl + put_pl
     
     print(f"\\n{scenario}:")
-    print(f"  Stock P&L: \${stock_pl:.2f}")
-    print(f"  Put P&L: \${put_pl:.2f}")
-    print(f"  Total P&L: \${total_pl:.2f}")
+    print(f"  Stock P&L: \\$\{stock_pl:.2f}")
+    print(f"  Put P&L: \\$\{put_pl:.2f}")
+    print(f"  Total P&L: \\$\{total_pl:.2f}")
     print(f"  Return: {(total_pl / purchase_price * 100):.2f}%")
 
 max_loss = put_strike - purchase_price - put_premium
 print(f"\\n{'─' * 70}")
-print(f"Max Loss: \${max_loss:.2f} per share (no matter how low stock goes!)")
-print(f"Cost of Protection: \${put_premium:.2f}/share for 90 days = {(put_premium/purchase_price*100):.2f}%")
+print(f"Max Loss: \\$\{max_loss:.2f} per share (no matter how low stock goes!)")
+print(f"Cost of Protection: \\$\{put_premium:.2f}/share for 90 days = {(put_premium/purchase_price*100):.2f}%")
 print(f"Annualized Insurance Cost: {(put_premium/purchase_price*4*100):.2f}%")
 \`\`\`
 
@@ -437,9 +437,9 @@ plt.legend()
 plt.show()
 
 print(f"Collar Analysis:")
-print(f"  Max Profit: \${call_strike - purchase_price} (at \${call_strike}+)")
-print(f"  Max Loss: \${purchase_price - put_strike} (at \${put_strike} or below)")
-print(f"  Net Cost: \${put_premium - call_premium}")
+print(f"  Max Profit: \${call_strike - purchase_price} (at \\$\{call_strike}+)")
+print(f"  Max Loss: \${purchase_price - put_strike} (at \\$\{put_strike} or below)")
+print(f"  Net Cost: \\$\{put_premium - call_premium}")
 \`\`\`
 
 ---

@@ -923,7 +923,7 @@ def estimate_vqa_cost(
 
 # Estimate cost for 1000 images
 total_cost = estimate_vqa_cost(500_000, "auto", 1) * 1000
-print(f"Estimated cost for 1000 images: \${total_cost:.2f}")
+print(f"Estimated cost for 1000 images: \\$\{total_cost:.2f}")
 \`\`\`
 
 ## Best Practices

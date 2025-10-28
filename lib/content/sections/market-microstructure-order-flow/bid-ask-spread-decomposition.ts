@@ -103,7 +103,7 @@ def roll_estimator(prices: np.ndarray) -> dict:
 prices = np.array([100.00, 100.02, 100.00, 100.03, 100.01, 100.04, 100.02])
 result = roll_estimator(prices)
 
-print(f"Estimated Spread: \${result['spread']:.4f}")
+print(f"Estimated Spread: \\$\{result['spread']:.4f}")
 print(f"Spread (bps): {result['spread_bps']:.1f}")
 \`\`\`
 
@@ -195,7 +195,7 @@ trades = [
 result = glosten_harris_decomposition(trades)
 print(f"Adverse Selection: {result['adverse_selection_pct']:.1%}")
 print(f"Order Processing: {result['order_processing_pct']:.1%}")
-print(f"Effective Spread: \${result['effective_spread']:.4f}")
+print(f"Effective Spread: \\$\{result['effective_spread']:.4f}")
 \`\`\`
 
 ---
@@ -450,8 +450,8 @@ inventory = 500  # Long 500 shares
 max_inventory = 1000
 
 bid, ask = optimal_spread(base_spread, adverse_pct, inventory, max_inventory)
-print(f"Bid: \${bid:.4f}, Ask: \${ask:.4f}")
-print(f"Spread: \${ask - bid:.4f}")
+print(f"Bid: \${bid:.4f}, Ask: \\$\{ask:.4f}")
+print(f"Spread: \\$\{ask - bid:.4f}")
 \`\`\`
 
 **Output:**
@@ -583,8 +583,8 @@ market_data = {
 result = analyzer.analyze_execution_quality(execution, market_data)
 
 print(f"Execution Analysis:")
-print(f"  Paid: \${result['execution_price']:.3f}")
-print(f"  Mid: \${result['mid_price']:.3f}")
+print(f"  Paid: \\$\{result['execution_price']:.3f}")
+print(f"  Mid: \\$\{result['mid_price']:.3f}")
 print(f"  Cost: {result['execution_cost_bps']:.1f} bps")
 print(f"  Price Improvement: {result['improvement_bps']:.1f} bps")
 print(f"  Quality Score: {result['quality_score']:.0f}/100")
@@ -652,10 +652,10 @@ result_aapl = analyze_tick_constraint(
 )
 
 print("AAPL (liquid, high-priced):")
-print(f"  Natural spread: \${result_aapl['natural_spread']:.3f}")
-print(f"  Observed spread: \${result_aapl['observed_spread']:.2f}")
+print(f"  Natural spread: \\$\{result_aapl['natural_spread']:.3f}")
+print(f"  Observed spread: \\$\{result_aapl['observed_spread']:.2f}")
 print(f"  Constrained: {result_aapl['is_constrained']}")
-print(f"  Excess: \${result_aapl['excess_spread']:.3f} ({result_aapl['pct_increase']:.0f}%)")
+print(f"  Excess: \\$\{result_aapl['excess_spread']:.3f} ({result_aapl['pct_increase']:.0f}%)")
 
 # Example: Low-priced illiquid stock
 result_penny = analyze_tick_constraint(
@@ -664,8 +664,8 @@ result_penny = analyze_tick_constraint(
 )
 
 print("\\nPenny stock (illiquid, low-priced):")
-print(f"  Natural spread: \${result_penny['natural_spread']:.3f}")
-print(f"  Observed spread: \${result_penny['observed_spread']:.2f}")
+print(f"  Natural spread: \\$\{result_penny['natural_spread']:.3f}")
+print(f"  Observed spread: \\$\{result_penny['observed_spread']:.2f}")
 print(f"  Constrained: {result_penny['is_constrained']}")
 print(f"  Ticks wide: {result_penny['ticks_wide']:.0f}")
 \`\`\`
@@ -728,8 +728,8 @@ base = {'spread': 0.02, 'depth': 5000, 'tick': 0.01}
 pilot = simulate_tick_size_change(base, new_tick=0.05)
 
 print("Tick Size Pilot Simulation:")
-print(f"  Tick: \${pilot['old_tick']:.2f} → \${pilot['new_tick']:.2f}")
-print(f"  Spread: \${pilot['old_spread']:.2f} → \${pilot['new_spread']:.2f} (+{pilot['spread_increase_pct']:.0f}%)")
+print(f"  Tick: \${pilot['old_tick']:.2f} → \\$\{pilot['new_tick']:.2f}")
+print(f"  Spread: \${pilot['old_spread']:.2f} → \\$\{pilot['new_spread']:.2f} (+{pilot['spread_increase_pct']:.0f}%)")
 print(f"  Depth: {pilot['old_depth']:,} → {pilot['new_depth']:,} ({pilot['depth_decrease_pct']:.0f}%)")
 \`\`\`
 
@@ -804,14 +804,14 @@ def gme_spread_analysis():
     
     print("GME Spread Analysis:")
     print(f"\\nNormal (Jan 15):")
-    print(f"  Price: \${normal['price']:.2f}")
-    print(f"  Spread: \${normal['spread']:.2f} ({(normal['spread']/normal['price'])*10000:.0f} bps)")
-    print(f"  Adverse selection: \${normal['components']['adverse_selection']:.3f}")
+    print(f"  Price: \\$\{normal['price']:.2f}")
+    print(f"  Spread: \\$\{normal['spread']:.2f} ({(normal['spread']/normal['price'])*10000:.0f} bps)")
+    print(f"  Adverse selection: \\$\{normal['components']['adverse_selection']:.3f}")
     
     print(f"\\nPeak Squeeze (Jan 28):")
-    print(f"  Price: \${squeeze['price']:.2f}")
-    print(f"  Spread: \${squeeze['spread']:.2f} ({(squeeze['spread']/squeeze['price'])*10000:.0f} bps)")
-    print(f"  Adverse selection: \${squeeze['components']['adverse_selection']:.2f}")
+    print(f"  Price: \\$\{squeeze['price']:.2f}")
+    print(f"  Spread: \\$\{squeeze['spread']:.2f} ({(squeeze['spread']/squeeze['price'])*10000:.0f} bps)")
+    print(f"  Adverse selection: \\$\{squeeze['components']['adverse_selection']:.2f}")
     
     print(f"\\nChanges:")
     print(f"  Spread increased: {spread_increase:.0f}x")

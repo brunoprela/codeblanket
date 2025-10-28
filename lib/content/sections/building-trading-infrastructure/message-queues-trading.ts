@@ -1,7 +1,7 @@
 export const messageQueuesTrading = {
-  title: 'Message Queues for Trading',
-  id: 'message-queues-trading',
-  content: `
+    title: 'Message Queues for Trading',
+    id: 'message-queues-trading',
+    content: `
 # Message Queues for Trading
 
 ## Introduction
@@ -266,7 +266,7 @@ async def kafka_market_data_example():
     
     for msg in messages[:5]:  # Print first 5
         value = msg['value']
-        print(f"  {value['symbol']}: Bid ${value['bid_price']}, Ask \${value['ask_price']}")
+        print(f"  \{value['symbol']}: Bid $\{value['bid_price']}, Ask $\{value['ask_price']}")
     
     consumer.close()
     producer.close()
@@ -716,7 +716,7 @@ def zeromq_example():
             latency_ns = now_ns - tick['timestamp_ns']
             latencies.append(latency_ns)
             
-            print(f"  {tick['symbol']}: \${tick['price']}, latency: {latency_ns/1000:.2f} μs")
+            print(f"  {tick['symbol']}: \\$\{tick['price']}, latency: {latency_ns/1000:.2f} μs")
         
         print(f"\\nAverage latency: {sum(latencies)/len(latencies)/1000:.2f} μs")
         

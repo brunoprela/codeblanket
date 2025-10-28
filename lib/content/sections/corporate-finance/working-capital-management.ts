@@ -199,7 +199,7 @@ class WorkingCapitalAnalysis:
         print(f"  {'─' * 68}")
         print(f"  Cash Conversion Cycle (CCC): {latest['CCC']:.1f} days")
         
-        print(f"\\n  Net Working Capital: \${latest['NWC']:,.0f}M")
+        print(f"\\n  Net Working Capital: \\$\{latest['NWC']:,.0f}M")
 print(f"  NWC as % of Revenue: {latest['NWC_pct_Revenue']:.1f}%")
 
 print(f"\\n{'=' * 70}\\n")

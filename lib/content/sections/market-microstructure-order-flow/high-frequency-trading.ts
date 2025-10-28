@@ -364,8 +364,8 @@ print("Market Making Simulation Results")
 print("=" * 60)
 print(f"Total trades executed: {mm.trades_executed}")
 print(f"Final inventory: {mm.inventory} shares")
-print(f"Final PnL: \${mm.get_pnl(pnl_df.iloc[-1]['price']):.2f}")
-print(f"Average PnL per trade: \${mm.get_pnl(pnl_df.iloc[-1]['price']) / mm.trades_executed:.2f}")
+print(f"Final PnL: \\$\{mm.get_pnl(pnl_df.iloc[-1]['price']):.2f}")
+print(f"Average PnL per trade: \\$\{mm.get_pnl(pnl_df.iloc[-1]['price']) / mm.trades_executed:.2f}")
 print()
 
 # Plot PnL over time

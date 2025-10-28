@@ -260,7 +260,7 @@ class RunwayGen2Client:
         # Track cost
         if self.track_costs:
             self.total_cost += result.cost
-            print(f"💰 Cost: \${result.cost:.2f} (Total: \${self.total_cost:.2f})")
+            print(f"💰 Cost: \${result.cost:.2f} (Total: \\$\{self.total_cost:.2f})")
         
         # Cache result
 self._cache_result (cache_key, result)
@@ -491,8 +491,8 @@ print(f"✅ Generated {len (results)} videos")
     # Show cost summary
 print("\\n💰 Cost Summary:")
 summary = client.get_cost_summary()
-print(f"   Total spent: \${summary['total_cost_usd']:.2f}")
-print(f"   Average per video: \${summary['average_cost_per_video']:.2f}")
+print(f"   Total spent: \\$\{summary['total_cost_usd']:.2f}")
+print(f"   Average per video: \\$\{summary['average_cost_per_video']:.2f}")
 
 if __name__ == "__main__":
     main()

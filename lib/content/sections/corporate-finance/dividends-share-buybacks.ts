@@ -322,19 +322,19 @@ print(f"  {decision['Rationale']}")
 buyback = company.buyback_impact (buyback_amount=500)
 print(f"\\n$500M Buyback Impact:")
 print(f"  Shares Repurchased: {buyback['Shares Repurchased']:.1f}M")
-print(f"  EPS Before: \${buyback['Before']['EPS']:.2f}")
-print(f"  EPS After: \${buyback['After']['EPS']:.2f}")
+print(f"  EPS Before: \\$\{buyback['Before']['EPS']:.2f}")
+print(f"  EPS After: \\$\{buyback['After']['EPS']:.2f}")
 print(f"  EPS Change: {buyback['EPS Change %']:.1f}%")
-print(f"  Implied Price (constant P/E): \${buyback['Implied Price (constant P/E)']:.2f}")
+print(f"  Implied Price (constant P/E): \\$\{buyback['Implied Price (constant P/E)']:.2f}")
 print(f"  Price Change: {buyback['Price Change %']:.1f}%")
 
 # Dividend vs buyback
 comparison = company.compare_dividend_vs_buyback (distribution_amount = 100)
 print(f"\\n$100M Distribution: Dividend vs Buyback")
-print(f"  Dividend (after tax): \${comparison['Dividend']['After Tax']:.2f}/share")
-print(f"  Buyback (after tax): \${comparison['Buyback']['After Tax Value']:.2f}/share value increase")
+print(f"  Dividend (after tax): \\$\{comparison['Dividend']['After Tax']:.2f}/share")
+print(f"  Buyback (after tax): \\$\{comparison['Buyback']['After Tax Value']:.2f}/share value increase")
 print(f"  Winner: {comparison['Winner']}")
-print(f"  Tax Advantage: \${comparison['Tax Advantage']:.2f}/share")
+print(f"  Tax Advantage: \\$\{comparison['Tax Advantage']:.2f}/share")
 \`\`\`
 
 **Output**:
@@ -459,7 +459,7 @@ valuation = multi_stage_ddm(
 
 print("Multi-Stage DDM Valuation:")
 for key, value in valuation.items():
-    print(f"  {key}: \${value:.2f}")
+    print(f"  {key}: \\$\{value:.2f}")
 \`\`\`
 
 ## Real-World Examples

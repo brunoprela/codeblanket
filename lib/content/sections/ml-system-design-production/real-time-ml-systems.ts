@@ -841,7 +841,7 @@ for i in range(20):
     
     features = feature_store.get_features (user_id, transaction)
     
-    print(f"Request {i+1}: User {user_id}, Amount \${transaction['amount']:.2f}")
+    print(f"Request {i+1}: User {user_id}, Amount \\$\{transaction['amount']:.2f}")
 print(f"  Features: 30d_transactions={features['user_30d_transactions']}, "
           f"amount_vs_avg={features['amount_vs_avg_ratio']:.2f}")
 

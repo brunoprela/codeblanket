@@ -29,7 +29,7 @@ export const featureImportanceInterpretationMultipleChoice = {
       correctAnswer: 1,
       explanation:
         "Permutation importance randomly shuffles each feature's values (breaking its relationship with target) and measures how much model performance drops. Large drop = important feature. It\'s model-agnostic and accounts for feature interactions.",
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Methods',
     },
     {

@@ -14,7 +14,7 @@ export const reRankingRelevanceMC = {
       correctAnswer: 0,
       explanation:
         'The primary purpose is to improve retrieval accuracy through semantic understanding. While other benefits may exist, semantic accuracy is the core goal.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Concepts',
     },
     {
@@ -78,7 +78,7 @@ export const reRankingRelevanceMC = {
       correctAnswer: 1,
       explanation:
         'Using a single global embedding would lose all semantic information. Each document needs its own embedding to enable semantic search. The other options are all best practices.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Best Practices',
     },
   ],

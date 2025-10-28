@@ -175,8 +175,8 @@ call = tracker.record_api_call(
     request_id="req_abc123"
 )
 
-print(f"Call cost: \${call.total_cost:.4f}")
-print(f"Total cost so far: \${tracker.get_current_total():.2f}")
+print(f"Call cost: \\$\{call.total_cost:.4f}")
+print(f"Total cost so far: \\$\{tracker.get_current_total():.2f}")
 
 # Analyze by dimension
 print("Cost by user:", tracker.get_cost_by_user())
@@ -371,7 +371,7 @@ today = datetime.now()
 week_ago = today - timedelta (days=7)
 
 weekly_cost = tracker.get_cost_for_period (week_ago, today)
-print(f"Weekly cost: \${weekly_cost['total_cost']:.2f}")
+print(f"Weekly cost: \\$\{weekly_cost['total_cost']:.2f}")
 
 # Cost by feature
 by_feature = tracker.get_cost_for_period (week_ago, today, group_by = "feature")
@@ -539,8 +539,8 @@ class SmartCostTracker(PersistentCostTracker):
             
             # Log alert
             print(f"🚨 COST ANOMALY DETECTED!")
-            print(f"   Cost: \${call_record.total_cost:.4f}")
-print(f"   Expected: \${details['mean']:.4f}")
+            print(f"   Cost: \\$\{call_record.total_cost:.4f}")
+print(f"   Expected: \\$\{details['mean']:.4f}")
 print(f"   Deviation: {details['deviation_percent']:.0f}%")
 print(f"   User: {call_record.user_id}")
 print(f"   Feature: {call_record.feature}")
@@ -721,8 +721,8 @@ async def safe_llm_call (prompt: str, model: str, user_id: str):
 
 # Check budget status
 status = budget_enforcer.get_budget_status()
-print(f"Daily budget: \${status['daily']['used']:.2f} / \${status['daily']['limit']:.2f}")
-print(f"Remaining: \${status['daily']['remaining']:.2f}")
+print(f"Daily budget: \${status['daily']['used']:.2f} / \\$\{status['daily']['limit']:.2f}")
+print(f"Remaining: \\$\{status['daily']['remaining']:.2f}")
 \`\`\`
 
 ---
@@ -875,9 +875,9 @@ print(report)
 
 # Analyze trends
 trends = analyzer.generate_trend_analysis (days = 30)
-print(f"\nAvg daily cost: \${trends['avg_daily_cost']:.2f}")
+print(f"\nAvg daily cost: \\$\{trends['avg_daily_cost']:.2f}")
 print(f"Trend: {trends['trend']}")
-print(f"Projected monthly: \${trends['projected_monthly_cost']:.2f}")
+print(f"Projected monthly: \\$\{trends['projected_monthly_cost']:.2f}")
 
 # Find optimization opportunities
 opportunities = analyzer.identify_optimization_opportunities()
@@ -885,7 +885,7 @@ for opp in opportunities:
   print(f"\n💡 Optimization Opportunity:")
 print(f"   Type: {opp['type']}")
 print(f"   Description: {opp['description']}")
-print(f"   Potential Savings: \\\${opp.get('potential_savings', 'TBD')}")
+print(f"   Potential Savings: \\\\$\{opp.get('potential_savings', 'TBD')}")
 print(f"   Recommendation: {opp['recommendation']}")
 \`\`\`
 

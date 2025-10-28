@@ -166,7 +166,7 @@ print("=== Institutional Investor Profiles ===\\n")
 for inst in institutions:
     patterns = inst.get_trading_patterns()
     print(f"{inst.name} ({inst.institution_type.value}):")
-    print(f"  AUM: \${inst.aum/1e9:.0f}B")
+    print(f"  AUM: \\$\{inst.aum/1e9:.0f}B")
     print(f"  Time Horizon: {inst.time_horizon}")
     print(f"  Style: {patterns.get('style', 'N/A')}")
     print(f"  Rebalancing: {patterns.get('rebalancing', 'N/A')}")
@@ -312,13 +312,13 @@ mm_profit = hft.calculate_market_maker_profit(
 )
 
 print("\\n=== Market Maker Economics ===\\n")
-print(f"Daily Volume: \${mm_profit['daily_volume']/1e6:.0f}M")
-print(f"Bid-Ask Spread: \${mm_profit['bid_ask_spread']:.2f}")
-print(f"Gross Revenue: \${mm_profit['gross_revenue']:,.0f}")
-print(f"Adverse Selection Cost: \${mm_profit['adverse_selection_cost']:,.0f}")
-print(f"Net Profit: \${mm_profit['net_profit']:,.0f}/day")
+print(f"Daily Volume: \\$\{mm_profit['daily_volume']/1e6:.0f}M")
+print(f"Bid-Ask Spread: \\$\{mm_profit['bid_ask_spread']:.2f}")
+print(f"Gross Revenue: \\$\{mm_profit['gross_revenue']:,.0f}")
+print(f"Adverse Selection Cost: \\$\{mm_profit['adverse_selection_cost']:,.0f}")
+print(f"Net Profit: \\$\{mm_profit['net_profit']:,.0f}/day")
 print(f"Profit Margin: {mm_profit['profit_margin']:.1f}%")
-print(f"Annual Profit: \${mm_profit['annual_profit']/1e6:.1f}M")
+print(f"Annual Profit: \\$\{mm_profit['annual_profit']/1e6:.1f}M")
 
 # HFT strategies
 print("\\n\\n=== HFT Strategies ===\\n")
@@ -501,7 +501,7 @@ for i, trade in enumerate (trades, 1):
         trade['time'],
         trade['type']
     )
-    print(f"Trade {i}: \${trade['size']:,} at {trade['time']} ({trade['type']})")
+    print(f"Trade {i}: \\$\{trade['size']:,} at {trade['time']} ({trade['type']})")
     print(f"  → Likely: {participant}\\n")
 
 # Index rebalancing strategy

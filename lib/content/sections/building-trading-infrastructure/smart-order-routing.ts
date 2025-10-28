@@ -200,14 +200,14 @@ def nbbo_example():
     print("NBBO CALCULATION")
     print("=" * 70)
     print(f"\\nSymbol: {nbbo.symbol}")
-    print(f"\\nBest Bid: \${nbbo.best_bid_price}")
+    print(f"\\nBest Bid: \\$\{nbbo.best_bid_price}")
     print(f"  Size: {nbbo.best_bid_size:,} shares")
     print(f"  Venues: {', '.join(v.value for v in nbbo.best_bid_venues)}")
-    print(f"\\nBest Ask: \${nbbo.best_ask_price}")
+    print(f"\\nBest Ask: \\$\{nbbo.best_ask_price}")
     print(f"  Size: {nbbo.best_ask_size:,} shares")
     print(f"  Venues: {', '.join(v.value for v in nbbo.best_ask_venues)}")
-    print(f"\\nSpread: \${nbbo.spread()} ({nbbo.spread_bps():.2f} bps)")
-    print(f"Midpoint: \${nbbo.midpoint()}")
+    print(f"\\nSpread: \\$\{nbbo.spread()} ({nbbo.spread_bps():.2f} bps)")
+    print(f"Midpoint: \\$\{nbbo.midpoint()}")
 
 # nbbo_example()
 \`\`\`
@@ -568,8 +568,8 @@ def order_splitting_example():
     
     print("\\nRouting Decisions:")
     for d in decisions:
-        print(f"  {d.venue.value}: {d.quantity:,} shares @ \${d.expected_price}")
-        print(f"    Fee: \${d.expected_fee:.2f}, Reason: {d.reason}")
+        print(f"  {d.venue.value}: {d.quantity:,} shares @ \\$\{d.expected_price}")
+        print(f"    Fee: \\$\{d.expected_fee:.2f}, Reason: {d.reason}")
     
     # Example 2: Limit order(single venue)
 print("\\n\\n2. Limit Sell Order: 5,000 shares @ $150.50")
@@ -583,8 +583,8 @@ decision = splitter.split_limit_order(
 )
 
 print(f"\\nRouting Decision:")
-print(f"  {decision.venue.value}: {decision.quantity:,} shares @ \${decision.expected_price}")
-print(f"    Fee: \${decision.expected_fee:.2f}, Reason: {decision.reason}")
+print(f"  {decision.venue.value}: {decision.quantity:,} shares @ \\$\{decision.expected_price}")
+print(f"    Fee: \\$\{decision.expected_fee:.2f}, Reason: {decision.reason}")
 
 # order_splitting_example()
 \`\`\`

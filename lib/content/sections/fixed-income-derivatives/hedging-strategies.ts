@@ -216,7 +216,7 @@ class DynamicDeltaHedger:
         >>> positions = [OptionPosition(100, 'call', 100, 30)]
         >>> hedger = DynamicDeltaHedger(positions, initial_spot=100)
         >>> hedger.rebalance(new_spot=105)
-        >>> print(f"Hedge P&L: \${hedger.total_pnl():,.2f}")
+        >>> print(f"Hedge P&L: \\$\{hedger.total_pnl():,.2f}")
         """
     
     def __init__(
@@ -381,8 +381,8 @@ if result.get('rebalanced', True):
 print("\\n=== Hedging Summary ===\\n")
 print(f"Rebalances: {hedger.rebalance_count}")
 print(f"Final stock position: {hedger.stock_position:.2f} shares")
-print(f"Hedge P&L: \${hedger.total_pnl():,.2f}")
-print(f"Estimated transaction costs: \${hedger.trading_costs():,.2f}")
+print(f"Hedge P&L: \\$\{hedger.total_pnl():,.2f}")
+print(f"Estimated transaction costs: \\$\{hedger.trading_costs():,.2f}")
 \`\`\`
 
 ---

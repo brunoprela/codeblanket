@@ -14,7 +14,7 @@ export const biasVarianceTradeoffMultipleChoice = {
       correctAnswer: 2,
       explanation:
         'High errors on both training and test (with small gap) indicates high bias/underfitting. The model is too simple to capture the underlying patterns. Solution: increase model complexity, add features, or reduce regularization.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Diagnosis',
     },
     {
@@ -30,7 +30,7 @@ export const biasVarianceTradeoffMultipleChoice = {
       correctAnswer: 2,
       explanation:
         'Regularization (L1/L2) directly reduces variance by constraining model parameters and preventing overfitting to noise. Other variance reduction techniques include: getting more data, feature selection, dropout, and early stopping.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Solutions',
     },
     {

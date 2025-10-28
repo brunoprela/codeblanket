@@ -115,9 +115,9 @@ pv_annuity = sum(
     for year in range(1, 31)
 )
 
-print(f"Lump sum: \${lump_sum:,.0f}")
-print(f"PV of annuity: \${pv_annuity:,.0f}")
-print(f"Difference: \${lump_sum - pv_annuity:,.0f}")
+print(f"Lump sum: \\$\{lump_sum:,.0f}")
+print(f"PV of annuity: \\$\{pv_annuity:,.0f}")
+print(f"Difference: \\$\{lump_sum - pv_annuity:,.0f}")
 print(f"\\nTake the lump sum!" if lump_sum > pv_annuity else "\\nTake the annuity!")
 
 # Output:
@@ -368,25 +368,25 @@ book.add_order(Order(99.50, 100, 'buy', time.time()))
 book.add_order(Order(100.50, 100, 'sell', time.time()))
 
 print("Initial market:")
-print(f"  Best bid: \${book.get_best_bid_ask()[0]:.2f}")
-print(f"  Best ask: \${book.get_best_bid_ask()[1]:.2f}")
-print(f"  Mid price: \${book.get_mid_price():.2f}")
-print(f"  Spread: \${book.get_best_bid_ask()[1] - book.get_best_bid_ask()[0]:.2f}")
+print(f"  Best bid: \\$\{book.get_best_bid_ask()[0]:.2f}")
+print(f"  Best ask: \\$\{book.get_best_bid_ask()[1]:.2f}")
+print(f"  Mid price: \\$\{book.get_mid_price():.2f}")
+print(f"  Spread: \\$\{book.get_best_bid_ask()[1] - book.get_best_bid_ask()[0]:.2f}")
 
 # News: Positive earnings announcement → aggressive buyers
 print("\\n[NEWS] Positive earnings! Buyers rush in...")
 
 trades = book.add_order(Order(100.50, 100, 'buy', time.time()))
-print(f"  Trade executed: {len (trades)} fills at \${trades[0][0]:.2f}")
+print(f"  Trade executed: {len (trades)} fills at \\$\{trades[0][0]:.2f}")
 
 # More buyers, pushing price up
 trades = book.add_order(Order(101.00, 50, 'buy', time.time()))
 book.add_order(Order(101.50, 50, 'sell', time.time()))
 
 print(f"\\nNew market after news:")
-print(f"  Best bid: \${book.get_best_bid_ask()[0]:.2f}")
-print(f"  Best ask: \${book.get_best_bid_ask()[1]:.2f}")
-print(f"  Mid price: \${book.get_mid_price():.2f}")
+print(f"  Best bid: \\$\{book.get_best_bid_ask()[0]:.2f}")
+print(f"  Best ask: \\$\{book.get_best_bid_ask()[1]:.2f}")
+print(f"  Mid price: \\$\{book.get_mid_price():.2f}")
 print(f"  Price change: +{book.get_mid_price() - 100:.2f} (+{(book.get_mid_price() - 100) / 100 * 100:.1f}%)")
 
 # Output:
@@ -663,8 +663,8 @@ def plot_stock_performance (ticker: str, period: str = '1y'):
     
     print(f"\\n{ticker} Performance Summary:")
     print(f"  Period: {period}")
-    print(f"  Start Price: \${df['Close'].iloc[0]:.2f}")
-print(f"  End Price: \${df['Close'].iloc[-1]:.2f}")
+    print(f"  Start Price: \\$\{df['Close'].iloc[0]:.2f}")
+print(f"  End Price: \\$\{df['Close'].iloc[-1]:.2f}")
 print(f"  Total Return: {total_return:.2%}")
 print(f"  Annualized Volatility: {volatility:.2%}")
 print(f"  Approx Sharpe Ratio: {sharpe:.2f}")

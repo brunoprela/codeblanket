@@ -240,25 +240,25 @@ class MandAValuation:
         print(f"{'=' * 70}\\n")
         
         print("Valuation:")
-        print(f"  {self.target_name} Standalone Value: \${deal['Target Standalone Value']:,.0f}M")
+        print(f"  {self.target_name} Standalone Value: \\$\{deal['Target Standalone Value']:,.0f}M")
 print(f"  Control Premium: {deal['Control Premium']:.1f}%")
-print(f"  Offer Price: \${deal['Offer Price']:,.0f}M")
-print(f"\\n  {self.acquirer_name} Value: \${deal['Acquirer Value']:,.0f}M")
-print(f"  Combined Value (pre-synergies): \${deal['Combined Value (pre-synergies)']:,.0f}M")
-print(f"\\n  Expected Synergies: \${deal['Synergies']:,.0f}M")
-print(f"  Less: Integration Costs: \${deal['Integration Costs']:,.0f}M")
-print(f"  Net Synergies: \${deal['Synergies'] - deal['Integration Costs']:,.0f}M")
+print(f"  Offer Price: \\$\{deal['Offer Price']:,.0f}M")
+print(f"\\n  {self.acquirer_name} Value: \\$\{deal['Acquirer Value']:,.0f}M")
+print(f"  Combined Value (pre-synergies): \\$\{deal['Combined Value (pre-synergies)']:,.0f}M")
+print(f"\\n  Expected Synergies: \\$\{deal['Synergies']:,.0f}M")
+print(f"  Less: Integration Costs: \\$\{deal['Integration Costs']:,.0f}M")
+print(f"  Net Synergies: \\$\{deal['Synergies'] - deal['Integration Costs']:,.0f}M")
 print(f"  {'─' * 68}")
-print(f"  Combined Value (post-synergies): \${deal['Combined Value (post-synergies)']:,.0f}M")
+print(f"  Combined Value (post-synergies): \\$\{deal['Combined Value (post-synergies)']:,.0f}M")
 
 print(f"\\nValue Distribution:")
-print(f"  Value to {self.target_name} Shareholders: \${deal['Value to Target']:,.0f}M")
-print(f"  Value to {self.acquirer_name} Shareholders: \${deal['Value to Acquirer']:,.0f}M")
-print(f"  Total Value Created: \${deal['Total Value Created']:,.0f}M")
+print(f"  Value to {self.target_name} Shareholders: \\$\{deal['Value to Target']:,.0f}M")
+print(f"  Value to {self.acquirer_name} Shareholders: \\$\{deal['Value to Acquirer']:,.0f}M")
+print(f"  Total Value Created: \\$\{deal['Total Value Created']:,.0f}M")
 
 print(f"\\nRecommendation: {deal['Recommendation']}")
 if deal['NPV to Acquirer'] > 0:
-    print(f"  Deal creates \${deal['NPV to Acquirer']:,.0f}M for {self.acquirer_name} shareholders.")
+    print(f"  Deal creates \\$\{deal['NPV to Acquirer']:,.0f}M for {self.acquirer_name} shareholders.")
 else:
 print(f"  Deal destroys \${-deal['NPV to Acquirer']:,.0f}M for {self.acquirer_name} shareholders.")
 

@@ -261,11 +261,11 @@ class TradingEnvironment (gym.Env):
         portfolio_value = self.balance + self.position * current_price
         
         print(f"Step: {self.current_step}")
-        print(f"  Price: \${current_price:.2f}")
+        print(f"  Price: \\$\{current_price:.2f}")
         print(f"  Position: {self.position:.2f} shares")
-        print(f"  Balance: \${self.balance:.2f}")
-        print(f"  Portfolio Value: \${portfolio_value:.2f}")
-        print(f"  P&L: \${portfolio_value - self.initial_balance:.2f}")
+        print(f"  Balance: \\$\{self.balance:.2f}")
+        print(f"  Portfolio Value: \\$\{portfolio_value:.2f}")
+        print(f"  P&L: \\$\{portfolio_value - self.initial_balance:.2f}")
 
 
 # ============================================================================
@@ -298,7 +298,7 @@ print("\\nInitial observation shape:", obs.shape)
 for _ in range(5):
     action = env.action_space.sample()  # Random action
     obs, reward, done, info = env.step (action)
-    print(f"Action: {action}, Reward: {reward:.4f}, Portfolio: \${info['portfolio_value']:,.2f}")
+    print(f"Action: {action}, Reward: {reward:.4f}, Portfolio: \\$\{info['portfolio_value']:,.2f}")
     if done:
         break
 \`\`\`
@@ -537,7 +537,7 @@ def train_dqn_agent (env, agent, num_episodes=500, update_target_every=10):
             avg_profit = np.mean (episode_profits[-50:])
             print(f"Episode {episode + 1}/{num_episodes}")
             print(f"  Avg Reward (50 ep): {avg_reward:.4f}")
-            print(f"  Avg Profit (50 ep): \${avg_profit:,.2f}")
+            print(f"  Avg Profit (50 ep): \\$\{avg_profit:,.2f}")
             print(f"  Epsilon: {agent.epsilon:.3f}")
             print(f"  Replay Memory: {len (agent.memory)}")
     
@@ -581,7 +581,7 @@ while not done:
 final_return = (portfolio_values[-1] - env.initial_balance) / env.initial_balance
 
 print(f"\\nEvaluation Results:")
-print(f"  Final Portfolio Value: \${portfolio_values[-1]:,.2f}")
+print(f"  Final Portfolio Value: \\$\{portfolio_values[-1]:,.2f}")
 print(f"  Total Return: {final_return:.2%}")
 print(f"  Number of Trades: {len (env.trades)}")
 \`\`\`

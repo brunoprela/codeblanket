@@ -273,23 +273,23 @@ print(btc_1h.tail())
 # 2. Order book
 orderbook = fetcher.fetch_order_book('BTC/USDT', limit=10)
 print(f"\\nOrder Book:")
-print(f"  Best Bid: \${orderbook['best_bid']:,.2f}")
-print(f"  Best Ask: \${orderbook['best_ask']:,.2f}")
-print(f"  Spread: \${orderbook['spread']:.2f} ({orderbook['spread_bps']:.1f} bps)")
+print(f"  Best Bid: \\$\{orderbook['best_bid']:,.2f}")
+print(f"  Best Ask: \\$\{orderbook['best_ask']:,.2f}")
+print(f"  Spread: \\$\{orderbook['spread']:.2f} ({orderbook['spread_bps']:.1f} bps)")
 print(f"  Imbalance: {orderbook['imbalance']:+.3f}")
 
 # 3. Ticker
 ticker = fetcher.fetch_ticker('BTC/USDT')
 print(f"\\nTicker:")
-print(f"  Price: \${ticker['last']:,.2f}")
+print(f"  Price: \\$\{ticker['last']:,.2f}")
 print(f"  24h Change: {ticker['change_24h']:+.2f}%")
-print(f"  24h Volume: \${ticker['volume_24h']:,.0f}")
+print(f"  24h Volume: \\$\{ticker['volume_24h']:,.0f}")
 
 # 4. Multiple coins
 print("\\nFetching multiple coins...")
 tickers = fetcher.fetch_tickers(['BTC/USDT', 'ETH/USDT', 'SOL/USDT'])
 for symbol, data in tickers.items():
-    print(f"  {symbol}: \${data['last']:,.2f} ({data['change_24h']:+.2f}%)")
+    print(f"  {symbol}: \\$\{data['last']:,.2f} ({data['change_24h']:+.2f}%)")
 \`\`\`
 
 ---

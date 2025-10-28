@@ -356,14 +356,14 @@ barrier = BarrierOption(
 )
 
 barrier_price = barrier.price_monte_carlo(num_paths = 10000)
-print(f"Up-and-out call price: \${barrier_price:.2f}")
+print(f"Up-and-out call price: \\$\{barrier_price:.2f}")
     
     # Compare to vanilla(approximate using Black - Scholes)
 d1 = (np.log(100 / 100) + (0.05 + 0.5 * 0.25 ** 2) * 1.0) / (0.25 * np.sqrt(1.0))
 d2 = d1 - 0.25 * np.sqrt(1.0)
 vanilla_price = 100 * norm.cdf(d1) - 100 * np.exp(-0.05 * 1.0) * norm.cdf(d2)
 
-print(f"Vanilla call price: \${vanilla_price:.2f}")
+print(f"Vanilla call price: \\$\{vanilla_price:.2f}")
 print(f"Discount from barrier: {(1 - barrier_price/vanilla_price)*100:.1f}%")
 
 print("\\n=== Asian Option Pricing ===\\n")
@@ -377,8 +377,8 @@ asian = AsianOption(
 )
 
 asian_price = asian.price_monte_carlo(num_paths = 10000)
-print(f"Asian call price: \${asian_price:.2f}")
-print(f"Vanilla call price: \${vanilla_price:.2f}")
+print(f"Asian call price: \\$\{asian_price:.2f}")
+print(f"Vanilla call price: \\$\{vanilla_price:.2f}")
 print(f"Discount from Asian: {(1 - asian_price/vanilla_price)*100:.1f}%")
 \`\`\`
 

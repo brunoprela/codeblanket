@@ -249,7 +249,7 @@ invoice_data = process_document_image(
 )
 
 print(f"Invoice Number: {invoice_data['invoice_number']}")
-print(f"Total: \${invoice_data['total']}")
+print(f"Total: \\$\{invoice_data['total']}")
 print(f"Line Items: {len (invoice_data['line_items'])}")
 \`\`\`
 

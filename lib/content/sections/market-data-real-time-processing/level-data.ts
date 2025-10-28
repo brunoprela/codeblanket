@@ -1,7 +1,7 @@
 export const levelData = {
-  title: 'Level 1, Level 2, Level 3 Data',
-  id: 'level-data',
-  content: `
+    title: 'Level 1, Level 2, Level 3 Data',
+    id: 'level-data',
+    content: `
 # Level 1, Level 2, Level 3 Data
 
 ## Introduction
@@ -117,9 +117,9 @@ quote = Level1Quote(
     volume=1_250_000
 )
 
-print(f"Spread: \\${quote.spread} ({quote.spread_bps} bps)")
-print(f"Mid: \\${quote.mid_price}")
-print(f"Latency: {(quote.receive_timestamp - quote.exchange_timestamp).total_seconds() * 1000:.2f}ms")
+print(f"Spread: \\$\{quote.spread} (\{quote.spread_bps} bps)")
+print(f"Mid: \\$\{quote.mid_price}")
+print(f"Latency: \{(quote.receive_timestamp - quote.exchange_timestamp).total_seconds() * 1000:.2f}ms")
 \`\`\`
 
 ### L1 Use Cases
@@ -269,12 +269,12 @@ snapshot = Level2Snapshot(
     ]
 )
 
-print(f"Best Bid: {snapshot.best_bid.price} × {snapshot.best_bid.size}")
-print(f"Best Ask: {snapshot.best_ask.price} × {snapshot.best_ask.size}")
-print(f"Spread: \\${snapshot.spread}")
-print(f"Top 5 bid volume: {snapshot.total_bid_volume(5)}")
-print(f"Top 5 ask volume: {snapshot.total_ask_volume(5)}")
-print(f"Imbalance: {snapshot.volume_imbalance(5):.2f}")
+print(f"Best Bid: \{snapshot.best_bid.price} × \{snapshot.best_bid.size}")
+print(f"Best Ask: \{snapshot.best_ask.price} × \{snapshot.best_ask.size}")
+print(f"Spread: \\$\{snapshot.spread}")
+print(f"Top 5 bid volume: \{snapshot.total_bid_volume(5)}")
+print(f"Top 5 ask volume: \{snapshot.total_ask_volume(5)}")
+print(f"Imbalance: \{snapshot.volume_imbalance(5):.2f}")
 \`\`\`
 
 ### Order Book Builder (Incremental Updates)

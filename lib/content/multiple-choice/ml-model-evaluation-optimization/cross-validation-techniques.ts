@@ -14,7 +14,7 @@ export const crossValidationTechniquesMultipleChoice = {
       correctAnswer: 1,
       explanation:
         'K-fold CV provides k different train-test splits, and averaging the results gives a more robust and reliable estimate of model performance with confidence intervals, reducing variance from a single lucky or unlucky split.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Concepts',
     },
     {
@@ -77,7 +77,7 @@ export const crossValidationTechniquesMultipleChoice = {
       correctAnswer: 1,
       explanation:
         'Stratified CV ensures each fold maintains the same class distribution as the original dataset. For example, if the original data has 70% class A and 30% class B, each fold will have approximately the same 70/30 split.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Stratification',
     },
   ],

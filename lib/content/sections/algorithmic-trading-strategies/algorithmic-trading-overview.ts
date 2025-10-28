@@ -357,7 +357,7 @@ if __name__ == "__main__":
     signals = strategy.generate_signals(market_data)
     print(f"Generated {len(signals)} signals")
     for signal in signals:
-        print(f"{signal.timestamp}: {signal.signal_type.value} {signal.symbol} at \${signal.price:.2f})"
+        print(f"{signal.timestamp}: {signal.signal_type.value} {signal.symbol} at \\$\{signal.price:.2f})"
 \`\`\`
 
 ---

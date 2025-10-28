@@ -198,8 +198,8 @@ def process_daily_orders():
     summary = result.get()
     
     print(f"Processed {summary['total_orders']} orders")
-    print(f"Total revenue: \${summary['total_revenue']:,}")
-    print(f"Average order: \${summary['average_order']:.2f}")
+    print(f"Total revenue: \\$\{summary['total_revenue']:,}")
+    print(f"Average order: \\$\{summary['average_order']:.2f}")
 
 return summary
 

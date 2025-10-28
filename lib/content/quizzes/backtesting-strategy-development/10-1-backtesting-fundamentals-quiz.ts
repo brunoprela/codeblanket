@@ -60,7 +60,7 @@ export const backtestingFundamentalsQuiz = [
     correctAnswer: 1,
     explanation:
       "**Event-driven backtesting** processes data point-by-point (like live trading) and can realistically model:\n- Order execution delays\n- Partial fills (order only partially executed)\n- Market impact (your orders moving prices)\n- Complex portfolio rebalancing logic\n- Stop losses and dynamic risk management\n\nThis makes it much more realistic for production systems. **Vectorized backtesting** (processing entire dataset at once with numpy/pandas) is **faster** and simpler but trades off realism. It's good for quick prototyping but can't easily model complex order logic.\n\n**Production systems** (Renaissance Technologies, Citadel, Two Sigma) all use event-driven architectures because the code closely resembles live trading systems, making the transition smoother. The trade-off: event-driven is 10-100x slower, but accuracy matters more than speed.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 5,
@@ -76,6 +76,6 @@ export const backtestingFundamentalsQuiz = [
     correctAnswer: 2,
     explanation:
       'Even with excellent backtest results, you should **never deploy directly to live trading**. The proper progression is:\n\n**Stage 1: Backtest** (✓ Done - Sharpe 2.5 is excellent)\n**Stage 2: Paper Trading** - Run for **3-6 months** with real-time data and simulated execution. This reveals:\n- How strategy behaves with live market conditions\n- Execution challenges (slippage, partial fills)\n- Data feed issues\n- Operational problems in your code\n- Whether backtest results were realistic\n\n**Typical degradation**: Expect 20-50% worse performance in paper trading vs backtest.\n\n**Stage 3: Live Trading** - Start with **small capital** (1-5% of intended size):\n- Monitor for 30-60 days\n- Scale up gradually if performance matches expectations\n- Be ready to shut down if performance degrades\n\n**Real-world**: Renaissance Technologies and Two Sigma run paper trading for 6-12 months. Most strategies that pass backtest **fail in paper trading**. Option C is the professional approach.',
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
 ];

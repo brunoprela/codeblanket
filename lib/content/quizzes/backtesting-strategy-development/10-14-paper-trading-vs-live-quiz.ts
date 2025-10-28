@@ -29,7 +29,7 @@ const paperTradingVsLiveQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "3-6 months minimum for daily strategies ensures exposure to various market conditions (trending, ranging, volatile, calm). One week (Option A) is far too short. One month (Option B) might miss important regimes. Option D is dangerous—even Renaissance Technologies, with the world's most sophisticated backtesting, paper trades for 6-12 months. The goal is to observe the strategy across: earnings seasons, Fed announcements, market corrections, low-volatility periods, and high-volatility periods. For higher-frequency strategies (intraday), 1-2 months may suffice. For lower-frequency (weekly/monthly), 12+ months recommended.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'paper-3',
@@ -58,7 +58,7 @@ const paperTradingVsLiveQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "Paper trading MUST use real-time market data identical to what live trading will use. Option A defeats the purpose—using historical data is just another backtest. Option B (delayed data) introduces different execution prices than live trading. Option D misses intraday volatility and execution dynamics even for daily strategies. The entire point of paper trading is forward validation with real market conditions, including: real-time price discovery, actual spreads, genuine market impact, live data feed latency, and real market microstructure. Use the exact same data infrastructure you'll use for live trading.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'paper-5',

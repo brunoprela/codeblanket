@@ -294,13 +294,13 @@ def simulate_vxx_decay(initial_price=100, months=12, monthly_roll_cost=0.05):
     print("=" * 70)
     print("VXX CONTANGO DECAY SIMULATION")
     print("=" * 70)
-    print(f"\\nStarting Price: \${initial_price:.2f})"
+    print(f"\\nStarting Price: \\$\{initial_price:.2f})"
 print(f"Monthly Roll Cost: {monthly_roll_cost*100:.0f}%")
 print(f"\\nPrice After:")
 for i in [1, 3, 6, 12]:
     if i < len(prices):
         pct_change = (prices[i] / initial_price - 1) * 100
-print(f"  {i:2d} month{'s' if i > 1 else ' '}: \${prices[i]:6.2f} ({pct_change:+.1f}%)")
+print(f"  {i:2d} month{'s' if i > 1 else ' '}: \\$\{prices[i]:6.2f} ({pct_change:+.1f}%)")
 
 annual_decay = (prices[-1] / initial_price - 1) * 100
 print(f"\\n{'─' * 70}")
@@ -358,7 +358,7 @@ def replicate_variance_swap_with_options(spot, strikes, option_prices, strike_va
     total_weight = 0
     portfolio_cost = 0
     
-    print(f"\\nSpot: \${spot:.2f}")
+    print(f"\\nSpot: \\$\{spot:.2f}")
 print(f"Strike Variance: {strike_variance:.0f} (vol = {np.sqrt(strike_variance):.1f}%)")
 print(f"\\nOption Portfolio:")
 print(f"  {'Strike':>8} {'Price':>8} {'Weight':>10} {'Position':>10}")
@@ -372,10 +372,10 @@ position_value = weight * price * 100
 total_weight += weight
 portfolio_cost += position_value
 
-print(f"  \${strike:7.2f} \${price:7.2f} {weight:10.6f} \${position_value:9.2f}")
+print(f"  \${strike:7.2f} \${price:7.2f} {weight:10.6f} \\$\{position_value:9.2f}")
 
 print("  " + "─" * 45)
-print(f"  {'Total':>8} \${portfolio_cost:7.2f}")
+print(f"  {'Total':>8} \\$\{portfolio_cost:7.2f}")
     
     # Calculate implied variance
 implied_variance = portfolio_cost / total_weight
@@ -525,7 +525,7 @@ def scan_vol_arbitrage(option_chain):
                 'trade': f'Buy {strike} 60-day, sell {strike} 30-day',
                 'edge': iv_30day - iv_60day
             })
-            print(f"  OPPORTUNITY: Strike \${strike}")
+            print(f"  OPPORTUNITY: Strike \\$\{strike}")
             print(f"    30-day IV: {iv_30day:.1f}% > 60-day IV: {iv_60day:.1f}%")
             print(f"    Inversion: {iv_30day - iv_60day:.1f}%")
     
@@ -549,7 +549,7 @@ def scan_vol_arbitrage(option_chain):
                 'deviation': deviation,
                 'moneyness': moneyness
             })
-            print(f"  OPPORTUNITY: Strike \${strike} ({moneyness:.2f} moneyness)")
+            print(f"  OPPORTUNITY: Strike \\$\{strike} ({moneyness:.2f} moneyness)")
             print(f"    IV: {iv:.1f}% vs ATM: {atm_iv:.1f}%")
             print(f"    Deviation: {deviation:.1f}%")
     

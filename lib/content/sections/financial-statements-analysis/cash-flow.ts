@@ -184,8 +184,8 @@ print("Cash Flow Statement Example")
 print("=" * 70)
 print(apple_cf.to_dataframe().to_string (index=False))
 print()
-print(f"Free Cash Flow: \${apple_cf.calculate_free_cash_flow():,.0f}")
-print(f"Net Change in Cash: \${apple_cf.calculate_net_change_cash():,.0f}")
+print(f"Free Cash Flow: \\$\{apple_cf.calculate_free_cash_flow():,.0f}")
+print(f"Net Change in Cash: \\$\{apple_cf.calculate_net_change_cash():,.0f}")
 \`\`\`
 
 ## Section 1: Operating Cash Flow (CFO) - The Most Critical
@@ -215,16 +215,16 @@ class OperatingCashFlowAnalyzer:
         print("Reconciliation: Net Income → Operating Cash Flow")
         print("=" * 70)
         print()
-        print(f"Net Income (starting point):           \${net_income:> 15, .0f}")
+        print(f"Net Income (starting point):           \\$\{net_income:> 15, .0f}")
 print()
         
         # Add back non - cash expenses
 print("Add back: Non-Cash Expenses")
 total_non_cash_expenses = 0
 for expense, amount in non_cash_expenses.items():
-    print(f"  {expense:35} \${amount:>15,.0f}")
+    print(f"  {expense:35} \\$\{amount:>15,.0f}")
 total_non_cash_expenses += amount
-print(f"  {'Total Non-Cash Expenses':35} \${total_non_cash_expenses:>15,.0f}")
+print(f"  {'Total Non-Cash Expenses':35} \\$\{total_non_cash_expenses:>15,.0f}")
 print()
         
         # Subtract non - cash income
@@ -241,15 +241,15 @@ print("Adjust for: Changes in Working Capital")
 total_wc_changes = 0
 for item, change in working_capital_changes.items():
     sign = '+' if change > 0 else ''
-print(f"  {item:35} \${change:>15,.0f}")
+print(f"  {item:35} \\$\{change:>15,.0f}")
 total_wc_changes += change
-print(f"  {'Total WC Changes':35} \${total_wc_changes:>15,.0f}")
+print(f"  {'Total WC Changes':35} \\$\{total_wc_changes:>15,.0f}")
 print()
         
         # Calculate CFO
 cfo = net_income + total_non_cash_expenses - total_non_cash_income + total_wc_changes
 
-print(f"{'Operating Cash Flow (CFO)':35} \${cfo:>15,.0f}")
+print(f"{'Operating Cash Flow (CFO)':35} \\$\{cfo:>15,.0f}")
 print()
         
         # Quality metrics
@@ -459,12 +459,12 @@ class FreeCashFlowAnalyzer:
         print("Free Cash Flow Quality Analysis")
         print("=" * 70)
         print()
-        print(f"Operating Cash Flow:     \${cfo:> 15, .0f}")
-print(f"Capital Expenditures:    \${capex:>15,.0f}")
-print(f"Free Cash Flow:          \${fcf:>15,.0f}")
+        print(f"Operating Cash Flow:     \\$\{cfo:> 15, .0f}")
+print(f"Capital Expenditures:    \\$\{capex:>15,.0f}")
+print(f"Free Cash Flow:          \\$\{fcf:>15,.0f}")
 print()
-print(f"Revenue:                 \${revenue:>15,.0f}")
-print(f"Net Income:              \${net_income:>15,.0f}")
+print(f"Revenue:                 \\$\{revenue:>15,.0f}")
+print(f"Net Income:              \\$\{net_income:>15,.0f}")
 print()
 print("Quality Metrics:")
 print(f"  FCF Margin:            {fcf_margin:>15.1%}")
@@ -598,9 +598,9 @@ class CashFlowPatternAnalyzer:
         print("Cash Flow Pattern Analysis")
         print("=" * 70)
         print()
-        print(f"Operating Cash Flow (CFO):  \${cfo:> 15, .0f}")
-print(f"Investing Cash Flow (CFI):  \${cfi:>15,.0f}")
-print(f"Financing Cash Flow (CFF):  \${cff:>15,.0f}")
+        print(f"Operating Cash Flow (CFO):  \\$\{cfo:> 15, .0f}")
+print(f"Investing Cash Flow (CFI):  \\$\{cfi:>15,.0f}")
+print(f"Financing Cash Flow (CFF):  \\$\{cff:>15,.0f}")
 print()
 print(f"Identified Stage: {stage}")
 
@@ -686,8 +686,8 @@ class CashFlowFraudDetector:
         
         # Flag 1: CFO < Net Income persistently
         cfo_ni_ratio = cfo / net_income if net_income != 0 else 0
-        print(f"Net Income:              \${net_income:> 15, .0f}")
-print(f"Operating Cash Flow:     \${cfo:>15,.0f}")
+        print(f"Net Income:              \\$\{net_income:> 15, .0f}")
+print(f"Operating Cash Flow:     \\$\{cfo:>15,.0f}")
 print(f"CFO / NI Ratio:          {cfo_ni_ratio:>15.2f}x")
 print()
 
@@ -702,7 +702,7 @@ print("  🚩 RED FLAG: CFO significantly below Net Income")
         
         # Flag 2: High accruals
 accruals_ratio = abs (accruals) / abs (net_income) if net_income != 0 else 0
-print(f"Total Accruals:          \${accruals:>15,.0f}")
+print(f"Total Accruals:          \\$\{accruals:>15,.0f}")
 print(f"Accruals / NI:           {accruals_ratio:>15.2f}x")
 print()
 
@@ -830,15 +830,15 @@ class ComprehensiveCashFlowAnalysis:
         # Analysis sections
         print("1. CASH FLOW COMPONENTS")
         print("-" * 70)
-        print(f"Operating Cash Flow:     \${cfo:> 18, .0f}")
-print(f"Capital Expenditures:    \${capex:>18,.0f}")
-print(f"Free Cash Flow:          \${fcf:>18,.0f}")
+        print(f"Operating Cash Flow:     \\$\{cfo:> 18, .0f}")
+print(f"Capital Expenditures:    \\$\{capex:>18,.0f}")
+print(f"Free Cash Flow:          \\$\{fcf:>18,.0f}")
 print()
 
 print("2. EARNINGS QUALITY")
 print("-" * 70)
 cfo_ni_ratio = cfo / net_income if net_income != 0 else 0
-print(f"Net Income:              \${net_income:>18,.0f}")
+print(f"Net Income:              \\$\{net_income:>18,.0f}")
 print(f"CFO / NI Ratio:          {cfo_ni_ratio:>18.2f}x")
 
 if cfo_ni_ratio > 1.1:
@@ -852,7 +852,7 @@ print()
 print("3. PROFITABILITY METRICS")
 print("-" * 70)
 fcf_margin = fcf / revenue if revenue != 0 else 0
-print(f"Revenue:                 \${revenue:>18,.0f}")
+print(f"Revenue:                 \\$\{revenue:>18,.0f}")
 print(f"FCF Margin:              {fcf_margin:>18.1%}")
 
 if fcf_margin > 0.20:

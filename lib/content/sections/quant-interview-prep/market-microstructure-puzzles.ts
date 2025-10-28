@@ -164,7 +164,7 @@ spreads = calculate_spreads(
 
 print("Spread Analysis:")
 for key, value in spreads.items():
-    print(f"  {key}: \${value:.4f}")
+    print(f"  {key}: \\$\{value:.4f}")
 
 # Output:
 # Spread Analysis:
@@ -312,16 +312,16 @@ mm.buy_at_bid(5000)
 mm.sell_at_ask(4000)
 
 print(f"Position after morning: {mm.position} shares")
-print(f"Spread P&L: \${mm.spread_pnl:.2f}")
+print(f"Spread P&L: \\$\{mm.spread_pnl:.2f}")
 
 # Close position at new mid
 mm.close_position (closing_price=100.25)
 
 breakdown = mm.get_breakdown()
 print(f"\\nP&L Breakdown:")
-print(f"  Spread P&L: \${breakdown['spread_pnl']:.2f}")
-print(f"  Inventory P&L: \${breakdown['inventory_pnl']:.2f}")
-print(f"  Total P&L: \${breakdown['total_pnl']:.2f}")
+print(f"  Spread P&L: \\$\{breakdown['spread_pnl']:.2f}")
+print(f"  Inventory P&L: \\$\{breakdown['inventory_pnl']:.2f}")
+print(f"  Total P&L: \\$\{breakdown['total_pnl']:.2f}")
 
 # Output:
 # Position after morning: 1000 shares
@@ -470,8 +470,8 @@ impact_a = estimate_market_impact(
 print("Scenario A (100K shares, 2M volume, 25% vol, $50 stock):")
 print(f"  Participation rate: {impact_a['participation_rate']:.1f}%")
 print(f"  Market impact: {impact_a['impact_pct']:.2f}%")
-print(f"  Cost per share: \${impact_a['impact_per_share']:.2f}")
-print(f"  Total cost: \${impact_a['total_cost']:,.0f}")
+print(f"  Cost per share: \\$\{impact_a['impact_per_share']:.2f}")
+print(f"  Total cost: \\$\{impact_a['total_cost']:,.0f}")
 
 # Scenario b
 impact_b = estimate_market_impact(
@@ -483,7 +483,7 @@ impact_b = estimate_market_impact(
 print(f"\\nScenario B (200K shares, double size):")
 print(f"  Market impact: {impact_b['impact_pct']:.2f}%")
 print(f"  Impact ratio vs A: {impact_b['impact_pct'] / impact_a['impact_pct']:.2f}x")
-print(f"  Total cost: \${impact_b['total_cost']:,.0f}")
+print(f"  Total cost: \\$\{impact_b['total_cost']:,.0f}")
 
 # Scenario c
 impact_c = estimate_market_impact(
@@ -495,8 +495,8 @@ impact_c = estimate_market_impact(
 print(f"\\nScenario C (100K shares, illiquid/volatile, $80 stock):")
 print(f"  Participation rate: {impact_c['participation_rate']:.1f}%")
 print(f"  Market impact: {impact_c['impact_pct']:.2f}%")
-print(f"  Cost per share: \${impact_c['impact_per_share']:.2f}")
-print(f"  Total cost: \${impact_c['total_cost']:,.0f}")
+print(f"  Cost per share: \\$\{impact_c['impact_per_share']:.2f}")
+print(f"  Total cost: \\$\{impact_c['total_cost']:,.0f}")
 
 # Output:
 # Market Impact Analysis:

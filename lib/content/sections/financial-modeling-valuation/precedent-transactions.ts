@@ -358,7 +358,7 @@ for key, value in premium_analysis.items():
         if 'Premium' in key and '(%)' in key:
             print(f"  {key:.<40} {value:.1%}")
         elif '$' in key or 'Price' in key:
-            print(f"  {key:.<40} \${value:.2f}")
+            print(f"  {key:.<40} \\$\{value:.2f}")
         else:
             print(f"  {key:.<40} {value}")
 
@@ -565,7 +565,7 @@ for key, value in valuation.items():
     if 'Premium' in key:
         print(f"  {key:.<50} {value:.1%}")
     else:
-        print(f"  {key:.<50} \${value / 1_000_000:,.0f}M")
+        print(f"  {key:.<50} \\$\{value / 1_000_000:,.0f}M")
 
 # Strategic vs Financial
 print("\\n\\nStrategic vs Financial Buyer Multiples:")
@@ -654,7 +654,7 @@ for key, value in result.items():
     if '%' in key or 'Probability' in key:
         print(f"  {key:.<40} {value:.1%}")
     else:
-        print(f"  {key:.<40} \${value / 1_000_000:,.0f}M")
+        print(f"  {key:.<40} \\$\{value / 1_000_000:,.0f}M")
 \`\`\`
 
 ---

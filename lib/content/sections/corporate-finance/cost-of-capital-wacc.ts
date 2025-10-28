@@ -124,8 +124,8 @@ tax_rate = 0.25             # 25% tax rate
 wacc = calculate_wacc (equity_value, debt_value, cost_equity, cost_debt, tax_rate)
 
 print("WACC Calculation:")
-print(f"Market value of equity: \${equity_value / 1e6:.0f}M")
-print(f"Market value of debt: \${debt_value/1e6:.0f}M")
+print(f"Market value of equity: \\$\{equity_value / 1e6:.0f}M")
+print(f"Market value of debt: \\$\{debt_value/1e6:.0f}M")
 print(f"Total firm value: \${(equity_value + debt_value)/1e6:.0f}M")
 print(f"\\nEquity weight: {equity_value/(equity_value+debt_value):.1%}")
 print(f"Debt weight: {debt_value/(equity_value+debt_value):.1%}")
@@ -399,8 +399,8 @@ growth = 0.03        # 3% annual growth
 re_ddm = cost_of_equity_ddm (next_div, price, growth)
 
 print(f"Cost of Equity (DDM):")
-print(f"Next dividend: \${next_div}")
-print(f"Current price: \${price}")
+print(f"Next dividend: \\$\{next_div}")
+print(f"Current price: \\$\{price}")
 print(f"Growth rate: {growth:.1%}")
 print(f"Cost of equity: {re_ddm:.2%}")
 
@@ -510,8 +510,8 @@ years = 10            # 10 years to maturity
 ytm = yield_to_maturity (bond_price, face_value, coupon_rate, years)
 
 print("Cost of Debt Calculation:")
-print(f"Bond price: \${bond_price}")
-print(f"Face value: \${face_value}")
+print(f"Bond price: \\$\{bond_price}")
+print(f"Face value: \\$\{face_value}")
 print(f"Coupon rate: {coupon_rate:.1%}")
 print(f"Years to maturity: {years}")
 print(f"\\nYTM (Cost of debt): {ytm:.2%}")
@@ -603,8 +603,8 @@ total_debt = 800_000_000    # $800M total debt
 
 rd = cost_of_debt_from_financials (interest_exp, total_debt)
 
-print(f"Interest expense: \${interest_exp / 1e6:.0f}M")
-print(f"Total debt: \${total_debt/1e6:.0f}M")
+print(f"Interest expense: \\$\{interest_exp / 1e6:.0f}M")
+print(f"Total debt: \\$\{total_debt/1e6:.0f}M")
 print(f"Cost of debt: {rd:.2%}")
 
 # Output:
@@ -642,9 +642,9 @@ shares = 15_500_000_000      # 15.5 billion shares
 
 mv_equity = market_value_equity (price, shares)
 
-print(f"Share price: \${price:.2f}")
+print(f"Share price: \\$\{price:.2f}")
 print(f"Shares outstanding: {shares/1e9:.1f}B")
-print(f"Market cap: \${mv_equity/1e12:.2f}T")
+print(f"Market cap: \\$\{mv_equity/1e12:.2f}T")
 
 # Output:
 # Share price: $180.00
@@ -682,9 +682,9 @@ price_pct = 95        # Trading at 95% of face value
 
 mv_debt = market_value_debt_from_bonds (face, price_pct)
 
-print(f"Face value: \${face / 1e6:.0f}M")
+print(f"Face value: \\$\{face / 1e6:.0f}M")
 print(f"Market price: {price_pct}% of face")
-print(f"Market value: \${mv_debt/1e6:.0f}M")
+print(f"Market value: \\$\{mv_debt/1e6:.0f}M")
 
 # Output:
 # Face value: $500M
@@ -729,9 +729,9 @@ rating = 'BBB'
 
 mv_debt_approx = approximate_market_value_debt (book_debt, rating)
 
-print(f"Book value of debt: \${book_debt / 1e9:.2f}B")
+print(f"Book value of debt: \\$\{book_debt / 1e9:.2f}B")
 print(f"Credit rating: {rating}")
-print(f"Approximate market value: \${mv_debt_approx/1e9:.2f}B")
+print(f"Approximate market value: \\$\{mv_debt_approx/1e9:.2f}B")
 
 # Output:
 # Book value of debt: $1.00B

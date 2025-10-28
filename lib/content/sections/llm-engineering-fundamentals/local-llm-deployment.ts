@@ -704,11 +704,11 @@ scenarios = [
 for name, requests, tokens in scenarios:
     result = calculate_breakeven (requests, tokens)
     print(f"\\n{name.upper()} ({requests} requests/day):")
-    print(f"  Monthly API cost: \${result['monthly_api_cost']:.2f}")
+    print(f"  Monthly API cost: \\$\{result['monthly_api_cost']:.2f}")
 print(f"  Months to break even: {result['months_to_breakeven']:.1f}")
-print(f"  3-year API cost: \${result['3_year_api_cost']:.0f}")
-print(f"  3-year local cost: \${result['3_year_local_cost']:.0f}")
-print(f"  3-year savings: \${result['3_year_savings']:.0f}")
+print(f"  3-year API cost: \\$\{result['3_year_api_cost']:.0f}")
+print(f"  3-year local cost: \\$\{result['3_year_local_cost']:.0f}")
+print(f"  3-year savings: \\$\{result['3_year_savings']:.0f}")
 
 if result['local_better_if_months']:
     print("  ✅ Go local!")

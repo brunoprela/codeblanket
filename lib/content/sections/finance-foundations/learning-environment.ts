@@ -275,7 +275,7 @@ api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
 
 # Get account info
 account = api.get_account()
-print(f"Buying power: \${float (account.buying_power):,.2f}")
+print(f"Buying power: \\$\{float (account.buying_power):,.2f}")
 
 # Place order
 api.submit_order(
@@ -289,7 +289,7 @@ api.submit_order(
 # Get positions
 positions = api.list_positions()
 for position in positions:
-    print(f"{position.symbol}: {position.qty} shares @ \${float (position.avg_entry_price):.2f}")
+    print(f"{position.symbol}: {position.qty} shares @ \\$\{float (position.avg_entry_price):.2f}")
 \`\`\`
 
 ### Interactive Brokers (IBKR)
@@ -344,7 +344,7 @@ print(f"USDT: {balance['USDT']['free']}")
 
 # Place order
 order = exchange.create_market_buy_order('BTC/USDT', 0.001)  # 0.001 BTC
-print(f"Bought at \\\${order['average']}")
+print(f"Bought at \\\\$\{order['average']}")
 \`\`\`
 
 ---

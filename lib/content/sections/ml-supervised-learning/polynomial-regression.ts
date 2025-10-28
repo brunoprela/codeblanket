@@ -499,7 +499,7 @@ marginal_revenue = best_model.predict (spend_levels + 10) - base_revenue
 
 for spend, marginal in zip (spend_levels.ravel(), marginal_revenue):
     roi = (marginal / 10) * 100
-    print(f"At \${spend}k spend: Additional $10k returns \${marginal:.2f}k (ROI: { roi: .1f }%) ")
+    print(f"At \${spend}k spend: Additional $10k returns \\$\{marginal:.2f}k (ROI: { roi: .1f }%) ")
 \`\`\`
 
 ## Best Practices

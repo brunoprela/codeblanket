@@ -240,9 +240,9 @@ var_dollar = abs (var_historical * portfolio_value)
 cvar_dollar = abs (cvar_95 * portfolio_value)
 
 print(f"\\nPortfolio Risk ($100,000):")
-print(f"  1-Day VaR (95%): \${var_dollar:,.0f}")
-print(f"  1-Day CVaR (95%): \${cvar_dollar:,.0f}")
-print(f"  Worst expected day (99%): \${abs (cvar_99 * portfolio_value):,.0f}")
+print(f"  1-Day VaR (95%): \\$\{var_dollar:,.0f}")
+print(f"  1-Day CVaR (95%): \\$\{cvar_dollar:,.0f}")
+print(f"  Worst expected day (99%): \\$\{abs (cvar_99 * portfolio_value):,.0f}")
 
 print("="*70)
 \`\`\`
@@ -449,7 +449,7 @@ print("\\n" + "="*70)
 print("STRESS TEST RESULTS")
 print("="*70)
 
-print(f"\\nPortfolio Value: \${stress_tester.portfolio_value:,.0f}")
+print(f"\\nPortfolio Value: \\$\{stress_tester.portfolio_value:,.0f}")
 
 # Historical scenarios
 print("\\n1. Historical Crisis Scenarios:")
@@ -457,19 +457,19 @@ historical_results = stress_tester.historical_stress_test()
 
 for scenario, result in historical_results.items():
     print(f"\\n{scenario}:")
-    print(f"  Loss: \${result['loss']:,.0f} ({result['loss_pct']:.2%})")
-    print(f"  New Value: \${result['new_value']:,.0f}")
+    print(f"  Loss: \\$\{result['loss']:,.0f} ({result['loss_pct']:.2%})")
+    print(f"  New Value: \\$\{result['new_value']:,.0f}")
 
 # Correlation breakdown
 print("\\n2. Correlation Breakdown (2008-style):")
 corr_breakdown = stress_tester.correlation_breakdown_test()
 print(f"  Scenario: {corr_breakdown['scenario']}")
-print(f"  Loss: \${corr_breakdown['loss']:,.0f} ({corr_breakdown['loss_pct']:.2%})")
+print(f"  Loss: \\$\{corr_breakdown['loss']:,.0f} ({corr_breakdown['loss_pct']:.2%})")
 
 # Liquidity stress
 print("\\n3. Forced Liquidation (50% of portfolio):")
 liquidity_result = stress_tester.liquidity_stress_test (liquidation_pct=0.50)
-print(f"  Liquidation Cost: \${liquidity_result['liquidation_cost']:,.0f}")
+print(f"  Liquidation Cost: \\$\{liquidity_result['liquidation_cost']:,.0f}")
 print(f"  Cost (bps): {liquidity_result['cost_bps']:.0f} bps")
 
 # Monte Carlo

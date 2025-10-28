@@ -475,7 +475,7 @@ from scipy.optimize import linprog
 B = 3334  # Round up to meet constraint
 S = 10000 - B
 
-print(f"Investment: \${S:,} in stocks, \${B:,} in bonds")
+print(f"Investment: \${S:,} in stocks, \\$\{B:,} in bonds")
 print(f"Expected return: \${0.08*S + 0.05*B:,.2f}")
 print(f"Return rate: {(0.08*S + 0.05*B)/10000*100:.2f}%")
 \`\`\`
@@ -514,9 +514,9 @@ cost = 1000 + 2*trades
 revenue = 5*trades
 profit = revenue - cost
 print(f"\\nAt {trades} trades:")
-print(f"Cost: \${cost:,}")
-print(f"Revenue: \${revenue:,}")
-print(f"Profit: \${profit:,}")
+print(f"Cost: \\$\{cost:,}")
+print(f"Revenue: \\$\{revenue:,}")
+print(f"Profit: \\$\{profit:,}")
 \`\`\`
 
 ## Using SymPy for Symbolic Math

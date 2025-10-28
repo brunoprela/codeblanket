@@ -212,7 +212,7 @@ class PositionTracker:
         
         print(f"[PositionTracker] {symbol} {side} {quantity} @ {price}")
         print(f"  New position: {position.quantity} @ avg {position.avg_cost}")
-        print(f"  Realized P&L: \${position.realized_pnl:.2f})"
+        print(f"  Realized P&L: \\$\{position.realized_pnl:.2f})"
     
     def update_market_price(self, symbol: str, price: Decimal):
 """Update market price for symbol"""
@@ -357,8 +357,8 @@ tracker.print_positions()
     # Aggregate view
 print("\\n5. Aggregate position:")
 agg = tracker.get_aggregate_position("AAPL")
-print(f"  Total AAPL: {agg.quantity} shares @ avg \${agg.avg_cost:.2f}")
-print(f"  Total P&L: \${agg.total_pnl():.2f}")
+print(f"  Total AAPL: {agg.quantity} shares @ avg \\$\{agg.avg_cost:.2f}")
+print(f"  Total P&L: \\$\{agg.total_pnl():.2f}")
 
 # asyncio.run(position_tracking_example())
 \`\`\`

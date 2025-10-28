@@ -439,7 +439,7 @@ print(f"Day trades (5 days): {status['day_trades_in_period']}")
 print(f"Total trades: {status['total_trades']}")
 print(f"Day trade %: {status['day_trade_percentage']:.1%}")
 print(f"Is PDT: {status['is_pdt']}")
-print(f"Account value: \${status['account_value']:,.0f}")
+print(f"Account value: \\$\{status['account_value']:,.0f}")
 print(f"Meets $25K min: {status['meets_minimum']}")
 
 if status['warning']:

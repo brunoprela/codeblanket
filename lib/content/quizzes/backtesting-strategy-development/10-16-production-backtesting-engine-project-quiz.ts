@@ -74,7 +74,7 @@ const productionBacktestingEngineProjectQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "Production systems need timeout mechanisms with graceful shutdown. Set reasonable timeout (e.g., 30 minutes for daily strategy), send SIGTERM for cleanup, then SIGKILL if unresponsive. Option A risks resource exhaustion. Option B risks corruption (open connections, partial writes). Option D masks problems instead of fixing them. Implementation: use asyncio.wait_for() with timeout, catch TimeoutError, log partial results, mark as failed with 'timeout' reason. Alert if timeouts become frequent (indicates code bug or infrastructure issue). This pattern is standard in distributed systems—every operation should have a timeout.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
 ];
 

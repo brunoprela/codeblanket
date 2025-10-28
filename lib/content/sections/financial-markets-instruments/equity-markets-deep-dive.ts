@@ -143,9 +143,9 @@ pricing = airbnb_ipo.estimate_ipo_price(
 )
 
 print("IPO Pricing Analysis:")
-print(f"P/E Method Price: \${pricing['pe_method_price']}")
-print(f"DCF Method Price: \${pricing['dcf_method_price']}")
-print(f"Recommended Range: \${pricing['recommended_range'][0]} - \${pricing['recommended_range'][1]}")
+print(f"P/E Method Price: \\$\{pricing['pe_method_price']}")
+print(f"DCF Method Price: \\$\{pricing['dcf_method_price']}")
+print(f"Recommended Range: \${pricing['recommended_range'][0]} - \\$\{pricing['recommended_range'][1]}")
 \`\`\`
 
 **Real-World: Airbnb\'s IPO Journey**
@@ -461,22 +461,22 @@ book.add_order('buy', 180.10, 150, 'bid3')
 
 print("Initial Order Book:")
 depth = book.get_market_depth()
-print(f"Best Bid: \${depth['bids'][0]['price']:.2f}")
-print(f"Best Ask: \${depth['asks'][0]['price']:.2f}")
-print(f"Spread: \${depth['spread']:.2f}")
-print(f"Mid Price: \${depth['mid_price']:.2f}")
+print(f"Best Bid: \\$\{depth['bids'][0]['price']:.2f}")
+print(f"Best Ask: \\$\{depth['asks'][0]['price']:.2f}")
+print(f"Spread: \\$\{depth['spread']:.2f}")
+print(f"Mid Price: \\$\{depth['mid_price']:.2f}")
 
 # Execute a market buy order (will match with best ask)
 print("\\nExecuting market buy for 150 shares...")
 trades = book.add_order('buy', 180.30, 150, 'market_buy_1')
 
 for trade in trades:
-    print(f"Traded {trade['quantity']} shares at \${trade['price']:.2f}")
+    print(f"Traded {trade['quantity']} shares at \\$\{trade['price']:.2f}")
 
 print("\\nUpdated Order Book:")
 depth = book.get_market_depth()
-print(f"New Last Trade: \${depth['last_trade']:.2f}")
-print(f"New Spread: \${depth['spread']:.2f}")
+print(f"New Last Trade: \\$\{depth['last_trade']:.2f}")
+print(f"New Spread: \\$\{depth['spread']:.2f}")
 \`\`\`
 
 **Key Insight**: Prices are NOT set by "the market" abstractly - they're determined by the **last matched trade** in the order book. The best bid and best ask create a **spread**, and trades occur when someone crosses that spread.
@@ -553,11 +553,11 @@ analyzer.add_company('TSLA', 240.00, 3_200_000_000)
 
 print("Market Capitalizations:")
 for ticker, info in analyzer.companies.items():
-    print(f"{ticker}: \${info['market_cap_billions']}B ({info['category']})")
+    print(f"{ticker}: \\$\{info['market_cap_billions']}B ({info['category']})")
 
 # Common misconception: Higher stock price = more valuable company
 comparison = analyzer.compare_valuations('MSFT', 'AAPL')
-print(f"\\nAlthough MSFT price (\${analyzer.companies['MSFT']['price']}) > "
+print(f"\\nAlthough MSFT price (\\$\{analyzer.companies['MSFT']['price']}) > "
       f"AAPL price (\${analyzer.companies['AAPL']['price']}),")
 print(f"AAPL market cap is actually larger!")
 \`\`\`
@@ -880,8 +880,8 @@ def analyze_google_stock_history():
     
     for m in milestones:
         print(f"\\n{m['date']}: {m['event']}")
-        print(f"  Price: \${m['price']:.2f}")
-        print(f"  Market Cap: \${m['market_cap_billions']}B")
+        print(f"  Price: \\$\{m['price']:.2f}")
+        print(f"  Market Cap: \\$\{m['market_cap_billions']}B")
         print(f"  Notes: {m['notes']}")
 
 analyze_google_stock_history()
@@ -1086,9 +1086,9 @@ aapl = EquityDataFetcher('AAPL')
 
 # Current price
 quote = aapl.get_current_price()
-print(f"\\nCurrent Price: \${quote.get('price'):.2f}")
+print(f"\\nCurrent Price: \\$\{quote.get('price'):.2f}")
 print(f"Change: {quote.get('change_percent'):.2f}%")
-print(f"Market Cap: \${quote.get('market_cap', 0)/1e9:.1f}B")
+print(f"Market Cap: \\$\{quote.get('market_cap', 0)/1e9:.1f}B")
 
 # Historical data with indicators
 data = aapl.get_historical_data (period='3mo')
@@ -1185,9 +1185,9 @@ execution = estimate_execution_price(
 
 print("Execution Estimate:")
 print(f"You want to buy {execution['quantity']} shares")
-print(f"Quote shows: \${execution['estimated_price']}")
-print(f"But market impact: \${execution['market_impact']}")
-print(f"Total cost: \${execution['total_cost']}")
+print(f"Quote shows: \\$\{execution['estimated_price']}")
+print(f"But market impact: \\$\{execution['market_impact']}")
+print(f"Total cost: \\$\{execution['total_cost']}")
 \`\`\`
 
 ### 3. Not Accounting for Stock Splits

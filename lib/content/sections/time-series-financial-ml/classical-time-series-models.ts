@@ -312,7 +312,7 @@ forecast_prices = model_arima.forecast (steps=10)
 
 print("\\n=== Price Forecast (10 days) ===")
 for i, price in enumerate (forecast_prices, 1):
-    print(f"Day {i}: \${price:.2f}")
+    print(f"Day {i}: \\$\{price:.2f}")
 
 # Plot forecast
 fig, ax = plt.subplots (figsize = (14, 6))
@@ -621,8 +621,8 @@ mape = np.mean (np.abs((actuals - predictions) / actuals)) * 100
 
 print("\\n=== Walk-Forward Validation Results ===")
 print(f"Predictions: {len (predictions)}")
-print(f"MAE: \${mae:.2f}")
-print(f"RMSE: \${rmse:.2f}")
+print(f"MAE: \\$\{mae:.2f}")
+print(f"RMSE: \\$\{rmse:.2f}")
 print(f"MAPE: {mape:.2f}%")
 
 # Plot predictions vs actuals

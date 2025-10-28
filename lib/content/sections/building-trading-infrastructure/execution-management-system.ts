@@ -654,7 +654,7 @@ class ExecutionManagementSystem:
             
             print(f"[EMS] Market order routing for {order_id}:")
             for decision in routing_decisions:
-                print(f"  {decision.venue.value}: {decision.quantity} @ \${decision.expected_price}")
+                print(f"  {decision.venue.value}: {decision.quantity} @ \\$\{decision.expected_price}")
                 print(f"    Reason: {decision.reason}")
             
         elif order_type == "LIMIT":
@@ -666,7 +666,7 @@ class ExecutionManagementSystem:
             )
             
             print(f"[EMS] Limit order routing for {order_id}:")
-            print(f"  {routing_decision.venue.value}: {routing_decision.quantity} @ \${routing_decision.expected_price}")
+            print(f"  {routing_decision.venue.value}: {routing_decision.quantity} @ \\$\{routing_decision.expected_price}")
             print(f"    Reason: {routing_decision.reason}")
         
         return routing_decisions if order_type == "MARKET" else routing_decision

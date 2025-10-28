@@ -123,9 +123,9 @@ for key, value in results.items():
     if '%' in key or 'Upside' in key:
         print(f"  {key:.<30} {value:>10.1%}")
     elif 'Price' in key:
-        print(f"  {key:.<30} \${value:>10.2f}")
+        print(f"  {key:.<30} \\$\{value:>10.2f}")
     else:
-        print(f"  {key:.<30} \${value/1e9:>10.1f}B")
+        print(f"  {key:.<30} \\$\{value/1e9:>10.1f}B")
 \`\`\`
 
 ---

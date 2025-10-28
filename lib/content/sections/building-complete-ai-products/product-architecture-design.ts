@@ -837,13 +837,13 @@ for model_name, model_pricing in MODELS.items():
     # Without caching
     no_cache = calculate_monthly_cost (usage, model_pricing, cache_hit_rate=0.0)
     print(f"{model_name}:")
-    print(f"  Monthly: \${no_cache['total_monthly_cost']:,.2f}")
-print(f"  Per User: \${no_cache['cost_per_user']:.4f}")
+    print(f"  Monthly: \\$\{no_cache['total_monthly_cost']:,.2f}")
+print(f"  Per User: \\$\{no_cache['cost_per_user']:.4f}")
     
     # With 30 % cache hit rate
 with_cache = calculate_monthly_cost (usage, model_pricing, cache_hit_rate = 0.3)
-print(f"  With Cache (30% hit rate): \${with_cache['total_monthly_cost']:,.2f}")
-print(f"  Cache Savings: \${with_cache['cache_savings']:,.2f}")
+print(f"  With Cache (30% hit rate): \\$\{with_cache['total_monthly_cost']:,.2f}")
+print(f"  Cache Savings: \\$\{with_cache['cache_savings']:,.2f}")
 print()
 
 # Output:
@@ -897,8 +897,8 @@ def calculate_breakeven_price(
 
 # Using GPT-3.5-turbo with caching
 pricing = calculate_breakeven_price (cost_per_user=0.4550)
-print(f"Minimum Price (Breakeven): \${pricing['breakeven_price']}/month")
-print(f"Target Price (70% margin): \${pricing['target_price']}/month")
+print(f"Minimum Price (Breakeven): \\$\{pricing['breakeven_price']}/month")
+print(f"Target Price (70% margin): \\$\{pricing['target_price']}/month")
 
 # Output:
 # Minimum Price (Breakeven): $0.78/month

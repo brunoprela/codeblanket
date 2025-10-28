@@ -1,69 +1,69 @@
 // Module 10: Backtesting & Strategy Development
 // Complete index file exporting all sections
 
-import backtestingFundamentals from './10-1-backtesting-fundamentals';
-import backtestingFundamentalsQuiz from '../../../quizzes/backtesting-strategy-development/10-1-backtesting-fundamentals-quiz';
-import backtestingFundamentalsDiscussion from '../../../discussions/backtesting-strategy-development/10-1-backtesting-fundamentals-discussion';
+import { backtestingFundamentals } from './10-1-backtesting-fundamentals';
+import { backtestingFundamentalsQuiz } from '../../quizzes/backtesting-strategy-development/10-1-backtesting-fundamentals-quiz';
+import { backtestingFundamentalsDiscussion } from '../../discussions/backtesting-strategy-development/10-1-backtesting-fundamentals-discussion';
 
-import historicalDataManagement from './10-2-historical-data-management';
-import historicalDataManagementQuiz from '../../../quizzes/backtesting-strategy-development/10-2-historical-data-management-quiz';
-import historicalDataManagementDiscussion from '../../../discussions/backtesting-strategy-development/10-2-historical-data-management-discussion';
+import { historicalDataManagement } from './10-2-historical-data-management';
+import { historicalDataManagementQuiz } from '../../quizzes/backtesting-strategy-development/10-2-historical-data-management-quiz';
+import { historicalDataManagementDiscussion } from '../../discussions/backtesting-strategy-development/10-2-historical-data-management-discussion';
 
-import eventDrivenBacktestingArchitecture from './10-3-event-driven-backtesting-architecture';
-import eventDrivenBacktestingArchitectureQuiz from '../../../quizzes/backtesting-strategy-development/10-3-event-driven-backtesting-architecture-quiz';
-import eventDrivenBacktestingArchitectureDiscussion from '../../../discussions/backtesting-strategy-development/10-3-event-driven-backtesting-architecture-discussion';
+import { eventDrivenBacktestingArchitecture } from './10-3-event-driven-backtesting-architecture';
+import { eventDrivenBacktestingArchitectureQuiz } from '../../quizzes/backtesting-strategy-development/10-3-event-driven-backtesting-architecture-quiz';
+import { eventDrivenBacktestingArchitectureDiscussion } from '../../discussions/backtesting-strategy-development/10-3-event-driven-backtesting-architecture-discussion';
 
-import performanceMetricsForTrading from './10-4-performance-metrics-for-trading';
-import performanceMetricsForTradingQuiz from '../../../quizzes/backtesting-strategy-development/10-4-performance-metrics-for-trading-quiz';
-import performanceMetricsForTradingDiscussion from '../../../discussions/backtesting-strategy-development/10-4-performance-metrics-for-trading-discussion';
+import { performanceMetricsForTrading } from './10-4-performance-metrics-for-trading';
+import { performanceMetricsForTradingQuiz } from '../../quizzes/backtesting-strategy-development/10-4-performance-metrics-for-trading-quiz';
+import { performanceMetricsForTradingDiscussion } from '../../discussions/backtesting-strategy-development/10-4-performance-metrics-for-trading-discussion';
 
 import transactionCostsAndSlippage from './10-5-transaction-costs-and-slippage';
-import transactionCostsAndSlippageQuiz from '../../../quizzes/backtesting-strategy-development/10-5-transaction-costs-and-slippage-quiz';
-import transactionCostsAndSlippageDiscussion from '../../../discussions/backtesting-strategy-development/10-5-transaction-costs-and-slippage-discussion';
+import transactionCostsAndSlippageQuiz from '../../quizzes/backtesting-strategy-development/10-5-transaction-costs-and-slippage-quiz';
+import transactionCostsAndSlippageDiscussion from '../../discussions/backtesting-strategy-development/10-5-transaction-costs-and-slippage-discussion';
 
 import walkForwardAnalysis from './10-6-walk-forward-analysis';
-import walkForwardAnalysisQuiz from '../../../quizzes/backtesting-strategy-development/10-6-walk-forward-analysis-quiz';
-import walkForwardAnalysisDiscussion from '../../../discussions/backtesting-strategy-development/10-6-walk-forward-analysis-discussion';
+import walkForwardAnalysisQuiz from '../../quizzes/backtesting-strategy-development/10-6-walk-forward-analysis-quiz';
+import walkForwardAnalysisDiscussion from '../../discussions/backtesting-strategy-development/10-6-walk-forward-analysis-discussion';
 
 import monteCarloSimulation from './10-7-monte-carlo-simulation';
-import monteCarloSimulationQuiz from '../../../quizzes/backtesting-strategy-development/10-7-monte-carlo-simulation-quiz';
-import monteCarloSimulationDiscussion from '../../../discussions/backtesting-strategy-development/10-7-monte-carlo-simulation-discussion';
+import monteCarloSimulationQuiz from '../../quizzes/backtesting-strategy-development/10-7-monte-carlo-simulation-quiz';
+import monteCarloSimulationDiscussion from '../../discussions/backtesting-strategy-development/10-7-monte-carlo-simulation-discussion';
 
 import overfittingAndDataMining from './10-8-overfitting-and-data-mining';
-import overfittingAndDataMiningQuiz from '../../../quizzes/backtesting-strategy-development/10-8-overfitting-and-data-mining-quiz';
-import overfittingAndDataMiningDiscussion from '../../../discussions/backtesting-strategy-development/10-8-overfitting-and-data-mining-discussion';
+import overfittingAndDataMiningQuiz from '../../quizzes/backtesting-strategy-development/10-8-overfitting-and-data-mining-quiz';
+import overfittingAndDataMiningDiscussion from '../../discussions/backtesting-strategy-development/10-8-overfitting-and-data-mining-discussion';
 
 import statisticalSignificanceTesting from './10-9-statistical-significance-testing';
-import statisticalSignificanceTestingQuiz from '../../../quizzes/backtesting-strategy-development/10-9-statistical-significance-testing-quiz';
-import statisticalSignificanceTestingDiscussion from '../../../discussions/backtesting-strategy-development/10-9-statistical-significance-testing-discussion';
+import statisticalSignificanceTestingQuiz from '../../quizzes/backtesting-strategy-development/10-9-statistical-significance-testing-quiz';
+import statisticalSignificanceTestingDiscussion from '../../discussions/backtesting-strategy-development/10-9-statistical-significance-testing-discussion';
 
 import outOfSampleTesting from './10-10-out-of-sample-testing';
-import outOfSampleTestingQuiz from '../../../quizzes/backtesting-strategy-development/10-10-out-of-sample-testing-quiz';
-import outOfSampleTestingDiscussion from '../../../discussions/backtesting-strategy-development/10-10-out-of-sample-testing-discussion';
+import outOfSampleTestingQuiz from '../../quizzes/backtesting-strategy-development/10-10-out-of-sample-testing-quiz';
+import outOfSampleTestingDiscussion from '../../discussions/backtesting-strategy-development/10-10-out-of-sample-testing-discussion';
 
 import timeSeriesCrossValidation from './10-11-time-series-cross-validation';
-import timeSeriesCrossValidationQuiz from '../../../quizzes/backtesting-strategy-development/10-11-time-series-cross-validation-quiz';
-import timeSeriesCrossValidationDiscussion from '../../../discussions/backtesting-strategy-development/10-11-time-series-cross-validation-discussion';
+import timeSeriesCrossValidationQuiz from '../../quizzes/backtesting-strategy-development/10-11-time-series-cross-validation-quiz';
+import timeSeriesCrossValidationDiscussion from '../../discussions/backtesting-strategy-development/10-11-time-series-cross-validation-discussion';
 
 import benchmarkComparison from './10-12-benchmark-comparison';
-import benchmarkComparisonQuiz from '../../../quizzes/backtesting-strategy-development/10-12-benchmark-comparison-quiz';
-import benchmarkComparisonDiscussion from '../../../discussions/backtesting-strategy-development/10-12-benchmark-comparison-discussion';
+import benchmarkComparisonQuiz from '../../quizzes/backtesting-strategy-development/10-12-benchmark-comparison-quiz';
+import benchmarkComparisonDiscussion from '../../discussions/backtesting-strategy-development/10-12-benchmark-comparison-discussion';
 
 import buildingBacktestingFramework from './10-13-building-backtesting-framework';
-import buildingBacktestingFrameworkQuiz from '../../../quizzes/backtesting-strategy-development/10-13-building-backtesting-framework-quiz';
-import buildingBacktestingFrameworkDiscussion from '../../../discussions/backtesting-strategy-development/10-13-building-backtesting-framework-discussion';
+import buildingBacktestingFrameworkQuiz from '../../quizzes/backtesting-strategy-development/10-13-building-backtesting-framework-quiz';
+import buildingBacktestingFrameworkDiscussion from '../../discussions/backtesting-strategy-development/10-13-building-backtesting-framework-discussion';
 
 import paperTradingVsLive from './10-14-paper-trading-vs-live';
-import paperTradingVsLiveQuiz from '../../../quizzes/backtesting-strategy-development/10-14-paper-trading-vs-live-quiz';
-import paperTradingVsLiveDiscussion from '../../../discussions/backtesting-strategy-development/10-14-paper-trading-vs-live-discussion';
+import paperTradingVsLiveQuiz from '../../quizzes/backtesting-strategy-development/10-14-paper-trading-vs-live-quiz';
+import paperTradingVsLiveDiscussion from '../../discussions/backtesting-strategy-development/10-14-paper-trading-vs-live-discussion';
 
 import strategyParameterOptimization from './10-15-strategy-parameter-optimization';
-import strategyParameterOptimizationQuiz from '../../../quizzes/backtesting-strategy-development/10-15-strategy-parameter-optimization-quiz';
-import strategyParameterOptimizationDiscussion from '../../../discussions/backtesting-strategy-development/10-15-strategy-parameter-optimization-discussion';
+import strategyParameterOptimizationQuiz from '../../quizzes/backtesting-strategy-development/10-15-strategy-parameter-optimization-quiz';
+import strategyParameterOptimizationDiscussion from '../../discussions/backtesting-strategy-development/10-15-strategy-parameter-optimization-discussion';
 
 import productionBacktestingEngineProject from './10-16-production-backtesting-engine-project';
-import productionBacktestingEngineProjectQuiz from '../../../quizzes/backtesting-strategy-development/10-16-production-backtesting-engine-project-quiz';
-import productionBacktestingEngineProjectDiscussion from '../../../discussions/backtesting-strategy-development/10-16-production-backtesting-engine-project-discussion';
+import productionBacktestingEngineProjectQuiz from '../../quizzes/backtesting-strategy-development/10-16-production-backtesting-engine-project-quiz';
+import productionBacktestingEngineProjectDiscussion from '../../discussions/backtesting-strategy-development/10-16-production-backtesting-engine-project-discussion';
 
 export const backtestingStrategyDevelopment = {
   title: 'Backtesting & Strategy Development',

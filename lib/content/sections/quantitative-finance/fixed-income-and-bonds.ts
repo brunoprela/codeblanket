@@ -610,17 +610,17 @@ class Bond:
         print("="*60)
         print("BOND ANALYTICS SUMMARY")
         print("="*60)
-        print(f"Face Value: $\${self.face_value:,.2f}")
+        print(f"Face Value: $\\$\{self.face_value:,.2f}")
         print(f"Coupon Rate: {self.coupon_rate*100:.2f}%")
         print(f"Maturity: {self.maturity_years} years")
         print(f"Frequency: {self.frequency}x per year")
         print(f"\\nYield to Maturity: {ytm*100:.2f}%")
-        print(f"Price: \${price:,.2f}")
+        print(f"Price: \\$\{price:,.2f}")
         print(f"Price vs Par: {'Premium' if price > self.face_value else 'Discount' if price < self.face_value else 'At Par'}")
         print(f"\\nMacaulay Duration: {mac_dur:.4f} years")
         print(f"Modified Duration: {mod_dur:.4f}")
         print(f"Convexity: {convex:.4f}")
-        print(f"DV01: \${dv01_val:.4f}")
+        print(f"DV01: \\$\{dv01_val:.4f}")
         
         return {
             'price': price,
@@ -652,7 +652,7 @@ print("YIELD CALCULATION FROM PRICE")
 print("="*60)
 market_price = 1050
 calculated_ytm = bond.ytm (market_price)
-print(f"Market Price: \${market_price:,.2f}")
+print(f"Market Price: \\$\{market_price:,.2f}")
 print(f"Calculated YTM: {calculated_ytm*100:.4f}%")
 \`\`\`
 

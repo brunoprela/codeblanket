@@ -279,7 +279,7 @@ print(f"{'Method':<20} {'Shares':<8} {'Dollar Amt':<12} {'% Capital':<12} {'$ Ri
 print("-" * 72)
 
 for method, data in results.items():
-    print(f"{method:<20} {data['shares']:<8} \${data['dollar_amount']:<11,.0f} "
+    print(f"{method:<20} {data['shares']:<8} \\$\{data['dollar_amount']:<11,.0f} "
           f"{data['pct_capital']:<11.1%} \${data['dollar_risk']:<9,.0f}")
 
 # Kelly details
@@ -455,23 +455,23 @@ entry_price = 180.0
 current_atr = atr.iloc[-1]
 
 print("=== Stop Loss Comparison ===")
-print(f"Entry Price: \${entry_price:.2f}")
-print(f"Current ATR: \${current_atr:.2f}\\n")
+print(f"Entry Price: \\$\{entry_price:.2f}")
+print(f"Current ATR: \\$\{current_atr:.2f}\\n")
 
 # Fixed stop
 fixed_stop = stop_manager.fixed_percentage_stop (entry_price, 0.05)
-print(f"Fixed 5% Stop: \${fixed_stop:.2f} (\${entry_price - fixed_stop:.2f} risk)")
+print(f"Fixed 5% Stop: \${fixed_stop:.2f} (\\$\{entry_price - fixed_stop:.2f} risk)")
 
 # ATR stops
 atr_2x = stop_manager.atr_stop (entry_price, current_atr, 2)
 atr_3x = stop_manager.atr_stop (entry_price, current_atr, 3)
-print(f"ATR 2x Stop: \${atr_2x:.2f} (\${entry_price - atr_2x:.2f} risk)")
-print(f"ATR 3x Stop: \${atr_3x:.2f} (\${entry_price - atr_3x:.2f} risk)")
+print(f"ATR 2x Stop: \${atr_2x:.2f} (\\$\{entry_price - atr_2x:.2f} risk)")
+print(f"ATR 3x Stop: \${atr_3x:.2f} (\\$\{entry_price - atr_3x:.2f} risk)")
 
 # Trailing stop
 highest = 190.0  # Assume price ran to 190
 trail_stop = stop_manager.trailing_stop(185, highest, 0.10)
-print(f"\\nTrailing 10% Stop (from high \${highest:.2f}): \${trail_stop:.2f}")
+print(f"\\nTrailing 10% Stop (from high \${highest:.2f}): \\$\{trail_stop:.2f}")
 \`\`\`
 
 ---
@@ -714,8 +714,8 @@ cvar_95 = prm.calculate_cvar (returns, 0.95)
 print(f"\\n=== Risk Metrics ===")
 print(f"VaR (95%): {var_95:.2%} - Worst expected daily loss with 95% confidence")
 print(f"CVaR (95%): {cvar_95:.2%} - Average loss in worst 5% of days")
-print(f"Dollar VaR: \${var_95 * 100000:,.0f}")
-print(f"Dollar CVaR: \${cvar_95 * 100000:,.0f}")
+print(f"Dollar VaR: \\$\{var_95 * 100000:,.0f}")
+print(f"Dollar CVaR: \\$\{cvar_95 * 100000:,.0f}")
 \`\`\`
 
 ---
@@ -874,7 +874,7 @@ print("=== Drawdown Analysis ===")
 print(f"Maximum Drawdown: {max_dd:.2%}")
 print(f"Drawdown Duration: {dd_duration} days")
 print(f"Recovery Factor: {recovery:.2f}")
-print(f"Final Equity: \${equity_curve[-1]:,.0f}")
+print(f"Final Equity: \\$\{equity_curve[-1]:,.0f}")
 
 # Position size adjustment example
 current_dd = -0.08  # 8% drawdown
@@ -883,8 +883,8 @@ adjusted_size = dd_manager.reduce_position_size_on_drawdown (base_size, current_
 
 print(f"\\n=== Position Sizing in Drawdown ===")
 print(f"Current Drawdown: {current_dd:.1%}")
-print(f"Base Position Size: \${base_size:,.0f}")
-print(f"Adjusted Size: \${adjusted_size:,.0f} ({adjusted_size/base_size:.0%} of base)")
+print(f"Base Position Size: \\$\{base_size:,.0f}")
+print(f"Adjusted Size: \\$\{adjusted_size:,.0f} ({adjusted_size/base_size:.0%} of base)")
 \`\`\`
 
 ---

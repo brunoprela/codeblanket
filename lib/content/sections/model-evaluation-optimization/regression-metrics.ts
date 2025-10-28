@@ -721,8 +721,8 @@ rmse_price = np.sqrt (mean_squared_error (true_prices, predicted_prices))
 mape_price = safe_mape (true_prices, predicted_prices)
 
 print("Standard Metrics:")
-print(f"  MAE:  \${mae_price:.2f}")
-print(f"  RMSE: \${rmse_price:.2f}")
+print(f"  MAE:  \\$\{mae_price:.2f}")
+print(f"  RMSE: \\$\{rmse_price:.2f}")
 print(f"  MAPE: {mape_price:.2f}%")
 
 # Trading - specific metrics

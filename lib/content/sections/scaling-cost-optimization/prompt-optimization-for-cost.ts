@@ -75,7 +75,7 @@ Please provide your analysis of the sentiment below. Thank you!
 """
 
 costs = calculate_prompt_cost (verbose_prompt)
-print(f"Verbose prompt: {costs['input_tokens']} tokens = \${costs['total_cost']:.4f}")
+print(f"Verbose prompt: {costs['input_tokens']} tokens = \\$\{costs['total_cost']:.4f}")
 # Output: Verbose prompt: 95 tokens = $0.0003
 
 # Optimized prompt
@@ -87,7 +87,7 @@ and I would definitely recommend it to anyone looking for quality."
 Sentiment: """
 
 costs = calculate_prompt_cost (optimized_prompt)
-print(f"Optimized prompt: {costs['input_tokens']} tokens = \${costs['total_cost']:.4f}")
+print(f"Optimized prompt: {costs['input_tokens']} tokens = \\$\{costs['total_cost']:.4f}")
 # Output: Optimized prompt: 38 tokens = $0.0001
 
 print(f"Token reduction: {((95-38)/95*100):.0f}%")
@@ -675,7 +675,7 @@ def cost_aware_completion(
     recommended_limit = task_limits.get (task_type, 150)
     actual_limit = min (max_output_tokens, recommended_limit)
     
-    print(f"Input: {input_tokens} tokens (\${input_cost:.4f}) ")
+    print(f"Input: {input_tokens} tokens (\\$\{input_cost:.4f}) ")
 print(f"Max output within budget: {max_output_tokens} tokens")
 print(f"Using: {actual_limit} tokens for {task_type}")
 
@@ -911,14 +911,14 @@ after_stats = measure_prompt_efficiency (after_prompt, test_reviews)
 
 print("BEFORE:")
 print(f"  Avg tokens: {before_stats['avg_tokens']:.0f}")
-print(f"  Cost/1M: \${before_stats['cost_per_1m_requests']:.2f}")
+print(f"  Cost/1M: \\$\{before_stats['cost_per_1m_requests']:.2f}")
 
 print("\nAFTER:")
 print(f"  Avg tokens: {after_stats['avg_tokens']:.0f}")
-print(f"  Cost/1M: \${after_stats['cost_per_1m_requests']:.2f}")
+print(f"  Cost/1M: \\$\{after_stats['cost_per_1m_requests']:.2f}")
 
 savings = before_stats['cost_per_1m_requests'] - after_stats['cost_per_1m_requests']
-print(f"\n💰 SAVINGS: \${savings:.2f}/1M requests ({savings/before_stats['cost_per_1m_requests']*100:.0f}%)")
+print(f"\n💰 SAVINGS: \\$\{savings:.2f}/1M requests ({savings/before_stats['cost_per_1m_requests']*100:.0f}%)")
 \`\`\`
 
 ---

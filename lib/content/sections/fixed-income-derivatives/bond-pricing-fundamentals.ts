@@ -114,7 +114,7 @@ class Bond:
         ...     frequency=Frequency.SEMI_ANNUAL
         ... )
         >>> price = bond.price(ytm=0.048)
-        >>> print(f"Price: \${price:.2f}")
+        >>> print(f"Price: \\$\{price:.2f}")
         Price: $982.14
     """
     
@@ -296,7 +296,7 @@ for ytm in yields:
     price = treasury.price(ytm)
 premium_discount = "Premium" if price > 1000 else "Discount" if price < 1000 else "Par"
 
-print(f"YTM: {ytm*100:.2f}% → Price: \${price:.2f} ({premium_discount})")
+print(f"YTM: {ytm*100:.2f}% → Price: \\$\{price:.2f} ({premium_discount})")
 
 print("\\n=== Yield Calculation ===\\n")
     
@@ -304,13 +304,13 @@ print("\\n=== Yield Calculation ===\\n")
 market_price = 982.14
 calculated_ytm = treasury.yield_to_maturity(market_price)
 
-print(f"Market Price: \${market_price:.2f}")
+print(f"Market Price: \\$\{market_price:.2f}")
 print(f"Calculated YTM: {calculated_ytm*100:.4f}%")
 print(f"Current Yield: {treasury.current_yield(market_price)*100:.2f}%")
     
     # Verify
 verify_price = treasury.price(calculated_ytm)
-print(f"Verification: Price at calculated YTM = \${verify_price:.2f}")
+print(f"Verification: Price at calculated YTM = \\$\{verify_price:.2f}")
 \`\`\`
 
 **Output**:
@@ -534,11 +534,11 @@ clean_price = 1020.00  # Quoted price
 accrued = bond.accrued_interest(settlement, last_coupon, next_coupon)
 dirty = bond.dirty_price(clean_price, settlement, last_coupon, next_coupon)
 
-print(f"Clean Price: \${clean_price:.2f}")
-print(f"Accrued Interest: \${accrued:.2f}")
-print(f"Dirty Price (settlement): \${dirty:.2f}")
-print(f"\\nBuyer pays: \${dirty:.2f}")
-print(f"Seller receives: \${dirty:.2f} (\${clean_price:.2f} + \${accrued:.2f} accrued)")
+print(f"Clean Price: \\$\{clean_price:.2f}")
+print(f"Accrued Interest: \\$\{accrued:.2f}")
+print(f"Dirty Price (settlement): \\$\{dirty:.2f}")
+print(f"\\nBuyer pays: \\$\{dirty:.2f}")
+print(f"Seller receives: \${dirty:.2f} (\${clean_price:.2f} + \\$\{accrued:.2f} accrued)")
 \`\`\`
 
 ---
@@ -575,7 +575,7 @@ def price_treasury_note():
     print(f"Coupon: {treasury.coupon_rate*100:.3f}%")
     print(f"Maturity: {treasury.years_to_maturity:.2f} years")
     print(f"Market YTM: {market_ytm*100:.2f}%")
-    print(f"\\nTheoretical Price: \${theoretical_price:.4f}")
+    print(f"\\nTheoretical Price: \\$\{theoretical_price:.4f}")
 print(f"Price as % of Par: {theoretical_price/10:.2f}")
     
     # Analysis
@@ -595,9 +595,9 @@ accrued = treasury.accrued_interest(settlement, last_coupon, next_coupon)
 dirty_price = theoretical_price + accrued
 
 print(f"\\n=== If Trading on {settlement} ===")
-print(f"Clean Price: \${theoretical_price:.2f}")
-print(f"Accrued Interest: \${accrued:.2f}")
-print(f"Dirty Price: \${dirty_price:.2f}")
+print(f"Clean Price: \\$\{theoretical_price:.2f}")
+print(f"Accrued Interest: \\$\{accrued:.2f}")
+print(f"Dirty Price: \\$\{dirty_price:.2f}")
 
 return treasury, theoretical_price
 

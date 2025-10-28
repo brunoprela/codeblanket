@@ -551,7 +551,7 @@ print(f"{bid_str:<30} | {ask_str:<30}")
 
 spread = self.get_spread()
 if spread:
-    print(f"\\nSpread: \${spread:.2f}")
+    print(f"\\nSpread: \\$\{spread:.2f}")
 
 # Example usage
 book = OrderBook('AAPL')
@@ -582,7 +582,7 @@ trades = book.add_limit_order(LimitOrder('AAPL', 'BUY', 300, 150.11))
 
 print(f"\\nExecuted {len(trades)} trades:")
 for trade in trades:
-    print(f"  {trade['quantity']} shares @ \${trade['price']:.2f}")
+    print(f"  {trade['quantity']} shares @ \\$\{trade['price']:.2f}")
 
 # Trades:
 # 100 shares @$150.10(first order at $150.10, time priority)
@@ -819,7 +819,7 @@ def handle_new_order(event: Event):
 
 def handle_trade(event: Event):
     trade = event.data
-    print(f"[{event.timestamp}] Trade: {trade['quantity']} @ \${trade['price']}")
+    print(f"[{event.timestamp}] Trade: {trade['quantity']} @ \\$\{trade['price']}")
     # Update positions, PnL...
 
 processor.register_handler(EventType.ORDER_NEW, handle_new_order)

@@ -44,7 +44,7 @@ export const performanceMetricsForTradingQuiz = [
     correctAnswer: 2,
     explanation:
       'Calmar Ratio = Annual Return / Max Drawdown. A ratio of 2.0 means annual return is twice the worst drawdown. Higher is better - indicates good return per unit of drawdown risk.',
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 4,

@@ -1,9 +1,9 @@
 export const derivativesOverview = {
-  title: 'Derivatives Overview',
-  slug: 'derivatives-overview',
-  description:
-    'Master forwards, futures, options, and swaps - the building blocks of modern finance',
-  content: `
+    title: 'Derivatives Overview',
+    slug: 'derivatives-overview',
+    description:
+        'Master forwards, futures, options, and swaps - the building blocks of modern finance',
+    content: `
 # Derivatives Overview
 
 ## Introduction: The Power and Peril of Derivatives
@@ -563,14 +563,14 @@ print(f"Maturity: {usd_eur_forward.time_to_maturity_days()} days")
 
 # Scenario 1: EUR strengthens to 1.15
 payoff1 = usd_eur_forward.calculate_payoff(1.15)
-print(f"\\nScenario 1: EUR at \${payoff1['spot_at_maturity']}")
-print(f"  {payoff1['long_party']}: {'Gains' if payoff1['long_payoff'] > 0 else 'Loses'} \${abs (payoff1['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
+print(f"\\nScenario 1: EUR at $\{payoff1['spot_at_maturity']}")
+print(f"  \{payoff1['long_party']}: \{'Gains' if payoff1['long_payoff'] > 0 else 'Loses'} $\{abs(payoff1['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
 print(f"  (Locked in $1.10, market is $1.15, saved $0.05 per euro)")
 
 # Scenario 2: EUR weakens to 1.05
 payoff2 = usd_eur_forward.calculate_payoff(1.05)
-print(f"\\nScenario 2: EUR at \\${payoff2['spot_at_maturity']}")
-print(f"  {payoff2['long_party']}: {'Gains' if payoff2['long_payoff'] > 0 else 'Loses'} \${abs (payoff2['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
+print(f"\\nScenario 2: EUR at $\{payoff2['spot_at_maturity']}")
+print(f"  \{payoff2['long_party']}: \{'Gains' if payoff2['long_payoff'] > 0 else 'Loses'} $\{abs(payoff2['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
 print(f"  (Locked in $1.10, market is $1.05, overpaid $0.05 per euro)")
 
 # Mark to market now
@@ -1045,18 +1045,18 @@ He was right.
 
 You now understand derivatives - the most powerful and dangerous instruments in finance!
 `,
-  exercises: [
-    {
-      prompt:
-        'Build a futures margin calculator that simulates daily mark-to-market, detects margin calls, and calculates optimal position sizing given risk tolerance. Include scenarios for extreme market moves (circuit breakers, limit moves).',
-      solution:
-        '// Implementation: 1) Track daily P&L with mark-to-market, 2) Monitor account balance vs maintenance margin, 3) Simulate gap risk (overnight moves), 4) Calculate VAR and position limits, 5) Alert on margin calls, 6) Handle forced liquidation scenarios, 7) Optimize position size using Kelly criterion or risk-adjusted returns',
-    },
-    {
-      prompt:
-        'Create an arbitrage detector that monitors cash-and-carry opportunities between spot and futures markets. Calculate fair value, detect mispricings, and simulate arbitrage execution accounting for transaction costs and funding costs.',
-      solution:
-        '// Implementation: 1) Real-time spot and futures price feeds, 2) Calculate fair futures value using cost-of-carry model, 3) Detect mispricings > threshold, 4) Account for bid-ask spreads, borrowing costs, storage costs (commodities), 5) Simulate P&L including all costs, 6) Alert when net profit > minimum threshold, 7) Track arbitrage convergence over time',
-    },
-  ],
+    exercises: [
+        {
+            prompt:
+                'Build a futures margin calculator that simulates daily mark-to-market, detects margin calls, and calculates optimal position sizing given risk tolerance. Include scenarios for extreme market moves (circuit breakers, limit moves).',
+            solution:
+                '// Implementation: 1) Track daily P&L with mark-to-market, 2) Monitor account balance vs maintenance margin, 3) Simulate gap risk (overnight moves), 4) Calculate VAR and position limits, 5) Alert on margin calls, 6) Handle forced liquidation scenarios, 7) Optimize position size using Kelly criterion or risk-adjusted returns',
+        },
+        {
+            prompt:
+                'Create an arbitrage detector that monitors cash-and-carry opportunities between spot and futures markets. Calculate fair value, detect mispricings, and simulate arbitrage execution accounting for transaction costs and funding costs.',
+            solution:
+                '// Implementation: 1) Real-time spot and futures price feeds, 2) Calculate fair futures value using cost-of-carry model, 3) Detect mispricings > threshold, 4) Account for bid-ask spreads, borrowing costs, storage costs (commodities), 5) Simulate P&L including all costs, 6) Alert when net profit > minimum threshold, 7) Track arbitrage convergence over time',
+        },
+    ],
 };

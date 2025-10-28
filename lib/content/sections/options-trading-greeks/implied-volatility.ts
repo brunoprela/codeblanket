@@ -203,16 +203,16 @@ market_price = 3.50  # Observed call price
 iv, iterations, success = implied_volatility_newton(market_price, S, K, T, r, 'call')
 
 if success:
-    print(f"\\nMarket Price: \${market_price}")
+    print(f"\\nMarket Price: \\$\{market_price}")
     print(f"Implied Volatility: {iv*100:.2f}%")
     print(f"Converged in {iterations} iterations")
     
     # Verify
     bs_price = black_scholes_price(S, K, T, r, iv, 'call')
     print(f"\\nVerification:")
-    print(f"  Market price: \${market_price:.4f}")
-    print(f"  BS price at IV: \${bs_price:.4f}")
-    print(f"  Difference: \${abs(bs_price - market_price):.6f}")
+    print(f"  Market price: \\$\{market_price:.4f}")
+    print(f"  BS price at IV: \\$\{bs_price:.4f}")
+    print(f"  Difference: \\$\{abs(bs_price - market_price):.6f}")
 else:
     print("Failed to calculate IV")
 \`\`\`
@@ -370,7 +370,7 @@ strikes, ivs = analyze_volatility_smile(spy_option_chain, S=100, T=30/365, r=0.0
 
 print("\\nVolatility Smile:")
 for strike, iv in zip(strikes, ivs):
-    print(f"  Strike \${strike}: IV = {iv:.2f}%")
+    print(f"  Strike \\$\{strike}: IV = {iv:.2f}%")
 \`\`\`
 
 ### Volatility Skew in Equities

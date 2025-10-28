@@ -74,7 +74,7 @@ const monteCarloSimulationQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 2,
     explanation:
       "10,000+ simulations are generally recommended for stable, reliable confidence interval estimates. With fewer simulations, the CI boundaries themselves become unstable—run the analysis twice and you'll get noticeably different results. Academic literature and professional practice typically use 10,000-50,000 simulations. While 1,000 simulations might give a rough estimate, the standard error of the confidence interval endpoints is still too large for production use. The computational cost is usually acceptable with modern hardware (seconds to minutes for most strategies). Option D is wrong—the number of simulations matters regardless of the resampling method used.",
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
 ];
 

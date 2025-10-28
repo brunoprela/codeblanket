@@ -58,7 +58,7 @@ const benchmarkComparisonQuiz: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Information Ratio = (Portfolio Return - Benchmark Return) / Tracking Error, where tracking error is the standard deviation of excess returns. IR measures how much excess return you generate per unit of active risk (deviation from benchmark). Option A describes Sharpe ratio, not IR. Option C is conceptually related but not the definition. Option D has no meaning. IR answers: "For each percentage point of tracking error I take, how much outperformance do I achieve?" IR > 0.5 is good, IR > 1.0 is excellent. Unlike Sharpe ratio, IR specifically evaluates active management skill relative to a benchmark.',
-    difficulty: 'beginner',
+    difficulty: 'easy',
   },
   {
     id: 'bench-5',

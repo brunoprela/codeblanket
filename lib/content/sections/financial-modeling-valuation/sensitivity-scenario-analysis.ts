@@ -234,7 +234,7 @@ print("\\n\\nScenario Analysis ($ millions):")
 print(scenario_results[['Scenario', 'Valuation', 'Probability', 'Probability-Weighted Value']].apply(
     lambda x: x/1_000_000 if x.name in ['Valuation', 'Probability-Weighted Value'] else x
 ).to_string(index=False))
-print(f"\\nExpected Value: \${expected_val/1_000_000:,.0f}M")
+print(f"\\nExpected Value: \\$\{expected_val/1_000_000:,.0f}M")
 \`\`\`
 
 ---

@@ -52,7 +52,7 @@ np.random.seed(42)
 house_prices = np.array([200, 250, 180, 300, 220, 240, 260, 280, 210, 3000])
 
 mean_price = np.mean (house_prices)
-print(f"Mean price: \${mean_price:.2f}k")
+print(f"Mean price: \\$\{mean_price:.2f}k")
 print(f"Notice: The $3000k mansion drastically pulls the mean up!")
 
 # Output:
@@ -62,7 +62,7 @@ print(f"Notice: The $3000k mansion drastically pulls the mean up!")
 # More realistic example without outlier
 typical_prices = house_prices[house_prices < 1000]
 mean_typical = np.mean (typical_prices)
-print(f"\\nMean of typical houses: \${mean_typical:.2f}k")
+print(f"\\nMean of typical houses: \\$\{mean_typical:.2f}k")
 # Output:
 # Mean of typical houses: $235.56k
 \`\`\`
@@ -83,10 +83,10 @@ The **median** is the middle value when data is sorted:
 
 \`\`\`python
 median_price = np.median (house_prices)
-print(f"Median price: \${median_price:.2f}k")
+print(f"Median price: \\$\{median_price:.2f}k")
 print(f"\\nCompare:")
-print(f"Mean: \${mean_price:.2f}k (pulled up by outlier)")
-print(f"Median: \${median_price:.2f}k (robust to outlier)")
+print(f"Mean: \\$\{mean_price:.2f}k (pulled up by outlier)")
+print(f"Median: \\$\{median_price:.2f}k (robust to outlier)")
 
 # Output:
 # Median price: $245.00k

@@ -101,20 +101,20 @@ print("=== DELTA EXAMPLES ===\\n")
 call_delta = calculate_delta(S, K, T, r, sigma, 'call')
 put_delta = calculate_delta(S, K, T, r, sigma, 'put')
 
-print(f"ATM (Strike \${K}, Stock \${S}):")
+print(f"ATM (Strike \${K}, Stock \\$\{S}):")
 print(f"  Call Delta: {call_delta:.4f} (~50%)")
 print(f"  Put Delta: {put_delta:.4f} (~-50%)")
 print(f"  Sum: {call_delta + put_delta:.4f} (should be ≈0)\\n")
 
 # ITM call
 call_itm_delta = calculate_delta(S, K-10, T, r, sigma, 'call')
-print(f"ITM Call (Strike \${K-10}, Stock \${S}):")
+print(f"ITM Call (Strike \${K-10}, Stock \\$\{S}):")
 print(f"  Delta: {call_itm_delta:.4f} (~80-90%)")
 print(f"  Behaves more like stock\\n")
 
 # OTM put
 put_otm_delta = calculate_delta(S, K-10, T, r, sigma, 'put')
-print(f"OTM Put (Strike \${K-10}, Stock \${S}):")
+print(f"OTM Put (Strike \${K-10}, Stock \\$\{S}):")
 print(f"  Delta: {put_otm_delta:.4f} (~-10 to -20%)")
 print(f"  Small exposure\\n")
 
@@ -232,7 +232,7 @@ print(f"Position: Long {option_pos} call contracts (delta {opt_delta})")
 print(f"Option delta exposure: {option_pos * 100 * opt_delta:.0f} shares")
 print(f"Hedge: {hedge:.0f} shares (short {abs (hedge):.0f} shares)")
 print(f"\\nResult: Delta-neutral position")
-print(f"  Stock up $1: Calls gain \${option_pos * 100 * opt_delta:.0f}, stock loses \${abs (hedge):.0f}")
+print(f"  Stock up $1: Calls gain \${option_pos * 100 * opt_delta:.0f}, stock loses \\$\{abs (hedge):.0f}")
 print(f"  Net change: $0 (approximately)")
 \`\`\`
 
@@ -301,7 +301,7 @@ sigma = 0.25
 gamma = calculate_gamma(S, K, T, r, sigma)
 
 print("=== GAMMA EXAMPLE ===\\n")
-print(f"Stock: \${S}, Strike: \${K}, T: {T*365:.0f} days")
+print(f"Stock: \${S}, Strike: \\$\{K}, T: {T*365:.0f} days")
 print(f"Gamma: {gamma:.6f}")
 print(f"\\nInterpretation:")
 print(f"  If stock moves $1, delta changes by {gamma:.6f}")
@@ -419,10 +419,10 @@ def simulate_gamma_scalping(S_initial, K, T, r, sigma, stock_path,
     initial_put = bs_price(S_initial, K, T, r, sigma, 'put')
     initial_cost = initial_call + initial_put
     
-    print(f"Initial Position: Long Straddle at \${S_initial}")
-    print(f"  Call: \${initial_call:.2f}")
-    print(f"  Put: \${initial_put:.2f}")
-    print(f"  Total Cost: \${initial_cost:.2f}\\n")
+    print(f"Initial Position: Long Straddle at \\$\{S_initial}")
+    print(f"  Call: \\$\{initial_call:.2f}")
+    print(f"  Put: \\$\{initial_put:.2f}")
+    print(f"  Total Cost: \\$\{initial_cost:.2f}\\n")
     
     # Track hedging
     stock_position = 0  # Start with no stock hedge
@@ -481,9 +481,9 @@ def simulate_gamma_scalping(S_initial, K, T, r, sigma, stock_path,
     print(f"\\n=== GAMMA SCALPING RESULTS ===")
     print(f"Number of rehedges: {len (rehedges)}")
     print(f"\\nP&L Breakdown:")
-    print(f"  Option P&L: \${option_pnl:.2f}")
-    print(f"  Hedging P&L (gamma scalping): \${total_hedging_pnl:.2f}")
-    print(f"  Total P&L: \${total_pnl:.2f}\\n")
+    print(f"  Option P&L: \\$\{option_pnl:.2f}")
+    print(f"  Hedging P&L (gamma scalping): \\$\{total_hedging_pnl:.2f}")
+    print(f"  Total P&L: \\$\{total_pnl:.2f}\\n")
     
     return total_pnl, rehedges
 
@@ -617,11 +617,11 @@ put_theta = calculate_theta(S, K, T, r, sigma, 'put')
 
 print("=== THETA EXAMPLES ===\\n")
 print(f"ATM Call (30 days to expiration):")
-print(f"  Theta: \${call_theta:.4f} per day")
-print(f"  Interpretation: Loses \${abs (call_theta):.2f} per day from time decay\\n")
+print(f"  Theta: \\$\{call_theta:.4f} per day")
+print(f"  Interpretation: Loses \\$\{abs (call_theta):.2f} per day from time decay\\n")
 
 print(f"ATM Put (30 days to expiration):")
-print(f"  Theta: \${put_theta:.4f} per day\\n")
+print(f"  Theta: \\$\{put_theta:.4f} per day\\n")
 
 # Calculate for different expirations
 expirations = [5, 15, 30, 60, 90, 180]
@@ -629,7 +629,7 @@ thetas = [calculate_theta(S, K, t/365, r, sigma, 'call') for t in expirations]
 
 print("Theta vs Time to Expiration:")
 for t, theta in zip (expirations, thetas):
-    print(f"  {t:3d} days: \${theta:+.4f}/day")
+    print(f"  {t:3d} days: \\$\{theta:+.4f}/day")
 
 print("\\n→ Theta accelerates as expiration approaches!")
 
@@ -777,11 +777,11 @@ vega = calculate_vega(S, K, T, r, sigma)
 
 print("=== VEGA EXAMPLES ===\\n")
 print(f"ATM Option (30 days):")
-print(f"  Vega: \${vega:.4f} per 1% volatility change")
+print(f"  Vega: \\$\{vega:.4f} per 1% volatility change")
 print(f"  Current IV: {sigma*100:.0f}%")
-print(f"\\n  If IV → 26% (+1%): Option gains \${vega:.2f}")
-print(f"  If IV → 30% (+5%): Option gains \${vega*5:.2f}")
-print(f"  If IV → 20% (-5%): Option loses \${vega*5:.2f}\\n")
+print(f"\\n  If IV → 26% (+1%): Option gains \\$\{vega:.2f}")
+print(f"  If IV → 30% (+5%): Option gains \\$\{vega*5:.2f}")
+print(f"  If IV → 20% (-5%): Option loses \\$\{vega*5:.2f}\\n")
 
 # IV crush example (earnings)
 print("=== IV CRUSH EXAMPLE (EARNINGS) ===")
@@ -797,14 +797,14 @@ vega_pre = calculate_vega(S, K, T, r, pre_earnings_iv)
 vega_loss_estimate = vega_pre * iv_drop
 
 print(f"\\nBefore earnings:")
-print(f"  IV: {pre_earnings_iv*100:.0f}%, Call Price: \${option_price_before:.2f}")
-print(f"  Vega: \${vega_pre:.2f}")
+print(f"  IV: {pre_earnings_iv*100:.0f}%, Call Price: \\$\{option_price_before:.2f}")
+print(f"  Vega: \\$\{vega_pre:.2f}")
 
 print(f"\\nAfter earnings (stock unchanged):")
 print(f"  IV: {post_earnings_iv*100:.0f}% (dropped {abs (iv_drop):.0f}%)")
-print(f"  Call Price: \${option_price_after:.2f}")
-print(f"\\nLoss from IV crush: \${actual_loss:.2f}")
-print(f"Vega estimate: \${vega_loss_estimate:.2f} (close!)")
+print(f"  Call Price: \\$\{option_price_after:.2f}")
+print(f"\\nLoss from IV crush: \\$\{actual_loss:.2f}")
+print(f"Vega estimate: \\$\{vega_loss_estimate:.2f} (close!)")
 
 # Visualize vega
 fig, axes = plt.subplots(2, 2, figsize=(14, 10))
@@ -959,8 +959,8 @@ put_rho = calculate_rho(S, K, T, r, sigma, 'put')
 
 print("=== RHO EXAMPLES ===\\n")
 print(f"Short-dated options (30 days):")
-print(f"  Call Rho: \${call_rho:.4f} per 1% rate change")
-print(f"  Put Rho: \${put_rho:.4f} per 1% rate change")
+print(f"  Call Rho: \\$\{call_rho:.4f} per 1% rate change")
+print(f"  Put Rho: \\$\{put_rho:.4f} per 1% rate change")
 print(f"  → Minimal impact\\n")
 
 # Long-dated (LEAPS)
@@ -969,8 +969,8 @@ call_rho_long = calculate_rho(S, K, T_long, r, sigma, 'call')
 put_rho_long = calculate_rho(S, K, T_long, r, sigma, 'put')
 
 print(f"Long-dated options (2 years):")
-print(f"  Call Rho: \${call_rho_long:.4f} per 1% rate change")
-print(f"  Put Rho: \${put_rho_long:.4f} per 1% rate change")
+print(f"  Call Rho: \\$\{call_rho_long:.4f} per 1% rate change")
+print(f"  Put Rho: \\$\{put_rho_long:.4f} per 1% rate change")
 print(f"  → More significant\\n")
 
 # Rate change scenario
@@ -979,8 +979,8 @@ call_impact = call_rho_long * 200  # 2% = 200 basis points
 put_impact = put_rho_long * 200
 
 print(f"If Fed raises rates by 2% (200 bps):")
-print(f"  2-year Call: {'+' if call_impact > 0 else '} \${call_impact:.2f}")
-print(f"  2-year Put: \${put_impact:.2f}")
+print(f"  2-year Call: {'+' if call_impact > 0 else '} \\$\{call_impact:.2f}")
+print(f"  2-year Put: \\$\{put_impact:.2f}")
 
 print("\\n=== WHY RHO MATTERS (SOMETIMES) ===")
 print("1. LEAPS (long-dated options): Rho can matter for multi-year positions")
@@ -1071,8 +1071,8 @@ class OptionPortfolio:
         print("\\n=== INTERPRETATION ===")
         print(f"Portfolio Delta: {total['delta']:.0f} (behaves like {total['delta']:.0f} shares)")
         print(f"Portfolio Gamma: {total['gamma']:.4f} (delta changes by {total['gamma']:.4f} per $1 move)")
-        print(f"Portfolio Theta: \${total['theta']:.2f}/day ({'earning' if total['theta'] > 0 else 'losing'} \${abs (total['theta']):.2f}/day)")
-        print(f"Portfolio Vega: \${total['vega']:.2f} per 1% IV ({'long' if total['vega'] > 0 else 'short'} vol)")
+        print(f"Portfolio Theta: \${total['theta']:.2f}/day ({'earning' if total['theta'] > 0 else 'losing'} \\$\{abs (total['theta']):.2f}/day)")
+        print(f"Portfolio Vega: \\$\{total['vega']:.2f} per 1% IV ({'long' if total['vega'] > 0 else 'short'} vol)")
 
 # Example portfolio
 S = 150
@@ -1112,17 +1112,17 @@ if abs (total_greeks['delta']) > 100:
 
 if abs (total_greeks['vega']) > 500:
     if total_greeks['vega'] > 0:
-        print(f"2. Vega risk: Long \${total_greeks['vega']:.0f} vega → exposed to IV drop")
+        print(f"2. Vega risk: Long \\$\{total_greeks['vega']:.0f} vega → exposed to IV drop")
         print(f"   Consider: Sell some options or buy short-dated options (lower vega)")
     else:
-        print(f"2. Vega risk: Short \${abs (total_greeks['vega']):.0f} vega → exposed to IV spike")
+        print(f"2. Vega risk: Short \\$\{abs (total_greeks['vega']):.0f} vega → exposed to IV spike")
         print(f"   Consider: Buy long-dated options to add positive vega")
 
 if total_greeks['theta'] < -50:
-    print(f"3. Theta burn: Losing \${abs (total_greeks['theta']):.2f}/day")
+    print(f"3. Theta burn: Losing \\$\{abs (total_greeks['theta']):.2f}/day")
     print(f"   Consider: Close or roll positions if expecting low movement")
 elif total_greeks['theta'] > 50:
-    print(f"3. Theta collection: Earning \${total_greeks['theta']:.2f}/day")
+    print(f"3. Theta collection: Earning \\$\{total_greeks['theta']:.2f}/day")
     print(f"   Good for range-bound markets")
 
 if abs (total_greeks['gamma']) < 0.01:

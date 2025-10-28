@@ -644,7 +644,7 @@ results = [
 
 optimal = optimizer.find_optimal (results)
 print(f"Optimal prompt: {optimal['prompt_id']}")
-print(f"Quality: {optimal['quality']:.2%}, Cost: \${optimal['cost']}")
+print(f"Quality: {optimal['quality']:.2%}, Cost: \\$\{optimal['cost']}")
 print(f"Composite Score: {optimal['composite_score']:.2f}")
 \`\`\`
 

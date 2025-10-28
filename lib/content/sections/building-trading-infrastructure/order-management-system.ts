@@ -768,7 +768,7 @@ async def oms_example():
     print(f"  Side: {order.side.value}")
     print(f"  Quantity: {order.quantity}")
     print(f"  Filled: {order.filled_quantity} ({order.get_fill_percentage():.1f}%)")
-    print(f"  Avg Price: \${order.avg_fill_price:.2f})"
+    print(f"  Avg Price: \\$\{order.avg_fill_price:.2f})"
 print(f"  State: {order.state.value}")
 print(f"\\n  Events:")
 for event in order.events:

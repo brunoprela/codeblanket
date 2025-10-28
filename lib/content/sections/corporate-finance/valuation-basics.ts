@@ -341,20 +341,20 @@ class DCFModel:
         print(f"{'=' * 60}\\n")
         
         print("Valuation Build-Up:")
-        print(f"  PV of Projected FCF (Years 1-{len (self.projections)}): \${self.valuation_summary['PV of Projected FCF']:,.0f}M")
-print(f"  Terminal Value: \${self.valuation_summary['Terminal Value']:,.0f}M")
-print(f"  PV of Terminal Value: \${self.valuation_summary['PV of Terminal Value']:,.0f}M")
+        print(f"  PV of Projected FCF (Years 1-{len (self.projections)}): \\$\{self.valuation_summary['PV of Projected FCF']:,.0f}M")
+print(f"  Terminal Value: \\$\{self.valuation_summary['Terminal Value']:,.0f}M")
+print(f"  PV of Terminal Value: \\$\{self.valuation_summary['PV of Terminal Value']:,.0f}M")
 print(f"  {'─' * 58}")
-print(f"  Enterprise Value: \${self.valuation_summary['Enterprise Value']:,.0f}M")
-print(f"\\n  Less: Net Debt: \${self.valuation_summary['Less: Net Debt']:,.0f}M")
-print(f"  Plus: Non-operating Assets: \${self.valuation_summary['Plus: Non-operating Assets']:,.0f}M")
+print(f"  Enterprise Value: \\$\{self.valuation_summary['Enterprise Value']:,.0f}M")
+print(f"\\n  Less: Net Debt: \\$\{self.valuation_summary['Less: Net Debt']:,.0f}M")
+print(f"  Plus: Non-operating Assets: \\$\{self.valuation_summary['Plus: Non-operating Assets']:,.0f}M")
 print(f"  {'─' * 58}")
-print(f"  Equity Value: \${self.valuation_summary['Equity Value']:,.0f}M")
+print(f"  Equity Value: \\$\{self.valuation_summary['Equity Value']:,.0f}M")
 
 if self.valuation_summary['Value per Share']:
     print(f"\\n  Shares Outstanding: {self.valuation_summary['Shares Outstanding']:,.1f}M")
 print(f"  {'=' * 58}")
-print(f"  Value per Share: \${self.valuation_summary['Value per Share']:.2f}")
+print(f"  Value per Share: \\$\{self.valuation_summary['Value per Share']:.2f}")
 
 print(f"\\n  Assumptions:")
 print(f"    WACC: {self.valuation_summary['WACC']:.2%}")

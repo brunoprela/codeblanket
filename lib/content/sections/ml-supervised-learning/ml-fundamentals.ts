@@ -308,7 +308,7 @@ y_pred = model.predict(X_test_scaled)
 mae = mean_absolute_error (y_test, y_pred)
 r2 = r2_score (y_test, y_pred)
 
-print(f"Mean Absolute Error: \${mae:,.0f}")
+print(f"Mean Absolute Error: \\$\{mae:,.0f}")
 print(f"R² Score: {r2:.3f}")
 \`\`\`
 

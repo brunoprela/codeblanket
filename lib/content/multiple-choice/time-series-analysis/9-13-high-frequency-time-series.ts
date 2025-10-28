@@ -13,7 +13,6 @@ export const highFrequencyTimeSeriesMultipleChoice = [
     correctAnswer: 1,
     explanation:
       '1-second returns biased upward due to microstructure noise. At very high frequencies: bid-ask bounce creates artificial volatility, rounding errors magnified, non-synchronous trading effects. Result: Σ(r²) overestimates true variance. Optimal sampling: ~5-minute for liquid stocks balances: enough observations (78 per day), minimal noise bias. Theory: Hansen-Lunde (2006) shows optimal frequency varies by liquidity. Very liquid: 1-min okay, Less liquid: 5-15 min better. Solution: Two-scale realized volatility (TSRV) or kernel-based estimators remove noise bias while using high-frequency data.',
-    difficulty: 'advanced',
   },
   {
     id: 2,
@@ -28,7 +27,6 @@ export const highFrequencyTimeSeriesMultipleChoice = [
     correctAnswer: 1,
     explanation:
       'Negative autocorrelation. Bid-ask bounce mechanism: Transaction alternates bid ($100.00) and ask ($100.02) → returns: +2bp, -2bp, +2bp, -2bp → negative serial correlation! Even if true price unchanged. Impact: Apparent mean reversion (not real), Overstated volatility at high freq, First-order autocorrelation ≈ -0.2 to -0.5 typical. Detection: Plot ACF of 1-second returns → spike at lag 1 (negative). Solutions: Use mid-price (bid+ask)/2 not transaction price, Sample at lower frequency (5-min), Use Lee-Ready algorithm to infer true direction, Model explicitly (Roll 1984 bid-ask bounce model).',
-    difficulty: 'intermediate',
   },
   {
     id: 3,
@@ -44,7 +42,6 @@ export const highFrequencyTimeSeriesMultipleChoice = [
     correctAnswer: 1,
     explanation:
       "Realized volatility most accurate. Information content: Close-to-close: 1 observation/day → inefficient, noisy. Realized volatility: ~78 observations (5-min) → uses full day's information. Range: 2 observations (high, low) → better than C-C but less than RV. Empirical evidence: RV reduces estimation error by ~90% vs daily returns! Why? Central limit theorem: averaging many observations → precise estimate. RV ≈ true integrated variance (continuous limit). Applications: Options pricing (better vol input), Risk management (accurate VaR), Volatility forecasting (HAR-RV model). Caveats: Still need to handle microstructure noise, non-trading hours. Modern: Use realized kernel or two-scale estimators.",
-    difficulty: 'advanced',
   },
   {
     id: 4,
@@ -60,7 +57,6 @@ export const highFrequencyTimeSeriesMultipleChoice = [
     correctAnswer: 1,
     explanation:
       "VWAP = $50.11 (volume-weighted average). Calculation: Total shares = 100,000. Tranche 1: 30,000 shares @ $50.00 = $1,500,000, Tranche 2: 50,000 shares @ $50.10 = $2,505,000, Tranche 3: 20,000 shares @ $50.20 = $1,004,000. Total cost = $5,009,000. VWAP = $5,009,000 / 100,000 = $50.09. Wait, let me recalculate: 0.30×50.00 + 0.50×50.10 + 0.20×50.20 = 15.00 + 25.05 + 10.04 = $50.09. Actually the answer should be $50.09 (option 2 is slightly off). Correct formula: VWAP = Σ(Price_i × Volume_i) / Σ(Volume_i). Used to: Benchmark execution quality, Minimize market impact, Match market's natural volume profile. Trader beats VWAP → outperformance!",
-    difficulty: 'intermediate',
   },
   {
     id: 5,
@@ -76,6 +72,5 @@ export const highFrequencyTimeSeriesMultipleChoice = [
     correctAnswer: 1,
     explanation:
       'Trading with informed traders. Adverse selection: Market maker quotes bid/ask → Informed trader knows stock undervalued → buys at ask → Price rises → MM loses! Example: MM sells at $100.02 (ask), informed buyer knows earnings beat → price jumps to $100.50 → MM loses $0.48 per share. Why it matters: Eats into bid-ask spread profit, Can cause systematic losses, Forces wider spreads → less liquidity, Key risk in market making. Detection: Order flow imbalance, Trade size patterns, Speed of order submission, Correlation with future price moves. Defense: Widen quotes when detecting informed flow, Reduce quote sizes, Use adverse selection models (Glosten-Milgrom), Fast cancellation when new information arrives. Successful MM: Profit from uninformed flow > losses from informed flow.',
-    difficulty: 'advanced',
   },
 ];

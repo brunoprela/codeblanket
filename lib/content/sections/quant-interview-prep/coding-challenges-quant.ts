@@ -549,7 +549,7 @@ result = detect_calendar_arbitrage(
     r=0.05
 )
 print(f"Arbitrage detected: {result['arbitrage_detected']}")
-print(f"Spread cost: \${result['spread_cost']:.2f}")
+print(f"Spread cost: \\$\{result['spread_cost']:.2f}")
 \`\`\`
 
 ---

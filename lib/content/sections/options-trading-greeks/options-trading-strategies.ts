@@ -78,8 +78,8 @@ plt.grid(True, alpha=0.3)
 plt.legend()
 plt.show()
 
-print(f"Max Loss: \${premium}")
-print(f"Breakeven: \${strike + premium}")
+print(f"Max Loss: \\$\{premium}")
+print(f"Breakeven: \\$\{strike + premium}")
 print(f"Max Profit: Unlimited")
 \`\`\`
 
@@ -136,10 +136,10 @@ plt.show()
 max_profit = short_strike - long_strike - net_debit
 max_loss = net_debit
 
-print(f"Net Debit: \${net_debit}")
-print(f"Max Profit: \${max_profit} (at \${short_strike}+)")
-print(f"Max Loss: \${net_debit}")
-print(f"Breakeven: \${long_strike + net_debit}")
+print(f"Net Debit: \\$\{net_debit}")
+print(f"Max Profit: \${max_profit} (at \\$\{short_strike}+)")
+print(f"Max Loss: \\$\{net_debit}")
+print(f"Breakeven: \\$\{long_strike + net_debit}")
 print(f"Return on Risk: {(max_profit / net_debit * 100):.1f}%")
 \`\`\`
 
@@ -199,9 +199,9 @@ payoff = bear_put_spread(stock_prices, long_strike, short_strike, net_debit)
 max_profit = long_strike - short_strike - net_debit
 max_loss = net_debit
 
-print(f"Max Profit: \${max_profit} (at \${short_strike} or below)")
-print(f"Max Loss: \${net_debit}")
-print(f"Breakeven: \${long_strike - net_debit}")
+print(f"Max Profit: \${max_profit} (at \\$\{short_strike} or below)")
+print(f"Max Loss: \\$\{net_debit}")
+print(f"Breakeven: \\$\{long_strike - net_debit}")
 \`\`\`
 
 ---
@@ -273,7 +273,7 @@ plt.grid(True, alpha=0.3)
 plt.legend()
 plt.show()
 
-print(f"Max Profit: \${net_credit:.2f} (stock between $95-$105)")
+print(f"Max Profit: \\$\{net_credit:.2f} (stock between $95-$105)")
 print(f"Max Loss: \${5 - net_credit:.2f} (stock below $90 or above $110)")
 print(f"Breakevens: \${95 - net_credit:.2f} and \${105 + net_credit:.2f}")
 print(f"Probability of Profit: ~70% (if selling 1 SD)")
@@ -330,13 +330,13 @@ sigma = 0.25
 spread_value, short, long_price = calendar_spread_value(S, K, T_short, T_long, sigma)
 
 print(f"\\nCalendar Spread Analysis:")
-print(f"  Front month (30d): \${short:.2f}")
-print(f"  Back month (60d): \${long_price:.2f}")
-print(f"  Net debit: \${spread_value:.2f}")
+print(f"  Front month (30d): \\$\{short:.2f}")
+print(f"  Back month (60d): \\$\{long_price:.2f}")
+print(f"  Net debit: \\$\{spread_value:.2f}")
 print(f"\\nProfit potential:")
-print(f"  If stock stays at \${K} at expiration:")
-print(f"    Front month expires worthless: +\${short:.2f}")
-print(f"    Back month retains value: still worth ~\${long_price - 1:.2f}")
+print(f"  If stock stays at \\$\{K} at expiration:")
+print(f"    Front month expires worthless: +\\$\{short:.2f}")
+print(f"    Back month retains value: still worth ~\\$\{long_price - 1:.2f}")
 print(f"    Estimated profit: $1-2 per share")
 \`\`\`
 

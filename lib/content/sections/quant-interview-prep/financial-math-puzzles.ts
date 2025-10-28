@@ -182,7 +182,7 @@ print(f"IRR: {irr:.4f} = {irr*100:.2f}%")
 
 # Verify
 npv_at_irr = npv (irr, cash_flows)
-print(f"NPV at IRR: \${npv_at_irr:.6f} (should be ≈0)")
+print(f"NPV at IRR: \\$\{npv_at_irr:.6f} (should be ≈0)")
 
 # Output:
 # IRR: 0.1124 = 11.24 %

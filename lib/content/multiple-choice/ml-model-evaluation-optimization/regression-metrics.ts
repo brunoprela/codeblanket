@@ -28,7 +28,7 @@ export const regressionMetricsMultipleChoice = {
       correctAnswer: 1,
       explanation:
         'R² represents the proportion of variance in the dependent variable that is explained by the independent variables. R²=0.85 means the model explains 85% of the variance, with 15% remaining unexplained.',
-      difficulty: 'beginner' as const,
+      difficulty: 'easy' as const,
       category: 'Interpretation',
     },
     {
