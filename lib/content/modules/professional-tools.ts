@@ -66,6 +66,7 @@ export const professionalToolsModule: Module = {
   title: 'Professional Tools & Technologies',
   description:
     'Master Excel, Bloomberg, data platforms, and build a professional quant workstation',
+  icon: '🛠️',
   sections: [
     {
       id: excelPowerUser.id,

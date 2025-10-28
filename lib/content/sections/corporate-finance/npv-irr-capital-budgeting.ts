@@ -1,7 +1,7 @@
 export const npvIrrCapitalBudgeting = {
-    title: 'NPV, IRR & Capital Budgeting',
-    id: 'npv-irr-capital-budgeting',
-    content: `
+  title: 'NPV, IRR & Capital Budgeting',
+  id: 'npv-irr-capital-budgeting',
+  content: `
 # NPV, IRR & Capital Budgeting
 
 ## Introduction

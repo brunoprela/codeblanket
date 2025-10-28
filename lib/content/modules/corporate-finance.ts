@@ -60,6 +60,7 @@ export const corporateFinanceModule: Module = {
   title: 'Corporate Finance Fundamentals',
   description:
     'Master valuation, capital structure, M&A, LBO modeling, and core corporate finance concepts',
+  icon: '💼',
   sections: [
     {
       id: timeValueOfMoney.id,

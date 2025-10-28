@@ -69,6 +69,7 @@ export const financialModelingValuationModule: Module = {
   title: 'Financial Modeling & Valuation',
   description:
     'Master DCF, comps, LBO models, and valuation techniques used by investment banks and PE firms',
+  icon: '📈',
   sections: [
     {
       id: financialModelingFundamentals.id,

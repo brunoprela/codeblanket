@@ -58,6 +58,7 @@ export const financialMarketsInstrumentsModule: Module = {
   title: 'Financial Markets & Instruments',
   description:
     'Master financial markets, trading instruments, market microstructure, and build a complete market data dashboard',
+  icon: '🏛️',
   estimatedHours: 50,
   prerequisites: [],
   learningObjectives: [
@@ -70,71 +71,85 @@ export const financialMarketsInstrumentsModule: Module = {
   sections: [
     {
       ...equityMarketsDeepDive,
+      id: equityMarketsDeepDive.slug,
       quiz: equityMarketsDeepDiveQuiz,
       multipleChoice: equityMarketsDeepDiveMultipleChoice,
     },
     {
       ...fixedIncomeMarkets,
+      id: fixedIncomeMarkets.slug,
       quiz: fixedIncomeMarketsQuiz,
       multipleChoice: fixedIncomeMarketsMultipleChoice,
     },
     {
       ...derivativesOverview,
+      id: derivativesOverview.slug,
       quiz: derivativesOverviewQuiz,
       multipleChoice: derivativesOverviewMultipleChoice,
     },
     {
       ...foreignExchangeMarkets,
+      id: foreignExchangeMarkets.slug,
       quiz: foreignExchangeMarketsQuiz,
       multipleChoice: foreignExchangeMarketsMultipleChoice,
     },
     {
       ...commoditiesMarkets,
+      id: commoditiesMarkets.slug,
       quiz: commoditiesMarketsQuiz,
       multipleChoice: commoditiesMarketsMultipleChoice,
     },
     {
       ...cryptocurrencyMarkets,
+      id: cryptocurrencyMarkets.slug,
       quiz: cryptocurrencyMarketsQuiz,
       multipleChoice: cryptocurrencyMarketsMultipleChoice,
     },
     {
       ...etfsMutualFunds,
+      id: etfsMutualFunds.slug,
       quiz: etfsMutualFundsQuiz,
       multipleChoice: etfsMutualFundsMultipleChoice,
     },
     {
       ...alternativeInvestments,
+      id: alternativeInvestments.slug,
       quiz: alternativeInvestmentsQuiz,
       multipleChoice: alternativeInvestmentsMultipleChoice,
     },
     {
       ...marketParticipants,
+      id: marketParticipants.slug,
       quiz: marketParticipantsQuiz,
       multipleChoice: marketParticipantsMultipleChoice,
     },
     {
       ...tradingVenuesExchanges,
+      id: tradingVenuesExchanges.slug,
       quiz: tradingVenuesExchangesQuiz,
       multipleChoice: tradingVenuesExchangesMultipleChoice,
     },
     {
       ...orderTypesExecution,
+      id: orderTypesExecution.slug,
       quiz: orderTypesExecutionQuiz,
       multipleChoice: orderTypesExecutionMultipleChoice,
     },
     {
       ...marketDataPriceDiscovery,
+      id: marketDataPriceDiscovery.slug,
       quiz: marketDataPriceDiscoveryQuiz,
       multipleChoice: marketDataPriceDiscoveryMultipleChoice,
     },
     {
       ...liquidityMarketImpact,
+      id: liquidityMarketImpact.slug,
       quiz: liquidityMarketImpactQuiz,
       multipleChoice: liquidityMarketImpactMultipleChoice,
     },
     {
       ...moduleProjectMarketDataDashboard,
+      id: moduleProjectMarketDataDashboard.slug,
       quiz: moduleProjectMarketDataDashboardQuiz,
       multipleChoice: moduleProjectMarketDataDashboardMultipleChoice,
     },

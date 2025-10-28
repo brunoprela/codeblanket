@@ -1,9 +1,9 @@
 export const derivativesOverview = {
-    title: 'Derivatives Overview',
-    slug: 'derivatives-overview',
-    description:
-        'Master forwards, futures, options, and swaps - the building blocks of modern finance',
-    content: `
+  title: 'Derivatives Overview',
+  slug: 'derivatives-overview',
+  description:
+    'Master forwards, futures, options, and swaps - the building blocks of modern finance',
+  content: `
 # Derivatives Overview
 
 ## Introduction: The Power and Peril of Derivatives
@@ -1045,18 +1045,18 @@ He was right.
 
 You now understand derivatives - the most powerful and dangerous instruments in finance!
 `,
-    exercises: [
-        {
-            prompt:
-                'Build a futures margin calculator that simulates daily mark-to-market, detects margin calls, and calculates optimal position sizing given risk tolerance. Include scenarios for extreme market moves (circuit breakers, limit moves).',
-            solution:
-                '// Implementation: 1) Track daily P&L with mark-to-market, 2) Monitor account balance vs maintenance margin, 3) Simulate gap risk (overnight moves), 4) Calculate VAR and position limits, 5) Alert on margin calls, 6) Handle forced liquidation scenarios, 7) Optimize position size using Kelly criterion or risk-adjusted returns',
-        },
-        {
-            prompt:
-                'Create an arbitrage detector that monitors cash-and-carry opportunities between spot and futures markets. Calculate fair value, detect mispricings, and simulate arbitrage execution accounting for transaction costs and funding costs.',
-            solution:
-                '// Implementation: 1) Real-time spot and futures price feeds, 2) Calculate fair futures value using cost-of-carry model, 3) Detect mispricings > threshold, 4) Account for bid-ask spreads, borrowing costs, storage costs (commodities), 5) Simulate P&L including all costs, 6) Alert when net profit > minimum threshold, 7) Track arbitrage convergence over time',
-        },
-    ],
+  exercises: [
+    {
+      prompt:
+        'Build a futures margin calculator that simulates daily mark-to-market, detects margin calls, and calculates optimal position sizing given risk tolerance. Include scenarios for extreme market moves (circuit breakers, limit moves).',
+      solution:
+        '// Implementation: 1) Track daily P&L with mark-to-market, 2) Monitor account balance vs maintenance margin, 3) Simulate gap risk (overnight moves), 4) Calculate VAR and position limits, 5) Alert on margin calls, 6) Handle forced liquidation scenarios, 7) Optimize position size using Kelly criterion or risk-adjusted returns',
+    },
+    {
+      prompt:
+        'Create an arbitrage detector that monitors cash-and-carry opportunities between spot and futures markets. Calculate fair value, detect mispricings, and simulate arbitrage execution accounting for transaction costs and funding costs.',
+      solution:
+        '// Implementation: 1) Real-time spot and futures price feeds, 2) Calculate fair futures value using cost-of-carry model, 3) Detect mispricings > threshold, 4) Account for bid-ask spreads, borrowing costs, storage costs (commodities), 5) Simulate P&L including all costs, 6) Alert when net profit > minimum threshold, 7) Track arbitrage convergence over time',
+    },
+  ],
 };

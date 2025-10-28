@@ -66,6 +66,7 @@ export const optionsTradingGreeksModule: Module = {
   title: 'Options Trading & Greeks',
   description:
     'Master options pricing, Greeks, volatility trading, and portfolio management for professional options trading',
+  icon: '📉',
   sections: [
     {
       id: optionsFundamentals.id,

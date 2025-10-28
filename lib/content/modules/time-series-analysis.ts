@@ -58,6 +58,7 @@ export const timeSeriesAnalysisModule: Module = {
   title: 'Time Series Analysis for Finance',
   description:
     'Master time series modeling for financial forecasting, volatility prediction, and algorithmic trading strategies',
+  icon: '📅',
   estimatedHours: 45,
   prerequisites: ['financial-statements-analysis', 'quantitative-finance'],
   learningObjectives: [

@@ -1,7 +1,7 @@
 export const dataQualityValidation = {
-    title: 'Data Quality and Validation',
-    id: 'data-quality-validation',
-    content: `
+  title: 'Data Quality and Validation',
+  id: 'data-quality-validation',
+  content: `
 # Data Quality and Validation
 
 ## Introduction

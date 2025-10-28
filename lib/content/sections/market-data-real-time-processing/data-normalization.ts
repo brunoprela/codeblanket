@@ -1,7 +1,7 @@
 export const dataNormalization = {
-    title: 'Data Normalization',
-    id: 'data-normalization',
-    content: `
+  title: 'Data Normalization',
+  id: 'data-normalization',
+  content: `
 # Data Normalization
 
 ## Introduction

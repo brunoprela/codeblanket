@@ -63,6 +63,7 @@ export const financeFoundationsModule: Module = {
   title: 'Finance Foundations for Engineers',
   description:
     'Understanding the financial landscape, career paths, and why finance matters for engineers',
+  icon: '🎓',
   sections: [
     {
       id: financialSystemOverview.id,

@@ -1,7 +1,7 @@
 export const corporateBonds = {
-    title: 'Corporate Bonds',
-    id: 'corporate-bonds',
-    content: `
+  title: 'Corporate Bonds',
+  id: 'corporate-bonds',
+  content: `
 # Corporate Bonds
 
 ## Introduction

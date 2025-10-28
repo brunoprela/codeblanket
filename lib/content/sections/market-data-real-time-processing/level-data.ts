@@ -1,7 +1,7 @@
 export const levelData = {
-    title: 'Level 1, Level 2, Level 3 Data',
-    id: 'level-data',
-    content: `
+  title: 'Level 1, Level 2, Level 3 Data',
+  id: 'level-data',
+  content: `
 # Level 1, Level 2, Level 3 Data
 
 ## Introduction

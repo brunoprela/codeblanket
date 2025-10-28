@@ -35,7 +35,7 @@ export const backtestingStrategyDevelopmentModule: Module = {
   title: 'Backtesting & Strategy Development',
   description:
     'Master the complete backtesting lifecycle from data management through production deployment, including walk-forward analysis, parameter optimization, and building production-grade backtesting infrastructure',
-  icon: '📊',
+  icon: '🔬',
   sections: backtestingStrategyDevelopment.sections.map((section: any) => ({
     id: section.id,
     title: section.title,

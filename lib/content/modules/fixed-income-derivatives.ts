@@ -72,6 +72,7 @@ export const fixedIncomeDerivativesModule: Module = {
   title: 'Fixed Income & Derivatives',
   description:
     'Master bond pricing, yield curves, duration/convexity, derivatives (swaps, CDS, options), hedging strategies, portfolio management, and risk management for fixed income markets.',
+  icon: '💵',
   sections: [
     {
       ...bondPricingFundamentals,

@@ -58,6 +58,7 @@ export const algorithmicTradingStrategiesModule: Module = {
   title: 'Algorithmic Trading Strategies',
   description:
     'Master systematic trading strategies from trend following to multi-strategy systems with production-ready implementations',
+  icon: '🤖',
   estimatedHours: 35,
   prerequisites: [
     'financial-markets-instruments',
@@ -75,71 +76,85 @@ export const algorithmicTradingStrategiesModule: Module = {
   sections: [
     {
       ...algorithmicTradingOverview,
+      id: algorithmicTradingOverview.slug,
       quiz: algorithmicTradingOverviewQuiz,
       multipleChoice: algorithmicTradingOverviewMC,
     },
     {
       ...trendFollowingStrategies,
+      id: trendFollowingStrategies.slug,
       quiz: trendFollowingStrategiesQuiz,
       multipleChoice: trendFollowingStrategiesMC,
     },
     {
       ...meanReversionStrategies,
+      id: meanReversionStrategies.slug,
       quiz: meanReversionStrategiesQuiz,
       multipleChoice: meanReversionStrategiesMC,
     },
     {
       ...statisticalArbitrage,
+      id: statisticalArbitrage.slug,
       quiz: statisticalArbitrageQuiz,
       multipleChoice: statisticalArbitrageMC,
     },
     {
       ...pairsTrading,
+      id: pairsTrading.slug,
       quiz: pairsTradingQuiz,
       multipleChoice: pairsTradingMC,
     },
     {
       ...momentumStrategies,
+      id: momentumStrategies.slug,
       quiz: momentumStrategiesQuiz,
       multipleChoice: momentumStrategiesMC,
     },
     {
       ...marketMakingStrategies,
+      id: marketMakingStrategies.slug,
       quiz: marketMakingStrategiesQuiz,
       multipleChoice: marketMakingStrategiesMC,
     },
     {
       ...executionAlgorithms,
+      id: executionAlgorithms.slug,
       quiz: executionAlgorithmsQuiz,
       multipleChoice: executionAlgorithmsMC,
     },
     {
       ...newsBasedTrading,
+      id: newsBasedTrading.slug,
       quiz: newsBasedTradingQuiz,
       multipleChoice: newsBasedTradingMC,
     },
     {
       ...sentimentAnalysisTrading,
+      id: sentimentAnalysisTrading.slug,
       quiz: sentimentAnalysisTradingQuiz,
       multipleChoice: sentimentAnalysisTradingMC,
     },
     {
       ...factorInvestingStrategies,
+      id: factorInvestingStrategies.slug,
       quiz: factorInvestingStrategiesQuiz,
       multipleChoice: factorInvestingStrategiesMC,
     },
     {
       ...multiAssetStrategies,
+      id: multiAssetStrategies.slug,
       quiz: multiAssetStrategiesQuiz,
       multipleChoice: multiAssetStrategiesMC,
     },
     {
       ...strategyPerformanceAttribution,
+      id: strategyPerformanceAttribution.slug,
       quiz: strategyPerformanceAttributionQuiz,
       multipleChoice: strategyPerformanceAttributionMC,
     },
     {
       ...projectMultiStrategyTradingSystem,
+      id: projectMultiStrategyTradingSystem.slug,
       quiz: projectMultiStrategyTradingSystemQuiz,
       multipleChoice: projectMultiStrategyTradingSystemMC,
     },

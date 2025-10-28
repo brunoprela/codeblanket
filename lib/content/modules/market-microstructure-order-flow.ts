@@ -63,6 +63,7 @@ export const marketMicrostructureOrderFlowModule: Module = {
   title: 'Market Microstructure & Order Flow',
   description:
     'Master how markets work at the micro level: order books, HFT, market making, latency optimization, and building production matching engines',
+  icon: '🔍',
   sections: [
     {
       id: marketMicrostructureFundamentals.id,

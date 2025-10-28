@@ -66,6 +66,7 @@ export const marketDataRealTimeProcessingModule: Module = {
   title: 'Market Data & Real-Time Processing',
   description:
     'Master real-time market data processing, low-latency infrastructure, and production data pipelines for financial markets',
+  icon: '📡',
   sections: [
     {
       id: marketDataFundamentals.id,

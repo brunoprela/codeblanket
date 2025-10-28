@@ -72,6 +72,7 @@ export const buildingTradingInfrastructureModule: Module = {
   title: 'Building Trading Infrastructure',
   description:
     'Build production-grade trading systems: OMS, EMS, FIX Protocol, position tracking, P&L calculation, and deployment',
+  icon: '⚙️',
   sections: [
     {
       id: tradingSystemArchitecture.id,

@@ -1,7 +1,7 @@
 export const messageQueuesTrading = {
-    title: 'Message Queues for Trading',
-    id: 'message-queues-trading',
-    content: `
+  title: 'Message Queues for Trading',
+  id: 'message-queues-trading',
+  content: `
 # Message Queues for Trading
 
 ## Introduction

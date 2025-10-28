@@ -47,6 +47,7 @@ export const financialStatementsAnalysisModule: Module = {
   title: 'Financial Statements & Analysis',
   description:
     'Master reading and analyzing financial statements programmatically - build automated systems to parse and analyze company financials',
+  icon: '📑',
   sections: [
     {
       id: fundamentals.slug,

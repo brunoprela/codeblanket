@@ -71,6 +71,7 @@ export const portfolioTheoryModule: Module = {
   title: 'Portfolio Theory & Asset Allocation',
   description:
     'Master Modern Portfolio Theory, optimization techniques, factor models, and institutional portfolio management',
+  icon: '📊',
   sections: [
     {
       id: modernPortfolioTheory.id,
