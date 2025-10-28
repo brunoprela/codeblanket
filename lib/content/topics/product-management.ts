@@ -9,7 +9,7 @@ export const productManagementTopic = {
     'Master product strategy, user research, roadmapping, and building products users love',
   icon: '📦',
   modules: [
-    'pm-fundamentals',
+    'product-management-fundamentals',
     'pm-user-research',
     'pm-product-strategy',
     'pm-roadmap-prioritization',

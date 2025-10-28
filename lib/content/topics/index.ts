@@ -132,6 +132,12 @@ import { marketMicrostructureOrderFlowModule } from '../modules/market-microstru
 import { buildingTradingInfrastructureModule } from '../modules/building-trading-infrastructure';
 import { backtestingStrategyDevelopmentModule } from '../modules/backtesting-strategy-development';
 
+import { linuxSystemAdministrationModule } from '../modules/linux-system-administration';
+
+import { cryptoBlockchainFundamentalsModule } from '../modules/crypto-blockchain-fundamentals';
+
+import { reactFundamentalsModule } from '../modules/react-fundamentals';
+
 import { promptEngineeringOptimizationModule } from '../modules/prompt-engineering-optimization';
 import { llmEngineeringFundamentalsModule } from '../modules/llm-engineering-fundamentals';
 import { fileProcessingDocumentUnderstandingModule } from '../modules/file-processing-document-understanding';
@@ -148,6 +154,10 @@ import { productionLlmApplicationsModule } from '../modules/production-llm-appli
 import { scalingCostOptimizationModule } from '../modules/scaling-cost-optimization';
 import aiSafetyGuardrailsModule from '../modules/ai-safety-guardrails';
 import { evaluationDataOpsFinetuningModule } from '../modules/evaluation-data-ops-fine-tuning';
+
+import { productManagementFundamentalsModule } from '../modules/product-management-fundamentals';
+
+import { competitiveProgrammingModule } from '../modules/competitive-programming';
 
 // Create a map of all modules by ID
 const allModulesMap: Record<string, Module> = {
@@ -244,6 +254,12 @@ const allModulesMap: Record<string, Module> = {
   'backtesting-strategy-development': backtestingStrategyDevelopmentModule,
   'financial-markets-instruments': financialMarketsInstrumentsModule,
 
+  'linux-system-administration': linuxSystemAdministrationModule,
+
+  'crypto-blockchain-fundamentals': cryptoBlockchainFundamentalsModule,
+
+  'react-fundamentals': reactFundamentalsModule,
+
   'applied-ai-llm-fundamentals': llmEngineeringFundamentalsModule,
   'applied-ai-prompt-engineering': promptEngineeringOptimizationModule,
   'applied-ai-file-processing': fileProcessingDocumentUnderstandingModule,
@@ -260,6 +276,10 @@ const allModulesMap: Record<string, Module> = {
   'applied-ai-scaling': scalingCostOptimizationModule,
   'applied-ai-safety': aiSafetyGuardrailsModule,
   'applied-ai-evaluation-dataops-finetuning': evaluationDataOpsFinetuningModule,
+
+  'product-management-fundamentals': productManagementFundamentalsModule,
+
+  'competitive-programming': competitiveProgrammingModule,
 };
 
 // Define all topics in order

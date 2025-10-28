@@ -4,11 +4,12 @@
 
 export const devopsTopic = {
   id: 'devops',
-  title: 'DevOps',
+  title: 'DevOps & AWS',
   description:
-    'Master deployment, CI/CD, infrastructure, and cloud technologies',
+    'Master Linux system administration, AWS infrastructure, deployment, CI/CD, and cloud technologies',
   icon: '🚀',
   modules: [
-    // Add devops modules here when ready
+    'linux-system-administration',
+    // Add more devops modules here when ready
   ],
 };

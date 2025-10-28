@@ -8,7 +8,5 @@ export const frontendDevelopmentTopic = {
   description:
     'Build modern web applications with React, Next.js, and modern frontend technologies',
   icon: '⚛️',
-  modules: [
-    // Add frontend modules here when ready
-  ],
+  modules: ['react-fundamentals'],
 };

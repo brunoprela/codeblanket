@@ -1,0 +1,5 @@
+export const walletArchitectureKeyManagement = {
+  title: 'Wallet Architecture & Key Management',
+  id: 'wallet-architecture-key-management',
+  content: `# Wallet Architecture & Key Management\n\n## HD Wallets (BIP32/BIP39/BIP44)\n\nHierarchical Deterministic wallets derive infinite keys from single seed. Seed phrase (12-24 words) → Master key → Child keys. Enables backups with single phrase.\n\n## Hot vs Cold Wallets\n\nHot wallet: Connected to internet, convenient but vulnerable. Cold wallet: Offline, secure but inconvenient. Best practice: Hot for daily use, cold for savings.\n\n## Multi-Signature Wallets\n\nRequire M-of-N signatures (e.g., 2-of-3). No single point of failure. Used for: Corporate treasuries, high-value storage, escrow.\n\n## Hardware Wallets\n\nDedicated devices for key storage. Private keys never leave device. Signs transactions internally. Examples: Ledger, Trezor.\n\n## Summary\n\nKey management is critical—lost keys = lost funds. HD wallets standard. Cold storage for large amounts. Hardware wallets best security/convenience trade-off.`,
+};
