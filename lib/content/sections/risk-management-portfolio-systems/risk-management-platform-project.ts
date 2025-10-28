@@ -1,4 +1,7 @@
-export const riskManagementPlatformProject = `
+export const riskManagementPlatformProject = {
+  id: 'risk-management-platform-project',
+  title: 'Risk Management Platform - Capstone Project',
+  content: `
 # Risk Management Platform - Capstone Project
 
 ## Introduction
@@ -728,4 +731,5 @@ When complete, submit:
 **Estimated Time**: 100-150 hours over 10 weeks
 
 **You've reached the end of Module 15. Congratulations! 🎉**
-`;
+`,
+};

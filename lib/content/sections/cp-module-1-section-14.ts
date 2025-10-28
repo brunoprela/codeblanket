@@ -1,8 +1,7 @@
 export const readingOthersCppCodeSection = {
   id: 'cp-m1-s14',
   title: "Reading Other People's C++ Code",
-  content:
-    `
+  content: `
 
 # Reading Other People's C++ Code
 
@@ -172,8 +171,8 @@ sort(all(a)); reverse(all(a));
 
 **Reading strategy:**
 1. Each \`; \` is a statement
-2. ` >>
-    ` chains input operations
+2. \` >>\`
+    chains input operations
 3. Parse line by line
 
 **What it does:**

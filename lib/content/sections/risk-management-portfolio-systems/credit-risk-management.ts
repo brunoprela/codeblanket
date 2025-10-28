@@ -1,4 +1,7 @@
-export const creditRiskManagement = `
+export const creditRiskManagement = {
+  id: 'credit-risk-management',
+  title: 'Credit Risk Management',
+  content: `
 # Credit Risk Management
 
 ## Introduction
@@ -698,5 +701,5 @@ Credit risk is insidious - it looks fine until it blows up. Unlike market risk (
 The key is measuring expected loss (provision for), unexpected loss (hold capital for), and having robust collateral and limit frameworks.
 
 Next: Operational Risk - the risk of process, system, and people failures.
-`;
-
+`,
+};

@@ -47,7 +47,7 @@ set -euo pipefail
 #=============================================================================
 
 readonly SCRIPT_NAME=$(basename "$0")
-readonly SCRIPT_DIR="$(cd "$(dirname "\\${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_DIR="$(cd "$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
 readonly RUN_ID="deploy-$(date +%Y%m%d-%H%M%S)-$$"
 readonly LOG_DIR="/var/log/deployments/$RUN_ID"
 readonly STATE_FILE="$LOG_DIR/deployment-state.db"
@@ -117,8 +117,8 @@ EOF
 update_instance_state() {
     local instance_id=$1
     local status=$2
-    local error_message=\\\${3:-}
-    local backup_path=\\\${4:-}
+    local error_message=\${3:-}
+    local backup_path=\${4:-}
     
     local end_time=$(date +%s)
     
@@ -179,7 +179,7 @@ INSERT OR IGNORE INTO deployment_state
     fi
     
     # Check config file exists in S3
-    if !aws s3 ls "\\${CONFIG_BUCKET}/\\${CONFIG_VERSION}/" &> /dev/null; then
+    if !aws s3 ls "\${CONFIG_BUCKET}/\${CONFIG_VERSION}/" &> /dev/null; then
         log_error "Config version not found in S3: $CONFIG_VERSION"
     errors = $((errors + 1))
     fi
@@ -244,8 +244,8 @@ backup_config() {
     
     log_instance "$instance_id" "Creating configuration backup"
     
-    local backup_file = "\\${instance_id}-$(date +%Y%m%d-%H%M%S).tar.gz"
-    local backup_path = "\\${BACKUP_BUCKET}/\\${environment}/\\${backup_file}"
+    local backup_file = "\${instance_id}-$(date +%Y%m%d-%H%M%S).tar.gz"
+    local backup_path = "\${BACKUP_BUCKET}/\${environment}/\${backup_file}"
     
     # Create backup on instance
     ssh - i ~/.ssh/deployment - key.pem \\
@@ -314,10 +314,10 @@ cleanup() {
     trap cleanup EXIT
 
 # Download config package
-aws s3 cp "\\${CONFIG_BUCKET}/\\${CONFIG_VERSION}/config.tar.gz" "$TEMP_DIR/config.tar.gz" || exit 1
+aws s3 cp "\${CONFIG_BUCKET}/\${CONFIG_VERSION}/config.tar.gz" "$TEMP_DIR/config.tar.gz" || exit 1
 
 # Verify checksum
-aws s3 cp "\\${CONFIG_BUCKET}/\\${CONFIG_VERSION}/config.tar.gz.sha256" "$TEMP_DIR/config.tar.gz.sha256" || exit 1
+aws s3 cp "\${CONFIG_BUCKET}/\${CONFIG_VERSION}/config.tar.gz.sha256" "$TEMP_DIR/config.tar.gz.sha256" || exit 1
 cd "$TEMP_DIR"
 if !sha256sum - c config.tar.gz.sha256; then
     echo "Checksum verification failed!"
@@ -459,7 +459,7 @@ deploy_worker() {
         fi
         
         if [[ $attempt -lt $MAX_RETRIES ]]; then
-            log_instance "$instance_id" "Retrying in \\${RETRY_DELAY}s..."
+            log_instance "$instance_id" "Retrying in \${RETRY_DELAY}s..."
             sleep "$RETRY_DELAY"
         fi
         
@@ -559,7 +559,7 @@ EOF
     cat "$report"
     
     # Upload report to S3
-    aws s3 cp "$report" "s3://my-company-deployment-reports/\\${RUN_ID}/report.txt"
+    aws s3 cp "$report" "s3://my-company-deployment-reports/\${RUN_ID}/report.txt"
     
     # Send summary notification
     local status_emoji
@@ -885,7 +885,7 @@ error_handler() {
     local command=$2
     log_error "Error at line $line_number: $command"
 }
-trap 'error_handler \\${LINENO} "$BASH_COMMAND"' ERR
+trap 'error_handler \${LINENO} "$BASH_COMMAND"' ERR
 
 #=============================================================================
 # 6. FUNCTIONS (Modular and testable)
@@ -935,7 +935,7 @@ retry() {
         
         if [[ $attempt -lt $max_attempts ]]; then
             local sleep_time=$((attempt * attempt))  # Exponential backoff
-            log_warning "Command failed, retrying in \\${sleep_time}s..."
+            log_warning "Command failed, retrying in \${sleep_time}s..."
             sleep "$sleep_time"
         fi
         
@@ -1630,7 +1630,7 @@ fetch_cloudwatch_logs() {
     
     while [[ "$status" == "Running" ]] || [[ "$status" == "Scheduled" ]]; do
         if [[ $wait_time -ge $max_wait ]]; then
-            log_error "Query timeout after \\${max_wait}s"
+            log_error "Query timeout after \${max_wait}s"
             return 1
         fi
         
@@ -1642,7 +1642,7 @@ fetch_cloudwatch_logs() {
             --query 'status' \\
             --output text)
         
-        echo -ne "\\rQuery status: $status (\\${wait_time}s)"
+        echo -ne "\\rQuery status: $status (\${wait_time}s)"
     done
     echo ""
     
@@ -1736,7 +1736,7 @@ parse_log_entry() {
     local duration=$(echo "$log_line" | grep -oP '\\d+ms' | tr -d 'ms')
     
     # Output as tab-separated values
-    echo -e "\\${timestamp}\\t\\${method}\\t\\${path}\\t\\${status}\\t\\${duration}"
+    echo -e "\${timestamp}\t\${method}\t\${path}\t\${status}\t\${duration}"
 }
 
 # Parse all logs in parallel
@@ -1805,7 +1805,7 @@ analyze_slow_queries() {
     local threshold=$2
     local output_file=$3
     
-    log_info "Analyzing slow queries (>\\${threshold}ms)..."
+    log_info "Analyzing slow queries (>\${threshold}ms)..."
     
     awk -F'\\t' -v threshold="$threshold" '
     {
@@ -1877,9 +1877,9 @@ analyze_percentiles() {
     local p95_line=$((total_count * 95 / 100))
     local p99_line=$((total_count * 99 / 100))
     
-    local p50=$(sed -n "\\${p50_line}p" "$durations_file")
-    local p95=$(sed -n "\\${p95_line}p" "$durations_file")
-    local p99=$(sed -n "\\${p99_line}p" "$durations_file")
+    local p50=$(sed -n "\${p50_line}p" "$durations_file")
+    local p95=$(sed -n "\${p95_line}p" "$durations_file")
+    local p99=$(sed -n "\${p99_line}p" "$durations_file")
     local min=$(head -1 "$durations_file")
     local max=$(tail -1 "$durations_file")
     
@@ -1898,9 +1898,9 @@ avg,$avg
 EOF
     
     log_success "Percentile analysis complete"
-    log_info "  p50: \\${p50}ms"
-    log_info "  p95: \\${p95}ms"
-    log_info "  p99: \\${p99}ms"
+    log_info "  p50: \${p50}ms"
+    log_info "  p95: \${p95}ms"
+    log_info "  p99: \${p99}ms"
 }
 
 # Analyze endpoint performance

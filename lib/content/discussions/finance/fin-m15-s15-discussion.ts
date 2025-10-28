@@ -1,10 +1,11 @@
 export default {
-    id: 'fin-m15-s15-discussion',
-    title: 'BlackRock Aladdin Architecture Study - Discussion Questions',
-    questions: [
-        {
-            question: 'Explain the core architecture of BlackRock Aladdin, which manages $10T+ in assets. How does Aladdin integrate portfolio management, risk analytics, trading, and operations in a single platform, and what makes this unified approach powerful?',
-            answer: `Aladdin represents the gold standard for institutional risk/portfolio management platforms:
+  id: 'fin-m15-s15-discussion',
+  title: 'BlackRock Aladdin Architecture Study - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Explain the core architecture of BlackRock Aladdin, which manages $10T+ in assets. How does Aladdin integrate portfolio management, risk analytics, trading, and operations in a single platform, and what makes this unified approach powerful?',
+      answer: `Aladdin represents the gold standard for institutional risk/portfolio management platforms:
 
 **Aladdin Platform Overview**
 \`\`\`python
@@ -227,10 +228,11 @@ operational_benefits = {
 \`\`\`
 
 **Bottom Line**: Aladdin's power is unified architecture—portfolio management, risk, trading, operations all share one database. No reconciliation, no data duplication, real-time consistency. Benefits: 18x workflow efficiency (minutes vs hours), pre-trade risk checks prevent limit breaches, operational risk reduced 99%, complete audit trail. Manages $10T+ across 1,000 firms, 50K users. Architecture: proprietary database (petabyte scale), distributed compute (GPU farms for Monte Carlo), real-time web UI, extensive integrations. Gold standard for why unified platforms beat point solutions.`,
-        },
-        {
-            question: 'Describe Aladdin\'s risk analytics capabilities.How does it perform real- time VaR, stress testing, and scenario analysis at scale, and what makes its factor - based risk models different from typical vendor solutions ? ',
-            answer: `Aladdin's risk analytics represent decades of institutional knowledge codified:
+    },
+    {
+      question:
+        "Describe Aladdin's risk analytics capabilities.How does it perform real- time VaR, stress testing, and scenario analysis at scale, and what makes its factor - based risk models different from typical vendor solutions ? ",
+      answer: `Aladdin's risk analytics represent decades of institutional knowledge codified:
 
 **Real-Time VaR at Scale**
 \`\`\`python
@@ -529,10 +531,11 @@ scale_comparison = {
 \`\`\`
 
 **Bottom Line**: Aladdin risk analytics: real-time VaR (<1s) via hierarchical aggregation + incremental updates + distributed compute + caching. Stress testing: 100+ historical scenarios + custom hypothetical + reverse stress, all in <2 minutes. Factor models: 180+ factors (vs 30 typical vendor) → more granular attribution. Key differentiators: depth of factors, tight integration with portfolio construction (optimize with risk constraints), 40 years historical data, institutional scale (millions of positions, 50K users). Built over 30+ years, institutional knowledge codified. Why firms pay $30K-100K+/year: comprehensive, integrated, battle-tested at scale.`,
-        },
-{
-    question: 'Explain Aladdin\'s business model and competitive moat.Why do institutional investors pay $30K - $100K + per user per year, and what would it take for a competitor to replicate Aladdin\'s capabilities?',
-        answer: `Aladdin has one of the strongest moats in financial technology:
+    },
+    {
+      question:
+        "Explain Aladdin's business model and competitive moat.Why do institutional investors pay $30K - $100K + per user per year, and what would it take for a competitor to replicate Aladdin's capabilities?",
+      answer: `Aladdin has one of the strongest moats in financial technology:
 
 **Pricing and Revenue Model**
 \`\`\`python
@@ -804,7 +807,6 @@ moat_strength = {
 \`\`\`
 
 **Bottom Line**: Aladdin charges $30K-100K/user/year because: (1) Replaces multiple systems ($50M → $36M TCO), (2) Network effects ($10T data aggregation), (3) Massive switching costs ($30M-115M + 18-36 months). Competitive moat: $10B+ to replicate, 15+ years development, 40 years data, institutional knowledge from 1000 clients, network effects, scale economics. Market share: 40-50% institutional. Threats: cloud-native competitors, regulators (systemic risk concern), modular best-of-breed. But moat extremely strong—one of best in fintech. BlackRock's golden goose: $1.5B revenue, 15% growth, 40%+ margins.`,
-        },
-    ],
-} as const ;
-
+    },
+  ],
+} as const;

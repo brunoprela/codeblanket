@@ -809,7 +809,7 @@ function useAuthWithRedirect() {
 **When HOCs Might Still Be Useful:**
 
 **1. Wrapping Third-Party Components:**
-\`\`\```tsx
+\`\`\`tsx
 // Can't modify third-party component to use hooks
 import ThirdPartyComponent from 'some-library';
 
@@ -1161,7 +1161,7 @@ useDeepCompareEffect(() => {
 \`\`\`
 
 **Option 3: Stringify (for simple objects):**
-\`\`\```tsx
+\`\`\`tsx
 const userString = JSON.stringify(user);
 
 useEffect(() => {

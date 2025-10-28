@@ -1,4 +1,7 @@
-export const valueAtRiskMethods = `
+export const valueAtRiskMethods = {
+  id: 'value-at-risk-methods',
+  title: 'Value at Risk (VaR) Methods',
+  content: `
 # Value at Risk (VaR) Methods
 
 ## Introduction
@@ -1061,5 +1064,5 @@ VaR is the industry standard risk metric, but it must be used intelligently:
 In the next section, we'll explore CVaR (Conditional VaR), which addresses VaR's biggest weakness - telling us nothing about how bad tail losses can be.
 
 Remember: "VaR is like a speedometer - useful but doesn't prevent crashes."
-`;
-
+`,
+};

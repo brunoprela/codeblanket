@@ -3,12 +3,12 @@
  * Module 1: Foundational React concepts including components, JSX, props, state, and hooks
  */
 
-import { Module } from '../../types';
+import { Module, DiscussionItem, MultipleChoiceQuestion } from '../../types';
 
 // Import sections
 import { introductionToReactJsx } from '../sections/react-fundamentals/introduction-to-react-jsx';
 import { functionComponentsTypescript } from '../sections/react-fundamentals/function-components-typescript';
-import { stateManagementUsestate } from '../sections/react-fundamentals/state-management-usestate';
+import { stateManagementUseState } from '../sections/react-fundamentals/state-management-usestate';
 import { eventHandling } from '../sections/react-fundamentals/event-handling';
 import { conditionalRendering } from '../sections/react-fundamentals/conditional-rendering';
 import { listsAndKeys } from '../sections/react-fundamentals/lists-and-keys';
@@ -19,7 +19,7 @@ import { legacyPatternsAndMigration } from '../sections/react-fundamentals/legac
 // Import discussions
 import { introductionToReactJsxDiscussion } from '../discussions/react-fundamentals/introduction-to-react-jsx-discussion';
 import { functionComponentsTypescriptDiscussion } from '../discussions/react-fundamentals/function-components-typescript-discussion';
-import { stateManagementUsestateDiscussion } from '../discussions/react-fundamentals/state-management-usestate-discussion';
+import { stateManagementUseStateDiscussion } from '../discussions/react-fundamentals/state-management-usestate-discussion';
 import { eventHandlingDiscussion } from '../discussions/react-fundamentals/event-handling-discussion';
 import { conditionalRenderingDiscussion } from '../discussions/react-fundamentals/conditional-rendering-discussion';
 import { listsAndKeysDiscussion } from '../discussions/react-fundamentals/lists-and-keys-discussion';
@@ -28,10 +28,10 @@ import { reactDeveloperToolsDiscussion } from '../discussions/react-fundamentals
 import { legacyPatternsAndMigrationDiscussion } from '../discussions/react-fundamentals/legacy-patterns-and-migration-discussion';
 
 // Import multiple choice
-import { introductionToReactJsxQuiz } from '../multiple-choice/react-fundamentals/introduction-to-react-jsx';
-import { functionComponentsTypescriptQuiz } from '../multiple-choice/react-fundamentals/function-components-typescript';
-import { stateManagementUsestateQuiz } from '../multiple-choice/react-fundamentals/state-management-usestate';
-import { eventHandlingQuiz } from '../multiple-choice/react-fundamentals/event-handling';
+import { introductionToReactJsxMultipleChoice } from '../multiple-choice/react-fundamentals/introduction-to-react-jsx';
+import { functionComponentsTypescriptMultipleChoice } from '../multiple-choice/react-fundamentals/function-components-typescript';
+import { stateManagementUseStateMultipleChoice } from '../multiple-choice/react-fundamentals/state-management-usestate';
+import { eventHandlingMultipleChoice } from '../multiple-choice/react-fundamentals/event-handling';
 import { conditionalRenderingQuiz } from '../multiple-choice/react-fundamentals/conditional-rendering';
 import { listsAndKeysQuiz } from '../multiple-choice/react-fundamentals/lists-and-keys';
 import { formsIntroductionQuiz } from '../multiple-choice/react-fundamentals/forms-introduction';
@@ -43,7 +43,7 @@ export const reactFundamentalsModule: Module = {
   title: 'React Fundamentals',
   description:
     'Master the core concepts of modern React including components, JSX, props, state, and hooks',
-  objectives: [
+  learningObjectives: [
     "Understand React's component-based architecture and Virtual DOM",
     'Write modern function components with TypeScript',
     'Manage component state with the useState hook',
@@ -57,48 +57,61 @@ export const reactFundamentalsModule: Module = {
   sections: [
     {
       ...introductionToReactJsx,
-      quiz: introductionToReactJsxDiscussion,
-      multipleChoice: introductionToReactJsxQuiz,
+      discussion:
+        introductionToReactJsxDiscussion as unknown as DiscussionItem[],
+      multipleChoice: introductionToReactJsxMultipleChoice,
     },
     {
       ...functionComponentsTypescript,
-      quiz: functionComponentsTypescriptDiscussion,
-      multipleChoice: functionComponentsTypescriptQuiz,
+      discussion:
+        functionComponentsTypescriptDiscussion as unknown as DiscussionItem[],
+      multipleChoice: functionComponentsTypescriptMultipleChoice,
     },
     {
-      ...stateManagementUsestate,
-      quiz: stateManagementUsestateDiscussion,
-      multipleChoice: stateManagementUsestateQuiz,
+      ...stateManagementUseState,
+      discussion:
+        stateManagementUseStateDiscussion as unknown as DiscussionItem[],
+      multipleChoice: stateManagementUseStateMultipleChoice,
     },
     {
       ...eventHandling,
-      quiz: eventHandlingDiscussion,
-      multipleChoice: eventHandlingQuiz,
+      discussion: eventHandlingDiscussion as unknown as DiscussionItem[],
+      multipleChoice: eventHandlingMultipleChoice,
     },
     {
       ...conditionalRendering,
-      quiz: conditionalRenderingDiscussion,
-      multipleChoice: conditionalRenderingQuiz,
+      discussion:
+        conditionalRenderingDiscussion.questions as unknown as DiscussionItem[],
+      multipleChoice: (conditionalRenderingQuiz.questions ||
+        conditionalRenderingQuiz) as unknown as MultipleChoiceQuestion[],
     },
     {
       ...listsAndKeys,
-      quiz: listsAndKeysDiscussion,
-      multipleChoice: listsAndKeysQuiz,
+      discussion:
+        listsAndKeysDiscussion.questions as unknown as DiscussionItem[],
+      multipleChoice: (listsAndKeysQuiz.questions ||
+        listsAndKeysQuiz) as unknown as MultipleChoiceQuestion[],
     },
     {
       ...formsIntroduction,
-      quiz: formsIntroductionDiscussion,
-      multipleChoice: formsIntroductionQuiz,
+      discussion:
+        formsIntroductionDiscussion.questions as unknown as DiscussionItem[],
+      multipleChoice: (formsIntroductionQuiz.questions ||
+        formsIntroductionQuiz) as unknown as MultipleChoiceQuestion[],
     },
     {
       ...reactDeveloperTools,
-      quiz: reactDeveloperToolsDiscussion,
-      multipleChoice: reactDeveloperToolsQuiz,
+      discussion:
+        reactDeveloperToolsDiscussion.questions as unknown as DiscussionItem[],
+      multipleChoice: (reactDeveloperToolsQuiz.questions ||
+        reactDeveloperToolsQuiz) as unknown as MultipleChoiceQuestion[],
     },
     {
       ...legacyPatternsAndMigration,
-      quiz: legacyPatternsAndMigrationDiscussion,
-      multipleChoice: legacyPatternsAndMigrationQuiz,
+      discussion:
+        legacyPatternsAndMigrationDiscussion.questions as unknown as DiscussionItem[],
+      multipleChoice: (legacyPatternsAndMigrationQuiz.questions ||
+        legacyPatternsAndMigrationQuiz) as unknown as MultipleChoiceQuestion[],
     },
   ],
 };

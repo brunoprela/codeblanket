@@ -1,4 +1,7 @@
-export const riskReportingDashboards = `
+export const riskReportingDashboards = {
+  id: 'risk-reporting-dashboards',
+  title: 'Risk Reporting and Dashboards',
+  content: `
 # Risk Reporting and Dashboards
 
 ## Introduction
@@ -581,5 +584,5 @@ Effective risk reporting bridges the gap between technical risk measurement and 
 The 2008 crisis showed that complex risks poorly communicated lead to catastrophe. Modern risk reporting must be both comprehensive and comprehensible.
 
 Next: BlackRock Aladdin Architecture - studying the world's largest risk platform.
-`;
-
+`,
+};

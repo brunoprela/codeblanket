@@ -1228,7 +1228,7 @@ function TradingDashboard() {
     return (
       <div style={style} className="trade-row">
         <span className="symbol">{trade.symbol}</span>
-        <span className="price">${trade.price.toFixed(2)}</span>
+        <span className="price">{\`\$\${trade.price.toFixed(2)}\`}</span>
         <span className="volume">{trade.volume.toLocaleString()}</span>
         <span className="time">
           {new Date(trade.timestamp).toLocaleTimeString()}

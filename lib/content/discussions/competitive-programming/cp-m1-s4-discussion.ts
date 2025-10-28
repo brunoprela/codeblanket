@@ -458,8 +458,7 @@ Stress testing is a superpower that finds bugs sample tests miss. Invest 10 minu
     {
       question:
         'What are the key features to look for in a competitive programming development environment, and how should you customize it for maximum efficiency?',
-      answer:
-        `The right development environment can significantly boost your competitive programming performance. Here's what matters:
+      answer: `The right development environment can significantly boost your competitive programming performance. Here's what matters:
 
 **Essential Features:**
 
@@ -476,7 +475,7 @@ Setup:
     {
         "label": "C++ Compile & Run",
             "type": "shell",
-                "command": "g++ -std=c++17 -O2 -Wall ${file} -o ${fileDirname}/solution && ${fileDirname}/solution < ${fileDirname}/input.txt",
+                "command": "g++ -std=c++17 -O2 -Wall \${file} -o \${fileDirname}/solution && \${fileDirname}/solution < \${fileDirname}/input.txt",
                     "group": { "kind": "build", "isDefault": true },
         "presentation": { "reveal": "always", "panel": "new" }
     }
@@ -752,8 +751,7 @@ nnoremap <leader>t :-1read ~/.vim/templates/cp.cpp<CR>
 #endif
 \`\`\`
 
-Compile with ` -
-        DLOCAL` to enable
+Compile with \`-DLOCAL\` to enable
 
         ** Contest - Day Checklist:**
 

@@ -1,4 +1,7 @@
-export const conditionalValueAtRisk = `
+export const conditionalValueAtRisk = {
+  id: 'conditional-value-at-risk',
+  title: 'Conditional Value at Risk (CVaR)',
+  content: `
 # Conditional Value at Risk (CVaR)
 
 ## Introduction
@@ -879,5 +882,5 @@ In risk management, understanding tail losses is critical. Black swan events (20
 **Best Practice**: Always report both VaR and CVaR. VaR for day-to-day risk monitoring, CVaR for capital allocation and stress testing.
 
 Next, we'll explore stress testing and scenario analysis - complementary approaches to understanding extreme risks beyond what VaR and CVaR capture from historical data.
-`;
-
+`,
+};

@@ -1,4 +1,7 @@
-export const stressTestingScenarioAnalysis = `
+export const stressTestingScenarioAnalysis = {
+  id: 'stress-testing-scenario-analysis',
+  title: 'Stress Testing and Scenario Analysis',
+  content: `
 # Stress Testing and Scenario Analysis
 
 ## Introduction
@@ -933,5 +936,5 @@ While VaR and CVaR tell us about normal market conditions, stress testing explor
 As the saying goes: "The Fed's job is to take away the punch bowl just as the party gets going." Stress testing is the risk manager's job - to imagine the party ending badly and ensure you survive it.
 
 Next: Market Risk Management - applying these concepts to specific risk types.
-`;
-
+`,
+};

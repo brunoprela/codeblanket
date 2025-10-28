@@ -1,4 +1,7 @@
-export const marketRiskManagement = `
+export const marketRiskManagement = {
+  id: 'market-risk-management',
+  title: 'Market Risk Management',
+  content: `
 # Market Risk Management
 
 ## Introduction
@@ -922,5 +925,5 @@ Market risk management is about understanding and controlling your sensitivities
 Professional firms monitor market risk in real-time, with automatic alerts and pre-trade risk checks. The goal isn't to eliminate market risk (that's impossible) - it's to take calculated risks within acceptable boundaries.
 
 Next: Credit Risk Management - managing counterparty default risk.
-`;
-
+`,
+};

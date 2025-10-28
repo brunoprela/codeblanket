@@ -3,7 +3,12 @@
  * Aggregates sections, discussions, and multiple choice questions
  */
 
-import { Module } from '../../types';
+import {
+  Module,
+  DiscussionItem,
+  QuizQuestion,
+  MultipleChoiceQuestion,
+} from '../../types';
 
 // Import sections
 import { buildingAlgorithmicIntuitionSection } from '../sections/cp-module-1-section-1';
@@ -102,83 +107,99 @@ export const competitiveProgrammingModule: Module = {
   sections: [
     {
       ...buildingAlgorithmicIntuitionSection,
-      quiz: cpM1S1Discussion,
-      multipleChoice: cpM1S1Quiz,
+      discussion: cpM1S1Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S1Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S1Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...whyCppForCpSection,
-      quiz: cpM1S2Discussion,
-      multipleChoice: cpM1S2Quiz,
+      discussion: cpM1S2Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S2Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S2Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...environmentSetupCompilationSection,
-      quiz: cpM1S3Discussion,
-      multipleChoice: cpM1S3Quiz,
+      discussion: cpM1S3Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S3Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S3Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...modernCpToolEcosystemSection,
-      quiz: cpM1S4Discussion,
-      multipleChoice: cpM1S4Quiz,
+      discussion: cpM1S4Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S4Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S4Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...fastInputOutputTechniquesSection,
-      quiz: cpM1S5Discussion,
-      multipleChoice: cpM1S5Quiz,
+      discussion: cpM1S5Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S5Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S5Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...cppBasicsReviewSection,
-      quiz: cpM1S6Discussion,
-      multipleChoice: cpM1S6Quiz,
+      discussion: cpM1S6Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S6Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S6Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...cppModernFeaturesSection,
-      quiz: cpM1S7Discussion,
-      multipleChoice: cpM1S7Quiz,
+      discussion: cpM1S7Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S7Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S7Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...macrosPreprocessorTricksSection,
-      quiz: cpM1S8Discussion,
-      multipleChoice: cpM1S8Quiz,
+      discussion: cpM1S8Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S8Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S8Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...bitsBytesOperationsSection,
-      quiz: cpM1S9Discussion,
-      multipleChoice: cpM1S9Quiz,
+      discussion: cpM1S9Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S9Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S9Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...memoryManagementCpSection,
-      quiz: cpM1S10Discussion,
-      multipleChoice: cpM1S10Quiz,
+      discussion: cpM1S10Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S10Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S10Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...templateMetaprogrammingBasicsSection,
-      quiz: cpM1S11Discussion,
-      multipleChoice: cpM1S11Quiz,
+      discussion: cpM1S11Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S11Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S11Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...commonCompilationErrorsSection,
-      quiz: cpM1S12Discussion,
-      multipleChoice: cpM1S12Quiz,
+      discussion: cpM1S12Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S12Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S12Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...debuggingCompetitiveEnvironmentSection,
-      quiz: cpM1S13Discussion,
-      multipleChoice: cpM1S13Quiz,
+      discussion: cpM1S13Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S13Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S13Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...readingOthersCppCodeSection,
-      quiz: cpM1S14Discussion,
-      multipleChoice: cpM1S14Quiz,
+      discussion: cpM1S14Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S14Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S14Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...contestDayCppTipsSection,
-      quiz: cpM1S15Discussion,
-      multipleChoice: cpM1S15Quiz,
+      discussion: cpM1S15Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S15Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S15Quiz as unknown as MultipleChoiceQuestion[],
     },
     {
       ...buildingRobustCpTemplateSection,
-      quiz: cpM1S16Discussion,
-      multipleChoice: cpM1S16Quiz,
+      discussion: cpM1S16Discussion.questions as unknown as DiscussionItem[],
+      quiz: cpM1S16Quiz as unknown as QuizQuestion[],
+      multipleChoice: cpM1S16Quiz as unknown as MultipleChoiceQuestion[],
     },
   ],
 };

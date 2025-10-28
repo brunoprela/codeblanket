@@ -13,6 +13,7 @@ import {
   getTotalMultipleChoiceQuestionsCount,
   getCompletedMultipleChoiceQuestionsCount,
 } from '@/lib/helpers/indexeddb';
+import { ModuleSection } from '@/lib/types';
 
 export default function Home() {
   const totalProblems = allProblems.length;
@@ -506,11 +507,13 @@ export default function Home() {
                 // Get discussion progress for this module
                 // Calculate total from module data
                 let discussionTotal = 0;
-                moduleCategory.module.sections.forEach((section) => {
-                  if (section.quiz) {
-                    discussionTotal += section.quiz.length;
-                  }
-                });
+                moduleCategory.module.sections.forEach(
+                  (section: ModuleSection) => {
+                    if (section.quiz) {
+                      discussionTotal += section.quiz.length;
+                    }
+                  },
+                );
 
                 const discussionProgress = moduleDiscussionProgress[
                   moduleCategory.id
@@ -537,11 +540,13 @@ export default function Home() {
                 // Get multiple choice progress for this module
                 // Calculate total from module data
                 let mcTotal = 0;
-                moduleCategory.module.sections.forEach((section) => {
-                  if (section.multipleChoice) {
-                    mcTotal += section.multipleChoice.length;
-                  }
-                });
+                moduleCategory.module.sections.forEach(
+                  (section: ModuleSection) => {
+                    if (section.multipleChoice) {
+                      mcTotal += section.multipleChoice.length;
+                    }
+                  },
+                );
 
                 const mcProgress = moduleMultipleChoiceProgress[
                   moduleCategory.id

@@ -1,4 +1,7 @@
-export const marginCollateralManagement = `
+export const marginCollateralManagement = {
+  id: 'margin-collateral-management',
+  title: 'Margin and Collateral Management',
+  content: `
 # Margin and Collateral Management
 
 ## Introduction
@@ -631,5 +634,5 @@ Key success factors:
 - **Regulatory compliance**: Meet UMR requirements
 
 Next: Position Limits and Risk Limits - controlling risk through hard constraints.
-`;
-
+`,
+};

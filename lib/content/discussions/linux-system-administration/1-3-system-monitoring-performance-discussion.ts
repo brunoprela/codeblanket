@@ -995,9 +995,9 @@ ssh ec2-user@<monitoring-instance-ip>
 
 # Install Prometheus
 PROM_VERSION="2.45.0"
-wget https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
-tar xvf prometheus-${PROM_VERSION}.linux-amd64.tar.gz
-sudo mv prometheus-${PROM_VERSION}.linux-amd64 /opt/prometheus
+wget https://github.com/prometheus/prometheus/releases/download/v\${PROM_VERSION}/prometheus-\${PROM_VERSION}.linux-amd64.tar.gz
+tar xvf prometheus-\${PROM_VERSION}.linux-amd64.tar.gz
+sudo mv prometheus-\${PROM_VERSION}.linux-amd64 /opt/prometheus
 sudo useradd --no-create-home --shell /bin/false prometheus
 sudo chown -R prometheus:prometheus /opt/prometheus
 

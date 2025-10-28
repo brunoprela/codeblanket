@@ -1,4 +1,7 @@
-export const realTimeRiskMonitoring = `
+export const realTimeRiskMonitoring = {
+  id: 'real-time-risk-monitoring',
+  title: 'Real-Time Risk Monitoring',
+  content: `
 # Real-Time Risk Monitoring
 
 ## Introduction
@@ -642,5 +645,5 @@ Real-time risk monitoring is the early warning system that prevents catastrophes
 Modern risk systems must detect and respond to threats faster than humans can. Automation is not optional - it's survival.
 
 Next: Risk Reporting & Dashboards - communicating risk to stakeholders.
-`;
-
+`,
+};

@@ -970,7 +970,7 @@ function Cart({ items, total }) {
   return (
     <div>
       <h2>Cart ({items.length} items)</h2>
-      <p>Total: ${total}</p>
+      <p>Total: \${total}</p>
       {items.length === 0 && <p>Your cart is empty</p>}
       {items.length > 10 && <p>Wow, that's a lot of items!</p>}
     </div>

@@ -3,25 +3,25 @@
  * Module 15 of Finance Curriculum
  */
 
-import { Module } from '../../types';
+import { Module, DiscussionItem, QuizQuestion } from '../../types';
 
 // Section imports
-import riskManagementFundamentals from '../sections/risk-management-portfolio-systems/risk-management-fundamentals';
-import valueAtRiskMethods from '../sections/risk-management-portfolio-systems/value-at-risk-methods';
-import conditionalValueAtRisk from '../sections/risk-management-portfolio-systems/conditional-value-at-risk';
-import stressTestingScenarioAnalysis from '../sections/risk-management-portfolio-systems/stress-testing-scenario-analysis';
-import marketRiskManagement from '../sections/risk-management-portfolio-systems/market-risk-management';
-import creditRiskManagement from '../sections/risk-management-portfolio-systems/credit-risk-management';
-import operationalRisk from '../sections/risk-management-portfolio-systems/operational-risk';
-import liquidityRisk from '../sections/risk-management-portfolio-systems/liquidity-risk';
-import riskAttributionAnalysis from '../sections/risk-management-portfolio-systems/risk-attribution-analysis';
-import riskBudgeting from '../sections/risk-management-portfolio-systems/risk-budgeting';
-import marginCollateralManagement from '../sections/risk-management-portfolio-systems/margin-collateral-management';
-import positionLimitsRiskLimits from '../sections/risk-management-portfolio-systems/position-limits-risk-limits';
-import realTimeRiskMonitoring from '../sections/risk-management-portfolio-systems/real-time-risk-monitoring';
-import riskReportingDashboards from '../sections/risk-management-portfolio-systems/risk-reporting-dashboards';
-import blackrockAladdinArchitecture from '../sections/risk-management-portfolio-systems/blackrock-aladdin-architecture';
-import riskManagementPlatformProject from '../sections/risk-management-portfolio-systems/risk-management-platform-project';
+import { riskManagementFundamentals } from '../sections/risk-management-portfolio-systems/risk-management-fundamentals';
+import { valueAtRiskMethods } from '../sections/risk-management-portfolio-systems/value-at-risk-methods';
+import { conditionalValueAtRisk } from '../sections/risk-management-portfolio-systems/conditional-value-at-risk';
+import { stressTestingScenarioAnalysis } from '../sections/risk-management-portfolio-systems/stress-testing-scenario-analysis';
+import { marketRiskManagement } from '../sections/risk-management-portfolio-systems/market-risk-management';
+import { creditRiskManagement } from '../sections/risk-management-portfolio-systems/credit-risk-management';
+import { operationalRisk } from '../sections/risk-management-portfolio-systems/operational-risk';
+import { liquidityRisk } from '../sections/risk-management-portfolio-systems/liquidity-risk';
+import { riskAttributionAnalysis } from '../sections/risk-management-portfolio-systems/risk-attribution-analysis';
+import { riskBudgeting } from '../sections/risk-management-portfolio-systems/risk-budgeting';
+import { marginCollateralManagement } from '../sections/risk-management-portfolio-systems/margin-collateral-management';
+import { positionLimitsRiskLimits } from '../sections/risk-management-portfolio-systems/position-limits-risk-limits';
+import { realTimeRiskMonitoring } from '../sections/risk-management-portfolio-systems/real-time-risk-monitoring';
+import { riskReportingDashboards } from '../sections/risk-management-portfolio-systems/risk-reporting-dashboards';
+import { blackrockAladdinArchitecture } from '../sections/risk-management-portfolio-systems/blackrock-aladdin-architecture';
+import { riskManagementPlatformProject } from '../sections/risk-management-portfolio-systems/risk-management-platform-project';
 
 // Discussion imports
 import finM15S1Discussion from '../discussions/finance/fin-m15-s1-discussion';
@@ -88,83 +88,83 @@ export const riskManagementPortfolioSystemsModule: Module = {
   sections: [
     {
       ...riskManagementFundamentals,
-      discussion: finM15S1Discussion,
-      quiz: finM15S1Quiz,
+      discussion: finM15S1Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S1Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...valueAtRiskMethods,
-      discussion: finM15S2Discussion,
-      quiz: finM15S2Quiz,
+      discussion: finM15S2Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S2Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...conditionalValueAtRisk,
-      discussion: finM15S3Discussion,
-      quiz: finM15S3Quiz,
+      discussion: finM15S3Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S3Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...stressTestingScenarioAnalysis,
-      discussion: finM15S4Discussion,
-      quiz: finM15S4Quiz,
+      discussion: finM15S4Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S4Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...marketRiskManagement,
-      discussion: finM15S5Discussion,
-      quiz: finM15S5Quiz,
+      discussion: finM15S5Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S5Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...creditRiskManagement,
-      discussion: finM15S6Discussion,
-      quiz: finM15S6Quiz,
+      discussion: finM15S6Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S6Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...operationalRisk,
-      discussion: finM15S7Discussion,
-      quiz: finM15S7Quiz,
+      discussion: finM15S7Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S7Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...liquidityRisk,
-      discussion: finM15S8Discussion,
-      quiz: finM15S8Quiz,
+      discussion: finM15S8Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S8Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...riskAttributionAnalysis,
-      discussion: finM15S9Discussion,
-      quiz: finM15S9Quiz,
+      discussion: finM15S9Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S9Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...riskBudgeting,
-      discussion: finM15S10Discussion,
-      quiz: finM15S10Quiz,
+      discussion: finM15S10Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S10Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...marginCollateralManagement,
-      discussion: finM15S11Discussion,
-      quiz: finM15S11Quiz,
+      discussion: finM15S11Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S11Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...positionLimitsRiskLimits,
-      discussion: finM15S12Discussion,
-      quiz: finM15S12Quiz,
+      discussion: finM15S12Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S12Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...realTimeRiskMonitoring,
-      discussion: finM15S13Discussion,
-      quiz: finM15S13Quiz,
+      discussion: finM15S13Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S13Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...riskReportingDashboards,
-      discussion: finM15S14Discussion,
-      quiz: finM15S14Quiz,
+      discussion: finM15S14Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S14Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...blackrockAladdinArchitecture,
-      discussion: finM15S15Discussion,
-      quiz: finM15S15Quiz,
+      discussion: finM15S15Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S15Quiz.questions as unknown as QuizQuestion[],
     },
     {
       ...riskManagementPlatformProject,
-      discussion: finM15S16Discussion,
-      quiz: finM15S16Quiz,
+      discussion: finM15S16Discussion.questions as unknown as DiscussionItem[],
+      quiz: finM15S16Quiz.questions as unknown as QuizQuestion[],
     },
   ],
 };

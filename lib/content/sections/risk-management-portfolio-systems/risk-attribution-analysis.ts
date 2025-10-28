@@ -1,4 +1,7 @@
-export const riskAttributionAnalysis = `
+export const riskAttributionAnalysis = {
+  id: 'risk-attribution-analysis',
+  title: 'Risk Attribution Analysis',
+  content: `
 # Risk Attribution Analysis
 
 ## Introduction
@@ -592,4 +595,5 @@ Risk attribution transforms a black box (portfolio risk number) into actionable 
 Just as performance attribution shows where returns came from, risk attribution shows where risk comes from - essential for intelligent risk management.
 
 Next: Risk Budgeting - allocating risk intentionally across strategies.
-`;
+`,
+};

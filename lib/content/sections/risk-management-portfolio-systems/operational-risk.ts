@@ -1,4 +1,7 @@
-export const operationalRisk = `
+export const operationalRisk = {
+  id: 'operational-risk',
+  title: 'Operational Risk',
+  content: `
 # Operational Risk
 
 ## Introduction
@@ -785,5 +788,5 @@ Unlike market risk (which you're paid to take) or credit risk (which you can ana
 The best operational risk management is invisible - nothing goes wrong because risks are proactively identified and mitigated.
 
 Next: Liquidity Risk - the risk of not being able to meet obligations when due.
-`;
-
+`,
+};

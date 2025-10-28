@@ -1,4 +1,7 @@
-export const liquidityRisk = `
+export const liquidityRisk = {
+  id: 'liquidity-risk',
+  title: 'Liquidity Risk',
+  content: `
 # Liquidity Risk
 
 ## Introduction
@@ -756,5 +759,5 @@ The key lessons:
 As Warren Buffett said: "Only when the tide goes out do you discover who's been swimming naked." Liquidity crises reveal who prepared and who didn't.
 
 Next: Risk Attribution Analysis - understanding where risk and returns come from.
-`;
-
+`,
+};

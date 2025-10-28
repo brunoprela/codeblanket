@@ -1,4 +1,7 @@
-export const blackrockAladdinArchitecture = `
+export const blackrockAladdinArchitecture = {
+  id: 'blackrock-aladdin-architecture',
+  title: 'BlackRock Aladdin Architecture Study',
+  content: `
 # BlackRock Aladdin Architecture Study
 
 ## Introduction
@@ -615,5 +618,5 @@ Aladdin represents the pinnacle of financial risk platform engineering. Its arch
 Studying Aladdin teaches us not just about risk management, but about building enterprise systems that handle trillions of dollars with reliability and precision.
 
 Next: Risk Management Platform Project - your capstone to build a comprehensive risk system.
-`;
-
+`,
+};

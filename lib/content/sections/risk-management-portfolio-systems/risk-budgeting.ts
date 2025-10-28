@@ -1,4 +1,7 @@
-export const riskBudgeting = `
+export const riskBudgeting = {
+  id: 'risk-budgeting',
+  title: 'Risk Budgeting',
+  content: `
 # Risk Budgeting
 
 ## Introduction
@@ -610,4 +613,5 @@ Bridgewater's All Weather portfolio popularized this approach, showing that bala
 The key insight: **Capital is abundant, risk tolerance is scarce**. Allocate your scarce resource (risk capacity) wisely.
 
 Next: Margin and Collateral Management - managing collateral requirements for derivatives and securities financing.
-`;
+`,
+};

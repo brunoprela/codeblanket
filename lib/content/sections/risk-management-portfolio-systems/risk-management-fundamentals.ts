@@ -1,4 +1,7 @@
-export const riskManagementFundamentals = `
+export const riskManagementFundamentals = {
+  id: 'risk-management-fundamentals',
+  title: 'Risk Management Fundamentals',
+  content: `
 # Risk Management Fundamentals
 
 ## Introduction
@@ -816,4 +819,5 @@ As Warren Buffett said: "Risk comes from not knowing what you're doing." Compreh
 The remainder of this module will dive deep into specific risk types, measurement methodologies, and implementation of production-grade risk management systems. We'll build real risk systems used by hedge funds and banks, not just theoretical frameworks.
 
 Remember: In trading, you can be right 99 times and wrong once, and that one time can wipe you out. Risk management ensures that one time doesn't destroy you.
-`;
+`,
+};

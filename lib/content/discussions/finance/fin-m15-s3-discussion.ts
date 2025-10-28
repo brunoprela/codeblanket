@@ -1,10 +1,11 @@
 export default {
-    id: 'fin-m15-s3-discussion',
-    title: 'Conditional Value at Risk (CVaR) - Discussion Questions',
-    questions: [
-        {
-            question: 'Explain why CVaR (Expected Shortfall) is considered a "coherent" risk measure while VaR is not. What are the practical implications of CVaR being sub-additive, and how does this property make it superior for portfolio optimization?',
-            answer: `CVaR's coherence properties make it mathematically superior to VaR, with important practical implications:
+  id: 'fin-m15-s3-discussion',
+  title: 'Conditional Value at Risk (CVaR) - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Explain why CVaR (Expected Shortfall) is considered a "coherent" risk measure while VaR is not. What are the practical implications of CVaR being sub-additive, and how does this property make it superior for portfolio optimization?',
+      answer: `CVaR's coherence properties make it mathematically superior to VaR, with important practical implications:
 
 **The Four Coherence Properties**
 
@@ -554,10 +555,11 @@ cvar_says = "Average loss in worst 1% is $Y"
    - VaR: Desk limits may not ensure firm limit
 
 **Bottom Line:** CVaR's sub-additivity (and coherence) makes it mathematically superior to VaR. This translates to practical advantages: better portfolio optimization, cleaner risk attribution, coherent limit frameworks, and regulatory preference. While VaR remains useful for day-to-day monitoring, CVaR is the better choice for portfolio construction and risk management decision-making.`,
-        },
-        {
-            question: 'Compare the three methods for calculating CVaR (Historical, Parametric, and Monte Carlo). How does the choice of method affect the accuracy of tail risk estimation, and what are the implications for regulatory capital requirements?',
-            answer: `The method used to calculate CVaR significantly impacts tail risk estimation and capital requirements. Understanding trade-offs is critical:
+    },
+    {
+      question:
+        'Compare the three methods for calculating CVaR (Historical, Parametric, and Monte Carlo). How does the choice of method affect the accuracy of tail risk estimation, and what are the implications for regulatory capital requirements?',
+      answer: `The method used to calculate CVaR significantly impacts tail risk estimation and capital requirements. Understanding trade-offs is critical:
 
 **Historical CVaR**
 
@@ -1274,10 +1276,11 @@ return {
 - **Conservative**: When in doubt, use higher estimate
 
 **Key Insight:** Method choice can change capital requirement by 50%+. Use Monte Carlo or stressed historical for regulatory capital. Use parametric for daily monitoring. Always compare multiple methods as sanity check.`,
-        },
-{
-    question: 'Discuss how CVaR can be used in portfolio optimization. Why does minimizing CVaR tend to produce more diversified portfolios than minimizing variance, and what are the computational challenges in CVaR optimization?',
-        answer: `CVaR optimization produces fundamentally different (and often better) portfolios than traditional mean-variance optimization:
+    },
+    {
+      question:
+        'Discuss how CVaR can be used in portfolio optimization. Why does minimizing CVaR tend to produce more diversified portfolios than minimizing variance, and what are the computational challenges in CVaR optimization?',
+      answer: `CVaR optimization produces fundamentally different (and often better) portfolios than traditional mean-variance optimization:
 
 **Traditional Mean-Variance Optimization**
 
@@ -1943,7 +1946,6 @@ print(optimal_weights)
 - Specialized solvers (linear programming)
 
 **Bottom Line:** CVaR optimization is superior to mean-variance for realistic risk management. Produces more diversified, tail-aware portfolios. Computationally more expensive but solvable with modern techniques. The natural diversification from focusing on tail risk makes it the preferred method for institutional portfolio management.`,
-        },
-    ],
-} as const ;
-
+    },
+  ],
+} as const;

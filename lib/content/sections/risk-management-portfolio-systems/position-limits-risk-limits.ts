@@ -1,4 +1,7 @@
-export const positionLimitsRiskLimits = `
+export const positionLimitsRiskLimits = {
+  id: 'position-limits-risk-limits',
+  title: 'Position Limits and Risk Limits',
+  content: `
 # Position Limits and Risk Limits
 
 ## Introduction
@@ -546,5 +549,5 @@ Effective risk limits are the safety net that prevents catastrophic losses. They
 As the London Whale showed, circumventing limits leads to disaster. Strong limit frameworks save firms from themselves.
 
 Next: Real-Time Risk Monitoring - continuous risk surveillance systems.
-`;
-
+`,
+};
