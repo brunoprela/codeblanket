@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s4-discussion',
-    title: 'Modern CP Tool Ecosystem - Discussion Questions',
-    questions: [
-        {
-            question: 'Compare the advantages and disadvantages of using Competitive Companion + CP Editor vs manual copy-paste workflow. When would you choose one over the other?',
-            answer: `The modern tool ecosystem can significantly improve your competitive programming workflow. Let's analyze the trade-offs:
+  id: 'cp-m1-s4-discussion',
+  title: 'Modern CP Tool Ecosystem - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Compare the advantages and disadvantages of using Competitive Companion + CP Editor vs manual copy-paste workflow. When would you choose one over the other?',
+      answer: `The modern tool ecosystem can significantly improve your competitive programming workflow. Let's analyze the trade-offs:
 
 **Manual Copy-Paste Workflow:**
 
@@ -124,9 +125,10 @@ Automated:
 
 **Pro Tip:** Set up tools on your main practice machine, but be comfortable with manual workflow for contests where reliability is critical (like ICPC regionals).`,
     },
-{
-    question: 'Explain how to use competitive programming tools for effective stress testing. Why is stress testing important and what kinds of bugs does it catch that sample tests might miss?',
-        answer: `Stress testing is one of the most powerful debugging techniques in competitive programming. Here's why and how:
+    {
+      question:
+        'Explain how to use competitive programming tools for effective stress testing. Why is stress testing important and what kinds of bugs does it catch that sample tests might miss?',
+      answer: `Stress testing is one of the most powerful debugging techniques in competitive programming. Here's why and how:
 
 **What is Stress Testing?**
 
@@ -453,9 +455,11 @@ int main(int argc, char * argv[]) {
 
 Stress testing is a superpower that finds bugs sample tests miss. Invest 10 minutes setting it up, and it can save you from frustrating WA verdicts on problems where your algorithm is almost correct but fails on edge cases you didn't consider.`,
     },
-{
-    question: 'What are the key features to look for in a competitive programming development environment, and how should you customize it for maximum efficiency?',
-        answer: `The right development environment can significantly boost your competitive programming performance. Here's what matters:
+    {
+      question:
+        'What are the key features to look for in a competitive programming development environment, and how should you customize it for maximum efficiency?',
+      answer:
+        `The right development environment can significantly boost your competitive programming performance. Here's what matters:
 
 **Essential Features:**
 
@@ -748,7 +752,8 @@ nnoremap <leader>t :-1read ~/.vim/templates/cp.cpp<CR>
 #endif
 \`\`\`
 
-Compile with `-DLOCAL` to enable
+Compile with ` -
+        DLOCAL` to enable
 
         ** Contest - Day Checklist:**
 
@@ -795,4 +800,3 @@ Invest time setting up your environment once, reap benefits in every contest!`,
     },
   ],
 } as const;
-

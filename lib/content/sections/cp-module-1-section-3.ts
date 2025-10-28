@@ -1,7 +1,7 @@
 export const environmentSetupCompilationSection = {
-    id: 'cp-m1-s3',
-    title: 'Environment Setup & Compilation',
-    content: `
+  id: 'cp-m1-s3',
+  title: 'Environment Setup & Compilation',
+  content: `
 
 # Environment Setup & Compilation
 
@@ -862,7 +862,6 @@ Now that your environment is ready, let's explore the **Modern CP Tool Ecosystem
 
 **Key Takeaway**: A well-configured environment is your foundation. Invest time here, and you'll code faster and debug quicker throughout your CP journey.
 `,
-    quizId: 'cp-m1-s3-quiz',
-        discussionId: 'cp-m1-s3-discussion',
-} as const ;
-
+  quizId: 'cp-m1-s3-quiz',
+  discussionId: 'cp-m1-s3-discussion',
+} as const;

@@ -1,7 +1,8 @@
 export const readingOthersCppCodeSection = {
-    id: 'cp-m1-s14',
-    title: 'Reading Other People\'s C++ Code',
-    content: `
+  id: 'cp-m1-s14',
+  title: "Reading Other People's C++ Code",
+  content:
+    `
 
 # Reading Other People's C++ Code
 
@@ -171,7 +172,8 @@ sort(all(a)); reverse(all(a));
 
 **Reading strategy:**
 1. Each \`; \` is a statement
-2. `>> ` chains input operations
+2. ` >>
+    ` chains input operations
 3. Parse line by line
 
 **What it does:**
@@ -732,6 +734,6 @@ Now let's learn **Contest-Day C++ Tips** - practical advice for writing fast, co
 
 **Key Takeaway**: Reading others' code is essential for growth in competitive programming. Don't be intimidated by macro-heavy, dense code—with practice, you'll read it as easily as clean code. Always extract insights and techniques to add to your own toolkit. Every solution you read makes you a better programmer!
 `,
-    quizId: 'cp-m1-s14-quiz',
-        discussionId: 'cp-m1-s14-discussion',
-} as const ;
+  quizId: 'cp-m1-s14-quiz',
+  discussionId: 'cp-m1-s14-discussion',
+} as const;

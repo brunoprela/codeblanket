@@ -95,7 +95,7 @@ class RiskReportGenerator:
     
     <h2>Executive Summary</h2>
     <div class="metric {'positive' if snapshot.pnl >= 0 else 'negative'}">
-        Daily P&L: ${snapshot.pnl:,.2f}
+        Daily P&L: \${snapshot.pnl:,.2f}
 </div>
 
     < table >
@@ -106,19 +106,19 @@ class RiskReportGenerator:
     </tr>
     < tr >
     <td>Portfolio Value </td>
-        < td > ${ snapshot.total_value:, .2f } </td>
+        < td > \${ snapshot.total_value:, .2f } </td>
             < td class="status-green" > OK </td>
                 </tr>
                 < tr >
                 <td>99 % VaR </td>
-                < td > ${ snapshot.var_99:, .2f } </td>
+                < td > \${ snapshot.var_99:, .2f } </td>
                     < td class="{'status-green' if snapshot.var_99 < 5000000 else 'status-yellow'}" >
                         { 'OK' if snapshot.var_99 < 5000000 else 'WARNING' }
                         </td>
                         </tr>
                         < tr >
                         <td>99 % CVaR </td>
-                        < td > ${ snapshot.cvar_99:, .2f } </td>
+                        < td > \${ snapshot.cvar_99:, .2f } </td>
                             < td class="status-green" > OK </td>
                                 </tr>
                                 < tr >
@@ -174,7 +174,7 @@ html += f"""
     < tr >
     <td style="text-align:left;" > { symbol } </td>
         < td > { quantity:, .0f } </td>
-        < td > ${ market_value:, .2f } </td>
+        < td > \${ market_value:, .2f } </td>
             < td > { pct: .2f } % </td>
             </tr>
 """
@@ -193,7 +193,7 @@ total_exposure = sum(abs(v) for v in snapshot.exposures.values())
 html += f"""
     < tr >
     <td style="text-align:left;" > { category } </td>
-        < td > ${ exposure:, .2f } </td>
+        < td > \${ exposure:, .2f } </td>
             < td > { pct: .2f } % </td>
             </tr>
 """
@@ -265,12 +265,12 @@ max_var = max(s.var_99 for s in week_snapshots)
                         <p><strong>Week Ending: </strong> {end_date.strftime('%Y-%m-%d')}</p >
 
                             <h2>Performance </h2>
-                            < p > Total P & L: <strong>${ total_pnl:, .2f } </strong></p >
+                            < p > Total P & L: <strong>\${ total_pnl:, .2f } </strong></p >
 
                                 <h2>Risk Metrics </h2>
                                     < ul >
-                                    <li>Average 99 % VaR: ${ avg_var:, .2f } </li>
-                                        < li > Max 99 % VaR: ${ max_var:, .2f } </li>
+                                    <li>Average 99 % VaR: \${ avg_var:, .2f } </li>
+                                        < li > Max 99 % VaR: \${ max_var:, .2f } </li>
                                             < li > Trading Days: { len(week_snapshots) } </li>
                                                 </ul>
                                                 </body>
@@ -311,9 +311,9 @@ print("Daily Risk Report Generated")
 print(f"Saved to: /tmp/risk_report.html")
 print()
 print("Key Metrics:")
-print(f"  Portfolio Value: ${snapshot.total_value:,.0f}")
-print(f"  Daily P&L: ${snapshot.pnl:,.0f}")
-print(f"  99% VaR: ${snapshot.var_99:,.0f}")
+print(f"  Portfolio Value: \${snapshot.total_value:,.0f}")
+print(f"  Daily P&L: \${snapshot.pnl:,.0f}")
+print(f"  99% VaR: \${snapshot.var_99:,.0f}")
 \`\`\`
 
 ## Interactive Risk Dashboard
@@ -539,7 +539,7 @@ basel_report = reporter.generate_basel_capital_report(
 print("Basel III Capital Adequacy Report")
 print("="*70)
 print(f"Institution: {basel_report['institution']}")
-print(f"Total RWA: ${basel_report['risk_weighted_assets']['total']:, .0f}")
+print(f"Total RWA: \${basel_report['risk_weighted_assets']['total']:, .0f}")
 print()
 print("Capital Ratios:")
 print(f"  CET1: {basel_report['ratios']['cet1']*100:.2f}% (min 4.5%)")

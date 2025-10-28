@@ -1,7 +1,7 @@
 export const buildingRobustCpTemplateSection = {
-    id: 'cp-m1-s16',
-    title: 'Building Your Starter Template',
-    content: `
+  id: 'cp-m1-s16',
+  title: 'Building Your Starter Template',
+  content: `
 
 # Building Your Starter Template
 
@@ -859,6 +859,6 @@ Module 2 will cover **Data Structures & STL**, where you'll master:
 
 **Happy coding! 🚀**
 `,
-    quizId: 'cp-m1-s16-quiz',
-        discussionId: 'cp-m1-s16-discussion',
-} as const ;
+  quizId: 'cp-m1-s16-quiz',
+  discussionId: 'cp-m1-s16-discussion',
+} as const;

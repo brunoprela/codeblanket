@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s8-discussion',
-    title: 'Macros & Preprocessor Tricks - Discussion Questions',
-    questions: [
-        {
-            question: 'Macros can save significant typing time in competitive programming but can also lead to hard-to-debug errors. Discuss the trade-offs and explain which macros are worth using and which should be avoided.',
-            answer: `Macros are controversial in competitive programming. Here's the balanced perspective:
+  id: 'cp-m1-s8-discussion',
+  title: 'Macros & Preprocessor Tricks - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Macros can save significant typing time in competitive programming but can also lead to hard-to-debug errors. Discuss the trade-offs and explain which macros are worth using and which should be avoided.',
+      answer: `Macros are controversial in competitive programming. Here's the balanced perspective:
 
 **What Macros Are:**
 
@@ -312,9 +313,10 @@ Some top competitive programmers use extensive macros:
 **The Right Balance:**
 Use macros that save time without sacrificing debuggability. When in doubt, write explicit code—it's always safer!`,
     },
-{
-    question: 'Conditional compilation with #ifdef and #ifndef can be useful for debugging. Explain how to set up a robust debug system using preprocessor directives that works both locally and on online judges.',
-        answer: `Conditional compilation is a powerful debugging tool. Here's how to use it effectively:
+    {
+      question:
+        'Conditional compilation with #ifdef and #ifndef can be useful for debugging. Explain how to set up a robust debug system using preprocessor directives that works both locally and on online judges.',
+      answer: `Conditional compilation is a powerful debugging tool. Here's how to use it effectively:
 
 **The Problem:**
 
@@ -685,9 +687,10 @@ A good debug system:
 
 Set it up once in your template and use it in every contest!`,
     },
-{
-    question: 'Some competitive programmers create extensive macro libraries with dozens of shortcuts. Others use minimal macros. Discuss your philosophy on macro usage and what belongs in a competitive programming template.',
-        answer: `The macro philosophy debate is one of the most contentious in competitive programming. Here's my comprehensive take:
+    {
+      question:
+        'Some competitive programmers create extensive macro libraries with dozens of shortcuts. Others use minimal macros. Discuss your philosophy on macro usage and what belongs in a competitive programming template.',
+      answer: `The macro philosophy debate is one of the most contentious in competitive programming. Here's my comprehensive take:
 
 **The Spectrum:**
 
@@ -1035,5 +1038,4 @@ int main() {
 **Remember:** The best template is one YOU understand completely and can modify quickly when needed!`,
     },
   ],
-} as const ;
-
+} as const;

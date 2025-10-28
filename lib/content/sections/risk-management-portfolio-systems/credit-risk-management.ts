@@ -348,8 +348,8 @@ if __name__ == "__main__":
     
     # Expected Loss
     el_analysis = credit_risk.calculate_portfolio_expected_loss()
-    print(f"Portfolio Expected Loss: ${el_analysis['total_expected_loss']:,.0f}")
-print(f"Total Exposure: ${el_analysis['total_exposure']:,.0f}")
+    print(f"Portfolio Expected Loss: \${el_analysis['total_expected_loss']:,.0f}")
+print(f"Total Exposure: \${el_analysis['total_exposure']:,.0f}")
 print(f"Portfolio EL Rate: {el_analysis['portfolio_el_rate']:.2f}%")
 print()
 
@@ -359,15 +359,15 @@ print()
     
     # Unexpected Loss
 ul_analysis = credit_risk.calculate_unexpected_loss(confidence_level = 0.99)
-print(f"Expected Loss: ${ul_analysis['expected_loss']:,.0f}")
-print(f"Credit VaR (99%): ${ul_analysis['credit_var']:,.0f}")
-print(f"Unexpected Loss: ${ul_analysis['unexpected_loss']:,.0f}")
+print(f"Expected Loss: \${ul_analysis['expected_loss']:,.0f}")
+print(f"Credit VaR (99%): \${ul_analysis['credit_var']:,.0f}")
+print(f"Unexpected Loss: \${ul_analysis['unexpected_loss']:,.0f}")
 print()
     
     # Concentration
 concentration = credit_risk.calculate_concentration_risk()
 print(f"Largest Exposure: {concentration['largest_counterparty']}")
-print(f"  Amount: ${concentration['largest_exposure']:,.0f}")
+print(f"  Amount: \${concentration['largest_exposure']:,.0f}")
 print(f"Top 10 Concentration: {concentration['top_10_concentration_pct']:.1f}%")
 print()
     
@@ -384,9 +384,9 @@ print()
 stress_result = credit_risk.stress_test_credit(rating_shock = 2, pd_multiplier = 3.0)
 print("Credit Stress Test:")
 print(f"  Scenario: {stress_result['scenario']}")
-print(f"  Baseline EL: ${stress_result['baseline_el']:,.0f}")
-print(f"  Stressed EL: ${stress_result['stressed_el']:,.0f}")
-print(f"  Increase: ${stress_result['el_increase']:,.0f} ({stress_result['el_increase_pct']:.0f}%)")
+print(f"  Baseline EL: \${stress_result['baseline_el']:,.0f}")
+print(f"  Stressed EL: \${stress_result['stressed_el']:,.0f}")
+print(f"  Increase: \${stress_result['el_increase']:,.0f} ({stress_result['el_increase_pct']:.0f}%)")
 \`\`\`
 
 ### 2. Counterparty Credit Risk (CCR)
@@ -591,24 +591,24 @@ if __name__ == "__main__":
     
     # Current exposure
     current_exp = ccr.calculate_current_exposure()
-    print(f"Total Current Exposure: ${current_exp['total_current_exposure']:, .0f}")
+    print(f"Total Current Exposure: \${current_exp['total_current_exposure']:, .0f}")
 print("By Counterparty:")
 for cp, exp in current_exp['exposure_by_counterparty'].items():
-    print(f"  {cp}: ${exp:,.0f}")
+    print(f"  {cp}: \${exp:,.0f}")
 print()
     
     # Potential Future Exposure
 pfe = ccr.calculate_potential_future_exposure(confidence_level = 0.95, time_horizon_days = 252)
-print(f"Total PFE (95%, 1Y): ${pfe['total_pfe']:,.0f}")
+print(f"Total PFE (95%, 1Y): \${pfe['total_pfe']:,.0f}")
 print("By Counterparty:")
 for cp, exp in pfe['pfe_by_counterparty'].items():
-    print(f"  {cp}: ${exp:,.0f}")
+    print(f"  {cp}: \${exp:,.0f}")
 print()
     
     # CVA calculation
 pd_curve = { 1: 0.01, 2: 0.025, 3: 0.045, 4: 0.07, 5: 0.10 }  # Cumulative PDs
 cva_result = ccr.calculate_cva(pd_curve, lgd = 0.60)
-print(f"Credit Valuation Adjustment (CVA): ${cva_result['total_cva']:,.0f}")
+print(f"Credit Valuation Adjustment (CVA): \${cva_result['total_cva']:,.0f}")
 \`\`\`
 
 ## Credit Risk Mitigation

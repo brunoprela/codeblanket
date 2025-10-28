@@ -611,4 +611,3 @@ The key insight: **Capital is abundant, risk tolerance is scarce**. Allocate you
 
 Next: Margin and Collateral Management - managing collateral requirements for derivatives and securities financing.
 `;
-

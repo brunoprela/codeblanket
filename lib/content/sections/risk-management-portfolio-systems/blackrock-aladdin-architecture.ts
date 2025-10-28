@@ -310,8 +310,8 @@ if __name__ == "__main__":
         num_simulations=100000
     )
     
-    print(f"99% VaR: ${result['var']:,.2f}")
-print(f"99% CVaR: ${result['cvar']:,.2f}")
+    print(f"99% VaR: \${result['var']:,.2f}")
+print(f"99% CVaR: \${result['cvar']:,.2f}")
 print(f"Calculation Time: {result['calculation_time_seconds']:.2f}s")
 print(f"Workers Used: {result['workers_used']}")
 print()

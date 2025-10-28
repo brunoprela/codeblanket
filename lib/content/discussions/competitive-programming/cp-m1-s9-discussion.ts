@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s9-discussion',
-    title: 'Bits, Bytes & Bitwise Operations - Discussion Questions',
-    questions: [
-        {
-            question: 'Bitwise operations are fundamental in competitive programming for efficiency and elegance. Explain the key bitwise operations with practical CP examples and discuss when bitwise tricks can replace traditional approaches.',
-            answer: `Bitwise operations work directly on binary representations of numbers, offering speed and elegance. Here's everything you need:
+  id: 'cp-m1-s9-discussion',
+  title: 'Bits, Bytes & Bitwise Operations - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Bitwise operations are fundamental in competitive programming for efficiency and elegance. Explain the key bitwise operations with practical CP examples and discuss when bitwise tricks can replace traditional approaches.',
+      answer: `Bitwise operations work directly on binary representations of numbers, offering speed and elegance. Here's everything you need:
 
 **The Six Core Bitwise Operators:**
 
@@ -384,10 +385,11 @@ Bitwise operations are:
 - **Powerful:** Enable unique solutions
 
 Master the basics, practice on problems, and you'll recognize when bitwise tricks apply naturally!`,
-        },
-        {
-            question: 'Bitmask Dynamic Programming is a powerful technique for problems with small constraints. Explain what bitmask DP is, provide a detailed example, and discuss when this technique is applicable.',
-            answer: `Bitmask DP uses binary representations to encode states, enabling DP on problems with exponential state spaces. Here's the complete guide:
+    },
+    {
+      question:
+        'Bitmask Dynamic Programming is a powerful technique for problems with small constraints. Explain what bitmask DP is, provide a detailed example, and discuss when this technique is applicable.',
+      answer: `Bitmask DP uses binary representations to encode states, enabling DP on problems with exponential state spaces. Here's the complete guide:
 
 **What is Bitmask DP?**
 
@@ -728,10 +730,11 @@ Key skills:
 - Debug by printing masks
 
 Practice on TSP, assignment, and subset problems to build intuition!`,
-        },
-        {
-            question: 'Explain the relationship between binary representation and various number theory concepts used in competitive programming, such as checking if a number is a power of 2, finding the next power of 2, and computing XOR properties.',
-            answer: `Binary representation reveals elegant patterns in number theory. Here's the deep dive:
+    },
+    {
+      question:
+        'Explain the relationship between binary representation and various number theory concepts used in competitive programming, such as checking if a number is a power of 2, finding the next power of 2, and computing XOR properties.',
+      answer: `Binary representation reveals elegant patterns in number theory. Here's the deep dive:
 
 **Binary Fundamentals:**
 
@@ -1082,7 +1085,6 @@ Binary representation reveals:
 - **Bit tricks:** Clever number theory shortcuts
 
 Understanding binary opens doors to elegant, efficient solutions!`,
-        },
-    ],
+    },
+  ],
 } as const;
-

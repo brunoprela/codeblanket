@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s12-discussion',
-    title: 'Common Compilation Errors - Discussion Questions',
-    questions: [
-        {
-            question: 'Compilation errors can waste significant time in contests. Describe a systematic approach to reading and fixing C++ compiler errors, including how to interpret cryptic template error messages.',
-            answer: `Compiler errors are inevitable, but handling them efficiently separates fast coders from slow ones. Here's the complete system:
+  id: 'cp-m1-s12-discussion',
+  title: 'Common Compilation Errors - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Compilation errors can waste significant time in contests. Describe a systematic approach to reading and fixing C++ compiler errors, including how to interpret cryptic template error messages.',
+      answer: `Compiler errors are inevitable, but handling them efficiently separates fast coders from slow ones. Here's the complete system:
 
 **The Golden Rule: Read from TOP to BOTTOM**
 
@@ -332,10 +333,11 @@ Compilation errors:
 - ✅ Template errors: read first line only
 
 **With practice, you'll fix most errors in <30 seconds!**`,
-        },
-        {
-            question: 'Many competitive programmers have compilation shortcuts and error-handling workflows. Describe an efficient compile-test-debug cycle that minimizes time wasted on errors.',
-            answer: `An efficient workflow can save 5-10 minutes per contest. Here's the complete system:
+    },
+    {
+      question:
+        'Many competitive programmers have compilation shortcuts and error-handling workflows. Describe an efficient compile-test-debug cycle that minimizes time wasted on errors.',
+      answer: `An efficient workflow can save 5-10 minutes per contest. Here's the complete system:
 
 **The Fast Compile-Test-Debug Cycle:**
 
@@ -664,10 +666,11 @@ Efficient workflow:
 - ✅ Practiced and automatic
 
 Set it up once, benefit in every contest!`,
-        },
-        {
-            question: 'Some compiler errors are particularly misleading or confusing for beginners. Discuss the most commonly misunderstood error messages in C++ and explain what they actually mean with examples.',
-            answer: `Some C++ errors are notorious for being confusing. Here's the truth behind the most misleading ones:
+    },
+    {
+      question:
+        'Some compiler errors are particularly misleading or confusing for beginners. Discuss the most commonly misunderstood error messages in C++ and explain what they actually mean with examples.',
+      answer: `Some C++ errors are notorious for being confusing. Here's the truth behind the most misleading ones:
 
 **Misleading Error #1: "Expected Primary Expression"**
 
@@ -1019,7 +1022,6 @@ Most "confusing" errors are actually simple:
 - ✅ Google the cleaned-up error
 
 With experience, these errors become instantly recognizable!`,
-        },
-    ],
+    },
+  ],
 } as const;
-

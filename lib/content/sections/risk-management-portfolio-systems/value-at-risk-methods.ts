@@ -198,10 +198,10 @@ if __name__ == "__main__":
     
     print("Historical VaR Analysis")
     print("="*50)
-    print(f"Portfolio Value: ${var_results['portfolio_value']:,.0f}")
-print(f"1-day 99% VaR: ${var_results['var']:,.0f} ({var_results['var_percentage']*100:.2f}%)")
-print(f"Expected Shortfall: ${var_results['expected_shortfall']:,.0f}")
-print(f"Worst Historical Loss: ${var_results['worst_historical']:,.0f}")
+    print(f"Portfolio Value: \${var_results['portfolio_value']:,.0f}")
+print(f"1-day 99% VaR: \${var_results['var']:,.0f} ({var_results['var_percentage']*100:.2f}%)")
+print(f"Expected Shortfall: \${var_results['expected_shortfall']:,.0f}")
+print(f"Worst Historical Loss: \${var_results['worst_historical']:,.0f}")
 print(f"Based on {var_results['num_scenarios']} scenarios")
 print()
     
@@ -420,10 +420,10 @@ if __name__ == "__main__":
     
     print("Parametric VaR Analysis")
     print("="*50)
-    print(f"Portfolio Value: ${var_results['portfolio_value']:, .0f}")
+    print(f"Portfolio Value: \${var_results['portfolio_value']:, .0f}")
 print(f"Annual Return: {var_results['annual_return']*100:.2f}%")
 print(f"Annual Volatility: {var_results['annual_vol']*100:.2f}%")
-print(f"1-day 99% VaR: ${var_results['var']:,.0f} ({var_results['var_percentage']*100:.2f}%)")
+print(f"1-day 99% VaR: \${var_results['var']:,.0f} ({var_results['var_percentage']*100:.2f}%)")
 print()
     
     # Component VaR
@@ -435,9 +435,9 @@ print()
     # Incremental VaR - what if we add $100k to AAPL ?
     incremental = var_calc.calculate_incremental_var('AAPL', 100000, 0.99)
     print(f"Incremental VaR for $100k AAPL:")
-print(f"  Current VaR: ${incremental['current_var']:,.0f}")
-print(f"  New VaR: ${incremental['new_var']:,.0f}")
-print(f"  Incremental: ${incremental['incremental_var']:,.0f}")
+print(f"  Current VaR: \${incremental['current_var']:,.0f}")
+print(f"  New VaR: \${incremental['new_var']:,.0f}")
+print(f"  Incremental: \${incremental['incremental_var']:,.0f}")
 \`\`\`
 
 #### Advantages
@@ -679,11 +679,11 @@ if __name__ == "__main__":
     
     print("Monte Carlo VaR (Normal Distribution)")
     print("="*50)
-    print(f"Portfolio Value: ${normal_results['portfolio_value']:, .0f}")
+    print(f"Portfolio Value: \${normal_results['portfolio_value']:, .0f}")
 print(f"Simulations: {normal_results['n_simulations']:,}")
-print(f"1-day 99% VaR: ${normal_results['var']:,.0f}")
-print(f"Expected Shortfall: ${normal_results['expected_shortfall']:,.0f}")
-print(f"Worst Scenario: ${normal_results['worst_scenario']:,.0f}")
+print(f"1-day 99% VaR: \${normal_results['var']:,.0f}")
+print(f"Expected Shortfall: \${normal_results['expected_shortfall']:,.0f}")
+print(f"Worst Scenario: \${normal_results['worst_scenario']:,.0f}")
 print()
     
     # Compare distributions

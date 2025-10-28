@@ -24,5 +24,6 @@ export const financeTopic = {
     'market-microstructure-order-flow',
     'market-data-real-time-processing',
     'building-trading-infrastructure',
+    'risk-management-portfolio-systems',
   ],
 };

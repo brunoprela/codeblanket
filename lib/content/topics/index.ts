@@ -131,6 +131,7 @@ import { algorithmicTradingStrategiesModule } from '../modules/algorithmic-tradi
 import { marketMicrostructureOrderFlowModule } from '../modules/market-microstructure-order-flow';
 import { buildingTradingInfrastructureModule } from '../modules/building-trading-infrastructure';
 import { backtestingStrategyDevelopmentModule } from '../modules/backtesting-strategy-development';
+import { riskManagementPortfolioSystemsModule } from '../modules/risk-management-portfolio-systems';
 
 import { linuxSystemAdministrationModule } from '../modules/linux-system-administration';
 
@@ -253,6 +254,7 @@ const allModulesMap: Record<string, Module> = {
   'building-trading-infrastructure': buildingTradingInfrastructureModule,
   'backtesting-strategy-development': backtestingStrategyDevelopmentModule,
   'financial-markets-instruments': financialMarketsInstrumentsModule,
+  'risk-management-portfolio-systems': riskManagementPortfolioSystemsModule,
 
   'linux-system-administration': linuxSystemAdministrationModule,
 

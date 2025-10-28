@@ -171,17 +171,17 @@ if __name__ == "__main__":
     
     print("Equity Risk Analysis")
     print("="*60)
-    print(f"Portfolio Value: ${portfolio_value:,.0f}")
+    print(f"Portfolio Value: \${portfolio_value:,.0f}")
 print(f"Portfolio Beta: {portfolio_beta:.2f}")
-print(f"Portfolio Delta: ${portfolio_delta:,.0f}")
+print(f"Portfolio Delta: \${portfolio_delta:,.0f}")
 print()
     
     # VaR decomposition
 var_decomp = risk_mgr.calculate_var_decomposition(prices)
 print("VaR Decomposition:")
-print(f"  Systematic VaR: ${var_decomp['systematic_var']:,.0f} ({var_decomp['systematic_percentage']*100:.0f}%)")
-print(f"  Specific VaR: ${var_decomp['specific_var']:,.0f}")
-print(f"  Total VaR: ${var_decomp['total_var']:,.0f}")
+print(f"  Systematic VaR: \${var_decomp['systematic_var']:,.0f} ({var_decomp['systematic_percentage']*100:.0f}%)")
+print(f"  Specific VaR: \${var_decomp['specific_var']:,.0f}")
+print(f"  Total VaR: \${var_decomp['total_var']:,.0f}")
 print()
     
     # Hedge calculation
@@ -372,7 +372,7 @@ if __name__ == "__main__":
     
     # DV01
     dv01 = ir_risk.calculate_dv01()
-    print(f"Portfolio DV01: ${dv01:, .2f}")
+    print(f"Portfolio DV01: \${dv01:, .2f}")
 print(f"  (P&L for 1bp parallel shift)")
 print()
     
@@ -385,7 +385,7 @@ print()
 key_rates = ir_risk.calculate_key_rate_durations([2, 10, 30])
 print("Key Rate DV01s:")
 for tenor, dv01_val in key_rates.items():
-    print(f"  {tenor}Y: ${dv01_val:,.2f}")
+    print(f"  {tenor}Y: \${dv01_val:,.2f}")
 print()
     
     # Scenario: yield curve steepening
@@ -395,7 +395,7 @@ scenario = {
         30: 20    # 30Y yields up 20bp
 }
 pnl = ir_risk.estimate_pnl_for_yield_shift(scenario)
-print(f"P&L for yield curve steepening: ${pnl:,.0f}")
+print(f"P&L for yield curve steepening: \${pnl:,.0f}")
 print()
     
     # Hedge to duration - neutral
@@ -563,14 +563,14 @@ if __name__ == "__main__":
     total_exposure = sum(exposures.values())
     for currency, value in exposures.items():
         pct = (value / total_exposure) * 100
-        print(f"  {currency}: ${value:, .0f} ({ pct: .1f } %)")
+        print(f"  {currency}: \${value:, .0f} ({ pct: .1f } %)")
 print()
     
     # Delta
 deltas = fx_risk.calculate_fx_delta(fx_rates)
 print("FX Delta (P&L for 1% move):")
 for currency, delta in deltas.items():
-    print(f"  {currency}: ${delta:,.0f}")
+    print(f"  {currency}: \${delta:,.0f}")
 print()
     
     # Hedge recommendations
@@ -578,7 +578,7 @@ hedges = fx_risk.hedge_fx_exposure(fx_rates, ['EUR', 'GBP', 'JPY'])
 print("FX Hedge Recommendations:")
 for currency, hedge_info in hedges.items():
     print(f"  {currency}: {hedge_info['hedge_direction']} {hedge_info['hedge_amount']:,.0f} "
-              f"(${hedge_info['usd_equivalent']:,.0f})")
+              f"(\${hedge_info['usd_equivalent']:,.0f})")
 \`\`\`
 
 ### 4. Options Greeks Risk
@@ -735,11 +735,11 @@ if __name__ == "__main__":
     )
     
     print("Scenario: SPY +$5, Vol +2, 1 day:")
-    print(f"  Total P&L: ${scenario_result['total_pnl']:, .0f}")
-print(f"    Delta P&L: ${scenario_result['delta_pnl']:,.0f}")
-print(f"    Gamma P&L: ${scenario_result['gamma_pnl']:,.0f}")
-print(f"    Vega P&L: ${scenario_result['vega_pnl']:,.0f}")
-print(f"    Theta P&L: ${scenario_result['theta_pnl']:,.0f}")
+    print(f"  Total P&L: \${scenario_result['total_pnl']:, .0f}")
+print(f"    Delta P&L: \${scenario_result['delta_pnl']:,.0f}")
+print(f"    Gamma P&L: \${scenario_result['gamma_pnl']:,.0f}")
+print(f"    Vega P&L: \${scenario_result['vega_pnl']:,.0f}")
+print(f"    Theta P&L: \${scenario_result['theta_pnl']:,.0f}")
 print()
     
     # Greek limits
@@ -766,7 +766,7 @@ hedge = greeks_risk.suggest_delta_hedge(spy_price)
 print("Delta Hedge:")
 print(f"  Current delta: {hedge['current_delta']:,.0f}")
 print(f"  {hedge['hedge_direction']} {abs(hedge['shares_to_hedge'])} shares")
-print(f"  Hedge value: ${hedge['hedge_value']:,.0f}")
+print(f"  Hedge value: \${hedge['hedge_value']:,.0f}")
 \`\`\`
 
 ## Risk Limits Framework

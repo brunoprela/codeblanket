@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s10-discussion',
-    title: 'Memory Management for CP - Discussion Questions',
-    questions: [
-        {
-            question: 'Explain the difference between stack, heap, and global/static memory allocation in C++. When should you use each in competitive programming, and what are the common pitfalls that lead to stack overflow or memory limit exceeded?',
-            answer: `Understanding memory segments is crucial for avoiding runtime errors. Here's the complete picture:
+  id: 'cp-m1-s10-discussion',
+  title: 'Memory Management for CP - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Explain the difference between stack, heap, and global/static memory allocation in C++. When should you use each in competitive programming, and what are the common pitfalls that lead to stack overflow or memory limit exceeded?',
+      answer: `Understanding memory segments is crucial for avoiding runtime errors. Here's the complete picture:
 
 **The Three Memory Regions:**
 
@@ -420,9 +421,10 @@ Memory management in CP:
 
 Always calculate memory before coding!`,
     },
-{
-    question: 'Memory optimization is often necessary in competitive programming. Describe specific techniques like rolling arrays, space-efficient data structures, and coordinate compression that can reduce memory usage while maintaining correctness.',
-        answer: `Memory optimization can turn MLE into AC. Here are the essential techniques:
+    {
+      question:
+        'Memory optimization is often necessary in competitive programming. Describe specific techniques like rolling arrays, space-efficient data structures, and coordinate compression that can reduce memory usage while maintaining correctness.',
+      answer: `Memory optimization can turn MLE into AC. Here are the essential techniques:
 
 **Technique 1: Rolling Array (Space Reduction)**
 
@@ -792,9 +794,10 @@ Memory optimization techniques:
 
 Often one technique is enough to pass! Calculate first, optimize when needed.`,
     },
-{
-    question: 'Discuss the practical implications of using global vs local arrays in competitive programming, including initialization behavior, memory limits, and how this affects code structure and debugging.',
-        answer: `Global vs local arrays is a critical decision in CP. Here's the complete analysis:
+    {
+      question:
+        'Discuss the practical implications of using global vs local arrays in competitive programming, including initialization behavior, memory limits, and how this affects code structure and debugging.',
+      answer: `Global vs local arrays is a critical decision in CP. Here's the complete analysis:
 
 **Global Arrays:**
 
@@ -1204,5 +1207,4 @@ In competitive programming:
 The convenience and safety of global arrays outweighs the minor disadvantages in CP context.`,
     },
   ],
-} as const ;
-
+} as const;

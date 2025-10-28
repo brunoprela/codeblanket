@@ -1,7 +1,7 @@
 export const modernCpToolEcosystemSection = {
-    id: 'cp-m1-s4',
-    title: 'Modern CP Tool Ecosystem',
-    content: `
+  id: 'cp-m1-s4',
+  title: 'Modern CP Tool Ecosystem',
+  content: `
 
 # Modern CP Tool Ecosystem
 
@@ -723,7 +723,6 @@ Now that you have powerful tools, let's optimize your code's performance with **
 
 **Key Takeaway**: Modern tools aren't cheating; they're leveling the playing field. Top coders use these tools to focus on problem-solving, not boilerplate tasks.
 `,
-    quizId: 'cp-m1-s4-quiz',
-        discussionId: 'cp-m1-s4-discussion',
-} as const ;
-
+  quizId: 'cp-m1-s4-quiz',
+  discussionId: 'cp-m1-s4-discussion',
+} as const;

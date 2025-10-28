@@ -181,10 +181,10 @@ if __name__ == "__main__":
         )
         
         print(f"Scenario: {scenario['desc']}")
-        print(f"  Current MTM: ${result['current_mtm']:,.0f}")
-        print(f"  Required Collateral: ${result['required_collateral']:,.0f}")
-        print(f"  Previous Collateral: ${result['previous_collateral']:,.0f}")
-        print(f"  Margin {result['direction']}: ${result['amount']:,.0f}")
+        print(f"  Current MTM: \${result['current_mtm']:,.0f}")
+        print(f"  Required Collateral: \${result['required_collateral']:,.0f}")
+        print(f"  Previous Collateral: \${result['previous_collateral']:,.0f}")
+        print(f"  Margin {result['direction']}: \${result['amount']:,.0f}")
         print()
     
     # Initial Margin
@@ -217,9 +217,9 @@ if __name__ == "__main__":
     
     im_result = margin_calc.calculate_initial_margin(trades)
     
-    print(f"Gross Initial Margin: ${im_result['gross_im']:,.0f}")
-    print(f"Diversification Benefit: -${im_result['diversification_benefit']:,.0f}")
-    print(f"Net Initial Margin: ${im_result['net_im']:,.0f}")
+    print(f"Gross Initial Margin: \${im_result['gross_im']:,.0f}")
+    print(f"Diversification Benefit: -\${im_result['diversification_benefit']:,.0f}")
+    print(f"Net Initial Margin: \${im_result['net_im']:,.0f}")
     print()
     print("IM by Trade:")
     print(im_result['trade_breakdown'].to_string(index=False))
@@ -391,14 +391,14 @@ if __name__ == "__main__":
         for asset, amount in alloc.items():
             if asset != 'SHORTFALL':
                 value = optimizer.calculate_collateral_value(asset, amount)
-                print(f"    {asset}: ${amount:,.0f} (value: ${value:,.0f})")
+                print(f"    {asset}: \${amount:,.0f} (value: \${value:,.0f})")
             else:
-                print(f"    ⚠️ SHORTFALL: ${amount:,.0f}")
+                print(f"    ⚠️ SHORTFALL: \${amount:,.0f}")
     
     print()
     print("Remaining Collateral:")
     for asset, amount in allocation['remaining_collateral'].items():
-        print(f"  {asset}: ${amount:,.0f}")
+        print(f"  {asset}: \${amount:,.0f}")
 \`\`\`
 
 ## Uncleared Margin Rules (UMR)
@@ -526,17 +526,17 @@ if __name__ == "__main__":
     
     im_result = umr.calculate_simm_im(sensitivities)
     
-    print(f"SIMM Initial Margin: ${im_result['total_im']:,.0f}")
+    print(f"SIMM Initial Margin: \${im_result['total_im']:,.0f}")
     print()
     print("By Risk Class:")
     for risk_class, amount in im_result['by_risk_class'].items():
-        print(f"  {risk_class}: ${amount:,.0f}")
+        print(f"  {risk_class}: \${amount:,.0f}")
     print()
     
     # Check threshold
     threshold_check = umr.check_threshold(notional_outstanding=50000000000)  # $50B
     print("UMR Threshold Check:")
-    print(f"  Notional: ${threshold_check['notional']:,.0f}")
+    print(f"  Notional: \${threshold_check['notional']:,.0f}")
     print(f"  UMR Applies: {threshold_check['umr_applies']}")
     if threshold_check['umr_applies']:
         print(f"  Phase: {threshold_check['phase']}")

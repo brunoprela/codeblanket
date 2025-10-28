@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s11-discussion',
-    title: 'Template Metaprogramming Basics - Discussion Questions',
-    questions: [
-        {
-            question: 'Templates enable generic programming but can make code harder to debug. Explain when templates are worth using in competitive programming versus when explicit types are better, with specific examples.',
-            answer: `Templates are powerful but should be used judiciously in CP. Here's when each approach makes sense:
+  id: 'cp-m1-s11-discussion',
+  title: 'Template Metaprogramming Basics - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Templates enable generic programming but can make code harder to debug. Explain when templates are worth using in competitive programming versus when explicit types are better, with specific examples.',
+      answer: `Templates are powerful but should be used judiciously in CP. Here's when each approach makes sense:
 
 **When Templates Are Worth It:**
 
@@ -385,10 +386,11 @@ T power(T base, long long exp) {
 ✅ When debugging is difficult
 
 **The sweet spot:** Templates for utilities, explicit for solutions. This gives you speed without sacrificing clarity!`,
-        },
-        {
-            question: 'Variadic templates and fold expressions (C++17) enable elegant solutions for certain problems. Provide examples of when these advanced features are useful in competitive programming.',
-            answer: `Variadic templates and fold expressions are powerful but rarely essential in CP. Here's when they shine:
+    },
+    {
+      question:
+        'Variadic templates and fold expressions (C++17) enable elegant solutions for certain problems. Provide examples of when these advanced features are useful in competitive programming.',
+      answer: `Variadic templates and fold expressions are powerful but rarely essential in CP. Here's when they shine:
 
 **Variadic Templates - Functions with Variable Arguments**
 
@@ -683,9 +685,10 @@ Variadic templates and fold expressions are:
 
 Learn them for your toolkit, but don't force them. Simple explicit code often better in contests!`,
     },
-{
-    question: 'Template specialization allows different implementations for specific types. Discuss when this is useful in competitive programming and provide examples where it significantly simplifies code.',
-        answer: `Template specialization allows custom implementations for specific types. Here's when it's valuable in CP:
+    {
+      question:
+        'Template specialization allows different implementations for specific types. Discuss when this is useful in competitive programming and provide examples where it significantly simplifies code.',
+      answer: `Template specialization allows custom implementations for specific types. Here's when it's valuable in CP:
 
 **What is Template Specialization?**
 
@@ -1091,5 +1094,4 @@ Template specialization:
 Use it for your debug/utility library, but don't force it into problem solutions!`,
     },
   ],
-} as const ;
-
+} as const;

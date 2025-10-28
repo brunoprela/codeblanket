@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s7-discussion',
-    title: 'C++11/14/17/20 Features for CP - Discussion Questions',
-    questions: [
-        {
-            question: 'Modern C++ features like lambda functions, auto, and range-based for loops can significantly speed up code writing. Explain how to use these features effectively in competitive programming and when you might avoid them.',
-            answer: `Modern C++ features are game-changers for competitive programming. Here's the comprehensive guide:
+  id: 'cp-m1-s7-discussion',
+  title: 'C++11/14/17/20 Features for CP - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Modern C++ features like lambda functions, auto, and range-based for loops can significantly speed up code writing. Explain how to use these features effectively in competitive programming and when you might avoid them.',
+      answer: `Modern C++ features are game-changers for competitive programming. Here's the comprehensive guide:
 
 **Lambda Functions - Anonymous Functions:**
 
@@ -304,10 +305,11 @@ Modern C++ features save time and make code cleaner:
 - **Structured bindings:** Elegant pair/tuple handling
 
 Use them! They're not just syntactic sugar—they make you faster.`,
-        },
-        {
-            question: 'C++20 introduced ranges and concepts. While not universally available on judges yet, explain what these features offer and how they might change competitive programming in the future.',
-            answer: `C++20 brings paradigm-shifting features to C++. Here's what the future holds:
+    },
+    {
+      question:
+        'C++20 introduced ranges and concepts. While not universally available on judges yet, explain what these features offer and how they might change competitive programming in the future.',
+      answer: `C++20 brings paradigm-shifting features to C++. Here's what the future holds:
 
 **Ranges - Composable Algorithms:**
 
@@ -639,10 +641,11 @@ auto result = v | views::filter([](int x) { return x % 2 == 0; });
 **The paradigm shift:** From imperative loops to declarative pipelines. From error-prone templates to constraint-checked concepts.
 
 **When C++20 is universal, CP will be faster and more expressive!**`,
-        },
-        {
-            question: 'Explain the practical differences between using initializer lists, uniform initialization, and traditional initialization in competitive programming. When does each method matter, and what are the potential pitfalls?',
-            answer: `C++11 introduced multiple initialization syntaxes. Here's when each matters and their pitfalls:
+    },
+    {
+      question:
+        'Explain the practical differences between using initializer lists, uniform initialization, and traditional initialization in competitive programming. When does each method matter, and what are the potential pitfalls?',
+      answer: `C++11 introduced multiple initialization syntaxes. Here's when each matters and their pitfalls:
 
 **Three Initialization Styles:**
 
@@ -925,5 +928,4 @@ For competitive programming:
 The main pitfall is the vector ambiguity—remember it and you'll be fine!`,
     },
   ],
-} as const ;
-
+} as const;

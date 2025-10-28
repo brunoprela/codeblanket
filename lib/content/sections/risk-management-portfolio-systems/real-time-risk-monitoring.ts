@@ -361,17 +361,17 @@ if __name__ == "__main__":
     
     # Calculate metrics
     metrics = monitor.calculate_portfolio_metrics()
-    print(f"Net Exposure: ${metrics['net_exposure']:,.0f}")
-print(f"Gross Exposure: ${metrics['gross_exposure']:,.0f}")
-print(f"Long: ${metrics['long_exposure']:,.0f}")
-print(f"Short: ${metrics['short_exposure']:,.0f}")
+    print(f"Net Exposure: \${metrics['net_exposure']:,.0f}")
+print(f"Gross Exposure: \${metrics['gross_exposure']:,.0f}")
+print(f"Long: \${metrics['long_exposure']:,.0f}")
+print(f"Short: \${metrics['short_exposure']:,.0f}")
 print(f"Leverage: {metrics['leverage']:.2f}x")
 print()
     
     # Price update
 print("AAPL price drops to $175...")
 result = monitor.update_price('AAPL', 175.0)
-print(f"P&L Impact: ${result['pnl_impact']:,.0f}")
+print(f"P&L Impact: \${result['pnl_impact']:,.0f}")
 \`\`\`
 
 ## Kill Switch Implementation

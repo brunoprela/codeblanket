@@ -1,7 +1,7 @@
 export const debuggingCompetitiveEnvironmentSection = {
-    id: 'cp-m1-s13',
-    title: 'Debugging in Competitive Environment',
-    content: `
+  id: 'cp-m1-s13',
+  title: 'Debugging in Competitive Environment',
+  content: `
 
 # Debugging in Competitive Environment
 
@@ -757,6 +757,6 @@ Now let's learn about **Reading Other People's C++ Code** - a crucial skill for 
 
 **Key Takeaway**: Debugging is a skill that improves with practice. Build a systematic approach, use effective print debugging, test edge cases thoroughly, and learn to recognize common bug patterns. Every bug you fix makes you better at avoiding similar bugs in the future!
 `,
-    quizId: 'cp-m1-s13-quiz',
-        discussionId: 'cp-m1-s13-discussion',
-} as const ;
+  quizId: 'cp-m1-s13-quiz',
+  discussionId: 'cp-m1-s13-discussion',
+} as const;

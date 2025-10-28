@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s6-discussion',
-    title: 'C++ Basics Review - Discussion Questions',
-    questions: [
-        {
-            question: 'Many competitive programmers use both arrays and vectors. Explain when you would choose a C-style array over a vector, and vice versa. What are the performance implications of each choice?',
-            answer: `The array vs vector choice affects both performance and code quality. Here's the complete analysis:
+  id: 'cp-m1-s6-discussion',
+  title: 'C++ Basics Review - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Many competitive programmers use both arrays and vectors. Explain when you would choose a C-style array over a vector, and vice versa. What are the performance implications of each choice?',
+      answer: `The array vs vector choice affects both performance and code quality. Here's the complete analysis:
 
 **C-Style Arrays:**
 
@@ -250,10 +251,11 @@ Reality: Vectors provide more features with minimal cost
 - Size known at compile time
 
 **In practice:** Both work fine! Choose based on convenience, not premature optimization.`,
-        },
-        {
-            question: 'Explain the differences between auto, decltype, and explicit type declarations. When should you use each in competitive programming?',
-            answer: `Modern C++ type features can simplify code significantly. Here's when and how to use each:
+    },
+    {
+      question:
+        'Explain the differences between auto, decltype, and explicit type declarations. When should you use each in competitive programming?',
+      answer: `Modern C++ type features can simplify code significantly. Here's when and how to use each:
 
 **auto - Type Deduction from Initializer:**
 
@@ -568,10 +570,11 @@ int main() {
 - Rarely in CP (mostly for templates)
 
 The goal: Balance convenience with clarity!`,
-        },
-        {
-            question: 'Pointers and references are fundamental C++ concepts. Explain when you would use each in competitive programming, and describe common bugs that arise from misusing them.',
-            answer: `Pointers and references are powerful but can cause subtle bugs. Here's the complete picture:
+    },
+    {
+      question:
+        'Pointers and references are fundamental C++ concepts. Explain when you would use each in competitive programming, and describe common bugs that arise from misusing them.',
+      answer: `Pointers and references are powerful but can cause subtle bugs. Here's the complete picture:
 
 **References - Alias to Existing Variable:**
 
@@ -901,5 +904,4 @@ Everything else?
 - **Best**: Use vectors and avoid manual memory management!`,
     },
   ],
-} as const ;
-
+} as const;

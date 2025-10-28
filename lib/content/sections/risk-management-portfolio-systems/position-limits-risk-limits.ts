@@ -413,7 +413,7 @@ if __name__ == "__main__":
     
     status = loss_mgr.check_loss_limits()
     
-    print(f"Daily P&L: ${status['daily_pnl']:,.0f}")
+    print(f"Daily P&L: \${status['daily_pnl']:,.0f}")
 print(f"Can Trade: {loss_mgr.can_trade()}")
 \`\`\`
 

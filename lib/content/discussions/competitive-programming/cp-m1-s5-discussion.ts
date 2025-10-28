@@ -1,10 +1,11 @@
 export default {
-    id: 'cp-m1-s5-discussion',
-    title: 'Fast Input/Output Techniques - Discussion Questions',
-    questions: [
-        {
-            question: 'Explain why cin/cout can be slow in competitive programming and how ios_base::sync_with_stdio(false) and cin.tie(nullptr) solve this problem. When would you NOT want to use these optimizations?',
-            answer: `Understanding I/O optimization is crucial for avoiding TLE on problems with large inputs. Here's the complete picture:
+  id: 'cp-m1-s5-discussion',
+  title: 'Fast Input/Output Techniques - Discussion Questions',
+  questions: [
+    {
+      question:
+        'Explain why cin/cout can be slow in competitive programming and how ios_base::sync_with_stdio(false) and cin.tie(nullptr) solve this problem. When would you NOT want to use these optimizations?',
+      answer: `Understanding I/O optimization is crucial for avoiding TLE on problems with large inputs. Here's the complete picture:
 
 **Why cin/cout are Slow by Default:**
 
@@ -190,9 +191,10 @@ Using NULL works but nullptr is more correct in C++11+.
 **Pro Tip:**
 Include these lines in your template at the start of main() - they never hurt (except in interactive problems) and often help!`,
     },
-{
-    question: 'When would you choose scanf/printf over cin/cout even with I/O optimizations? Discuss the trade-offs between safety, speed, and code complexity.',
-        answer: `The scanf/printf vs cin/cout debate is nuanced. Let's analyze all aspects:
+    {
+      question:
+        'When would you choose scanf/printf over cin/cout even with I/O optimizations? Discuss the trade-offs between safety, speed, and code complexity.',
+      answer: `The scanf/printf vs cin/cout debate is nuanced. Let's analyze all aspects:
 
 **scanf/printf Advantages:**
 
@@ -477,9 +479,10 @@ Problem: Read matrix of n×n (n=3000) integers
 
 **Pro Tip:** Most problems with good time limits won't TLE with optimized cin/cout. Focus on correct algorithms, not micro-optimizing I/O!`,
     },
-{
-    question: 'Describe best practices for handling different types of input formats in competitive programming (space-separated, line-separated, mixed formats, etc.). What are common pitfalls and how do you avoid them?',
-        answer: `Input parsing is a common source of bugs in competitive programming. Master these patterns:
+    {
+      question:
+        'Describe best practices for handling different types of input formats in competitive programming (space-separated, line-separated, mixed formats, etc.). What are common pitfalls and how do you avoid them?',
+      answer: `Input parsing is a common source of bugs in competitive programming. Master these patterns:
 
 **Common Input Formats:**
 
@@ -943,5 +946,4 @@ Before submitting:
 Master these input patterns, test thoroughly, and input parsing will become automatic!`,
     },
   ],
-} as const ;
-
+} as const;

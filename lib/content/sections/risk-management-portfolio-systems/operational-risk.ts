@@ -323,11 +323,11 @@ if __name__ == "__main__":
     total = op_risk.calculate_total_losses()
     print(f"Total Operational Losses:")
     print(f"  Number of Events: {total['num_events']}")
-    print(f"  Gross Loss: ${total['total_gross_loss']:,.0f}")
-print(f"  Recovery: ${total['total_recovery']:,.0f}")
-print(f"  Net Loss: ${total['total_net_loss']:,.0f}")
+    print(f"  Gross Loss: \${total['total_gross_loss']:,.0f}")
+print(f"  Recovery: \${total['total_recovery']:,.0f}")
+print(f"  Net Loss: \${total['total_net_loss']:,.0f}")
 print(f"  Recovery Rate: {total['recovery_rate']:.1f}%")
-print(f"  Average Loss per Event: ${total['avg_loss_per_event']:,.0f}")
+print(f"  Average Loss per Event: \${total['avg_loss_per_event']:,.0f}")
 print()
     
     # By category
@@ -338,20 +338,20 @@ print()
     # Severity distribution
 severity = op_risk.calculate_severity_distribution()
 print("Loss Severity Distribution:")
-print(f"  Mean: ${severity['mean']:,.0f}")
-print(f"  Median: ${severity['median']:,.0f}")
-print(f"  Std Dev: ${severity['std']:,.0f}")
-print(f"  95th Percentile: ${severity['percentile_95']:,.0f}")
-print(f"  99th Percentile: ${severity['percentile_99']:,.0f}")
-print(f"  Max: ${severity['max']:,.0f}")
+print(f"  Mean: \${severity['mean']:,.0f}")
+print(f"  Median: \${severity['median']:,.0f}")
+print(f"  Std Dev: \${severity['std']:,.0f}")
+print(f"  95th Percentile: \${severity['percentile_95']:,.0f}")
+print(f"  99th Percentile: \${severity['percentile_99']:,.0f}")
+print(f"  Max: \${severity['max']:,.0f}")
 print()
     
     # Operational VaR
 op_var = op_risk.calculate_operational_var(confidence_level = 0.99)
 print("Operational VaR (99%, 1 year):")
-print(f"  OpVaR: ${op_var['operational_var']:,.0f}")
+print(f"  OpVaR: \${op_var['operational_var']:,.0f}")
 print(f"  Expected Frequency: {op_var['expected_frequency']:.2f} events/year")
-print(f"  Expected Severity: ${op_var['expected_severity']:,.0f}")
+print(f"  Expected Severity: \${op_var['expected_severity']:,.0f}")
 print()
     
     # High risk areas
@@ -553,7 +553,7 @@ if __name__ == "__main__":
     print("="*70)
     print(cyber_scenarios.to_string(index=False))
     print()
-    print(f"Total Expected Annual Loss: ${cyber_scenarios['expected_loss'].sum():, .0f}")
+    print(f"Total Expected Annual Loss: \${cyber_scenarios['expected_loss'].sum():, .0f}")
 print()
     
     # Rogue trader scenario
@@ -564,7 +564,7 @@ print("Rogue Trader Scenarios")
 print("=" * 70)
 print(rogue_scenarios.to_string(index = False))
 print()
-print(f"Total Expected Loss: ${rogue_scenarios['expected_loss'].sum():,.0f}")
+print(f"Total Expected Loss: \${rogue_scenarios['expected_loss'].sum():,.0f}")
 \`\`\`
 
 ## Operational Risk Controls
@@ -748,8 +748,8 @@ capital_bia = calculate_operational_risk_capital_basel(revenue_3years, 'BIA')
 print("Basel III Operational Risk Capital")
 print("="*70)
 print(f"Approach: {capital_bia['approach']}")
-print(f"Average Gross Income: ${capital_bia['avg_gross_income']:, .0f}")
-print(f"Required Capital: ${capital_bia['required_capital']:,.0f}")
+print(f"Average Gross Income: \${capital_bia['avg_gross_income']:, .0f}")
+print(f"Required Capital: \${capital_bia['required_capital']:,.0f}")
 \`\`\`
 
 ## Key Takeaways

@@ -1,7 +1,7 @@
 export const commonCompilationErrorsSection = {
-    id: 'cp-m1-s12',
-    title: 'Common Compilation Errors',
-    content: `
+  id: 'cp-m1-s12',
+  title: 'Common Compilation Errors',
+  content: `
 
 # Common Compilation Errors
 
@@ -937,6 +937,6 @@ Now let's learn about **Debugging in Competitive Environment** - how to debug yo
 
 **Key Takeaway**: Compilation errors are inevitable, but they shouldn't slow you down. Master pattern recognition, read compiler messages effectively, and fix errors systematically. Most errors have simple, instant fixes once you recognize the pattern. Build a mental database of error-pattern-fix triplets through practice!
 `,
-    quizId: 'cp-m1-s12-quiz',
-        discussionId: 'cp-m1-s12-discussion',
-} as const ;
+  quizId: 'cp-m1-s12-quiz',
+  discussionId: 'cp-m1-s12-discussion',
+} as const;

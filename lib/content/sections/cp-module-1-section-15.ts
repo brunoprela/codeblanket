@@ -1,7 +1,7 @@
 export const contestDayCppTipsSection = {
-    id: 'cp-m1-s15',
-    title: 'Contest-Day C++ Tips',
-    content: `
+  id: 'cp-m1-s15',
+  title: 'Contest-Day C++ Tips',
+  content: `
 
 # Contest-Day C++ Tips
 
@@ -703,6 +703,6 @@ Now let's complete the foundational knowledge with **Building Your Starter Templ
 
 **Key Takeaway**: Contest performance isn't just about algorithms—it's about execution, discipline, and mental game. Develop a systematic workflow, avoid common mistakes, manage your time, and stay calm under pressure. Every contest is an opportunity to refine your process. Build good habits in practice, and they'll serve you well in competition!
 `,
-    quizId: 'cp-m1-s15-quiz',
-    discussionId: 'cp-m1-s15-discussion',
-} as const ;
+  quizId: 'cp-m1-s15-quiz',
+  discussionId: 'cp-m1-s15-discussion',
+} as const;

@@ -261,8 +261,8 @@ if __name__ == "__main__":
     
     print("Lehman Crisis 2008 Stress Test")
     print("="*60)
-    print(f"Portfolio Value: ${lehman_result['portfolio_value']:,.0f}")
-print(f"Scenario P&L: ${lehman_result['total_pnl']:,.0f}")
+    print(f"Portfolio Value: \${lehman_result['portfolio_value']:,.0f}")
+print(f"Scenario P&L: \${lehman_result['total_pnl']:,.0f}")
 print(f"Portfolio Return: {lehman_result['portfolio_return_pct']:.2f}%")
 print(f"Worst Position: {lehman_result['worst_position']}")
 print()
@@ -613,8 +613,8 @@ if __name__ == "__main__":
     print("Breaking Scenario Patterns:")
     print("="*60)
     print(f"Critical asset class: {patterns['critical_asset_class']}")
-    print(f"Average loss in breaking scenarios: ${patterns['average_loss']:, .0f}")
-print(f"Worst case: ${patterns['worst_case_loss']:,.0f}")
+    print(f"Average loss in breaking scenarios: \${patterns['average_loss']:, .0f}")
+print(f"Worst case: \${patterns['worst_case_loss']:,.0f}")
 print()
     
     # Path to failure for each asset class
@@ -623,7 +623,7 @@ print()
 for asset_class in set(asset_classes.values()):
     path = reverse_tester.scenario_path_to_failure(asset_class)
 print(f"{path['asset_class']}:")
-print(f"  Exposure: ${path['exposure']:,.0f} ({path['exposure_percentage']*100:.1f}%)")
+print(f"  Exposure: \${path['exposure']:,.0f} ({path['exposure_percentage']*100:.1f}%)")
 if path['breaking_return_pct']:
     print(f"  Breaking return: {path['breaking_return_pct']:.1f}%")
 print(f"  Feasibility: {path['feasibility']}")

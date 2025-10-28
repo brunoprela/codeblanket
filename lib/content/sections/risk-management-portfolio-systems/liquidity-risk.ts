@@ -367,8 +367,8 @@ if __name__ == "__main__":
     # LCR
     lcr = liq_risk.calculate_liquidity_coverage_ratio()
     print("Liquidity Coverage Ratio (LCR)")
-    print(f"  HQLA: ${lcr['hqla']:,.0f}")
-print(f"  Net Cash Outflows (30d): ${lcr['net_cash_outflows_30d']:,.0f}")
+    print(f"  HQLA: \${lcr['hqla']:,.0f}")
+print(f"  Net Cash Outflows (30d): \${lcr['net_cash_outflows_30d']:,.0f}")
 print(f"  LCR: {lcr['lcr_ratio']:.1f}%")
 print(f"  Requirement: {lcr['lcr_requirement']}%")
 print(f"  Status: {'✓ COMPLIANT' if lcr['compliant'] else '✗ NON-COMPLIANT'}")
@@ -377,8 +377,8 @@ print()
     # NSFR
 nsfr = liq_risk.calculate_net_stable_funding_ratio()
 print("Net Stable Funding Ratio (NSFR)")
-print(f"  Available Stable Funding: ${nsfr['available_stable_funding']:,.0f}")
-print(f"  Required Stable Funding: ${nsfr['required_stable_funding']:,.0f}")
+print(f"  Available Stable Funding: \${nsfr['available_stable_funding']:,.0f}")
+print(f"  Required Stable Funding: \${nsfr['required_stable_funding']:,.0f}")
 print(f"  NSFR: {nsfr['nsfr_ratio']:.1f}%")
 print(f"  Status: {'✓ COMPLIANT' if nsfr['compliant'] else '✗ NON-COMPLIANT'}")
 print()
@@ -398,11 +398,11 @@ stress = liq_risk.stress_test_liquidity(
 
 print("Liquidity Stress Test")
 print(f"  Scenario: 20% deposit runoff, 30% additional haircut, no wholesale funding")
-print(f"  Stressed Cash: ${stress['stressed_cash']:,.0f}")
-print(f"  Asset Liquidation Value: ${stress['liquidation_value']:,.0f}")
-print(f"  Total Available: ${stress['total_available_liquidity']:,.0f}")
-print(f"  30-day Funding Needs: ${stress['funding_needs_30d']:,.0f}")
-print(f"  Surplus/Deficit: ${stress['liquidity_surplus_deficit']:,.0f}")
+print(f"  Stressed Cash: \${stress['stressed_cash']:,.0f}")
+print(f"  Asset Liquidation Value: \${stress['liquidation_value']:,.0f}")
+print(f"  Total Available: \${stress['total_available_liquidity']:,.0f}")
+print(f"  30-day Funding Needs: \${stress['funding_needs_30d']:,.0f}")
+print(f"  Surplus/Deficit: \${stress['liquidity_surplus_deficit']:,.0f}")
 print(f"  Survival Days: {stress['survival_days']:.0f}")
 \`\`\`
 
@@ -570,7 +570,7 @@ if __name__ == "__main__":
     print(f"Market Impact - Selling {impact['shares_to_sell']:,.0f} shares of {impact['asset']}:")
     print(f"  Participation Rate: {impact['participation_rate']*100:.1f}%")
     print(f"  Price Impact: {impact['price_impact_pct']:.2f}%")
-    print(f"  Total Slippage Cost: ${impact['total_slippage_cost']:, .0f}")
+    print(f"  Total Slippage Cost: \${impact['total_slippage_cost']:, .0f}")
 print(f"  Liquidity Cost: {impact['liquidity_cost_bps']:.0f} bps")
 print()
     
@@ -717,10 +717,10 @@ if __name__ == "__main__":
     # Contingent capacity
     capacity = cfp.calculate_total_contingent_capacity()
     print("Contingent Funding Capacity:")
-    print(f"  Immediate (<1 day): ${capacity['immediate_capacity']:, .0f}")
-print(f"  Short-term (1-7 days): ${capacity['short_term_capacity']:,.0f}")
-print(f"  Medium-term (7-30 days): ${capacity['medium_term_capacity']:,.0f}")
-print(f"  Total: ${capacity['total_capacity']:,.0f}")
+    print(f"  Immediate (<1 day): \${capacity['immediate_capacity']:, .0f}")
+print(f"  Short-term (1-7 days): \${capacity['short_term_capacity']:,.0f}")
+print(f"  Medium-term (7-30 days): \${capacity['medium_term_capacity']:,.0f}")
+print(f"  Total: \${capacity['total_capacity']:,.0f}")
 \`\`\`
 
 ## Key Takeaways
