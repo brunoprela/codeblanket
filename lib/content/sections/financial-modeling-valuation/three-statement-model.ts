@@ -745,12 +745,10 @@ class ThreeStatementModel:
             if abs(diff) > tolerance:
                 results['cash_flow_ties'] = False
                 results['errors'].append(
-                    f"Year {year + 1}: Cash flow doesn't tie (diff: ${diff:, .0f
-}
-}) "
+                    f"Year {year + 1}: Cash flow doesn't tie (diff: \${diff:,.0f})"
                 )
-
-return results
+        
+        return results
     
     def export_summary(self) -> pd.DataFrame:
 """Export key metrics summary"""
@@ -906,9 +904,9 @@ result = solve_circular_model(
 print("\\nCircular Model Solution:")
 for key, value in result.items():
     if key != 'iterations':
-        print(f"{key.replace('_', ' ').title()}: ${value:, .0f}")
+        print(f"{key.replace('_', ' ').title()}: \${value:,.0f}")
     else:
-print(f"{key.title()}: {value}")
+        print(f"{key.title()}: {value}")
 \`\`\`
 
 ---
