@@ -10,14 +10,6 @@ import { ClientOnlySyntaxHighlighter } from './ClientOnlySyntaxHighlighter';
 // Dynamically import Monaco Editor with no SSR
 const Editor = dynamic(() => import('@monaco-editor/react'), {
   ssr: false,
-  loading: () => (
-    <div className="flex h-[300px] items-center justify-center bg-[#282a36]">
-      <div className="flex items-center gap-2 text-sm text-[#6272a4]">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#bd93f9] border-t-transparent" />
-        Loading editor...
-      </div>
-    </div>
-  ),
 });
 
 interface InteractiveCodeBlockProps {
@@ -36,6 +28,18 @@ export function InteractiveCodeBlock({
   const [isRunning, setIsRunning] = useState(false);
 
   const { isReady: pyodideReady, isLoading: pyodideLoading } = usePyodide();
+
+  // Calculate dynamic height based on number of lines
+  const lineCount = initialCode.split('\n').length;
+  const lineHeight = 20; // Approximate height per line in pixels
+  const padding = 32; // Top and bottom padding
+  const minHeight = 200; // Minimum height
+  const maxHeight = 800; // Maximum height
+  const calculatedHeight = Math.min(
+    Math.max(lineCount * lineHeight + padding, minHeight),
+    maxHeight,
+  );
+  const editorHeight = `${calculatedHeight}px`;
 
   const runCode = async () => {
     setIsRunning(true);
@@ -213,12 +217,23 @@ json.dumps(_plot_images)
       {/* Code Editor */}
       <div className="bg-[#282a36]">
         <Editor
-          height="300px"
+          height={editorHeight}
           defaultLanguage={language}
           language={language}
           value={code}
           onChange={(value) => setCode(value || '')}
           theme="dracula"
+          loading={
+            <div
+              className="flex items-center justify-center bg-[#282a36]"
+              style={{ height: editorHeight }}
+            >
+              <div className="flex items-center gap-2 text-sm text-[#6272a4]">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#bd93f9] border-t-transparent" />
+                Loading editor...
+              </div>
+            </div>
+          }
           options={{
             minimap: { enabled: false },
             fontSize: 14,
