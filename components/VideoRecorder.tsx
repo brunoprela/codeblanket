@@ -202,7 +202,7 @@ export function VideoRecorder({
                 src={video.url}
                 controls
                 className="w-full"
-                style={{ maxHeight: '200px' }}
+                style={{ maxHeight: '200px', transform: 'scaleX(-1)' }}
               />
               <div className="flex items-center justify-between border-t border-[#44475a] p-2">
                 <span className="text-xs text-[#6272a4]">
@@ -236,7 +236,7 @@ export function VideoRecorder({
             playsInline
             muted
             className="w-full"
-            style={{ maxHeight: '300px' }}
+            style={{ maxHeight: '300px', transform: 'scaleX(-1)' }}
           />
         </div>
       )}
