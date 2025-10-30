@@ -33,7 +33,7 @@ export default function RootLayout({
         />
 
         <StorageInitializer />
-        <nav className="sticky top-0 z-50 border-b border-gray-700 bg-[#282a36] text-white shadow-lg">
+        <nav className="border-b border-gray-700 bg-[#282a36] text-white shadow-lg">
           <div className="container mx-auto px-4 py-3 sm:py-4">
             <div className="flex items-center justify-between">
               <Link
@@ -49,7 +49,7 @@ export default function RootLayout({
           </div>
         </nav>
 
-        <main className="min-h-[calc(100vh-4rem)] overflow-y-auto bg-[#282a36] sm:min-h-[calc(100vh-4.5rem)]">
+        <main className="h-[calc(100vh-64px)] overflow-y-auto bg-[#282a36]">
           {children}
         </main>
       </body>
