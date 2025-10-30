@@ -588,6 +588,17 @@ export default function ModulePage({
       ? Math.round((completedProblemsCount / totalProblems) * 100)
       : 0;
 
+  // Calculate overall progress percentage with 2 decimal points
+  const totalCompleted =
+    completedSections.size +
+    completedMultipleChoice +
+    completedDiscussions +
+    completedProblemsCount;
+  const totalItems =
+    totalSections + totalMultipleChoice + totalDiscussions + totalProblems;
+  const overallProgressPercent =
+    totalItems > 0 ? ((totalCompleted / totalItems) * 100).toFixed(2) : '0.00';
+
   return (
     <div className="container mx-auto max-w-[1400px] px-2 py-4 sm:py-8">
       {/* Back Link */}
@@ -705,6 +716,24 @@ export default function ModulePage({
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Overall Progress Bar */}
+        <div className="mt-4">
+          <div className="mb-2 flex items-center justify-between text-sm sm:text-base">
+            <span className="font-semibold text-[#f8f8f2]">
+              Overall Progress: {totalCompleted} / {totalItems}
+            </span>
+            <span className="font-bold text-[#bd93f9]">
+              {overallProgressPercent}%
+            </span>
+          </div>
+          <div className="h-3 overflow-hidden rounded-full bg-[#282a36] shadow-inner sm:h-4">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#bd93f9] via-[#ff79c6] to-[#50fa7b] transition-all duration-500 ease-out"
+              style={{ width: `${overallProgressPercent}%` }}
+            />
           </div>
         </div>
       </div>
