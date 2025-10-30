@@ -470,10 +470,11 @@ export default function Home() {
                 <button
                   key={topicSection.id}
                   onClick={() => handleSectionChange(topicSection.id)}
-                  className={`min-w-[160px] flex-shrink-0 rounded-lg border-2 p-3 text-left transition-all sm:min-w-0 sm:p-4 lg:w-full ${isSelected
+                  className={`min-w-[160px] flex-shrink-0 rounded-lg border-2 p-3 text-left transition-all sm:min-w-0 sm:p-4 lg:w-full ${
+                    isSelected
                       ? 'border-[#bd93f9] bg-[#bd93f9]/20 shadow-lg'
                       : 'border-[#44475a] bg-[#44475a]/50 hover:border-[#bd93f9]/50 hover:bg-[#44475a]'
-                    }`}
+                  }`}
                 >
                   <div className="flex items-center gap-2 sm:gap-3">
                     <div className="text-xl sm:text-2xl">
@@ -527,9 +528,9 @@ export default function Home() {
                 const problemsPercent =
                   problemsProgress.total > 0
                     ? Math.round(
-                      (problemsProgress.completed / problemsProgress.total) *
-                      100,
-                    )
+                        (problemsProgress.completed / problemsProgress.total) *
+                          100,
+                      )
                     : 0;
 
                 // Get discussion progress for this module
@@ -559,10 +560,10 @@ export default function Home() {
                 const discussionPercent =
                   finalDiscussionProgress.total > 0
                     ? Math.round(
-                      (finalDiscussionProgress.completed /
-                        finalDiscussionProgress.total) *
-                      100,
-                    )
+                        (finalDiscussionProgress.completed /
+                          finalDiscussionProgress.total) *
+                          100,
+                      )
                     : 0;
 
                 // Get multiple choice progress for this module
@@ -592,9 +593,9 @@ export default function Home() {
                 const mcPercent =
                   finalMcProgress.total > 0
                     ? Math.round(
-                      (finalMcProgress.completed / finalMcProgress.total) *
-                      100,
-                    )
+                        (finalMcProgress.completed / finalMcProgress.total) *
+                          100,
+                      )
                     : 0;
 
                 return (
@@ -641,7 +642,7 @@ export default function Home() {
                           {/* Hide "All Problems Solved" badge for system design modules */}
                           {selectedSection.id !== 'system-design' &&
                             problemsProgress.completed ===
-                            problemsProgress.total &&
+                              problemsProgress.total &&
                             problemsProgress.total > 0 && (
                               <span className="rounded-full border-2 border-[#50fa7b] bg-[#50fa7b]/20 px-2 py-0.5 text-xs font-semibold text-[#50fa7b]">
                                 ✓ Problems
