@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { MultipleChoiceQuestion } from '@/lib/types';
+import { formatTextWithMath } from '@/lib/utils/formatTextWithMath';
 
 interface MultipleChoiceQuizProps {
   questions: MultipleChoiceQuestion[];
@@ -210,9 +211,9 @@ export function MultipleChoiceQuiz({
                 <span className="flex-shrink-0 text-lg font-bold text-[#8be9fd]">
                   {qIndex + 1}.
                 </span>
-                <p className="flex-1 text-lg font-semibold text-[#f8f8f2]">
-                  {question.question}
-                </p>
+                <div className="flex-1 text-lg font-semibold text-[#f8f8f2]">
+                  {formatTextWithMath(question.question)}
+                </div>
                 {isCompleted && (
                   <div className="ml-auto flex flex-shrink-0 items-center gap-2">
                     <span className="text-xl">✅</span>
@@ -257,7 +258,9 @@ export function MultipleChoiceQuiz({
                         <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 font-semibold">
                           {String.fromCharCode(65 + optionIndex)}
                         </span>
-                        <span className="flex-1">{option}</span>
+                        <span className="flex-1">
+                          {formatTextWithMath(option)}
+                        </span>
                         {showCorrect && <span className="text-xl">✓</span>}
                         {showIncorrect && <span className="text-xl">✗</span>}
                       </div>
@@ -284,9 +287,9 @@ export function MultipleChoiceQuiz({
                     >
                       {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
                     </div>
-                    <p className="text-sm text-[#f8f8f2]">
-                      {question.explanation}
-                    </p>
+                    <div className="text-sm text-[#f8f8f2]">
+                      {formatTextWithMath(question.explanation)}
+                    </div>
                   </div>
 
                   {/* Key Points */}
@@ -299,7 +302,7 @@ export function MultipleChoiceQuiz({
                         {question.keyPoints.map((point, index) => (
                           <li key={index} className="flex items-start gap-2">
                             <span className="mt-1 text-[#8be9fd]">•</span>
-                            <span>{point}</span>
+                            <span>{formatTextWithMath(point)}</span>
                           </li>
                         ))}
                       </ul>
