@@ -1295,13 +1295,13 @@ export default function ModulePage({
                               <span className="mr-2 text-[#bd93f9]">
                                 {qIndex + 1}.
                               </span>
-                              {question.question}
+                              {formatTextWithMath(question.question)}
                             </div>
 
                             {question.hint && !showSolution && (
                               <div className="mb-3 rounded-lg border border-[#6272a4] bg-[#6272a4]/10 p-2 text-xs text-[#8be9fd] sm:mb-4 sm:p-3 sm:text-sm">
                                 <span className="font-semibold">💡 Hint: </span>
-                                {question.hint}
+                                {formatTextWithMath(question.hint)}
                               </div>
                             )}
 
@@ -1364,7 +1364,9 @@ export default function ModulePage({
                                               <span className="mt-1 text-[#8be9fd]">
                                                 •
                                               </span>
-                                              <span>{point}</span>
+                                              <span>
+                                                {formatTextWithMath(point)}
+                                              </span>
                                             </li>
                                           ),
                                         )}
