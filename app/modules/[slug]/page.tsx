@@ -589,7 +589,7 @@ export default function ModulePage({
       : 0;
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-4 sm:py-8">
+    <div className="container mx-auto max-w-[1400px] px-2 py-4 sm:py-8">
       {/* Back Link */}
       <Link
         href="/"

@@ -121,7 +121,7 @@ export default function AllProblemsPage() {
   };
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-12">
+    <div className="container mx-auto max-w-[1400px] px-2 py-12">
       <h1 className="mb-8 text-4xl font-bold text-[#f8f8f2]">All Problems</h1>
 
       <div className="flex flex-col gap-8 lg:flex-row">

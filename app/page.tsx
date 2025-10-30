@@ -373,7 +373,7 @@ export default function Home() {
   // Don't render content until we've loaded the saved selection
   if (!isInitialized || !selectedSectionId) {
     return (
-      <div className="container mx-auto max-w-7xl px-4 py-6 sm:py-8 lg:py-12">
+      <div className="container mx-auto max-w-[1400px] px-2 py-6 sm:py-8 lg:py-12">
         <div className="flex items-center justify-center py-12">
           <div className="text-[#6272a4]">Loading...</div>
         </div>
@@ -382,7 +382,7 @@ export default function Home() {
   }
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-6 sm:py-8 lg:py-12">
+    <div className="container mx-auto max-w-[1400px] px-2 py-6 sm:py-8 lg:py-12">
       {/* Stats */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:gap-4 md:grid-cols-4 md:gap-6">
         {/* Sub-Modules (Sections) Completed */}
