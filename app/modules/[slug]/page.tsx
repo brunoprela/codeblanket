@@ -234,9 +234,11 @@ export default function ModulePage({
   }>({});
 
   // Load video metadata only (bandwidth optimized - no video downloads)
+  // OPTIMIZED: Fetch all videos once, then filter client-side (1 API call instead of N)
   useEffect(() => {
     const loadVideoMetadata = async () => {
       console.log(`[Module ${slug}] Loading video metadata...`);
+
       const metadataMap: Record<
         string,
         Array<{
@@ -246,26 +248,35 @@ export default function ModulePage({
           size?: number;
         }>
       > = {};
+
+      // OPTIMIZATION: Get ALL videos in ONE API call, then filter client-side
+      const allVideos = await getVideoMetadataForQuestion(''); // Empty prefix = all videos
+      console.log(
+        `[Module ${slug}] Fetched ${allVideos.length} total videos in 1 API call`,
+      );
+
+      // Filter videos for this module's questions
       for (const [sectionIndex, section] of moduleData.sections.entries()) {
         const sectionId = section.id || `section-${sectionIndex}`;
         if (section.quiz) {
           for (const question of section.quiz) {
             const questionId = `${slug}-${sectionId}-${question.id}`;
-            // Use metadata-only fetch (no bandwidth for actual videos)
-            const metadata = await getVideoMetadataForQuestion(questionId);
-            console.log(
-              `[Module ${slug}] Question ${questionId}: ${metadata.length} videos`,
+            // Filter from already-loaded videos (no additional API calls)
+            const questionVideos = allVideos.filter((v) =>
+              v.id.startsWith(questionId),
             );
-            if (metadata.length > 0) {
-              metadataMap[questionId] = metadata;
+            console.log(
+              `[Module ${slug}] Question ${questionId}: ${questionVideos.length} videos`,
+            );
+            if (questionVideos.length > 0) {
+              metadataMap[questionId] = questionVideos;
             }
           }
         }
       }
+
       console.log(
-        `[Module ${slug}] Total video metadata loaded:`,
-        Object.keys(metadataMap).length,
-        'questions',
+        `[Module ${slug}] Total: ${Object.keys(metadataMap).length} questions with videos`,
       );
       setVideoMetadata(metadataMap);
     };
