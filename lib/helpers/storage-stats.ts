@@ -25,9 +25,11 @@ export interface UserStats {
   completedDiscussionQuestions: number;
   hasCompletedProblems: boolean;
   completedProblemsCount: number; // Actual count of completed problems
+  completedProblemsList: string[]; // List of completed problem IDs
   multipleChoiceQuizCount: number; // Actual count of completed MC questions
   moduleProgressCount: number;
   moduleVideoCounts: Record<string, number>; // Module-specific video counts
+  moduleMCCounts: Record<string, number>; // Module-specific MC counts
   moduleCompletionMap: Record<string, number>; // Module-specific section completion counts
   keys: string[];
 }

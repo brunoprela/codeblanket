@@ -89,35 +89,53 @@ export async function GET() {
     // Extract completion stats from keys and values (all in one pass)
     const keys = progressData.map((row) => row.key as string);
 
-    // Build maps for module completions and MC questions in one pass
-    const moduleCompletionMap: Record<string, number> = {};
+    // Build maps for ALL module-specific progress in one pass
+    const moduleCompletionMap: Record<string, number> = {}; // Section completions
+    const moduleMCCounts: Record<string, number> = {}; // MC questions
     let totalMCQuestions = 0;
     let completedProblemsCount = 0;
+    const completedProblemsList: string[] = [];
+
+    // Helper to handle Neon's JSON columns (already parsed vs string)
+    const parseValue = (val: unknown) => {
+      if (Array.isArray(val)) {
+        return val; // Already parsed
+      } else if (typeof val === 'string') {
+        return JSON.parse(val); // Need to parse
+      }
+      return val;
+    };
 
     progressData.forEach((row) => {
       const key = row.key as string;
       const value = row.value;
 
       try {
-        // IMPORTANT: Neon returns JSON columns as already-parsed objects, not strings
-        // So we need to handle both cases: already parsed OR string
-        const parseValue = (val: unknown) => {
-          if (Array.isArray(val)) {
-            return val; // Already parsed
-          } else if (typeof val === 'string') {
-            return JSON.parse(val); // Need to parse
-          }
-          return val;
-        };
-
         if (key.startsWith('mc-quiz-')) {
           // Multiple choice: count questions in array
+          // Key format: mc-quiz-{moduleId}-{sectionId}
           const completedQuestions = parseValue(value);
           if (Array.isArray(completedQuestions)) {
             console.debug(
               `[API Stats] MC ${key}: ${completedQuestions.length} questions`,
             );
             totalMCQuestions += completedQuestions.length;
+
+            // Extract module ID for module-specific counts
+            // From "mc-quiz-python-fundamentals-variables-types"
+            // Extract "python-fundamentals"
+            const keyWithoutPrefix = key.replace('mc-quiz-', '');
+            const parts = keyWithoutPrefix.split('-');
+            // Take all except last part (section ID)
+            const moduleId = parts.slice(0, -1).join('-');
+
+            if (!moduleMCCounts[moduleId]) {
+              moduleMCCounts[moduleId] = 0;
+            }
+            moduleMCCounts[moduleId] += completedQuestions.length;
+            console.debug(
+              `[API Stats] Module ${moduleId} MC count: ${moduleMCCounts[moduleId]}`,
+            );
           }
         } else if (key.startsWith('module-') && key.endsWith('-completed')) {
           // Module completion: extract module ID and count sections
@@ -137,6 +155,7 @@ export async function GET() {
               `[API Stats] Completed problems: ${completedProblems.length}`,
             );
             completedProblemsCount = completedProblems.length;
+            completedProblemsList.push(...completedProblems);
           }
         }
       } catch (error) {
@@ -158,9 +177,11 @@ export async function GET() {
       completedDiscussionQuestions: uniqueQuestions.size,
       hasCompletedProblems: !!completedProblemsKey,
       completedProblemsCount: completedProblemsCount, // Actual count of completed problems
+      completedProblemsList: completedProblemsList, // List of completed problem IDs
       multipleChoiceQuizCount: totalMCQuestions, // Actual count of completed MC questions
       moduleProgressCount: moduleKeys.length,
       moduleVideoCounts: moduleVideoCounts, // Module-specific video counts
+      moduleMCCounts: moduleMCCounts, // Module-specific MC counts
       moduleCompletionMap: moduleCompletionMap, // Module-specific section completion counts
       keys: keys, // Return keys for checking specific completion
     };

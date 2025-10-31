@@ -99,26 +99,53 @@ export default function Home() {
       const userStats = await getUserStats();
       const progress: Record<string, { completed: number; total: number }> = {};
 
+      console.log('[Homepage] Loading module progress, userStats:', userStats);
+
       if (userStats) {
         // Authenticated user: use stats from efficient API (1 call, not 50+)
+        console.log(
+          '[Homepage] Module completion map:',
+          userStats.moduleCompletionMap,
+        );
+
         moduleCategories.forEach((moduleCategory) => {
+          const completed =
+            userStats.moduleCompletionMap[moduleCategory.id] || 0;
+          console.log(
+            `[Homepage] Module ${moduleCategory.id}: ${completed} sections completed`,
+          );
+
           progress[moduleCategory.id] = {
-            completed: userStats.moduleCompletionMap[moduleCategory.id] || 0,
+            completed: completed,
             total: moduleCategory.module.sections.length,
           };
         });
       } else {
         // Anonymous user: read from localStorage (fast, local)
+        console.log('[Homepage] Anonymous user, reading from localStorage');
+
         moduleCategories.forEach((moduleCategory) => {
           const storageKey = `module-${moduleCategory.id}-completed`;
           const stored = localStorage.getItem(storageKey);
           const completedSections = stored ? JSON.parse(stored) : [];
+          console.log(
+            `[Homepage] Module ${moduleCategory.id} (localStorage): ${completedSections.length} sections`,
+          );
+
           progress[moduleCategory.id] = {
             completed: completedSections.length,
             total: moduleCategory.module.sections.length,
           };
         });
       }
+
+      const totalCompleted = Object.values(progress).reduce(
+        (sum, p) => sum + p.completed,
+        0,
+      );
+      console.log(
+        `[Homepage] Total sections completed across all modules: ${totalCompleted}`,
+      );
 
       setModuleProgress(progress);
     };
@@ -245,49 +272,54 @@ export default function Home() {
 
       setTotalMultipleChoice(total);
 
-      // Load multiple choice progress per module
+      // Load multiple choice progress per module (use stats API for authenticated users)
       const mcProgress: Record<string, { completed: number; total: number }> =
         {};
 
-      for (const moduleCategory of moduleCategories) {
-        let completedCount = 0;
-        let totalCount = 0;
+      if (userStats) {
+        // Authenticated: Use module-specific MC counts from stats API
+        moduleCategories.forEach((moduleCategory) => {
+          let totalCount = 0;
+          moduleCategory.module.sections.forEach((section) => {
+            if (section.multipleChoice) {
+              totalCount += section.multipleChoice.length;
+            }
+          });
 
-        for (const section of moduleCategory.module.sections) {
-          if (section.multipleChoice) {
-            totalCount += section.multipleChoice.length;
+          mcProgress[moduleCategory.id] = {
+            completed: userStats.moduleMCCounts[moduleCategory.id] || 0,
+            total: totalCount,
+          };
+        });
+      } else {
+        // Anonymous: Load from localStorage
+        for (const moduleCategory of moduleCategories) {
+          let completedCount = 0;
+          let totalCount = 0;
 
-            const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
-            const stored = localStorage.getItem(storageKey);
-            if (stored) {
-              try {
-                const completedQuestions = JSON.parse(stored);
-                // Deduplicate in case of corrupted data
-                const uniqueQuestions = [...new Set(completedQuestions)];
+          for (const section of moduleCategory.module.sections) {
+            if (section.multipleChoice) {
+              totalCount += section.multipleChoice.length;
 
-                // Fix corrupted data if duplicates found
-                if (uniqueQuestions.length !== completedQuestions.length) {
-                  localStorage.setItem(
-                    storageKey,
-                    JSON.stringify(uniqueQuestions),
-                  );
-                  console.warn(
-                    `Fixed duplicates in ${storageKey}: ${completedQuestions.length} → ${uniqueQuestions.length}`,
-                  );
+              const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
+              const stored = localStorage.getItem(storageKey);
+              if (stored) {
+                try {
+                  const completedQuestions = JSON.parse(stored);
+                  const uniqueQuestions = [...new Set(completedQuestions)];
+                  completedCount += uniqueQuestions.length;
+                } catch (e) {
+                  console.error('Failed to parse MC quiz progress:', e);
                 }
-
-                completedCount += uniqueQuestions.length;
-              } catch (e) {
-                console.error('Failed to parse MC quiz progress:', e);
               }
             }
           }
-        }
 
-        mcProgress[moduleCategory.id] = {
-          completed: completedCount,
-          total: totalCount,
-        };
+          mcProgress[moduleCategory.id] = {
+            completed: completedCount,
+            total: totalCount,
+          };
+        }
       }
 
       setModuleMultipleChoiceProgress(mcProgress);
@@ -307,19 +339,35 @@ export default function Home() {
         const problems = await getCompletedProblems();
         setCompletedProblems(problems);
 
+        // SECURITY: Use stats API for authenticated users (don't read localStorage)
+        const userStatsForUpdate = await getUserStats();
         const newProgress: Record<
           string,
           { completed: number; total: number }
         > = {};
-        moduleCategories.forEach((moduleCategory) => {
-          const storageKey = `module-${moduleCategory.id}-completed`;
-          const stored = localStorage.getItem(storageKey);
-          const completedSections = stored ? JSON.parse(stored) : [];
-          newProgress[moduleCategory.id] = {
-            completed: completedSections.length,
-            total: moduleCategory.module.sections.length,
-          };
-        });
+
+        if (userStatsForUpdate) {
+          // Authenticated: Use PostgreSQL data
+          moduleCategories.forEach((moduleCategory) => {
+            newProgress[moduleCategory.id] = {
+              completed:
+                userStatsForUpdate.moduleCompletionMap[moduleCategory.id] || 0,
+              total: moduleCategory.module.sections.length,
+            };
+          });
+        } else {
+          // Anonymous: Read from localStorage
+          moduleCategories.forEach((moduleCategory) => {
+            const storageKey = `module-${moduleCategory.id}-completed`;
+            const stored = localStorage.getItem(storageKey);
+            const completedSections = stored ? JSON.parse(stored) : [];
+            newProgress[moduleCategory.id] = {
+              completed: completedSections.length,
+              total: moduleCategory.module.sections.length,
+            };
+          });
+        }
+
         setModuleProgress(newProgress);
 
         // Update discussion stats (efficient - use stats API)
@@ -349,49 +397,56 @@ export default function Home() {
           setCompletedMultipleChoice(mcCompleted);
         }
 
-        // Update multiple choice progress per module
+        // Update multiple choice progress per module (use stats API for authenticated users)
+        const statsForMCModules = await getUserStats();
         const mcProgress: Record<string, { completed: number; total: number }> =
           {};
 
-        for (const moduleCategory of moduleCategories) {
-          let completedCount = 0;
-          let totalCount = 0;
+        if (statsForMCModules) {
+          // Authenticated: Use stats API
+          moduleCategories.forEach((moduleCategory) => {
+            let totalCount = 0;
+            moduleCategory.module.sections.forEach((section) => {
+              if (section.multipleChoice) {
+                totalCount += section.multipleChoice.length;
+              }
+            });
 
-          for (const section of moduleCategory.module.sections) {
-            if (section.multipleChoice) {
-              totalCount += section.multipleChoice.length;
+            mcProgress[moduleCategory.id] = {
+              completed:
+                statsForMCModules.moduleMCCounts[moduleCategory.id] || 0,
+              total: totalCount,
+            };
+          });
+        } else {
+          // Anonymous: Use localStorage
+          for (const moduleCategory of moduleCategories) {
+            let completedCount = 0;
+            let totalCount = 0;
 
-              const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
-              const stored = localStorage.getItem(storageKey);
-              if (stored) {
-                try {
-                  const completedQuestions = JSON.parse(stored);
-                  // Deduplicate in case of corrupted data
-                  const uniqueQuestions = [...new Set(completedQuestions)];
+            for (const section of moduleCategory.module.sections) {
+              if (section.multipleChoice) {
+                totalCount += section.multipleChoice.length;
 
-                  // Fix corrupted data if duplicates found
-                  if (uniqueQuestions.length !== completedQuestions.length) {
-                    localStorage.setItem(
-                      storageKey,
-                      JSON.stringify(uniqueQuestions),
-                    );
-                    console.warn(
-                      `Fixed duplicates in ${storageKey}: ${completedQuestions.length} → ${uniqueQuestions.length}`,
-                    );
+                const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
+                const stored = localStorage.getItem(storageKey);
+                if (stored) {
+                  try {
+                    const completedQuestions = JSON.parse(stored);
+                    const uniqueQuestions = [...new Set(completedQuestions)];
+                    completedCount += uniqueQuestions.length;
+                  } catch (e) {
+                    console.error('Failed to parse MC quiz progress:', e);
                   }
-
-                  completedCount += uniqueQuestions.length;
-                } catch (e) {
-                  console.error('Failed to parse MC quiz progress:', e);
                 }
               }
             }
-          }
 
-          mcProgress[moduleCategory.id] = {
-            completed: completedCount,
-            total: totalCount,
-          };
+            mcProgress[moduleCategory.id] = {
+              completed: completedCount,
+              total: totalCount,
+            };
+          }
         }
 
         setModuleMultipleChoiceProgress(mcProgress);
