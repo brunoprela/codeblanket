@@ -516,7 +516,7 @@ export default function ModulePage({
   }, [selectedSection, selectedSectionId]);
 
   // Save completed sections to localStorage
-  const toggleSectionComplete = (sectionId: string) => {
+  const toggleSectionComplete = async (sectionId: string) => {
     setCompletedSections((prev) => {
       const newSet = new Set(prev);
       const wasCompleted = newSet.has(sectionId);
@@ -527,9 +527,9 @@ export default function ModulePage({
         newSet.add(sectionId);
       }
 
-      // Save to localStorage
-      const storageKey = `module-${slug}-completed`;
-      localStorage.setItem(storageKey, JSON.stringify(Array.from(newSet)));
+      // SECURITY: Use storage functions (routes to PostgreSQL for authenticated users)
+      const { saveCompletedSections } = require('@/lib/helpers/storage');
+      saveCompletedSections(slug, Array.from(newSet));
 
       return newSet;
     });

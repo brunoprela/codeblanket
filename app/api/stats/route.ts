@@ -80,6 +80,33 @@ export async function GET() {
       (k) => k.startsWith('module-') && k.endsWith('-completed'),
     );
 
+    // Build module completion map: moduleId -> number of completed sections
+    const moduleCompletionMap: Record<string, number> = {};
+    for (const moduleKey of moduleKeys) {
+      try {
+        // Extract module ID from key: "module-{moduleId}-completed"
+        const moduleId = moduleKey
+          .replace('module-', '')
+          .replace('-completed', '');
+
+        const moduleData = await sql`
+          SELECT value FROM user_progress 
+          WHERE user_id = ${user.id} AND key = ${moduleKey}
+        `;
+        if (moduleData.length > 0 && moduleData[0].value) {
+          const completedSections = JSON.parse(moduleData[0].value as string);
+          if (Array.isArray(completedSections)) {
+            moduleCompletionMap[moduleId] = completedSections.length;
+          }
+        }
+      } catch (error) {
+        console.error(
+          `Failed to count module completion for key ${moduleKey}:`,
+          error,
+        );
+      }
+    }
+
     // Count actual multiple choice questions (not just sections)
     // Each mc-quiz key contains an array of completed question IDs
     let totalMCQuestions = 0;
@@ -128,6 +155,7 @@ export async function GET() {
       multipleChoiceQuizCount: totalMCQuestions, // Actual count of completed MC questions
       moduleProgressCount: moduleKeys.length,
       moduleVideoCounts: moduleVideoCounts, // Module-specific video counts
+      moduleCompletionMap: moduleCompletionMap, // Module-specific section completion counts
       keys: keys, // Return keys for checking specific completion
     };
 

@@ -94,17 +94,21 @@ export default function Home() {
     };
     loadProblems();
 
-    // Load module progress (SECURITY: check auth first to prevent anonymous data leakage)
+    // Load module progress (EFFICIENT: use stats API for authenticated users)
     const loadModuleProgress = async () => {
-      // Check authentication to ensure we don't show anonymous data to authenticated users
-      const authResponse = await fetch('/api/auth/check');
-      const authData = await authResponse.json();
-      const isAuthenticated = authData.authenticated === true;
-
+      const userStats = await getUserStats();
       const progress: Record<string, { completed: number; total: number }> = {};
 
-      if (!isAuthenticated) {
-        // Anonymous user: read from localStorage
+      if (userStats) {
+        // Authenticated user: use stats from efficient API (1 call, not 50+)
+        moduleCategories.forEach((moduleCategory) => {
+          progress[moduleCategory.id] = {
+            completed: userStats.moduleCompletionMap[moduleCategory.id] || 0,
+            total: moduleCategory.module.sections.length,
+          };
+        });
+      } else {
+        // Anonymous user: read from localStorage (fast, local)
         moduleCategories.forEach((moduleCategory) => {
           const storageKey = `module-${moduleCategory.id}-completed`;
           const stored = localStorage.getItem(storageKey);
@@ -114,20 +118,6 @@ export default function Home() {
             total: moduleCategory.module.sections.length,
           };
         });
-      } else {
-        // Authenticated user: use PostgreSQL via storage functions
-        for (const moduleCategory of moduleCategories) {
-          const { getCompletedSections } = await import(
-            '@/lib/helpers/storage'
-          );
-          const completedSections = await getCompletedSections(
-            moduleCategory.id,
-          );
-          progress[moduleCategory.id] = {
-            completed: completedSections.size,
-            total: moduleCategory.module.sections.length,
-          };
-        }
       }
 
       setModuleProgress(progress);

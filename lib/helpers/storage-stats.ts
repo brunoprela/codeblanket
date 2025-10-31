@@ -28,6 +28,7 @@ export interface UserStats {
   multipleChoiceQuizCount: number; // Actual count of completed MC questions
   moduleProgressCount: number;
   moduleVideoCounts: Record<string, number>; // Module-specific video counts
+  moduleCompletionMap: Record<string, number>; // Module-specific section completion counts
   keys: string[];
 }
 
