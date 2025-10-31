@@ -17,16 +17,16 @@ export async function GET() {
 
     console.debug('[API Stats] Fetching stats for user:', user.id);
 
-    // Efficient count queries - no data transfer
-    const [progressCount, videoCount, progressKeys] = await Promise.all([
+    // Efficient queries - get keys and small values in one go
+    const [progressCount, videoCount, progressData] = await Promise.all([
       // Count total progress items
       sql`SELECT COUNT(*) as count FROM user_progress WHERE user_id = ${user.id}`,
 
       // Count total videos
       sql`SELECT COUNT(*) as count FROM user_videos WHERE user_id = ${user.id}`,
 
-      // Get just the keys (for completion checking) - much smaller than full data
-      sql`SELECT key FROM user_progress WHERE user_id = ${user.id}`,
+      // Get keys AND values (we need values to count questions, not just keys)
+      sql`SELECT key, value FROM user_progress WHERE user_id = ${user.id}`,
     ]);
 
     // Extract unique video question prefixes for discussion completion count
@@ -37,18 +37,29 @@ export async function GET() {
     const uniqueQuestions = new Set<string>();
     const moduleVideoMap: Record<string, Set<string>> = {};
 
+    console.debug(
+      `[API Stats] Processing ${videoQuestions.length} video records...`,
+    );
+
     videoQuestions.forEach((row) => {
       const videoId = row.video_id as string;
+      console.debug(`[API Stats] Video ID: ${videoId}`);
+
       // Extract question prefix (everything before the last timestamp)
       // Format: moduleId-sectionId-questionId-timestamp
       // We want: moduleId-sectionId-questionId (everything except the timestamp)
       const parts = videoId.split('-');
+      console.debug(`[API Stats]   Parts: [${parts.join(', ')}]`);
 
       // Need at least 4 parts: module, section, question, timestamp
       if (parts.length >= 4) {
         // Take all parts except the last one (timestamp)
         // This gives us the unique question identifier (deduplicates multiple videos for same question)
         const questionPrefix = parts.slice(0, -1).join('-');
+        console.debug(
+          `[API Stats]   Question prefix (deduplicated): ${questionPrefix}`,
+        );
+
         uniqueQuestions.add(questionPrefix);
 
         // Extract module ID (first part)
@@ -57,12 +68,17 @@ export async function GET() {
           moduleVideoMap[moduleId] = new Set();
         }
         moduleVideoMap[moduleId].add(questionPrefix);
+      } else {
+        console.warn(
+          `[API Stats]   WARNING: Unexpected format (less than 4 parts)`,
+        );
       }
     });
 
     console.debug(
-      `[API Stats] Found ${videoQuestions.length} videos, ${uniqueQuestions.size} unique questions`,
+      `[API Stats] Deduplication complete: ${videoQuestions.length} videos → ${uniqueQuestions.size} unique questions`,
     );
+    console.debug(`[API Stats] Unique questions:`, Array.from(uniqueQuestions));
 
     // Convert module video map to counts
     const moduleVideoCounts: Record<string, number> = {};
@@ -70,8 +86,44 @@ export async function GET() {
       moduleVideoCounts[moduleId] = moduleVideoMap[moduleId].size;
     });
 
-    // Extract completion stats from keys and values
-    const keys = progressKeys.map((row) => row.key as string);
+    // Extract completion stats from keys and values (all in one pass)
+    const keys = progressData.map((row) => row.key as string);
+
+    // Build maps for module completions and MC questions in one pass
+    const moduleCompletionMap: Record<string, number> = {};
+    let totalMCQuestions = 0;
+    let completedProblemsCount = 0;
+
+    progressData.forEach((row) => {
+      const key = row.key as string;
+      const value = row.value;
+
+      try {
+        if (key.startsWith('mc-quiz-')) {
+          // Multiple choice: count questions in array
+          const completedQuestions = JSON.parse(value as string);
+          if (Array.isArray(completedQuestions)) {
+            totalMCQuestions += completedQuestions.length;
+          }
+        } else if (key.startsWith('module-') && key.endsWith('-completed')) {
+          // Module completion: extract module ID and count sections
+          const moduleId = key.replace('module-', '').replace('-completed', '');
+          const completedSections = JSON.parse(value as string);
+          if (Array.isArray(completedSections)) {
+            moduleCompletionMap[moduleId] = completedSections.length;
+          }
+        } else if (key === 'codeblanket_completed_problems') {
+          // Problem completion: count problems in array
+          const completedProblems = JSON.parse(value as string);
+          if (Array.isArray(completedProblems)) {
+            completedProblemsCount = completedProblems.length;
+          }
+        }
+      } catch (error) {
+        console.error(`Failed to parse value for key ${key}:`, error);
+      }
+    });
+
     const completedProblemsKey = keys.find(
       (k) => k === 'codeblanket_completed_problems',
     );
@@ -79,72 +131,6 @@ export async function GET() {
     const moduleKeys = keys.filter(
       (k) => k.startsWith('module-') && k.endsWith('-completed'),
     );
-
-    // Build module completion map: moduleId -> number of completed sections
-    const moduleCompletionMap: Record<string, number> = {};
-    for (const moduleKey of moduleKeys) {
-      try {
-        // Extract module ID from key: "module-{moduleId}-completed"
-        const moduleId = moduleKey
-          .replace('module-', '')
-          .replace('-completed', '');
-
-        const moduleData = await sql`
-          SELECT value FROM user_progress 
-          WHERE user_id = ${user.id} AND key = ${moduleKey}
-        `;
-        if (moduleData.length > 0 && moduleData[0].value) {
-          const completedSections = JSON.parse(moduleData[0].value as string);
-          if (Array.isArray(completedSections)) {
-            moduleCompletionMap[moduleId] = completedSections.length;
-          }
-        }
-      } catch (error) {
-        console.error(
-          `Failed to count module completion for key ${moduleKey}:`,
-          error,
-        );
-      }
-    }
-
-    // Count actual multiple choice questions (not just sections)
-    // Each mc-quiz key contains an array of completed question IDs
-    let totalMCQuestions = 0;
-    for (const mcKey of mcQuizKeys) {
-      try {
-        const mcData = await sql`
-          SELECT value FROM user_progress 
-          WHERE user_id = ${user.id} AND key = ${mcKey}
-        `;
-        if (mcData.length > 0 && mcData[0].value) {
-          const completedQuestions = JSON.parse(mcData[0].value as string);
-          if (Array.isArray(completedQuestions)) {
-            totalMCQuestions += completedQuestions.length;
-          }
-        }
-      } catch (error) {
-        console.error(`Failed to count MC questions for key ${mcKey}:`, error);
-      }
-    }
-
-    // Count completed problems
-    let completedProblemsCount = 0;
-    if (completedProblemsKey) {
-      try {
-        const problemsData = await sql`
-          SELECT value FROM user_progress 
-          WHERE user_id = ${user.id} AND key = ${completedProblemsKey}
-        `;
-        if (problemsData.length > 0 && problemsData[0].value) {
-          const completedProblems = JSON.parse(problemsData[0].value as string);
-          if (Array.isArray(completedProblems)) {
-            completedProblemsCount = completedProblems.length;
-          }
-        }
-      } catch (error) {
-        console.error('Failed to count completed problems:', error);
-      }
-    }
 
     const stats = {
       totalProgressItems: Number(progressCount[0].count),

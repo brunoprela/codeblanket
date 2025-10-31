@@ -236,6 +236,7 @@ export default function ModulePage({
   // Load video metadata only (bandwidth optimized - no video downloads)
   useEffect(() => {
     const loadVideoMetadata = async () => {
+      console.log(`[Module ${slug}] Loading video metadata...`);
       const metadataMap: Record<
         string,
         Array<{
@@ -252,12 +253,20 @@ export default function ModulePage({
             const questionId = `${slug}-${sectionId}-${question.id}`;
             // Use metadata-only fetch (no bandwidth for actual videos)
             const metadata = await getVideoMetadataForQuestion(questionId);
+            console.log(
+              `[Module ${slug}] Question ${questionId}: ${metadata.length} videos`,
+            );
             if (metadata.length > 0) {
               metadataMap[questionId] = metadata;
             }
           }
         }
       }
+      console.log(
+        `[Module ${slug}] Total video metadata loaded:`,
+        Object.keys(metadataMap).length,
+        'questions',
+      );
       setVideoMetadata(metadataMap);
     };
     loadVideoMetadata();

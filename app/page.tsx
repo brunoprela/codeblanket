@@ -129,9 +129,15 @@ export default function Home() {
       // Try to get efficient stats from API (authenticated users)
       const userStats = await getUserStats();
 
+      console.log('[Homepage] Loading discussion stats, userStats:', userStats);
+
       if (userStats) {
         // Authenticated user - use efficient stats from API
         const total = getTotalDiscussionQuestionsCount(moduleCategories);
+        console.log(
+          '[Homepage] Setting completed discussions to:',
+          userStats.completedDiscussionQuestions,
+        );
         setCompletedDiscussions(userStats.completedDiscussionQuestions);
         setTotalDiscussions(total);
 
@@ -149,8 +155,14 @@ export default function Home() {
             }
           });
 
+          const moduleCompleted =
+            userStats.moduleVideoCounts[moduleCategory.id] || 0;
+          console.log(
+            `[Homepage] Module ${moduleCategory.id}: ${moduleCompleted} discussions completed`,
+          );
+
           discussionProgress[moduleCategory.id] = {
-            completed: userStats.moduleVideoCounts[moduleCategory.id] || 0,
+            completed: moduleCompleted,
             total: totalCount,
           };
         });
@@ -211,13 +223,23 @@ export default function Home() {
 
       // Check if authenticated and use stats API
       const userStats = await getUserStats();
+      console.log('[Homepage] Loading MC stats, userStats:', userStats);
+
       if (userStats) {
         // Use efficient stats from API
+        console.log(
+          '[Homepage] Setting completed MC to:',
+          userStats.multipleChoiceQuizCount,
+        );
         setCompletedMultipleChoice(userStats.multipleChoiceQuizCount);
       } else {
         // Anonymous: Use localStorage/IndexedDB
         const completed =
           getCompletedMultipleChoiceQuestionsCount(moduleCategories);
+        console.log(
+          '[Homepage] Setting completed MC (anonymous) to:',
+          completed,
+        );
         setCompletedMultipleChoice(completed);
       }
 
