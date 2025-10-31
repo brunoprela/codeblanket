@@ -10,7 +10,7 @@ export async function GET() {
   try {
     const user = await stackServerApp.getUser();
 
-    console.log(
+    console.debug(
       '[Auth Check] User:',
       user ? `Authenticated as ${user.id}` : 'Not authenticated',
     );

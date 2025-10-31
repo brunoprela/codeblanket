@@ -3,12 +3,20 @@
 import { useUser } from '@stackframe/stack';
 import { useState, Suspense } from 'react';
 
+interface ApiResult {
+  status?: number;
+  data?: unknown;
+  error?: string;
+}
+
 function DebugContent() {
   const user = useUser();
-  const [authCheckResult, setAuthCheckResult] = useState<any>(null);
-  const [progressResult, setProgressResult] = useState<any>(null);
-  const [videosResult, setVideosResult] = useState<any>(null);
-  const [testSaveResult, setTestSaveResult] = useState<any>(null);
+  const [authCheckResult, setAuthCheckResult] = useState<ApiResult | null>(
+    null,
+  );
+  const [progressResult, setProgressResult] = useState<ApiResult | null>(null);
+  const [videosResult, setVideosResult] = useState<ApiResult | null>(null);
+  const [testSaveResult, setTestSaveResult] = useState<ApiResult | null>(null);
 
   const testAuthCheck = async () => {
     try {
@@ -209,7 +217,7 @@ function DebugContent() {
           </p>
           <p className="mt-4 text-xs text-gray-400">
             Note: STACK_SECRET_SERVER_KEY, DATABASE_URL, and
-            BLOB_READ_WRITE_TOKEN are server-only and won't show here
+            BLOB_READ_WRITE_TOKEN are server-only and won&apos;t show here
           </p>
         </div>
       </div>
@@ -225,20 +233,20 @@ function DebugContent() {
             account
           </li>
           <li>
-            <strong>2. Click "Test /api/auth/check"</strong> - Should return
-            authenticated: true
+            <strong>2. Click &quot;Test /api/auth/check&quot;</strong> - Should
+            return authenticated: true
           </li>
           <li>
-            <strong>3. Click "Test /api/progress"</strong> - Should return your
-            data or empty object
+            <strong>3. Click &quot;Test /api/progress&quot;</strong> - Should
+            return your data or empty object
           </li>
           <li>
-            <strong>4. Click "Test /api/videos"</strong> - Should return empty
-            videos array
+            <strong>4. Click &quot;Test /api/videos&quot;</strong> - Should
+            return empty videos array
           </li>
           <li>
-            <strong>5. Click "Test Save to PostgreSQL"</strong> - Should save
-            successfully
+            <strong>5. Click &quot;Test Save to PostgreSQL&quot;</strong> -
+            Should save successfully
           </li>
           <li>
             <strong>6. Check terminal logs</strong> - Will show detailed

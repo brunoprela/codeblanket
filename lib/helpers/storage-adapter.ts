@@ -278,13 +278,13 @@ export async function getVideo(id: string): Promise<Blob | null> {
  */
 export async function migrateToPostgreSQL(): Promise<void> {
   try {
-    console.log('Starting migration from IndexedDB to PostgreSQL...');
+    console.debug('Starting migration from IndexedDB to PostgreSQL...');
 
     // Get all data from IndexedDB
     const data = await indexedDB.getAllData();
 
     if (Object.keys(data).length === 0) {
-      console.log('No data to migrate');
+      console.debug('No data to migrate');
       return;
     }
 
@@ -301,7 +301,7 @@ export async function migrateToPostgreSQL(): Promise<void> {
       throw new Error('Failed to migrate data');
     }
 
-    console.log(
+    console.debug(
       `Successfully migrated ${Object.keys(data).length} items to PostgreSQL`,
     );
 

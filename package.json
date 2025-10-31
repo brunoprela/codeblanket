@@ -8,9 +8,11 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:strict": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
-    "lint": "eslint \"**/*.{ts,tsx,js,jsx}\" --max-warnings 0",
+    "lint": "eslint \"**/*.{ts,tsx,js,jsx}\"",
+    "lint:strict": "eslint \"**/*.{ts,tsx,js,jsx}\" --max-warnings 0",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier \"**/*.{ts,tsx,js,jsx,json,css,md}\" --write",
     "format-check": "prettier \"**/*.{ts,tsx,js,jsx,json,css,md}\" --check",

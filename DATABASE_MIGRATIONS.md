@@ -15,11 +15,13 @@
 4. Changes are applied
 
 **Pros:**
+
 - ✅ Simple, no extra tools
 - ✅ Full control over SQL
 - ✅ Works for any database
 
 **Cons:**
+
 - ❌ Easy to forget migrations
 - ❌ No rollback tracking
 - ❌ Hard to coordinate across team/environments
@@ -48,6 +50,7 @@ npm install -D @types/pg
 ### Option 1: Manual SQL Files (Current - Simple)
 
 **Directory structure:**
+
 ```
 lib/db/
 ├── schema.sql           # Initial schema
@@ -62,10 +65,11 @@ lib/db/
 
 1. Create new migration file: `lib/db/migrations/00X_description.sql`
 2. Write the SQL:
+
    ```sql
    -- Migration: Add user preferences table
    -- Date: 2024-10-31
-   
+
    CREATE TABLE IF NOT EXISTS user_preferences (
      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
      user_id TEXT NOT NULL,
@@ -73,10 +77,12 @@ lib/db/
      created_at TIMESTAMPTZ DEFAULT NOW()
    );
    ```
+
 3. Run in Neon SQL Editor
 4. Commit to Git
 
 **Track what's been run:**
+
 ```sql
 -- Optional: Track migrations
 CREATE TABLE IF NOT EXISTS migrations (
@@ -108,18 +114,21 @@ export const userProgress = pgTable('user_progress', {
 ```
 
 **2. Generate migration:**
+
 ```bash
 npx drizzle-kit generate:pg
 # Creates: drizzle/0001_migration.sql automatically
 ```
 
 **3. Run migration:**
+
 ```bash
 npx drizzle-kit push:pg
 # Applies to Neon database
 ```
 
 **Benefits:**
+
 - Migrations auto-generated from TypeScript
 - Type-safe queries
 - Version controlled
@@ -133,6 +142,7 @@ npx prisma init
 ```
 
 Define schema in `prisma/schema.prisma`, then:
+
 ```bash
 npx prisma migrate dev --name add_user_preferences
 ```
@@ -153,11 +163,11 @@ Create: `lib/db/migrations/002_add_last_login.sql`
 -- Description: Track user's last login time
 
 -- Add column to user_progress (or create new table)
-ALTER TABLE user_progress 
+ALTER TABLE user_progress
 ADD COLUMN IF NOT EXISTS last_login TIMESTAMPTZ;
 
 -- Create index for performance
-CREATE INDEX IF NOT EXISTS idx_user_progress_last_login 
+CREATE INDEX IF NOT EXISTS idx_user_progress_last_login
 ON user_progress(user_id, last_login);
 ```
 
@@ -195,12 +205,14 @@ git commit -m "Add last_login tracking to user_progress"
 ### 1. Always Use Migrations (Never Direct ALTER TABLE)
 
 **❌ Bad (Direct changes):**
+
 ```sql
 -- Running random ALTER TABLE commands
 ALTER TABLE user_progress ADD COLUMN random_field TEXT;
 ```
 
 **✅ Good (Versioned migrations):**
+
 ```
 migrations/
 ├── 001_initial.sql
@@ -214,11 +226,11 @@ Use `IF NOT EXISTS`, `IF EXISTS`, etc:
 
 ```sql
 -- Safe to run multiple times
-ALTER TABLE user_progress 
+ALTER TABLE user_progress
 ADD COLUMN IF NOT EXISTS new_field TEXT;
 
 -- Not safe (errors if run twice)
-ALTER TABLE user_progress 
+ALTER TABLE user_progress
 ADD COLUMN new_field TEXT;
 ```
 
@@ -243,18 +255,21 @@ ALTER TABLE user_progress ADD COLUMN preferences JSONB;
 ## Common Schema Changes
 
 ### Add Column
+
 ```sql
-ALTER TABLE user_progress 
+ALTER TABLE user_progress
 ADD COLUMN IF NOT EXISTS new_field TEXT DEFAULT 'value';
 ```
 
 ### Add Index
+
 ```sql
-CREATE INDEX IF NOT EXISTS idx_name 
+CREATE INDEX IF NOT EXISTS idx_name
 ON table_name(column_name);
 ```
 
 ### Add Table
+
 ```sql
 CREATE TABLE IF NOT EXISTS new_table (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -263,16 +278,18 @@ CREATE TABLE IF NOT EXISTS new_table (
 ```
 
 ### Modify Column (Careful!)
+
 ```sql
 -- Change column type (may require data conversion)
-ALTER TABLE user_progress 
+ALTER TABLE user_progress
 ALTER COLUMN some_field TYPE BIGINT USING some_field::BIGINT;
 ```
 
 ### Remove Column (Dangerous!)
+
 ```sql
 -- Make sure no code depends on this first!
-ALTER TABLE user_progress 
+ALTER TABLE user_progress
 DROP COLUMN IF EXISTS old_field;
 ```
 
@@ -281,12 +298,14 @@ DROP COLUMN IF EXISTS old_field;
 ### Development → Production
 
 **Development:**
+
 1. Create migration file
 2. Run on dev database
 3. Test thoroughly
 4. Commit to Git
 
 **Production:**
+
 1. Deploy code (Vercel auto-deploys from Git)
 2. Run same migration on production database
 3. Verify it worked
@@ -328,7 +347,7 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 );
 
 -- After running each migration
-INSERT INTO schema_migrations (migration_name) 
+INSERT INTO schema_migrations (migration_name)
 VALUES ('002_add_user_preferences')
 ON CONFLICT (migration_name) DO NOTHING;
 
@@ -366,6 +385,7 @@ Right now, you're using **manual migrations**:
 ## Quick Reference Commands
 
 ### Check Current Schema
+
 ```sql
 -- List all tables
 \dt
@@ -377,15 +397,16 @@ Right now, you're using **manual migrations**:
 \di
 
 -- Show all columns
-SELECT column_name, data_type 
-FROM information_schema.columns 
+SELECT column_name, data_type
+FROM information_schema.columns
 WHERE table_name = 'user_progress';
 ```
 
 ### Backup Before Migration
+
 ```sql
 -- Backup table
-CREATE TABLE user_progress_backup AS 
+CREATE TABLE user_progress_backup AS
 SELECT * FROM user_progress;
 
 -- Run migration
@@ -399,16 +420,17 @@ ALTER TABLE user_progress_backup RENAME TO user_progress;
 ## Summary
 
 **For now (manual approach):**
+
 1. Create `.sql` file in `lib/db/migrations/`
 2. Run in Neon SQL Editor
 3. Commit to Git
 4. Document in README
 
 **Future upgrade (Drizzle ORM):**
+
 1. Define schema in TypeScript
 2. Run `drizzle-kit generate`
 3. Run `drizzle-kit push`
 4. Automatic migration history
 
 Your current manual approach is totally fine for development! Consider upgrading to Drizzle when you have more complex migrations or a team. 🚀
-

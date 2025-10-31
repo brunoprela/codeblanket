@@ -364,15 +364,15 @@ export default function ModulePage({
       }
       setCompletedMultipleChoice(mcCompleted);
 
-      // Load discussion progress (count videos)
+      // Load discussion progress (count videos using metadata - no bandwidth)
       let discussionCompleted = 0;
       for (const [sectionIndex, section] of moduleData.sections.entries()) {
         const sectionId = section.id || `section-${sectionIndex}`;
         if (section.quiz) {
           for (const question of section.quiz) {
             const questionId = `${slug}-${sectionId}-${question.id}`;
-            const videos = await getVideosForQuestion(questionId);
-            if (videos.length > 0) {
+            const metadata = await getVideoMetadataForQuestion(questionId);
+            if (metadata.length > 0) {
               discussionCompleted++;
             }
           }
@@ -416,15 +416,15 @@ export default function ModulePage({
         }
         setCompletedMultipleChoice(mcCompleted);
 
-        // Update discussion progress
+        // Update discussion progress (using metadata - no bandwidth)
         let discussionCompleted = 0;
         for (const [sectionIndex, section] of moduleData.sections.entries()) {
           const sectionId = section.id || `section-${sectionIndex}`;
           if (section.quiz) {
             for (const question of section.quiz) {
               const questionId = `${slug}-${sectionId}-${question.id}`;
-              const videos = await getVideosForQuestion(questionId);
-              if (videos.length > 0) {
+              const metadata = await getVideoMetadataForQuestion(questionId);
+              if (metadata.length > 0) {
                 discussionCompleted++;
               }
             }

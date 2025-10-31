@@ -20,15 +20,15 @@ import {
  */
 export async function GET(request: NextRequest) {
   try {
-    console.log('[API /api/videos GET] Request received');
+    console.debug('[API /api/videos GET] Request received');
     const user = await stackServerApp.getUser();
-    console.log(
+    console.debug(
       '[API /api/videos GET] User:',
       user ? `${user.id} (${user.primaryEmail})` : 'null',
     );
 
     if (!user) {
-      console.log('[API /api/videos GET] Returning 401 - No user');
+      console.debug('[API /api/videos GET] Returning 401 - No user');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -48,12 +48,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(metadata.blobUrl);
     } else {
       // Get all videos metadata
-      console.log(
+      console.debug(
         '[API /api/videos GET] Fetching all videos for user:',
         user.id,
       );
       const videos = await getAllVideoMetadata(user.id);
-      console.log(
+      console.debug(
         '[API /api/videos GET] Success - found',
         videos.length,
         'videos',
