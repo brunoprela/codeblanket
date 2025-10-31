@@ -46,7 +46,14 @@ export async function getCompletedProblems(): Promise<Set<string>> {
 
       if (response.ok) {
         const data = await response.json();
-        return data.value ? new Set(JSON.parse(data.value)) : new Set();
+        // IMPORTANT: Neon returns JSON as already-parsed objects
+        const value = data.value;
+        if (Array.isArray(value)) {
+          return new Set(value); // Already parsed
+        } else if (typeof value === 'string') {
+          return new Set(JSON.parse(value)); // Need to parse
+        }
+        return new Set();
       }
 
       // If API fails, return empty (don't fall back to localStorage for authenticated users)
@@ -430,7 +437,14 @@ export async function getMultipleChoiceProgress(
 
       if (response.ok) {
         const data = await response.json();
-        return data.value ? (JSON.parse(data.value) as string[]) : [];
+        // IMPORTANT: Neon returns JSON as already-parsed objects
+        const value = data.value;
+        if (Array.isArray(value)) {
+          return value as string[]; // Already parsed
+        } else if (typeof value === 'string') {
+          return JSON.parse(value) as string[]; // Need to parse
+        }
+        return [];
       }
 
       // If API fails, return empty (don't fall back to localStorage for authenticated users)
@@ -498,7 +512,14 @@ export async function getCompletedSections(
 
       if (response.ok) {
         const data = await response.json();
-        return data.value ? new Set(JSON.parse(data.value)) : new Set();
+        // IMPORTANT: Neon returns JSON as already-parsed objects
+        const value = data.value;
+        if (Array.isArray(value)) {
+          return new Set(value); // Already parsed
+        } else if (typeof value === 'string') {
+          return new Set(JSON.parse(value)); // Need to parse
+        }
+        return new Set();
       }
 
       // If API fails, return empty (don't fall back to localStorage for authenticated users)

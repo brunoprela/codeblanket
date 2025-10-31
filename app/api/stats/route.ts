@@ -99,23 +99,43 @@ export async function GET() {
       const value = row.value;
 
       try {
+        // IMPORTANT: Neon returns JSON columns as already-parsed objects, not strings
+        // So we need to handle both cases: already parsed OR string
+        const parseValue = (val: unknown) => {
+          if (Array.isArray(val)) {
+            return val; // Already parsed
+          } else if (typeof val === 'string') {
+            return JSON.parse(val); // Need to parse
+          }
+          return val;
+        };
+
         if (key.startsWith('mc-quiz-')) {
           // Multiple choice: count questions in array
-          const completedQuestions = JSON.parse(value as string);
+          const completedQuestions = parseValue(value);
           if (Array.isArray(completedQuestions)) {
+            console.debug(
+              `[API Stats] MC ${key}: ${completedQuestions.length} questions`,
+            );
             totalMCQuestions += completedQuestions.length;
           }
         } else if (key.startsWith('module-') && key.endsWith('-completed')) {
           // Module completion: extract module ID and count sections
           const moduleId = key.replace('module-', '').replace('-completed', '');
-          const completedSections = JSON.parse(value as string);
+          const completedSections = parseValue(value);
           if (Array.isArray(completedSections)) {
+            console.debug(
+              `[API Stats] Module ${moduleId}: ${completedSections.length} sections`,
+            );
             moduleCompletionMap[moduleId] = completedSections.length;
           }
         } else if (key === 'codeblanket_completed_problems') {
           // Problem completion: count problems in array
-          const completedProblems = JSON.parse(value as string);
+          const completedProblems = parseValue(value);
           if (Array.isArray(completedProblems)) {
+            console.debug(
+              `[API Stats] Completed problems: ${completedProblems.length}`,
+            );
             completedProblemsCount = completedProblems.length;
           }
         }

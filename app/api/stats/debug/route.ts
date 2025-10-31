@@ -31,6 +31,16 @@ export async function GET() {
     let completedProblems = 0;
     const keys: string[] = [];
 
+    // Helper to handle Neon's JSON columns (already parsed vs string)
+    const parseValue = (val: unknown) => {
+      if (Array.isArray(val)) {
+        return val; // Already parsed by Neon
+      } else if (typeof val === 'string') {
+        return JSON.parse(val); // Need to parse
+      }
+      return val;
+    };
+
     progressData.forEach((row) => {
       const key = row.key as string;
       const value = row.value;
@@ -38,18 +48,30 @@ export async function GET() {
 
       try {
         if (key.startsWith('mc-quiz-')) {
-          const questions = JSON.parse(value as string);
+          const questions = parseValue(value);
           if (Array.isArray(questions)) {
             console.log(
               `[Debug Stats] MC key ${key}: ${questions.length} questions`,
             );
             totalMC += questions.length;
+          } else {
+            console.log(
+              `[Debug Stats] MC key ${key}: value is not an array:`,
+              typeof value,
+              value,
+            );
           }
         } else if (key === 'codeblanket_completed_problems') {
-          const problems = JSON.parse(value as string);
+          const problems = parseValue(value);
           if (Array.isArray(problems)) {
             console.log(`[Debug Stats] Completed problems: ${problems.length}`);
             completedProblems = problems.length;
+          } else {
+            console.log(
+              `[Debug Stats] Completed problems: value is not an array:`,
+              typeof value,
+              value,
+            );
           }
         }
       } catch (error) {
