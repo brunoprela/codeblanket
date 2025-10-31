@@ -87,244 +87,261 @@ export default function Home() {
 
   // Load completion data
   useEffect(() => {
-    // Load completed problems (async for authenticated users)
-    const loadProblems = async () => {
+    // OPTIMIZATION: Call getUserStats() ONCE and reuse for all progress types
+    const loadAllProgress = async () => {
+      console.log('[Homepage] Starting unified progress load...');
+      const startTime = performance.now();
+
+      // Get stats once (request deduplication ensures single API call)
+      const userStats = await getUserStats();
+
+      // Load completed problems
       const problems = await getCompletedProblems();
       setCompletedProblems(problems);
-    };
-    loadProblems();
 
-    // Load module progress (EFFICIENT: use stats API for authenticated users)
-    const loadModuleProgress = async () => {
-      const userStats = await getUserStats();
-      const progress: Record<string, { completed: number; total: number }> = {};
+      // === MODULE PROGRESS ===
+      const loadModuleProgress = () => {
+        const progress: Record<string, { completed: number; total: number }> =
+          {};
 
-      console.log('[Homepage] Loading module progress, userStats:', userStats);
-
-      if (userStats) {
-        // Authenticated user: use stats from efficient API (1 call, not 50+)
         console.log(
-          '[Homepage] Module completion map:',
-          userStats.moduleCompletionMap,
+          '[Homepage] Loading module progress, userStats:',
+          userStats,
         );
 
-        moduleCategories.forEach((moduleCategory) => {
+        if (userStats) {
+          // Authenticated user: use stats from efficient API (1 call, not 50+)
+          console.log(
+            '[Homepage] Module completion map:',
+            userStats.moduleCompletionMap,
+          );
+
+          moduleCategories.forEach((moduleCategory) => {
+            const completed =
+              userStats.moduleCompletionMap[moduleCategory.id] || 0;
+            console.log(
+              `[Homepage] Module ${moduleCategory.id}: ${completed} sections completed`,
+            );
+
+            progress[moduleCategory.id] = {
+              completed: completed,
+              total: moduleCategory.module.sections.length,
+            };
+          });
+        } else {
+          // Anonymous user: read from localStorage (fast, local)
+          console.log('[Homepage] Anonymous user, reading from localStorage');
+
+          moduleCategories.forEach((moduleCategory) => {
+            const storageKey = `module-${moduleCategory.id}-completed`;
+            const stored = localStorage.getItem(storageKey);
+            const completedSections = stored ? JSON.parse(stored) : [];
+            console.log(
+              `[Homepage] Module ${moduleCategory.id} (localStorage): ${completedSections.length} sections`,
+            );
+
+            progress[moduleCategory.id] = {
+              completed: completedSections.length,
+              total: moduleCategory.module.sections.length,
+            };
+          });
+        }
+
+        const totalCompleted = Object.values(progress).reduce(
+          (sum, p) => sum + p.completed,
+          0,
+        );
+        console.log(
+          `[Homepage] Total sections completed across all modules: ${totalCompleted}`,
+        );
+
+        setModuleProgress(progress);
+      };
+      loadModuleProgress();
+
+      // === DISCUSSION STATS ===
+      const loadDiscussionStats = async () => {
+        // Reuse userStats from above (no additional API call)
+
+        console.log(
+          '[Homepage] Loading discussion stats, userStats:',
+          userStats,
+        );
+
+        if (userStats) {
+          // Authenticated user - use efficient stats from API
+          const total = getTotalDiscussionQuestionsCount(moduleCategories);
+          console.log(
+            '[Homepage] Setting completed discussions to:',
+            userStats.completedDiscussionQuestions,
+          );
+          setCompletedDiscussions(userStats.completedDiscussionQuestions);
+          setTotalDiscussions(total);
+
+          // Use module-specific video counts from stats API
+          const discussionProgress: Record<
+            string,
+            { completed: number; total: number }
+          > = {};
+
+          moduleCategories.forEach((moduleCategory) => {
+            let totalCount = 0;
+            moduleCategory.module.sections.forEach((section) => {
+              if (section.quiz) {
+                totalCount += section.quiz.length;
+              }
+            });
+
+            const moduleCompleted =
+              userStats.moduleVideoCounts[moduleCategory.id] || 0;
+            console.log(
+              `[Homepage] Module ${moduleCategory.id}: ${moduleCompleted} discussions completed`,
+            );
+
+            discussionProgress[moduleCategory.id] = {
+              completed: moduleCompleted,
+              total: totalCount,
+            };
+          });
+
+          setModuleDiscussionProgress(discussionProgress);
+        } else {
+          // Anonymous user - use IndexedDB (local, instant)
+          const { getCompletedDiscussionQuestionsCount } = await import(
+            '@/lib/helpers/indexeddb'
+          );
+          const completed = await getCompletedDiscussionQuestionsCount();
+          const total = getTotalDiscussionQuestionsCount(moduleCategories);
+          setCompletedDiscussions(completed);
+          setTotalDiscussions(total);
+
+          // For anonymous users, load from IndexedDB (fast, local)
+          const discussionProgress: Record<
+            string,
+            { completed: number; total: number }
+          > = {};
+
+          const { getVideosForQuestion } = await import(
+            '@/lib/helpers/indexeddb'
+          );
+
+          for (const moduleCategory of moduleCategories) {
+            let completedCount = 0;
+            let totalCount = 0;
+
+            for (const section of moduleCategory.module.sections) {
+              if (section.quiz) {
+                totalCount += section.quiz.length;
+
+                for (const question of section.quiz) {
+                  const questionId = `${moduleCategory.id}-${section.id}-${question.id}`;
+                  const videos = await getVideosForQuestion(questionId);
+                  if (videos.length > 0) {
+                    completedCount++;
+                  }
+                }
+              }
+            }
+
+            discussionProgress[moduleCategory.id] = {
+              completed: completedCount,
+              total: totalCount,
+            };
+          }
+
+          setModuleDiscussionProgress(discussionProgress);
+        }
+      };
+      await loadDiscussionStats();
+
+      // === MULTIPLE CHOICE STATS ===
+      const loadMultipleChoiceStats = async () => {
+        const total = getTotalMultipleChoiceQuestionsCount(moduleCategories);
+
+        // Reuse userStats from above (no additional API call)
+        console.log('[Homepage] Loading MC stats, userStats:', userStats);
+
+        if (userStats) {
+          // Use efficient stats from API
+          console.log(
+            '[Homepage] Setting completed MC to:',
+            userStats.multipleChoiceQuizCount,
+          );
+          setCompletedMultipleChoice(userStats.multipleChoiceQuizCount);
+        } else {
+          // Anonymous: Use localStorage/IndexedDB
           const completed =
-            userStats.moduleCompletionMap[moduleCategory.id] || 0;
+            getCompletedMultipleChoiceQuestionsCount(moduleCategories);
           console.log(
-            `[Homepage] Module ${moduleCategory.id}: ${completed} sections completed`,
+            '[Homepage] Setting completed MC (anonymous) to:',
+            completed,
           );
+          setCompletedMultipleChoice(completed);
+        }
 
-          progress[moduleCategory.id] = {
-            completed: completed,
-            total: moduleCategory.module.sections.length,
-          };
-        });
-      } else {
-        // Anonymous user: read from localStorage (fast, local)
-        console.log('[Homepage] Anonymous user, reading from localStorage');
+        setTotalMultipleChoice(total);
 
-        moduleCategories.forEach((moduleCategory) => {
-          const storageKey = `module-${moduleCategory.id}-completed`;
-          const stored = localStorage.getItem(storageKey);
-          const completedSections = stored ? JSON.parse(stored) : [];
-          console.log(
-            `[Homepage] Module ${moduleCategory.id} (localStorage): ${completedSections.length} sections`,
-          );
+        // Load multiple choice progress per module (use stats API for authenticated users)
+        const mcProgress: Record<string, { completed: number; total: number }> =
+          {};
 
-          progress[moduleCategory.id] = {
-            completed: completedSections.length,
-            total: moduleCategory.module.sections.length,
-          };
-        });
-      }
+        if (userStats) {
+          // Authenticated: Use module-specific MC counts from stats API
+          moduleCategories.forEach((moduleCategory) => {
+            let totalCount = 0;
+            moduleCategory.module.sections.forEach((section) => {
+              if (section.multipleChoice) {
+                totalCount += section.multipleChoice.length;
+              }
+            });
 
-      const totalCompleted = Object.values(progress).reduce(
-        (sum, p) => sum + p.completed,
-        0,
-      );
+            mcProgress[moduleCategory.id] = {
+              completed: userStats.moduleMCCounts[moduleCategory.id] || 0,
+              total: totalCount,
+            };
+          });
+        } else {
+          // Anonymous: Load from localStorage
+          for (const moduleCategory of moduleCategories) {
+            let completedCount = 0;
+            let totalCount = 0;
+
+            for (const section of moduleCategory.module.sections) {
+              if (section.multipleChoice) {
+                totalCount += section.multipleChoice.length;
+
+                const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
+                const stored = localStorage.getItem(storageKey);
+                if (stored) {
+                  try {
+                    const completedQuestions = JSON.parse(stored);
+                    const uniqueQuestions = [...new Set(completedQuestions)];
+                    completedCount += uniqueQuestions.length;
+                  } catch (e) {
+                    console.error('Failed to parse MC quiz progress:', e);
+                  }
+                }
+              }
+            }
+
+            mcProgress[moduleCategory.id] = {
+              completed: completedCount,
+              total: totalCount,
+            };
+          }
+        }
+
+        setModuleMultipleChoiceProgress(mcProgress);
+      };
+      await loadMultipleChoiceStats();
+
+      const totalTime = performance.now() - startTime;
       console.log(
-        `[Homepage] Total sections completed across all modules: ${totalCompleted}`,
+        `[Homepage] All progress loaded in ${totalTime.toFixed(0)}ms`,
       );
-
-      setModuleProgress(progress);
     };
-    loadModuleProgress();
 
-    // Load discussion question stats (efficient - uses stats API for authenticated users)
-    const loadDiscussionStats = async () => {
-      // Try to get efficient stats from API (authenticated users)
-      const userStats = await getUserStats();
-
-      console.log('[Homepage] Loading discussion stats, userStats:', userStats);
-
-      if (userStats) {
-        // Authenticated user - use efficient stats from API
-        const total = getTotalDiscussionQuestionsCount(moduleCategories);
-        console.log(
-          '[Homepage] Setting completed discussions to:',
-          userStats.completedDiscussionQuestions,
-        );
-        setCompletedDiscussions(userStats.completedDiscussionQuestions);
-        setTotalDiscussions(total);
-
-        // Use module-specific video counts from stats API
-        const discussionProgress: Record<
-          string,
-          { completed: number; total: number }
-        > = {};
-
-        moduleCategories.forEach((moduleCategory) => {
-          let totalCount = 0;
-          moduleCategory.module.sections.forEach((section) => {
-            if (section.quiz) {
-              totalCount += section.quiz.length;
-            }
-          });
-
-          const moduleCompleted =
-            userStats.moduleVideoCounts[moduleCategory.id] || 0;
-          console.log(
-            `[Homepage] Module ${moduleCategory.id}: ${moduleCompleted} discussions completed`,
-          );
-
-          discussionProgress[moduleCategory.id] = {
-            completed: moduleCompleted,
-            total: totalCount,
-          };
-        });
-
-        setModuleDiscussionProgress(discussionProgress);
-      } else {
-        // Anonymous user - use IndexedDB (local, instant)
-        const { getCompletedDiscussionQuestionsCount } = await import(
-          '@/lib/helpers/indexeddb'
-        );
-        const completed = await getCompletedDiscussionQuestionsCount();
-        const total = getTotalDiscussionQuestionsCount(moduleCategories);
-        setCompletedDiscussions(completed);
-        setTotalDiscussions(total);
-
-        // For anonymous users, load from IndexedDB (fast, local)
-        const discussionProgress: Record<
-          string,
-          { completed: number; total: number }
-        > = {};
-
-        const { getVideosForQuestion } = await import(
-          '@/lib/helpers/indexeddb'
-        );
-
-        for (const moduleCategory of moduleCategories) {
-          let completedCount = 0;
-          let totalCount = 0;
-
-          for (const section of moduleCategory.module.sections) {
-            if (section.quiz) {
-              totalCount += section.quiz.length;
-
-              for (const question of section.quiz) {
-                const questionId = `${moduleCategory.id}-${section.id}-${question.id}`;
-                const videos = await getVideosForQuestion(questionId);
-                if (videos.length > 0) {
-                  completedCount++;
-                }
-              }
-            }
-          }
-
-          discussionProgress[moduleCategory.id] = {
-            completed: completedCount,
-            total: totalCount,
-          };
-        }
-
-        setModuleDiscussionProgress(discussionProgress);
-      }
-    };
-    loadDiscussionStats();
-
-    // Load multiple choice question stats (use stats API for authenticated users)
-    const loadMultipleChoiceStats = async () => {
-      const total = getTotalMultipleChoiceQuestionsCount(moduleCategories);
-
-      // Check if authenticated and use stats API
-      const userStats = await getUserStats();
-      console.log('[Homepage] Loading MC stats, userStats:', userStats);
-
-      if (userStats) {
-        // Use efficient stats from API
-        console.log(
-          '[Homepage] Setting completed MC to:',
-          userStats.multipleChoiceQuizCount,
-        );
-        setCompletedMultipleChoice(userStats.multipleChoiceQuizCount);
-      } else {
-        // Anonymous: Use localStorage/IndexedDB
-        const completed =
-          getCompletedMultipleChoiceQuestionsCount(moduleCategories);
-        console.log(
-          '[Homepage] Setting completed MC (anonymous) to:',
-          completed,
-        );
-        setCompletedMultipleChoice(completed);
-      }
-
-      setTotalMultipleChoice(total);
-
-      // Load multiple choice progress per module (use stats API for authenticated users)
-      const mcProgress: Record<string, { completed: number; total: number }> =
-        {};
-
-      if (userStats) {
-        // Authenticated: Use module-specific MC counts from stats API
-        moduleCategories.forEach((moduleCategory) => {
-          let totalCount = 0;
-          moduleCategory.module.sections.forEach((section) => {
-            if (section.multipleChoice) {
-              totalCount += section.multipleChoice.length;
-            }
-          });
-
-          mcProgress[moduleCategory.id] = {
-            completed: userStats.moduleMCCounts[moduleCategory.id] || 0,
-            total: totalCount,
-          };
-        });
-      } else {
-        // Anonymous: Load from localStorage
-        for (const moduleCategory of moduleCategories) {
-          let completedCount = 0;
-          let totalCount = 0;
-
-          for (const section of moduleCategory.module.sections) {
-            if (section.multipleChoice) {
-              totalCount += section.multipleChoice.length;
-
-              const storageKey = `mc-quiz-${moduleCategory.id}-${section.id}`;
-              const stored = localStorage.getItem(storageKey);
-              if (stored) {
-                try {
-                  const completedQuestions = JSON.parse(stored);
-                  const uniqueQuestions = [...new Set(completedQuestions)];
-                  completedCount += uniqueQuestions.length;
-                } catch (e) {
-                  console.error('Failed to parse MC quiz progress:', e);
-                }
-              }
-            }
-          }
-
-          mcProgress[moduleCategory.id] = {
-            completed: completedCount,
-            total: totalCount,
-          };
-        }
-      }
-
-      setModuleMultipleChoiceProgress(mcProgress);
-    };
-    loadMultipleChoiceStats();
+    loadAllProgress();
 
     // Listen for completion events with debouncing
     let updateTimeout: NodeJS.Timeout | null = null;
@@ -668,15 +685,17 @@ export default function Home() {
                       )
                     : 0;
 
-                // Get discussion progress for this module
-                // Calculate total from module data
-                let discussionTotal = 0;
-                moduleCategory.module.sections.forEach(
-                  (section: ModuleSection) => {
-                    if (section.quiz) {
-                      discussionTotal += section.quiz.length;
-                    }
-                  },
+                // OPTIMIZATION: Calculate totals from module metadata, not full sections
+                // This avoids loading all section content
+                const discussionTotal = moduleCategory.module.sections.reduce(
+                  (sum: number, section: ModuleSection) =>
+                    sum + (section.quiz?.length || 0),
+                  0,
+                );
+                const mcTotal = moduleCategory.module.sections.reduce(
+                  (sum: number, section: ModuleSection) =>
+                    sum + (section.multipleChoice?.length || 0),
+                  0,
                 );
 
                 const discussionProgress = moduleDiscussionProgress[
@@ -686,7 +705,6 @@ export default function Home() {
                   total: discussionTotal,
                 };
 
-                // Ensure we use the calculated total if state doesn't have it yet
                 const finalDiscussionProgress = {
                   completed: discussionProgress.completed,
                   total: discussionTotal,
@@ -700,17 +718,6 @@ export default function Home() {
                           100,
                       )
                     : 0;
-
-                // Get multiple choice progress for this module
-                // Calculate total from module data
-                let mcTotal = 0;
-                moduleCategory.module.sections.forEach(
-                  (section: ModuleSection) => {
-                    if (section.multipleChoice) {
-                      mcTotal += section.multipleChoice.length;
-                    }
-                  },
-                );
 
                 const mcProgress = moduleMultipleChoiceProgress[
                   moduleCategory.id
