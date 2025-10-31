@@ -17,6 +17,19 @@ function DebugContent() {
   const [progressResult, setProgressResult] = useState<ApiResult | null>(null);
   const [videosResult, setVideosResult] = useState<ApiResult | null>(null);
   const [testSaveResult, setTestSaveResult] = useState<ApiResult | null>(null);
+  const [dbTestResult, setDbTestResult] = useState<ApiResult | null>(null);
+
+  const testDatabaseConnection = async () => {
+    try {
+      const res = await fetch('/api/db-test');
+      const data = await res.json();
+      setDbTestResult({ status: res.status, data });
+    } catch (error) {
+      setDbTestResult({
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  };
 
   const testAuthCheck = async () => {
     try {
@@ -103,6 +116,41 @@ function DebugContent() {
           </div>
         ) : (
           <p className="text-red-400">❌ Not logged in</p>
+        )}
+      </div>
+
+      {/* Database Connection Test - MOST IMPORTANT */}
+      <div className="mb-8 rounded-lg border-4 border-yellow-500 bg-[#44475a] p-6">
+        <h2 className="mb-4 text-xl font-bold text-yellow-400">
+          🔥 0. Database Connection Test (Test This First!)
+        </h2>
+        <p className="mb-4 text-sm text-white">
+          This tests the raw database connection without authentication. If this
+          fails, nothing else will work.
+        </p>
+        <button
+          onClick={testDatabaseConnection}
+          className="mb-4 rounded-md bg-yellow-500 px-6 py-3 font-bold text-black hover:bg-yellow-400"
+        >
+          🔌 Test Database Connection
+        </button>
+        {dbTestResult && (
+          <div className="space-y-2">
+            <pre className="overflow-auto rounded bg-[#282a36] p-3 text-xs text-green-400">
+              {JSON.stringify(dbTestResult, null, 2)}
+            </pre>
+            {dbTestResult.status === 200 ? (
+              <p className="rounded bg-green-500/20 p-2 text-sm text-green-400">
+                ✅ Database connection works! The blocked network error is
+                somewhere else.
+              </p>
+            ) : (
+              <p className="rounded bg-red-500/20 p-2 text-sm text-red-400">
+                ❌ Database connection BLOCKED. Check Neon Console → Settings →
+                IP Allow
+              </p>
+            )}
+          </div>
         )}
       </div>
 
@@ -228,6 +276,10 @@ function DebugContent() {
           Debugging Instructions
         </h2>
         <ol className="space-y-3 text-white">
+          <li>
+            <strong>0. FIRST: Test Database Connection</strong> - Must return
+            200 or nothing will work
+          </li>
           <li>
             <strong>1. Check User Info above</strong> - Should show your Google
             account
