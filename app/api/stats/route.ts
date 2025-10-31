@@ -17,23 +17,25 @@ export async function GET() {
 
     console.debug('[API Stats] Fetching stats for user:', user.id);
 
-    // Efficient queries - get keys and small values in one go
-    const [progressCount, videoCount, progressData] = await Promise.all([
-      // Count total progress items
-      sql`SELECT COUNT(*) as count FROM user_progress WHERE user_id = ${user.id}`,
-
-      // Count total videos
-      sql`SELECT COUNT(*) as count FROM user_videos WHERE user_id = ${user.id}`,
-
-      // Get keys AND values (we need values to count questions, not just keys)
+    // OPTIMIZED: Get data and count in JavaScript (2 queries instead of 4)
+    const [progressData, videoQuestions] = await Promise.all([
+      // Get all progress data (we'll count in JavaScript)
       sql`SELECT key, value FROM user_progress WHERE user_id = ${user.id}`,
+
+      // Get all video IDs (we'll count in JavaScript)
+      sql`SELECT video_id FROM user_videos WHERE user_id = ${user.id}`,
     ]);
 
-    // Extract unique video question prefixes for discussion completion count
-    const videoQuestions = await sql`
-      SELECT video_id FROM user_videos WHERE user_id = ${user.id}
-    `;
+    // Count in JavaScript (no extra queries needed)
+    const progressCount = progressData.length;
+    const videoCount = videoQuestions.length;
 
+    console.debug(
+      `[API Stats] Fetched ${progressCount} progress items and ${videoCount} videos in 2 queries`,
+    );
+
+    // Process video question prefixes for discussion completion count
+    // (videoQuestions already fetched above)
     const uniqueQuestions = new Set<string>();
     const moduleVideoMap: Record<string, Set<string>> = {};
 
@@ -179,8 +181,8 @@ export async function GET() {
     );
 
     const stats = {
-      totalProgressItems: Number(progressCount[0].count),
-      totalVideos: Number(videoCount[0].count),
+      totalProgressItems: progressCount,
+      totalVideos: videoCount,
       completedDiscussionQuestions: uniqueQuestions.size,
       hasCompletedProblems: !!completedProblemsKey,
       completedProblemsCount: completedProblemsCount, // Actual count of completed problems

@@ -279,6 +279,9 @@ export default function ModulePage({
         `[Module ${slug}] Total: ${Object.keys(metadataMap).length} questions with videos`,
       );
       setVideoMetadata(metadataMap);
+
+      // Also update discussion count based on loaded videos
+      setCompletedDiscussions(Object.keys(metadataMap).length);
     };
     loadVideoMetadata();
   }, [slug, moduleData.sections]);
@@ -346,49 +349,69 @@ export default function ModulePage({
   }, [slug]);
 
   // Load progress data for all types
+  // OPTIMIZED: Use stats API for authenticated users (1 call instead of many)
   useEffect(() => {
     const loadProgress = async () => {
-      // Load completed problems (async for authenticated users)
+      console.log(`[Module ${slug}] Loading progress...`);
+
+      // Load completed problems
       const problems = await getCompletedProblems();
       setCompletedProblems(problems);
 
-      // Load multiple choice progress (SECURITY: use storage function to prevent anonymous data leakage)
-      let mcCompleted = 0;
-      const { getMultipleChoiceProgress } = await import(
-        '@/lib/helpers/storage'
-      );
+      // Check if authenticated - use stats API for efficiency
+      const authResponse = await fetch('/api/auth/check');
+      const authData = await authResponse.json();
+      const isAuthenticated = authData.authenticated === true;
 
-      for (const [sectionIndex, section] of moduleData.sections.entries()) {
-        const sectionId = section.id || `section-${sectionIndex}`;
-        if (section.multipleChoice && section.multipleChoice.length > 0) {
-          try {
-            const completedQuestions = await getMultipleChoiceProgress(
-              slug,
-              sectionId,
-            );
-            mcCompleted += completedQuestions.length;
-          } catch (e) {
-            console.error('Failed to load MC quiz progress:', e);
-          }
+      if (isAuthenticated) {
+        // OPTIMIZED: Use stats API (1 call) instead of N calls per section
+        const { getUserStats } = await import('@/lib/helpers/storage-stats');
+        const stats = await getUserStats();
+
+        if (stats) {
+          // Set MC progress from stats
+          const mcCount = stats.moduleMCCounts[slug] || 0;
+          console.log(`[Module ${slug}] MC progress from stats: ${mcCount}`);
+          setCompletedMultipleChoice(mcCount);
+
+          // Set discussion progress from stats
+          const discussionCount = stats.moduleVideoCounts[slug] || 0;
+          console.log(
+            `[Module ${slug}] Discussion progress from stats: ${discussionCount}`,
+          );
+          setCompletedDiscussions(discussionCount);
+        } else {
+          // Fallback if stats fails
+          setCompletedMultipleChoice(0);
+          setCompletedDiscussions(0);
         }
-      }
-      setCompletedMultipleChoice(mcCompleted);
+      } else {
+        // Anonymous: Load from localStorage (N calls is fine, it's local)
+        const { getMultipleChoiceProgress } = await import(
+          '@/lib/helpers/storage'
+        );
 
-      // Load discussion progress (count videos using metadata - no bandwidth)
-      let discussionCompleted = 0;
-      for (const [sectionIndex, section] of moduleData.sections.entries()) {
-        const sectionId = section.id || `section-${sectionIndex}`;
-        if (section.quiz) {
-          for (const question of section.quiz) {
-            const questionId = `${slug}-${sectionId}-${question.id}`;
-            const metadata = await getVideoMetadataForQuestion(questionId);
-            if (metadata.length > 0) {
-              discussionCompleted++;
+        let mcCompleted = 0;
+        for (const [sectionIndex, section] of moduleData.sections.entries()) {
+          const sectionId = section.id || `section-${sectionIndex}`;
+          if (section.multipleChoice && section.multipleChoice.length > 0) {
+            try {
+              const completedQuestions = await getMultipleChoiceProgress(
+                slug,
+                sectionId,
+              );
+              mcCompleted += completedQuestions.length;
+            } catch (e) {
+              console.error('Failed to load MC quiz progress:', e);
             }
           }
         }
+        setCompletedMultipleChoice(mcCompleted);
+
+        // Count discussions from videoMetadata (will be set by other useEffect)
+        // This will be updated when videoMetadata loads
+        setCompletedDiscussions(0); // Will be updated by videoMetadata effect
       }
-      setCompletedDiscussions(discussionCompleted);
     };
 
     loadProgress();
