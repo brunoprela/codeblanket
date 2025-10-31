@@ -122,19 +122,22 @@ export async function GET() {
             totalMCQuestions += completedQuestions.length;
 
             // Extract module ID for module-specific counts
-            // From "mc-quiz-python-fundamentals-variables-types"
-            // Extract "python-fundamentals"
+            // Key format: "mc-quiz-python-fundamentals-variables-types"
+            // Module ID: "python-fundamentals" (first 2 parts)
+            // Section ID: "variables-types" (remaining parts)
             const keyWithoutPrefix = key.replace('mc-quiz-', '');
             const parts = keyWithoutPrefix.split('-');
-            // Take all except last part (section ID)
-            const moduleId = parts.slice(0, -1).join('-');
+
+            // Standard format: module IDs are always 2 parts (e.g., "python-fundamentals")
+            // Take first 2 parts as module ID
+            const moduleId = parts.slice(0, 2).join('-');
 
             if (!moduleMCCounts[moduleId]) {
               moduleMCCounts[moduleId] = 0;
             }
             moduleMCCounts[moduleId] += completedQuestions.length;
             console.debug(
-              `[API Stats] Module ${moduleId} MC count: ${moduleMCCounts[moduleId]}`,
+              `[API Stats] Key ${key} → Module ${moduleId} MC count: ${moduleMCCounts[moduleId]}`,
             );
           }
         } else if (key.startsWith('module-') && key.endsWith('-completed')) {
