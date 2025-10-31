@@ -3,11 +3,11 @@
  */
 
 import {
-  getAllData,
   importData,
   migrateFromLocalStorage,
   saveVideo,
-} from './indexeddb';
+} from './storage-adapter';
+import * as indexedDB from './indexeddb';
 
 export interface ExportData {
   version: string;
@@ -130,58 +130,39 @@ function getLocalStorageData(): Record<string, unknown> {
 
 /**
  * Get all videos from IndexedDB video store
+ * Always uses IndexedDB for export (includes both anonymous and authenticated users' local data)
  */
 async function getAllVideos(): Promise<
   Array<{ id: string; data: string; timestamp: number }>
 > {
   try {
-    const db = await openVideoStore();
-    const transaction = db.transaction('videos', 'readonly');
-    const store = transaction.objectStore('videos');
+    // Get all videos from IndexedDB
+    const videos = await indexedDB.getVideosForQuestion(''); // Empty prefix = all videos
+    const exportVideos: Array<{
+      id: string;
+      data: string;
+      timestamp: number;
+    }> = [];
 
-    return new Promise((resolve, reject) => {
-      const request = store.getAll();
-      request.onsuccess = async () => {
-        const videos = request.result || [];
-        const exportVideos: Array<{
-          id: string;
-          data: string;
-          timestamp: number;
-        }> = [];
+    // Convert each video blob to base64
+    for (const video of videos) {
+      try {
+        const base64 = await blobToBase64(video.blob);
+        exportVideos.push({
+          id: video.id,
+          data: base64,
+          timestamp: video.timestamp,
+        });
+      } catch (error) {
+        console.error(`Failed to convert video ${video.id}:`, error);
+      }
+    }
 
-        // Convert each video blob to base64
-        for (const video of videos) {
-          try {
-            const base64 = await blobToBase64(video.video);
-            exportVideos.push({
-              id: video.id,
-              data: base64,
-              timestamp: video.timestamp,
-            });
-          } catch (error) {
-            console.error(`Failed to convert video ${video.id}:`, error);
-          }
-        }
-
-        resolve(exportVideos);
-      };
-      request.onerror = () => reject(request.error);
-    });
+    return exportVideos;
   } catch (error) {
     console.error('Failed to get videos:', error);
     return [];
   }
-}
-
-/**
- * Open IndexedDB database for video store
- */
-async function openVideoStore(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('CodeBlanketDB', 2);
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
 }
 
 /**
@@ -206,8 +187,8 @@ function blobToBase64(blob: Blob): Promise<string> {
  */
 export async function exportProgress(): Promise<void> {
   try {
-    // Get data from both IndexedDB AND localStorage to ensure nothing is missed
-    const indexedDBData = await getAllData();
+    // Get data from IndexedDB directly (works for both anonymous and authenticated)
+    const indexedDBData = await indexedDB.getAllData();
     const localStorageData = getLocalStorageData();
 
     // Merge both sources, preferring IndexedDB for duplicates
@@ -338,10 +319,14 @@ export async function importProgress(file: File): Promise<void> {
 
 /**
  * Download a backup of current progress (auto-backup)
+ * Uses IndexedDB directly to avoid API calls on page load
  */
 export async function createAutoBackup(): Promise<void> {
   try {
-    const data = await getAllData();
+    // Import directly from indexeddb to avoid API calls
+    const indexedDB = await import('./indexeddb');
+    const data = await indexedDB.getAllData();
+
     const backupKey = 'codeblanket-auto-backup';
     const backup = {
       date: new Date().toISOString(),

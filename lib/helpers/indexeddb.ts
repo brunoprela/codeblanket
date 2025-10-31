@@ -14,20 +14,59 @@ interface ProgressData {
 }
 
 let dbInstance: IDBDatabase | null = null;
+let dbPromise: Promise<IDBDatabase> | null = null;
 
 /**
- * Initialize and open the IndexedDB database
+ * Initialize and open the IndexedDB database with connection pooling
  */
 async function openDB(): Promise<IDBDatabase> {
-  if (dbInstance) return dbInstance;
+  // Check if we have a valid cached connection
+  if (dbInstance) {
+    try {
+      // Test if connection is still valid by attempting a transaction
+      dbInstance.transaction(STORE_NAME, 'readonly');
+      return dbInstance;
+    } catch {
+      // Connection is closed, clear the cache
+      console.warn('IndexedDB connection was closed, reopening...');
+      dbInstance = null;
+      dbPromise = null;
+    }
+  }
 
-  return new Promise((resolve, reject) => {
+  // If there's already a connection attempt in progress, wait for it
+  if (dbPromise) {
+    return dbPromise;
+  }
+
+  // Create new connection
+  dbPromise = new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-    request.onerror = () => reject(request.error);
+    request.onerror = () => {
+      dbPromise = null;
+      reject(request.error);
+    };
+
     request.onsuccess = () => {
       dbInstance = request.result;
-      resolve(request.result);
+
+      // Handle unexpected close
+      dbInstance.onclose = () => {
+        console.warn('IndexedDB connection closed unexpectedly');
+        dbInstance = null;
+        dbPromise = null;
+      };
+
+      // Handle version change (another tab upgraded the database)
+      dbInstance.onversionchange = () => {
+        console.warn('IndexedDB version change detected, closing connection');
+        dbInstance?.close();
+        dbInstance = null;
+        dbPromise = null;
+      };
+
+      resolve(dbInstance);
     };
 
     request.onupgradeneeded = (event) => {
@@ -39,7 +78,15 @@ async function openDB(): Promise<IDBDatabase> {
         db.createObjectStore(VIDEO_STORE_NAME, { keyPath: 'id' });
       }
     };
+
+    request.onblocked = () => {
+      console.warn(
+        'IndexedDB open request blocked, may need to close other tabs',
+      );
+    };
   });
+
+  return dbPromise;
 }
 
 /**
@@ -256,6 +303,29 @@ export async function saveVideo(
   } catch (error) {
     console.error('IndexedDB saveVideo error:', error);
     throw error;
+  }
+}
+
+/**
+ * Get a single video by ID
+ */
+export async function getVideo(videoId: string): Promise<Blob | null> {
+  try {
+    const db = await openDB();
+    const transaction = db.transaction(VIDEO_STORE_NAME, 'readonly');
+    const store = transaction.objectStore(VIDEO_STORE_NAME);
+
+    return new Promise((resolve, reject) => {
+      const request = store.get(videoId);
+      request.onsuccess = () => {
+        const result = request.result;
+        resolve(result ? result.video : null);
+      };
+      request.onerror = () => reject(request.error);
+    });
+  } catch (error) {
+    console.error('IndexedDB getVideo error:', error);
+    return null;
   }
 }
 

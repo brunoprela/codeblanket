@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { migrateFromLocalStorage } from '@/lib/helpers/indexeddb';
+import { migrateFromLocalStorage } from '@/lib/helpers/storage-adapter';
 import { createAutoBackup } from '@/lib/helpers/export-import';
 
 /**

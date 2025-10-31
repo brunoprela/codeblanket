@@ -5,6 +5,11 @@ import Link from 'next/link';
 import ExportImportMenu from '@/components/ExportImportMenu';
 import StorageInitializer from '@/components/StorageInitializer';
 import Script from 'next/script';
+import { Suspense } from 'react';
+import { StackProvider, StackTheme } from '@stackframe/stack';
+import { stackServerApp } from '@/lib/stack';
+import AuthButtons from '@/components/AuthButtons';
+import DataMigration from '@/components/DataMigration';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,31 +32,47 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <Script
-          src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"
-          strategy="lazyOnload"
-        />
+        <StackProvider app={stackServerApp}>
+          <StackTheme>
+            <Script
+              src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"
+              strategy="lazyOnload"
+            />
 
-        <StorageInitializer />
-        <nav className="border-b border-gray-700 bg-[#282a36] text-white shadow-lg">
-          <div className="container mx-auto px-4 py-3 sm:py-4">
-            <div className="flex items-center justify-between">
-              <Link
-                href="/"
-                className="flex items-center space-x-2 transition-opacity hover:opacity-90"
-              >
-                <div className="text-xl font-bold text-[#bd93f9] sm:text-2xl">
-                  🛌 CodeBlanket
+            <StorageInitializer />
+            <Suspense fallback={null}>
+              <DataMigration />
+            </Suspense>
+            <nav className="border-b border-gray-700 bg-[#282a36] text-white shadow-lg">
+              <div className="container mx-auto px-4 py-3 sm:py-4">
+                <div className="flex items-center justify-between">
+                  <Link
+                    href="/"
+                    className="flex items-center space-x-2 transition-opacity hover:opacity-90"
+                  >
+                    <div className="text-xl font-bold text-[#bd93f9] sm:text-2xl">
+                      🛌 CodeBlanket
+                    </div>
+                  </Link>
+                  <div className="flex items-center gap-4">
+                    <ExportImportMenu />
+                    <Suspense
+                      fallback={
+                        <div className="h-10 w-24 animate-pulse rounded-md bg-[#44475a]" />
+                      }
+                    >
+                      <AuthButtons />
+                    </Suspense>
+                  </div>
                 </div>
-              </Link>
-              <ExportImportMenu />
-            </div>
-          </div>
-        </nav>
+              </div>
+            </nav>
 
-        <main className="h-[calc(100vh-64px)] overflow-y-auto bg-[#282a36]">
-          {children}
-        </main>
+            <main className="h-[calc(100vh-64px)] overflow-y-auto bg-[#282a36]">
+              {children}
+            </main>
+          </StackTheme>
+        </StackProvider>
       </body>
     </html>
   );

@@ -1,21 +1,23 @@
 /**
  * Storage helper utilities for tracking problem completion and user code.
- * Uses localStorage as cache with IndexedDB for persistent backup.
+ * Uses localStorage as cache with dual-backend storage (IndexedDB or PostgreSQL).
+ * Automatically routes to the correct backend based on authentication state.
  * Provides type-safe access with error handling.
  */
 
-import { setItem } from './indexeddb';
+import { setItem } from './storage-adapter';
 
 const COMPLETED_PROBLEMS_KEY = 'codeblanket_completed_problems';
 const USER_CODE_KEY_PREFIX = 'codeblanket_code_';
 const CUSTOM_TESTS_KEY_PREFIX = 'codeblanket_tests_';
 
 /**
- * Sync to IndexedDB in the background (fire and forget)
+ * Sync to storage backend in the background (fire and forget)
+ * Automatically uses IndexedDB for anonymous users or PostgreSQL for authenticated users
  */
-function syncToIndexedDB(key: string, value: unknown): void {
+function syncToStorage(key: string, value: unknown): void {
   setItem(key, value).catch((error) => {
-    console.error('IndexedDB sync failed:', error);
+    console.error('Storage sync failed:', error);
   });
 }
 
@@ -54,8 +56,8 @@ export function markProblemCompleted(problemId: string): void {
       COMPLETED_PROBLEMS_KEY,
       JSON.stringify(completedArray),
     );
-    // Sync to IndexedDB in background
-    syncToIndexedDB(COMPLETED_PROBLEMS_KEY, completedArray);
+    // Sync to storage backend in background
+    syncToStorage(COMPLETED_PROBLEMS_KEY, completedArray);
   } catch (error) {
     console.error('Failed to save completion status:', error);
   }
@@ -76,8 +78,8 @@ export function markProblemIncomplete(problemId: string): void {
       COMPLETED_PROBLEMS_KEY,
       JSON.stringify(completedArray),
     );
-    // Sync to IndexedDB in background
-    syncToIndexedDB(COMPLETED_PROBLEMS_KEY, completedArray);
+    // Sync to storage backend in background
+    syncToStorage(COMPLETED_PROBLEMS_KEY, completedArray);
   } catch (error) {
     console.error('Failed to remove completion status:', error);
   }
@@ -120,8 +122,8 @@ export function saveUserCode(problemId: string, code: string): void {
   try {
     const key = `${USER_CODE_KEY_PREFIX}${problemId}`;
     localStorage.setItem(key, code);
-    // Sync to IndexedDB in background
-    syncToIndexedDB(key, code);
+    // Sync to storage backend in background
+    syncToStorage(key, code);
   } catch (error) {
     console.error('Failed to save user code:', error);
   }
@@ -176,8 +178,8 @@ export function saveCustomTestCases(
     const key = `${CUSTOM_TESTS_KEY_PREFIX}${problemId}`;
     const serialized = JSON.stringify(testCases);
     localStorage.setItem(key, serialized);
-    // Sync to IndexedDB in background
-    syncToIndexedDB(key, testCases);
+    // Sync to storage backend in background
+    syncToStorage(key, testCases);
   } catch (error) {
     console.error('Failed to save custom test cases:', error);
   }
@@ -236,8 +238,8 @@ export function saveMultipleChoiceProgress(
     const key = `mc-quiz-${moduleId}-${sectionId}`;
     const serialized = JSON.stringify(completedQuestionIds);
     localStorage.setItem(key, serialized);
-    // Sync to IndexedDB in background
-    syncToIndexedDB(key, completedQuestionIds);
+    // Sync to storage backend in background
+    syncToStorage(key, completedQuestionIds);
   } catch (error) {
     console.error('Failed to save multiple choice progress:', error);
   }
@@ -321,8 +323,8 @@ export function saveCompletedSections(
     const key = `module-${moduleId}-completed`;
     const serialized = JSON.stringify(completedSectionIds);
     localStorage.setItem(key, serialized);
-    // Sync to IndexedDB in background
-    syncToIndexedDB(key, completedSectionIds);
+    // Sync to storage backend in background
+    syncToStorage(key, completedSectionIds);
   } catch (error) {
     console.error('Failed to save completed sections:', error);
   }

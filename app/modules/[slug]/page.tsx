@@ -9,13 +9,13 @@ import { allProblems } from '@/lib/content/problems';
 import { getCompletedProblems } from '@/lib/helpers/storage';
 import { formatTextWithMath } from '@/lib/utils/formatTextWithMath';
 import { InteractiveCodeBlock } from '@/components/InteractiveCodeBlock';
-import { VideoRecorder } from '@/components/VideoRecorder';
+import { VideoRecorderLazy } from '@/components/VideoRecorderLazy';
 import { MultipleChoiceQuiz } from '@/components/MultipleChoiceQuiz';
 import {
   saveVideo,
-  getVideosForQuestion,
+  getVideoMetadataForQuestion,
   deleteVideo,
-} from '@/lib/helpers/indexeddb';
+} from '@/lib/helpers/storage-adapter';
 
 /**
  * Formats sample answer text with markdown support (headers, lists, code blocks, bold, etc.)
@@ -211,9 +211,12 @@ export default function ModulePage({
   // State for showing quiz solutions
   const [showSolutions, setShowSolutions] = useState<Set<string>>(new Set());
 
-  // State for video recordings - maps questionId to array of {id, url}
-  const [videoUrls, setVideoUrls] = useState<
-    Record<string, Array<{ id: string; url: string }>>
+  // State for video metadata - maps questionId to array of metadata (no video data loaded)
+  const [videoMetadata, setVideoMetadata] = useState<
+    Record<
+      string,
+      Array<{ id: string; blobUrl?: string; timestamp: number; size?: number }>
+    >
   >({});
 
   // State for tracking various progress types
@@ -230,37 +233,35 @@ export default function ModulePage({
     h3?: string;
   }>({});
 
-  // Load videos from IndexedDB
+  // Load video metadata only (bandwidth optimized - no video downloads)
   useEffect(() => {
-    const loadVideos = async () => {
-      const urlsMap: Record<string, Array<{ id: string; url: string }>> = {};
+    const loadVideoMetadata = async () => {
+      const metadataMap: Record<
+        string,
+        Array<{
+          id: string;
+          blobUrl?: string;
+          timestamp: number;
+          size?: number;
+        }>
+      > = {};
       for (const [sectionIndex, section] of moduleData.sections.entries()) {
         const sectionId = section.id || `section-${sectionIndex}`;
         if (section.quiz) {
           for (const question of section.quiz) {
             const questionId = `${slug}-${sectionId}-${question.id}`;
-            const videos = await getVideosForQuestion(questionId);
-            if (videos.length > 0) {
-              urlsMap[questionId] = videos.map((video) => ({
-                id: video.id,
-                url: URL.createObjectURL(video.blob),
-              }));
+            // Use metadata-only fetch (no bandwidth for actual videos)
+            const metadata = await getVideoMetadataForQuestion(questionId);
+            if (metadata.length > 0) {
+              metadataMap[questionId] = metadata;
             }
           }
         }
       }
-      setVideoUrls(urlsMap);
+      setVideoMetadata(metadataMap);
     };
-    loadVideos();
-
-    // Cleanup video URLs on unmount
-    return () => {
-      Object.values(videoUrls).forEach((videos) => {
-        videos.forEach((video) => URL.revokeObjectURL(video.url));
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
+    loadVideoMetadata();
+  }, [slug, moduleData.sections]);
 
   // Handle video save
   const handleVideoSave = async (
@@ -270,10 +271,17 @@ export default function ModulePage({
   ) => {
     try {
       await saveVideo(videoId, videoBlob);
-      const url = URL.createObjectURL(videoBlob);
-      setVideoUrls((prev) => ({
+      // Add metadata only (video will be loaded on-demand)
+      setVideoMetadata((prev) => ({
         ...prev,
-        [questionId]: [...(prev[questionId] || []), { id: videoId, url }],
+        [questionId]: [
+          ...(prev[questionId] || []),
+          {
+            id: videoId,
+            timestamp: Date.now(),
+            size: videoBlob.size,
+          },
+        ],
       }));
     } catch (error) {
       console.error('Failed to save video:', error);
@@ -285,23 +293,18 @@ export default function ModulePage({
     try {
       await deleteVideo(videoId);
 
-      setVideoUrls((prev) => {
+      setVideoMetadata((prev) => {
         const videos = prev[questionId] || [];
-        const videoToDelete = videos.find((v) => v.id === videoId);
-        if (videoToDelete) {
-          URL.revokeObjectURL(videoToDelete.url);
-        }
-
         const newVideos = videos.filter((v) => v.id !== videoId);
-        const newUrls = { ...prev };
+        const newMetadata = { ...prev };
 
         if (newVideos.length === 0) {
-          delete newUrls[questionId];
+          delete newMetadata[questionId];
         } else {
-          newUrls[questionId] = newVideos;
+          newMetadata[questionId] = newVideos;
         }
 
-        return newUrls;
+        return newMetadata;
       });
     } catch (error) {
       console.error('Failed to delete video:', error);
@@ -1376,10 +1379,10 @@ export default function ModulePage({
                               </div>
                             )}
 
-                            {/* Video Recorder */}
-                            <VideoRecorder
+                            {/* Video Recorder (Lazy Loading) */}
+                            <VideoRecorderLazy
                               questionId={questionId}
-                              existingVideos={videoUrls[questionId] || []}
+                              existingVideos={videoMetadata[questionId] || []}
                               onSave={(videoBlob, videoId) =>
                                 handleVideoSave(questionId, videoBlob, videoId)
                               }
