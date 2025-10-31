@@ -36,6 +36,7 @@ Videos are **large binary files** that are expensive to store in traditional dat
 ```
 
 **What gets stored where:**
+
 - **Vercel Blob**: Actual video file (.webm format)
 - **PostgreSQL**: Video metadata (blob URL, pathname, size, timestamp)
 
@@ -193,10 +194,12 @@ videos/{userId}/{videoId}.webm
 ```
 
 Examples:
+
 - `videos/user_123abc/python-fundamentals-variables-q1-1699123456.webm`
 - `videos/user_456def/system-design-caching-q2-1699123789.webm`
 
 This structure:
+
 - Groups videos by user (easy to find all of a user's videos)
 - Uses consistent naming (no random suffixes)
 - Overwrites old recordings (when user re-records)
@@ -211,6 +214,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxxx
 ```
 
 In production (Vercel dashboard):
+
 - The token is automatically set when you connect Blob storage
 - No manual configuration needed!
 
@@ -219,15 +223,18 @@ In production (Vercel dashboard):
 Vercel Blob pricing (as of 2024):
 
 **Free Tier:**
+
 - 5 GB storage
 - Unlimited bandwidth
 
 **Pro Plan** ($20/month for whole account):
+
 - 100 GB storage (included)
 - Unlimited bandwidth
 - $0.15/GB beyond 100 GB
 
 **Example calculation:**
+
 - Average video: 5 MB (5-minute explanation)
 - Free tier: ~1,000 videos
 - Pro tier: ~20,000 videos included
@@ -244,7 +251,7 @@ If you have existing videos in the old schema (binary data in PostgreSQL):
 ```sql
 -- Example migration script (customize as needed)
 INSERT INTO user_videos (user_id, video_id, blob_url, blob_pathname, mime_type, file_size)
-SELECT 
+SELECT
   user_id,
   video_id,
   'https://placeholder.com/' || video_id, -- Placeholder URL
@@ -300,6 +307,7 @@ Or simply start fresh with new recordings - old videos remain in `user_videos_ba
 If you want truly private videos:
 
 1. Change upload to private:
+
 ```typescript
 const blob = await put(pathname, videoFile, {
   access: 'private', // Change from 'public'
@@ -308,6 +316,7 @@ const blob = await put(pathname, videoFile, {
 ```
 
 2. Generate signed URLs when serving:
+
 ```typescript
 import { generateSignedUrl } from '@vercel/blob';
 
@@ -321,6 +330,7 @@ const signedUrl = await generateSignedUrl({
 3. Update GET endpoint to return signed URL instead of redirecting
 
 Trade-offs:
+
 - 👍 More secure (URLs expire)
 - 👎 More complex (need to regenerate URLs)
 - 👎 No CDN caching (signed URLs are unique)
@@ -334,6 +344,7 @@ To avoid excessive bandwidth usage, videos use **lazy loading**:
 - ✅ **On-demand**: Actual video loaded only when user clicks
 
 **Bandwidth savings:**
+
 - Before: 100+ MB per page load (all videos)
 - After: <1 KB per page load (metadata only)
 - **Reduction: 99.99%** 🎉
@@ -351,4 +362,3 @@ See `BANDWIDTH_OPTIMIZATION.md` for details.
 - ✅ On-demand loading to save bandwidth
 
 Your video storage is production-ready! 🎥
-

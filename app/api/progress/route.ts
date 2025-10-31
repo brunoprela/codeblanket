@@ -20,7 +20,10 @@ export async function GET(request: NextRequest) {
   try {
     console.log('[API /api/progress GET] Request received');
     const user = await stackServerApp.getUser();
-    console.log('[API /api/progress GET] User:', user ? `${user.id} (${user.primaryEmail})` : 'null');
+    console.log(
+      '[API /api/progress GET] User:',
+      user ? `${user.id} (${user.primaryEmail})` : 'null',
+    );
 
     if (!user) {
       console.log('[API /api/progress GET] Returning 401 - No user');
@@ -37,9 +40,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ key, value });
     } else {
       // Get all data
-      console.log('[API /api/progress GET] Fetching all data for user:', user.id);
+      console.log(
+        '[API /api/progress GET] Fetching all data for user:',
+        user.id,
+      );
       const data = await getAllProgressData(user.id);
-      console.log('[API /api/progress GET] Success - found', Object.keys(data).length, 'items');
+      console.log(
+        '[API /api/progress GET] Success - found',
+        Object.keys(data).length,
+        'items',
+      );
       return NextResponse.json({ data });
     }
   } catch (error) {

@@ -3,6 +3,7 @@
 ## Problem
 
 When users have multiple video recordings across many discussion questions, loading all videos on page load would:
+
 - ❌ Consume large amounts of Vercel Blob bandwidth
 - ❌ Slow down page load significantly
 - ❌ Cost money unnecessarily (bandwidth quotas)
@@ -13,6 +14,7 @@ When users have multiple video recordings across many discussion questions, load
 ## Solution: On-Demand Video Loading
 
 Instead of loading all video files, we now:
+
 1. ✅ Load **metadata only** (no bandwidth usage)
 2. ✅ Show **video indicators** (thumbnails/placeholders)
 3. ✅ Load actual video **only when user clicks** "Load Video"
@@ -20,6 +22,7 @@ Instead of loading all video files, we now:
 ## Architecture
 
 ### Before (Wasteful)
+
 ```
 Page Load → Fetch ALL videos → Create blob URLs → Display all videos
           ↓
@@ -27,6 +30,7 @@ Page Load → Fetch ALL videos → Create blob URLs → Display all videos
 ```
 
 ### After (Optimized)
+
 ```
 Page Load → Fetch metadata only → Show placeholders
           ↓                           ↓
@@ -41,6 +45,7 @@ Page Load → Fetch metadata only → Show placeholders
 ### 1. New Storage Adapter Functions
 
 #### `getVideoMetadataForQuestion()`
+
 ```typescript
 // Only fetches metadata (blobUrl, timestamp, size)
 // NO actual video download - saves bandwidth!
@@ -49,6 +54,7 @@ const metadata = await getVideoMetadataForQuestion(questionId);
 ```
 
 #### `loadVideoFromUrl()`
+
 ```typescript
 // Loads actual video on-demand
 const blob = await loadVideoFromUrl(blobUrl);
@@ -60,6 +66,7 @@ const blob = await loadVideoFromUrl(blobUrl);
 Located at: `components/VideoRecorderLazy.tsx`
 
 **Key Features:**
+
 - Shows video placeholders instead of actual videos
 - "Load Video" button for on-demand loading
 - Loading spinner while fetching
@@ -68,21 +75,23 @@ Located at: `components/VideoRecorderLazy.tsx`
 
 **UI States:**
 
-| State | Display |
-|-------|---------|
-| Not loaded | Placeholder + "▶ Load Video" button |
-| Loading | Spinner + "Loading..." |
-| Loaded | Actual `<video>` element with controls |
+| State      | Display                                |
+| ---------- | -------------------------------------- |
+| Not loaded | Placeholder + "▶ Load Video" button   |
+| Loading    | Spinner + "Loading..."                 |
+| Loaded     | Actual `<video>` element with controls |
 
 ### 3. Module Page Updates
 
 **Before:**
+
 ```typescript
 const videos = await getVideosForQuestion(questionId);
 // Downloads ALL video files ❌
 ```
 
 **After:**
+
 ```typescript
 const metadata = await getVideoMetadataForQuestion(questionId);
 // Only fetches metadata ✅
@@ -93,11 +102,13 @@ const metadata = await getVideoMetadataForQuestion(questionId);
 ### Example Scenario: 10 Discussion Questions
 
 **Before optimization:**
+
 - 10 questions × 3 videos each × 5MB = **150MB per page load**
 - User visits 10 modules = **1.5GB bandwidth**
 - Vercel Free tier: 100GB/month → Only 66 page visits allowed!
 
 **After optimization:**
+
 - 10 questions × 3 videos × 200 bytes metadata = **6KB per page load**
 - Videos only loaded when clicked
 - Average user clicks 2-3 videos = **10-15MB per page load**
@@ -108,20 +119,24 @@ const metadata = await getVideoMetadataForQuestion(questionId);
 ### Vercel Blob Pricing
 
 **Free Tier:**
+
 - 5GB storage
 - **100GB bandwidth/month** (the constraint)
 
 **Pro Tier ($20/month):**
+
 - 100GB storage
 - **Unlimited bandwidth** (included)
 
 ### With Our Optimization
 
 **Free Tier (100GB bandwidth):**
+
 - **Before**: ~66 page visits with 10 modules
 - **After**: ~6,600 page visits (100x improvement!)
 
 **Effective Cost:**
+
 - **Before**: Would need Pro tier immediately
 - **After**: Can stay on free tier much longer
 
@@ -130,10 +145,12 @@ const metadata = await getVideoMetadataForQuestion(questionId);
 ### Loading Time
 
 **Before:**
+
 - Page load: 5-10 seconds (loading all videos)
 - User sees: Blank page, then videos pop in
 
 **After:**
+
 - Page load: <1 second (metadata only)
 - User sees: Instant placeholders
 - Video load: 1-2 seconds (when clicked)
@@ -141,17 +158,19 @@ const metadata = await getVideoMetadataForQuestion(questionId);
 ### Mobile/Slow Connections
 
 **Before:**
+
 - Terrible experience: Downloads 100+ MB
 - Users give up waiting
 
 **After:**
+
 - Great experience: Page loads instantly
 - Users choose which videos to watch
 
 ## Implementation Checklist
 
 - ✅ Created `getVideoMetadataForQuestion()` - metadata-only fetch
-- ✅ Created `loadVideoFromUrl()` - on-demand video loading  
+- ✅ Created `loadVideoFromUrl()` - on-demand video loading
 - ✅ Created `VideoRecorderLazy` component with placeholders
 - ✅ Updated module page to use metadata instead of full videos
 - ✅ Added loading states and error handling
@@ -179,10 +198,10 @@ useEffect(() => {
 ```typescript
 const loadVideo = async (videoId: string, blobUrl: string) => {
   setLoadingVideos((prev) => new Set(prev).add(videoId));
-  
+
   const blob = await loadVideoFromUrl(blobUrl);
   // Fetches actual video (5MB) from Vercel Blob
-  
+
   const url = URL.createObjectURL(blob);
   setLoadedVideos((prev) => ({ ...prev, [videoId]: url }));
   // Caches for re-viewing without re-download
@@ -192,15 +211,17 @@ const loadVideo = async (videoId: string, blobUrl: string) => {
 ### 3. Display Logic
 
 ```tsx
-{isLoaded ? (
-  <video src={loadedVideos[videoId]} controls />
-) : (
-  <div className="placeholder">
-    <button onClick={() => loadVideo(videoId, blobUrl)}>
-      {isLoading ? 'Loading...' : '▶ Load Video'}
-    </button>
-  </div>
-)}
+{
+  isLoaded ? (
+    <video src={loadedVideos[videoId]} controls />
+  ) : (
+    <div className="placeholder">
+      <button onClick={() => loadVideo(videoId, blobUrl)}>
+        {isLoading ? 'Loading...' : '▶ Load Video'}
+      </button>
+    </div>
+  );
+}
 ```
 
 ## Testing
@@ -233,12 +254,14 @@ const loadVideo = async (videoId: string, blobUrl: string) => {
 ### When to Use Lazy Loading
 
 ✅ **Use lazy loading for:**
+
 - Multiple videos per page
 - Large video files (>1MB)
 - Public-facing pages
 - Mobile users
 
 ❌ **Don't use lazy loading for:**
+
 - Single video on page
 - Critical videos that all users watch
 - Very small videos (<100KB)
@@ -255,6 +278,7 @@ const loadVideo = async (videoId: string, blobUrl: string) => {
 ### IndexedDB Users (Anonymous)
 
 For users not signed in (using IndexedDB):
+
 - Videos load as before (local storage, instant)
 - No bandwidth concerns (local data)
 - Seamless experience
@@ -271,6 +295,7 @@ For users not signed in (using IndexedDB):
 ### Track Bandwidth Usage
 
 In Vercel dashboard:
+
 1. Go to Storage → Blob
 2. Check "Bandwidth" graph
 3. Compare before/after implementation
@@ -284,6 +309,7 @@ In Vercel dashboard:
 ## Future Enhancements
 
 Possible improvements:
+
 - [ ] Lazy load on scroll (load when visible)
 - [ ] Prefetch on hover (load before click)
 - [ ] Progressive video loading (stream instead of download)
@@ -294,18 +320,18 @@ Possible improvements:
 
 **Bandwidth Optimization Results:**
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Page load data | 150MB | 6KB | 99.99% |
-| Page load time | 5-10s | <1s | 80-90% |
-| Bandwidth/month | Needs Pro | Free tier OK | $20/mo saved |
-| User experience | Poor on slow connections | Great everywhere | Much better |
+| Metric          | Before                   | After            | Improvement  |
+| --------------- | ------------------------ | ---------------- | ------------ |
+| Page load data  | 150MB                    | 6KB              | 99.99%       |
+| Page load time  | 5-10s                    | <1s              | 80-90%       |
+| Bandwidth/month | Needs Pro                | Free tier OK     | $20/mo saved |
+| User experience | Poor on slow connections | Great everywhere | Much better  |
 
 **Implementation:**
+
 - ✅ Zero breaking changes
 - ✅ Backward compatible
 - ✅ Better UX
 - ✅ Massive savings
 
 Your video system is now optimized for scale! 🚀
-

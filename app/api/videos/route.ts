@@ -22,7 +22,10 @@ export async function GET(request: NextRequest) {
   try {
     console.log('[API /api/videos GET] Request received');
     const user = await stackServerApp.getUser();
-    console.log('[API /api/videos GET] User:', user ? `${user.id} (${user.primaryEmail})` : 'null');
+    console.log(
+      '[API /api/videos GET] User:',
+      user ? `${user.id} (${user.primaryEmail})` : 'null',
+    );
 
     if (!user) {
       console.log('[API /api/videos GET] Returning 401 - No user');
@@ -45,9 +48,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(metadata.blobUrl);
     } else {
       // Get all videos metadata
-      console.log('[API /api/videos GET] Fetching all videos for user:', user.id);
+      console.log(
+        '[API /api/videos GET] Fetching all videos for user:',
+        user.id,
+      );
       const videos = await getAllVideoMetadata(user.id);
-      console.log('[API /api/videos GET] Success - found', videos.length, 'videos');
+      console.log(
+        '[API /api/videos GET] Success - found',
+        videos.length,
+        'videos',
+      );
       const videosList = videos.map((v) => ({
         id: v.id,
         blobUrl: v.blobUrl,

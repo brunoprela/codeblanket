@@ -89,6 +89,7 @@ CREATE TRIGGER update_user_videos_updated_at
 ### Step 5: Click "Run"
 
 You should see:
+
 - ✓ CREATE EXTENSION
 - ✓ CREATE TABLE (2 times)
 - ✓ CREATE INDEX (3 times)
@@ -100,12 +101,13 @@ You should see:
 Run this query in the SQL Editor:
 
 ```sql
-SELECT table_name 
-FROM information_schema.tables 
+SELECT table_name
+FROM information_schema.tables
 WHERE table_schema = 'public';
 ```
 
 You should see:
+
 - user_progress
 - user_videos
 
@@ -118,8 +120,8 @@ The error should be gone and your progress will save to the cloud!
 ## Quick Test
 
 After refreshing:
+
 1. Complete a coding problem
 2. Go back to Neon SQL Editor
 3. Run: `SELECT * FROM user_progress;`
 4. You should see your data! 🎊
-

@@ -11,6 +11,7 @@ Get your CodeBlanket app running with authentication and cloud storage in 15 min
 ## Step 1: Install Dependencies (Already Done ✓)
 
 The required packages are already installed:
+
 - `@stackframe/stack` - Authentication
 - `@neondatabase/serverless` - Database driver
 
@@ -75,12 +76,14 @@ Visit http://localhost:3000
 ## Step 6: Test It Works (2 minutes)
 
 ### Test Anonymous Flow:
+
 1. Open http://localhost:3000 in **Incognito/Private window**
 2. Complete a coding problem
 3. Close the tab and reopen - progress should persist ✓
 4. Check DevTools > Application > IndexedDB > CodeBlanketDB ✓
 
 ### Test Authenticated Flow:
+
 1. Open http://localhost:3000 in **normal window**
 2. Click "Sign In" button in top-right
 3. Create a new account (use any email/password)
@@ -93,6 +96,7 @@ Visit http://localhost:3000
    - You should see your data ✓
 
 ### Test Cross-Device Sync:
+
 1. Sign out
 2. Sign in from a different browser (or incognito)
 3. Your progress should be there ✓
@@ -100,20 +104,24 @@ Visit http://localhost:3000
 ## Troubleshooting
 
 ### "Unauthorized" errors in console
+
 - Check that all env variables are set correctly
 - Restart dev server (`npm run dev`)
 
 ### Migration dialog doesn't appear
+
 - Make sure you have local data (complete a problem first as anonymous)
 - Check browser console for errors
 - Clear `migration-completed-*` from localStorage to retry
 
 ### Database connection errors
+
 - Verify DATABASE_URL is correct (copy-paste from Neon)
 - Check that schema was created successfully
 - Ensure `?sslmode=require` is in the connection string
 
 ### Stack Auth not loading
+
 - Check that all Stack Auth env vars start with correct prefixes
 - Verify Project ID in Stack Auth dashboard matches your `.env.local`
 - Clear browser cache and cookies
@@ -121,6 +129,7 @@ Visit http://localhost:3000
 ## What Just Happened?
 
 You now have:
+
 - ✅ Working authentication with Stack Auth
 - ✅ Cloud database with Neon PostgreSQL
 - ✅ Video storage with Vercel Blob Storage
@@ -155,14 +164,15 @@ When deploying:
 ## Cost Estimate
 
 ### Free Tier (Perfect for getting started):
+
 - **Stack Auth**: 1,000 monthly active users
 - **Neon**: 0.5 GB storage, ~200 hours compute/month
 - **Cost**: $0/month
 
 ### When You Outgrow Free Tier:
+
 - **Stack Auth Pro**: $50/month (10,000 MAU)
 - **Neon Launch**: $19/month (3 GB storage)
 - **Total**: ~$70/month for a growing app
 
 You're all set! Happy coding! 🚀
-

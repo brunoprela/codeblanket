@@ -5,6 +5,7 @@ This guide explains how to set up authentication with Stack Auth and database st
 ## Overview
 
 CodeBlanket now uses a **dual-storage strategy**:
+
 - **Anonymous users**: Data stored in browser IndexedDB (client-side)
 - **Authenticated users**: Data stored in Neon PostgreSQL (server-side)
 
@@ -78,6 +79,7 @@ DATABASE_URL=postgresql://user:password@xxx.neon.tech/dbname?sslmode=require
 ## Step 4: Test the Setup
 
 1. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -125,6 +127,7 @@ All storage operations go through `lib/helpers/storage-adapter.ts`, which:
 Two main tables in PostgreSQL:
 
 1. **user_progress**: Stores all progress data (completed problems, code, quiz answers)
+
    ```sql
    CREATE TABLE user_progress (
      id UUID PRIMARY KEY,
@@ -161,6 +164,7 @@ When a user signs in for the first time, the `DataMigration` component:
 4. Marks migration as complete (stored in localStorage to prevent re-prompting)
 
 Users can:
+
 - **Sync My Data**: Upload all local data to cloud
 - **Skip**: Continue with empty cloud storage (local data remains in IndexedDB)
 
@@ -237,10 +241,12 @@ When deploying to production:
 ## Cost Considerations
 
 ### Stack Auth
+
 - Free tier: 1,000 MAUs (Monthly Active Users)
 - Paid plans start at $50/month for more users
 
 ### Neon
+
 - Free tier: 0.5 GB storage, 191.9 hours compute per month
 - Paid plans start at $19/month for more storage/compute
 
@@ -249,9 +255,9 @@ Both services are generous for small to medium applications.
 ## Future Enhancements
 
 Possible improvements:
+
 - Real-time sync across devices using WebSockets
 - Offline-first with background sync queue
 - Data export to other formats (PDF, JSON)
 - Social features (leaderboards, sharing progress)
 - Team/classroom accounts with admin dashboards
-

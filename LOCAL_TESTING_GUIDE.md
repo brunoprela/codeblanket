@@ -26,6 +26,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxxx
 ### Option B: Test Without Videos First
 
 If you want to test authentication and progress storage first without videos:
+
 - Skip Vercel Blob for now
 - Videos will fallback to IndexedDB (still works!)
 - Add Vercel Blob later when ready
@@ -52,6 +53,7 @@ psql "postgresql://neondb_owner:npg_ztd3cDkr4bSw@ep-muddy-dream-a4w0jsgc-pooler.
 7. Click **Run**
 
 You should see:
+
 ```
 CREATE TABLE
 CREATE INDEX
@@ -67,6 +69,7 @@ npm run dev
 ```
 
 You should see:
+
 ```
 ▲ Next.js 15.x.x
 - Local:        http://localhost:3000
@@ -128,8 +131,8 @@ You should see:
 
 ```sql
 -- See all your synced data
-SELECT key, value, created_at 
-FROM user_progress 
+SELECT key, value, created_at
+FROM user_progress
 ORDER BY created_at DESC;
 ```
 
@@ -147,14 +150,16 @@ ORDER BY created_at DESC;
 ### Verify Video Storage:
 
 **Vercel Blob Dashboard:**
+
 - Go to Vercel → Storage → Blob
 - You should see your video file
 - Path: `videos/{userId}/{videoId}.webm`
 
 **Neon Database:**
+
 ```sql
-SELECT video_id, blob_url, file_size, created_at 
-FROM user_videos 
+SELECT video_id, blob_url, file_size, created_at
+FROM user_videos
 ORDER BY created_at DESC;
 ```
 
@@ -163,7 +168,7 @@ ORDER BY created_at DESC;
 1. Refresh the module page
 2. **Without clicking**: Videos show as placeholders ✓
 3. **Network tab**: No large video downloads ✓
-4. **Click "Load Video"**: 
+4. **Click "Load Video"**:
    - Loading spinner appears
    - Video downloads and plays
 5. **Bandwidth saved**: 99.99% reduction! ✓
@@ -174,6 +179,7 @@ ORDER BY created_at DESC;
 
 **Symptom**: API calls return 401
 **Fix**:
+
 ```bash
 # Restart dev server after adding env vars
 # Ctrl+C to stop, then:
@@ -184,6 +190,7 @@ npm run dev
 
 **Symptom**: Can't connect to Neon
 **Check**:
+
 - Is DATABASE_URL correct in `.env`?
 - Does it include `?sslmode=require`?
 - Try connecting with psql to verify
@@ -192,6 +199,7 @@ npm run dev
 
 **Symptom**: Sign in button doesn't work
 **Check**:
+
 - All 3 Stack Auth env vars are set
 - Restart dev server
 - Clear browser cache/cookies
@@ -201,6 +209,7 @@ npm run dev
 
 **Symptom**: No migration prompt when signing in
 **Steps**:
+
 1. Make sure you have IndexedDB data first
 2. Clear `migration-completed-*` from localStorage
 3. Sign in again
@@ -208,10 +217,12 @@ npm run dev
 ### Videos Not Uploading
 
 **Without Vercel Blob Token**:
+
 - Videos save to IndexedDB (still works!)
 - Add token later for Vercel Blob
 
 **With Vercel Blob Token**:
+
 - Check token is correct in `.env`
 - Verify Vercel Blob store is created
 - Check Network tab for error details
@@ -221,27 +232,32 @@ npm run dev
 Run these checks to verify everything works:
 
 ### Authentication
+
 - [ ] Sign up creates new account
 - [ ] Sign in works with existing account
 - [ ] User button shows in nav bar
 - [ ] Sign out works
 
 ### Data Storage (Anonymous)
+
 - [ ] Problems saved to IndexedDB
 - [ ] Code persists across page reloads
 - [ ] Quiz progress tracked
 
 ### Data Storage (Authenticated)
+
 - [ ] Problems saved to PostgreSQL
 - [ ] Data visible in Neon Console
 - [ ] Cross-browser sync works
 
 ### Migration
+
 - [ ] Migration dialog appears
 - [ ] Data migrates successfully
 - [ ] No duplicates in database
 
 ### Videos (if Blob set up)
+
 - [ ] Can record videos
 - [ ] Videos save to Vercel Blob
 - [ ] Metadata in PostgreSQL
@@ -250,16 +266,19 @@ Run these checks to verify everything works:
 ## Common Commands
 
 ### Check Database Connection
+
 ```bash
 psql "$DATABASE_URL" -c "SELECT version();"
 ```
 
 ### View All Tables
+
 ```bash
 psql "$DATABASE_URL" -c "\dt"
 ```
 
 ### Clear Local Data (Start Fresh)
+
 ```javascript
 // Run in browser console
 localStorage.clear();
@@ -268,6 +287,7 @@ location.reload();
 ```
 
 ### Check Environment Variables
+
 ```bash
 # In frontend directory
 cat .env
@@ -295,16 +315,19 @@ Once everything works locally:
 ## Performance Tips
 
 ### Development Mode
+
 - Page loads slower than production
 - Hot reload can cause state issues
 - Clear cache if weird behavior
 
 ### Testing Multiple Users
+
 - Use different browsers
 - Or multiple incognito windows
 - Or different browser profiles
 
 ### Database Queries
+
 - Use Neon Console SQL Editor
 - Add indexes if queries slow
 - Monitor query performance
@@ -312,17 +335,20 @@ Once everything works locally:
 ## Debugging Tools
 
 ### Browser DevTools
+
 - **Console**: See errors and logs
 - **Network**: Check API calls
 - **Application**: View localStorage/IndexedDB
 - **Sources**: Debug breakpoints
 
 ### Neon Console
+
 - **SQL Editor**: Run queries
 - **Monitoring**: Check connections
 - **Logs**: See query logs
 
 ### Vercel Dashboard
+
 - **Blob Storage**: See uploaded files
 - **Bandwidth**: Monitor usage
 - **Logs**: Check errors
@@ -339,4 +365,3 @@ You should be able to:
 ✓ See bandwidth optimization working
 
 If all of these work, you're ready for production! 🚀
-

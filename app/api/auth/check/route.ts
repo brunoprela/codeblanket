@@ -9,9 +9,12 @@ import { stackServerApp } from '@/lib/stack';
 export async function GET() {
   try {
     const user = await stackServerApp.getUser();
-    
-    console.log('[Auth Check] User:', user ? `Authenticated as ${user.id}` : 'Not authenticated');
-    
+
+    console.log(
+      '[Auth Check] User:',
+      user ? `Authenticated as ${user.id}` : 'Not authenticated',
+    );
+
     return NextResponse.json({
       authenticated: !!user,
       userId: user?.id || null,
