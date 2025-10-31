@@ -62,8 +62,12 @@ export async function GET() {
 
         uniqueQuestions.add(questionPrefix);
 
-        // Extract module ID (first part)
-        const moduleId = parts[0];
+        // Extract module ID: Standard format is 2 parts (e.g., "python-fundamentals")
+        // From ["python", "fundamentals", "variables", "types", "pf", "variables", "q", "2"]
+        // Take first 2 parts
+        const moduleId = parts.slice(0, 2).join('-');
+        console.debug(`[API Stats]   Module ID: ${moduleId}`);
+
         if (!moduleVideoMap[moduleId]) {
           moduleVideoMap[moduleId] = new Set();
         }

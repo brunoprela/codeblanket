@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
-import ExportImportMenu from '@/components/ExportImportMenu';
 import StorageInitializer from '@/components/StorageInitializer';
 import Script from 'next/script';
 import { Suspense } from 'react';
@@ -55,7 +54,6 @@ export default function RootLayout({
                     </div>
                   </Link>
                   <div className="flex items-center gap-4">
-                    <ExportImportMenu />
                     <Suspense
                       fallback={
                         <div className="h-10 w-24 animate-pulse rounded-md bg-[#44475a]" />
