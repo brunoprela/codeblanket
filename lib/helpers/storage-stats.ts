@@ -19,6 +19,9 @@ async function isUserAuthenticated(): Promise<boolean> {
   }
 }
 
+// Request deduplication: Prevent multiple simultaneous calls
+let inflightRequest: Promise<UserStats | null> | null = null;
+
 export interface UserStats {
   totalProgressItems: number;
   totalVideos: number;
@@ -45,36 +48,56 @@ export async function getUserStats(): Promise<UserStats | null> {
 
   if (!isAuthenticated) {
     console.log('[getUserStats] User not authenticated, returning null');
+    inflightRequest = null; // Clear any pending request
     return null; // Anonymous users use IndexedDB directly
   }
 
-  try {
-    console.log('[getUserStats] Fetching from /api/stats...');
-    const response = await fetch('/api/stats');
-
-    console.log(
-      '[getUserStats] Response status:',
-      response.status,
-      response.statusText,
-    );
-
-    if (!response.ok) {
-      console.error(
-        '[getUserStats] API returned error status:',
-        response.status,
-      );
-      const errorText = await response.text();
-      console.error('[getUserStats] Error response:', errorText);
-      return null;
-    }
-
-    const stats = await response.json();
-    console.log('[getUserStats] Stats received:', stats);
-    return stats as UserStats;
-  } catch (error) {
-    console.error('[getUserStats] Exception fetching user stats:', error);
-    return null;
+  // OPTIMIZATION: If there's already a request in flight, return that promise
+  // This prevents duplicate API calls when multiple components mount simultaneously
+  if (inflightRequest) {
+    console.log('[getUserStats] Reusing inflight request');
+    return inflightRequest;
   }
+
+  // Start new request and store promise
+  inflightRequest = (async () => {
+    try {
+      console.log('[getUserStats] Fetching fresh stats from /api/stats...');
+      const startTime = performance.now();
+      const response = await fetch('/api/stats');
+      const fetchTime = performance.now() - startTime;
+
+      console.log(
+        `[getUserStats] Response status: ${response.status} (${fetchTime.toFixed(0)}ms)`,
+      );
+
+      if (!response.ok) {
+        console.error(
+          '[getUserStats] API returned error status:',
+          response.status,
+        );
+        const errorText = await response.text();
+        console.error('[getUserStats] Error response:', errorText);
+        return null;
+      }
+
+      const stats = await response.json();
+      const totalTime = performance.now() - startTime;
+      console.log(`[getUserStats] Stats received in ${totalTime.toFixed(0)}ms`);
+
+      return stats as UserStats;
+    } catch (error) {
+      console.error('[getUserStats] Exception fetching user stats:', error);
+      return null;
+    } finally {
+      // Clear inflight request after 100ms to allow fresh requests
+      setTimeout(() => {
+        inflightRequest = null;
+      }, 100);
+    }
+  })();
+
+  return inflightRequest;
 }
 
 /**
