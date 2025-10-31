@@ -35,6 +35,8 @@ export async function GET() {
     `;
 
     const uniqueQuestions = new Set<string>();
+    const moduleVideoMap: Record<string, Set<string>> = {};
+
     videoQuestions.forEach((row) => {
       const videoId = row.video_id as string;
       // Extract question prefix (remove timestamp)
@@ -42,7 +44,20 @@ export async function GET() {
       if (parts.length >= 4) {
         const questionPrefix = parts.slice(0, -1).join('-');
         uniqueQuestions.add(questionPrefix);
+
+        // Extract module ID (first part before first dash)
+        const moduleId = parts[0];
+        if (!moduleVideoMap[moduleId]) {
+          moduleVideoMap[moduleId] = new Set();
+        }
+        moduleVideoMap[moduleId].add(questionPrefix);
       }
+    });
+
+    // Convert module video map to counts
+    const moduleVideoCounts: Record<string, number> = {};
+    Object.keys(moduleVideoMap).forEach((moduleId) => {
+      moduleVideoCounts[moduleId] = moduleVideoMap[moduleId].size;
     });
 
     // Extract completion stats from keys
@@ -62,6 +77,7 @@ export async function GET() {
       hasCompletedProblems: !!completedProblemsKey,
       multipleChoiceQuizCount: mcQuizKeys.length,
       moduleProgressCount: moduleKeys.length,
+      moduleVideoCounts: moduleVideoCounts, // Module-specific video counts
       keys: keys, // Return keys for checking specific completion
     };
 

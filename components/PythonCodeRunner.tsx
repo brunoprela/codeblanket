@@ -126,9 +126,9 @@ json.dumps(result)
 
       // Check if all tests passed
       if (testResults.every((r) => r.passed)) {
-        // Mark problem as completed in localStorage
+        // Mark problem as completed (saves to PostgreSQL for authenticated users)
         if (problemId) {
-          markProblemCompleted(problemId);
+          await markProblemCompleted(problemId);
         }
         // Call success callback if provided
         if (onSuccess) {
@@ -151,12 +151,12 @@ json.dumps(result)
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     resetCodeStorage();
     setResults([]);
 
     if (problemId) {
-      markProblemIncomplete(problemId);
+      await markProblemIncomplete(problemId);
       // Dispatch event to notify parent component
       window.dispatchEvent(
         new CustomEvent('problemReset', { detail: { problemId } }),

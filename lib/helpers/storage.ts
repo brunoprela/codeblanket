@@ -29,12 +29,36 @@ function syncToStorage(key: string, value: unknown): void {
  * Retrieves all completed problem IDs from localStorage
  * @returns Set of completed problem IDs
  */
-export function getCompletedProblems(): Set<string> {
+export async function getCompletedProblems(): Promise<Set<string>> {
   if (typeof window === 'undefined') return new Set();
 
   try {
-    const stored = localStorage.getItem(COMPLETED_PROBLEMS_KEY);
-    return stored ? new Set(JSON.parse(stored)) : new Set();
+    // Check authentication
+    const authResponse = await fetch('/api/auth/check');
+    const authData = await authResponse.json();
+    const isAuthenticated = authData.authenticated === true;
+
+    if (isAuthenticated) {
+      // Fetch from PostgreSQL via API (ignore localStorage entirely)
+      const response = await fetch(
+        '/api/progress?key=codeblanket_completed_problems',
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.value ? new Set(JSON.parse(data.value)) : new Set();
+      }
+
+      // If API fails, return empty (don't fall back to localStorage for authenticated users)
+      console.warn(
+        'Failed to fetch completed problems from API, returning empty',
+      );
+      return new Set();
+    } else {
+      // Anonymous user: Use localStorage
+      const stored = localStorage.getItem(COMPLETED_PROBLEMS_KEY);
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    }
   } catch (error) {
     console.error('Failed to load completed problems:', error);
     return new Set();
@@ -42,21 +66,22 @@ export function getCompletedProblems(): Set<string> {
 }
 
 /**
- * Marks a problem as completed in localStorage and syncs to IndexedDB
+ * Marks a problem as completed in localStorage and syncs to storage backend
+ * For authenticated users, saves to PostgreSQL
  * @param problemId - The unique identifier of the problem
  */
-export function markProblemCompleted(problemId: string): void {
+export async function markProblemCompleted(problemId: string): Promise<void> {
   if (typeof window === 'undefined') return;
 
   try {
-    const completed = getCompletedProblems();
+    const completed = await getCompletedProblems();
     completed.add(problemId);
     const completedArray = [...completed];
     localStorage.setItem(
       COMPLETED_PROBLEMS_KEY,
       JSON.stringify(completedArray),
     );
-    // Sync to storage backend in background
+    // Sync to storage backend in background (PostgreSQL for authenticated users)
     syncToStorage(COMPLETED_PROBLEMS_KEY, completedArray);
   } catch (error) {
     console.error('Failed to save completion status:', error);
@@ -64,21 +89,22 @@ export function markProblemCompleted(problemId: string): void {
 }
 
 /**
- * Marks a problem as incomplete in localStorage and syncs to IndexedDB
+ * Marks a problem as incomplete in localStorage and syncs to storage backend
+ * For authenticated users, saves to PostgreSQL
  * @param problemId - The unique identifier of the problem
  */
-export function markProblemIncomplete(problemId: string): void {
+export async function markProblemIncomplete(problemId: string): Promise<void> {
   if (typeof window === 'undefined') return;
 
   try {
-    const completed = getCompletedProblems();
+    const completed = await getCompletedProblems();
     completed.delete(problemId);
     const completedArray = [...completed];
     localStorage.setItem(
       COMPLETED_PROBLEMS_KEY,
       JSON.stringify(completedArray),
     );
-    // Sync to storage backend in background
+    // Sync to storage backend in background (PostgreSQL for authenticated users)
     syncToStorage(COMPLETED_PROBLEMS_KEY, completedArray);
   } catch (error) {
     console.error('Failed to remove completion status:', error);
@@ -87,11 +113,13 @@ export function markProblemIncomplete(problemId: string): void {
 
 /**
  * Checks if a problem is marked as completed
+ * For authenticated users, checks PostgreSQL
  * @param problemId - The unique identifier of the problem
  * @returns true if problem is completed, false otherwise
  */
-export function isProblemCompleted(problemId: string): boolean {
-  return getCompletedProblems().has(problemId);
+export async function isProblemCompleted(problemId: string): Promise<boolean> {
+  const completed = await getCompletedProblems();
+  return completed.has(problemId);
 }
 
 /**
@@ -247,20 +275,45 @@ export function saveMultipleChoiceProgress(
 
 /**
  * Retrieves multiple choice quiz progress for a specific module/section
+ * For authenticated users, fetches from PostgreSQL
+ * For anonymous users, uses localStorage
  * @param moduleId - The module identifier
  * @param sectionId - The section identifier
  * @returns Array of completed question IDs
  */
-export function getMultipleChoiceProgress(
+export async function getMultipleChoiceProgress(
   moduleId: string,
   sectionId: string,
-): string[] {
+): Promise<string[]> {
   if (typeof window === 'undefined') return [];
 
   try {
-    const key = `mc-quiz-${moduleId}-${sectionId}`;
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : [];
+    // Check authentication
+    const authResponse = await fetch('/api/auth/check');
+    const authData = await authResponse.json();
+    const isAuthenticated = authData.authenticated === true;
+
+    if (isAuthenticated) {
+      // Fetch from PostgreSQL via API
+      const key = `mc-quiz-${moduleId}-${sectionId}`;
+      const response = await fetch(
+        `/api/progress?key=${encodeURIComponent(key)}`,
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.value ? (JSON.parse(data.value) as string[]) : [];
+      }
+
+      // If API fails, return empty (don't fall back to localStorage for authenticated users)
+      console.warn('Failed to fetch MC progress from API, returning empty');
+      return [];
+    } else {
+      // Anonymous user: Use localStorage
+      const key = `mc-quiz-${moduleId}-${sectionId}`;
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : [];
+    }
   } catch (error) {
     console.error('Failed to load multiple choice progress:', error);
     return [];

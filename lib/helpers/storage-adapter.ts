@@ -305,8 +305,9 @@ export async function migrateToPostgreSQL(): Promise<void> {
       `Successfully migrated ${Object.keys(data).length} items to PostgreSQL`,
     );
 
-    // Optionally: Clear IndexedDB after successful migration
-    // await indexedDB.clearAllData();
+    // Clear IndexedDB after successful migration so only PostgreSQL data is shown
+    console.debug('Clearing IndexedDB after successful migration...');
+    await clearIndexedDB();
   } catch (error) {
     console.error('Migration failed:', error);
     throw error;
@@ -540,6 +541,28 @@ export async function getCompletedDiscussionQuestionsCount(): Promise<number> {
     // Ultimate fallback
     console.error('Error in getCompletedDiscussionQuestionsCount:', error);
     return 0;
+  }
+}
+
+/**
+ * Clear all IndexedDB data (used after successful migration)
+ */
+async function clearIndexedDB(): Promise<void> {
+  try {
+    // Clear progress data
+    await indexedDB.importData({}); // Clears progress store
+
+    // Clear video data - get all video IDs and delete them
+    const { getVideosForQuestion, deleteVideo } = indexedDB;
+    const allVideos = await getVideosForQuestion(''); // Empty string gets all videos
+
+    for (const video of allVideos) {
+      await deleteVideo(video.id);
+    }
+
+    console.debug('IndexedDB cleared successfully');
+  } catch (error) {
+    console.error('Failed to clear IndexedDB:', error);
   }
 }
 

@@ -248,9 +248,9 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
 
       // Check if all tests passed
       if (testResults.every((r) => r.passed)) {
-        // Mark problem as completed in localStorage
+        // Mark problem as completed (saves to PostgreSQL for authenticated users)
         if (problemId) {
-          markProblemCompleted(problemId);
+          await markProblemCompleted(problemId);
         }
         // Call success callback if provided
         if (onSuccess) {
@@ -273,7 +273,7 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     resetCodeStorage();
     setResults([]);
     setConsoleOutput([]);
@@ -281,7 +281,7 @@ sys.stdout.getvalue() + sys.stderr.getvalue()
     setExecutionMode(null);
 
     if (problemId) {
-      markProblemIncomplete(problemId);
+      await markProblemIncomplete(problemId);
       // Dispatch event to notify parent component
       window.dispatchEvent(
         new CustomEvent('problemReset', { detail: { problemId } }),

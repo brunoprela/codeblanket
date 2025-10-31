@@ -87,8 +87,12 @@ export default function Home() {
 
   // Load completion data
   useEffect(() => {
-    // Load completed problems
-    setCompletedProblems(getCompletedProblems());
+    // Load completed problems (async for authenticated users)
+    const loadProblems = async () => {
+      const problems = await getCompletedProblems();
+      setCompletedProblems(problems);
+    };
+    loadProblems();
 
     // Load module progress
     const progress: Record<string, { completed: number; total: number }> = {};
@@ -114,8 +118,7 @@ export default function Home() {
         setCompletedDiscussions(userStats.completedDiscussionQuestions);
         setTotalDiscussions(total);
 
-        // For module-specific discussion progress, we'll load lazily
-        // Set to 0 for now, update when module is viewed
+        // Use module-specific video counts from stats API
         const discussionProgress: Record<
           string,
           { completed: number; total: number }
@@ -130,7 +133,7 @@ export default function Home() {
           });
 
           discussionProgress[moduleCategory.id] = {
-            completed: 0, // Will be loaded when module is expanded/viewed
+            completed: userStats.moduleVideoCounts[moduleCategory.id] || 0,
             total: totalCount,
           };
         });
@@ -252,7 +255,8 @@ export default function Home() {
       }
 
       updateTimeout = setTimeout(async () => {
-        setCompletedProblems(getCompletedProblems());
+        const problems = await getCompletedProblems();
+        setCompletedProblems(problems);
 
         const newProgress: Record<
           string,

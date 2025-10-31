@@ -32,26 +32,33 @@ export default function TopicProblemsPage({
     }
   }, []);
 
-  // Load completed problems from localStorage
+  // Load completed problems (async for authenticated users)
   useEffect(() => {
     // Initial load
-    setCompletedProblems(getCompletedProblems());
+    const loadProblems = async () => {
+      const problems = await getCompletedProblems();
+      setCompletedProblems(problems);
+    };
+    loadProblems();
 
     // Reload when tab/window regains focus (after completing problems on other pages)
-    const handleFocus = () => {
-      setCompletedProblems(getCompletedProblems());
+    const handleFocus = async () => {
+      const problems = await getCompletedProblems();
+      setCompletedProblems(problems);
     };
 
     // Reload when storage changes (e.g., completing problems in another tab)
-    const handleStorageChange = (e: StorageEvent) => {
+    const handleStorageChange = async (e: StorageEvent) => {
       if (e.key === 'codeblanket_completed_problems') {
-        setCompletedProblems(getCompletedProblems());
+        const problems = await getCompletedProblems();
+        setCompletedProblems(problems);
       }
     };
 
     // Listen for custom event when problems are completed
-    const handleProblemCompleted = () => {
-      setCompletedProblems(getCompletedProblems());
+    const handleProblemCompleted = async () => {
+      const problems = await getCompletedProblems();
+      setCompletedProblems(problems);
     };
 
     window.addEventListener('focus', handleFocus);

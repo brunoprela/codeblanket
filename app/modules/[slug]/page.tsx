@@ -328,8 +328,9 @@ export default function ModulePage({
   // Load progress data for all types
   useEffect(() => {
     const loadProgress = async () => {
-      // Load completed problems
-      setCompletedProblems(getCompletedProblems());
+      // Load completed problems (async for authenticated users)
+      const problems = await getCompletedProblems();
+      setCompletedProblems(problems);
 
       // Load multiple choice progress
       let mcCompleted = 0;
@@ -393,7 +394,8 @@ export default function ModulePage({
       }
 
       updateTimeout = setTimeout(async () => {
-        setCompletedProblems(getCompletedProblems());
+        const problems = await getCompletedProblems();
+        setCompletedProblems(problems);
 
         // Update multiple choice
         let mcCompleted = 0;

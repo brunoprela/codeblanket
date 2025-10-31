@@ -141,9 +141,13 @@ function ProblemPageContent({ id }: { id: string }) {
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
-    if (problem) {
-      setIsCompleted(isProblemCompleted(problem.id));
-    }
+    const loadCompletionStatus = async () => {
+      if (problem) {
+        const completed = await isProblemCompleted(problem.id);
+        setIsCompleted(completed);
+      }
+    };
+    loadCompletionStatus();
 
     // Listen for problem reset events
     const handleReset = (event: CustomEvent) => {

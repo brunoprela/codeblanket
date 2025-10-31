@@ -26,6 +26,7 @@ export interface UserStats {
   hasCompletedProblems: boolean;
   multipleChoiceQuizCount: number;
   moduleProgressCount: number;
+  moduleVideoCounts: Record<string, number>; // Module-specific video counts
   keys: string[];
 }
 

@@ -3,6 +3,10 @@
 import { useState, useEffect } from 'react';
 import { MultipleChoiceQuestion } from '@/lib/types';
 import { formatTextWithMath } from '@/lib/utils/formatTextWithMath';
+import {
+  saveMultipleChoiceProgress,
+  getMultipleChoiceProgress,
+} from '@/lib/helpers/storage';
 
 interface MultipleChoiceQuizProps {
   questions: MultipleChoiceQuestion[];
@@ -25,46 +29,24 @@ export function MultipleChoiceQuiz({
     Set<string | number>
   >(new Set());
 
-  // Load completed questions from localStorage
+  // Load completed questions from storage (uses storage adapter)
   useEffect(() => {
-    const storageKey = `mc-quiz-${moduleId}-${sectionId}`;
-    const stored = localStorage.getItem(storageKey);
-    if (stored) {
-      try {
-        const completed = JSON.parse(stored);
-        // Deduplicate in case of corrupted data
-        const uniqueCompleted = [...new Set(completed)];
+    const loadCompleted = async () => {
+      const completed = await getMultipleChoiceProgress(moduleId, sectionId);
+      setCompletedQuestions(new Set(completed as (string | number)[]));
 
-        // Fix corrupted data if duplicates found
-        if (uniqueCompleted.length !== completed.length) {
-          localStorage.setItem(storageKey, JSON.stringify(uniqueCompleted));
-          console.warn(
-            `Fixed duplicates in ${storageKey}: ${completed.length} → ${uniqueCompleted.length}`,
-          );
-        }
+      // Also reset UI state when changing sections
+      setShowResults({});
+      setSelectedAnswers({});
+    };
 
-        setCompletedQuestions(new Set(uniqueCompleted as (string | number)[]));
-      } catch (e) {
-        console.error('Failed to load completed questions:', e);
-      }
-    } else {
-      // CRITICAL: Reset state when no stored data for this section
-      setCompletedQuestions(new Set<string | number>());
-    }
-
-    // Also reset UI state when changing sections
-    setShowResults({});
-    setSelectedAnswers({});
+    loadCompleted();
   }, [moduleId, sectionId]);
 
-  // Save completed questions to localStorage
+  // Save completed questions via storage adapter (routes to PostgreSQL if authenticated)
   const saveProgress = (questionId: string | number) => {
-    // CRITICAL: Always read fresh data from localStorage to avoid cross-contamination
-    const storageKey = `mc-quiz-${moduleId}-${sectionId}`;
-    const stored = localStorage.getItem(storageKey);
-    const currentCompleted = stored
-      ? new Set<string | number>(JSON.parse(stored) as (string | number)[])
-      : new Set<string | number>();
+    // Get current completed set
+    const currentCompleted = new Set(completedQuestions);
 
     // Add the new question
     currentCompleted.add(questionId);
@@ -72,10 +54,11 @@ export function MultipleChoiceQuiz({
     // Update state
     setCompletedQuestions(currentCompleted);
 
-    // Save to localStorage
-    localStorage.setItem(
-      storageKey,
-      JSON.stringify(Array.from(currentCompleted)),
+    // Save via storage helper (routes to PostgreSQL for authenticated users)
+    saveMultipleChoiceProgress(
+      moduleId,
+      sectionId,
+      Array.from(currentCompleted).map(String),
     );
 
     // Dispatch custom event to trigger updates (storage event doesn't fire in same window)
