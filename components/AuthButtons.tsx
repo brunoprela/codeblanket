@@ -8,10 +8,27 @@
 import { useUser } from '@stackframe/stack';
 import { useState } from 'react';
 import Link from 'next/link';
+import { clearAllUserData } from '@/lib/helpers/auth-cleanup';
 
 export default function AuthButtons() {
   const user = useUser();
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleSignOut = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    // Clear all user data BEFORE signing out
+    console.log('[Sign Out] Clearing user data before logout');
+    try {
+      await clearAllUserData();
+      console.log('[Sign Out] Data cleared successfully');
+    } catch (error) {
+      console.error('[Sign Out] Failed to clear data:', error);
+    }
+
+    // Navigate to Stack Auth sign-out
+    window.location.href = '/handler/sign-out';
+  };
 
   if (!user) {
     return (
@@ -59,12 +76,12 @@ export default function AuthButtons() {
             >
               Account Settings
             </Link>
-            <Link
-              href="/handler/sign-out"
-              className="block px-4 py-2 text-sm text-red-400 transition-colors hover:bg-[#44475a]"
+            <button
+              onClick={handleSignOut}
+              className="block w-full px-4 py-2 text-left text-sm text-red-400 transition-colors hover:bg-[#44475a]"
             >
               Sign Out
-            </Link>
+            </button>
           </div>
         </>
       )}

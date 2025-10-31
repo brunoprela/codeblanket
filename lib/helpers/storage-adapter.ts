@@ -46,12 +46,9 @@ export async function setItem(key: string, value: unknown): Promise<void> {
         throw new Error('Failed to save to database');
       }
     } catch (error) {
-      console.error(
-        'Failed to save to PostgreSQL, falling back to IndexedDB:',
-        error,
-      );
-      // Fallback to IndexedDB
-      await indexedDB.setItem(key, value);
+      console.error('Failed to save to PostgreSQL (NO FALLBACK):', error);
+      // DON'T fall back to IndexedDB for authenticated users
+      throw error;
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -79,12 +76,9 @@ export async function getItem<T>(key: string): Promise<T | null> {
       const data = await response.json();
       return data.value as T | null;
     } catch (error) {
-      console.error(
-        'Failed to fetch from PostgreSQL, falling back to IndexedDB:',
-        error,
-      );
-      // Fallback to IndexedDB
-      return await indexedDB.getItem<T>(key);
+      console.error('Failed to fetch from PostgreSQL (NO FALLBACK):', error);
+      // DON'T fall back to IndexedDB for authenticated users
+      return null;
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -112,12 +106,8 @@ export async function removeItem(key: string): Promise<void> {
         throw new Error('Failed to delete from database');
       }
     } catch (error) {
-      console.error(
-        'Failed to delete from PostgreSQL, falling back to IndexedDB:',
-        error,
-      );
-      // Fallback to IndexedDB
-      await indexedDB.removeItem(key);
+      console.error('Failed to delete from PostgreSQL (NO FALLBACK):', error);
+      // DON'T fall back to IndexedDB for authenticated users
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -144,11 +134,11 @@ export async function getAllData(): Promise<Record<string, unknown>> {
       return result.data as Record<string, unknown>;
     } catch (error) {
       console.error(
-        'Failed to fetch all data from PostgreSQL, falling back to IndexedDB:',
+        'Failed to fetch all data from PostgreSQL (NO FALLBACK):',
         error,
       );
-      // Fallback to IndexedDB
-      return await indexedDB.getAllData();
+      // DON'T fall back to IndexedDB for authenticated users
+      return {};
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -177,12 +167,9 @@ export async function importData(data: Record<string, unknown>): Promise<void> {
         throw new Error('Failed to import data to database');
       }
     } catch (error) {
-      console.error(
-        'Failed to import to PostgreSQL, falling back to IndexedDB:',
-        error,
-      );
-      // Fallback to IndexedDB
-      await indexedDB.importData(data);
+      console.error('Failed to import to PostgreSQL (NO FALLBACK):', error);
+      // DON'T fall back to IndexedDB for authenticated users
+      throw error;
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -212,12 +199,9 @@ export async function saveVideo(id: string, video: Blob): Promise<void> {
         throw new Error('Failed to save video to database');
       }
     } catch (error) {
-      console.error(
-        'Failed to save video to PostgreSQL, falling back to IndexedDB:',
-        error,
-      );
-      // Fallback to IndexedDB
-      await indexedDB.saveVideo(id, video);
+      console.error('Failed to save video to PostgreSQL (NO FALLBACK):', error);
+      // DON'T fall back to IndexedDB for authenticated users
+      throw error;
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -260,11 +244,11 @@ export async function getVideo(id: string): Promise<Blob | null> {
       return await blobResponse.blob();
     } catch (error) {
       console.error(
-        'Failed to fetch video from Vercel Blob, falling back to IndexedDB:',
+        'Failed to fetch video from Vercel Blob (NO FALLBACK):',
         error,
       );
-      // Fallback to IndexedDB
-      return await indexedDB.getVideo(id);
+      // DON'T fall back to IndexedDB for authenticated users
+      return null;
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -327,11 +311,17 @@ export async function getVideoMetadataForQuestion(
 
   if (isAuthenticated) {
     // Use Vercel Blob Storage via API (metadata only, no bandwidth)
+    // DON'T fall back to IndexedDB - authenticated users use PostgreSQL exclusively
     try {
       const response = await fetch('/api/videos');
 
       if (!response.ok) {
-        throw new Error('Failed to fetch videos metadata');
+        console.error(
+          'Failed to fetch videos metadata from API:',
+          response.status,
+          response.statusText,
+        );
+        return []; // Return empty array, don't fall back to IndexedDB
       }
 
       const result = await response.json();
@@ -342,6 +332,10 @@ export async function getVideoMetadataForQuestion(
         timestamp: string;
         size?: number;
       }>;
+
+      console.debug(
+        `[getVideoMetadataForQuestion] Fetched ${videos.length} videos from API for prefix: ${questionIdPrefix}`,
+      );
 
       // Filter by prefix and return metadata only
       const filtered = videos
@@ -354,19 +348,14 @@ export async function getVideoMetadataForQuestion(
         }))
         .sort((a, b) => a.timestamp - b.timestamp);
 
+      console.debug(
+        `[getVideoMetadataForQuestion] Filtered to ${filtered.length} videos for prefix: ${questionIdPrefix}`,
+      );
       return filtered;
     } catch (error) {
-      console.error(
-        'Failed to fetch videos metadata, falling back to IndexedDB:',
-        error,
-      );
-      // Fallback to IndexedDB - get metadata from IndexedDB videos
-      const videos = await indexedDB.getVideosForQuestion(questionIdPrefix);
-      return videos.map((v) => ({
-        id: v.id,
-        blobUrl: '', // IndexedDB doesn't have blob URLs
-        timestamp: v.timestamp,
-      }));
+      console.error('Failed to fetch videos metadata from API:', error);
+      // For authenticated users, return empty array (don't use IndexedDB)
+      return [];
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -423,11 +412,11 @@ export async function getVideosForQuestion(
       return videosWithBlobs.sort((a, b) => a.timestamp - b.timestamp);
     } catch (error) {
       console.error(
-        'Failed to fetch videos from Vercel Blob, falling back to IndexedDB:',
+        'Failed to fetch videos from Vercel Blob (NO FALLBACK):',
         error,
       );
-      // Fallback to IndexedDB
-      return await indexedDB.getVideosForQuestion(questionIdPrefix);
+      // DON'T fall back to IndexedDB for authenticated users
+      return [];
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -477,11 +466,10 @@ export async function deleteVideo(videoId: string): Promise<void> {
       }
     } catch (error) {
       console.error(
-        'Failed to delete video from PostgreSQL, falling back to IndexedDB:',
+        'Failed to delete video from PostgreSQL (NO FALLBACK):',
         error,
       );
-      // Fallback to IndexedDB
-      await indexedDB.deleteVideo(videoId);
+      // DON'T fall back to IndexedDB for authenticated users
     }
   } else {
     // Use IndexedDB for anonymous users
@@ -502,11 +490,9 @@ export async function getCompletedDiscussionQuestionsCount(): Promise<number> {
         const response = await fetch('/api/videos');
 
         if (!response.ok) {
-          // API failed, fallback to IndexedDB
-          console.warn(
-            'Failed to fetch videos from API, using IndexedDB fallback',
-          );
-          return await indexedDB.getCompletedDiscussionQuestionsCount();
+          // API failed, no fallback for authenticated users
+          console.warn('Failed to fetch videos from API (NO FALLBACK)');
+          return 0;
         }
 
         const result = await response.json();
@@ -526,12 +512,9 @@ export async function getCompletedDiscussionQuestionsCount(): Promise<number> {
 
         return uniqueQuestions.size;
       } catch (error) {
-        console.warn(
-          'Error fetching videos from API, falling back to IndexedDB:',
-          error,
-        );
-        // Fallback to IndexedDB
-        return await indexedDB.getCompletedDiscussionQuestionsCount();
+        console.warn('Error fetching videos from API (NO FALLBACK):', error);
+        // DON'T fall back to IndexedDB for authenticated users
+        return 0;
       }
     } else {
       // Use IndexedDB for anonymous users

@@ -41,11 +41,14 @@ export function useCustomTestCases(
 ): UseCustomTestCasesReturn {
   const [customTestCases, setCustomTestCases] = useState<CustomTestCase[]>([]);
 
-  // Load saved custom test cases on mount
+  // Load saved custom test cases on mount (async for authenticated users)
   useEffect(() => {
     if (problemId) {
-      const saved = getCustomTestCases(problemId) as CustomTestCase[];
-      setCustomTestCases(saved);
+      const loadTestCases = async () => {
+        const saved = (await getCustomTestCases(problemId)) as CustomTestCase[];
+        setCustomTestCases(saved);
+      };
+      loadTestCases();
     }
   }, [problemId]);
 

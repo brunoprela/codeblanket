@@ -3,6 +3,8 @@
 import { useUser } from '@stackframe/stack';
 import { useState, Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 interface ApiResult {
   status?: number;
   data?: unknown;

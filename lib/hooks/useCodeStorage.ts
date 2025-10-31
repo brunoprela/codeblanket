@@ -41,13 +41,16 @@ export function useCodeStorage(
 ): UseCodeStorageReturn {
   const [code, setCodeState] = useState(starterCode);
 
-  // Load saved code on mount
+  // Load saved code on mount (async for authenticated users)
   useEffect(() => {
     if (problemId) {
-      const savedCode = getUserCode(problemId);
-      if (savedCode) {
-        setCodeState(savedCode);
-      }
+      const loadCode = async () => {
+        const savedCode = await getUserCode(problemId);
+        if (savedCode) {
+          setCodeState(savedCode);
+        }
+      };
+      loadCode();
     }
   }, [problemId]);
 

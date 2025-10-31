@@ -199,10 +199,11 @@ export async function getAllVideoMetadata(userId: string): Promise<
     blobPathname: string;
     mimeType: string;
     timestamp: string;
+    size: number;
   }>
 > {
   const result = await sql`
-    SELECT video_id, blob_url, blob_pathname, mime_type, created_at FROM user_videos
+    SELECT video_id, blob_url, blob_pathname, mime_type, file_size, created_at FROM user_videos
     WHERE user_id = ${userId}
   `;
 
@@ -211,6 +212,7 @@ export async function getAllVideoMetadata(userId: string): Promise<
     blobUrl: row.blob_url as string,
     blobPathname: row.blob_pathname as string,
     mimeType: row.mime_type as string,
+    size: Number(row.file_size) || 0,
     timestamp: row.created_at as string,
   }));
 }

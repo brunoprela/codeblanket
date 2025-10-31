@@ -77,11 +77,21 @@ export async function markProblemCompleted(problemId: string): Promise<void> {
     const completed = await getCompletedProblems();
     completed.add(problemId);
     const completedArray = [...completed];
-    localStorage.setItem(
-      COMPLETED_PROBLEMS_KEY,
-      JSON.stringify(completedArray),
-    );
-    // Sync to storage backend in background (PostgreSQL for authenticated users)
+
+    // Check authentication - authenticated users DON'T use localStorage
+    const authResponse = await fetch('/api/auth/check');
+    const authData = await authResponse.json();
+    const isAuthenticated = authData.authenticated === true;
+
+    if (!isAuthenticated) {
+      // Only write to localStorage for anonymous users
+      localStorage.setItem(
+        COMPLETED_PROBLEMS_KEY,
+        JSON.stringify(completedArray),
+      );
+    }
+
+    // Sync to storage backend (PostgreSQL for authenticated, IndexedDB for anonymous)
     syncToStorage(COMPLETED_PROBLEMS_KEY, completedArray);
   } catch (error) {
     console.error('Failed to save completion status:', error);
@@ -100,11 +110,21 @@ export async function markProblemIncomplete(problemId: string): Promise<void> {
     const completed = await getCompletedProblems();
     completed.delete(problemId);
     const completedArray = [...completed];
-    localStorage.setItem(
-      COMPLETED_PROBLEMS_KEY,
-      JSON.stringify(completedArray),
-    );
-    // Sync to storage backend in background (PostgreSQL for authenticated users)
+
+    // Check authentication - authenticated users DON'T use localStorage
+    const authResponse = await fetch('/api/auth/check');
+    const authData = await authResponse.json();
+    const isAuthenticated = authData.authenticated === true;
+
+    if (!isAuthenticated) {
+      // Only write to localStorage for anonymous users
+      localStorage.setItem(
+        COMPLETED_PROBLEMS_KEY,
+        JSON.stringify(completedArray),
+      );
+    }
+
+    // Sync to storage backend (PostgreSQL for authenticated, IndexedDB for anonymous)
     syncToStorage(COMPLETED_PROBLEMS_KEY, completedArray);
   } catch (error) {
     console.error('Failed to remove completion status:', error);
@@ -149,9 +169,29 @@ export function saveUserCode(problemId: string, code: string): void {
 
   try {
     const key = `${USER_CODE_KEY_PREFIX}${problemId}`;
-    localStorage.setItem(key, code);
-    // Sync to storage backend in background
+
+    // SECURITY: Authenticated users should NOT write to localStorage
+    // Only sync to PostgreSQL (handled by syncToStorage)
+    // localStorage is ONLY for anonymous users
+
+    // Note: We'll check auth in syncToStorage, so just always sync
+    // The backend will handle routing to correct storage
     syncToStorage(key, code);
+
+    // For anonymous users, also write to localStorage for instant access
+    // This check happens inside syncToStorage, but we do it here too
+    // to avoid localStorage writes for authenticated users
+    fetch('/api/auth/check')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.authenticated) {
+          localStorage.setItem(key, code);
+        }
+      })
+      .catch(() => {
+        // On error, assume anonymous
+        localStorage.setItem(key, code);
+      });
   } catch (error) {
     console.error('Failed to save user code:', error);
   }
@@ -159,14 +199,41 @@ export function saveUserCode(problemId: string, code: string): void {
 
 /**
  * Retrieves user's saved code for a specific problem
+ * For authenticated users, fetches from PostgreSQL
+ * For anonymous users, uses localStorage
  * @param problemId - The unique identifier of the problem
  * @returns The saved code, or null if no code is saved
  */
-export function getUserCode(problemId: string): string | null {
+export async function getUserCode(problemId: string): Promise<string | null> {
   if (typeof window === 'undefined') return null;
 
   try {
-    return localStorage.getItem(`${USER_CODE_KEY_PREFIX}${problemId}`);
+    // Check authentication
+    const authResponse = await fetch('/api/auth/check');
+    const authData = await authResponse.json();
+    const isAuthenticated = authData.authenticated === true;
+
+    if (isAuthenticated) {
+      // Fetch from PostgreSQL via API
+      const key = `${USER_CODE_KEY_PREFIX}${problemId}`;
+      const response = await fetch(
+        `/api/progress?key=${encodeURIComponent(key)}`,
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        // SECURITY: DON'T cache authenticated user data in localStorage
+        // It will leak to anonymous users after logout
+        return data.value || null;
+      }
+
+      // If API fails, return empty (don't fall back to localStorage for authenticated users)
+      console.warn('Failed to fetch user code from API, returning null');
+      return null;
+    } else {
+      // Anonymous user: Use localStorage
+      return localStorage.getItem(`${USER_CODE_KEY_PREFIX}${problemId}`);
+    }
   } catch (error) {
     console.error('Failed to load user code:', error);
     return null;
@@ -205,9 +272,23 @@ export function saveCustomTestCases(
   try {
     const key = `${CUSTOM_TESTS_KEY_PREFIX}${problemId}`;
     const serialized = JSON.stringify(testCases);
-    localStorage.setItem(key, serialized);
-    // Sync to storage backend in background
+
+    // SECURITY: Don't write to localStorage for authenticated users
+    // Sync to backend first
     syncToStorage(key, testCases);
+
+    // For anonymous users only, write to localStorage
+    fetch('/api/auth/check')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.authenticated) {
+          localStorage.setItem(key, serialized);
+        }
+      })
+      .catch(() => {
+        // On error, assume anonymous
+        localStorage.setItem(key, serialized);
+      });
   } catch (error) {
     console.error('Failed to save custom test cases:', error);
   }
@@ -215,16 +296,50 @@ export function saveCustomTestCases(
 
 /**
  * Retrieves user's saved custom test cases for a specific problem
+ * For authenticated users, fetches from PostgreSQL
+ * For anonymous users, uses localStorage
  * @param problemId - The unique identifier of the problem
  * @returns Array of saved test cases, or empty array if none are saved
  */
-export function getCustomTestCases(problemId: string): unknown[] {
+export async function getCustomTestCases(
+  problemId: string,
+): Promise<unknown[]> {
   if (typeof window === 'undefined') return [];
 
   try {
-    const key = `${CUSTOM_TESTS_KEY_PREFIX}${problemId}`;
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : [];
+    // Check authentication
+    const authResponse = await fetch('/api/auth/check');
+    const authData = await authResponse.json();
+    const isAuthenticated = authData.authenticated === true;
+
+    if (isAuthenticated) {
+      // Fetch from PostgreSQL via API
+      const key = `${CUSTOM_TESTS_KEY_PREFIX}${problemId}`;
+      const response = await fetch(
+        `/api/progress?key=${encodeURIComponent(key)}`,
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        // SECURITY: DON'T cache authenticated user data in localStorage
+        return data.value
+          ? Array.isArray(data.value)
+            ? data.value
+            : JSON.parse(data.value)
+          : [];
+      }
+
+      // If API fails, return empty (don't fall back to localStorage for authenticated users)
+      console.warn(
+        'Failed to fetch custom test cases from API, returning empty',
+      );
+      return [];
+    } else {
+      // Anonymous user: Use localStorage
+      const key = `${CUSTOM_TESTS_KEY_PREFIX}${problemId}`;
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : [];
+    }
   } catch (error) {
     console.error('Failed to load custom test cases:', error);
     return [];
@@ -265,9 +380,22 @@ export function saveMultipleChoiceProgress(
   try {
     const key = `mc-quiz-${moduleId}-${sectionId}`;
     const serialized = JSON.stringify(completedQuestionIds);
-    localStorage.setItem(key, serialized);
-    // Sync to storage backend in background
+
+    // SECURITY: Don't write to localStorage for authenticated users
     syncToStorage(key, completedQuestionIds);
+
+    // For anonymous users only, write to localStorage
+    fetch('/api/auth/check')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.authenticated) {
+          localStorage.setItem(key, serialized);
+        }
+      })
+      .catch(() => {
+        // On error, assume anonymous
+        localStorage.setItem(key, serialized);
+      });
   } catch (error) {
     console.error('Failed to save multiple choice progress:', error);
   }
@@ -345,16 +473,45 @@ export function clearMultipleChoiceProgress(
 
 /**
  * Retrieves completed sections for a specific module
+ * For authenticated users, fetches from PostgreSQL
+ * For anonymous users, uses localStorage
  * @param moduleId - The module identifier
  * @returns Set of completed section IDs
  */
-export function getCompletedSections(moduleId: string): Set<string> {
+export async function getCompletedSections(
+  moduleId: string,
+): Promise<Set<string>> {
   if (typeof window === 'undefined') return new Set();
 
   try {
-    const key = `module-${moduleId}-completed`;
-    const stored = localStorage.getItem(key);
-    return stored ? new Set(JSON.parse(stored)) : new Set();
+    // Check authentication
+    const authResponse = await fetch('/api/auth/check');
+    const authData = await authResponse.json();
+    const isAuthenticated = authData.authenticated === true;
+
+    if (isAuthenticated) {
+      // Fetch from PostgreSQL via API
+      const key = `module-${moduleId}-completed`;
+      const response = await fetch(
+        `/api/progress?key=${encodeURIComponent(key)}`,
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.value ? new Set(JSON.parse(data.value)) : new Set();
+      }
+
+      // If API fails, return empty (don't fall back to localStorage for authenticated users)
+      console.warn(
+        'Failed to fetch module completion from API, returning empty',
+      );
+      return new Set();
+    } else {
+      // Anonymous user: Use localStorage
+      const key = `module-${moduleId}-completed`;
+      const stored = localStorage.getItem(key);
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    }
   } catch (error) {
     console.error('Failed to load completed sections:', error);
     return new Set();
@@ -375,9 +532,22 @@ export function saveCompletedSections(
   try {
     const key = `module-${moduleId}-completed`;
     const serialized = JSON.stringify(completedSectionIds);
-    localStorage.setItem(key, serialized);
-    // Sync to storage backend in background
+
+    // SECURITY: Don't write to localStorage for authenticated users
     syncToStorage(key, completedSectionIds);
+
+    // For anonymous users only, write to localStorage
+    fetch('/api/auth/check')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.authenticated) {
+          localStorage.setItem(key, serialized);
+        }
+      })
+      .catch(() => {
+        // On error, assume anonymous
+        localStorage.setItem(key, serialized);
+      });
   } catch (error) {
     console.error('Failed to save completed sections:', error);
   }
@@ -385,17 +555,18 @@ export function saveCompletedSections(
 
 /**
  * Marks a section as completed in a module
+ * For authenticated users, saves to PostgreSQL
  * @param moduleId - The module identifier
  * @param sectionId - The section identifier
  */
-export function markSectionCompleted(
+export async function markSectionCompleted(
   moduleId: string,
   sectionId: string,
-): void {
+): Promise<void> {
   if (typeof window === 'undefined') return;
 
   try {
-    const completed = getCompletedSections(moduleId);
+    const completed = await getCompletedSections(moduleId);
     completed.add(sectionId);
     saveCompletedSections(moduleId, [...completed]);
   } catch (error) {
@@ -405,17 +576,18 @@ export function markSectionCompleted(
 
 /**
  * Marks a section as incomplete in a module
+ * For authenticated users, saves to PostgreSQL
  * @param moduleId - The module identifier
  * @param sectionId - The section identifier
  */
-export function markSectionIncomplete(
+export async function markSectionIncomplete(
   moduleId: string,
   sectionId: string,
-): void {
+): Promise<void> {
   if (typeof window === 'undefined') return;
 
   try {
-    const completed = getCompletedSections(moduleId);
+    const completed = await getCompletedSections(moduleId);
     completed.delete(sectionId);
     saveCompletedSections(moduleId, [...completed]);
   } catch (error) {
@@ -425,13 +597,15 @@ export function markSectionIncomplete(
 
 /**
  * Checks if a section is marked as completed
+ * For authenticated users, checks PostgreSQL
  * @param moduleId - The module identifier
  * @param sectionId - The section identifier
  * @returns true if section is completed, false otherwise
  */
-export function isSectionCompleted(
+export async function isSectionCompleted(
   moduleId: string,
   sectionId: string,
-): boolean {
-  return getCompletedSections(moduleId).has(sectionId);
+): Promise<boolean> {
+  const completed = await getCompletedSections(moduleId);
+  return completed.has(sectionId);
 }

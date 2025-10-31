@@ -63,6 +63,7 @@ export async function GET(request: NextRequest) {
         blobUrl: v.blobUrl,
         mimeType: v.mimeType,
         timestamp: v.timestamp,
+        size: v.size, // Include file size
       }));
 
       return NextResponse.json({ videos: videosList });
