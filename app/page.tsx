@@ -94,18 +94,45 @@ export default function Home() {
     };
     loadProblems();
 
-    // Load module progress
-    const progress: Record<string, { completed: number; total: number }> = {};
-    moduleCategories.forEach((moduleCategory) => {
-      const storageKey = `module-${moduleCategory.id}-completed`;
-      const stored = localStorage.getItem(storageKey);
-      const completedSections = stored ? JSON.parse(stored) : [];
-      progress[moduleCategory.id] = {
-        completed: completedSections.length,
-        total: moduleCategory.module.sections.length,
-      };
-    });
-    setModuleProgress(progress);
+    // Load module progress (SECURITY: check auth first to prevent anonymous data leakage)
+    const loadModuleProgress = async () => {
+      // Check authentication to ensure we don't show anonymous data to authenticated users
+      const authResponse = await fetch('/api/auth/check');
+      const authData = await authResponse.json();
+      const isAuthenticated = authData.authenticated === true;
+
+      const progress: Record<string, { completed: number; total: number }> = {};
+
+      if (!isAuthenticated) {
+        // Anonymous user: read from localStorage
+        moduleCategories.forEach((moduleCategory) => {
+          const storageKey = `module-${moduleCategory.id}-completed`;
+          const stored = localStorage.getItem(storageKey);
+          const completedSections = stored ? JSON.parse(stored) : [];
+          progress[moduleCategory.id] = {
+            completed: completedSections.length,
+            total: moduleCategory.module.sections.length,
+          };
+        });
+      } else {
+        // Authenticated user: use PostgreSQL via storage functions
+        for (const moduleCategory of moduleCategories) {
+          const { getCompletedSections } = await import(
+            '@/lib/helpers/storage'
+          );
+          const completedSections = await getCompletedSections(
+            moduleCategory.id,
+          );
+          progress[moduleCategory.id] = {
+            completed: completedSections.size,
+            total: moduleCategory.module.sections.length,
+          };
+        }
+      }
+
+      setModuleProgress(progress);
+    };
+    loadModuleProgress();
 
     // Load discussion question stats (efficient - uses stats API for authenticated users)
     const loadDiscussionStats = async () => {
@@ -188,13 +215,23 @@ export default function Home() {
     };
     loadDiscussionStats();
 
-    // Load multiple choice question stats
-    const loadMultipleChoiceStats = () => {
+    // Load multiple choice question stats (use stats API for authenticated users)
+    const loadMultipleChoiceStats = async () => {
       const total = getTotalMultipleChoiceQuestionsCount(moduleCategories);
-      const completed =
-        getCompletedMultipleChoiceQuestionsCount(moduleCategories);
+
+      // Check if authenticated and use stats API
+      const userStats = await getUserStats();
+      if (userStats) {
+        // Use efficient stats from API
+        setCompletedMultipleChoice(userStats.multipleChoiceQuizCount);
+      } else {
+        // Anonymous: Use localStorage/IndexedDB
+        const completed =
+          getCompletedMultipleChoiceQuestionsCount(moduleCategories);
+        setCompletedMultipleChoice(completed);
+      }
+
       setTotalMultipleChoice(total);
-      setCompletedMultipleChoice(completed);
 
       // Load multiple choice progress per module
       const mcProgress: Record<string, { completed: number; total: number }> =
@@ -290,10 +327,15 @@ export default function Home() {
 
         // Note: Module-specific discussion progress updated lazily, not on every change
 
-        // Update multiple choice stats
-        const mcCompleted =
-          getCompletedMultipleChoiceQuestionsCount(moduleCategories);
-        setCompletedMultipleChoice(mcCompleted);
+        // Update multiple choice stats (use stats API for authenticated users)
+        const statsForMC = await getUserStats();
+        if (statsForMC) {
+          setCompletedMultipleChoice(statsForMC.multipleChoiceQuizCount);
+        } else {
+          const mcCompleted =
+            getCompletedMultipleChoiceQuestionsCount(moduleCategories);
+          setCompletedMultipleChoice(mcCompleted);
+        }
 
         // Update multiple choice progress per module
         const mcProgress: Record<string, { completed: number; total: number }> =

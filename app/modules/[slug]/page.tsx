@@ -311,18 +311,18 @@ export default function ModulePage({
     }
   };
 
-  // Load completed sections from localStorage
+  // Load completed sections (SECURITY: use storage function to prevent anonymous data leakage)
   useEffect(() => {
-    const storageKey = `module-${slug}-completed`;
-    const stored = localStorage.getItem(storageKey);
-    if (stored) {
+    const loadSections = async () => {
       try {
-        const completed = JSON.parse(stored);
-        setCompletedSections(new Set(completed));
+        const { getCompletedSections } = await import('@/lib/helpers/storage');
+        const completed = await getCompletedSections(slug);
+        setCompletedSections(completed);
       } catch (e) {
         console.error('Failed to load completed sections:', e);
       }
-    }
+    };
+    loadSections();
   }, [slug]);
 
   // Load progress data for all types
@@ -332,34 +332,23 @@ export default function ModulePage({
       const problems = await getCompletedProblems();
       setCompletedProblems(problems);
 
-      // Load multiple choice progress
+      // Load multiple choice progress (SECURITY: use storage function to prevent anonymous data leakage)
       let mcCompleted = 0;
+      const { getMultipleChoiceProgress } = await import(
+        '@/lib/helpers/storage'
+      );
+
       for (const [sectionIndex, section] of moduleData.sections.entries()) {
         const sectionId = section.id || `section-${sectionIndex}`;
         if (section.multipleChoice && section.multipleChoice.length > 0) {
-          const storageKey = `mc-quiz-${slug}-${sectionId}`;
-          const stored = localStorage.getItem(storageKey);
-          if (stored) {
-            try {
-              const completedQuestions = JSON.parse(stored);
-              // Deduplicate in case of corrupted data
-              const uniqueQuestions = [...new Set(completedQuestions)];
-
-              // Fix corrupted data if duplicates found
-              if (uniqueQuestions.length !== completedQuestions.length) {
-                localStorage.setItem(
-                  storageKey,
-                  JSON.stringify(uniqueQuestions),
-                );
-                console.warn(
-                  `Fixed duplicates in ${storageKey}: ${completedQuestions.length} → ${uniqueQuestions.length}`,
-                );
-              }
-
-              mcCompleted += uniqueQuestions.length;
-            } catch (e) {
-              console.error('Failed to parse MC quiz progress:', e);
-            }
+          try {
+            const completedQuestions = await getMultipleChoiceProgress(
+              slug,
+              sectionId,
+            );
+            mcCompleted += completedQuestions.length;
+          } catch (e) {
+            console.error('Failed to load MC quiz progress:', e);
           }
         }
       }
@@ -397,22 +386,23 @@ export default function ModulePage({
         const problems = await getCompletedProblems();
         setCompletedProblems(problems);
 
-        // Update multiple choice
+        // Update multiple choice (SECURITY: use storage function)
         let mcCompleted = 0;
+        const { getMultipleChoiceProgress } = await import(
+          '@/lib/helpers/storage'
+        );
+
         for (const [sectionIndex, section] of moduleData.sections.entries()) {
           const sectionId = section.id || `section-${sectionIndex}`;
           if (section.multipleChoice && section.multipleChoice.length > 0) {
-            const storageKey = `mc-quiz-${slug}-${sectionId}`;
-            const stored = localStorage.getItem(storageKey);
-            if (stored) {
-              try {
-                const completedQuestions = JSON.parse(stored);
-                // Deduplicate to ensure clean count
-                const uniqueQuestions = [...new Set(completedQuestions)];
-                mcCompleted += uniqueQuestions.length;
-              } catch (e) {
-                console.error('Failed to parse MC quiz progress:', e);
-              }
+            try {
+              const completedQuestions = await getMultipleChoiceProgress(
+                slug,
+                sectionId,
+              );
+              mcCompleted += completedQuestions.length;
+            } catch (e) {
+              console.error('Failed to load MC quiz progress:', e);
             }
           }
         }

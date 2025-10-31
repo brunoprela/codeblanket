@@ -24,7 +24,8 @@ export interface UserStats {
   totalVideos: number;
   completedDiscussionQuestions: number;
   hasCompletedProblems: boolean;
-  multipleChoiceQuizCount: number;
+  completedProblemsCount: number; // Actual count of completed problems
+  multipleChoiceQuizCount: number; // Actual count of completed MC questions
   moduleProgressCount: number;
   moduleVideoCounts: Record<string, number>; // Module-specific video counts
   keys: string[];

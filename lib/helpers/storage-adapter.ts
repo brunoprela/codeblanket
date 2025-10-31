@@ -289,9 +289,17 @@ export async function migrateToPostgreSQL(): Promise<void> {
       `Successfully migrated ${Object.keys(data).length} items to PostgreSQL`,
     );
 
-    // Clear IndexedDB after successful migration so only PostgreSQL data is shown
-    console.debug('Clearing IndexedDB after successful migration...');
+    // CRITICAL SECURITY: Clear ALL local data after successful migration
+    console.debug(
+      'Clearing ALL local data (localStorage + IndexedDB) after migration...',
+    );
     await clearIndexedDB();
+
+    // Also clear localStorage to prevent data leakage
+    const { clearAllUserData } = await import('./auth-cleanup');
+    await clearAllUserData();
+
+    console.debug('Migration complete - all local data cleared');
   } catch (error) {
     console.error('Migration failed:', error);
     throw error;
