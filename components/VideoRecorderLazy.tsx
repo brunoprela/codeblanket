@@ -293,8 +293,11 @@ export function VideoRecorderLazy({
                       />
                     </svg>
                     <div className="text-center">
-                      <p className="text-sm text-[#f8f8f2]">
-                        Recording {index + 1}
+                      <p className="text-sm font-semibold text-[#f8f8f2]">
+                        Your Answer - Recording {index + 1}
+                      </p>
+                      <p className="mt-1 text-xs text-[#6272a4]">
+                        {new Date(video.timestamp).toLocaleDateString()}
                       </p>
                       {video.size && (
                         <p className="text-xs text-[#6272a4]">
@@ -332,7 +335,16 @@ export function VideoRecorderLazy({
                             Loading...
                           </span>
                         ) : (
-                          '▶ Load Video'
+                          <>
+                            <svg
+                              className="h-5 w-5"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                            </svg>
+                            Watch My Answer
+                          </>
                         )}
                       </button>
                     )}

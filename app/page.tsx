@@ -7,12 +7,12 @@ import { allProblems } from '@/lib/content/problems';
 import { moduleCategories, topicSections } from '@/lib/content/topics';
 import { getCompletedProblems } from '@/lib/helpers/storage';
 import {
-  getCompletedDiscussionQuestionsCount,
   getTotalDiscussionQuestionsCount,
   getTotalMultipleChoiceQuestionsCount,
   getCompletedMultipleChoiceQuestionsCount,
 } from '@/lib/helpers/indexeddb';
-import { getVideosForQuestion } from '@/lib/helpers/storage-adapter';
+import { getVideoMetadataForQuestion } from '@/lib/helpers/storage-adapter';
+import { getUserStats } from '@/lib/helpers/storage-stats';
 import { ModuleSection } from '@/lib/types';
 
 export default function Home() {
@@ -103,44 +103,85 @@ export default function Home() {
     });
     setModuleProgress(progress);
 
-    // Load discussion question stats
+    // Load discussion question stats (efficient - uses stats API for authenticated users)
     const loadDiscussionStats = async () => {
-      const completed = await getCompletedDiscussionQuestionsCount();
-      const total = getTotalDiscussionQuestionsCount(moduleCategories);
-      setCompletedDiscussions(completed);
-      setTotalDiscussions(total);
+      // Try to get efficient stats from API (authenticated users)
+      const userStats = await getUserStats();
 
-      // Load discussion progress per module
-      const discussionProgress: Record<
-        string,
-        { completed: number; total: number }
-      > = {};
+      if (userStats) {
+        // Authenticated user - use efficient stats from API
+        const total = getTotalDiscussionQuestionsCount(moduleCategories);
+        setCompletedDiscussions(userStats.completedDiscussionQuestions);
+        setTotalDiscussions(total);
 
-      for (const moduleCategory of moduleCategories) {
-        let completedCount = 0;
-        let totalCount = 0;
+        // For module-specific discussion progress, we'll load lazily
+        // Set to 0 for now, update when module is viewed
+        const discussionProgress: Record<
+          string,
+          { completed: number; total: number }
+        > = {};
 
-        for (const section of moduleCategory.module.sections) {
-          if (section.quiz) {
-            totalCount += section.quiz.length;
+        moduleCategories.forEach((moduleCategory) => {
+          let totalCount = 0;
+          moduleCategory.module.sections.forEach((section) => {
+            if (section.quiz) {
+              totalCount += section.quiz.length;
+            }
+          });
 
-            for (const question of section.quiz) {
-              const questionId = `${moduleCategory.id}-${section.id}-${question.id}`;
-              const videos = await getVideosForQuestion(questionId);
-              if (videos.length > 0) {
-                completedCount++;
+          discussionProgress[moduleCategory.id] = {
+            completed: 0, // Will be loaded when module is expanded/viewed
+            total: totalCount,
+          };
+        });
+
+        setModuleDiscussionProgress(discussionProgress);
+      } else {
+        // Anonymous user - use IndexedDB (local, instant)
+        const { getCompletedDiscussionQuestionsCount } = await import(
+          '@/lib/helpers/indexeddb'
+        );
+        const completed = await getCompletedDiscussionQuestionsCount();
+        const total = getTotalDiscussionQuestionsCount(moduleCategories);
+        setCompletedDiscussions(completed);
+        setTotalDiscussions(total);
+
+        // For anonymous users, load from IndexedDB (fast, local)
+        const discussionProgress: Record<
+          string,
+          { completed: number; total: number }
+        > = {};
+
+        const { getVideosForQuestion } = await import(
+          '@/lib/helpers/indexeddb'
+        );
+
+        for (const moduleCategory of moduleCategories) {
+          let completedCount = 0;
+          let totalCount = 0;
+
+          for (const section of moduleCategory.module.sections) {
+            if (section.quiz) {
+              totalCount += section.quiz.length;
+
+              for (const question of section.quiz) {
+                const questionId = `${moduleCategory.id}-${section.id}-${question.id}`;
+                const videos = await getVideosForQuestion(questionId);
+                if (videos.length > 0) {
+                  completedCount++;
+                }
               }
             }
           }
+
+          discussionProgress[moduleCategory.id] = {
+            completed: completedCount,
+            total: totalCount,
+          };
         }
 
-        discussionProgress[moduleCategory.id] = {
-          completed: completedCount,
-          total: totalCount,
-        };
+        setModuleDiscussionProgress(discussionProgress);
       }
-
-      setModuleDiscussionProgress(discussionProgress);
     };
     loadDiscussionStats();
 
@@ -228,41 +269,22 @@ export default function Home() {
         });
         setModuleProgress(newProgress);
 
-        // Update discussion stats
-        const completed = await getCompletedDiscussionQuestionsCount();
-        setCompletedDiscussions(completed);
+        // Update discussion stats (efficient - use stats API)
+        const userStats = await getUserStats();
 
-        // Update discussion progress per module
-        const discussionProgress: Record<
-          string,
-          { completed: number; total: number }
-        > = {};
-
-        for (const moduleCategory of moduleCategories) {
-          let completedCount = 0;
-          let totalCount = 0;
-
-          for (const section of moduleCategory.module.sections) {
-            if (section.quiz) {
-              totalCount += section.quiz.length;
-
-              for (const question of section.quiz) {
-                const questionId = `${moduleCategory.id}-${section.id}-${question.id}`;
-                const videos = await getVideosForQuestion(questionId);
-                if (videos.length > 0) {
-                  completedCount++;
-                }
-              }
-            }
-          }
-
-          discussionProgress[moduleCategory.id] = {
-            completed: completedCount,
-            total: totalCount,
-          };
+        if (userStats) {
+          // Authenticated: Use efficient stats API
+          setCompletedDiscussions(userStats.completedDiscussionQuestions);
+        } else {
+          // Anonymous: Use IndexedDB (local, fast)
+          const { getCompletedDiscussionQuestionsCount } = await import(
+            '@/lib/helpers/indexeddb'
+          );
+          const completed = await getCompletedDiscussionQuestionsCount();
+          setCompletedDiscussions(completed);
         }
 
-        setModuleDiscussionProgress(discussionProgress);
+        // Note: Module-specific discussion progress updated lazily, not on every change
 
         // Update multiple choice stats
         const mcCompleted =

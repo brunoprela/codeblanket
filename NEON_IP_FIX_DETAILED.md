@@ -20,23 +20,29 @@ This is **100% a Neon IP restriction issue**, even if "Allow public traffic" app
 You should see one of these:
 
 #### Option A: Toggle Switch
+
 ```
 [ ] Enable IP allowlist
 ```
+
 Make sure this is **UNCHECKED** (disabled)
 
 #### Option B: IP Allowlist Field
+
 ```
 IP Allowlist: [                    ]
               [+ Add IP Address     ]
 ```
+
 If you see this, **leave it EMPTY** or add `0.0.0.0/0`
 
 #### Option C: Radio Buttons
+
 ```
 ( ) Restrict access to only these IPs: [____]
 (*) Allow all IP addresses
 ```
+
 Select **"Allow all IP addresses"**
 
 ### Location 2: Branch-Specific Settings
@@ -61,6 +67,7 @@ Some Neon accounts have database-level restrictions:
 ## Screenshots to Help You
 
 Look for settings that say:
+
 - ✅ "IP Allow" - Should be empty or disabled
 - ✅ "Protected branches" - Should NOT include your branch
 - ✅ "Firewall rules" - Should be empty or disabled
@@ -73,11 +80,13 @@ If you CAN'T disable IP restrictions (company policy, etc.):
 ### Add These IPs to Allowlist:
 
 #### For Development (Your Computer):
+
 1. Go to https://whatismyipaddress.com
 2. Copy your IP address
 3. Add to Neon allowlist
 
 #### For Production (Vercel):
+
 **Problem**: Vercel uses dynamic IPs that change frequently.
 
 **Solution**: Use `0.0.0.0/0` (allow all) or contact Neon support for Vercel integration.
@@ -107,22 +116,26 @@ If nothing works:
 ## Common Mistakes
 
 ### ❌ Wrong Setting
+
 Looking at "Allow traffic via public internet" (networking)
 This is about **public vs private VPC**, NOT IP restrictions!
 
 ### ✅ Correct Setting
+
 Looking at "IP Allow" or "IP Allowlist" (security)
 This controls which IP addresses can connect.
 
 ## Quick Visual Guide
 
 In Neon Console, look for sections named:
+
 - **"Security"** → IP Allow
-- **"Access Control"** → IP Restrictions  
+- **"Access Control"** → IP Restrictions
 - **"Firewall"** → Allowed IPs
 - **"Protected Branches"** → IP Settings
 
 **NOT** these sections (wrong place):
+
 - "Networking" → VPC/Public Internet (this is about VPC vs public, not IPs)
 - "Compute" → Autoscaling (wrong section)
 - "Storage" → Data (wrong section)
@@ -160,4 +173,3 @@ The fix: Either **disable that setting entirely** or **add `0.0.0.0/0`** to the 
 ---
 
 **Keep looking for "IP Allow" or "IP Allowlist" in Settings!** That's where the block is configured.
-

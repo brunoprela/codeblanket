@@ -9,8 +9,7 @@
 
 import { useEffect, useState } from 'react';
 import { useUser } from '@stackframe/stack';
-import { migrateToPostgreSQL } from '@/lib/helpers/storage-adapter';
-import * as indexedDB from '@/lib/helpers/indexeddb';
+import { migrateToPostgreSQL, getAllData } from '@/lib/helpers/storage-adapter';
 
 export default function DataMigration() {
   const user = useUser();
@@ -36,7 +35,7 @@ export default function DataMigration() {
 
     async function checkForDataToMigrate() {
       try {
-        const data = await indexedDB.getAllData();
+        const data = await getAllData();
         const dataKeys = Object.keys(data);
 
         // Only show migration dialog if there's significant data
