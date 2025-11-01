@@ -29,19 +29,31 @@ export function MultipleChoiceQuiz({
     Set<string | number>
   >(new Set());
 
-  // Load completed questions from storage (uses storage adapter)
+  // Load completed questions from storage and pre-select correct answers
   useEffect(() => {
     const loadCompleted = async () => {
       const completed = await getMultipleChoiceProgress(moduleId, sectionId);
       setCompletedQuestions(new Set(completed as (string | number)[]));
 
-      // Also reset UI state when changing sections
-      setShowResults({});
-      setSelectedAnswers({});
+      // Pre-select correct answers for completed questions
+      const answers: Record<string | number, number> = {};
+      const results: Record<string | number, boolean> = {};
+
+      completed.forEach((questionId) => {
+        // Find the question to get its correct answer
+        const question = questions.find((q) => q.id === questionId);
+        if (question) {
+          answers[questionId] = question.correctAnswer;
+          results[questionId] = true; // Show results for completed questions
+        }
+      });
+
+      setSelectedAnswers(answers);
+      setShowResults(results);
     };
 
     loadCompleted();
-  }, [moduleId, sectionId]);
+  }, [moduleId, sectionId, questions]);
 
   // Save completed questions via storage adapter (routes to PostgreSQL if authenticated)
   const saveProgress = (questionId: string | number) => {
