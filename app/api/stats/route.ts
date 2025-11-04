@@ -35,89 +35,148 @@ export async function GET() {
     );
 
     // Helper to extract module ID from a key
-    // Some modules are 2 parts (python-fundamentals), others are 3+ (applied-ai-llm-fundamentals)
+    // Strategy: Try progressively longer prefixes and check against known module IDs
     const extractModuleId = (keyWithoutPrefix: string): string => {
       const parts = keyWithoutPrefix.split('-');
 
-      // Try to match valid module ID patterns
-      // Common patterns:
-      // - applied-ai-* (3 parts): applied-ai-llm-fundamentals
-      // - system-design-* (2-4 parts): system-design-fundamentals, system-design-core-building-blocks
-      // - ml-* (2-5 parts): ml-supervised-learning, ml-ai-llm-applications-finance
-      // - python-* (2 parts): python-fundamentals
-      // - single word (1 part): dfs, bfs, etc.
+      // All known module ID patterns (from topics/index.ts)
+      const knownModuleIds = new Set([
+        // Python
+        'python-fundamentals',
+        'python-intermediate',
+        'python-advanced',
+        'python-oop',
+        'sqlalchemy-database',
+        'python-async',
+        'python-celery',
+        'python-django',
+        'fastapi-production',
+        'python-testing',
+        // Algorithms
+        'time-space-complexity',
+        'arrays-hashing',
+        'two-pointers',
+        'sliding-window',
+        'dfs',
+        'bfs',
+        'binary-search',
+        'sorting',
+        'recursion',
+        'stack',
+        'queue',
+        'design-problems',
+        'linked-list',
+        'string-algorithms',
+        'trees',
+        'heap',
+        'graphs',
+        'backtracking',
+        'dynamic-programming',
+        'tries',
+        'intervals',
+        'greedy',
+        'advanced-graphs',
+        'segment-tree',
+        'fenwick-tree',
+        'bit-manipulation',
+        'math-geometry',
+        // System Design
+        'system-design-fundamentals',
+        'system-design-core-building-blocks',
+        'system-design-database-design',
+        'system-design-networking',
+        'system-design-api-design',
+        'system-design-tradeoffs',
+        'system-design-authentication',
+        'system-design-microservices',
+        'observability-resilience',
+        'system-design-advanced-algorithms',
+        'distributed-system-patterns',
+        'search-analytics-specialized-systems',
+        'distributed-file-systems-databases',
+        'system-design-message-queues',
+        'real-world-architectures',
+        'system-design-case-studies',
+        'system-design-trading',
+        // Machine Learning
+        'ml-mathematical-foundations',
+        'ml-calculus-fundamentals',
+        'ml-linear-algebra-foundations',
+        'ml-probability-theory',
+        'ml-statistics-fundamentals',
+        'ml-python-for-data-science',
+        'ml-eda-feature-engineering',
+        'ml-supervised-learning',
+        'ml-unsupervised-learning',
+        'ml-deep-learning-fundamentals',
+        'ml-advanced-deep-learning',
+        'ml-natural-language-processing',
+        'ml-model-evaluation-optimization',
+        'ml-system-design-production',
+        'large-language-models',
+        // Finance
+        'quantitative-finance',
+        'time-series-financial-ml',
+        'ml-ai-llm-applications-finance',
+        'quant-interview-prep',
+        'finance-foundations',
+        'professional-tools',
+        'corporate-finance',
+        'financial-markets-instruments',
+        'financial-statements-analysis',
+        'financial-modeling-valuation',
+        'portfolio-theory',
+        'options-trading-greeks',
+        'time-series-analysis',
+        'market-data-real-time-processing',
+        'fixed-income-derivatives',
+        'algorithmic-trading-strategies',
+        'market-microstructure-order-flow',
+        'building-trading-infrastructure',
+        'backtesting-strategy-development',
+        'risk-management-portfolio-systems',
+        // Applied AI
+        'applied-ai-llm-fundamentals',
+        'applied-ai-prompt-engineering',
+        'applied-ai-file-processing',
+        'applied-ai-code-understanding',
+        'applied-ai-code-generation',
+        'applied-ai-tool-use',
+        'applied-ai-multi-agent',
+        'applied-ai-image-generation',
+        'applied-ai-video-audio',
+        'applied-ai-multi-modal',
+        'applied-ai-rag-search',
+        'applied-ai-production',
+        'applied-ai-scaling',
+        'applied-ai-safety',
+        'applied-ai-complete-products',
+        'applied-ai-evaluation-dataops-finetuning',
+        // Others
+        'linux-system-administration',
+        'crypto-blockchain-fundamentals',
+        'react-fundamentals',
+        'product-management-fundamentals',
+        'competitive-programming',
+      ]);
 
-      if (parts[0] === 'applied' && parts[1] === 'ai' && parts.length >= 3) {
-        return parts.slice(0, 3).join('-'); // applied-ai-{something}
-      } else if (
-        parts[0] === 'system' &&
-        parts[1] === 'design' &&
-        parts.length >= 3
-      ) {
-        // For system-design, could be 3-5 parts
-        // Try to find where the section name starts (usually after 2-4 parts)
-        // Heuristic: if part contains common section words, stop before it
-        for (let i = 2; i < Math.min(5, parts.length); i++) {
-          const part = parts[i];
-          // Common section indicators
-          if (
-            [
-              'fundamentals',
-              'core',
-              'advanced',
-              'database',
-              'networking',
-              'api',
-              'tradeoffs',
-              'authentication',
-              'microservices',
-              'message',
-              'case',
-              'trading',
-            ].includes(part)
-          ) {
-            return parts.slice(0, i + 1).join('-');
-          }
+      // Try longest match first (up to 6 parts, down to 1)
+      for (let len = Math.min(6, parts.length); len >= 1; len--) {
+        const candidate = parts.slice(0, len).join('-');
+        if (knownModuleIds.has(candidate)) {
+          console.debug(
+            `[extractModuleId] Matched: ${candidate} from ${keyWithoutPrefix}`,
+          );
+          return candidate;
         }
-        return parts.slice(0, 3).join('-'); // Default to 3 parts
-      } else if (parts[0] === 'ml' && parts.length >= 3) {
-        // For ML, could be 3-5 parts
-        // Similar heuristic
-        for (let i = 2; i < Math.min(5, parts.length); i++) {
-          const part = parts[i];
-          if (
-            [
-              'mathematical',
-              'calculus',
-              'linear',
-              'probability',
-              'statistics',
-              'python',
-              'eda',
-              'supervised',
-              'unsupervised',
-              'deep',
-              'advanced',
-              'natural',
-              'model',
-              'system',
-              'ai',
-            ].includes(part)
-          ) {
-            return parts.slice(0, i + 1).join('-');
-          }
-        }
-        return parts.slice(0, 3).join('-'); // Default to 3 parts
-      } else if (
-        parts.length >= 2 &&
-        parts[0] !== 'applied' &&
-        parts[0] !== 'system' &&
-        parts[0] !== 'ml'
-      ) {
-        return parts.slice(0, 2).join('-'); // Standard 2-part module
-      } else {
-        return parts[0]; // Single-word module
       }
+
+      // Fallback: return first 2 parts (most common pattern)
+      const fallback = parts.slice(0, 2).join('-');
+      console.debug(
+        `[extractModuleId] Fallback: ${fallback} from ${keyWithoutPrefix}`,
+      );
+      return fallback;
     };
 
     // Process video question prefixes for discussion completion count
@@ -216,6 +275,15 @@ export async function GET() {
             // Extract module ID for module-specific counts
             const keyWithoutPrefix = key.replace('mc-quiz-', '');
             const moduleId = extractModuleId(keyWithoutPrefix);
+
+            console.debug(`[API Stats] MC key: ${key}`);
+            console.debug(
+              `[API Stats]   Key without prefix: ${keyWithoutPrefix}`,
+            );
+            console.debug(`[API Stats]   Extracted module ID: ${moduleId}`);
+            console.debug(
+              `[API Stats]   Question count: ${completedQuestions.length}`,
+            );
 
             if (!moduleMCCounts[moduleId]) {
               moduleMCCounts[moduleId] = 0;
