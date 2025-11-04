@@ -16,3 +16,4 @@ ON user_videos(user_id);
 ANALYZE user_progress;
 ANALYZE user_videos;
 
+

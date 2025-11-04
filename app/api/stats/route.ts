@@ -34,6 +34,92 @@ export async function GET() {
       `[API Stats] Fetched ${progressCount} progress items and ${videoCount} videos in 2 queries`,
     );
 
+    // Helper to extract module ID from a key
+    // Some modules are 2 parts (python-fundamentals), others are 3+ (applied-ai-llm-fundamentals)
+    const extractModuleId = (keyWithoutPrefix: string): string => {
+      const parts = keyWithoutPrefix.split('-');
+
+      // Try to match valid module ID patterns
+      // Common patterns:
+      // - applied-ai-* (3 parts): applied-ai-llm-fundamentals
+      // - system-design-* (2-4 parts): system-design-fundamentals, system-design-core-building-blocks
+      // - ml-* (2-5 parts): ml-supervised-learning, ml-ai-llm-applications-finance
+      // - python-* (2 parts): python-fundamentals
+      // - single word (1 part): dfs, bfs, etc.
+
+      if (parts[0] === 'applied' && parts[1] === 'ai' && parts.length >= 3) {
+        return parts.slice(0, 3).join('-'); // applied-ai-{something}
+      } else if (
+        parts[0] === 'system' &&
+        parts[1] === 'design' &&
+        parts.length >= 3
+      ) {
+        // For system-design, could be 3-5 parts
+        // Try to find where the section name starts (usually after 2-4 parts)
+        // Heuristic: if part contains common section words, stop before it
+        for (let i = 2; i < Math.min(5, parts.length); i++) {
+          const part = parts[i];
+          // Common section indicators
+          if (
+            [
+              'fundamentals',
+              'core',
+              'advanced',
+              'database',
+              'networking',
+              'api',
+              'tradeoffs',
+              'authentication',
+              'microservices',
+              'message',
+              'case',
+              'trading',
+            ].includes(part)
+          ) {
+            return parts.slice(0, i + 1).join('-');
+          }
+        }
+        return parts.slice(0, 3).join('-'); // Default to 3 parts
+      } else if (parts[0] === 'ml' && parts.length >= 3) {
+        // For ML, could be 3-5 parts
+        // Similar heuristic
+        for (let i = 2; i < Math.min(5, parts.length); i++) {
+          const part = parts[i];
+          if (
+            [
+              'mathematical',
+              'calculus',
+              'linear',
+              'probability',
+              'statistics',
+              'python',
+              'eda',
+              'supervised',
+              'unsupervised',
+              'deep',
+              'advanced',
+              'natural',
+              'model',
+              'system',
+              'ai',
+            ].includes(part)
+          ) {
+            return parts.slice(0, i + 1).join('-');
+          }
+        }
+        return parts.slice(0, 3).join('-'); // Default to 3 parts
+      } else if (
+        parts.length >= 2 &&
+        parts[0] !== 'applied' &&
+        parts[0] !== 'system' &&
+        parts[0] !== 'ml'
+      ) {
+        return parts.slice(0, 2).join('-'); // Standard 2-part module
+      } else {
+        return parts[0]; // Single-word module
+      }
+    };
+
     // Process video question prefixes for discussion completion count
     // (videoQuestions already fetched above)
     const uniqueQuestions = new Set<string>();
@@ -64,10 +150,10 @@ export async function GET() {
 
         uniqueQuestions.add(questionPrefix);
 
-        // Extract module ID: Standard format is 2 parts (e.g., "python-fundamentals")
+        // Extract module ID using helper function (supports variable-length module IDs)
         // From ["python", "fundamentals", "variables", "types", "pf", "variables", "q", "2"]
-        // Take first 2 parts
-        const moduleId = parts.slice(0, 2).join('-');
+        // or ["applied", "ai", "llm", "fundamentals", "section", "q", "1"]
+        const moduleId = extractModuleId(videoId);
         console.debug(`[API Stats]   Module ID: ${moduleId}`);
 
         if (!moduleVideoMap[moduleId]) {
@@ -128,15 +214,8 @@ export async function GET() {
             totalMCQuestions += completedQuestions.length;
 
             // Extract module ID for module-specific counts
-            // Key format: "mc-quiz-python-fundamentals-variables-types"
-            // Module ID: "python-fundamentals" (first 2 parts)
-            // Section ID: "variables-types" (remaining parts)
             const keyWithoutPrefix = key.replace('mc-quiz-', '');
-            const parts = keyWithoutPrefix.split('-');
-
-            // Standard format: module IDs are always 2 parts (e.g., "python-fundamentals")
-            // Take first 2 parts as module ID
-            const moduleId = parts.slice(0, 2).join('-');
+            const moduleId = extractModuleId(keyWithoutPrefix);
 
             if (!moduleMCCounts[moduleId]) {
               moduleMCCounts[moduleId] = 0;

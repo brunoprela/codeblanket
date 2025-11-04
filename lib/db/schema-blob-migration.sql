@@ -34,3 +34,4 @@ CREATE TRIGGER update_user_videos_updated_at
 -- After confirming everything works, you can drop the backup table:
 -- DROP TABLE user_videos_backup;
 
+
