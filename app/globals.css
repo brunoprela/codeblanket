@@ -28,19 +28,30 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-conmily: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
   overscroll-behavior-x: auto;
   /* Enable browser back/forward gestures on macOS */
+  position: fixed;
+  /* Prevent mobile browser chrome from changing on scroll */
 }
 
 html {
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
   overscroll-behavior-x: auto;
   /* Enable browser back/forward gestures on macOS */
   scroll-behavior: smooth;
+  /* Use dvh (dynamic viewport height) on mobile to account for browser chrome */
+  @supports (height: 100dvh) {
+    height: 100dvh;
+  }
 }
 
 /* Enable smooth scrolling in scroll containers */
@@ -69,8 +80,12 @@ html {
 /* Ensure main scrollable area allows browser back/forward gestures on macOS */
 main {
   overscroll-behavior-x: auto !important;
-  touch-action: manipulation;
-  /* Enable all gestures including browser navigation */
+  overscroll-behavior-y: none !important;
+  /* Prevent pull-to-refresh to allow Chrome UI to hide */
+  touch-action: pan-y pinch-zoom;
+  /* Allow vertical scrolling and pinch-zoom, but prevent pull-to-refresh */
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on iOS */
 }
 
 /* Resizable editor styles */

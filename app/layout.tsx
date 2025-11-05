@@ -20,6 +20,14 @@ export const metadata: Metadata = {
     width: 'device-width',
     initialScale: 1,
     maximumScale: 5,
+    userScalable: true,
+    viewportFit: 'cover',
+  },
+  themeColor: '#282a36',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'CodeBlanket',
   },
 };
 
@@ -29,8 +37,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning style={{ height: '100%', width: '100%' }}>
+      <body className={inter.className} suppressHydrationWarning style={{ height: '100%', width: '100%', margin: 0, padding: 0, overflow: 'hidden' }}>
         <StackProvider app={stackServerApp}>
           <StackTheme>
             <Script
@@ -66,7 +74,7 @@ export default function RootLayout({
               </div>
             </nav>
 
-            <main className="h-[calc(100vh-64px)] overflow-y-auto bg-[#282a36]">
+            <main className="h-[calc(100vh-64px)] overflow-y-auto bg-[#282a36]" style={{ WebkitOverflowScrolling: 'touch', overscrollBehaviorY: 'none' }}>
               {children}
             </main>
           </StackTheme>
