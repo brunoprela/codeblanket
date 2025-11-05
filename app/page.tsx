@@ -781,10 +781,9 @@ export default function Home() {
                                 ✓ Discuss
                               </span>
                             )}
-                          {/* Hide "All Problems Solved" badge for system design modules */}
-                          {selectedSection.id !== 'system-design' &&
-                            problemsProgress.completed ===
-                              problemsProgress.total &&
+                          {/* Show "All Problems Solved" badge only if module has problems */}
+                          {problemsProgress.completed ===
+                            problemsProgress.total &&
                             problemsProgress.total > 0 && (
                               <span className="rounded-full border-2 border-[#50fa7b] bg-[#50fa7b]/20 px-2 py-0.5 text-xs font-semibold text-[#50fa7b]">
                                 ✓ Problems
@@ -801,8 +800,8 @@ export default function Home() {
                         <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-2 py-1 text-xs font-semibold text-[#f8f8f2] sm:px-3">
                           {moduleCategory.module.sections.length} sections
                         </div>
-                        {/* Hide problems count for system design modules */}
-                        {selectedSection.id !== 'system-design' && (
+                        {/* Show problems count only if module has problems */}
+                        {problemsProgress.total > 0 && (
                           <div className="rounded-full border-2 border-[#f8f8f2] bg-[#f8f8f2]/10 px-2 py-1 text-xs font-semibold text-[#f8f8f2] sm:px-3">
                             {problemsProgress.total} problems
                           </div>
@@ -813,8 +812,8 @@ export default function Home() {
                         >
                           Learn
                         </Link>
-                        {/* Hide Practice button for system design modules */}
-                        {selectedSection.id !== 'system-design' && (
+                        {/* Show Practice button only if module has problems */}
+                        {problemsProgress.total > 0 && (
                           <Link
                             href={`/topics/${moduleCategory.id}`}
                             className="rounded-lg border-2 border-[#bd93f9] bg-transparent px-3 py-1.5 text-xs font-semibold text-[#bd93f9] transition-colors hover:bg-[#bd93f9] hover:text-[#282a36] sm:px-4 sm:py-2 sm:text-sm"
@@ -827,7 +826,7 @@ export default function Home() {
 
                     {/* Progress Bars - Always show */}
                     <div
-                      className={`mt-4 grid gap-3 ${selectedSection.id === 'system-design' ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}
+                      className={`mt-4 grid gap-3 ${problemsProgress.total > 0 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'}`}
                     >
                       {/* Module Progress */}
                       <div>
@@ -883,8 +882,8 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Problems Progress - Hide for system design modules */}
-                      {selectedSection.id !== 'system-design' && (
+                      {/* Problems Progress - Only show if module has problems */}
+                      {problemsProgress.total > 0 && (
                         <div>
                           <div className="mb-1 flex items-center justify-between text-xs">
                             <span className="font-semibold text-[#50fa7b]">

@@ -688,8 +688,8 @@ export default function ModulePage({
               {moduleData.description}
             </p>
           </div>
-          {/* Hide Practice Problems button for system design modules */}
-          {!slug.startsWith('system-design') && (
+          {/* Show Practice Problems button only if module has problems */}
+          {totalProblems > 0 && (
             <Link
               href={`/topics/${moduleData.id}?from=modules/${slug}`}
               className="w-full rounded-lg bg-[#bd93f9] px-4 py-2 text-center font-semibold text-[#282a36] transition-colors hover:bg-[#ff79c6] sm:w-auto sm:px-6"
@@ -702,7 +702,7 @@ export default function ModulePage({
         {/* Progress Bars */}
         <div className="rounded-lg border-2 border-[#6272a4] bg-[#6272a4]/10 p-4">
           <div
-            className={`grid gap-3 ${slug.startsWith('system-design') ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}
+            className={`grid gap-3 ${totalProblems > 0 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'}`}
           >
             {/* Module Sections Progress */}
             <div>
@@ -753,8 +753,8 @@ export default function ModulePage({
               </div>
             </div>
 
-            {/* Problems Progress - Hide for system design modules */}
-            {!slug.startsWith('system-design') && (
+            {/* Problems Progress - Only show if module has problems */}
+            {totalProblems > 0 && (
               <div>
                 <div className="mb-1 flex items-center justify-between text-xs">
                   <span className="font-semibold text-[#50fa7b]">

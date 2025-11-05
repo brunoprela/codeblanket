@@ -17,3 +17,4 @@ ANALYZE user_progress;
 ANALYZE user_videos;
 
 
+
