@@ -29,6 +29,10 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
     title: 'CodeBlanket',
   },
+  manifest: '/manifest.json',
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
 };
 
 export default function RootLayout({
@@ -37,8 +41,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning style={{ height: '100%', width: '100%' }}>
-      <body className={inter.className} suppressHydrationWarning style={{ height: '100%', width: '100%', margin: 0, padding: 0, overflow: 'hidden' }}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <StackProvider app={stackServerApp}>
           <StackTheme>
             <Script
@@ -74,7 +78,7 @@ export default function RootLayout({
               </div>
             </nav>
 
-            <main className="h-[calc(100vh-64px)] overflow-y-auto bg-[#282a36]" style={{ WebkitOverflowScrolling: 'touch', overscrollBehaviorY: 'none' }}>
+            <main className="min-h-screen bg-[#282a36]">
               {children}
             </main>
           </StackTheme>
