@@ -78,9 +78,7 @@ export default function RootLayout({
               </div>
             </nav>
 
-            <main className="min-h-screen bg-[#282a36]">
-              {children}
-            </main>
+            <main className="min-h-screen bg-[#282a36]">{children}</main>
           </StackTheme>
         </StackProvider>
       </body>

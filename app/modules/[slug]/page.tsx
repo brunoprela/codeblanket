@@ -198,9 +198,16 @@ export default function ModulePage({
     notFound();
   }
 
+  type ModuleSection = (typeof moduleData.sections)[number];
+
+  const getSectionKey = (section: ModuleSection, index: number): string =>
+    section.id || `section-${index}`;
+
   // State for selected section (first section by default)
-  const [selectedSectionId, setSelectedSectionId] = useState<string>(
-    moduleData.sections[0]?.id || '',
+  const [selectedSectionId, setSelectedSectionId] = useState<string>(() =>
+    moduleData.sections.length > 0
+      ? getSectionKey(moduleData.sections[0], 0)
+      : '',
   );
 
   // State for completed sections
@@ -257,7 +264,7 @@ export default function ModulePage({
 
       // Filter videos for this module's questions
       for (const [sectionIndex, section] of moduleData.sections.entries()) {
-        const sectionId = section.id || `section-${sectionIndex}`;
+        const sectionId = getSectionKey(section, sectionIndex);
         if (section.quiz) {
           for (const question of section.quiz) {
             const questionId = `${slug}-${sectionId}-${question.id}`;
@@ -399,7 +406,7 @@ export default function ModulePage({
 
         let mcCompleted = 0;
         for (const [sectionIndex, section] of moduleData.sections.entries()) {
-          const sectionId = section.id || `section-${sectionIndex}`;
+          const sectionId = getSectionKey(section, sectionIndex);
           if (section.multipleChoice && section.multipleChoice.length > 0) {
             try {
               const completedQuestions = await getMultipleChoiceProgress(
@@ -464,7 +471,7 @@ export default function ModulePage({
 
           let mcCompleted = 0;
           for (const [sectionIndex, section] of moduleData.sections.entries()) {
-            const sectionId = section.id || `section-${sectionIndex}`;
+            const sectionId = getSectionKey(section, sectionIndex);
             if (section.multipleChoice && section.multipleChoice.length > 0) {
               try {
                 const completedQuestions = await getMultipleChoiceProgress(
@@ -508,15 +515,15 @@ export default function ModulePage({
 
   // Get selected section (moved before useEffect to avoid reference error)
   const selectedSection = moduleData.sections.find(
-    (s, index) => (s.id || `section-${index}`) === selectedSectionId,
+    (section, index) => getSectionKey(section, index) === selectedSectionId,
   );
 
   const selectedSectionIndex = moduleData.sections.findIndex(
-    (s, index) => (s.id || `section-${index}`) === selectedSectionId,
+    (section, index) => getSectionKey(section, index) === selectedSectionId,
   );
 
   const selectedSectionIdResolved = selectedSection
-    ? selectedSection.id || `section-${selectedSectionIndex}`
+    ? getSectionKey(selectedSection, selectedSectionIndex)
     : selectedSectionId;
 
   // Track visible headers using Intersection Observer
@@ -804,7 +811,7 @@ export default function ModulePage({
             </div>
             <div className="max-h-[300px] overflow-y-auto p-2 lg:max-h-[calc(100vh-200px)]">
               {moduleData.sections.map((section, index) => {
-                const sectionId = section.id || `section-${index}`;
+                const sectionId = getSectionKey(section, index);
                 const isSelected = selectedSectionId === sectionId;
                 const isCompleted = completedSections.has(sectionId);
 
