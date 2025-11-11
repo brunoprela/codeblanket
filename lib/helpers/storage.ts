@@ -5,7 +5,7 @@
  * Provides type-safe access with error handling.
  */
 
-import { setItem } from './storage-adapter';
+import { removeItem, setItem } from './storage-adapter';
 
 const COMPLETED_PROBLEMS_KEY = 'codeblanket_completed_problems';
 const USER_CODE_KEY_PREFIX = 'codeblanket_code_';
@@ -467,17 +467,30 @@ export async function getMultipleChoiceProgress(
  * @param moduleId - The module identifier
  * @param sectionId - The section identifier
  */
-export function clearMultipleChoiceProgress(
+export async function clearMultipleChoiceProgress(
   moduleId: string,
   sectionId: string,
-): void {
+): Promise<void> {
   if (typeof window === 'undefined') return;
 
+  const key = `mc-quiz-${moduleId}-${sectionId}`;
+
   try {
-    const key = `mc-quiz-${moduleId}-${sectionId}`;
+    await removeItem(key);
+  } catch (error) {
+    console.error(
+      'Failed to clear multiple choice progress from storage:',
+      error,
+    );
+  }
+
+  try {
     localStorage.removeItem(key);
   } catch (error) {
-    console.error('Failed to clear multiple choice progress:', error);
+    console.error(
+      'Failed to clear multiple choice progress from localStorage:',
+      error,
+    );
   }
 }
 

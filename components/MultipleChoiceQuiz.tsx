@@ -6,6 +6,7 @@ import { formatTextWithMath } from '@/lib/utils/formatTextWithMath';
 import {
   saveMultipleChoiceProgress,
   getMultipleChoiceProgress,
+  clearMultipleChoiceProgress,
 } from '@/lib/helpers/storage';
 
 interface MultipleChoiceQuizProps {
@@ -112,8 +113,8 @@ export function MultipleChoiceQuiz({
     newCompleted.delete(questionId);
     setCompletedQuestions(newCompleted);
 
-    const storageKey = `mc-quiz-${moduleId}-${sectionId}`;
-    localStorage.setItem(storageKey, JSON.stringify(Array.from(newCompleted)));
+    const updatedCompleted = Array.from(newCompleted).map(String);
+    saveMultipleChoiceProgress(moduleId, sectionId, updatedCompleted);
 
     // Reset UI state
     setShowResults((prev) => ({ ...prev, [questionId]: false }));
@@ -122,9 +123,15 @@ export function MultipleChoiceQuiz({
       delete newAnswers[questionId];
       return newAnswers;
     });
+
+    window.dispatchEvent(
+      new CustomEvent('mcQuizUpdated', {
+        detail: { moduleId, sectionId, questionId, action: 'reset-question' },
+      }),
+    );
   };
 
-  const handleResetAll = () => {
+  const handleResetAll = async () => {
     if (
       !confirm(
         'Are you sure you want to reset all quiz progress? This cannot be undone.',
@@ -138,9 +145,14 @@ export function MultipleChoiceQuiz({
     setShowResults({});
     setSelectedAnswers({});
 
-    // Clear localStorage
-    const storageKey = `mc-quiz-${moduleId}-${sectionId}`;
-    localStorage.removeItem(storageKey);
+    // Clear persisted progress
+    await clearMultipleChoiceProgress(moduleId, sectionId);
+
+    window.dispatchEvent(
+      new CustomEvent('mcQuizUpdated', {
+        detail: { moduleId, sectionId, action: 'reset-all' },
+      }),
+    );
   };
 
   const correctCount = questions.filter((q) =>
