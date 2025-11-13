@@ -92,6 +92,36 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const contentType = request.headers.get('content-type') ?? '';
+
+    if (contentType.includes('application/json')) {
+      const { videoId, blobUrl, blobPathname, mimeType, size } =
+        (await request.json()) as {
+          videoId?: string;
+          blobUrl?: string;
+          blobPathname?: string;
+          mimeType?: string;
+          size?: number;
+        };
+
+      if (!videoId || !blobUrl || !blobPathname) {
+        return NextResponse.json(
+          { error: 'Missing video metadata' },
+          { status: 400 },
+        );
+      }
+
+      await saveVideoMetadata(user.id, videoId, {
+        blobUrl,
+        blobPathname,
+        mimeType: mimeType ?? 'video/webm',
+        fileSize: typeof size === 'number' ? size : 0,
+      });
+
+      return NextResponse.json({ success: true });
+    }
+
+    // Fallback: support legacy multipart uploads (may hit size limits)
     const formData = await request.formData();
     const videoId = formData.get('videoId') as string;
     const videoFile = formData.get('video') as File;
@@ -103,16 +133,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Upload to Vercel Blob Storage
-    // Pathname format: videos/{userId}/{videoId}.webm
     const pathname = `videos/${user.id}/${videoId}.webm`;
 
     const blob = await put(pathname, videoFile, {
-      access: 'public', // Make videos publicly accessible
-      addRandomSuffix: false, // Use consistent pathname
+      access: 'public',
+      addRandomSuffix: false,
     });
 
-    // Save metadata to PostgreSQL
     await saveVideoMetadata(user.id, videoId, {
       blobUrl: blob.url,
       blobPathname: blob.pathname,

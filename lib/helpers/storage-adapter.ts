@@ -186,17 +186,85 @@ export async function saveVideo(id: string, video: Blob): Promise<void> {
   if (isAuthenticated) {
     // Use PostgreSQL via API
     try {
-      const formData = new FormData();
-      formData.append('videoId', id);
-      formData.append('video', video);
-
-      const response = await fetch('/api/videos', {
+      const sessionResponse = await fetch('/api/videos/upload-url', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          videoId: id,
+          contentType: video.type || 'video/webm',
+          fileSize: video.size,
+        }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save video to database');
+      if (!sessionResponse.ok) {
+        throw new Error('Failed to create upload session');
+      }
+
+      const {
+        uploadUrl,
+        uploadToken,
+        blobPathname,
+      }: {
+        uploadUrl: string;
+        uploadToken?: string;
+        blobPathname: string;
+      } = await sessionResponse.json();
+
+      const uploadFormData = new FormData();
+      if (uploadToken) {
+        uploadFormData.append('token', uploadToken);
+      }
+      uploadFormData.append('file', video);
+
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'POST',
+        body: uploadFormData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Direct upload to blob storage failed');
+      }
+
+      let uploadedUrl: string | undefined;
+      let uploadedPathname: string | undefined;
+      let uploadedSize: number | undefined;
+
+      try {
+        const uploadedData = (await uploadResponse.json()) as {
+          url?: string;
+          pathname?: string;
+          size?: number;
+          blob?: { url?: string; pathname?: string; size?: number };
+        };
+
+        uploadedUrl = uploadedData?.url ?? uploadedData?.blob?.url;
+        uploadedPathname =
+          uploadedData?.pathname ??
+          uploadedData?.blob?.pathname ??
+          blobPathname;
+        uploadedSize = uploadedData?.size ?? uploadedData?.blob?.size;
+      } catch {
+        uploadedPathname = blobPathname;
+      }
+
+      const metadataResponse = await fetch('/api/videos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          videoId: id,
+          blobUrl: uploadedUrl ?? uploadUrl.replace(/\?.*$/, ''),
+          blobPathname: uploadedPathname ?? blobPathname,
+          mimeType: video.type || 'video/webm',
+          size: uploadedSize ?? video.size,
+        }),
+      });
+
+      if (!metadataResponse.ok) {
+        throw new Error('Failed to persist video metadata');
       }
     } catch (error) {
       console.error('Failed to save video to PostgreSQL (NO FALLBACK):', error);
