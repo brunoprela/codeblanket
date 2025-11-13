@@ -6,6 +6,7 @@
  */
 
 import * as indexedDB from './indexeddb';
+import { upload } from '@vercel/blob/client';
 
 /**
  * Check if user is authenticated by calling the API
@@ -186,68 +187,18 @@ export async function saveVideo(id: string, video: Blob): Promise<void> {
   if (isAuthenticated) {
     // Use PostgreSQL via API
     try {
-      const sessionResponse = await fetch('/api/videos/upload-url', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const extension = video.type === 'video/mp4' ? '.mp4' : '.webm';
+      const pathname = `videos/${id}${extension}`;
+
+      const result = await upload(pathname, video, {
+        access: 'public',
+        contentType: video.type || 'video/webm',
+        handleUploadUrl: '/api/videos/upload',
+        multipart: video.size > 8 * 1024 * 1024, // use multipart for larger recordings
+        clientPayload: JSON.stringify({
           videoId: id,
-          contentType: video.type || 'video/webm',
-          fileSize: video.size,
         }),
       });
-
-      if (!sessionResponse.ok) {
-        throw new Error('Failed to create upload session');
-      }
-
-      const {
-        uploadUrl,
-        uploadToken,
-        blobPathname,
-      }: {
-        uploadUrl: string;
-        uploadToken?: string;
-        blobPathname: string;
-      } = await sessionResponse.json();
-
-      const uploadFormData = new FormData();
-      if (uploadToken) {
-        uploadFormData.append('token', uploadToken);
-      }
-      uploadFormData.append('file', video);
-
-      const uploadResponse = await fetch(uploadUrl, {
-        method: 'POST',
-        body: uploadFormData,
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error('Direct upload to blob storage failed');
-      }
-
-      let uploadedUrl: string | undefined;
-      let uploadedPathname: string | undefined;
-      let uploadedSize: number | undefined;
-
-      try {
-        const uploadedData = (await uploadResponse.json()) as {
-          url?: string;
-          pathname?: string;
-          size?: number;
-          blob?: { url?: string; pathname?: string; size?: number };
-        };
-
-        uploadedUrl = uploadedData?.url ?? uploadedData?.blob?.url;
-        uploadedPathname =
-          uploadedData?.pathname ??
-          uploadedData?.blob?.pathname ??
-          blobPathname;
-        uploadedSize = uploadedData?.size ?? uploadedData?.blob?.size;
-      } catch {
-        uploadedPathname = blobPathname;
-      }
 
       const metadataResponse = await fetch('/api/videos', {
         method: 'POST',
@@ -256,10 +207,10 @@ export async function saveVideo(id: string, video: Blob): Promise<void> {
         },
         body: JSON.stringify({
           videoId: id,
-          blobUrl: uploadedUrl ?? uploadUrl.replace(/\?.*$/, ''),
-          blobPathname: uploadedPathname ?? blobPathname,
+          blobUrl: result.url,
+          blobPathname: result.pathname,
           mimeType: video.type || 'video/webm',
-          size: uploadedSize ?? video.size,
+          size: video.size,
         }),
       });
 
