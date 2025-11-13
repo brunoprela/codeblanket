@@ -232,6 +232,7 @@ export default function ModulePage({
   );
   const [completedMultipleChoice, setCompletedMultipleChoice] = useState(0);
   const [completedDiscussions, setCompletedDiscussions] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   // State for sticky breadcrumb headers
   const [currentHeaders, setCurrentHeaders] = useState<{
@@ -292,6 +293,82 @@ export default function ModulePage({
     };
     loadVideoMetadata();
   }, [slug, moduleData.sections]);
+
+  useEffect(() => {
+    if (isAuthenticated === null) return;
+
+    let updateTimeout: NodeJS.Timeout | null = null;
+    let pollInterval: NodeJS.Timeout | null = null;
+
+    const runUpdate = async () => {
+      console.log(`[Module ${slug}] Handling update event...`);
+
+      const problems = await getCompletedProblems();
+      setCompletedProblems(problems);
+
+      if (isAuthenticated) {
+        const { getUserStats } = await import('@/lib/helpers/storage-stats');
+        const stats = await getUserStats();
+
+        if (stats) {
+          setCompletedMultipleChoice(stats.moduleMCCounts[slug] || 0);
+          setCompletedDiscussions(stats.moduleVideoCounts[slug] || 0);
+        }
+      } else {
+        const { getMultipleChoiceProgress } = await import(
+          '@/lib/helpers/storage'
+        );
+
+        let mcCompleted = 0;
+        for (const [sectionIndex, section] of moduleData.sections.entries()) {
+          const sectionId = getSectionKey(section, sectionIndex);
+          if (section.multipleChoice && section.multipleChoice.length > 0) {
+            try {
+              const completedQuestions = await getMultipleChoiceProgress(
+                slug,
+                sectionId,
+              );
+              mcCompleted += completedQuestions.length;
+            } catch (e) {
+              console.error('Failed to load MC quiz progress:', e);
+            }
+          }
+        }
+        setCompletedMultipleChoice(mcCompleted);
+        setCompletedDiscussions(Object.keys(videoMetadata).length);
+      }
+    };
+
+    const scheduleUpdate = () => {
+      if (updateTimeout) {
+        clearTimeout(updateTimeout);
+      }
+      updateTimeout = setTimeout(runUpdate, 100);
+    };
+
+    window.addEventListener('focus', scheduleUpdate);
+    window.addEventListener('storage', scheduleUpdate);
+    window.addEventListener('problemCompleted', scheduleUpdate);
+    window.addEventListener('problemReset', scheduleUpdate);
+    window.addEventListener('mcQuizUpdated', scheduleUpdate);
+
+    if (!isAuthenticated) {
+      pollInterval = setInterval(scheduleUpdate, 1000);
+    }
+
+    // Ensure we refresh once when auth status is known
+    scheduleUpdate();
+
+    return () => {
+      if (updateTimeout) clearTimeout(updateTimeout);
+      if (pollInterval) clearInterval(pollInterval);
+      window.removeEventListener('focus', scheduleUpdate);
+      window.removeEventListener('storage', scheduleUpdate);
+      window.removeEventListener('problemCompleted', scheduleUpdate);
+      window.removeEventListener('problemReset', scheduleUpdate);
+      window.removeEventListener('mcQuizUpdated', scheduleUpdate);
+    };
+  }, [slug, moduleData.sections, videoMetadata, isAuthenticated]);
 
   // Handle video save
   const handleVideoSave = async (
@@ -369,9 +446,10 @@ export default function ModulePage({
       // Check if authenticated - use stats API for efficiency
       const authResponse = await fetch('/api/auth/check');
       const authData = await authResponse.json();
-      const isAuthenticated = authData.authenticated === true;
+      const authed = authData.authenticated === true;
+      setIsAuthenticated(authed);
 
-      if (isAuthenticated) {
+      if (authed) {
         // OPTIMIZED: Call getUserStats ONCE, reuse for MC and discussions
         const { getUserStats } = await import('@/lib/helpers/storage-stats');
         const stats = await getUserStats();
@@ -433,84 +511,6 @@ export default function ModulePage({
     };
 
     loadAllProgress();
-
-    // Listen for updates with debouncing to prevent multiple rapid updates
-    let updateTimeout: NodeJS.Timeout | null = null;
-
-    const handleUpdate = async () => {
-      // Debounce updates to prevent counting the same data multiple times
-      if (updateTimeout) {
-        clearTimeout(updateTimeout);
-      }
-
-      updateTimeout = setTimeout(async () => {
-        console.log(`[Module ${slug}] Handling update event...`);
-
-        const problems = await getCompletedProblems();
-        setCompletedProblems(problems);
-
-        // OPTIMIZED: Single stats call for both MC and discussions
-        const authResponse = await fetch('/api/auth/check');
-        const authData = await authResponse.json();
-        const isAuthenticated = authData.authenticated === true;
-
-        if (isAuthenticated) {
-          // Use stats API (1 call)
-          const { getUserStats } = await import('@/lib/helpers/storage-stats');
-          const stats = await getUserStats();
-
-          if (stats) {
-            setCompletedMultipleChoice(stats.moduleMCCounts[slug] || 0);
-            setCompletedDiscussions(stats.moduleVideoCounts[slug] || 0);
-          }
-        } else {
-          // Anonymous: Load from localStorage
-          const { getMultipleChoiceProgress } = await import(
-            '@/lib/helpers/storage'
-          );
-
-          let mcCompleted = 0;
-          for (const [sectionIndex, section] of moduleData.sections.entries()) {
-            const sectionId = getSectionKey(section, sectionIndex);
-            if (section.multipleChoice && section.multipleChoice.length > 0) {
-              try {
-                const completedQuestions = await getMultipleChoiceProgress(
-                  slug,
-                  sectionId,
-                );
-                mcCompleted += completedQuestions.length;
-              } catch (e) {
-                console.error('Failed to load MC quiz progress:', e);
-              }
-            }
-          }
-          setCompletedMultipleChoice(mcCompleted);
-
-          // Count discussions from videoMetadata state (already loaded)
-          setCompletedDiscussions(Object.keys(videoMetadata).length);
-        }
-      }, 100); // 100ms debounce
-    };
-
-    // Set up less aggressive polling (1 second instead of 300ms)
-    // This catches changes from other tabs/windows
-    const pollInterval = setInterval(handleUpdate, 1000);
-
-    window.addEventListener('focus', handleUpdate);
-    window.addEventListener('storage', handleUpdate);
-    window.addEventListener('problemCompleted', handleUpdate);
-    window.addEventListener('problemReset', handleUpdate);
-    window.addEventListener('mcQuizUpdated', handleUpdate);
-
-    return () => {
-      if (updateTimeout) clearTimeout(updateTimeout);
-      clearInterval(pollInterval);
-      window.removeEventListener('focus', handleUpdate);
-      window.removeEventListener('storage', handleUpdate);
-      window.removeEventListener('problemCompleted', handleUpdate);
-      window.removeEventListener('problemReset', handleUpdate);
-      window.removeEventListener('mcQuizUpdated', handleUpdate);
-    };
   }, [slug, moduleData.sections]);
 
   // Get selected section (moved before useEffect to avoid reference error)
