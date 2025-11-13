@@ -33,8 +33,9 @@ export function VideoRecorder({
       setError(null);
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: {
-          width: { ideal: 640 },
-          height: { ideal: 480 },
+          width: { ideal: 480, max: 640 },
+          height: { ideal: 360, max: 480 },
+          frameRate: { ideal: 15, max: 24 },
           facingMode: 'user',
         },
         audio: true,
@@ -68,6 +69,8 @@ export function VideoRecorder({
     chunksRef.current = [];
     const mediaRecorder = new MediaRecorder(stream, {
       mimeType: 'video/webm;codecs=vp9',
+      videoBitsPerSecond: 600_000,
+      audioBitsPerSecond: 64_000,
     });
 
     mediaRecorder.ondataavailable = (event) => {
