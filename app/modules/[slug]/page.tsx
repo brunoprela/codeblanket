@@ -2,7 +2,14 @@
 
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { use, ReactElement, ReactNode, useState, useEffect } from 'react';
+import {
+  use,
+  ReactElement,
+  ReactNode,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 
 import { getModuleById } from '@/lib/content/topics';
 import { allProblems } from '@/lib/content/problems';
@@ -233,6 +240,11 @@ export default function ModulePage({
   const [completedMultipleChoice, setCompletedMultipleChoice] = useState(0);
   const [completedDiscussions, setCompletedDiscussions] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const videoMetadataRef = useRef(videoMetadata);
+
+  useEffect(() => {
+    videoMetadataRef.current = videoMetadata;
+  }, [videoMetadata]);
 
   // State for sticky breadcrumb headers
   const [currentHeaders, setCurrentHeaders] = useState<{
@@ -295,47 +307,22 @@ export default function ModulePage({
   }, [slug, moduleData.sections]);
 
   useEffect(() => {
-    if (isAuthenticated === null) return;
+    if (isAuthenticated !== true) return;
 
     let updateTimeout: NodeJS.Timeout | null = null;
-    let pollInterval: NodeJS.Timeout | null = null;
 
     const runUpdate = async () => {
-      console.log(`[Module ${slug}] Handling update event...`);
+      console.log(`[Module ${slug}] Handling update event (authed)...`);
 
       const problems = await getCompletedProblems();
       setCompletedProblems(problems);
 
-      if (isAuthenticated) {
-        const { getUserStats } = await import('@/lib/helpers/storage-stats');
-        const stats = await getUserStats();
+      const { getUserStats } = await import('@/lib/helpers/storage-stats');
+      const stats = await getUserStats();
 
-        if (stats) {
-          setCompletedMultipleChoice(stats.moduleMCCounts[slug] || 0);
-          setCompletedDiscussions(stats.moduleVideoCounts[slug] || 0);
-        }
-      } else {
-        const { getMultipleChoiceProgress } = await import(
-          '@/lib/helpers/storage'
-        );
-
-        let mcCompleted = 0;
-        for (const [sectionIndex, section] of moduleData.sections.entries()) {
-          const sectionId = getSectionKey(section, sectionIndex);
-          if (section.multipleChoice && section.multipleChoice.length > 0) {
-            try {
-              const completedQuestions = await getMultipleChoiceProgress(
-                slug,
-                sectionId,
-              );
-              mcCompleted += completedQuestions.length;
-            } catch (e) {
-              console.error('Failed to load MC quiz progress:', e);
-            }
-          }
-        }
-        setCompletedMultipleChoice(mcCompleted);
-        setCompletedDiscussions(Object.keys(videoMetadata).length);
+      if (stats) {
+        setCompletedMultipleChoice(stats.moduleMCCounts[slug] || 0);
+        setCompletedDiscussions(stats.moduleVideoCounts[slug] || 0);
       }
     };
 
@@ -352,11 +339,67 @@ export default function ModulePage({
     window.addEventListener('problemReset', scheduleUpdate);
     window.addEventListener('mcQuizUpdated', scheduleUpdate);
 
-    if (!isAuthenticated) {
-      pollInterval = setInterval(scheduleUpdate, 1000);
-    }
+    scheduleUpdate();
 
-    // Ensure we refresh once when auth status is known
+    return () => {
+      if (updateTimeout) clearTimeout(updateTimeout);
+      window.removeEventListener('focus', scheduleUpdate);
+      window.removeEventListener('storage', scheduleUpdate);
+      window.removeEventListener('problemCompleted', scheduleUpdate);
+      window.removeEventListener('problemReset', scheduleUpdate);
+      window.removeEventListener('mcQuizUpdated', scheduleUpdate);
+    };
+  }, [isAuthenticated, slug, moduleData.sections]);
+
+  useEffect(() => {
+    if (isAuthenticated !== false) return;
+
+    let updateTimeout: NodeJS.Timeout | null = null;
+    let pollInterval: NodeJS.Timeout | null = null;
+
+    const runUpdate = async () => {
+      console.log(`[Module ${slug}] Handling update event (anon)...`);
+
+      const problems = await getCompletedProblems();
+      setCompletedProblems(problems);
+
+      const { getMultipleChoiceProgress } = await import(
+        '@/lib/helpers/storage'
+      );
+
+      let mcCompleted = 0;
+      for (const [sectionIndex, section] of moduleData.sections.entries()) {
+        const sectionId = getSectionKey(section, sectionIndex);
+        if (section.multipleChoice && section.multipleChoice.length > 0) {
+          try {
+            const completedQuestions = await getMultipleChoiceProgress(
+              slug,
+              sectionId,
+            );
+            mcCompleted += completedQuestions.length;
+          } catch (e) {
+            console.error('Failed to load MC quiz progress:', e);
+          }
+        }
+      }
+      setCompletedMultipleChoice(mcCompleted);
+      setCompletedDiscussions(Object.keys(videoMetadataRef.current).length);
+    };
+
+    const scheduleUpdate = () => {
+      if (updateTimeout) {
+        clearTimeout(updateTimeout);
+      }
+      updateTimeout = setTimeout(runUpdate, 100);
+    };
+
+    window.addEventListener('focus', scheduleUpdate);
+    window.addEventListener('storage', scheduleUpdate);
+    window.addEventListener('problemCompleted', scheduleUpdate);
+    window.addEventListener('problemReset', scheduleUpdate);
+    window.addEventListener('mcQuizUpdated', scheduleUpdate);
+
+    pollInterval = setInterval(scheduleUpdate, 1000);
     scheduleUpdate();
 
     return () => {
@@ -368,7 +411,7 @@ export default function ModulePage({
       window.removeEventListener('problemReset', scheduleUpdate);
       window.removeEventListener('mcQuizUpdated', scheduleUpdate);
     };
-  }, [slug, moduleData.sections, videoMetadata, isAuthenticated]);
+  }, [isAuthenticated, slug, moduleData.sections]);
 
   // Handle video save
   const handleVideoSave = async (
